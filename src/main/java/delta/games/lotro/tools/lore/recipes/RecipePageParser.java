@@ -25,8 +25,8 @@ import delta.games.lotro.lore.recipes.Recipe.CraftingResult;
 import delta.games.lotro.lore.recipes.Recipe.Ingredient;
 import delta.games.lotro.lore.recipes.Recipe.ItemReference;
 import delta.games.lotro.lore.recipes.Recipe.RecipeVersion;
+import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.DownloadService;
-import delta.games.lotro.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**

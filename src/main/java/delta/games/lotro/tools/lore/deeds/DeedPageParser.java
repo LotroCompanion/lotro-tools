@@ -24,8 +24,8 @@ import delta.games.lotro.common.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedDescription.TYPE;
 import delta.games.lotro.tools.lore.common.RewardsHTMLParser;
+import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.DownloadService;
-import delta.games.lotro.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**

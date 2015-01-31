@@ -26,7 +26,7 @@ import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
-import delta.games.lotro.utils.JerichoHtmlUtils;
+import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
