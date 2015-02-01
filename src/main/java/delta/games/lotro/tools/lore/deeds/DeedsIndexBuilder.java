@@ -6,7 +6,7 @@ import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.index.DeedsIndex;
-import delta.games.lotro.lore.deeds.index.io.xml.DeedsIndexWriter;
+import delta.games.lotro.lore.deeds.index.io.xml.DeedsIndexXMLWriter;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 
 /**
@@ -53,7 +53,7 @@ public class DeedsIndexBuilder
           int id=deed.getIdentifier();
           index.addDeed(category,id,key,name);
         }
-        DeedsIndexWriter writer=new DeedsIndexWriter();
+        DeedsIndexXMLWriter writer=new DeedsIndexXMLWriter();
         ret=writer.write(_indexFile,index,EncodingNames.UTF_8);
       }
     }

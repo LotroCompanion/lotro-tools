@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.deeds.index.DeedsIndex;
-import delta.games.lotro.lore.deeds.index.io.xml.DeedsIndexWriter;
+import delta.games.lotro.lore.deeds.index.io.xml.DeedsIndexXMLWriter;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
@@ -28,7 +28,7 @@ public class DeedsIndexLoader
     DeedsIndex index=parser.parseDeedsIndex();
     if (index!=null)
     {
-      DeedsIndexWriter writer=new DeedsIndexWriter();
+      DeedsIndexXMLWriter writer=new DeedsIndexXMLWriter();
       ret=writer.write(indexFile,index,"UTF-8");
       if (!ret)
       {
