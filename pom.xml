@@ -13,7 +13,7 @@
   <dependencies>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
-      <artifactId>delta-lotro</artifactId>
+      <artifactId>delta-lotro-core</artifactId>
       <version>4.0-SNAPSHOT</version>
     </dependency>
     <dependency>

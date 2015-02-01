@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.TextUtils;
 import delta.games.lotro.Config;
-import delta.games.lotro.common.icons.LotroIconsManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.recipes.Recipe.ItemReference;
 import delta.games.lotro.utils.Escapes;
+import delta.games.lotro.utils.LotroIconsManager;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**

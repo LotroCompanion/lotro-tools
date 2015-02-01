@@ -1,11 +1,12 @@
 package delta.games.lotro.tools.characters;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import delta.games.lotro.MyLotroConfig;
 import delta.games.lotro.character.CharacterFile;
 import delta.games.lotro.character.log.CharacterLog;
 import delta.games.lotro.character.log.CharacterLogsManager;
-import delta.games.lotro.character.log.LotroTestUtils;
 
 /**
  * Test for character log parsing.
@@ -19,13 +20,15 @@ public class MainTestCharacterActivityLogIO
    */
   public static void main(String[] args)
   {
-    LotroTestUtils utils=new LotroTestUtils();
-    List<CharacterFile> toons=utils.getAllFiles();
+    List<CharacterFile> toons=new ArrayList<CharacterFile>();
+    CharacterFile glumlug=CharacterFile.build("Elendilmir","Glumlug");
+    toons.add(glumlug);
 
+    MyLotroConfig cfg=MyLotroConfig.getInstance();
     CharacterLogPageParser parser=new CharacterLogPageParser();
     for(CharacterFile toon : toons)
     {
-      String url=toon.getBaseMyLotroURL();
+      String url=cfg.getCharacterURL(toon.getServerName(),toon.getName());
       CharacterLog log=parser.parseLogPages(url,null);
       if (log!=null)
       {

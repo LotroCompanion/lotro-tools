@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import delta.games.lotro.MyLotroConfig;
 import delta.games.lotro.character.CharacterFile;
 import delta.games.lotro.character.log.CharacterLog;
 import delta.games.lotro.character.log.CharacterLogItem;
@@ -67,7 +68,8 @@ public class CharacterLogRepair
       Long oldest=dates.get(0);
       
       CharacterLogPageParser parser=new CharacterLogPageParser();
-      String url=toon.getBaseMyLotroURL();
+      MyLotroConfig cfg=MyLotroConfig.getInstance();
+      String url=cfg.getCharacterURL(toon.getServerName(),toon.getName());
       CharacterLog newLog=parser.parseLogPages(url,oldest);
       if (newLog!=null)
       {
