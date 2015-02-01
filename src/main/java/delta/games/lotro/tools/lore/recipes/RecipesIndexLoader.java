@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.recipes.index.RecipeSummary;
 import delta.games.lotro.lore.recipes.index.RecipesIndex;
-import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexWriter;
+import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexXMLWriter;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
@@ -29,7 +29,7 @@ public class RecipesIndexLoader
     RecipesIndex index=parser.parseRecipesIndex();
     if (index!=null)
     {
-      RecipesIndexWriter writer=new RecipesIndexWriter();
+      RecipesIndexXMLWriter writer=new RecipesIndexXMLWriter();
       ret=writer.write(indexFile,index,"UTF-8");
       if (!ret)
       {

@@ -6,7 +6,7 @@ import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.lore.recipes.Recipe;
 import delta.games.lotro.lore.recipes.index.RecipesIndex;
-import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexWriter;
+import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexXMLWriter;
 import delta.games.lotro.lore.recipes.io.xml.RecipeXMLParser;
 
 /**
@@ -54,7 +54,7 @@ public class RecipesIndexBuilder
           int tier=recipe.getTier();
           index.addRecipe(key,name,profession,tier);
         }
-        RecipesIndexWriter writer=new RecipesIndexWriter();
+        RecipesIndexXMLWriter writer=new RecipesIndexXMLWriter();
         ret=writer.write(_indexFile,index,EncodingNames.UTF_8);
       }
     }
