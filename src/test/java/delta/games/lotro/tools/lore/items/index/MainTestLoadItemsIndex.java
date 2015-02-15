@@ -8,8 +8,8 @@ import delta.common.utils.environment.FileSystem;
 import delta.games.lotro.lore.items.index.ItemCategory;
 import delta.games.lotro.lore.items.index.ItemSummary;
 import delta.games.lotro.lore.items.index.ItemsIndex;
-import delta.games.lotro.lore.items.index.io.xml.ItemsIndexWriter;
 import delta.games.lotro.lore.items.index.io.xml.ItemsIndexXMLParser;
+import delta.games.lotro.lore.items.index.io.xml.ItemsIndexXMLWriter;
 import delta.games.lotro.tools.lore.items.ItemsIndexJSONParser;
 import delta.games.lotro.utils.LotroLoggers;
 
@@ -31,7 +31,7 @@ public class MainTestLoadItemsIndex
     ItemsIndex index=parser.parseItemsIndex();
     if (index!=null)
     {
-      ItemsIndexWriter writer=new ItemsIndexWriter();
+      ItemsIndexXMLWriter writer=new ItemsIndexXMLWriter();
       File tmpDir=FileSystem.getTmpDir();
       File outFile=new File(tmpDir,"itemsIndex.xml");
       boolean ok=writer.write(outFile,index,"UTF-8");
