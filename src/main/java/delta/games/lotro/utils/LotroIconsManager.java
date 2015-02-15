@@ -6,9 +6,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import delta.downloads.DownloadException;
-import delta.games.lotro.Config;
-import delta.games.lotro.utils.DownloadService;
-import delta.games.lotro.utils.LotroLoggers;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.utils.cache.StringToFileCache;
 
 /**
@@ -40,7 +38,7 @@ public class LotroIconsManager
    */
   private LotroIconsManager()
   {
-    _rootDir=Config.getInstance().getIconsDir();
+    _rootDir=LotroCoreConfig.getInstance().getIconsDir();
     String[] seeds={SEED,SEED2};
     _cache=new StringToFileCache(_rootDir,seeds);
   }

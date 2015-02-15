@@ -12,7 +12,7 @@ import java.util.Set;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
-import delta.games.lotro.Config;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.recipes.Recipe;
@@ -49,7 +49,7 @@ public class ItemsIndexer
   {
     HashMap<String,List<Integer>> idStr2Id=new HashMap<String,List<Integer>>(); 
     ItemsManager mgr=ItemsManager.getInstance();
-    File itemsDir=Config.getInstance().getItemsDir();
+    File itemsDir=LotroCoreConfig.getInstance().getItemsDir();
     FileFilter fileFilter=new ExtensionPredicate("xml");
     File[] itemFiles=itemsDir.listFiles(fileFilter);
     if (itemFiles!=null)
@@ -205,7 +205,7 @@ public class ItemsIndexer
   {
     // Load recipes
     RecipesManager rMgr=RecipesManager.getInstance();
-    File recipesDir=Config.getInstance().getRecipesDir();
+    File recipesDir=LotroCoreConfig.getInstance().getRecipesDir();
     FileFilter fileFilter=new ExtensionPredicate("xml");
     File[] recipeFiles=recipesDir.listFiles(fileFilter);
     if (recipeFiles!=null)

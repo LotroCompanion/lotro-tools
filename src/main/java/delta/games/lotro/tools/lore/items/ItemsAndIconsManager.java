@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.TextUtils;
-import delta.games.lotro.Config;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.recipes.Recipe.ItemReference;
@@ -111,7 +111,7 @@ public class ItemsAndIconsManager
   private void loadItems(String key)
   {
     System.out.println("Loading item ["+key+"]");
-    File itemsDir=Config.getInstance().getItemsDir();
+    File itemsDir=LotroCoreConfig.getInstance().getItemsDir();
     if (!itemsDir.exists())
     {
       itemsDir.mkdirs();

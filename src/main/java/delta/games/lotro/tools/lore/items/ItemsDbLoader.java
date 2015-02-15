@@ -11,7 +11,7 @@ import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.common.utils.misc.IntegerHolder;
-import delta.games.lotro.Config;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.bonus.Bonus;
@@ -34,7 +34,7 @@ public class ItemsDbLoader
     LotroDataSource ds=LotroDataSource.getInstance("lotro");
     ObjectsManager<Item> itemsSource=ds.getManager(Item.class);
     ItemsManager mgr=ItemsManager.getInstance();
-    File itemsDir=Config.getInstance().getItemsDir();
+    File itemsDir=LotroCoreConfig.getInstance().getItemsDir();
     FileFilter fileFilter=new ExtensionPredicate("xml");
     File[] itemFiles=itemsDir.listFiles(fileFilter);
     if (itemFiles!=null)

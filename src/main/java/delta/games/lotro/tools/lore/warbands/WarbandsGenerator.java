@@ -3,7 +3,7 @@ package delta.games.lotro.tools.lore.warbands;
 import java.io.File;
 
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.Config;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.SIZE;
 import delta.games.lotro.lore.warbands.WarbandDefinition;
 import delta.games.lotro.lore.warbands.WarbandsRegistry;
@@ -237,7 +237,7 @@ public class WarbandsGenerator
 
   private void doIt()
   {
-    Config cfg=Config.getInstance();
+    LotroCoreConfig cfg=LotroCoreConfig.getInstance();
     File loreDir=cfg.getLoreDir();
     File warbandsFile=new File(loreDir,"warbands.xml");
     WarbandsRegistry r=buildRegistry();
