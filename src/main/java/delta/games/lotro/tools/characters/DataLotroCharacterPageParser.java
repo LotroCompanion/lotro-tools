@@ -131,13 +131,13 @@ public class DataLotroCharacterPageParser
     else if ("vitality".equals(name)) return STAT.VITALITY;
     else if ("will".equals(name)) return STAT.WILL;
     else if ("fate".equals(name)) return STAT.FATE;
-    else if ("criticalPoints".equals(name)) return STAT.CRITICAL_HIT;
+    else if ("criticalPoints".equals(name)) return STAT.CRITICAL_RATING;
     else if ("finessePoints".equals(name)) return STAT.FINESSE;
     else if ("block".equals(name)) return STAT.BLOCK;
     else if ("parry".equals(name)) return STAT.PARRY;
     else if ("evade".equals(name)) return STAT.EVADE;
     else if ("theOneResistance".equals(name)) return STAT.RESISTANCE;
-    else if ("criticalDefense".equals(name)) return STAT.CRITICAL_AVOID;
+    else if ("criticalDefense".equals(name)) return STAT.CRITICAL_DEFENCE;
     else if ("physicalMitigation".equals(name)) return STAT.PHYSICAL_MITIGATION;
     else if ("tacticalMitigation".equals(name)) return STAT.TACTICAL_MITIGATION;
     else return null;

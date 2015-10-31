@@ -134,13 +134,13 @@ public class CharacterPageParser
     else if ("Vitality".equals(name)) return STAT.VITALITY;
     else if ("Will".equals(name)) return STAT.WILL;
     else if ("Fate".equals(name)) return STAT.FATE;
-    else if ("Critical Hit".equals(name)) return STAT.CRITICAL_HIT;
+    else if ("Critical Hit".equals(name)) return STAT.CRITICAL_RATING;
     else if ("Finesse".equals(name)) return STAT.FINESSE;
     else if ("Block".equals(name)) return STAT.BLOCK;
     else if ("Parry".equals(name)) return STAT.PARRY;
     else if ("Evade".equals(name)) return STAT.EVADE;
     else if ("Resistance".equals(name)) return STAT.RESISTANCE;
-    else if ("Crit Avoid".equals(name)) return STAT.CRITICAL_AVOID;
+    else if ("Crit Avoid".equals(name)) return STAT.CRITICAL_DEFENCE;
     else if ("Physical Mit.".equals(name)) return STAT.PHYSICAL_MITIGATION;
     else if ("Tactical Mit.".equals(name)) return STAT.TACTICAL_MITIGATION;
     else return null;
