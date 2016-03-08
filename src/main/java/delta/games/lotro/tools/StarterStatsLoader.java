@@ -1,18 +1,19 @@
 package delta.games.lotro.tools;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
+import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextUtils;
+import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.CharacterStat;
-import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.character.stats.StarterStatsManager;
-import delta.games.lotro.character.stats.io.xml.StarterStatsParser;
-import delta.games.lotro.character.stats.io.xml.StarterStatsWriter;
+import delta.games.lotro.character.stats.base.StarterStatsManager;
+import delta.games.lotro.character.stats.base.io.xml.StarterStatsWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 
@@ -28,8 +29,9 @@ public class StarterStatsLoader
    */
   public static void main(String[] args)
   {
-    File f=new File("d:\\dam\\tmp\\stats.txt");
-    List<String> lines=TextUtils.readAsLines(f);
+    URL url=URLTools.getFromClassPath("stats.txt",StarterStatsLoader.class.getPackage());
+    TextFileReader reader=new TextFileReader(url, EncodingNames.ISO8859_1);
+    List<String> lines=TextUtils.readAsLines(reader);
     HashMap<String,List<String>> values=new HashMap<String,List<String>>(); 
     for(String line : lines)
     {
@@ -61,6 +63,7 @@ public class StarterStatsLoader
         int raceIndex=0;
         for(Race r : Race.ALL_RACES)
         {
+          if (r==Race.BEORNING) continue;
           raceIndex++;
           if ((cClass==CharacterClass.BURGLAR) && (r==Race.DWARF)) continue;
           if ((cClass==CharacterClass.BURGLAR) && (r==Race.ELF)) continue;
@@ -88,15 +91,9 @@ public class StarterStatsLoader
     //BasicStatsSet set=mgr.getStartingStats(Race.ELF,CharacterClass.WARDEN);
     //System.out.println(set);
     StarterStatsWriter writer=new StarterStatsWriter();
-    File to=new File(f.getParent(),"starter.xml");
+    File to=new File("starter.xml");
     writer.write(to,mgr,EncodingNames.UTF_8);
-    StarterStatsParser parser=new StarterStatsParser();
-    StarterStatsManager mgr2=parser.parseXML(to);
-    BasicStatsSet set=mgr.getStartingStats(Race.ELF,CharacterClass.WARDEN);
-    System.out.println(set);
-    BasicStatsSet set2=mgr2.getStartingStats(Race.ELF,CharacterClass.WARDEN);
-    System.out.println(set2);
-    //System.out.println(values);
+    System.out.println("Wrote file " + to.getAbsolutePath());
   }
 
   private static String removeDuplicateSpaces(String line)

@@ -1,0 +1,40 @@
+Morale 	148 	99 	115 	162 	111 	130 	222 	152 	252 	170 	136 	86 	155 	105 	86 	105 	136 	86 	155 	105
+Power 	50 	50 	50 	50 	50 	50 	50 	50 	50 	50 	50 	50 	50 	50 	65 	65 	65 	65 	65 	65
+Armour 	4 	4 	5 	3 	3 	3 	10 	10 	10 	10 	5 	5 	5 	5 	9 	9 	3 	3 	3 	3
+Might 	7 	29 	29 	29 	14 	29 	29 	14 	7 	29 	23 	8 	1 	23 	8 	23 	26 	11 	4 	26
+Agility 	14 	14 	8 	7 	29 	14 	3 	25 	10 	10 	7 	29 	14 	14 	26 	11 	1 	23 	8 	28
+Vitality 	23 	8 	10 	20 	10 	10 	24 	14 	29 	14 	20 	10 	25 	10 	10 	10 	20 	10 	25 	10
+Will 	11 	4 	4 	8 	8 	1 	11 	11 	11 	4 	14 	14 	14 	7 	14 	7 	14 	14 	14 	7
+Fate 	10 	25 	29 	4 	4 	26 	1 	1 	8 	23 	4 	4 	11 	26 	7 	29 	07 	7 	014 	29
+Critical_Rating 	39 	77 	81 	17 	39 	79 	6 	28 	30 	68 	17 	39 	42 	79 	44 	84 	19 	41 	43 	81
+Finesse 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0
+Physical_Mastery 	141 	141 	291 	291 	141 	291 	291 	141 	71 	291 	71 	291 	141 	141 	141 	71 	141 	141 	141 	71
+Tactical_Mastery 	56 	21 	291 	41 	41 	6 	56 	56 	56 	21 	71 	71 	71 	36 	141 	71 	141 	141 	141 	71
+Resistance 	68 	24 	28 	56 	36 	22 	70 	50 	80 	36 	68 	48 	78 	34 	48 	34 	68 	48 	78 	34
+Critical_Defence 	0 	0 	0 	0 	0 	0 	16 	16 	16 	16 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0
+Incoming_Healing 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0
+Block_Rating 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A 	118 	58 	30 	118 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A 	N/A
+Parry_Rating 	42 	86 	74 	188 	142 	202 	64 	78 	34 	78 	60 	74 	30 	74 	68 	68 	54 	68 	24 	68
+Evade_Rating 	56 	56 	32 	28 	116 	56 	12 	100 	40 	40 	28 	116 	56 	56 	104 	44 	4 	92 	32 	22
+Physical_Mitigation 	64 	78 	83 	101 	51 	81 	116 	66 	82 	96 	91 	41 	57 	71 	45 	75 	95 	45 	61 	75
+Tactical_Mitigation 	115 	41 	49 	97 	57 	43 	120 	80 	140 	66 	109 	69 	129 	55 	70 	56 	109 	69 	129 	55
+Morale 	136 	86 		131 	232 	150
+Power 	65 	65 		50 	50 	50
+Armour 	4 	4 		8 	8 	8
+Might 	23 	8 		14 	7 	29
+Agility 	4 	26 		29 	14 	14
+Vitality 	20 	10 		10 	25 	10
+Will 	14 	14 		8 	8 	1
+Fate 	7 	7 		4 	11 	26
+Critical_Rating 	22 	44 		39 	42 	79
+Finesse 	0 	0 		0 	0 	0
+Physical_Mastery 	141 	141 		431 	211 	431
+Tactical_Mastery 	141 	141 		216 	106 	216
+Resistance 	68 	48 		36 	66 	22
+Critical_Defence 	0 	0 		32 	32 	32
+Incoming_Healing 	0 	0 		0 	0 	0
+Block_Rating 	N/A 	N/A 		58 	30 	118
+Parry_Rating 	54 	68 		86 	42 	86
+Evade_Rating 	16 	104 		116 	56 	56
+Physical_Mitigation 	90 	40 		56 	72 	86
+Tactical_Mitigation 	109 	69 		58 	118 	44 
