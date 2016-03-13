@@ -15,6 +15,7 @@ import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
 import delta.games.lotro.character.CharacterStat.STAT;
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.utils.DownloadService;
@@ -73,6 +74,7 @@ public class DataLotroCharacterPageParser
           Element statsTag=DOMParsingTools.getChildTagByName(characterTag,"stats");
           if (statsTag!=null)
           {
+            BasicStatsSet stats=ret.getStats();
             List<Element> statTags=DOMParsingTools.getChildTagsByName(statsTag,"stat");
             for(Element statTag : statTags)
             {
@@ -84,10 +86,13 @@ public class DataLotroCharacterPageParser
               {
                 value=NumericTools.parseInteger(statValue);
               }
-              STAT stat=getStatByName(statName);
-              if (stat!=null)
+              if (value!=null)
               {
-                ret.getStat(stat,true).setValue(value);
+                STAT stat=getStatByName(statName);
+                if (stat!=null)
+                {
+                  stats.setStat(stat,value.intValue());
+                }
               }
             }
           }

@@ -14,8 +14,8 @@ import delta.games.lotro.character.Character;
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
-import delta.games.lotro.character.CharacterStat;
 import delta.games.lotro.character.CharacterStat.STAT;
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
@@ -81,15 +81,16 @@ public class CharacterPageParser
       //<div class="morale">4839</div>
       String moraleStr=JerichoHtmlUtils.getTagContents(charPanel,HTMLElementName.DIV,"class","morale");
       int morale=NumericTools.parseInt(moraleStr,0);
-      _character.getStat(STAT.MORALE,true).setValue(Integer.valueOf(morale));
+      BasicStatsSet stats=_character.getStats();
+      stats.setStat(STAT.MORALE,morale);
       //<div class="power">2243</div>
       String powerStr=JerichoHtmlUtils.getTagContents(charPanel,HTMLElementName.DIV,"class","power");
       int power=NumericTools.parseInt(powerStr,0);
-      _character.getStat(STAT.POWER,true).setValue(Integer.valueOf(power));
+      stats.setStat(STAT.POWER,power);
       //<div class="armour">3213</div>
       String armourStr=JerichoHtmlUtils.getTagContents(charPanel,HTMLElementName.DIV,"class","armour");
       int armour=NumericTools.parseInt(armourStr,0);
-      _character.getStat(STAT.ARMOUR,true).setValue(Integer.valueOf(armour));
+      stats.setStat(STAT.ARMOUR,armour);
       //System.out.println("Morale="+morale+", Power="+power+", Armour="+armour);
     }
     
@@ -148,6 +149,7 @@ public class CharacterPageParser
 
   private void parseStats(Element charPanel)
   {
+    BasicStatsSet stats=_character.getStats();
     // <table class="stat_list">    
     List<Element> statsTables=JerichoHtmlUtils.findElementsByTagNameAndAttributeValue(charPanel,HTMLElementName.TABLE,"class","stat_list");
     for(Element statsTable : statsTables)
@@ -170,8 +172,10 @@ public class CharacterPageParser
               {
                 value=NumericTools.parseInteger(statValue);
               }
-              CharacterStat cstat=_character.getStat(stat,true);
-              cstat.setValue(value);
+              if (value!=null)
+              {
+                stats.setStat(stat,value.intValue());
+              }
               //System.out.println("Stat : name=["+statName+"], value=["+value+"]");
             }
           }
