@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.xml.DOMParsingTools;
 import delta.games.lotro.common.Rewards;
-import delta.games.lotro.common.SIZE;
+import delta.games.lotro.common.Size;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.QuestDescription.TYPE;
@@ -165,15 +165,15 @@ public class QuestPageParser
         }
         else if ("Small Fellowship".equals(title))
         {
-          _quest.setSize(SIZE.SMALL_FELLOWSHIP);
+          _quest.setSize(Size.SMALL_FELLOWSHIP);
         }
         else if ("Fellowship".equals(title))
         {
-          _quest.setSize(SIZE.FELLOWSHIP);
+          _quest.setSize(Size.FELLOWSHIP);
         }
         else if ("Raid".equals(title))
         {
-          _quest.setSize(SIZE.RAID);
+          _quest.setSize(Size.RAID);
         }
         else if ("Repeatable".equals(title))
         {
