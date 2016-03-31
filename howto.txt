@@ -1,0 +1,32 @@
+Merge tulkas index and legacy items:
+
+<item key="1879049233" name="Hengaim" category="ITEM" subCategory="5" unique="false" sturdiness="NORMAL" quality="UNCOMMON" description="">
+<property key="backgroundIconId" value="1090519042"/>
+<property key="iconId" value="1090520031"/>
+<stats/>
+</item>
+
+<item key="1879049233" id="Armour:Hengaim" name="Hengaim" iconURL="http://content.turbine.com/sites/lorebook.lotro.com/images/icons/item/hands/eq_breeland_light_hands_02.png" category="ARMOUR" subCategory="Light Armour" binding="BIND_ON_ACQUIRE" unique="false" durability="30" sturdiness="NORMAL" armour="55" armourType="LIGHT">
+<money gold="0" silver="1" copper="60"/>
+<bonus value="+5 Will"/>
+<stats/>
+</item>
+
+Tulkas loaders sets:
+- identifier
+- name
+- description
+- iconId and iconBackgroundId properties
+- isUnique
+- subCategory (int value)
+- quality
+- sturdiness
+
+
+Iterate on tulkas items (complete index)
+- find item in legacy based on id
+	- found: we have both item definitions
+		- check names: warn if different
+		- category: legacy shall be right, take it
+		- subCategory
+	- not found: put tulkas item in legacy map
