@@ -5,10 +5,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
-import delta.common.utils.misc.IntegerHolder;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
@@ -28,15 +28,12 @@ public class ItemsDbLoader
   private static final int NAME_INDEX=0;
   private static final int ITEM_LEVEL_INDEX=1;
   private static final int ARMOUR_INDEX=2;
-  private static final int FIRST_STAT_INDEX=3;
+  private static final int FIRST_STAT_INDEX=3; // Might
   private static final int Notes=28;
-  // TODO add support for these stats
-  /*
-  private static final int Audacity=26;
-  private static final int Hope=27;
-  private static final int ParryP=53;
-  private static final int RngRedP=62;
-  */
+  private static final int AUDACITY_INDEX=26;
+  private static final int HOPE_INDEX=27;
+  private static final int PARRY_PERCENTAGE_INDEX=53;
+  private static final int RANGED_DEFENCE_PERCENTAGE_INDEX=62;
   // All other stats are unused
   //Name  iLvl  Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
 
@@ -46,8 +43,10 @@ public class ItemsDbLoader
     STAT.PHYSICAL_MITIGATION, STAT.TACTICAL_MITIGATION
   };
 
-  private HashMap<String,IntegerHolder> _map=new HashMap<String,IntegerHolder>();
-  private String[] _fields;
+  private HashMap<Integer,STAT> _mapIndexToStat;
+  //private HashMap<String,IntegerHolder> _map;
+  //private String[] _fields;
+
   /**
    * Main method for this tool.
    * @param args Not used.
@@ -57,13 +56,27 @@ public class ItemsDbLoader
     new ItemsDbLoader().doIt();
   }
 
+  private ItemsDbLoader()
+  {
+    _mapIndexToStat=new HashMap<Integer,STAT>();
+    //_map=new HashMap<String,IntegerHolder>();
+    for(int i=0;i<STATS.length;i++)
+    {
+      _mapIndexToStat.put(Integer.valueOf(i+FIRST_STAT_INDEX),STATS[i]);
+    }
+    _mapIndexToStat.put(Integer.valueOf(AUDACITY_INDEX),STAT.AUDACITY);
+    _mapIndexToStat.put(Integer.valueOf(HOPE_INDEX),STAT.HOPE);
+    _mapIndexToStat.put(Integer.valueOf(PARRY_PERCENTAGE_INDEX),STAT.PARRY_PERCENTAGE);
+    _mapIndexToStat.put(Integer.valueOf(RANGED_DEFENCE_PERCENTAGE_INDEX),STAT.RANGED_DEFENCE_PERCENTAGE);
+  }
+
   private void doIt()
   {
     URL url=URLTools.getFromClassPath("itemsdb.txt",ItemsDbLoader.class.getPackage());
     TextFileReader reader=new TextFileReader(url, EncodingNames.UTF_8);
     List<String> lines=TextUtils.readAsLines(reader);
     List<Item> items=new ArrayList<Item>();
-    _fields=StringSplitter.split(lines.get(0),'\t');
+    //_fields=StringSplitter.split(lines.get(0),'\t');
     lines.remove(0);
     for(String line : lines)
     {
@@ -73,7 +86,7 @@ public class ItemsDbLoader
     ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("itemsdb.xml").getAbsoluteFile();
     mgr.writeItemsFile(toFile,items);
-    System.out.println(_map);
+    //System.out.println(_map);
   }
 
   private Item buildItemFromLine(String line)
@@ -115,14 +128,30 @@ public class ItemsDbLoader
     }
     // Stats
     BasicStatsSet stats=item.getStats();
-    for(int i=0;i<STATS.length;i++)
+    for(Map.Entry<Integer,STAT> entry : _mapIndexToStat.entrySet())
     {
-      Integer statValue=NumericTools.parseInteger(fields[i+FIRST_STAT_INDEX]);
-      if (statValue!=null)
+      int index=entry.getKey().intValue();
+      String valueStr=fields[index];
+      if (valueStr.endsWith("%"))
       {
-        stats.setStat(STATS[i],statValue.intValue());
+        valueStr=valueStr.substring(0,valueStr.length()-1);
+        valueStr=valueStr.replace(',','.');
+        Float statValue=NumericTools.parseFloat(valueStr);
+        if (statValue!=null)
+        {
+          stats.setStat(entry.getValue(),statValue.floatValue());
+        }
+      }
+      else
+      {
+        Integer statValue=NumericTools.parseInteger(valueStr);
+        if (statValue!=null)
+        {
+          stats.setStat(entry.getValue(),statValue.intValue());
+        }
       }
     }
+    /*
     for(int i=FIRST_STAT_INDEX+STATS.length;i<fields.length;i++)
     {
       if (fields[i].length()>0) {
@@ -135,6 +164,7 @@ public class ItemsDbLoader
         holder.increment();
       }
     }
+    */
     return item;
   }
 }
