@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -183,11 +184,11 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
       item.setDescription(description);
       if (iconID!=null)
       {
-        item.setProperty("iconId",iconID.toString());
+        item.setProperty(ItemPropertyNames.ICON_ID,iconID.toString());
       }
       if (backgroundIconId!=null)
       {
-        item.setProperty("backgroundIconId",backgroundIconId.toString());
+        item.setProperty(ItemPropertyNames.BACKGROUND_ICON_ID,backgroundIconId.toString());
       }
       if (isUnique!=null)
       {

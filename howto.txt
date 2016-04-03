@@ -1,4 +1,5 @@
-Merge tulkas index and legacy items:
+Merge tulkas index and legacy items
+===================================
 
 <item key="1879049233" name="Hengaim" category="ITEM" subCategory="5" unique="false" sturdiness="NORMAL" quality="UNCOMMON" description="">
 <property key="backgroundIconId" value="1090519042"/>
@@ -22,11 +23,31 @@ Tulkas loaders sets:
 - quality
 - sturdiness
 
-
 Iterate on tulkas items (complete index)
 - find item in legacy based on id
 	- found: we have both item definitions
 		- check names: warn if different
 		- category: legacy shall be right, take it
-		- subCategory
+		- subCategory: build a map with tulkas ints and legacy strings (count each mapping)
+		- unique: check and warn if different, keep tulkas value
+		- sturdiness: check and warn if different, keep tulkas value
+		- quality: use tulkas value
+		- description: check and warn if different, use tulkas value if not empty and legacy one if tulkas is empty
+		- properties: keep tulkas ones
+		- keep iconURL, binding, armour value, armour type, money and bonuses from legacy.
+	=> keep legacy item, update it with tulkas data
 	- not found: put tulkas item in legacy map
+
+Subcategory merge: use map to set sub category to all tulkas items
+
+Merge results with lotro plan items:
+====================================
+
+Lotro plan loaders sets:
+- identifier
+- name
+- item level
+- stats
+
+Check name, warn if different
+Add item level and stats to existing items
