@@ -9,7 +9,8 @@ import delta.common.utils.files.iterator.FileIterator;
 import delta.common.utils.files.iterator.FileIteratorCallback;
 
 /**
- * @author dm
+ * Tool to rename screenshot files.
+ * @author DAM
  */
 public class ScreenshotsRename
 {
@@ -29,7 +30,8 @@ public class ScreenshotsRename
   }
 
   /**
-   * @param args
+   * Main method of this tool.
+   * @param args Not used.
    */
   public static void main(String[] args)
   {
@@ -43,13 +45,10 @@ public class ScreenshotsRename
     };
     FileIteratorCallback c=new FileIteratorCallback()
     {
-      
       public void leaveDirectory(File absolute, File relative)
       {
-        // ToDo Auto-generated method stub
-        
+        // Nothing to do!
       }
-      
       public void handleFile(File absolute, File relative)
       {
         if (f.accept(absolute))
@@ -57,12 +56,10 @@ public class ScreenshotsRename
           doRename(absolute);
         }
       }
-
       public void handleDirectory(File absolute, File relative)
       {
-        // ToDo Auto-generated method stub
+        // Nothing to do!
       }
-      
       public boolean enterDirectory(File absolute, File relative)
       {
         return true;
