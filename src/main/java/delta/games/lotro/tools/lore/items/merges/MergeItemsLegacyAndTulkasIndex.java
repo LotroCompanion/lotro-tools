@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.items.merges;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
  * into a single items database.
  * @author DAM
  */
-public class ItemsMerge
+public class MergeItemsLegacyAndTulkasIndex
 {
   // Map tulkas subcategories int ids to list of legacy subcategories names
   //private HashMap<String,HashMap<String,IntegerHolder>> _tulkas2legacySubCategoriesMap;
@@ -39,7 +39,7 @@ public class ItemsMerge
   /**
    * Constructor.
    */
-  public ItemsMerge()
+  public MergeItemsLegacyAndTulkasIndex()
   {
     //_legacy2tulkasSubCategoriesMap=new HashMap<String,Set<String>>();
     //_tulkas2legacySubCategoriesMap=new HashMap<String,HashMap<String,IntegerHolder>>();
@@ -266,6 +266,6 @@ public class ItemsMerge
    */
   public static void main(String[] args)
   {
-    new ItemsMerge().doIt();
+    new MergeItemsLegacyAndTulkasIndex().doIt();
   }
 }
