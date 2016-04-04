@@ -13,7 +13,7 @@ Merge tulkas index and legacy items
 <stats/>
 </item>
 
-Tulkas loaders sets:
+Tulkas index loader sets:
 - identifier
 - name
 - description
@@ -51,3 +51,35 @@ Lotro plan loaders sets:
 
 Check name, warn if different
 Add item level and stats to existing items
+
+
+
+Tulkas 13.1
+===========
+// Armour:
+<item key="1879049261" name="Cutleaf's Waistcoat" level="0" category="ARMOUR" unique="false" quality="UNCOMMON" minLevel="0" armour="65" armourType="LIGHT">
+<stats/>
+</item>
+// Weapon:
+<item key="1879049249" name="Constable's Hammer" level="0" category="WEAPON" unique="false" quality="UNCOMMON" minLevel="0" dps="11.8" minDamage="17" maxDamage="28" damageType="COMMON" weaponType="One-handed Hammer">
+<stats/>
+</item>
+// Item:
+<item key="1879049771" name="Strange Rock" level="0" category="ITEM" unique="false" quality="RARE" minLevel="0">
+<stats/>
+</item>
+
+Tulkas "new" loader sets:
+- slot (not persisted!)
+- armor: armour value, type (light/medium/heavy+shield type)
+- weapon: weapon type, min/max damage, dps, damage type
+- required level
+- item level
+- required class
+- quality
+- bonuses (should be stats)
+
+TODO in tulkas "new" loader:
+	add bonus as stats
+Merge
+=> add slot, required class

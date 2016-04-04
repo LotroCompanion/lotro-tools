@@ -64,11 +64,13 @@ public class ItemsMerge
       if ((tulkasItem!=null) && (legacyItem!=null))
       {
         result=mergeItems(tulkasItem,legacyItem);
+        legacyItems.remove(id);
       }
       String tulkasSubCategory=tulkasItem.getSubCategory();
       result.setProperty(ItemPropertyNames.TULKAS_CATEGORY,tulkasSubCategory);
       mergeResult.put(Integer.valueOf(result.getIdentifier()),result);
     }
+    System.out.println(legacyItems.size());
     File toFile=new File("itemsLegacy+TulkasIndex.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);

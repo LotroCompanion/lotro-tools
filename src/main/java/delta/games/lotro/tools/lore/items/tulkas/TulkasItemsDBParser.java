@@ -38,7 +38,7 @@ public class TulkasItemsDBParser
     }
     else if (version==NEW_VERSION)
     {
-      _inputFile=new File(new File("d:\\tmp"),"Items2.1.0.lua");
+      _inputFile=new File(new File("d:\\tmp"),"Items13.1.lua");
       _encoding=EncodingNames.UTF_8;
     }
     else if (version==INDEX)
@@ -313,5 +313,6 @@ public class TulkasItemsDBParser
   public static void main(String[] args)
   {
     new TulkasItemsDBParser(INDEX).doIt();
+    new TulkasItemsDBParser(NEW_VERSION).doIt();
   }
 }

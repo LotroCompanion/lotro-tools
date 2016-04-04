@@ -115,7 +115,7 @@ public class TulkasItemsLoader1 extends TulkasItemsLoader
       }
       String armourTypeStr=(String)map.get("Type");
       ArmourType armourType=ArmourType.getArmourTypeByName(armourTypeStr);
-      if (loc==EquipmentLocation.SHIELD)
+      if (loc==EquipmentLocation.OFF_HAND)
       {
         String subSlot=(String)map.get("SubSlot");
         if ("Heavy".equals(subSlot)) armourType=ArmourType.HEAVY_SHIELD;

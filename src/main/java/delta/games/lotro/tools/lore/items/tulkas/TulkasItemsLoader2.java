@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.items.tulkas;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemQuality;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.ItemsSet;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -70,19 +72,24 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     Collections.sort(keys);
     int nbKeys=keys.size();
     System.out.println("Min: "+keys.get(0)+", max: "+keys.get(nbKeys-1));
+    List<Item> itemsList=new ArrayList<Item>();
     for(int i=0;i<nbKeys;i++)
     {
       Integer id=keys.get(i);
       HashMap<Object,Object> data=items.get(id);
       Item item=buildItem(id,data);
       item.setIdentifier(id.intValue());
-      System.out.println(item.dump());
+      //System.out.println(item.dump());
+      itemsList.add(item);
       /*
       ItemsManager mgr=ItemsManager.getInstance();
       mgr.writeItemFile(item);
       */
       //writeItemToDB(item);
     }
+    ItemsManager mgr=ItemsManager.getInstance();
+    File toFile=new File("itemsTulkas13.1.xml").getAbsoluteFile();
+    mgr.writeItemsFile(toFile,itemsList);
   }
 
   private Item buildItem(Integer id, HashMap<Object,Object> map)
@@ -101,6 +108,7 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     HashMap<Object,Object> map1=(HashMap<Object,Object>)map.get(Integer.valueOf(1));
     String name=(String)map1.get(Integer.valueOf(1)); // label US
 
+    WeaponType weaponType=null;
     EquipmentLocation loc=null;
     // slot
     Integer locValue=(Integer)map.get(Integer.valueOf(5));
@@ -109,11 +117,13 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     {
       switch (locValue.intValue())
       {
+        // Jewels
         case 1: loc=EquipmentLocation.EAR; break;
         case 2: loc=EquipmentLocation.NECK; break;
         case 3: loc=EquipmentLocation.POCKET; break;
         case 4: loc=EquipmentLocation.WRIST; break;
         case 5: loc=EquipmentLocation.FINGER; break;
+        // Armours
         case 6: loc=EquipmentLocation.HEAD; break;
         case 7: loc=EquipmentLocation.SHOULDER; break;
         case 8: loc=EquipmentLocation.BACK; break;
@@ -121,10 +131,17 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
         case 10: loc=EquipmentLocation.HAND; break;
         case 11: loc=EquipmentLocation.LEGS; break;
         case 12: loc=EquipmentLocation.FEET; break;
-        case 13: loc=EquipmentLocation.MELEE_WEAPON; break;
-        case 14: loc=EquipmentLocation.SHIELD; break;
-        case 15: loc=EquipmentLocation.RANGED_WEAPON; break;
-        case 16: loc=EquipmentLocation.RUNE_STONE; break;
+        // Weapons/tools/class items
+        case 13: loc=EquipmentLocation.MAIN_HAND; break;
+        case 14: loc=EquipmentLocation.OFF_HAND; break;
+        case 15: loc=EquipmentLocation.RANGED_ITEM; break;
+        // Rune-stone
+        case 16:
+        {
+          loc=EquipmentLocation.MAIN_HAND;
+          weaponType=WeaponType.RUNE_STONE;
+        }
+        break;
         default:
         {
           _logger.warn("Unmanaged loc value: "+locValue);
@@ -141,6 +158,10 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       if (armourValue!=null)
       {
         a.setArmourValue(armourValue.intValue());
+      }
+      else
+      {
+        _logger.warn("No armour value!");
       }
       // 7=armor type: 1=light, 2=medium, 3=heavy
       Integer armourTypeInt=(Integer)map.get(Integer.valueOf(7));
@@ -185,7 +206,6 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     }
     else
     {
-      WeaponType weaponType=null;
       Integer weaponTypeInt=(Integer)map.get(Integer.valueOf(9));
       if (weaponTypeInt!=null)
       {
@@ -207,8 +227,11 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
           case 17: weaponType=WeaponType.BOW; break;
           case 18: weaponType=WeaponType.CROSSBOW; break;
           case 19: weaponType=WeaponType.JAVELIN; break;
+          case 20: weaponType=null; break; // Instrument
+          case 21: weaponType=null; break; // Chisel
+          case 22: weaponType=null; break; // Riffler
           default:
-            _logger.warn("Unmanaged weapon type: "+weaponTypeInt.intValue());
+            _logger.warn("ID=" + id + ": unmanaged weapon type: "+weaponTypeInt.intValue());
         }
       }
       if (weaponType!=null)
@@ -284,10 +307,16 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     ret.setEquipmentLocation(loc);
     // Required level
     Integer requiredLevel=(Integer)map.get(Integer.valueOf(2));
-    ret.setMinLevel(requiredLevel);
+    if ((requiredLevel!=null) && (requiredLevel.intValue()>0))
+    {
+      ret.setMinLevel(requiredLevel);
+    }
     // Item level
     Integer itemLevel=(Integer)map.get(Integer.valueOf(3));
-    ret.setItemLevel(itemLevel);
+    if ((itemLevel!=null) && (itemLevel.intValue()>0))
+    {
+      ret.setItemLevel(itemLevel);
+    }
     // Class
     CharacterClass cClass=null;
     Integer classInt=(Integer)map.get(Integer.valueOf(14));
@@ -321,15 +350,20 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     {
       switch (qualityInt.intValue())
       {
+        case 1: quality=ItemQuality.COMMON; break;
         case 2: quality=ItemQuality.UNCOMMON; break;
         case 3: quality=ItemQuality.RARE; break;
         case 4: quality=ItemQuality.INCOMPARABLE; break;
         case 5: quality=ItemQuality.LEGENDARY; break;
         default:
         {
-          _logger.warn("Unmanaged quality ["+qualityInt+"]");
+          _logger.warn("ID: " + id + ": unmanaged quality ["+qualityInt+"]");
         }
       }
+    }
+    else
+    {
+      _logger.warn("ID: " + id + ": no quality!");
     }
     ret.setQuality(quality);
     

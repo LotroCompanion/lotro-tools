@@ -60,7 +60,7 @@ public class TulkasConstants
     if (loc==EquipmentLocation.BACK) return true;
     if (loc==EquipmentLocation.LEGS) return true;
     if (loc==EquipmentLocation.FEET) return true;
-    if (loc==EquipmentLocation.SHIELD) return true;
+    if (loc==EquipmentLocation.OFF_HAND) return true;
     if (loc==EquipmentLocation.SHOULDER) return true;
     return false;
   }
