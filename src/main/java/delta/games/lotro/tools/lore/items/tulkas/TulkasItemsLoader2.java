@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
@@ -19,10 +21,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.ItemsSet;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.bonus.Bonus;
-import delta.games.lotro.lore.items.bonus.Bonus.BONUS_OCCURRENCE;
-import delta.games.lotro.lore.items.bonus.BonusManager;
-import delta.games.lotro.lore.items.bonus.BonusType;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
@@ -211,25 +210,25 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       {
         switch (weaponTypeInt.intValue())
         {
-          case 1: weaponType=WeaponType.ONE_HANDED_AXE; break;
-          case 2: weaponType=WeaponType.TWO_HANDED_AXE; break;
-          case 3: weaponType=WeaponType.ONE_HANDED_CLUB; break;
-          case 4: weaponType=WeaponType.TWO_HANDED_CLUB; break;
-          case 5: weaponType=WeaponType.DAGGER; break;
-          case 6: weaponType=WeaponType.HALBERD; break;
-          case 7: weaponType=WeaponType.ONE_HANDED_HAMMER; break;
-          case 8: weaponType=WeaponType.TWO_HANDED_HAMMER; break;
-          case 9: weaponType=WeaponType.ONE_HANDED_MACE; break;
-          case 10: weaponType=WeaponType.SPEAR; break;
-          case 11: weaponType=WeaponType.STAFF; break;
-          case 12: weaponType=WeaponType.ONE_HANDED_SWORD; break;
-          case 13: weaponType=WeaponType.TWO_HANDED_SWORD; break;
-          case 17: weaponType=WeaponType.BOW; break;
-          case 18: weaponType=WeaponType.CROSSBOW; break;
-          case 19: weaponType=WeaponType.JAVELIN; break;
-          case 20: weaponType=null; break; // Instrument
-          case 21: weaponType=null; break; // Chisel
-          case 22: weaponType=null; break; // Riffler
+          case 1: weaponType=WeaponType.ONE_HANDED_AXE; loc=EquipmentLocation.MAIN_HAND; break;
+          case 2: weaponType=WeaponType.TWO_HANDED_AXE; loc=EquipmentLocation.MAIN_HAND; break;
+          case 3: weaponType=WeaponType.ONE_HANDED_CLUB; loc=EquipmentLocation.MAIN_HAND; break;
+          case 4: weaponType=WeaponType.TWO_HANDED_CLUB; loc=EquipmentLocation.MAIN_HAND; break;
+          case 5: weaponType=WeaponType.DAGGER; loc=EquipmentLocation.MAIN_HAND; break;
+          case 6: weaponType=WeaponType.HALBERD; loc=EquipmentLocation.MAIN_HAND; break;
+          case 7: weaponType=WeaponType.ONE_HANDED_HAMMER; loc=EquipmentLocation.MAIN_HAND; break;
+          case 8: weaponType=WeaponType.TWO_HANDED_HAMMER; loc=EquipmentLocation.MAIN_HAND; break;
+          case 9: weaponType=WeaponType.ONE_HANDED_MACE; loc=EquipmentLocation.MAIN_HAND; break;
+          case 10: weaponType=WeaponType.SPEAR; loc=EquipmentLocation.MAIN_HAND; break;
+          case 11: weaponType=WeaponType.STAFF; loc=EquipmentLocation.MAIN_HAND; break;
+          case 12: weaponType=WeaponType.ONE_HANDED_SWORD; loc=EquipmentLocation.MAIN_HAND; break;
+          case 13: weaponType=WeaponType.TWO_HANDED_SWORD; loc=EquipmentLocation.MAIN_HAND; break;
+          case 17: weaponType=WeaponType.BOW; loc=EquipmentLocation.RANGED_ITEM; break;
+          case 18: weaponType=WeaponType.CROSSBOW; loc=EquipmentLocation.RANGED_ITEM; break;
+          case 19: weaponType=WeaponType.JAVELIN; loc=EquipmentLocation.RANGED_ITEM; break;
+          case 20: weaponType=null; loc=EquipmentLocation.RANGED_ITEM; break; // Instrument
+          case 21: weaponType=null; loc=EquipmentLocation.RANGED_ITEM; break; // Chisel
+          case 22: weaponType=null; loc=EquipmentLocation.RANGED_ITEM; break; // Riffler
           default:
             _logger.warn("ID=" + id + ": unmanaged weapon type: "+weaponTypeInt.intValue());
         }
@@ -289,16 +288,6 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       if (ret==null)
       {
         ret=new Item();
-        /*
-        _TABLES["WEAPONTYPE"] =
-          {
-            [20] = {
-              [1] = "Instrument";
-            [21] = {
-              [1] = "Chisel";
-            [22] = {
-              [1] = "Riffler";
-            */
       }
     }
     // Name
@@ -372,7 +361,7 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
     HashMap<Integer,Object> bonuses=(HashMap<Integer,Object>)map.get(Integer.valueOf(6));
     if (bonuses!=null)
     {
-      BonusManager bonusMgr=ret.getBonusManager();
+      BasicStatsSet stats=ret.getStats();
       List<Integer> keys=new ArrayList<Integer>(bonuses.keySet());
       Collections.sort(keys);
       for(Integer key : keys)
@@ -382,12 +371,24 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
         {
           String bonusName=TulkasConstants.BONUS_NAMES[index];
           Object bonusValue=bonuses.get(key);
-          BonusType type=BonusType.getByName(bonusName);
-          Bonus bonus=new Bonus(type,BONUS_OCCURRENCE.ALWAYS);
-          Object value=type.buildValue(bonusValue);
-          bonus.setValue(value);
-          bonusMgr.add(bonus);
-          //ret.getBonus().add(bonusName+" : "+bonuses.get(key));
+          STAT stat=TulkasConstants.STATS[index];
+          if (stat!=null)
+          {
+            FixedDecimalsInteger value=fromObjectValue(bonusValue);
+            stats.setStat(stat,value);
+          }
+          else
+          {
+            _logger.warn("No stat associated to bonus: " + bonusName);
+            /*
+            BonusType type=BonusType.getByName(bonusName);
+            Bonus bonus=new Bonus(type,BONUS_OCCURRENCE.ALWAYS);
+            Object value=type.buildValue(bonusValue);
+            bonus.setValue(value);
+            bonusMgr.add(bonus);
+            ret.getBonus().add(bonusName+" : "+bonuses.get(key));
+            */
+          }
           bonuses.remove(key);
         }
         else
@@ -401,7 +402,30 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       }
     }
     return ret;
-  }    
+  }
+
+  /**
+   * Build a fixed decimal integer from an object value.
+   * @param objectValue External representation string.
+   * @return A value.
+   */
+  private FixedDecimalsInteger fromObjectValue(Object objectValue)
+  {
+    FixedDecimalsInteger ret=null;
+    if (objectValue instanceof Integer)
+    {
+      ret=new FixedDecimalsInteger(((Integer)objectValue).intValue());
+    }
+    else if (objectValue instanceof Float)
+    {
+      ret=new FixedDecimalsInteger(((Float)objectValue).floatValue());
+    }
+    else
+    {
+      _logger.warn("Unmanaged value: " + objectValue);
+    }
+    return ret;
+  }
 
   /**
    * Build items sets from raw data items.

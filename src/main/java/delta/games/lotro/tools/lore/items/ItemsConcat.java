@@ -37,7 +37,7 @@ public class ItemsConcat
         int id=NumericTools.parseInt(idStr,-1);
         if (id!=-1)
         {
-          System.out.println(id);
+          //System.out.println(id);
           Item item=parser.parseXML(itemFile);
           item.setIdentifier(id);
           itemsList.add(item);

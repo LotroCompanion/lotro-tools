@@ -57,29 +57,28 @@ Add item level and stats to existing items
 Tulkas 13.1
 ===========
 // Armour:
-<item key="1879049261" name="Cutleaf's Waistcoat" level="0" category="ARMOUR" unique="false" quality="UNCOMMON" minLevel="0" armour="65" armourType="LIGHT">
+<item key="1879049261" name="Cutleaf's Waistcoat" slot="CHEST" category="ARMOUR" unique="false" quality="UNCOMMON" armour="65" armourType="LIGHT">
 <stats/>
 </item>
 // Weapon:
-<item key="1879049249" name="Constable's Hammer" level="0" category="WEAPON" unique="false" quality="UNCOMMON" minLevel="0" dps="11.8" minDamage="17" maxDamage="28" damageType="COMMON" weaponType="One-handed Hammer">
+<item key="1879049249" name="Constable's Hammer" slot="MAIN_HAND" category="WEAPON" unique="false" quality="UNCOMMON" dps="11.8" minDamage="17" maxDamage="28" damageType="COMMON" weaponType="ONE_HANDED_HAMMER">
 <stats/>
 </item>
 // Item:
-<item key="1879049771" name="Strange Rock" level="0" category="ITEM" unique="false" quality="RARE" minLevel="0">
+<item key="1879049771" name="Strange Rock" slot="POCKET" category="ITEM" unique="false" quality="RARE">
 <stats/>
 </item>
 
 Tulkas "new" loader sets:
-- slot (not persisted!)
-- armor: armour value, type (light/medium/heavy+shield type)
-- weapon: weapon type, min/max damage, dps, damage type
-- required level
-- item level
-- required class
-- quality
-- bonuses (should be stats)
+- slot - OK
+- armor: armour value, type (light/medium/heavy+shield type) - OK
+- weapon: weapon type, min/max damage, dps, damage type - OK
+- required level - OK
+- item level - OK
+- required class - OK
+- quality - OK
+- stats - OK
 
-TODO in tulkas "new" loader:
-	add bonus as stats
 Merge
-=> add slot, required class
+- add slot, required class 
+...
