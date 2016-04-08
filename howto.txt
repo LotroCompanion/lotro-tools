@@ -40,20 +40,6 @@ Iterate on tulkas items (complete index)
 
 Subcategory merge: use map to set sub category to all tulkas items
 
-Merge results with lotro plan items:
-====================================
-
-Lotro plan loaders sets:
-- identifier
-- name
-- item level
-- stats
-
-Check name, warn if different
-Add item level and stats to existing items
-
-
-
 Tulkas 13.1
 ===========
 // Armour:
@@ -82,3 +68,35 @@ Tulkas "new" loader sets:
 Merge
 - add slot, required class 
 ...
+
+Lotro Plan
+==========
+Lotro Plan DB import builds Item or Armour instances. No Weapon instances.
+
+Item:
+<item key="1879049996" name="Collúr" level="20" category="ITEM" unique="false" quality="COMMON">
+<stats>
+<stat name="MORALE" value="1900"/>
+<stat name="WILL" value="600"/>
+</stats>
+</item>
+
+Armour:
+<item key="1879049234" name="Cloak of Cardolan" level="15" category="ARMOUR" unique="false" quality="COMMON" armour="74">
+<stats>
+<stat name="MORALE" value="1500"/>
+</stats>
+</item>
+
+Merge results with lotro plan items:
+====================================
+
+Lotro plan loaders sets:
+- identifier
+- name
+- item level
+- stats
+- armour (for Armour instances)
+
+Check name, warn if different
+Add item level and stats to existing items

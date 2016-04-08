@@ -144,7 +144,7 @@ Mapping:
 189=Perks
 205=Festival Items
 190=Stat tomes
-27=Quest Item (only Map to Esteldín)
+27=Quest Item
 28=Potion (all kinds)
 31=Key
 47=Trophy
