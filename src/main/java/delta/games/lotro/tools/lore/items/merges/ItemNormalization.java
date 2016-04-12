@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
+import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -68,14 +70,12 @@ public class ItemNormalization
   private Item normalizeCategory(Item item)
   {
     Item ret=normalizeArmours(item);
+    // TODO weapons
     ret=normalizeWeapons(ret);
     ret=normalizeCrafting(ret);
     ret=normalizeJewels(ret);
-    // TODO weapons
-    // TODO find out legendary items
-    // Reshaped/Reforged/Crafted/Unearthed Class's XXX of the First/Second/Third Age
-    // Captain's Emblem of the xxx Age
-    // TODO recipes
+    ret=normalizeRecipes(ret);
+    ret=normalizeLegendaryItem(ret);
     return ret;
   }
 
@@ -334,6 +334,130 @@ public class ItemNormalization
       item.setEquipmentLocation(loc);
       item.setSubCategory(null);
     }
+  }
+
+  private static final String[] PROFESSIONS = {"Prospector", "Farmer", "Forester", "Woodworker", "Cook", "Jeweller", "Metalsmith", "Weaponsmith", "Tailor", "Scholar" };
+
+  private static int[][] CRAFTING_CATEGORIES = {
+    { 60, 61, 63, 67, 65, 59, 64, 66, 58, 62},
+    { 134, 162, 122, 147, 113, 143, 141, 148, 155, 139},
+    { 135, 121, 127, 152, 114, 146, 144, 153, 160, 140},
+    { 136, 126, 130, 157, 115, 151, 149, 158, 120, 142},
+    { 137, 129, 132, 118, 116, 156, 154, 119, 125, 145},
+    { 138, 131, 133, 123, 117, 161, 159, 124, 128, 150},
+    { 202, 200, 201, 197, 203, 196, 195, 198, 199, 204},
+    { 215, 213, 214, 210, 216, 209, 208, 211, 212, 217},
+    { 228, 226, 227, 223, 229, 222, 221, 224, 225, 220}
+  };
+
+  private Item normalizeRecipes(Item item)
+  {
+    boolean found=false;
+    for(int i=0;i<CRAFTING_CATEGORIES.length;i++)
+    {
+      for(int j=0;j<CRAFTING_CATEGORIES[0].length;j++)
+      {
+        String craftingCategory=String.valueOf(CRAFTING_CATEGORIES[i][j]);
+        String subCategory=item.getSubCategory();
+        if (craftingCategory.equals(subCategory))
+        {
+          String newCategory="Recipe:"+PROFESSIONS[j]+":Tier"+(i+1);
+          item.setSubCategory(newCategory);
+          item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+          found=true;
+          break;
+        }
+      }
+      if (found)
+      {
+        break;
+      }
+    }
+    return item;
+  }
+
+  private Item normalizeLegendaryItem(Item item)
+  {
+    String name=item.getName();
+    ItemQuality quality=null;
+    if (name==null) return item;
+    if (name.endsWith("of the First Age")) quality=ItemQuality.LEGENDARY;
+    else if (name.endsWith("of the Second Age")) quality=ItemQuality.INCOMPARABLE;
+    else if (name.endsWith("of the Third Age")) quality=ItemQuality.RARE;
+    if (quality!=null)
+    {
+      CharacterClass cClass=null;
+      if (name.indexOf("Champion")!=-1) cClass=CharacterClass.CHAMPION;
+      else if (name.indexOf("Captain")!=-1) cClass=CharacterClass.CAPTAIN;
+      else if (name.indexOf("Beorning")!=-1) cClass=CharacterClass.BEORNING;
+      else if (name.indexOf("Burglar")!=-1) cClass=CharacterClass.BURGLAR;
+      else if (name.indexOf("Guardian")!=-1) cClass=CharacterClass.GUARDIAN;
+      else if (name.indexOf("Hunter")!=-1) cClass=CharacterClass.HUNTER;
+      else if (name.indexOf("Lore-master")!=-1) cClass=CharacterClass.LORE_MASTER;
+      else if (name.indexOf("Minstrel")!=-1) cClass=CharacterClass.MINSTREL;
+      else if (name.indexOf("Rune-keeper")!=-1) cClass=CharacterClass.RUNE_KEEPER;
+      else if (name.indexOf("Warden")!=-1) cClass=CharacterClass.WARDEN;
+
+      WeaponType type=null;
+      String classItemType=null;
+      boolean bridle=false;
+      if (name.indexOf("Great Club")!=-1) type=WeaponType.TWO_HANDED_CLUB;
+      else if (name.indexOf("Great Axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
+      else if (name.indexOf("Great Sword")!=-1) type=WeaponType.TWO_HANDED_SWORD;
+      else if (name.indexOf("Greatsword")!=-1) type=WeaponType.TWO_HANDED_SWORD;
+      else if (name.indexOf("Great Hammer")!=-1) type=WeaponType.TWO_HANDED_HAMMER;
+      else if (name.indexOf("Halberd")!=-1) type=WeaponType.HALBERD;
+      else if (name.indexOf("Club")!=-1) type=WeaponType.ONE_HANDED_CLUB;
+      else if (name.indexOf("Axe")!=-1) type=WeaponType.ONE_HANDED_AXE;
+      else if (name.indexOf("Sword")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+      else if (name.indexOf("Hammer")!=-1) type=WeaponType.ONE_HANDED_HAMMER;
+      else if (name.indexOf("Dagger")!=-1) type=WeaponType.DAGGER;
+      else if (name.indexOf("Spear")!=-1) type=WeaponType.SPEAR;
+      else if (name.indexOf("Mace")!=-1) type=WeaponType.ONE_HANDED_MACE;
+      else if (name.indexOf("Rune-stone")!=-1)
+      {
+        type=WeaponType.RUNE_STONE;
+        cClass=CharacterClass.RUNE_KEEPER;
+      }
+      else if (name.indexOf("Staff")!=-1) type=WeaponType.STAFF;
+      else if (name.indexOf("Carving")!=-1) classItemType="Carving";
+      else if (name.indexOf("Tools")!=-1) classItemType="Tools";
+      else if (name.indexOf("Emblem")!=-1) classItemType="Emblem";
+      else if (name.indexOf("Rune-satchel")!=-1) classItemType="Rune-satchel";
+      else if (name.indexOf("Rune")!=-1) classItemType="Rune";
+      else if (name.indexOf("Belt")!=-1) classItemType="Belt";
+      else if (name.indexOf("Crossbow")!=-1) classItemType="Crossbow";
+      else if (name.indexOf("Bow")!=-1) classItemType="Bow";
+      else if (name.indexOf("Book")!=-1) classItemType="Book";
+      else if (name.indexOf("Songbook")!=-1) classItemType="Songbook";
+      else if (name.indexOf("Javelin")!=-1) classItemType="Javelin";
+      else if (name.indexOf("Bridle")!=-1) bridle=true;
+
+      if ((type!=null) || (classItemType!=null) || (bridle))
+      {
+        item.setQuality(quality);
+        item.setRequiredClass(cClass);
+        String category=null;
+        if (bridle)
+        {
+          category="Legendary Bridle";
+        }
+        else if (classItemType!=null)
+        {
+          category="Legendary Class Item:"+classItemType;
+        }
+        else if (type!=null)
+        {
+          category="Legendary Weapon";
+        }
+        item.setSubCategory(category);
+        item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+        item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+        //System.out.println(name+", class="+cClass+", category="+category+", weapon type="+type);
+      }
+    }
+    return item;
   }
 
   /**
