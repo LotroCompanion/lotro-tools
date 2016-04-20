@@ -3,20 +3,18 @@ package delta.games.lotro.tools.lore.items.icons;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.CRC32;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.misc.CRC;
 import delta.downloads.DownloadException;
-import delta.downloads.Downloader;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.utils.DownloadService;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
- * @author dm
+ * Downloads item icons from the site lotro.fr
+ * @author DAM
  */
 public class ItemIconsDownloader
 {
@@ -36,7 +34,7 @@ public class ItemIconsDownloader
 
   private File _toDir=new File("d:\\tmp\\icons");
 
-  private void doIt2() {
+  private void doIt() {
     DownloadService downloader=DownloadService.getInstance();
     File toFile=new File("items.xml").getAbsoluteFile();
     _toDir.mkdirs();
@@ -58,7 +56,8 @@ public class ItemIconsDownloader
     }
   }
 
-  private void doIt()
+  /*
+  private void doIt2()
   {
     File[] files=_toDir.listFiles();
     for(File file : files)
@@ -70,9 +69,11 @@ public class ItemIconsDownloader
       //if (crc==2459958024L) file.delete();
     }
   }
+  */
 
   /**
-   * @param args
+   * Main method for this tool.
+   * @param args Not used.
    */
   public static void main(String[] args)
   {
