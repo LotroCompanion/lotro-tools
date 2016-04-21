@@ -45,7 +45,10 @@ public class MergeItemsLegacyAndTulkasIndex
     //_tulkas2legacySubCategoriesMap=new HashMap<String,HashMap<String,IntegerHolder>>();
   }
 
-  private void doIt()
+  /**
+   * Do the job.
+   */
+  public void doIt()
   {
     File file1=new File("itemsLegacy.xml");
     HashMap<Integer,Item> legacyItems=loadItemsFile(file1);

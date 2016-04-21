@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.items.tulkas;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemQuality;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.ItemsSet;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -82,19 +84,24 @@ public class TulkasItemsLoader1 extends TulkasItemsLoader
     Collections.sort(keys);
     int nbKeys=keys.size();
     System.out.println("Min: "+keys.get(0)+", max: "+keys.get(nbKeys-1));
+    List<Item> itemsList=new ArrayList<Item>();
     for(int i=0;i<nbKeys;i++)
     {
       Integer id=keys.get(i);
       HashMap<Object,Object> data=items.get(id);
       Item item=buildItem(id,data);
       item.setIdentifier(id.intValue());
+      itemsList.add(item);
       /*
       ItemsManager mgr=ItemsManager.getInstance();
       mgr.writeItemFile(item);
       System.out.println(item.dump());
       */
-      writeItemToDB(item);
+      //writeItemToDB(item);
     }
+    ItemsManager mgr=ItemsManager.getInstance();
+    File toFile=new File("itemsTulkasOld.xml").getAbsoluteFile();
+    mgr.writeItemsFile(toFile,itemsList);
   }
 
   private Item buildItem(Integer id, HashMap<Object,Object> map)

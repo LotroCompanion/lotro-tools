@@ -42,7 +42,10 @@ public class MergeWithTulkasNew
     // Nothing to do!
   }
 
-  private void doIt()
+  /**
+   * Do the job.
+   */
+  public void doIt()
   {
     File file1=new File("itemsLegacy+TulkasIndex.xml");
     HashMap<Integer,Item> sourceItems=loadItemsFile(file1);

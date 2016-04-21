@@ -17,35 +17,34 @@ import delta.common.utils.text.TextUtils;
  */
 public class TulkasItemsDBParser
 {
-  private static final int OLD_VERSION=1;
-  private static final int NEW_VERSION=2;
-  private static final int INDEX=3;
+  /**
+   * Oldest format, with explicit stats.
+   */
+  public static final int OLD_VERSION=1;
+  /**
+   * Newer format, with coded stats.
+   */
+  public static final int NEW_VERSION=2;
+  /**
+   * Items index.
+   */
+  public static final int INDEX=3;
+
   private File _inputFile;
   private int _version;
   private String _encoding;
 
   /**
    * Constructor.
+   * @param from Source file.
+   * @param encoding File encoding.
    * @param version Tulkas DB version.
    */
-  public TulkasItemsDBParser(int version)
+  public TulkasItemsDBParser(File from, String encoding, int version)
   {
+    _inputFile=from;
+    _encoding=encoding;
     _version=version;
-    if (version==OLD_VERSION)
-    {
-      _inputFile=new File(new File("d:\\tmp"),"Items.lua");
-      _encoding=EncodingNames.UTF_8;
-    }
-    else if (version==NEW_VERSION)
-    {
-      _inputFile=new File(new File("d:\\tmp"),"Items13.1.lua");
-      _encoding=EncodingNames.UTF_8;
-    }
-    else if (version==INDEX)
-    {
-      _inputFile=new File(new File("d:\\tmp"),"17_1_Items.lua");
-      _encoding=EncodingNames.UTF_8;
-    }
   }
 
   private void parseItemsDef(Map<Object,Object> values, String strValue)
@@ -236,7 +235,10 @@ public class TulkasItemsDBParser
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Do the job.
+   */
+  public void doIt()
   {
     HashMap<Integer,HashMap<Object,Object>> items=loadItems();
     if (_version==OLD_VERSION)
@@ -312,7 +314,11 @@ public class TulkasItemsDBParser
    */
   public static void main(String[] args)
   {
-    new TulkasItemsDBParser(INDEX).doIt();
-    new TulkasItemsDBParser(NEW_VERSION).doIt();
+    File old=new File("Items.lua");
+    new TulkasItemsDBParser(old,EncodingNames.UTF_8,OLD_VERSION).doIt();
+    File index=new File("17_1_Items.lua");
+    new TulkasItemsDBParser(index,EncodingNames.UTF_8,INDEX).doIt();
+    File new13p1=new File("Items13.1.lua");
+    new TulkasItemsDBParser(new13p1,EncodingNames.UTF_8,NEW_VERSION).doIt();
   }
 }

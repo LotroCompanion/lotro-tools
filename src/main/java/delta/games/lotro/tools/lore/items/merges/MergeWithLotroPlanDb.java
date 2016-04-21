@@ -38,7 +38,10 @@ public class MergeWithLotroPlanDb
     // Nothing to do!
   }
 
-  private void doIt()
+  /**
+   * Do the job.
+   */
+  public void doIt()
   {
     File file1=new File("itemsLegacy+Tulkas.xml");
     HashMap<Integer,Item> sourceItems=loadItemsFile(file1);

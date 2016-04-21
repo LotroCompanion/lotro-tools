@@ -43,7 +43,10 @@ public class ItemNormalization
     // Nothing to do!
   }
 
-  private void doIt()
+  /**
+   * Do the job.
+   */
+  public void doIt()
   {
     File file1=new File("items-rc.xml");
     HashMap<Integer,Item> sourceItems=loadItemsFile(file1);
