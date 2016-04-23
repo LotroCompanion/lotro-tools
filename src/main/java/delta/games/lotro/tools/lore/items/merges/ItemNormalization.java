@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemCategory;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Normalize items database "release candidate".
@@ -64,22 +67,53 @@ public class ItemNormalization
     ItemsManager.getInstance().writeItemsFile(toFile,items);
   }
 
-  private Item normalizeItem(Item source)
-  {
-    Item ret=normalizeCategory(source);
-    return ret;
-  }
-
-  private Item normalizeCategory(Item item)
+  private Item normalizeItem(Item item)
   {
     Item ret=normalizeArmours(item);
-    // TODO weapons
     ret=normalizeWeapons(ret);
     ret=normalizeCrafting(ret);
     ret=normalizeJewels(ret);
     ret=normalizeRecipes(ret);
     ret=normalizeLegendaryItem(ret);
+    ret=normalizeCraftingTool(ret);
+    ret=normalizeInstrument(ret);
     return ret;
+  }
+
+  private Item normalizeCraftingTool(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("32".equals(category))
+    {
+      String oldCategory=item.getSubCategory();
+      if ((!"32".equals(oldCategory)) && (!"Craft Tool".equals(oldCategory)))
+      {
+        System.out.println("Warn: expected 'Craft Tool', got '"+oldCategory+"'");
+      }
+      item.setSubCategory("Crafting Tool");
+      item.setEquipmentLocation(EquipmentLocation.TOOL);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeInstrument(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("11".equals(category))
+    {
+      String oldCategory=item.getSubCategory();
+      if ((oldCategory!=null) && (!"11".equals(oldCategory)) && (!oldCategory.startsWith("Instrument")))
+      {
+        System.out.println("Warn: expected 'Instrument', got '"+oldCategory+"'");
+      }
+      item.setSubCategory("Instrument");
+      item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
   }
 
   private Item normalizeWeapons(Item item)
@@ -89,6 +123,14 @@ public class ItemNormalization
     item=setWeaponTypeFromCategory(item,"110",WeaponType.JAVELIN);
     item=setWeaponTypeFromCategory(item,"29",WeaponType.CROSSBOW);
     item=setWeaponTypeFromCategory(item,"46",WeaponType.SPEAR);
+    item=setWeaponTypeFromCategory(item,"One-handed Axe",WeaponType.ONE_HANDED_AXE);
+    item=setWeaponTypeFromCategory(item,"Two-handed Axe",WeaponType.TWO_HANDED_AXE);
+    item=setWeaponTypeFromCategory(item,"One-handed Sword",WeaponType.ONE_HANDED_SWORD);
+    item=setWeaponTypeFromCategory(item,"Two-handed Sword",WeaponType.TWO_HANDED_SWORD);
+    item=setWeaponTypeFromCategory(item,"One-handed Club",WeaponType.ONE_HANDED_CLUB);
+    item=setWeaponTypeFromCategory(item,"Rune-stone",WeaponType.RUNE_STONE);
+    item=setWeaponTypeFromCategory(item,"Staff",WeaponType.STAFF);
+    item=setWeaponTypeFromCategory(item,"Dagger",WeaponType.DAGGER);
     if (item instanceof Weapon) {
       Weapon weapon=(Weapon)item;
       WeaponType type=weapon.getWeaponType();
@@ -106,18 +148,21 @@ public class ItemNormalization
 
   private Item setWeaponTypeFromCategory(Item item, String category, WeaponType type)
   {
-    Item ret=item;
+    Weapon ret=null;
     if (category.equals(item.getSubCategory()))
     {
       if (item.getClass()==Item.class)
       {
-        Weapon weapon=new Weapon();
-        ret=weapon;
-        weapon.copyFrom(item);
-        weapon.setWeaponType(type);
+        ret=new Weapon();
+        ret.copyFrom(item);
       }
+      else
+      {
+        ret=(Weapon)item;
+      }
+      ret.setWeaponType(type);
     }
-    return ret;
+    return (ret!=null)?ret:item;
   }
   /*
     ========= WEAPONS ==========
@@ -174,6 +219,67 @@ public class ItemNormalization
         }
         armour.setArmourType(ArmourType.LIGHT);
         armour.setSubCategory(null);
+      }
+      else if ("Shield".equals(category))
+      {
+        if ((previous==ArmourType.LIGHT) || (previous==null))
+        {
+          armour.setArmourType(ArmourType.SHIELD);
+          armour.setSubCategory(null);
+          armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+          armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+          armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+        }
+      }
+      else if ("Heavy Shield".equals(category))
+      {
+        armour.setArmourType(ArmourType.HEAVY_SHIELD);
+        armour.setSubCategory(null);
+        armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+        armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+        armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      }
+      else if ("Warden's Shield".equals(category))
+      {
+        armour.setArmourType(ArmourType.WARDEN_SHIELD);
+        armour.setSubCategory(null);
+        armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+        armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+        armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      }
+      else if ("33".equals(category))
+      {
+        ArmourType type=armour.getArmourType();
+        if (type==null)
+        {
+          String name=armour.getName();
+          if (name.toLowerCase().contains("warden"))
+          {
+            armour.setArmourType(ArmourType.WARDEN_SHIELD);
+            armour.setSubCategory(null);
+            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          }
+          else if ((name.indexOf("Heavy Shield")!=-1) || (name.indexOf("Bulwark")!=-1)
+              || (name.indexOf("Battle-shield")!=-1))
+          {
+            armour.setArmourType(ArmourType.HEAVY_SHIELD);
+            armour.setSubCategory(null);
+            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          }
+          else
+          {
+            // Default as shield
+            armour.setArmourType(ArmourType.SHIELD);
+            armour.setSubCategory(null);
+            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          }
+        }
       }
     }
     Item ret=normalizeArmour(item, "3", "Chest", EquipmentLocation.CHEST);
@@ -325,6 +431,13 @@ public class ItemNormalization
       }
       ret.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       ret.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      if (ret instanceof Armour)
+      {
+        Armour armour=(Armour)ret;
+        int armourValue=armour.getArmourValue();
+        ret.getStats().setStat(STAT.ARMOUR,new FixedDecimalsInteger(armourValue));
+        ret.setCategory(ItemCategory.ITEM);
+      }
     }
     return ret;
   }
@@ -402,42 +515,47 @@ public class ItemNormalization
       else if (name.indexOf("Rune-keeper")!=-1) cClass=CharacterClass.RUNE_KEEPER;
       else if (name.indexOf("Warden")!=-1) cClass=CharacterClass.WARDEN;
 
-      WeaponType type=null;
+      WeaponType weaponType=null;
       String classItemType=null;
       boolean bridle=false;
-      if (name.indexOf("Great Club")!=-1) type=WeaponType.TWO_HANDED_CLUB;
-      else if (name.indexOf("Great Axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
-      else if (name.indexOf("Great Sword")!=-1) type=WeaponType.TWO_HANDED_SWORD;
-      else if (name.indexOf("Greatsword")!=-1) type=WeaponType.TWO_HANDED_SWORD;
-      else if (name.indexOf("Great Hammer")!=-1) type=WeaponType.TWO_HANDED_HAMMER;
-      else if (name.indexOf("Halberd")!=-1) type=WeaponType.HALBERD;
-      else if (name.indexOf("Club")!=-1) type=WeaponType.ONE_HANDED_CLUB;
-      else if (name.indexOf("Axe")!=-1) type=WeaponType.ONE_HANDED_AXE;
-      else if (name.indexOf("Sword")!=-1) type=WeaponType.ONE_HANDED_SWORD;
-      else if (name.indexOf("Hammer")!=-1) type=WeaponType.ONE_HANDED_HAMMER;
-      else if (name.indexOf("Dagger")!=-1) type=WeaponType.DAGGER;
-      else if (name.indexOf("Spear")!=-1) type=WeaponType.SPEAR;
-      else if (name.indexOf("Mace")!=-1) type=WeaponType.ONE_HANDED_MACE;
+      if (name.indexOf("Great Club")!=-1) weaponType=WeaponType.TWO_HANDED_CLUB;
+      else if (name.indexOf("Great Axe")!=-1) weaponType=WeaponType.TWO_HANDED_AXE;
+      else if (name.indexOf("Great Sword")!=-1) weaponType=WeaponType.TWO_HANDED_SWORD;
+      else if (name.indexOf("Greatsword")!=-1) weaponType=WeaponType.TWO_HANDED_SWORD;
+      else if (name.indexOf("Great Hammer")!=-1) weaponType=WeaponType.TWO_HANDED_HAMMER;
+      else if (name.indexOf("Halberd")!=-1) weaponType=WeaponType.HALBERD;
+      else if (name.indexOf("Club")!=-1) weaponType=WeaponType.ONE_HANDED_CLUB;
+      else if (name.indexOf("Axe")!=-1) weaponType=WeaponType.ONE_HANDED_AXE;
+      else if (name.indexOf("Sword")!=-1) weaponType=WeaponType.ONE_HANDED_SWORD;
+      else if (name.indexOf("Hammer")!=-1) weaponType=WeaponType.ONE_HANDED_HAMMER;
+      else if (name.indexOf("Dagger")!=-1) weaponType=WeaponType.DAGGER;
+      else if (name.indexOf("Spear")!=-1) weaponType=WeaponType.SPEAR;
+      else if (name.indexOf("Mace")!=-1) weaponType=WeaponType.ONE_HANDED_MACE;
       else if (name.indexOf("Rune-stone")!=-1)
       {
-        type=WeaponType.RUNE_STONE;
+        weaponType=WeaponType.RUNE_STONE;
         cClass=CharacterClass.RUNE_KEEPER;
       }
-      else if (name.indexOf("Staff")!=-1) type=WeaponType.STAFF;
+      else if (name.indexOf("Stone")!=-1)
+      {
+        weaponType=WeaponType.RUNE_STONE;
+        cClass=CharacterClass.RUNE_KEEPER;
+      }
+      else if (name.indexOf("Staff")!=-1) weaponType=WeaponType.STAFF;
       else if (name.indexOf("Carving")!=-1) classItemType="Carving";
       else if (name.indexOf("Tools")!=-1) classItemType="Tools";
       else if (name.indexOf("Emblem")!=-1) classItemType="Emblem";
       else if (name.indexOf("Rune-satchel")!=-1) classItemType="Rune-satchel";
       else if (name.indexOf("Rune")!=-1) classItemType="Rune";
       else if (name.indexOf("Belt")!=-1) classItemType="Belt";
-      else if (name.indexOf("Crossbow")!=-1) classItemType="Crossbow";
-      else if (name.indexOf("Bow")!=-1) classItemType="Bow";
+      else if (name.indexOf("Crossbow")!=-1) weaponType=WeaponType.CROSSBOW;
+      else if (name.indexOf("Bow")!=-1) weaponType=WeaponType.BOW;
       else if (name.indexOf("Book")!=-1) classItemType="Book";
       else if (name.indexOf("Songbook")!=-1) classItemType="Songbook";
-      else if (name.indexOf("Javelin")!=-1) classItemType="Javelin";
+      else if (name.indexOf("Javelin")!=-1) weaponType=WeaponType.JAVELIN;
       else if (name.indexOf("Bridle")!=-1) bridle=true;
 
-      if ((type!=null) || (classItemType!=null) || (bridle))
+      if ((weaponType!=null) || (classItemType!=null) || (bridle))
       {
         item.setQuality(quality);
         item.setRequiredClass(cClass);
@@ -445,14 +563,28 @@ public class ItemNormalization
         if (bridle)
         {
           category="Legendary Bridle";
+          item.setCategory(ItemCategory.ITEM);
         }
         else if (classItemType!=null)
         {
           category="Legendary Class Item:"+classItemType;
+          item.setCategory(ItemCategory.ITEM);
         }
-        else if (type!=null)
+        else if (weaponType!=null)
         {
           category="Legendary Weapon";
+          Weapon weapon;
+          if (item instanceof Weapon)
+          {
+            weapon=(Weapon)item;
+          }
+          else
+          {
+            weapon=new Weapon();
+            weapon.copyFrom(item);
+            item=weapon;
+          }
+          weapon.setWeaponType(weaponType);
         }
         item.setSubCategory(category);
         item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
