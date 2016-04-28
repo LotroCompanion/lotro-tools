@@ -1,41 +1,28 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.quests;
 
-import java.io.File;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.environment.FileSystem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
-import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.DeedsManager;
-import delta.games.lotro.lore.deeds.index.DeedCategory;
-import delta.games.lotro.lore.deeds.index.DeedSummary;
-import delta.games.lotro.lore.deeds.index.DeedsIndex;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.QuestsManager;
+import delta.games.lotro.lore.quests.index.QuestCategory;
+import delta.games.lotro.lore.quests.index.QuestSummary;
+import delta.games.lotro.lore.quests.index.QuestsIndex;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
- * Loader for the reward items of deeds.
+ * Loader for the reward items of quests.
  * @author DAM
  */
-public class DeedsItemsLoader
+public class QuestsItemsLoader
 {
   private static final Logger _logger=LotroLoggers.getWebInputLogger();
 
-  private File _workDir;
-  private ItemsAndIconsManager _manager;
   private static final String WIKI_SEED="/wiki/";
-
-  /**
-   * Constructor.
-   */
-  public DeedsItemsLoader()
-  {
-    _workDir=FileSystem.getTmpDir();
-    _manager=new ItemsAndIconsManager(_workDir);
-  }
 
   private void handleSet(ObjectsSet set)
   {
@@ -49,21 +36,21 @@ public class DeedsItemsLoader
         if ((url!=null) && (url.startsWith(WIKI_SEED)))
         {
           String itemId=url.substring(WIKI_SEED.length());
-          _manager.handleItemKey(itemId);
+          System.out.println("ItemID: "+itemId);
         }
         String icon=item.getIconURL();
-        _manager.handleIcon(icon);
+        System.out.println("Icon: "+icon);
       }
     }
   }
 
-  private void handleDeed(int index, DeedDescription q)
+  private void handleQuest(int index, QuestDescription q)
   {
     try
     {
       String key=q.getKey();
       System.out.println("#"+index+", quest: "+key);
-      Rewards r=q.getRewards();
+      Rewards r=q.getQuestRewards();
       ObjectsSet set=r.getObjects();
       handleSet(set);
       ObjectsSet set2=r.getSelectObjects();
@@ -77,25 +64,23 @@ public class DeedsItemsLoader
   
   private void doIt()
   {
-    _manager.loadMaps();
-    DeedsManager qm=DeedsManager.getInstance();
-    DeedsIndex index=qm.getIndex();
+    QuestsManager qm=QuestsManager.getInstance();
+    QuestsIndex index=qm.getIndex();
     if (index!=null)
     {
       String[] categories=index.getCategories();
       System.out.println(Arrays.deepToString(categories));
       for(String category : categories)
       {
-        DeedCategory c=index.getCategory(category);
-        DeedSummary[] quests=c.getDeeds();
+        QuestCategory c=index.getCategory(category);
+        QuestSummary[] quests=c.getQuests();
         int indexQ=0;
-        for(DeedSummary questSum : quests)
+        for(QuestSummary questSum : quests)
         {
           int id=questSum.getIdentifier();
-          DeedDescription q=qm.getDeed(id);
-          handleDeed(indexQ,q);
+          QuestDescription q=qm.getQuest(id);
+          handleQuest(indexQ,q);
           indexQ++;
-          if (indexQ%10==0) _manager.saveMaps();
         }
       }
     }
@@ -111,6 +96,6 @@ public class DeedsItemsLoader
    */
   public static void main(String[] args)
   {
-    new DeedsItemsLoader().doIt();
+    new QuestsItemsLoader().doIt();
   }
 }

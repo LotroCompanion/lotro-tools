@@ -1,32 +1,56 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.items.sort;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import delta.common.utils.collections.filters.CompoundFilter;
 import delta.common.utils.collections.filters.Filter;
 import delta.common.utils.collections.filters.Operator;
+import delta.games.lotro.character.CharacterProficiencies;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.gui.items.ItemChoiceWindowController;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.filters.ItemArmourTypeFilter;
 import delta.games.lotro.lore.items.filters.ItemFilter;
 import delta.games.lotro.lore.items.filters.ItemRequiredClassFilter;
 import delta.games.lotro.lore.items.filters.ItemSlotFilter;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 
 /**
- * Test item filters.
+ * Sort items.
  * @author DAM
  */
-public class TestItemFilters
+public class ItemsSorter
 {
+  private static final String WEAPON="weapon-";
+  private static final String ARMOUR="armour-";
+  private static final String JEWELS="jewel-";
+  private static final String LEGENDARY="liClassItem-";
+
+  private HashMap<String,List<Item>> _items;
+
+  /**
+   * Constructor.
+   */
+  public ItemsSorter()
+  {
+    _items=new HashMap<String,List<Item>>();
+  }
+
+  /**
+   * Load all items.
+   * @param file Items file.
+   * @return A list of items.
+   */
   private List<Item> loadItemsFile(File file)
   {
     long now1=System.currentTimeMillis();
@@ -64,7 +88,8 @@ public class TestItemFilters
     {
       WeaponType type=entry.getKey();
       List<Item> list=entry.getValue();
-      System.out.println("\t"+type+": "+list.size());
+      _items.put(WEAPON+type.getKey(),list);
+      //System.out.println("\t"+type+": "+list.size());
     }
     System.out.println("\tOther: "+others.size());
     for(Item other : others)
@@ -105,6 +130,15 @@ public class TestItemFilters
         else others.add(armour);
       }
     }
+    _items.put(ARMOUR+EquipmentLocation.HEAD.getKey(),head);
+    _items.put(ARMOUR+EquipmentLocation.SHOULDER.getKey(),shoulders);
+    _items.put(ARMOUR+EquipmentLocation.BACK.getKey(),back);
+    _items.put(ARMOUR+EquipmentLocation.CHEST.getKey(),chest);
+    _items.put(ARMOUR+EquipmentLocation.HAND.getKey(),hands);
+    _items.put(ARMOUR+EquipmentLocation.LEGS.getKey(),leggings);
+    _items.put(ARMOUR+EquipmentLocation.FEET.getKey(),feet);
+    _items.put(ARMOUR+"SHIELD",shields);
+    /*
     System.out.println("\tHead: "+head.size());
     System.out.println("\tShoulders: "+shoulders.size());
     System.out.println("\tBack: "+back.size());
@@ -113,6 +147,7 @@ public class TestItemFilters
     System.out.println("\tLeggings: "+leggings.size());
     System.out.println("\tFeet: "+feet.size());
     System.out.println("\tShields: "+shields.size());
+    */
     System.out.println("\tOther: "+others.size());
     for(Item other : others)
     {
@@ -122,7 +157,7 @@ public class TestItemFilters
 
   private void filterJewels(List<Item> jewels)
   {
-    List<Item> ear=new ArrayList<Item>();
+    List<Item> ears=new ArrayList<Item>();
     List<Item> neck=new ArrayList<Item>();
     List<Item> wrist=new ArrayList<Item>();
     List<Item> finger=new ArrayList<Item>();
@@ -130,17 +165,24 @@ public class TestItemFilters
     for(Item jewel : jewels)
     {
       EquipmentLocation location=jewel.getEquipmentLocation();
-      if (location==EquipmentLocation.EAR) ear.add(jewel);
+      if (location==EquipmentLocation.EAR) ears.add(jewel);
       else if (location==EquipmentLocation.NECK) neck.add(jewel);
       else if (location==EquipmentLocation.WRIST) wrist.add(jewel);
       else if (location==EquipmentLocation.FINGER) finger.add(jewel);
       else if (location==EquipmentLocation.POCKET) pocket.add(jewel);
     }
-    System.out.println("\tEar: "+ear.size());
+    _items.put(JEWELS+EquipmentLocation.EAR.getKey(),ears);
+    _items.put(JEWELS+EquipmentLocation.NECK.getKey(),neck);
+    _items.put(JEWELS+EquipmentLocation.WRIST.getKey(),wrist);
+    _items.put(JEWELS+EquipmentLocation.FINGER.getKey(),finger);
+    _items.put(JEWELS+EquipmentLocation.POCKET.getKey(),pocket);
+    /*
+    System.out.println("\tEar: "+ears.size());
     System.out.println("\tNeck: "+neck.size());
     System.out.println("\tWrist: "+wrist.size());
     System.out.println("\tFinger: "+finger.size());
     System.out.println("\tPocket: "+pocket.size());
+    */
   }
 
   private void filterLegendaryClassItems(List<Item> classItems)
@@ -169,7 +211,8 @@ public class TestItemFilters
     {
       CharacterClass characterClass=entry.getKey();
       List<Item> list=entry.getValue();
-      System.out.println("\t"+characterClass+": "+list.size());
+      _items.put(LEGENDARY+characterClass.getKey(),list);
+      //System.out.println("\t"+characterClass+": "+list.size());
     }
     System.out.println("\tOther: "+others.size());
     for(Item other : others)
@@ -213,10 +256,16 @@ public class TestItemFilters
     System.out.println("\tRecipe: "+recipes.size());
     System.out.println("\tInstrument: "+instruments.size());
     System.out.println("\tOther: "+others.size());
+    _items.put("TOOL",tools);
+    _items.put("RECIPE",recipes);
+    _items.put("INSTRUMENT",instruments);
+    _items.put("OTHER",others);
+    /*
     for(Item other : others)
     {
       System.out.println(other.getIdentifier()+" -> "+other.getName());
     }
+    */
   }
 
   private void filterItems(List<Item> items)
@@ -280,6 +329,7 @@ public class TestItemFilters
   {
     File from=new File("items.xml");
     List<Item> items=loadItemsFile(from);
+    /*
     long now1=System.currentTimeMillis();
     List<Filter<Item>> filters=new ArrayList<Filter<Item>>();
     ItemFilter filter1=new ItemRequiredClassFilter(CharacterClass.HUNTER,true);
@@ -299,6 +349,7 @@ public class TestItemFilters
     long now2=System.currentTimeMillis();
     System.out.println("Time to filter items: "+(now2-now1)+"ms.");
     System.out.println(acceptedItems.size());
+    */
     /*
     for(Item item : acceptedItems)
     {
@@ -306,13 +357,100 @@ public class TestItemFilters
     }
     */
     filterItems(items);
+    test();
+    /*
+    for(String key : _items.keySet())
+    {
+      List<Item> itemsForCategory=_items.get(key);
+      System.out.println(key+"  ->  "+itemsForCategory.size());
+      Collections.sort(itemsForCategory,new ItemNameComparator());
+      ItemXMLWriter writer=new ItemXMLWriter();
+      File to=new File(key+".xml").getAbsoluteFile();
+      writer.writeItems(to,itemsForCategory,EncodingNames.UTF_8);
+    }
+    */
+  }
+
+  private void test()
+  {
+    {
+      List<Item> items=buildWeaponsList(CharacterClass.HUNTER,95,EquipmentLocation.MAIN_HAND);
+      ItemChoiceWindowController ctrl=new ItemChoiceWindowController(items);
+      ctrl.show();
+    }
+    {
+      List<Item> items=buildArmoursList(CharacterClass.HUNTER,95,EquipmentLocation.HEAD);
+      ItemChoiceWindowController ctrl=new ItemChoiceWindowController(items);
+      ctrl.show();
+    }
+  }
+
+  private List<Item> buildArmoursList(CharacterClass cClass, int level, EquipmentLocation slot)
+  {
+    List<Item> ret=new ArrayList<Item>();
+    CharacterProficiencies prof=new CharacterProficiencies();
+    Set<ArmourType> armourTypes=prof.getArmourProficiencies(cClass,level);
+    List<Filter<Item>> filters=new ArrayList<Filter<Item>>();
+    ItemFilter classFilter=new ItemRequiredClassFilter(cClass,false);
+    filters.add(classFilter);
+    ItemSlotFilter slotFilter=new ItemSlotFilter(slot);
+    filters.add(slotFilter);
+    Filter<Item> armourTypeFilter=null;
+    {
+      List<Filter<Item>> armourTypeFilters=new ArrayList<Filter<Item>>();
+      for(ArmourType armourType : armourTypes)
+      {
+        Filter<Item> singleArmourTypeFilter=new ItemArmourTypeFilter(armourType);
+        armourTypeFilters.add(singleArmourTypeFilter);
+      }
+      armourTypeFilter=new CompoundFilter<Item>(Operator.OR,armourTypeFilters);
+    }
+    filters.add(armourTypeFilter);
+    // TODO required level
+    Filter<Item> filter=new CompoundFilter<Item>(Operator.AND,filters);
+
+    List<Item> items=_items.get(ARMOUR+slot.getKey());
+    for(Item item : items)
+    {
+      if (filter.accept(item))
+      {
+        ret.add(item);
+      }
+    }
+    return ret;
+  }
+
+  private List<Item> buildWeaponsList(CharacterClass cClass, int level, EquipmentLocation slot)
+  {
+    List<Item> ret=new ArrayList<Item>();
+    CharacterProficiencies prof=new CharacterProficiencies();
+    Set<WeaponType> weapons=prof.getWeaponProficiencies(cClass,level);
+    List<Filter<Item>> filters=new ArrayList<Filter<Item>>();
+    ItemFilter classFilter=new ItemRequiredClassFilter(cClass,false);
+    filters.add(classFilter);
+    ItemSlotFilter slotFilter=new ItemSlotFilter(slot);
+    filters.add(slotFilter);
+    Filter<Item> filter=new CompoundFilter<Item>(Operator.AND,filters);
+    for(WeaponType weaponType : weapons)
+    {
+      List<Item> items=_items.get(WEAPON+weaponType.getKey());
+      for(Item item : items)
+      {
+        if (filter.accept(item))
+        {
+          ret.add(item);
+        }
+      }
+    }
+    return ret;
   }
 
   /**
-   * @param args
+   * Main method for this tool.
+   * @param args Not used.
    */
   public static void main(String[] args)
   {
-    new TestItemFilters().doIt();
+    new ItemsSorter().doIt();
   }
 }

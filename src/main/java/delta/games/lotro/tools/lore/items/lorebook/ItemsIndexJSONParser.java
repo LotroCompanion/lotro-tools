@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.items.lorebook;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;

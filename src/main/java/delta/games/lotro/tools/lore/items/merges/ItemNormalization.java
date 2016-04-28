@@ -143,6 +143,25 @@ public class ItemNormalization
         item.setSubCategory(null);
       }
     }
+    // TODO: these categories
+    /*
+        104=Rune-stone
+        1=Bow and some Javelin!
+        12 => {One-handed Axe=165, Two-handed Axe=84}
+        => Axe
+        24 => {Two-handed Hammer=21, One-handed Hammer=131}
+        => Hammer
+        34=Staff (legendary or not - loremaster only...)
+        40 => {Two-handed Club=86, One-handed Club=148}
+        => Club
+        30 => {One-handed Mace=163, One-handed Hammer=28, One-handed Club=34}
+        => Misc one-handed mace/hammer or club
+        44 => {Two-handed Sword=127, One-handed Mace=1, Halberd=16, Dagger=7, Two-handed Hammer=21, Two-handed Club=13, One-handed Sword=238, One-handed Club=3, Two-handed Axe=26}
+        => Misc main hand weapon (one or two handed)
+     */
+
+
+    
     return item;
   }
 

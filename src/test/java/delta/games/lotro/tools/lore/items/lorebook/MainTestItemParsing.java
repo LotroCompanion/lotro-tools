@@ -1,9 +1,10 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.items.lorebook;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.tools.lore.items.lorebook.ItemPageParser;
 
 /**
  * Test for item description parsing.

@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.lore.items.lorebook;
 
 import java.io.StringReader;
 import java.util.ArrayList;

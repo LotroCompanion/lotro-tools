@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items.index;
+package delta.games.lotro.tools.lore.items.lorebook;
 
 import java.io.File;
 
@@ -10,7 +10,6 @@ import delta.games.lotro.lore.items.index.ItemSummary;
 import delta.games.lotro.lore.items.index.ItemsIndex;
 import delta.games.lotro.lore.items.index.io.xml.ItemsIndexXMLParser;
 import delta.games.lotro.lore.items.index.io.xml.ItemsIndexXMLWriter;
-import delta.games.lotro.tools.lore.items.ItemsIndexJSONParser;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
