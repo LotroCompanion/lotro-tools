@@ -52,7 +52,6 @@ public class ResolveItemLinksInRecipes
   {
     HashMap<String,List<Integer>> idStr2Id=new HashMap<String,List<Integer>>(); 
     ItemsManager mgr=ItemsManager.getInstance();
-    mgr.loadAllItems();
     List<Item> items=mgr.getAllItems();
     for(Item item : items)
     {
