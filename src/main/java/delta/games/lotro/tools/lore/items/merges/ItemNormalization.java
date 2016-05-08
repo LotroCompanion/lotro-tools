@@ -275,28 +275,28 @@ public class ItemNormalization
           if (name.toLowerCase().contains("warden"))
           {
             armour.setArmourType(ArmourType.WARDEN_SHIELD);
-            armour.setSubCategory(null);
-            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
           }
           else if ((name.indexOf("Heavy Shield")!=-1) || (name.indexOf("Bulwark")!=-1)
               || (name.indexOf("Battle-shield")!=-1))
           {
             armour.setArmourType(ArmourType.HEAVY_SHIELD);
-            armour.setSubCategory(null);
-            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
           }
           else
           {
             // Default as shield
             armour.setArmourType(ArmourType.SHIELD);
-            armour.setSubCategory(null);
-            armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-            armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-            armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          }
+        }
+        type=armour.getArmourType();
+        if (type!=null)
+        {
+          armour.setSubCategory(null);
+          armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+          armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+          armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+          if (type==ArmourType.WARDEN_SHIELD)
+          {
+            armour.setRequiredClass(CharacterClass.WARDEN);
           }
         }
       }
