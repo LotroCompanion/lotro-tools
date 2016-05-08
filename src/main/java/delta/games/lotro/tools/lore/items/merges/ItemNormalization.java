@@ -60,7 +60,14 @@ public class ItemNormalization
     {
       Item sourceItem=sourceItems.get(id);
       sourceItem=normalizeItem(sourceItem);
-      sourceItems.put(id,sourceItem);
+      if (sourceItem!=null)
+      {
+        sourceItems.put(id,sourceItem);
+      }
+      else
+      {
+        sourceItems.remove(id);
+      }
     }
     File toFile=new File("items.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(sourceItems.values());
@@ -69,7 +76,12 @@ public class ItemNormalization
 
   private Item normalizeItem(Item item)
   {
-    Item ret=normalizeArmours(item);
+    Item ret=removeTestItems(item);
+    if (ret==null)
+    {
+      return null;
+    }
+    ret=normalizeArmours(ret);
     ret=normalizeWeapons(ret);
     ret=normalizeCrafting(ret);
     ret=normalizeJewels(ret);
@@ -77,6 +89,18 @@ public class ItemNormalization
     ret=normalizeLegendaryItem(ret);
     ret=normalizeCraftingTool(ret);
     ret=normalizeInstrument(ret);
+    ret=normalizeRuneKeeperItems(ret);
+    return ret;
+  }
+
+  private Item removeTestItems(Item item)
+  {
+    Item ret=item;
+    String name=item.getName();
+    if ((name!=null) && (name.startsWith("DNT")))
+    {
+      ret=null;
+    }
     return ret;
   }
 
@@ -110,6 +134,59 @@ public class ItemNormalization
       }
       item.setSubCategory("Instrument");
       item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeRuneKeeperItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("106".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.RUNE_KEEPER);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("satchel")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Satchel");
+      }
+      else if (name.indexOf("rune-bag")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Satchel");
+      }
+      else if (name.indexOf("chisel")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Chisel");
+      }
+      else if (name.indexOf("riffler")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Riffler");
+      }
+      else if (name.indexOf("inlay")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Inlay");
+      }
+      else if (name.indexOf("enamel")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Enamel");
+      }
+      else if (name.indexOf("parchment")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Parchment");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Other");
+      }
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
     }
@@ -337,7 +414,8 @@ public class ItemNormalization
         EquipmentLocation previousLoc=ret.getEquipmentLocation();
         if ((previousLoc!=null) && (previousLoc!=loc))
         {
-          System.out.println("ID: " + id+": loc conflict: was=" + previousLoc + ", should be=" + loc);
+          String name=ret.getName();
+          System.out.println("ID: " + id+"("+name+"): loc conflict: was=" + previousLoc + ", should be=" + loc);
         }
         armour.setEquipmentLocation(loc);
       }
