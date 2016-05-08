@@ -9,6 +9,7 @@ import java.util.Map;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.EncodingNames;
+import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.TextUtils;
 
 /**
@@ -183,7 +184,15 @@ public class TulkasItemsDBParser
       if ((length>=2)&&(valueStr.charAt(0)=='\"')&&(valueStr.charAt(length-1)=='\"'))
       {
         // String
-        ret=valueStr.substring(1,length-1);
+        String value=valueStr.substring(1,length-1);
+        if (value.startsWith("0x"))
+        {
+          ret=Integer.valueOf(value.substring(2),16);
+        }
+        else
+        {
+          ret=value;
+        }
       }
       else if ((length>=2)&&(valueStr.charAt(0)=='{')&&(valueStr.charAt(length-1)=='}'))
       {
@@ -278,6 +287,7 @@ public class TulkasItemsDBParser
 
     List<String> itemLines=new ArrayList<String>();
     boolean foundFirstLine=false;
+    StringBuilder currentLine=new StringBuilder();
     for(String line:lines)
     {
       if (!foundFirstLine)
@@ -286,9 +296,36 @@ public class TulkasItemsDBParser
       }
       else
       {
+        if (line.equals("};"))
+        {
+          if (currentLine.length()>0)
+          {
+            itemLines.add(currentLine.toString());
+            currentLine.setLength(0);
+          }
+          break;
+        }
+        if (line.startsWith("{"))
+        {
+          line=line.substring(1);
+        }
+        if (line.endsWith("\";};};"))
+        {
+          line=line.substring(0,line.length()-2);
+        }
         if ((line.length()>0)&&(line.charAt(0)=='['))
         {
-          itemLines.add(line);
+          if (currentLine.length()>0)
+          {
+            itemLines.add(currentLine.toString());
+            currentLine.setLength(0);
+          }
+          currentLine.append(line);
+        }
+        else
+        {
+          currentLine.append(EndOfLine.UNIX);
+          currentLine.append(line);
         }
       }
     }

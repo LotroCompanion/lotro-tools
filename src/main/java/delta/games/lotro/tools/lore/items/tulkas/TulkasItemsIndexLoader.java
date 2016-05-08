@@ -137,7 +137,7 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
     }
     System.out.println(backgroundIconIDs.size()+" : "+backgroundIconIDs);
   }
-  
+
   List<Integer> inspect(int key, HashMap<Integer,HashMap<Object,Object>> items)
   {
     Set<Integer> values=new HashSet<Integer>();
@@ -171,7 +171,19 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
       Integer id=keys.get(i);
       HashMap<Object,Object> data=items.get(id);
       String name=(String)data.get(Integer.valueOf(1));
+      if ("GNDN".equals(name))
+      {
+        continue;
+      }
       String description=(String)data.get(Integer.valueOf(2));
+      if (description!=null)
+      {
+        if (description.indexOf("string table error")!=-1)
+        {
+          description="";
+        }
+        //description=description.replace("  ", " ");
+      }
       Integer categoryInt=(Integer)data.get(Integer.valueOf(3));
       // 4..5: see below (quality, sturdiness)
       // 6: isMagic is always false
