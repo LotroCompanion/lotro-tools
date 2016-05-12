@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.items.merges;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
  */
 public class ItemNormalization
 {
+  private HashMap<String,List<Item>> _byCategory;
   private HashMap<Integer,Item> loadItemsFile(File file)
   {
     ItemXMLParser parser=new ItemXMLParser();
@@ -43,7 +45,7 @@ public class ItemNormalization
    */
   public ItemNormalization()
   {
-    // Nothing to do!
+    _byCategory=new HashMap<String,List<Item>>();
   }
 
   /**
@@ -72,6 +74,16 @@ public class ItemNormalization
     File toFile=new File("items.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(sourceItems.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);
+    List<String> categories=new ArrayList<String>(_byCategory.keySet());
+    Collections.sort(categories);
+    int totalSize=0;
+    for(String category : categories)
+    {
+      int size=_byCategory.get(category).size();
+      System.out.println(category+ "  =>  " + size);
+      totalSize+=size;
+    }
+    System.out.println(totalSize);
   }
 
   private Item normalizeItem(Item item)
@@ -90,6 +102,19 @@ public class ItemNormalization
     ret=normalizeCraftingTool(ret);
     ret=normalizeInstrument(ret);
     ret=normalizeRuneKeeperItems(ret);
+    ret=normalizeByCategory(ret);
+    ret=normalizeBelt(ret);
+    String prop=ret.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if (prop!=null)
+    {
+      List<Item> items=_byCategory.get(prop);
+      if (items==null)
+      {
+        items=new ArrayList<Item>();
+        _byCategory.put(prop,items);
+      }
+      items.add(item);
+    }
     return ret;
   }
 
@@ -97,11 +122,136 @@ public class ItemNormalization
   {
     Item ret=item;
     String name=item.getName();
-    if ((name!=null) && (name.startsWith("DNT")))
+    if (name!=null)
     {
-      ret=null;
+      if ((name.startsWith("DNT")) || (name.startsWith("TBD")))
+      {
+        ret=null;
+      }
     }
+    String tulkasCategory=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    // Test armours  (medium, heavy, light)
+    if ("230".equals(tulkasCategory)) return null;
+    if ("231".equals(tulkasCategory)) return null;
+    if ("232".equals(tulkasCategory)) return null;
     return ret;
+  }
+
+  private Item normalizeByCategory(Item item)
+  {
+    normalizeByCategory(item,"27","Misc:Quest Item");
+    normalizeByCategory(item,"28","Misc:Potion");
+    normalizeByCategory(item,"31","Misc:Key");
+    normalizeByCategory(item,"50","Misc:Device");
+    normalizeByCategory(item,"55","Misc:Food");
+    normalizeByCategory(item,"57","Misc:Scroll");
+    normalizeByCategory(item,"172","Misc:Trophy:Special");
+    normalizeByCategory(item,"47","Misc:Trophy");
+    normalizeByCategory(item,"8","Misc:Mount");
+    normalizeByCategory(item,"91","Misc:Implement");
+    normalizeByCategory(item,"53","Misc:Non-Inventory");
+    normalizeByCategory(item,"52","Misc:Book");
+    normalizeByCategory(item,"16","Misc:Smoking");
+    normalizeByCategory(item,"174","Misc:Emote");
+    normalizeByCategory(item,"205","Misc:Event Item");
+    // Cosmetic
+    normalizeByCategory(item,"97","Cosmetic:Back");
+    normalizeByCategory(item,"182","Cosmetic:Chest");
+    normalizeByCategory(item,"192","Cosmetic:Class");
+    normalizeByCategory(item,"180","Cosmetic:Feet");
+    normalizeByCategory(item,"184","Cosmetic:Hands");
+    normalizeByCategory(item,"183","Cosmetic:Head");
+    normalizeByCategory(item,"96","Cosmetic:Held");
+    normalizeByCategory(item,"185","Cosmetic:Legs");
+    normalizeByCategory(item,"181","Cosmetic:Shoulders");
+    // Housing
+    normalizeByCategory(item,"82","Housing:Music");
+    normalizeByCategory(item,"83","Housing:SurfacePaint");
+    normalizeByCategory(item,"84","Housing:Trophy");
+    normalizeByCategory(item,"85","Housing:Furniture");
+    normalizeByCategory(item,"86","Housing:Floor");
+    normalizeByCategory(item,"87","Housing:Yard");
+    normalizeByCategory(item,"88","Housing:Wall");
+    normalizeByCategory(item,"98","Housing:Special");
+    normalizeByCategory(item,"99","Housing:Ceiling");
+    // Fishing
+    normalizeByCategory(item,"102","Fishing:Fish");
+    normalizeByCategory(item,"100","Fishing:Bait");
+    normalizeByCategory(item,"103","Fishing:Pole");
+    normalizeByCategory(item,"101","Fishing:Other");
+    // Legendary
+    normalizeByCategory(item,"206","Legendary:Crystal of Remembrance");
+    normalizeByCategory(item,"176","Legendary:Star-lit crystal");
+    normalizeByCategory(item,"107","Legendary:XP");
+    normalizeByCategory(item,"166","Legendary:Legacy Scroll");
+    normalizeByCategory(item,"167","Legendary:Delving Scroll");
+    normalizeByCategory(item,"168","Legendary:Enpowerment Scroll");
+    normalizeByCategory(item,"108","Legendary:Reset Scroll");
+    normalizeByCategory(item,"194","Legendary:Relic Removal Scroll");
+    normalizeByCategory(item,"109","Legendary:Deconstructable Relics");
+    normalizeByCategory(item,"218","Bridle");
+
+    // Misc
+    normalizeByCategory(item,"41","Dye");
+    normalizeByCategory(item,"14","Oil");
+    normalizeByCategory(item,"20","Trap");
+    normalizeByCategory(item,"235","Essence");
+    normalizeByCategory(item,"89","Faction Item");
+    normalizeByCategory(item,"54","Thrown Weapon");
+    normalizeByCategory(item,"177","Skirmish Mark");
+    normalizeByCategory(item,"178","Barter Item");
+    normalizeByCategory(item,"186","Skill Item");
+    normalizeByCategory(item,"207","Task Item");
+    normalizeByCategory(item,"189","Perk");
+    normalizeByCategory(item,"191","Travel");
+    normalizeByCategory(item,"190","Tome");
+    normalizeByCategory(item,"173","Misc");
+    normalizeByCategory(item,"164","Misc");
+    normalizeByCategory(item,"170","Crafting Trophy");
+    normalizeByCategory(item,"43","Charter");
+    normalizeByCategory(item,"187","Horn",CharacterClass.CHAMPION);
+
+    // TODO: 1 -> Bow (check Bow in name)
+    /*
+        ["Beorning"] = 233
+        ["Burglar"] = 48
+        ["Captain"] = 13
+        ["Champion"] = 22
+        ["Guardian"] = 26
+        ["Hunter"] = 17
+        ["Loremaster"] = 19
+        ["LoremasterFood"] = 171
+        ["Minstrel"] = 4
+        ["MinstrelBook"] = 163
+        ["Warden"] = 105
+        }
+     */
+    return item;
+  }
+
+  private Item normalizeByCategory(Item item, String tulkasCategory, String category)
+  {
+    return normalizeByCategory(item,tulkasCategory,category,null);
+  }
+
+  private Item normalizeByCategory(Item item, String tulkasCategory, String category, CharacterClass cClass)
+    {
+
+    String itemTulkasCategory=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if (itemTulkasCategory!=null)
+    {
+      if (tulkasCategory.equals(itemTulkasCategory))
+      {
+        item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+        item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+        item.setSubCategory(category);
+        if (cClass!=null)
+        {
+          item.setRequiredClass(cClass);
+        }
+      }
+    }
+    return item;
   }
 
   private Item normalizeCraftingTool(Item item)
@@ -116,6 +266,20 @@ public class ItemNormalization
       }
       item.setSubCategory("Crafting Tool");
       item.setEquipmentLocation(EquipmentLocation.TOOL);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeBelt(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("111".equals(category))
+    {
+      item.setSubCategory("Belt");
+      item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+      item.setRequiredClass(CharacterClass.GUARDIAN);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
     }
@@ -200,6 +364,7 @@ public class ItemNormalization
     item=setWeaponTypeFromCategory(item,"110",WeaponType.JAVELIN);
     item=setWeaponTypeFromCategory(item,"29",WeaponType.CROSSBOW);
     item=setWeaponTypeFromCategory(item,"46",WeaponType.SPEAR);
+    //item=setWeaponTypeFromCategory(item,"12",WeaponType.ONE_HANDED_AXE);
     item=setWeaponTypeFromCategory(item,"One-handed Axe",WeaponType.ONE_HANDED_AXE);
     item=setWeaponTypeFromCategory(item,"Two-handed Axe",WeaponType.TWO_HANDED_AXE);
     item=setWeaponTypeFromCategory(item,"One-handed Sword",WeaponType.ONE_HANDED_SWORD);
@@ -220,24 +385,6 @@ public class ItemNormalization
         item.setSubCategory(null);
       }
     }
-    // TODO: these categories
-    /*
-        104=Rune-stone
-        1=Bow and some Javelin!
-        12 => {One-handed Axe=165, Two-handed Axe=84}
-        => Axe
-        24 => {Two-handed Hammer=21, One-handed Hammer=131}
-        => Hammer
-        34=Staff (legendary or not - loremaster only...)
-        40 => {Two-handed Club=86, One-handed Club=148}
-        => Club
-        30 => {One-handed Mace=163, One-handed Hammer=28, One-handed Club=34}
-        => Misc one-handed mace/hammer or club
-        44 => {Two-handed Sword=127, One-handed Mace=1, Halberd=16, Dagger=7, Two-handed Hammer=21, Two-handed Club=13, One-handed Sword=238, One-handed Club=3, Two-handed Axe=26}
-        => Misc main hand weapon (one or two handed)
-     */
-
-
     
     return item;
   }
@@ -256,6 +403,13 @@ public class ItemNormalization
       {
         ret=(Weapon)item;
       }
+      /*
+      WeaponType oldType=ret.getWeaponType();
+      if (oldType==null)
+      {
+        ret.setWeaponType(type);
+      }
+      */
       ret.setWeaponType(type);
     }
     return (ret!=null)?ret:item;
@@ -284,101 +438,109 @@ public class ItemNormalization
   private Item normalizeArmours(Item item)
   {
     int id=item.getIdentifier();
-    if (item instanceof Armour)
+    String category=item.getSubCategory();
+    Armour armour=null;
+    if ("Heavy Armour".equals(category))
     {
-      Armour armour=(Armour)item;
-      String category=armour.getSubCategory();
+      armour=checkArmour(item);
       ArmourType previous=armour.getArmourType();
-      if ("Heavy Armour".equals(category))
+      if ((previous!=null) && (previous!=ArmourType.HEAVY))
       {
-        if ((previous!=null) && (previous!=ArmourType.HEAVY))
-        {
-          System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.HEAVY);
-        }
-        armour.setArmourType(ArmourType.HEAVY);
-        armour.setSubCategory(null);
+        System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.HEAVY);
       }
-      else if ("Medium Armour".equals(category))
+      armour.setArmourType(ArmourType.HEAVY);
+      armour.setSubCategory(null);
+    }
+    else if ("Medium Armour".equals(category))
+    {
+      armour=checkArmour(item);
+      ArmourType previous=armour.getArmourType();
+      if ((previous!=null) && (previous!=ArmourType.MEDIUM))
       {
-        if ((previous!=null) && (previous!=ArmourType.MEDIUM))
-        {
-          System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.MEDIUM);
-        }
-        armour.setArmourType(ArmourType.MEDIUM);
-        armour.setSubCategory(null);
+        System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.MEDIUM);
       }
-      else if ("Light Armour".equals(category))
+      armour.setArmourType(ArmourType.MEDIUM);
+      armour.setSubCategory(null);
+    }
+    else if ("Light Armour".equals(category))
+    {
+      armour=checkArmour(item);
+      ArmourType previous=armour.getArmourType();
+      if ((previous!=null) && (previous!=ArmourType.LIGHT))
       {
-        if ((previous!=null) && (previous!=ArmourType.LIGHT))
-        {
-          System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.LIGHT);
-        }
-        armour.setArmourType(ArmourType.LIGHT);
-        armour.setSubCategory(null);
+        System.out.println("ID: " + id+": armour type conflict: was=" + previous + ", should be=" + ArmourType.LIGHT);
       }
-      else if ("Shield".equals(category))
+      armour.setArmourType(ArmourType.LIGHT);
+      armour.setSubCategory(null);
+    }
+    else if ("Shield".equals(category))
+    {
+      armour=checkArmour(item);
+      ArmourType previous=armour.getArmourType();
+      if ((previous==ArmourType.LIGHT) || (previous==null))
       {
-        if ((previous==ArmourType.LIGHT) || (previous==null))
+        armour.setArmourType(ArmourType.SHIELD);
+      }
+      armour.setSubCategory(null);
+      armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+      armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    }
+    else if ("Heavy Shield".equals(category))
+    {
+      armour=checkArmour(item);
+      armour.setArmourType(ArmourType.HEAVY_SHIELD);
+      armour.setSubCategory(null);
+      armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+      armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    }
+    else if ("Warden's Shield".equals(category))
+    {
+      armour=checkArmour(item);
+      armour.setArmourType(ArmourType.WARDEN_SHIELD);
+      armour.setSubCategory(null);
+      armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
+      armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    }
+    else if ("33".equals(category))
+    {
+      armour=checkArmour(item);
+      ArmourType type=armour.getArmourType();
+      if (type==null)
+      {
+        String name=armour.getName();
+        if (name.toLowerCase().contains("warden"))
         {
+          armour.setArmourType(ArmourType.WARDEN_SHIELD);
+        }
+        else if ((name.indexOf("Heavy Shield")!=-1) || (name.indexOf("Bulwark")!=-1)
+            || (name.indexOf("Battle-shield")!=-1))
+        {
+          armour.setArmourType(ArmourType.HEAVY_SHIELD);
+        }
+        else
+        {
+          // Default as shield
           armour.setArmourType(ArmourType.SHIELD);
-          armour.setSubCategory(null);
-          armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-          armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-          armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
         }
       }
-      else if ("Heavy Shield".equals(category))
+      type=armour.getArmourType();
+      if (type!=null)
       {
-        armour.setArmourType(ArmourType.HEAVY_SHIELD);
         armour.setSubCategory(null);
         armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
         armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
         armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
-      }
-      else if ("Warden's Shield".equals(category))
-      {
-        armour.setArmourType(ArmourType.WARDEN_SHIELD);
-        armour.setSubCategory(null);
-        armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-        armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-        armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
-      }
-      else if ("33".equals(category))
-      {
-        ArmourType type=armour.getArmourType();
-        if (type==null)
+        if (type==ArmourType.WARDEN_SHIELD)
         {
-          String name=armour.getName();
-          if (name.toLowerCase().contains("warden"))
-          {
-            armour.setArmourType(ArmourType.WARDEN_SHIELD);
-          }
-          else if ((name.indexOf("Heavy Shield")!=-1) || (name.indexOf("Bulwark")!=-1)
-              || (name.indexOf("Battle-shield")!=-1))
-          {
-            armour.setArmourType(ArmourType.HEAVY_SHIELD);
-          }
-          else
-          {
-            // Default as shield
-            armour.setArmourType(ArmourType.SHIELD);
-          }
-        }
-        type=armour.getArmourType();
-        if (type!=null)
-        {
-          armour.setSubCategory(null);
-          armour.setEquipmentLocation(EquipmentLocation.OFF_HAND);
-          armour.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-          armour.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
-          if (type==ArmourType.WARDEN_SHIELD)
-          {
-            armour.setRequiredClass(CharacterClass.WARDEN);
-          }
+          armour.setRequiredClass(CharacterClass.WARDEN);
         }
       }
     }
-    Item ret=normalizeArmour(item, "3", "Chest", EquipmentLocation.CHEST);
+    Item ret=(armour!=null)?armour:item;
+    ret=normalizeArmour(ret, "3", "Chest", EquipmentLocation.CHEST);
     ret=normalizeArmour(ret, "5", "Hands", EquipmentLocation.HAND);
     ret=normalizeArmour(ret, "6", "Shoulders", EquipmentLocation.SHOULDER);
     ret=normalizeArmour(ret, "7", "Head", EquipmentLocation.HEAD);
@@ -392,22 +554,28 @@ public class ItemNormalization
     return ret;
   }
 
+  private Armour checkArmour(Item item)
+  {
+    Armour ret=null;
+    if (item instanceof Armour)
+    {
+      ret=(Armour)item;
+    }
+    else
+    {
+      ret=new Armour();
+      ret.copyFrom(item);
+    }
+    return ret;
+  }
+
   private Item normalizeArmour(Item item, String categoryInt, String expectedCategoryStr, EquipmentLocation loc)
   {
     Item ret=item;
     int id=item.getIdentifier();
     String categoryProp=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
     if (categoryInt.equals(categoryProp)) {
-      Armour armour=null;
-      if (!(item instanceof Armour))
-      {
-        armour=new Armour();
-        armour.copyFrom(item);
-      }
-      else
-      {
-        armour=(Armour)item;
-      }
+      Armour armour=checkArmour(item);
       ret=armour;
       // Location
       {
