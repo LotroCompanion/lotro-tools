@@ -113,6 +113,9 @@ public class ItemNormalization
     ret=normalizeWardenItems(ret);
     ret=normalizeByCategory(ret);
     ret=normalizeBelt(ret);
+    ret=normalizeThrownWeapon(ret);
+    ret=normalizeMiscWeapons(ret);
+    ret=normalizeCategory0(ret);
     String prop=ret.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
     if (prop!=null)
     {
@@ -186,7 +189,7 @@ public class ItemNormalization
     // Fishing
     normalizeByCategory(item,"102","Fishing:Fish");
     normalizeByCategory(item,"100","Fishing:Bait");
-    normalizeByCategory(item,"103","Fishing:Pole");
+    normalizeByCategory(item,"103","Fishing:Pole",null,EquipmentLocation.MAIN_HAND);
     normalizeByCategory(item,"101","Fishing:Other");
     // Legendary
     normalizeByCategory(item,"206","Legendary:Crystal of Remembrance");
@@ -206,7 +209,6 @@ public class ItemNormalization
     normalizeByCategory(item,"20","Trap");
     normalizeByCategory(item,"235","Essence");
     normalizeByCategory(item,"89","Faction Item");
-    normalizeByCategory(item,"54","Thrown Weapon");
     normalizeByCategory(item,"177","Skirmish Mark");
     normalizeByCategory(item,"178","Barter Item");
     normalizeByCategory(item,"186","Skill Item");
@@ -218,21 +220,18 @@ public class ItemNormalization
     normalizeByCategory(item,"164","Misc");
     normalizeByCategory(item,"170","Crafting Trophy");
     normalizeByCategory(item,"43","Charter");
-    normalizeByCategory(item,"187","Horn",CharacterClass.CHAMPION);
-    normalizeByCategory(item,"171","Pet Food",CharacterClass.LORE_MASTER);
-
-    // TODO: 1 -> Bow (check Bow in name)
+    normalizeByCategory(item,"187","Horn",CharacterClass.CHAMPION,null);
+    normalizeByCategory(item,"171","Pet Food",CharacterClass.LORE_MASTER,null);
     return item;
   }
 
   private Item normalizeByCategory(Item item, String tulkasCategory, String category)
   {
-    return normalizeByCategory(item,tulkasCategory,category,null);
+    return normalizeByCategory(item,tulkasCategory,category,null,null);
   }
 
-  private Item normalizeByCategory(Item item, String tulkasCategory, String category, CharacterClass cClass)
-    {
-
+  private Item normalizeByCategory(Item item, String tulkasCategory, String category, CharacterClass cClass, EquipmentLocation loc)
+  {
     String itemTulkasCategory=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
     if (itemTulkasCategory!=null)
     {
@@ -245,6 +244,7 @@ public class ItemNormalization
         {
           item.setRequiredClass(cClass);
         }
+        item.setEquipmentLocation(loc);
       }
     }
     return item;
@@ -268,6 +268,21 @@ public class ItemNormalization
     return item;
   }
 
+  private Item normalizeThrownWeapon(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("54".equals(category))
+    {
+      item=setWeaponTypeFromCategory(item,null,WeaponType.THROWN_WEAPON);
+      item.setEquipmentLocation(null);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      item.setSubCategory(null);
+    }
+    return item;
+  }
+
+
   private Item normalizeBelt(Item item)
   {
     String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
@@ -276,6 +291,33 @@ public class ItemNormalization
       item.setSubCategory("Belt");
       item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
       item.setRequiredClass(CharacterClass.GUARDIAN);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeCategory0(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("0".equals(category))
+    {
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("tracking")!=-1)
+      {
+        item.setSubCategory("Misc:Tracking");
+        item.setEquipmentLocation(null);
+      }
+      else if (name.indexOf("experience disabler")!=-1)
+      {
+        item.setSubCategory("Misc:XP disabler");
+        item.setEquipmentLocation(null);
+      }
+      else
+      {
+        item.setSubCategory("Misc");
+        item.setEquipmentLocation(null);
+      }
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
     }
@@ -782,7 +824,7 @@ public class ItemNormalization
   private Item setWeaponTypeFromCategory(Item item, String category, WeaponType type)
   {
     Weapon ret=null;
-    if (category.equals(item.getSubCategory()))
+    if ((category==null) || (category.equals(item.getSubCategory())))
     {
       if (item.getClass()==Item.class)
       {
@@ -793,37 +835,87 @@ public class ItemNormalization
       {
         ret=(Weapon)item;
       }
-      /*
       WeaponType oldType=ret.getWeaponType();
       if (oldType==null)
       {
         ret.setWeaponType(type);
       }
-      */
-      ret.setWeaponType(type);
+      else
+      {
+        if (type!=oldType)
+        {
+          System.out.println("Conflict weapon type for ID:"+item.getIdentifier()+", name:"+item.getName()+": from:"+oldType+" to:"+type);
+        }
+      }
     }
     return (ret!=null)?ret:item;
   }
-  /*
-    ========= WEAPONS ==========
-    1=Bow and some Javelin!
-    104=Rune-stone
-    187=Horn
-    12 => {One-handed Axe=165, Two-handed Axe=84}
-    => Axe
-    24 => {Two-handed Hammer=21, One-handed Hammer=131}
-    => Hammer
-    34=Staff (legendary or not - loremaster only...)
-    40 => {Two-handed Club=86, One-handed Club=148}
-    => Club
-    54=Thrown Weapon
-    192=Satchel
 
-    30 => {One-handed Mace=163, One-handed Hammer=28, One-handed Club=34}
-    => Misc one-handed mace/hammer or club
-    44 => {Two-handed Sword=127, One-handed Mace=1, Halberd=16, Dagger=7, Two-handed Hammer=21, Two-handed Club=13, One-handed Sword=238, One-handed Club=3, Two-handed Axe=26}
-    => Misc main hand weapon (one or two handed)
-    */
+  private Item normalizeMiscWeapons(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    String name=item.getName();
+    if (name==null) return item;
+    name=name.toLowerCase();
+    WeaponType type=null;
+    if (("1".equals(category)) || ("12".equals(category)) || ("24".equals(category))
+        || ("30".equals(category)) || ("40".equals(category)) || ("44".equals(category)))
+    {
+      if (item instanceof Weapon)
+      {
+        type=((Weapon)item).getWeaponType();
+      }
+      if (type==null)
+      {
+        if ("12".equals(category))
+        {
+          if (name.indexOf("great axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
+          else type=WeaponType.ONE_HANDED_AXE;
+        }
+        else if ("1".equals(category))
+        {
+          if (name.indexOf("bow")!=-1) type=WeaponType.BOW;
+          else if (name.indexOf("javelin")!=-1) type=WeaponType.JAVELIN;
+          else type=null;
+        }
+        else if ("24".equals(category))
+        {
+          if (name.indexOf("mallet")!=-1) type=WeaponType.TWO_HANDED_HAMMER;
+          else type=WeaponType.ONE_HANDED_HAMMER;
+        }
+        else if ("40".equals(category))
+        {
+          type=WeaponType.ONE_HANDED_CLUB;
+        }
+        else if ("30".equals(category))
+        {
+          if (name.indexOf("mace")!=-1) type=WeaponType.ONE_HANDED_MACE;
+          else if (name.indexOf("hammer")!=-1) type=WeaponType.ONE_HANDED_HAMMER;
+          else if (name.indexOf("club")!=-1) type=WeaponType.ONE_HANDED_CLUB;
+          else if (name.indexOf("old reliable")!=-1) type=WeaponType.ONE_HANDED_CLUB;
+        }
+        else if ("44".equals(category))
+        {
+          if (name.indexOf("mace")!=-1) type=WeaponType.ONE_HANDED_MACE;
+          else if (name.indexOf("hammer")!=-1) type=WeaponType.ONE_HANDED_HAMMER;
+          else if (name.indexOf("club")!=-1) type=WeaponType.ONE_HANDED_CLUB;
+          else if (name.indexOf("sword")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+          else if (name.indexOf("blade")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+          else if (name.indexOf("great axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
+          else if (name.indexOf("oathbreaker's bane")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+        }
+      }
+      if (type==null)
+      {
+        System.out.println("Weapon type not found: category:"+category+", name:"+name);
+        type=WeaponType.OTHER;
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      item=setWeaponTypeFromCategory(item,null,type);
+    }
+    return item;
+  }
 
   private Item normalizeArmours(Item item)
   {
