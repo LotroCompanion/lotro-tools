@@ -101,7 +101,16 @@ public class ItemNormalization
     ret=normalizeLegendaryItem(ret);
     ret=normalizeCraftingTool(ret);
     ret=normalizeInstrument(ret);
+    ret=normalizeBeorningItems(ret);
+    ret=normalizeBurglarItems(ret);
+    ret=normalizeCaptainItems(ret);
+    ret=normalizeChampionItems(ret);
+    ret=normalizeGuardianItems(ret);
+    ret=normalizeHunterItems(ret);
+    ret=normalizeLoreMasterItems(ret);
+    ret=normalizeMinstrelItems(ret);
     ret=normalizeRuneKeeperItems(ret);
+    ret=normalizeWardenItems(ret);
     ret=normalizeByCategory(ret);
     ret=normalizeBelt(ret);
     String prop=ret.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
@@ -210,22 +219,9 @@ public class ItemNormalization
     normalizeByCategory(item,"170","Crafting Trophy");
     normalizeByCategory(item,"43","Charter");
     normalizeByCategory(item,"187","Horn",CharacterClass.CHAMPION);
+    normalizeByCategory(item,"171","Pet Food",CharacterClass.LORE_MASTER);
 
     // TODO: 1 -> Bow (check Bow in name)
-    /*
-        ["Beorning"] = 233
-        ["Burglar"] = 48
-        ["Captain"] = 13
-        ["Champion"] = 22
-        ["Guardian"] = 26
-        ["Hunter"] = 17
-        ["Loremaster"] = 19
-        ["LoremasterFood"] = 171
-        ["Minstrel"] = 4
-        ["MinstrelBook"] = 163
-        ["Warden"] = 105
-        }
-     */
     return item;
   }
 
@@ -304,6 +300,367 @@ public class ItemNormalization
     return item;
   }
 
+  private Item normalizeBeorningItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("233".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.BEORNING);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("carving")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.BEORNING.getLabel()+":Carving");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BEORNING.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeBurglarItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("48".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.BURGLAR);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("signal")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Signal");
+      }
+      else if (name.indexOf("caltrops")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Clever Devices:Caltrops");
+      }
+      else if (name.indexOf("marbles")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Clever Devices:Marbles");
+      }
+      else if (name.indexOf("stun dust")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Clever Devices:Stun Dust");
+      }
+      else if (name.indexOf("knife")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Knife");
+      }
+      else if (name.indexOf("hatchet")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Throwing Hatchet");
+      }
+      else if (name.indexOf("tools")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Tools");
+      }
+      else if (name.indexOf("implements")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Implements");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeCaptainItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("13".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.CAPTAIN);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("crest")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Crest");
+      }
+      else if (name.indexOf("armaments")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Armaments");
+      }
+      else if (name.indexOf("battle tonic")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Battle Tonic");
+      }
+      else if (name.indexOf("standard")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Standard");
+      }
+      else if (name.indexOf("emblem")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Emblem");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.CAPTAIN.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeChampionItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("22".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.CHAMPION);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("rune")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.CHAMPION.getLabel()+":Rune");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.CHAMPION.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeGuardianItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("26".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.GUARDIAN);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("overpower")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Overpower Tactics");
+      }
+      else if (name.indexOf("spike")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spike Kit");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    if ("179".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.GUARDIAN); // TODO and warden
+      item.setEquipmentLocation(null);
+      item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spikes");
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeHunterItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("17".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.HUNTER);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("whisper-draw")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Whisper-draw");
+      }
+      else if (name.indexOf("wind-rider")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Wind-rider");
+      }
+      else if (name.indexOf("bow-chant")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Bow Chant");
+      }
+      else if (name.indexOf("oil")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Oil");
+      }
+      else if (name.indexOf("guide")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Guide");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private static final String[] LOREMASTER_PETS = {
+    "cat", "dog", "fox", "frog", "hare", "snake", "sparrow", "squirrel", "turtle"
+  };
+
+  private Item normalizeLoreMasterItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("19".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.LORE_MASTER);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("brooch")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Brooch");
+      }
+      else if (name.indexOf("parable")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Parable");
+      }
+      else if (name.indexOf("book")!=-1)
+      {
+        if (name.startsWith("the"))
+        {
+          item.setEquipmentLocation(null);
+          item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Other");
+        }
+        else
+        {
+          item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+          item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Book");
+        }
+      }
+      else if (name.indexOf("tome")!=-1)
+      {
+        boolean isPet=false;
+        for(String petName : LOREMASTER_PETS)
+        {
+          if (name.indexOf(petName)!=-1)
+          {
+            isPet=true;
+          }
+        }
+        if (isPet)
+        {
+          item.setEquipmentLocation(null);
+          item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Pet Skill");
+        } else {
+          item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+          item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Tome");
+        }
+      }
+      else if (name.indexOf("stickpin")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Stickpin");
+      }
+      else if (name.indexOf("talisman")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Talisman");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeMinstrelItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("4".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.MINSTREL);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("sheet")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Music Sheet");
+      }
+      else if (name.indexOf("parable")!=-1)
+      {
+        item.setRequiredClass(CharacterClass.LORE_MASTER); // !!
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Parable");
+      }
+      else if (name.indexOf("mentor")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Mentoring");
+      }
+      else if (name.indexOf("strings")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Strings");
+      }
+      else if (name.indexOf("manual")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Manual");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    if ("163".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.MINSTREL);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("songbook")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Soongbook");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
   private Item normalizeRuneKeeperItems(Item item)
   {
     String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
@@ -350,6 +707,39 @@ public class ItemNormalization
       {
         item.setEquipmentLocation(null);
         item.setSubCategory(CharacterClass.RUNE_KEEPER.getLabel()+":Other");
+      }
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizeWardenItems(Item item)
+  {
+    String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("105".equals(category))
+    {
+      item.setRequiredClass(CharacterClass.WARDEN);
+      String name=item.getName().toLowerCase();
+      if (name.indexOf("carving")!=-1)
+      {
+        item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
+        item.setSubCategory(CharacterClass.WARDEN.getLabel()+":Carving");
+      }
+      else if (name.indexOf("hymn")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.WARDEN.getLabel()+":Hymn");
+      }
+      else if (name.indexOf("muster")!=-1)
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.WARDEN.getLabel()+":Muster");
+      }
+      else
+      {
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.WARDEN.getLabel()+":Other");
       }
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
