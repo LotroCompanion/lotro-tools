@@ -136,7 +136,15 @@ public class ItemNormalization
     String name=item.getName();
     if (name!=null)
     {
-      if ((name.startsWith("DNT")) || (name.startsWith("TBD")))
+      if ((name.startsWith("DNT")) || (name.contains("TBD")))
+      {
+        ret=null;
+      }
+      if (name.contains("Tester"))
+      {
+        ret=null;
+      }
+      if (name.contains("Barter Test"))
       {
         ret=null;
       }
@@ -201,7 +209,6 @@ public class ItemNormalization
     normalizeByCategory(item,"108","Legendary:Reset Scroll");
     normalizeByCategory(item,"194","Legendary:Relic Removal Scroll");
     normalizeByCategory(item,"109","Legendary:Deconstructable Relics");
-    normalizeByCategory(item,"218","Bridle");
 
     // Misc
     normalizeByCategory(item,"41","Dye");
@@ -532,7 +539,13 @@ public class ItemNormalization
     {
       item.setRequiredClass(CharacterClass.HUNTER);
       String name=item.getName().toLowerCase();
-      if (name.indexOf("whisper-draw")!=-1)
+      if (name.indexOf("bow chant")!=-1)
+      {
+        // Use bow chant before 'whisper-draw' and 'wind-rider'
+        item.setEquipmentLocation(null);
+        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Bow Chant");
+      }
+      else if (name.indexOf("whisper-draw")!=-1)
       {
         item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
         item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Whisper-draw");
@@ -541,11 +554,6 @@ public class ItemNormalization
       {
         item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
         item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Wind-rider");
-      }
-      else if (name.indexOf("bow-chant")!=-1)
-      {
-        item.setEquipmentLocation(null);
-        item.setSubCategory(CharacterClass.HUNTER.getLabel()+":Bow Chant");
       }
       else if (name.indexOf("oil")!=-1)
       {
@@ -1170,10 +1178,30 @@ public class ItemNormalization
           normalizeJewelByName(ret,"Choker",EquipmentLocation.NECK);
           normalizeJewelByName(ret,"Band ",EquipmentLocation.FINGER);
           normalizeJewelByName(ret,"Armlet",EquipmentLocation.WRIST);
+          normalizeJewelByName(ret,"Bangle of Deep Waters",EquipmentLocation.WRIST);
           normalizeJewelByName(ret,"Mountain-stone",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Scroll",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Phial",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Pocket-square",EquipmentLocation.POCKET);
+          // Specific names for pocket items
+          normalizeJewelByName(ret,"Small Golden Dish",EquipmentLocation.POCKET);
+          normalizeJewelByName(ret,"Leather-bound Diary",EquipmentLocation.POCKET);
+          normalizeJewelByName(ret,"Carved Jewellery Box",EquipmentLocation.POCKET);
+          normalizeJewelByName(ret,"Fancy Gems in a Shell",EquipmentLocation.POCKET);
+          normalizeJewelByName(ret,"Small Golden Dish",EquipmentLocation.POCKET);
+          String name=ret.getName();
+          if ("Plains Walker's Symbol".equals(name))
+          {
+            ret.setRequiredClass(CharacterClass.BEORNING);
+            ret.setEquipmentLocation(EquipmentLocation.POCKET);
+            ret.setSubCategory(null);
+          }
+          else if ("Talisman of the Tundra Cub".equals(name))
+          {
+            ret.setRequiredClass(CharacterClass.LORE_MASTER);
+            ret.setEquipmentLocation(null);
+            ret.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Talisman");
+          }
         }
       }
       ret.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
