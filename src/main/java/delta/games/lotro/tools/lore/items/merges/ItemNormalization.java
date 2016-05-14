@@ -19,6 +19,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -93,6 +94,7 @@ public class ItemNormalization
     {
       return null;
     }
+    ret=normalizeSpecifics(ret);
     ret=normalizeArmours(ret);
     ret=normalizeWeapons(ret);
     ret=normalizeCrafting(ret);
@@ -111,6 +113,7 @@ public class ItemNormalization
     ret=normalizeMinstrelItems(ret);
     ret=normalizeRuneKeeperItems(ret);
     ret=normalizeWardenItems(ret);
+    ret=normalizePotions(ret);
     ret=normalizeByCategory(ret);
     ret=normalizeBelt(ret);
     ret=normalizeThrownWeapon(ret);
@@ -157,10 +160,45 @@ public class ItemNormalization
     return ret;
   }
 
+  private Item normalizeSpecifics(Item item)
+  {
+    int id=item.getIdentifier();
+    // Sword of Thrâng
+    if (id==1879097298)
+    {
+      item.setSubCategory("Misc:Quest Item");
+      item.setEquipmentLocation(null);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    return item;
+  }
+
+  private Item normalizePotions(Item item)
+  {
+    String itemTulkasCategory=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    if ("28".equals(itemTulkasCategory))
+    {
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      String name=item.getName();
+      if ((name.contains("Edhelharn Token")) || (name.contains("Hope Token")))
+      {
+        item.setSubCategory("Misc:Hope Token");
+      }
+      else
+      {
+        item.setSubCategory("Misc:Potion");
+      }
+      item.setEquipmentLocation(null);
+    }
+    return item;
+  }
+
+  
   private Item normalizeByCategory(Item item)
   {
     normalizeByCategory(item,"27","Misc:Quest Item");
-    normalizeByCategory(item,"28","Misc:Potion");
     normalizeByCategory(item,"31","Misc:Key");
     normalizeByCategory(item,"50","Misc:Device");
     normalizeByCategory(item,"55","Misc:Food");
@@ -170,7 +208,7 @@ public class ItemNormalization
     normalizeByCategory(item,"8","Misc:Mount");
     normalizeByCategory(item,"91","Misc:Implement");
     normalizeByCategory(item,"53","Misc:Non-Inventory");
-    normalizeByCategory(item,"52","Misc:Book");
+    normalizeByCategory(item,"52","Misc:Emote");
     normalizeByCategory(item,"16","Misc:Smoking");
     normalizeByCategory(item,"174","Misc:Emote");
     normalizeByCategory(item,"205","Misc:Event Item");
@@ -198,7 +236,7 @@ public class ItemNormalization
     normalizeByCategory(item,"102","Fishing:Fish");
     normalizeByCategory(item,"100","Fishing:Bait");
     normalizeByCategory(item,"103","Fishing:Pole",null,EquipmentLocation.MAIN_HAND);
-    normalizeByCategory(item,"101","Fishing:Other");
+    normalizeByCategory(item,"101","Misc");
     // Legendary
     normalizeByCategory(item,"206","Legendary:Crystal of Remembrance");
     normalizeByCategory(item,"176","Legendary:Star-lit crystal");
@@ -295,7 +333,7 @@ public class ItemNormalization
     String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
     if ("111".equals(category))
     {
-      item.setSubCategory("Belt");
+      item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Belt");
       item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
       item.setRequiredClass(CharacterClass.GUARDIAN);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
@@ -511,7 +549,7 @@ public class ItemNormalization
       else if (name.indexOf("spike")!=-1)
       {
         item.setEquipmentLocation(null);
-        item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spike Kit");
+        item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spike Kit"); // TODO and warden
       }
       else
       {
@@ -525,7 +563,7 @@ public class ItemNormalization
     {
       item.setRequiredClass(CharacterClass.GUARDIAN); // TODO and warden
       item.setEquipmentLocation(null);
-      item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spikes");
+      item.setSubCategory(CharacterClass.GUARDIAN.getLabel()+":Shield-spike Kit");
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
     }
@@ -698,7 +736,7 @@ public class ItemNormalization
       if (name.indexOf("songbook")!=-1)
       {
         item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
-        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Soongbook");
+        item.setSubCategory(CharacterClass.MINSTREL.getLabel()+":Songbook");
       }
       else
       {
@@ -1256,6 +1294,32 @@ public class ItemNormalization
           item.setSubCategory(newCategory);
           item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
           item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+          // Patch for badly named beorning carving recipes
+          if ("Woodworker".equals(PROFESSIONS[j]))
+          {
+            String name=item.getName();
+            if (name.indexOf("Beorning")!=-1)
+            {
+              if (!name.endsWith("Recipe"))
+              {
+                name=name+" Recipe";
+                item.setName(name);
+              }
+            }
+          }
+          // Patch for badly named bridle recipes
+          if ("Tailor".equals(PROFESSIONS[j]))
+          {
+            String name=item.getName();
+            if (name.indexOf("Bridle")!=-1)
+            {
+              if (!name.endsWith("Recipe"))
+              {
+                name=name+" Recipe";
+                item.setName(name);
+              }
+            }
+          }
           found=true;
           break;
         }
@@ -1337,28 +1401,31 @@ public class ItemNormalization
         String category=null;
         if (bridle)
         {
-          category="Legendary Bridle";
-          item.setCategory(ItemCategory.ITEM);
+          category="Bridle";
+          item.setCategory(ItemCategory.LEGENDARY_ITEM);
+          item.setEquipmentLocation(EquipmentLocation.BRIDLE);
         }
         else if (classItemType!=null)
         {
-          category="Legendary Class Item:"+classItemType;
-          item.setCategory(ItemCategory.ITEM);
+          category=cClass.getLabel()+":"+classItemType;
+          item.setCategory(ItemCategory.LEGENDARY_ITEM);
+          item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
         }
         else if (weaponType!=null)
         {
-          category="Legendary Weapon";
-          Weapon weapon;
-          if (item instanceof Weapon)
+          LegendaryWeapon weapon;
+          if (item instanceof LegendaryWeapon)
           {
-            weapon=(Weapon)item;
+            weapon=(LegendaryWeapon)item;
           }
           else
           {
-            weapon=new Weapon();
+            weapon=new LegendaryWeapon();
             weapon.copyFrom(item);
             item=weapon;
           }
+          EquipmentLocation location=weaponType.isRanged()?EquipmentLocation.RANGED_ITEM:EquipmentLocation.MAIN_HAND;
+          weapon.setEquipmentLocation(location);
           weapon.setWeaponType(weaponType);
         }
         item.setSubCategory(category);
