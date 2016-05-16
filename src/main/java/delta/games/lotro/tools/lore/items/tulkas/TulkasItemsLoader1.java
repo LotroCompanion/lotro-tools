@@ -245,6 +245,11 @@ public class TulkasItemsLoader1 extends TulkasItemsLoader
           STAT stat=TulkasConstants.STATS[index];
           if (stat!=null)
           {
+            if (stat==STAT.ALL_SKILL_INDUCTION)
+            {
+              if (bonusValue instanceof Integer) bonusValue=Integer.valueOf(-((Integer)bonusValue).intValue());
+              else if (bonusValue instanceof Float) bonusValue=Float.valueOf(-((Float)bonusValue).floatValue());
+            }
             FixedDecimalsInteger value=TulkasValuesUtils.fromObjectValue(bonusValue);
             stats.setStat(stat,value);
           }

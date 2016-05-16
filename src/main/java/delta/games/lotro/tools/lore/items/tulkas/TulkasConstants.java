@@ -84,7 +84,7 @@ public class TulkasConstants
     STAT.TACTICAL_CRITICAL_MULTIPLIER, // 29
     // Not in version 2:
     null, //"Ranged Offence Rating",
-    null  //"All Skill Inductions"
+    STAT.ALL_SKILL_INDUCTION
   };
 
   /**
