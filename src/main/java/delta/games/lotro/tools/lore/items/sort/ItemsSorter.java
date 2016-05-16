@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.items.sort;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Set;
 import delta.common.utils.collections.filters.CompoundFilter;
 import delta.common.utils.collections.filters.Filter;
 import delta.common.utils.collections.filters.Operator;
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.CharacterProficiencies;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.gui.items.ItemChoiceWindowController;
@@ -19,11 +21,13 @@ import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.comparators.ItemNameComparator;
 import delta.games.lotro.lore.items.filters.ItemArmourTypeFilter;
 import delta.games.lotro.lore.items.filters.ItemFilter;
 import delta.games.lotro.lore.items.filters.ItemRequiredClassFilter;
 import delta.games.lotro.lore.items.filters.ItemSlotFilter;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 
 /**
  * Sort items.
@@ -34,7 +38,6 @@ public class ItemsSorter
   private static final String WEAPON="weapon-";
   private static final String ARMOUR="armour-";
   private static final String JEWELS="jewel-";
-  private static final String LEGENDARY="liClassItem-";
 
   private HashMap<String,List<Item>> _items;
 
@@ -185,87 +188,22 @@ public class ItemsSorter
     */
   }
 
-  private void filterLegendaryClassItems(List<Item> classItems)
-  {
-    HashMap<CharacterClass,List<Item>> map=new HashMap<CharacterClass,List<Item>>();
-    List<Item> others=new ArrayList<Item>();
-    for(Item item : classItems)
-    {
-      CharacterClass characterClass=item.getRequiredClass();
-      if (characterClass!=null)
-      {
-        List<Item> list=map.get(characterClass);
-        if (list==null)
-        {
-          list=new ArrayList<Item>();
-          map.put(characterClass,list);
-        }
-        list.add(item);
-      }
-      else
-      {
-        others.add(item);
-      }
-    }
-    for(Map.Entry<CharacterClass,List<Item>> entry : map.entrySet())
-    {
-      CharacterClass characterClass=entry.getKey();
-      List<Item> list=entry.getValue();
-      _items.put(LEGENDARY+characterClass.getKey(),list);
-      //System.out.println("\t"+characterClass+": "+list.size());
-    }
-    System.out.println("\tOther: "+others.size());
-    for(Item other : others)
-    {
-      System.out.println(other.dump());
-    }
-  }
-
   private void filterOthers(List<Item> items)
   {
-    List<Item> tools=new ArrayList<Item>();
-    List<Item> instruments=new ArrayList<Item>();
-    List<Item> recipes=new ArrayList<Item>();
-    List<Item> others=new ArrayList<Item>();
+    HashMap<String,List<Item>> lists=new HashMap<String,List<Item>>();
     for(Item item : items)
     {
-      EquipmentLocation location=item.getEquipmentLocation();
-      if (location==EquipmentLocation.TOOL)
+      String category=item.getSubCategory();
+      if (category==null) category="???";
+      List<Item> itemsForCategogy=lists.get(category);
+      if (itemsForCategogy==null)
       {
-        tools.add(item);
+        itemsForCategogy=new ArrayList<Item>();
+        lists.put(category,itemsForCategogy);
       }
-      else
-      {
-        String category=item.getSubCategory();
-        if ((category!=null) && (category.startsWith("Recipe:")))
-        {
-          recipes.add(item);
-        }
-        else if ("Instrument".equals(category))
-        {
-          // TODO some items are considered instruments but are not (chisel, satchel...)
-          instruments.add(item);
-        }
-        else
-        {
-          others.add(item);
-        }
-      }
+      itemsForCategogy.add(item);
     }
-    System.out.println("\tTool: "+tools.size());
-    System.out.println("\tRecipe: "+recipes.size());
-    System.out.println("\tInstrument: "+instruments.size());
-    System.out.println("\tOther: "+others.size());
-    _items.put("TOOL",tools);
-    _items.put("RECIPE",recipes);
-    _items.put("INSTRUMENT",instruments);
-    _items.put("OTHER",others);
-    /*
-    for(Item other : others)
-    {
-      System.out.println(other.getIdentifier()+" -> "+other.getName());
-    }
-    */
+    _items.putAll(lists);
   }
 
   private void filterItems(List<Item> items)
@@ -273,7 +211,6 @@ public class ItemsSorter
     List<Item> weapons=new ArrayList<Item>();
     List<Item> armours=new ArrayList<Item>();
     List<Item> jewels=new ArrayList<Item>();
-    List<Item> liClassItems=new ArrayList<Item>();
     List<Item> others=new ArrayList<Item>();
 
     for(Item item : items)
@@ -299,15 +236,7 @@ public class ItemsSorter
           }
           else
           {
-            String category=item.getSubCategory();
-            if ((category!=null) && (category.startsWith("Legendary Class Item:")))
-            {
-              liClassItems.add(item);
-            }
-            else
-            {
-              others.add(item);
-            }
+            others.add(item);
           }
         }
       }
@@ -318,11 +247,8 @@ public class ItemsSorter
     filterArmours(armours);
     System.out.println("Jewels: "+jewels.size());
     filterJewels(jewels);
-    System.out.println("LI class items: "+liClassItems.size());
-    filterLegendaryClassItems(liClassItems);
     System.out.println("Others: "+others.size());
     filterOthers(others);
-    // TODO: class specific items (brooch, chisel/riffler, ...)
   }
 
   private void doIt()
@@ -357,21 +283,25 @@ public class ItemsSorter
     }
     */
     filterItems(items);
-    test();
-    /*
-    for(String key : _items.keySet())
+    //test();
+    List<String> categories=new ArrayList<String>(_items.keySet());
+    Collections.sort(categories);
+    for(String category : categories)
     {
-      List<Item> itemsForCategory=_items.get(key);
-      System.out.println(key+"  ->  "+itemsForCategory.size());
+      List<Item> itemsForCategory=_items.get(category);
+      System.out.println(category+"  ->  "+itemsForCategory.size());
+      category=category.replace(':','_');
       Collections.sort(itemsForCategory,new ItemNameComparator());
       ItemXMLWriter writer=new ItemXMLWriter();
-      File to=new File(key+".xml").getAbsoluteFile();
+      File to=new File("sorted",category+".xml").getAbsoluteFile();
       writer.writeItems(to,itemsForCategory,EncodingNames.UTF_8);
     }
-    */
   }
 
-  private void test()
+  /**
+   * Test filtering.
+   */
+  public void test()
   {
     {
       List<Item> items=buildWeaponsList(CharacterClass.HUNTER,95,EquipmentLocation.MAIN_HAND);

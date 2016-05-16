@@ -59,6 +59,7 @@ public class BuildItemsDbForIcons
     for(Map.Entry<String,List<Integer>> entry : _iconIds2Ids.entrySet())
     {
       ids.add(entry.getValue().get(0));
+      //ids.addAll(entry.getValue());
     }
     Collections.sort(ids);
 
@@ -102,14 +103,24 @@ public class BuildItemsDbForIcons
     File toFile=new File("items.xml").getAbsoluteFile();
     HashMap<Integer,Item> items=loadItemsFile(toFile);
     System.out.println(items.size());
+    
     for(Integer id : items.keySet())
     {
       Item item=items.get(id);
+      //String tulkas=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      //String category=item.getSubCategory();
+      //if ((category==null) || (!category.contains("Guardian:Shield-spike"))) continue;
+      //int idValue=id.intValue();
+      //if ((idValue==1879097298) || (idValue==1879109623)
+      //    || (idValue==1879109618) || (idValue==1879083770) || (idValue==1879115686))
+      //{
       String iconId=item.getProperty(ItemPropertyNames.ICON_ID);
       _iconsIds.add(iconId);
       String backgroundIconId=item.getProperty(ItemPropertyNames.BACKGROUND_ICON_ID);
       _backgroundIconsIds.add(backgroundIconId);
       String key=iconId+"-"+backgroundIconId;
+      //ImageIcon icon=IconsManager.getItemIcon(iconId,backgroundIconId);
+      //if (icon!=null) continue;
       List<Integer> list=_iconIds2Ids.get(key);
       if (list==null)
       {
@@ -117,6 +128,7 @@ public class BuildItemsDbForIcons
         _iconIds2Ids.put(key,list);
       }
       list.add(id);
+      //}
     }
     buildDb(items);
     System.out.println(_iconIds2Ids.size());
