@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
@@ -20,10 +22,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.ItemsSet;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.bonus.Bonus;
-import delta.games.lotro.lore.items.bonus.BonusManager;
-import delta.games.lotro.lore.items.bonus.BonusType;
-import delta.games.lotro.lore.items.bonus.Bonus.BONUS_OCCURRENCE;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**
@@ -233,20 +232,26 @@ public class TulkasItemsLoader1 extends TulkasItemsLoader
     // Bonus
     if (statsMap!=null)
     {
-      BonusManager bonusMgr=ret.getBonusManager();
+      BasicStatsSet stats=ret.getStats();
       final HashMap<String,Object> bonuses=new HashMap<String,Object>();
       loadBonusItemsVersion1(bonuses,statsMap);
       bonuses.remove("Armour");
-      for(String bonusName : TulkasConstants.BONUS_NAMES)
+      for(int index=0;index<TulkasConstants.BONUS_NAMES.length;index++)
       {
+        String bonusName=TulkasConstants.BONUS_NAMES[index];
         Object bonusValue=bonuses.get(bonusName);
         if (bonusValue!=null)
         {
-          BonusType type=BonusType.getByName(bonusName);
-          Bonus bonus=new Bonus(type,BONUS_OCCURRENCE.ALWAYS);
-          Object value=type.buildValue(bonusValue);
-          bonus.setValue(value);
-          bonusMgr.add(bonus);
+          STAT stat=TulkasConstants.STATS[index];
+          if (stat!=null)
+          {
+            FixedDecimalsInteger value=TulkasValuesUtils.fromObjectValue(bonusValue);
+            stats.setStat(stat,value);
+          }
+          else
+          {
+            //_logger.warn("No stat associated to bonus: " + bonusName);
+          }
           bonuses.remove(bonusName);
         }
       }

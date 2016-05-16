@@ -374,7 +374,7 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
           STAT stat=TulkasConstants.STATS[index];
           if (stat!=null)
           {
-            FixedDecimalsInteger value=fromObjectValue(bonusValue);
+            FixedDecimalsInteger value=TulkasValuesUtils.fromObjectValue(bonusValue);
             stats.setStat(stat,value);
           }
           else
@@ -400,29 +400,6 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       {
         _logger.warn("Unmanaged bonuses: "+bonuses);
       }
-    }
-    return ret;
-  }
-
-  /**
-   * Build a fixed decimal integer from an object value.
-   * @param objectValue External representation string.
-   * @return A value.
-   */
-  private FixedDecimalsInteger fromObjectValue(Object objectValue)
-  {
-    FixedDecimalsInteger ret=null;
-    if (objectValue instanceof Integer)
-    {
-      ret=new FixedDecimalsInteger(((Integer)objectValue).intValue());
-    }
-    else if (objectValue instanceof Float)
-    {
-      ret=new FixedDecimalsInteger(((Float)objectValue).floatValue());
-    }
-    else
-    {
-      _logger.warn("Unmanaged value: " + objectValue);
     }
     return ret;
   }

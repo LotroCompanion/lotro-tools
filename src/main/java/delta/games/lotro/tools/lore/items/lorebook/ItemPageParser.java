@@ -541,7 +541,7 @@ public class ItemPageParser
       }
     }
     _item.setBonus(bonuses);
-    
+
     // TODO <div class="itemmsi">+5 Damage to The Dead</div>
     String msi=getTagContent(itemTooltip,"itemmsi");
     if ((msi!=null) && (msi.length()>0))

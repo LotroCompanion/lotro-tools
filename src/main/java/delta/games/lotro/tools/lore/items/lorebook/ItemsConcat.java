@@ -7,9 +7,12 @@ import java.util.List;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.tools.lore.items.lorebook.bonus.BonusManager;
+import delta.games.lotro.tools.lore.items.lorebook.bonus.RawBonusParser;
 
 /**
  * Concatenates a series of item files into a single file.
@@ -23,11 +26,13 @@ public class ItemsConcat
    */
   public static void main(String[] args)
   {
+    System.out.println("Concatenation of legacy items into one file...");
     File itemsDir=new File("d:\\dam\\tmp\\items");
     FileFilter fileFilter=new ExtensionPredicate("xml");
     File[] itemFiles=itemsDir.listFiles(fileFilter);
     if (itemFiles!=null)
     {
+      BonusConverter converter=new BonusConverter();
       ItemXMLParser parser=new ItemXMLParser();
       List<Item> itemsList=new ArrayList<Item>();
       for(File itemFile : itemFiles)
@@ -39,6 +44,17 @@ public class ItemsConcat
         {
           //System.out.println(id);
           Item item=parser.parseXML(itemFile);
+          List<String> bonuses=item.getBonus();
+          if (bonuses.size()>0)
+          {
+            RawBonusParser bonusParser=new RawBonusParser();
+            BonusManager bonusMgr=bonusParser.build(bonuses);
+            if (bonusMgr!=null)
+            {
+              BasicStatsSet stats=converter.getStats(bonusMgr);
+              item.getStats().setStats(stats);
+            }
+          }
           item.setIdentifier(id);
           itemsList.add(item);
         }
