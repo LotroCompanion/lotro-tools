@@ -1,0 +1,117 @@
+iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+- Supreme Essence of Agility	195			139.00	17.00																				
+- Supreme Essence of Blocking	192																				2764.80	345.60			
+- Supreme Essence of Critical Defence	192													153.60					3088.00						
+- Supreme Essence of Critical Rating	192													1228.80					386.00						
+- Supreme Essence of Evasion	192																					345.60	2764.80		
+- Supreme Essence of Fate	195				17.00		139.00																		
+- Supreme Essence of Finesse	192						17.00								3748.52										
+- Supreme Essence of Incoming Healing	192																	234.00		2457,60					
+- Supreme Essence of Might	195		139.00		17.00																				
+- Supreme Essence of Morale	195							891.45	96.14																
+- Supreme Essence of Parrying	192																					2764.80	345.60		
+- Supreme Essence of Physical Mastery	192							109.33								1228.80									
+- Supreme Essence of Physical Mitigation	192																							2765.60	345.70
+- Supreme Essence of Power	195							111.43	769.12																
+- Supreme Essence of Resistance	192																	1872.00		153,60					
+- Supreme Essence of Tactical Mastery	192								94.35								1228.80								
+- Supreme Essence of Tactical Mitigation	192																							345.70	2765.60
+- Supreme Essence of Vitality	195				139.00		17.00																		
+- Supreme Essence of Will	195				17.00	139.00																			
+- Greater Essence of Agility	192			136.00																					
+- Greater Essence of Blocking	192																				2764.80				
+- Greater Essence of Critical Defence	192																		3088.00						
+- Greater Essence of Critical Rating	192													1228.80											
+- Greater Essence of Evasion	192																						2764.80		
+- Greater Essence of Fate	192						136.00																		
+- Greater Essence of Finesse	192														3748.52										
+- Greater Essence of Incoming Healing	192																			2457,60					
+- Greater Essence of Might	192		136.00																						
+- Greater Essence of Morale	192							874.61																	
+- Greater Essence of Parrying	192																					2764.80			
+- Greater Essence of Physical Mastery	192															1228.80									
+- Greater Essence of Physical Mitigation	192																							2765.60	
+- Greater Essence of Power	192								754.80																
+- Greater Essence of Resistance	192																	1872.00							
+- Greater Essence of Tactical Mastery	192																1228.80								
+- Greater Essence of Tactical Mitigation	192																								2765.60
+- Greater Essence of Vitality	192				136.00																				
+- Greater Essence of Will	192					136.00																			
+- Major Essence of Agility	192			119.00																								
+- Major Essence of Blocking	192																				2419.20							
+- Major Essence of Critical Defence	192																		2702.00									
+- Major Essence of Critical Rating	192													1075.20														
+- Major Essence of Evasion	192																						2419.20					
+- Major Essence of Fate	192						119.00																					
+- Major Essence of Finesse	192														3279.95													
+- Major Essence of Incoming Healing	192																			2150,40								
+- Major Essence of Might	192		119.00																									
+- Major Essence of Morale	192							765.28																				
+- Major Essence of Parrying	192																					2419.20						
+- Major Essence of Physical Mastery	192															1075.20												
+- Major Essence of Physical Mitigation	192																							2419.90				
+- Major Essence of Power	192								660.45																			
+- Major Essence of Resistance	192																	1638.00										
+- Major Essence of Tactical Mastery	192																1075.20											
+- Major Essence of Tactical Mitigation	192																								2419.90			
+- Major Essence of Vitality	192				119.00																							
+- Major Essence of Will	192					119.00																						
+Rare Beorning (unique)																												
+- Essence of Nature's Roar	192																											Encouraging Roar has a 15% chance to grant your target 5% Incoming Healing for 10s. +5% Incoming Healing Modifier.
+- Essence of the Sharp Claw	192																											Expose has a 15% chance to grant 5% Critical Chance for 10s. +5% Melee Critical Chance.
+- Essence of the Thick Hide	192																											Evading an attack has a 15% chance to restore 10% of your maximum morale.
+Rare Burglar (unique)																												
+- Essence of Good Fortune	192																											Tricks have a 5% chance to restore 10% of maximum morale.
+- Essence of the Critical Harmony	192																											Critical Hits have a 25% chance to reduce the targets critical defence rating by 10% for 10s. -10% Critical Defence.
+- Essence of the Gambler	192																											Evading an attack has a 15% chance to restore 10% of your maximum morale.
+Rare Captain (unique)																												
+- Essence of Balance	192																											When performing a heal, you have a 5% chance to increase damage for 10% for 20s. +10% Melee Damage. +10% Ranged Damage. +10% Tactical Damage. Duration: 20s.
+- Essence of Retaliation	192																											In retaliation to a critical hit, you have a 25% chance to increase damage by 20% for 10s. +20% Melee Damage. +20% Ranged Damage. +20% Tactical Damage. Duration: 10s.
+- Essence of the Protector	192																											Critical hits have a 25% chance to increase healing output by 20% for 10s. +20% Outgoing Healing Modifier. Duration: 10s.
+Rare Champion (unique)																												
+- Essence of the Berserker	192																											Melee skills have a 5% chance to add 5 Fervour. Adds 5 Fervour.
+- Essence of the Red Storm	192																											Melee skills have a 5% chance to apply a bleed. 195 Damage every 2 seconds for 12 seconds.
+- Essence of the Resolute	192																											Melee skills have a 5% chance to reset the cooldown of Fight On.
+Rare Guardian (unique)																												
+- Essence of Stunned Silence	192																											Melee skills have a 5% chance to apply a 6s stun. 6s Stun.
+- Essence of the Elusive Defender	192																											On block, parry, and evade, there is a 10% chance to restore 10% of your total Power.
+- Essence of the Fleet Footed	192																											After every kill, 25% chance to apply to the target: 50% Run Speed. Duration: 10s.
+Rare Hunter (unique)																												
+- Essence of Freedom	192																											On being hit, 5% chance to remove movement penalty while inducting for 10s. Applied on removal: +25% Ranged Critical Chance, +25% Bow Critical Multiplier. Duration: 5s.
+- Essence of the Powerful Draw	192																											Critical Hits have a 25% chance to apply an effect that reduces power costs by 50% for 10s. -50% Power Cost. Duration: 10s.
+- Essence of Thorns	192																											Reduces Rain of Thorns break chance to 10%.
+Rare Lore-master (unique)																												
+- Essence of Nature	192																											Fury of Nature skills have a 10% chance to reduce the cooldown of Nature's Fury skill by 10s.
+- Essence of the Beast	192																											Critical hits have a 25% chance to lower the cooldown of Sic em'! by 10s.
+- Essence of Wisdom	192																											Lore skills have a 10% chance to reduce the cooldown of "The Ancient Master" skill for 10s.
+Rare Minstrel (unique)																												
+- Essence of the Combat Medic	192																											Healing skills have a 5% chance to proc a 10% damage increase for 10s. +10% Damage. Duration: 10s.
+- Essence of the Protector of Power	192																											Anthems have a 25% chance to reduce power costs by 50% for 10s. -50% Power Cost. Duration: 10s.
+- Essence of the War Councillor	192																											Call to War skills have a 5% chance to proc a 20% healing increase for 10s. +10% Outgoing healing Effect Modifier. Duration: 10s.
+Rare Rune-keeper (unique)																												
+- Essence of Peace	192																											Heals have a 5% chance to increase the healing of your next Rune of Restoration by 100%.
+- Essence of the Cleansing Flame	192																											Fire skills have a 5% chance to restore 10% of morale.
+- Essence of the Storm	192																											Lightning skills have a 5% chance to trigger an additional lightning strike. 466 - 666 Lightning Damage.
+Rare Warden (unique)																												
+- Essence of Physicality	192																											Critical hits have a 25% chance of reducing your target's physical mitigation by 20% for 10s. -20% Physical Mitigation. Duration: 10s.
+- Essence of the Determined Defender	192																											Dodging an attack has a 10% chance to restore 10% of your morale.
+- Essence of the Reckless Defender	192																											After every kill, 10% chance to apply to the target: Restores 25% of maximum Morale.
+- Minor Essence of Agility	188			116.00																					
+- Minor Essence of Blocking	188																				2368.80				
+- Minor Essence of Critical Defence	188																		2646.00						
+- Minor Essence of Critical Rating	188													1052.80											
+- Minor Essence of Evasion	188																						2368.80		
+- Minor Essence of Fate	188						116.00																		
+- Minor Essence of Finesse	188														3213.02										
+- Minor Essence of Incoming Healing	188																			2105,60					
+- Minor Essence of Might	188		116.00																						
+- Minor Essence of Morale	188							745.64																	
+- Minor Essence of Parrying	188																					2368.80			
+- Minor Essence of Physical Mastery	188															1052.80									
+- Minor Essence of Physical Mitigation	188																							2369.50	
+- Minor Essence of Power	188								643.74																
+- Minor Essence of Resistance	188																	1604.40							
+- Minor Essence of Tactical Mastery	188																1052.80								
+- Minor Essence of Tactical Mitigation	188																								2369.50
+- Minor Essence of Vitality	188				116.00																				
+- Minor Essence of Will	188					116.00																			

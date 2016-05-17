@@ -20,6 +20,7 @@ import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -72,6 +73,8 @@ public class ItemNormalization
         sourceItems.remove(id);
       }
     }
+    // Essences stats injection
+    new EssenceStatsInjector().doIt(sourceItems.values());
     File toFile=new File("items.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(sourceItems.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);
