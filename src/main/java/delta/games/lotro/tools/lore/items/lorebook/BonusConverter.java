@@ -97,22 +97,25 @@ public class BonusConverter
     if (occurrence==BONUS_OCCURRENCE.ALWAYS)
     {
       BonusType type=bonus.getBonusType();
-      STAT stat=getStatFromBonusType(type);
-      if (stat!=null)
+      if (type!=BonusType.OTHER)
       {
-        Object value=bonus.getValue();
-        FixedDecimalsInteger statValue=TulkasValuesUtils.fromObjectValue(value);
-        stats.addStat(stat,statValue);
-        // TODO remove bonus from manager
-      }
-      else
-      {
-        System.out.println("Ignored: "+bonus);
+        STAT stat=getStatFromBonusType(type);
+        if (stat!=null)
+        {
+          Object value=bonus.getValue();
+          FixedDecimalsInteger statValue=TulkasValuesUtils.fromObjectValue(value);
+          stats.addStat(stat,statValue);
+          // TODO remove bonus from manager
+        }
+        else
+        {
+          System.out.println("Ignored: "+bonus);
+        }
       }
     }
     else
     {
-      System.out.println("Ignored: "+bonus);
+      //System.out.println("Ignored: "+bonus);
     }
   }
 
