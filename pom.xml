@@ -32,16 +32,6 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>com.dam.delta4j</groupId>
-      <artifactId>delta-utils-jdbc</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.dam.delta4j</groupId>
-      <artifactId>delta-framework-objects</artifactId>
-      <version>1.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
     	<groupId>net.htmlparser.jericho</groupId>
     	<artifactId>jericho-html</artifactId>
     	<version>3.2</version>
