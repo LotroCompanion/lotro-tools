@@ -1,45 +1,45 @@
-- T8 Supreme Essence of Masterful Agility	234			149.00												374.40									
-- T8 Supreme Essence of Robust Agility	234			149.00				277.58																	
-- T8 Supreme Essence of Blocking	234						42.00														2948.40				
-- T8 Supreme Essence of Critical Defence	234													374.40					3290.00						
-- T8 Supreme Essence of Critical Rating	234													1310.40					940.00						
-- T8 Supreme Essence of Evasion	234						42.00																2948.40		
-- T8 Supreme Essence of Finesse	234														3982.73	374.40	374.40								
-- T8 Supreme Essence of Masterful Might	234		149.00													374.40									
-- T8 Supreme Essence of Robust Might	234		149.00					277.58																	
-- T8 Supreme Essence of Morale	234						42.00	971.54																	
-- T8 Supreme Essence of Parrying	234						42.00															2948.40			
-- T8 Supreme Essence of Physical Mastery	234													374.40		1310.40									
-- T8 Supreme Essence of Physical Mitigation	234																		940.00					2949.10	
-- T8 Supreme Essence of Tactical Mastery	234													374.40			1310.40								
-- T8 Supreme Essence of Tactical Mitigation	234																		940.00						2949.10
-- T8 Supreme Essence of Masterful Will	234					149.00											374.40								
-- T8 Supreme Essence of Robust Will	234					149.00		277.58																	
-- T8 Greater Essence of Agility	222			140.00				130.37																	
-- T8 Greater Essence of Blocking	222																	270.00			2797.20				
-- T8 Greater Essence of Critical Defence	222													177.60					3122.00						
-- T8 Greater Essence of Critical Rating	222													1243.20					446.00						
-- T8 Greater Essence of Evasion	222																	270.00					2797.20		
-- T8 Greater Essence of Finesse	222														3781.93	177.60	177.60								
-- T8 Greater Essence of Might	222		140.00					130.37																	
-- T8 Greater Essence of Morale	222						20.00	912.61																	
-- T8 Greater Essence of Parrying	222																	270.00				2797.20			
-- T8 Greater Essence of Physical Mastery	222													177.60		1243.20									
-- T8 Greater Essence of Physical Mitigation	222																		446.00					2797.90	
-- T8 Greater Essence of Tactical Mastery	222													177.60			1243.20								
-- T8 Greater Essence of Tactical Mitigation	222																		446.00						2797.90
-- T8 Greater Essence of Will	222					140.00		130.37																	
-- T8 Major Essence of Agility	213			134.00																					
-- T8 Major Essence of Blocking	213																				2683.80				
-- T8 Major Essence of Critical Defence	213																		2996.00						
-- T8 Major Essence of Critical Rating	213													1192.80											
-- T8 Major Essence of Evasion	213																						2683.80		
-- T8 Major Essence of Finesse	213														3631.34										
-- T8 Major Essence of Might	213		134.00																						
-- T8 Major Essence of Morale	213							868.41																	
-- T8 Major Essence of Parrying	213																					2683.80			
-- T8 Major Essence of Physical Mastery	213															1192.80									
-- T8 Major Essence of Physical Mitigation	213																							2684.50	
-- T8 Major Essence of Tactical Mastery	213																1192.80								
-- T8 Major Essence of Tactical Mitigation	213																								2684.50
-- T8 Major Essence of Will	213					134.00																			
+Supreme Essence of Masterful Agility	234			149.00												374.40									
+Supreme Essence of Robust Agility	234			149.00				277.58																	
+Supreme Essence of Blocking	234						42.00														2948.40				
+Supreme Essence of Critical Defence	234													374.40					3290.00						
+Supreme Essence of Critical Rating	234													1310.40					940.00						
+Supreme Essence of Evasion	234						42.00																2948.40		
+Supreme Essence of Finesse	234														3982.73	374.40	374.40								
+Supreme Essence of Masterful Might	234		149.00													374.40									
+Supreme Essence of Robust Might	234		149.00					277.58																	
+Supreme Essence of Morale	234						42.00	971.54																	
+Supreme Essence of Parrying	234						42.00															2948.40			
+Supreme Essence of Physical Mastery	234													374.40		1310.40									
+Supreme Essence of Physical Mitigation	234																		940.00					2949.10	
+Supreme Essence of Tactical Mastery	234													374.40			1310.40								
+Supreme Essence of Tactical Mitigation	234																		940.00						2949.10
+Supreme Essence of Masterful Will	234					149.00											374.40								
+Supreme Essence of Robust Will	234					149.00		277.58																	
+Greater Essence of Agility	222			140.00				130.37																	
+Greater Essence of Blocking	222																	270.00			2797.20				
+Greater Essence of Critical Defence	222													177.60					3122.00						
+Greater Essence of Critical Rating	222													1243.20					446.00						
+Greater Essence of Evasion	222																	270.00					2797.20		
+Greater Essence of Finesse	222														3781.93	177.60	177.60								
+Greater Essence of Might	222		140.00					130.37																	
+Greater Essence of Morale	222						20.00	912.61																	
+Greater Essence of Parrying	222																	270.00				2797.20			
+Greater Essence of Physical Mastery	222													177.60		1243.20									
+Greater Essence of Physical Mitigation	222																		446.00					2797.90	
+Greater Essence of Tactical Mastery	222													177.60			1243.20								
+Greater Essence of Tactical Mitigation	222																		446.00						2797.90
+Greater Essence of Will	222					140.00		130.37																	
+Major Essence of Agility	213			134.00																					
+Major Essence of Blocking	213																				2683.80				
+Major Essence of Critical Defence	213																		2996.00						
+Major Essence of Critical Rating	213													1192.80											
+Major Essence of Evasion	213																						2683.80		
+Major Essence of Finesse	213														3631.34										
+Major Essence of Might	213		134.00																						
+Major Essence of Morale	213							868.41																	
+Major Essence of Parrying	213																					2683.80			
+Major Essence of Physical Mastery	213															1192.80									
+Major Essence of Physical Mitigation	213																							2684.50	
+Major Essence of Tactical Mastery	213																1192.80								
+Major Essence of Tactical Mitigation	213																								2684.50
+Major Essence of Will	213					134.00																			
