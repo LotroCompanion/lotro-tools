@@ -52,15 +52,25 @@ public class BuildItemsDbForIcons
 
   private void buildDb(HashMap<Integer,Item> items)
   {
-    StringBuilder sb=new StringBuilder();
-    sb.append("_ITEMSDB =").append("\n");
-    sb.append("{").append("\n");
     List<Integer> ids=new ArrayList<Integer>();
     for(Map.Entry<String,List<Integer>> entry : _iconIds2Ids.entrySet())
     {
-      ids.add(entry.getValue().get(0));
-      //ids.addAll(entry.getValue());
+      //ids.add(entry.getValue().get(0));
+      ids.addAll(entry.getValue());
     }
+    buildDb(items,ids);
+  }
+
+  /**
+   * Build a LUA database using the given item IDs.
+   * @param items Items database.
+   * @param ids Identifiers to use.
+   */
+  public void buildDb(HashMap<Integer,Item> items, List<Integer> ids)
+  {
+    StringBuilder sb=new StringBuilder();
+    sb.append("_ITEMSDB =").append("\n");
+    sb.append("{").append("\n");
     Collections.sort(ids);
 
     List<String> iconIds=new ArrayList<String>();
@@ -108,8 +118,8 @@ public class BuildItemsDbForIcons
     {
       Item item=items.get(id);
       //String tulkas=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
-      //String category=item.getSubCategory();
-      //if ((category==null) || (!category.contains("Guardian:Shield-spike"))) continue;
+      String category=item.getSubCategory();
+      if ((category==null) || (!category.contains("Essence"))) continue;
       //int idValue=id.intValue();
       //if ((idValue==1879097298) || (idValue==1879109623)
       //    || (idValue==1879109618) || (idValue==1879083770) || (idValue==1879115686))

@@ -1,0 +1,325 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Armour of a Beorning's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Armour of a Burglar's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Armour of a Hunter's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Armour of a Warden's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Pelennor Ambusher's Armour: 4 Equipped	222																																							10,0%																									
+Pelennor Battle-outrider's Armour: 4 Equipped	222																																								10,0%																								
+Pelennor Juggernaut's Armour: 4 Equipped	222																																							10,0%																									
+Pelennor War-bear's Armour: 4 Equipped	222																																							10,0%																									
+Orophin's Watch set bonus: 6 Equipped	192			170	170											768							1728																																										
+Spyhill set bonus: 6 Equipped	192			255	170									768																																																			
+Head																																																																	
+Ambusher's Helm (4s):	222	892		80				391																																																									
+Battle-outrider's Helm (4s):	222	892		80				391																																																									
+Juggernaut's Helm (4s):	222	892		80				391																																																									
+War-bear's Helm (4s):	222	892	80					391																																																									
+Ancient Doom-hunter's Helm (2s):	222	892		201				652								355								1599																																									
+Ancient Rift-reaper's Helm (2s):	222	892	201					652															799	1599																																									
+Ancient Thrill-seeker's Helm (2s):	222	892		201				652								355								1599																																									
+Ancient Town-saver's Helm (2s):	222	892		201				652													799			1599																																									
+Fine Mathom-Hunter's Helmet (105)	207	890		372	279											828																																																	
+Mathom-hunter's Helmet (105)	207	845		372	186											828																																																	
+Exemplary Tough Mask of the Anórien Tree (3s):	204	836	128					824																																																									
+Exemplary Mask of the Anórien Tree (3s):	204	836		128				824																																																									
+Anórien Combat Helm (3s):	201	827					90	1041																																																									
+Helm of the Osgiliath Bowmaster	201	827		360	90			578						804																																																			
+Helm of the Osgiliath Claw	201	827	324		126									1608																																																			
+Helm of the Osgiliath Fist	201	827		360			90								2450	804																																																	
+Helm of the Osgiliath Gambler	201	827		360			90								2450	804																																																	
+Helm of the Osgiliath Hide	201	827	126		360														1616	1286,4																																													
+Helm of the Osgiliath Huntsman	201	827		360			90								2450	804																																																	
+Helm of the Osgiliath Knife	201	827		360	90									804	2450																																																		
+Helm of the Osgiliath Mischief-maker	201	827		360	90										2450				2020																																														
+Helm of the Osgiliath Roar	201	827	324		126									804			804																																																
+Helm of the Osgiliath Shield	201	827		126	360														1616	1286,4																																													
+Helm of the Osgiliath Spear	201	827		360	90									804	2450																																																		
+Helm of the Osgiliath Trapper	201	827		360	90										2450				2020																																														
+Hood of Faramir's Faithful (5s):	201	827																																																															
+Helm of the Beacon	192	798		239	205										2343	614																																																	
+Hood of the Liberator	192	798		239	205									768	1874																																																		
+Helmet of Nature's Guard	192	798	239		205										2343	614																																																	
+Eyepatch of the Seafarer	192	798		239	205										2343				1544																																														
+Medium Nadhin Mask (4s):	192	798		119																																																													
+Tirithgarab	192	798		171	171											1536							1728																																										
+Longthol	192	798		171	171									768		1536																																																	
+Nadhin Footman's Padded Helm (3s):	192	756	119		34																																																												
+Nadhin Footman's Helm (3s):	192	756		119	34																																																												
+Nimble Ancient Assault Helm of the Onodrim	188	827	267		233		133								918																																																		
+Nimble Ancient Helm of the Onodrim	188	827		267	233		133								918																																																		
+Potent Ancient Assault Helm of the Onodrim	188	827	267		233									752		752																																																	
+Potent Ancient Helm of the Onodrim	188	827		267	233									752		752																																																	
+Gifted Ancient Assault Helm of the Onodrim	188	827	233		267		133												756																																														
+Gifted Ancient Helm of the Onodrim	188	827		233	267		133												756																																														
+Potent Assault Helm of the Onodrim	188	786	233		200									752		602																																																	
+Potent Helm of the Onodrim	188	786		233	200									752		602																																																	
+Enduring Fangorn Assault Helm of Fate	182	767	225		193		128								445																																																		
+Enduring Fangorn Helm of Fate	182	767		225	193		128								445																																																		
+Enduring Fangorn Assault Helm of Skill	182	767	225		193									582	445	582																																																	
+Enduring Fangorn Helm of Skill	182	767		225	193									582	445	582																																																	
+Enduring Fangorn Assault Helm of Protection	182	767	193		225		128												366																																														
+Enduring Fangorn Helm of Protection	182	767		193	225		128												366																																														
+Fated Combat Helm of the Deep	176	741		217	186		124								430																																																		
+Pride of Helm's Deep	176	741		217	186		77									563																																																	
+Resilient Combat Helm of the Deep	176	741		217	186		77								430	422																																																	
+Greater Dextrous Helmet of Prowess	176	741		217	186									282	1291	563																																																	
+Skillful Combat Helm of the Deep	176	741		217	186									563	430	563																																																	
+Steadfast Combat Helm of the Deep	176	741		186	217		77												1416																																														
+Watchful Combat Helm of the Deep	176	741		186	217														354			1267	1267																																										
+Nadhin Footman's Padded Helm (3s):	176	702	108		31																																																												
+Nadhin Footman's Helm (3s):	176	702		108	31																																																												
+Shoulders																																																																	
+Ambusher's Shoulders (4s):	222	892		80				391																																																									
+Battle-outrider's Shoulders (4s):	222	892		80				391																																																									
+Juggernaut's Shoulders (4s):	222	892		80				391																																																									
+War-bear's Shoulders (4s):	222	892	80					391																																																									
+Ancient Doom-hunter's Shoulders (2s):	222	892		201				652						355											1599																																								
+Ancient Rift-reaper's Shoulders (2s):	222	892	201					652														799			1599																																								
+Ancient Thrill-seeker's Shoulders (2s):	222	892		201				652						355											1599																																								
+Ancient Town-saver's Shoulders (2s):	222	892		201				652														799			1599																																								
+Fine Mathom-Hunter's Shoulder-pads (105)	207	890		279	186		279																																																										
+Mathom-hunter's Shoulder-pads (105)	207	845		279	186		186																																																										
+Exemplary Tough Shoulders of the Anórien Tree (3s):	204	836	128					824																																																									
+Exemplary Shoulders of the Anórien Tree (3s):	204	836		128				824																																																									
+Anórien Combat Pauldrons (3s):	201	827					90	1041																																																									
+Shoulderpads of the Osgiliath Bowmaster	201	827		360	90		90							804																																																			
+Shoulderpads of the Osgiliath Claw	201	827	324		126		90							804																																																			
+Shoulderpads of the Osgiliath Fist	201	827		360	90									804		804																																																	
+Shoulderpads of the Osgiliath Gambler	201	827		360	90									804		804																																																	
+Shoulderpads of the Osgiliath Hide	201	827	90		360																		1809		1810																																								
+Shoulderpads of the Osgiliath Huntsman	201	827		360	90									804		804																																																	
+Shoulderpads of the Osgiliath Knife	201	827		360	90		90							804																																																			
+Shoulderpads of the Osgiliath Mischief-maker	201	827		360	90			578								804																																																	
+Shoulderpads of the Osgiliath Roar	201	827	324		126									804			804																																																
+Shoulderpads of the Osgiliath Shield	201	827		90	360																1809				1810																																								
+Shoulderpads of the Osgiliath Spear	201	827		360	90		90							804																																																			
+Shoulderpads of the Osgiliath Trapper	201	827		360	90			578								804																																																	
+Shoulder Guards of Faramir's Faithful (5s):	201	827																																																															
+Pauldron of the Beacon	192	798		239	205		68							768																																																			
+Shoulderpads of the Liberator	192	798		239	205		85							614																																																			
+Shoulderpads of Nature's Guard	192	798	239		205		68							768																																																			
+Pauldrons of the Seafarer	192	798		239	205				377							768																																																	
+Medium Nadhin Shoulders (4s):	192	798		119																																																													
+Vanwaranc	192	798		171										768	2343	1536							1728																																										
+Nedhranc	192	798		171										768		1536							3456																																										
+Nimble Ancient Assault Schoulderguards of the Onodrim	188	827	267		233		133								918																																																		
+Nimble Ancient Schoulderguards of the Onodrim	188	827		267	233		133								918																																																		
+Potent Ancient Assault Schoulderguards of the Onodrim	188	827	267		233									752		752																																																	
+Potent Ancient Schoulderguards of the Onodrim	188	827		267	233									752		752																																																	
+Gifted Ancient Assault Schoulderguards of the Onodrim	188	827	233		267		133												756																																														
+Gifted Ancient Schoulderguards of the Onodrim	188	827		233	267		133												756																																														
+Potent Assault Schoulderguards of the Onodrim	188	786	233		200									752		602																																																	
+Potent Schoulderguards of the Onodrim	188	786		233	200									752		602																																																	
+Enduring Fangorn Assault Schoulderguards of Fate	182	767	225		193		128								445																																																		
+Enduring Fangorn Schoulderguards of Fate	182	767		225	193		128								445																																																		
+Enduring Fangorn Assault Schoulderguards of Skill	182	767	225		193									582	445	582																																																	
+Enduring Fangorn Schoulderguards of Skill	182	767		225	193									582	445	582																																																	
+Enduring Fangorn Assault Schoulderguards of Protection	182	767	193		225		80												366				983																																										
+Enduring Fangorn Schoulderguards of Protection	182	767		193	225		80												366				983																																										
+Medium Nadhin Shoulders (3s):	182	727		144																																																													
+Fated Combat Pauldrons of the Deep	176	741		217	186		124								430																																																		
+Gutarmas	176	741		217	186		93							422																																																			
+Resilient Combat Pauldrons of the Deep	176	741		217	186		77								430	422																																																	
+Skillful Combat Pauldrons of the Deep	176	741		217	186									563	430	563																																																	
+Steadfast Combat Pauldrons of the Deep	176	741		186	217		77												1416																																														
+Watchful Combat Pauldrons of the Deep	176	741		186	217														354			1267	1267																																										
+Chest																																																																	
+Ambusher's Jacket (4s):	222	2970		80				391																																																									
+Battle-outrider's Breastplate (4s):	222	2970		80				391																																																									
+Juggernaut's Jacket (4s):	222	2970		80				391																																																									
+War-bear's Jacket (4s):	222	2970	80					391																																																									
+Ancient Doom-hunter's Breastplate (2s):	222	2970		201				652								355								1599																																									
+Ancient Rift-reaper's Jacket (2s):	222	2970	201					652															799	1599																																									
+Ancient Thrill-seeker's Jacket (2s):	222	2970		201				652								355								1599																																									
+Ancient Town-saver's Jacket (2s):	222	2970		201				652															799	1599																																									
+Fine Mathom-Hunter's Jacket (105)	207	2968		279	372		93																																																										
+Mathom-hunter's Jacket (105)	207	2813		279	279		93																																																										
+Exemplary Tough Jacket of the Anórien Tree (3s):	204	2782	128					824																																																									
+Exemplary Jacket of the Anórien Tree (3s):	204	2782		128				824																																																									
+Anórien Combat Armour (3s):	201	2751					90	1041																																																									
+Breastplate of the Osgiliath Claw	201	2751	360		90									804	2450																																																		
+Breastplate of the Osgiliath Hide	201	2751	126		324										2450							1809																																											
+Breastplate of the Osgiliath Roar	201	2751	360		126		54										804																																																
+Jacket of the Osgiliath Bowmaster	201	2751		360			90							804	2450																																																		
+Jacket of the Osgiliath Fist	201	2751		360	90											1608																																																	
+Jacket of the Osgiliath Gambler	201	2751		360	90										2450	804																																																	
+Jacket of the Osgiliath Huntsman	201	2751		360	90									804		804																																																	
+Jacket of the Osgiliath Knife	201	2751		360			90	578						804																																																			
+Jacket of the Osgiliath Mischief-maker	201	2751		360	90		90	578																																																									
+Jacket of the Osgiliath Shield	201	2751		126	324																	1809			1810																																								
+Jacket of the Osgiliath Spear	201	2751		360			90							804	2450																																																		
+Jacket of the Osgiliath Trapper	201	2751		360	90		90	578																																																									
+Coat of Faramir's Faithful (5s):	201	2751																																																															
+Jacket of the Beacon	192	2657		239	205										1874	768																																																	
+Jacket of the Liberator	192	2657		239	205									768	1874																																																		
+Breastplate of Nature's Guard	192	2657	239		205										1874	768																																																	
+Jacket of the Seafarer	192	2657		239	205		85								1874																																																		
+Medium Nadhin Jacket (4s):	192	2657		119																																																													
+Nelegham	192	2657		171	171											768			3860																																														
+Ethiram	192	2657		85	171									1536		1536																																																	
+Tattered Gondorian Leathers	192	2657		205	239																	1728	1382																																										
+Medium Nadhin Jacket (3s):	192	2525		153																																																													
+Enduring Fangorn Assault Armour of Fate	182	2552	225		193		128								445																																																		
+Enduring Fangorn Armour of Fate	182	2552		225	193		128								445																																																		
+Enduring Fangorn Assault Armour of Skill	182	2552	225		193									582	445	582																																																	
+Enduring Fangorn Armour of Skill	182	2552		225	193									582	445	582																																																	
+Enduring Fangorn Assault Armour of Protection	182	2552	193		225		80												366			983																																											
+Enduring Fangorn Armour of Protection	182	2552		193	225		80												366			983																																											
+Fated Combat Armour of the Deep	176	2467		217	186		124								430																																																		
+Resilient Combat Armour of the Deep	176	2467		217	186		77								430	422																																																	
+Deep-dweller's Chain	176	2467		217	186									563	861	422																																																	
+Greater Dextrous Jacket of Finesse	176	2467		217	186									422	2582																																																		
+Skillful Combat Armour of the Deep	176	2467		217	186									563	430	563																																																	
+Steadfast Combat Armour of the Deep	176	2467		186	217		77												1416																																														
+Watchful Combat Armour of the Deep	176	2467		186	217														354			1267	1267																																										
+Hands																																																																	
+Ambusher's Gloves (4s):	222	1485		80				391																																																									
+Battle-outrider's Gloves (4s):	222	1485		80				391																																																									
+Juggernaut's Gauntlets (4s):	222	1485		80				391																																																									
+War-bear's Gloves (4s):	222	1485	80					391																																																									
+Ancient Doom-hunter's Gloves (2s):	222	1485		201				652						355											1599																																								
+Ancient Rift-reaper's Gloves (2s):	222	1485	201					652														799			1599																																								
+Ancient Thrill-seeker's Gloves (2s):	222	1485		201				652						355											1599																																								
+Ancient Town-saver's Gauntlets (2s):	222	1485		201				652													799				1599																																								
+Fine Mathom-Hunter's Gloves (105)	207	1484		372	186		93							828																																																			
+Mathom-hunter's Gloves (105)	207	1406		279	186		93							828																																																			
+Exemplary Tough Gauntlets of the Anórien Tree (3s):	204	1391	128					824																																																									
+Exemplary Gauntlets of the Anórien Tree (3s):	204	1391		128				824																																																									
+Anórien Combat Gauntlets (3s):	201	1375					90	1041																																																									
+Gloves of the Osgiliath Bowmaster	201	1375		360	90									804		804																																																	
+Gloves of the Osgiliath Claw	201	1375	360		126											1286																																																	
+Gloves of the Osgiliath Fist	201	1375		360	90		180																																																										
+Gloves of the Osgiliath Gambler	201	1375		360	90		90	578																																																									
+Gloves of the Osgiliath Hide	201	1375	144		324			578												1286,4																																													
+Gloves of the Osgiliath Huntsman	201	1375		360	90		90	578																																																									
+Gloves of the Osgiliath Knife	201	1375		360	90											1608																																																	
+Gloves of the Osgiliath Mischief-maker	201	1375		360	180														2020																																														
+Gloves of the Osgiliath Roar	201	1375	360		90		90												2020																																														
+Gloves of the Osgiliath Shield	201	1375		216	324															1608																																													
+Gloves of the Osgiliath Spear	201	1375		360	90										2450	804																																																	
+Gloves of the Osgiliath Trapper	201	1375		360	180									804																																																			
+Thick Gloves of Faramir's Faithful (5s):	201	1375																																																															
+Gloves of the Beacon	192	1328		239	205		85								1874																																																		
+Gauntlets of the Liberator	192	1328		239	205										2343	614																																																	
+Gloves of Nature's Guard	192	1328	239		205		85								1874																																																		
+Gloves of the Seafarer	192	1328		239	205									614	2343																																																		
+Medium Nadhin Gauntlets (4s):	192	1328		119																																																													
+Ecthelaim	192	1328		171	171									768	2343	768																																																	
+Astaldo	192	1328		171	171											1536							1728																																										
+Reinforced Gloves of the Great Shore	192	1328		239	205										2343	614																																																	
+Nadhin Footman's Padded Gauntlets (3s):	192	1264	119													307																																																	
+Nadhin Footman's Gauntlets (3s):	192	1264		119												307																																																	
+Enduring Fangorn Assault Gauntlets of Fate	182	1276	225		193		128								445																																																		
+Enduring Fangorn Gauntlets of Fate	182	1276		225	193		128								445																																																		
+Enduring Fangorn Assault Gauntlets of Skill	182	1276	225		193									582	445	582																																																	
+Enduring Fangorn Gauntlets of Skill	182	1276		225	193									582	445	582																																																	
+Enduring Fangorn Assault Gauntlets of Protection	182	1276	193		225		128												366																																														
+Enduring Fangorn Gauntlets of Protection	182	1276		193	225		128												366																																														
+Fated Combat Gauntlets of the Deep	176	1233		217	186		124								430																																																		
+Resilient Combat Gauntlets of the Deep	176	1233		217	186		77								430	422																																																	
+Skillful Combat Gauntlets of the Deep	176	1233		217	186									563	430	563																																																	
+Steadfast Combat Gauntlets of the Deep	176	1233		186	217		77												1416																																														
+Watchful Combat Gauntlets of the Deep	176	1233		186	217														354			1267	1267																																										
+Nadhin Footman's Padded Gauntlets (3s):	176	1173	108													282																																																	
+Nadhin Footman's Gauntlets (3s):	176	1173		108												282																																																	
+Legs																																																																	
+Ambusher's Leggings (4s):	222	2475		80				391																																																									
+Battle-outrider's Leggings (4s):	222	2475		80				391																																																									
+Juggernaut's Leggings (4s):	222	2475		80				391																																																									
+War-bear's Leggings (4s):	222	2475	80					391																																																									
+Ancient Doom-hunter's Leggings (2s):	222	2475		201				652								355								1599																																									
+Ancient Rift-reaper's Leggings (2s):	222	2475	201					652															799	1599																																									
+Ancient Thrill-seeker's Leggings (2s):	222	2475		201				652								355								1599																																									
+Ancient Town-saver's Leggings (2s):	222	2475		201				652															799	1599																																									
+Fine Mathom-Hunter's Leggings (105)	207	2475		372	186			1198																																																									
+Mathom-hunter's Leggings (105)	207	2344		279	186			1198																																																									
+Exemplary Tough Leggings of the Anórien Tree (3s):	204	2318	128					824																																																									
+Exemplary Leggings of the Anórien Tree (3s):	204	2318		128				824																																																									
+Anórien Combat Leggings (3s):	201	2292					90	1041																																																									
+Leggings of the Osgiliath Bowmaster	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Claw	201	2292	360		126		54							804																																																			
+Leggings of the Osgiliath Fist	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Gambler	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Hide	201	2292	90		360		90												2020																																														
+Leggings of the Osgiliath Huntsman	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Knife	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Mischief-maker	201	2292		360	90		90									804																																																	
+Leggings of the Osgiliath Roar	201	2292	360		90		90	578																																																									
+Leggings of the Osgiliath Shield	201	2292		90	360		90												2020																																														
+Leggings of the Osgiliath Spear	201	2292		360	90		90	578																																																									
+Leggings of the Osgiliath Trapper	201	2292		360	90		90									804																																																	
+Medium Leggings of Faramir's Faithful (5s):	201	2292																																																															
+Leggings of the Beacon	192	2214		239	205				472					614																																																			
+Leggings of the Liberator	192	2214		239	205		85		377																																																								
+Leggings of Nature's Guard	192	2214	239		205				472					614																																																			
+Leggings of the Seafarer	192	2214		239	205									614		768																																																	
+Medium Nadhin Leggings (4s):	192	2214		119																																																													
+Thoronail	192	2214		171	171									1536	2343																																																		
+Barannir	192	2214		256	171											1536																																																	
+Enduring Fangorn Assault Leggings of Fate	182	2127	225		193		128								445																																																		
+Enduring Fangorn Leggings of Fate	182	2127		225	193		128								445																																																		
+Enduring Fangorn Assault Leggings of Skill	182	2127	225		193									582	445	582																																																	
+Enduring Fangorn Leggings of Skill	182	2127		225	193									582	445	582																																																	
+Enduring Fangorn Assault Leggings of Protection	182	2127	193		225		80												366		983																																												
+Enduring Fangorn Leggings of Protection	182	2127		193	225		80												366		983																																												
+Fated Combat Leggings of the Deep	176	2056		217	186		124								430																																																		
+Resilient Combat Leggings of the Deep	176	2056		217	186		77								430	422																																																	
+Greater Dextrous Leggings of Penetration	176	2056		217	186									704		563																																																	
+Skillful Combat Leggings of the Deep	176	2056		217	186									563	430	563																																																	
+Steadfast Combat Leggings of the Deep	176	2056		186	217		77												1416																																														
+Watchful Combat Leggings of the Deep	176	2056		186	217														354			1267	1267																																										
+Feet																																																																	
+Ambusher's Boots (4s):	222	1190		80				391																																																									
+Battle-outrider's Boots (4s):	222	1190		80				391																																																									
+Juggernaut's Boots (4s):	222	1190		80				391																																																									
+War-bear's Boots (4s):	222	1190	80					391																																																									
+Ancient Doom-hunter's Boots (2s):	222	1190		201				652						355											1599																																								
+Ancient Rift-reaper's Boots (2s):	222	1190	201					652														799			1599																																								
+Ancient Thrill-seeker's Boots (2s):	222	1190		201				652						355											1599																																								
+Ancient Town-saver's Boots (2s):	222	1190		201				652														799			1599																																								
+Fine Mathom-Hunter's Boots (105)	207	1187		372	186											1656																																																	
+Mathom-hunter's Boots (105)	207	1127		279	186											1656																																																	
+Exemplary Tough Boots of the Anórien Tree (3s):	204	1115	128					824																																																									
+Exemplary Boots of the Anórien Tree (3s):	204	1115		128				824																																																									
+Anórien Combat Boots (3s):	201	1102					90	1041																																																									
+Boots of the Osgiliath Bowmaster	201	1102		360	180									804																																																			
+Boots of the Osgiliath Claw	201	1102	360		90									804		804																																																	
+Boots of the Osgiliath Fist	201	1102		360	180											804																																																	
+Boots of the Osgiliath Gambler	201	1102		360	180											804																																																	
+Boots of the Osgiliath Hide	201	1102	90		360		90												2020																																														
+Boots of the Osgiliath Huntsman	201	1102		360	180											804																																																	
+Boots of the Osgiliath Knife	201	1102		360	180									804																																																			
+Boots of the Osgiliath Mischief-maker	201	1102		360	180														2020																																														
+Boots of the Osgiliath Roar	201	1102	360		90										2450		804																																																
+Boots of the Osgiliath Shield	201	1102		90	360																			3619																																									
+Boots of the Osgiliath Spear	201	1102		360	180									804																																																			
+Boots of the Osgiliath Trapper	201	1102		360	180														2020																																														
+Leather Boots of Faramir's Faithful (5s):	201	1102																																																															
+Boots of the Beacon	192	1065		239	205									614		768																																																	
+Boots of the Liberator	192	1065		239	205									768	1874																																																		
+Boots of Nature's Guard	192	1065	239		205									614		768																																																	
+Boots of the Seafarer	192	1065		239	205										2343				1544																																														
+Medium Nadhin Boots (4s):	192	1065		119																																																													
+Beinail	192	1065		171	171											1536							1728																																										
+Cabedail	192	1065		171	85									768		1536							1728																																										
+Enduring Fangorn Assault Boots of Fate	182	1023	225		193		128								445																																																		
+Enduring Fangorn Boots of Fate	182	1023		225	193		128								445																																																		
+Enduring Fangorn Assault Boots of Skill	182	1023	225		193									582	445	582																																																	
+Enduring Fangorn Boots of Skill	182	1023		225	193									582	445	582																																																	
+Enduring Fangorn Assault Boots of Protection	182	1023	193		225		80												366		983																																												
+Enduring Fangorn Boots of Protection	182	1023		193	225		80												366		983																																												
+Fated Combat Boots of the Deep	176	989		217	186		124								430																																																		
+Greater Dextrous Boots of Fate	176	989		217	186		93									422																																																	
+Resilient Combat Boots of the Deep	176	989		217	186		77								430	422																																																	
+Skillful Combat Boots of the Deep	176	989		217	186									563	430	563																																																	
+Steadfast Combat Boots of the Deep	176	989		186	217		77												1416																																														
+Watchful Combat Boots of the Deep	176	989		186	217														354			1267	1267																																										
+Shields																																																																	
+Anórien Combat-shield	201	2883		252	180		108							804					3232																																														
+Bridge-warden's Shield	201	2883		252	216		72							482		322			3232																																														
+Shield of the Regal Warden	192	2825		205	239		102												3088		1555																																												
+Shield of the Tireless Defender	192	2825		239	205									614		768			3088																																														
+Blackroot Strong Warden Shield	192	2673		205	171									461	2343				3088																																														
+Blackroot Tempered Warden Shield	192	2673		171	205														1544		2592		1037																																										
+Fangorn Combat-shield of Force	182	2760		225	193		64							582	445				2928																																														
+Fangorn Combat-shield of Warding	182	2760		193	225														2928		983	1310	983																																										

@@ -1,0 +1,234 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Ears																																																																	
+Earring of Absent Friends (2s):	222		221					782																799	799																																								
+Earring of Forgotten Spirits (2s):	222					221		782																799	799																																								
+Earring of Outcast Brethren (2s):	222			221				782																799	799																																								
+Exquisite Anórien Earring of Combat (3s):	201		126					809																																																									
+Exquisite Anórien Earring of Skill (3s):	201			126				809																																																									
+Exquisite Anórien Earring of Succour (3s):	201					126		809																																																									
+Siege-breaker's Earring of Warfare (2s):	201		180					694						804																																																			
+Siege-breaker's Earring of Strategy (2s):	201			180				694						804																																																			
+Siege-breaker's Earring of Tactics (2s):	201					180		694						804																																																			
+Polished Star-set Earring of the Warrior	201		270		180									804	2450																																																		
+Polished Star-set Earring of the Defender	201		180		270										2450							1809																																											
+Polished Star-set Earring of the Rangers	201			270	180									804	1470	322																																																	
+Polished Star-set Earring of the Bridge-warden	201			180	270										2450								1809																																										
+Polished Star-set Earring of the Healers	201				216	270									1470		804																																																
+Polished Star-set Earring of the Nobleman	201				180	270								804	2450																																																		
+Sturdy Earrings of the Vale	195		174		174											1560								1756																																									
+Gleaming Earrings of the Vale	195			174	174											1560								1756																																									
+Polished Earrings of the Vale	195				174	174											1560								1756																																								
+Golden Hare Earring	192		239		205		102								1406																																																		
+Gold Dwarf-make Earring	192		205		239																	1728	1382																																										
+Luminescent Earring	192			239	205									307	1406	614																																																	
+Large Ruby Earring	192				205	239		219							1874		461																																																
+Bloodstone Earring	192				205	239	85		377																																																								
+Greater Valourous Earring of Finesse	192		239		205										2343	614																																																	
+Adept Officer's Enduring Earring	192		205		239		85															1382																																											
+Master Engineer's Enduring Earring	192		205		239														1158				2074																																										
+Adept Officer's Persevering Earring	192				205	239	85							614																																																			
+Adept Officer's Resolute Earring	192				205	239	85										614																																																
+Master Engineer's Persevering Earring	192				205	239								922			461																																																
+Master Engineer's Resolute Earring	192				205	239									1406		922																																																
+Opulent Earrings of the Great Shore	192				171	205	85							461																																																			
+Exquisite Earring of Fangorn	182		225		193			307						437		437																																																	
+Exquisite Fangorn Earring of Skill	182			225	193			307						437		437																																																	
+Exquisite Fangorn Earring of Tactics	182				193	225		307						437			437																																																
+Exquisite Fangorn Earring of Endurance	182				225		193	409	354										366																																														
+Master Engineer's Valourous Earring	176		217		186		93							422																																																			
+Skilled Vanguard's Valourous Earring	176		217		186			196						563		422																																																	
+Battle Earring of the Deep	176		217		186			491						422	430																																																		
+Master Engineer's Enduring Earring	176		186		217														1062				1901																																										
+Greater Dextrous Earring of Fate	176			217	186		77									563																																																	
+Greater Dextrous Earring of Penetration	176			217	186									845		422																																																	
+Adept Officer's Dextrous Earring	176			217	186										2152	563																																																	
+Adept Officer's Resilient Earring	176			186	217										2152	563																																																	
+Exquisite Emerald Earring of Combat	156		162		135			420						374																																																			
+Neck																																																																	
+Necklace of Absent Friends (2s):	222		221					782																799	799																																								
+Necklace of Forgotten Spirits (2s):	222					221		782																799	799																																								
+Necklace of Outcast Brethren (2s):	222			221				782																799	799																																								
+Exquisite Anórien Necklace of Combat (3s):	201		126					809																																																									
+Exquisite Anórien Necklace of Skill (3s):	201			126				809																																																									
+Exquisite Anórien Necklace of Succour (3s):	201					126		809																																																									
+Siege-breaker's Necklace of Warfare (2s):	201		180					694						804																																																			
+Siege-breaker's Necklace of Strategy (2s):	201			180				694						804																																																			
+Siege-breaker's Necklace of Tactics (2s):	201					180		694						804																																																			
+Damrod's Pendant (3s):	201		252																																																														
+Anborn's Pendant (3s):	201			252																																																													
+Mablung's Pendant (3s):	201					252																																																											
+Ancient Jade Necklace	192		239		205										2811	461																																																	
+Choker of the Spearhead	192		205		239		102														1037																																												
+Large Opal Necklace	192			239	205				189						1874	461																																																	
+Compass Rose Necklace	192			205	239																	1382	1728																																										
+Pendant of the Golden Triangle	192			205	239																1037	2074																																											
+Elegant Jade Choker	192				205	239								614			768																																																
+Shimmering Gold Pendant	192				205	239	102										461																																																
+Exquisite Necklace of Fangorn	182		225		193			307						437		437																																																	
+Exquisite Fangorn Necklace of Skill	182			225	193			307						437		437																																																	
+Exquisite Fangorn Necklace of Tactics	182				193	225		307						437			437																																																
+Exquisite Fangorn Necklace of Endurance	182				225		193	409	354										366																																														
+Master Engineer's Valourous Necklace	176		217		186		93							422																																																			
+Skilled Vanguard's Valourous Necklace	176		217		186				170					422		563																																																	
+Battle Necklace of the Deep	176		217		186			491						422	430																																																		
+Adept Officer's Enduring Necklace	176		186		217		77														1267																																												
+Master Engineer's Enduring Necklace	176		186		217																1901	950																																											
+Greater Steadfast Necklace of Parrying	176		186		217																1267	1584																																											
+Greater Dextrous Necklace of Fate	176			217	186		77									563																																																	
+Skilled Vanguard's Resilient Necklace	176			186	217		62	196						422																																																			
+Adept Officer's Resilient Necklace	176			186	217									563		704																																																	
+Tactical Necklace of the Deep	176				186	217		491						422	430																																																		
+Greater Resolute Necklace of Tactics	176				186	217		196						422			563																																																
+Greater Resolute Necklace of Penetration	176				186	217			254					845																																																			
+Exquisite Great River Necklace of Morale	84				63			235												1075,2				757	757																																								
+Wrists																																																																	
+Bracelet of Absent Friends (2s):	222		221					782																799	799																																								
+Bracelet of Forgotten Spirits (2s):	222					221		782																799	799																																								
+Bracelet of Outcast Brethren (2s):	222			221				782																799	799																																								
+Exquisite Anórien Bracelet of Combat (3s):	201		126					809																																																									
+Exquisite Anórien Bracelet of Skill (3s):	201			126				809																																																									
+Exquisite Anórien Bracelet of Succour (3s):	201					126		809																																																									
+Siege-breaker's Bracelet of Warfare (2s):	201		180					694						804																																																			
+Siege-breaker's Bracelet of Strategy (2s):	201			180				694						804																																																			
+Siege-breaker's Bracelet of Tactics (2s):	201					180		694						804																																																			
+Armlet of Anarion (3s):	201		252																																																														
+Armlet of Siriondil (3s):	201		126		126																																																												
+Bracelet of Mighty Defiance (3s):	201		252																																																														
+Hearty Bracelet of Mighty Defiance (3s):	201		126		126																																																												
+Armlet of Meneldil (3s):	201			252																																																													
+Armlet of Alcarin (3s):	201			126	126																																																												
+Bracelet of Willful Defiance (3s):	201			252																																																													
+Hearty Bracelet of Willful Defiance (3s):	201			126	126																																																												
+Armlet of Ostoher (3s):	201					252																																																											
+Armlet of Eldacar (3s):	201				126	126																																																											
+Bracelet of Skilled Defiance (3s):	201					252																																																											
+Hearty Bracelet of Skilled Defiance (3s):	201				126	126																																																											
+Gleaming Bracelet of the Prince	195		261		174																			1756	1756																																								
+Polished Bracelet of the Prince	195			261	174																			1756	1756																																								
+Shining Bracelet of the Prince	195				174	261																		1756	1756																																								
+Spun Gold Bracelet	192		239		205			328						614		307																																																	
+Lapis Lazuli Cuff	192		205		239		102												1158																																														
+Silver Cuff	192			239	205		85	437																																																									
+Bracelet of the Three Stars	192				205	239	85								1874																																																		
+Bangle of Deep Waters	192				205	239		656						461																																																			
+Adept Officer's Enduring Bracelet	192		239		205		85								1874																																																		
+Skilled Vanguard's Resolute Bracelet	192				205	239	68	219							1406																																																		
+Adept Officer's Persevering Bracelet	192				205	239								614			768																																																
+Adept Officer's Resolute Bracelet	192				205	239								768	1874																																																		
+Veteran Engineer's Valourous Bracelet	192		205		171									307	2811																																																		
+Exquisite Bracelet of Fangorn	182		225		193			307						437		437																																																	
+Exquisite Fangorn Bracelet of Skill	182			225	193			307						437		437																																																	
+Exquisite Fangorn Bracelet of Tactics	182				193	225		307						437			437																																																
+Exquisite Fangorn Bracelet of Endurance	182				225		193	409	354										366																																														
+Master Engineer's Valourous Bracelet	176		217		186									422	2582																																																		
+Battle Bracelet of the Deep	176		217		186			491						422	430																																																		
+Skilled Vanguard's Enduring Bracelet	176		186		217		62	196															950																																										
+Adept Officer's Enduring Bracelet	176		186		217														1770				1267																																										
+Greater Dextrous Bracelet of Fate	176			217	186		93							422														Inn of the Forsaken,The Flight to the Lonely Mountain																																					
+Master Engineer's Dextrous Bracelet	176			217	186		93								1291																																																		
+Greater Dextrous Bracelet of Penetration	176			217	186									563	1291	282																																																	
+Tactical Bracelet of the Deep	176				186	217		491						422	430																																																		
+Veteran Rohirric Esquire's Valourous Bracelet	156		162		135									624	1148																																																		
+Exquisite Emerald Bracelet of Succour	156				135	162		420						374																																																			
+Fingers																																																																	
+Ring of Absent Friends (2s):	222		221					782																799	799																																								
+Ring of Forgotten Spirits (2s):	222					221		782																799	799																																								
+Ring of Outcast Brethren (2s):	222			221				782																799	799																																								
+Exquisite Anórien Ring of Combat (3s):	201		126					809																																																									
+Exquisite Anórien Ring of Skill (3s):	201			126				809																																																									
+Exquisite Anórien Ring of Succour (3s):	201					126		809																																																									
+Siege-breaker's Ring of Warfare (2s):	201		180					694						804																																																			
+Siege-breaker's Ring of Strategy (2s):	201			180				694						804																																																			
+Siege-breaker's Ring of Tactics (2s):	201					180		694						804																																																			
+Polished Star-set Ring of the Warrior	201		270		180									804	2450																																																		
+Polished Star-set Ring of the Defender	201		180		270										2450							1809																																											
+Polished Star-set Ring of the Rangers	201			270	180									804	1470	322																																																	
+Polished Star-set Ring of the Bridge-warden	201			180	270										2450								1809																																										
+Polished Star-set Ring of the Healers	201				216	270									1470		804																																																
+Polished Star-set Ring of the Nobleman	201				180	270								804	2450																																																		
+Gleaming Ring of the Prince	195		174		174		87	1114																																																									
+Strong Ring of the Prince	195			174	174		87	1114																																																									
+Opulent Ring of the Prince	195				174	174	87	1114																																																									
+Elite Advisor's Fateful Ring (1s):	192					307	171							768																																																			
+Elite Advisor's Sturdy Ring (1s):	192				256	256																	1037																																										
+Elite Scout's Fateful Ring (1s):	192			307			171								2343																																																		
+Elite Scout's Sturdy Ring (1s):	192			256	256									461																																																			
+Elite Soldier's Fateful Ring (1s):	192		307				171								2343																																																		
+Elite Soldier's Sturdy Ring (1s):	192		256		256																				1037																																								
+Advisor's Fateful Ring (1s):	192					256	136							768																																																			
+Advisor's Sturdy Ring (1s):	192				171	256																	1037																																										
+Scout's Fateful Ring (1s):	192			256			136								2343																																																		
+Scout's Sturdy Ring (1s):	192			256	171									461																																																			
+Soldier's Fateful Ring (1s):	192		256				136								2343																																																		
+Soldier's Sturdy Ring (1s):	192		256		171																				1037																																								
+Glittering Ring of the Blessed	192		239		205		85		377																																																								
+Ring of the Ciphered Message	192		205		239			328											772				1382																																										
+Skilled Vanguard's Enduring Ring	192		205		239			547														1382																																											
+Melted Bronze Ring	192			239	205				283					922																																																			
+Ring of the Burnt Offering	192			205	239		85	437																																																									
+Greater Resolute Ring of Fate	192				205	239	68								1406		307																																																
+Greater Resolute Ring of Penetration	192				205	239		437						768																																																			
+Lost Wedding Ring	192				205	239			283								922																																																
+Ring of the Broken Promise	192				205	239		328	377						937																																																		
+Master Engineer's Persevering Ring	192				205	239	102							461																																																			
+Skilled Vanguard's Persevering Ring	192				205	239		219						614			461																																																
+Skilled Vanguard's Resolute Ring	192				205	239		219							1406		614																																																
+Exquisite Ring of Fangorn	182		225		193			307						437		437																																																	
+Exquisite Fangorn Ring of Skill	182			225	193			307						437		437																																																	
+Exquisite Fangorn Ring of Tactics	182				193	225		307						437			437																																																
+Exquisite Fangorn Ring of Endurance	182				225		193	409	354										366																																														
+Greater Valourous Ring of Penetration	176		217		186									704	1721																																																		
+Battle Ring of the Deep	176		217		186			491						422	430																																																		
+Adept Officer's Valourous Ring	176		217		186										1721	704																																																	
+Master Engineer's Enduring Ring	176		186		217		93												1062																																														
+Greater Steadfast Ring of Fate	176		186		217		93																950																																										
+Greater Dextrous Ring of Fate	176			217	186		62								1291	282																																																	
+Adept Officer's Resilient Ring	176			186	217		77									563																																																	
+Master Engineer's Resilient Ring	176			186	217									422		845																																																	
+Exquisite Emerald Ring of Combat	156		162		135			420						374																																																			
+Pockets																																																																	
+Hilt of Eärnil (3s):	234		255		149																																																												
+Hilt of Eärnil (3s):	234			255	149																																																												
+Hilt of Eärnil (3s):	234				149	255																																																											
+Figurine of a Beorning	222		241		201		60	652						888																																																			
+Figurine of a Burglar	222			241	201		60	652						888																																																			
+Figurine of a Captain	222		241		201		60	652						888																																																			
+Figurine of a Champion	222		241		201		60	652						888																																																			
+Figurine of a Guardian	222		241		201		60	652						888																																																			
+Figurine of a Hunter	222			241	201		60	652						888																																																			
+Figurine of a Lore-master	222				201	241	60	652						888																																																			
+Figurine of a Minstrel	222				201	241	60	652						888																																																			
+Figurine of a Rune-keeper	222				201	241	60	652						888																																																			
+Figurine of a Warden	222			241	201		60	652						888																																																			
+Greater Combative Scroll of Anórien	201		270		180			578						804																																																			
+Greater Vigilant Scroll of Anórien	201		180		270			578													1809																																												
+Greater Precise Scroll of Anórien	201			270	180			578						804																																																			
+Greater Defensive Scroll of Anórien	201			180	270			578													1809																																												
+Greater Spirited Scroll of Anórien	201				180	270		578						804																																																			
+Opulent Bauble of Sirith	195		243		174		52	446	385																																																								
+Phial of Bear's Strength (2s):	195		243		121																																																												
+Sturdy Bauble of Sirith	195			243	174		52	446	385																																																								
+Phial of Ground Athelas (2s):	195			243	121																																																												
+Gleaming Bauble of Sirith	195				174	243	52	446	385																																																								
+Phial of Anduin's Waters (2s):	195				121	243																																																											
+Small Golden Dish	192		205		239				189												1382	1037																																											
+Leather-bound Diary	192		239		205									614		768																																																	
+Fancy Gems in a Shell	192				205	239		219						614	1406																																																		
+Adept Officer's Persevering Token	192				205	239								768			614																																																
+Carved Jewelry Box	192			239	205		102							461																																																			
+Illuminated Fangorn Book of Combat	182		225		193		80	409																																																									
+Illuminated Fangorn Book of Precision	182			225	193		80	409																																																									
+Illuminated Fangorn Book of Spirit	182				193	225	80	409																																																									
+Illuminated Fangorn Book of Vigilance	182				225		193	512											366		983																																												
+Adept Officer's Valourous Token	176		217		186		77								1721																																																		
+Gleaming Brass Bauble of The Grey Company	176		217		186		77								1721																																																		
+Adept Officer's Enduring Token	176		186		217														1416				1584																																										
+Skilled Vanguard's Enduring Token	176		186		217		62		170													950																																											
+Greater Steadfast Pocket of Parrying	176		186		217																	1901	950																																										
+Drakeling's Preserved Claw	176			217	186		93							422																																																			
+Master Engineer's Dextrous Token	176			217	186		93								1291																																																		
+Greater Dextrous Pocket of Prowess	176			217	186				339							704																																																	
+Gleaming Bronze Bauble of The Grey Company	176			186	217			491													1267																																												
+Gleaming Silver Bauble of The Grey Company	176				186	217								563	861		422																																																
+Greater Resolute Bauble of Fate	176				186	217	93							422																																																			
+Spirited Scroll of the Deep	176				186	217		491						422	430																																																		

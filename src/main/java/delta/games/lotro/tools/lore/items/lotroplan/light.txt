@@ -1,0 +1,265 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Armour of a Lore-master's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Armour of a Minstrel's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Armour of a Rune-keeper's Recollection set bonus: 4 Equipped	222																																																10,0%																
+Pelennor Armour of the Biting Wit: 4 Equipped	222																																									10,0%																							
+	105																																																																
+Pelennor Armour of the War-counselor: 4 Equipped	222																																									10,0%																							
+Pelennor Battle-crier's Armour: 4 Equipped	222																																									10,0%																							
+Guardian of Watchwood set bonus: 6 Equipped	192				85	170	170										768																																																
+Western Shore set bonus: 6 Equipped	192					85	170										2304																																																
+Armour of the Storied Mariner set bonus: 6 Equipped	192																																		5,0%																														
+Head																																																																	
+Battle-crier's Helm (4s):	222	604				80		391																																																									
+Circlet of Biting Wit (4s):	222	604				80		391																																																									
+Hat of the War-counselor (4s):	222	604				80		391																																																									
+Ancient Circlet of Graven Word (2s):	222	604				201		652									355							1599																																									
+Ancient Hat of the Elder Days (2s):	222	604				201		652									355							1599																																									
+Ancient Wandering Bard's Helm (2s):	222	604				201		652									355							1599																																									
+Fine Mathom-Hunter's Hat (105)	207	604			279	372											828																																																
+Mathom-hunter's Hat (105)	207	574			186	372											828																																																
+Exemplary Hood of Anórien Sun (3s):	204	568				128		824																																																									
+Anórien Assault Circlet (3s):	201	562					90	1041																																																									
+Ancient Osgiliath Helm	201	562			90	360									2450				2020																																														
+Helm of Osgiliath's Fury	201	562			90	360								1608																																																			
+Helm of the Osgiliath Animal-friend	201	562			90	360											1608																																																
+Helm of the Osgiliath Cleanser	201	562			90	360								804			804																																																
+Helm of the Osgiliath Peace-caller	201	562			90	360								804			804																																																
+Helm of the Osgiliath Skald	201	562			90	360								1608																																																			
+Helm of the Osgiliath Song-protector	201	562			180	360											804																																																
+Helm of the Osgiliath Thunder-caller	201	562			90	360								804	2450																																																		
+Helm of the Osgiliath Watcher	201	562			90	360								804			804																																																
+Circlet of Faramir's Faithful (5s):	201	562																																																															
+Circlet of the Archivist	192	544			205	239								768	1874																																																		
+Circlet of the Night Watcher	192	544			205	239								768	1874																																																		
+Hood of the Storied Mariner	192	544			205	239	68							768																																																			
+Light Nadhin Hood (4s):	192	544				119																																																											
+Amarthgarab	192	544			171	171	85										1536																																																
+Golthol	192	544				171	256										1536																																																
+Faithful Mender's Hat	192	544			205	239								461			922																																																
+Nadhin Footman's Helm (3s):	192	515			34	119																																																											
+Vibrant Ancient Circlet of the Onodrim	188	564			233	267	133												756																																														
+Tactical Ancient Circlet of the Onodrim	188	564			233	267								752			752																																																
+Tactical Circlet of the Onodrim	188	536			200	233								752			602																																																
+Supple Fangorn Hat of Insight	182	524			193	225	128							146																																																			
+Supple Fangorn Hat of Spirit	182	524			193	225	128										146																																																
+Nadhin Footman's Helm (3s):	176	480			31	108																																																											
+Hope of Helm's Deep	176	507			186	217	77										563																																																
+Shoulders																																																																	
+Battle-crier's Shoulders (4s):	222	604				80		391																																																									
+Shoulders of Biting Wit (4s):	222	604				80		391																																																									
+Shoulders of the War-counselor (4s):	222	604				80		391																																																									
+Ancient Shoulders of Graven Word (2s):	222	604				201		652						355											1599																																								
+Ancient Shoulders of the Elder Days (2s):	222	604				201		652						355											1599																																								
+Ancient Wandering Bard's Shoulders (2s):	222	604				201		652						355											1599																																								
+Fine Mathom-Hunter's Mantle (105)	207	604			186	279	279																																																										
+Mathom-hunter's Mantle (105)	207	574			186	279	186																																																										
+Exemplary Shoulders of Anórien Sun (3s):	204	568				128		824																																																									
+Anórien Assault Pauldrons (3s):	201	562					90	1041																																																									
+Ancient Osgiliath Shoulderpads	201	562			90	360		578									804																																																
+Shoulderpads of Osgiliath's Fury	201	562			90	360	90							804																																																			
+Shoulderpads of the Osgiliath Animal-friend	201	562			90	360								804			804																																																
+Shoulderpads of the Osgiliath Cleanser	201	562			90	360								804			804																																																
+Shoulderpads of the Osgiliath Peace-caller	201	562			90	360								804			804																																																
+Shoulderpads of the Osgiliath Skald	201	562			90	360	90							804																																																			
+Shoulderpads of the Osgiliath Song-protector	201	562			90	360		578									804																																																
+Shoulderpads of the Osgiliath Thunder-caller	201	562			90	360	90							804																																																			
+Shoulderpads of the Osgiliath Watcher	201	562			90	360								804			804																																																
+Shoulder Pads of Faramir's Faithful (5s):	201	562																																																															
+Shoulderpads of the Archivist	192	544			205	239	85							614																																																			
+Shoulderpads of the Night Watcher	192	544			205	239	85							614																																																			
+Shoulderpads of the Storied Mariner	192	544			205	239	85							614																																																			
+Light Nadhin Shoulders (4s):	192	544				119																																																											
+Eiliadhranc	192	544				171	171							768			1536																																																
+Gweluranc	192	544				171	171							1536	2343																																																		
+Vibrant Ancient Shoulderpads of the Onodrim	188	564			233	267	133												756																																														
+Tactical Ancient Shoulderpads of the Onodrim	188	564			233	267								752			752																																																
+Tactical Shoulderpads of the Onodrim	188	536			200	233								752			602																																																
+Supple Fangorn Schoulderpads of Insight	182	524			193	225	128							146																																																			
+Supple Fangorn Schoulderpads of Spirit	182	524			193	225	128										146																																																
+Light Nadhin Shoulders (3s):	182	497				144																																																											
+Back																																																																	
+Adroit Cloak of the Citadel Guard Captain (1s):	204	1326		219	183		109								2486																																																		
+Careful Cloak of the Citadel Guard Captain (1s):	204	1326			256	256													2050																																														
+Clever Cloak of the Citadel Guard Captain (1s):	204	1326			91	366								1306																																																			
+Decisive Cloak of the Citadel Guard Captain (1s):	204	1326			183	219	109								2486																																																		
+Deft Cloak of the Citadel Guard Captain (1s):	204	1326		256	256														2050																																														
+Durable Cloak of the Citadel Guard Captain (1s):	204	1326	256		256														2050																																														
+Flexible Cloak of the Citadel Guard Captain (1s):	204	1326		366	91									1306																																																			
+Forceful Cloak of the Citadel Guard Captain (1s):	204	1326	366		91									1306																																																			
+Staunch Cloak of the Citadel Guard Captain (1s):	204	1326	219		183		109								2486																																																		
+Anórien Cloak of Clout	201	1241	216		216									482					3636									0.2 extra slice																																					
+Anórien Cloak of Nimbleness	201	1241		216	216									482					3636									0.2 extra slice																																					
+Anórien Cloak of Brilliance	201	1241			216	216								482					3636									0.2 extra slice																																					
+Cloak of the Bridge-warden	201	1241		270	270														2020																																														
+Cloak of the Crossroads	201	1241	360		90									1608																																																			
+Cloak of the Defender	201	1241	270		270														2020																																														
+Cloak of the Diplomat	201	1241			180	270											804		2020																																														
+Cloak of the Guard-captain	201	1241	216		180		144								2450																																																		
+Cloak of the Healers	201	1241			90	270	180		499																																																								
+Cloak of the Nobleman	201	1241			90	360								1608																																																			
+Cloak of the Rangers	201	1241		360	90									1608																																																			
+Cloak of the Ruined City	201	1241		216	180		144								2450																																																		
+Cloak of the Fallen Tower	192	1198	239		205									922	1406																																																		
+Watchman's Woolen Cloak	192	1198		205	239														1158				2074																																										
+Greater Enduring Cloak of Fate	192	1198	205		239		85															1382																																											
+Greater Resolute Cloak of Tactics	192	1198			205	239								614			768																																																
+Gondorian Guardsman's Light Cloak	192	1139			171	171								614			768																																																
+Supple Fangorn Cloak of Might	182	1151	225		193									1165		146																																																	
+Supple Fangorn Cloak of Agility	182	1151		225	193									1165		146																																																	
+Supple Fangorn Cloak of Will	182	1151			193	225								1165			146																																																
+Supple Fangorn Cloak of Vitality	182	1151			225		193								445				2928																																														
+Forceful Cloak of the Deep	176	1111	217		186		62								430	563																																																	
+Greater Valourous Cloak of Finesse	176	1111	217		186									422	2582																																																		
+Vigilant Cloak of the Deep	176	1111	186		217		62												1770																																														
+Skillful Cloak of the Deep	176	1111		217	186		62								430	563																																																	
+Greater Dextrous Cloak of Prowess	176	1111		217	186									422	861	563																																																	
+Watchful Cloak of the Deep	176	1111		186	217		62												1770																																														
+Perceptive Cloak of the Deep	176	1111			186	217	62								430		563																																																
+Heavy Cloak of Westfold	168	1006	147		176																	1814	605																																										
+Sarchol	84	501						336							1052									1513	1513			Pits T2																																					
+Shield of the Hammerhand	105	611			84									334														Gives +25% to all forms of XP until level 85.																																					
+Chest																																																																	
+Battle-crier's Robe (4s):	222	2010				80		391																																																									
+Robe of Biting Wit (4s):	222	2010				80		391																																																									
+Robe of the War-counselor (4s):	222	2010				80		391																																																									
+Ancient Robe of Graven Word (2s):	222	2010				201		652									355							1599																																									
+Ancient Robe of the Elder Days (2s):	222	2010				201		652									355							1599																																									
+Ancient Wandering Bard's Robe (2s):	222	2010				201		652									355							1599																																									
+Fine Mathom-Hunter's Waistcoat (105)	207	2016			372	279	93																																																										
+Mathom-hunter's Waistcoat (105)	207	1911			279	279	93																																																										
+Exemplary Robe of Anórien Sun (3s):	204	1891				128		824																																																									
+Anórien Assault Robe (3s):	201	1871					90	1041																																																									
+Ancient Osgiliath Jacket	201	1871				360	180							804																																																			
+Jacket of Osgiliath's Fury	201	1871				360	90							804	2450																																																		
+Jacket of the Osgiliath Animal-friend	201	1871				360	90							804			804																																																
+Jacket of the Osgiliath Cleanser	201	1871				360	90										1608																																																
+Jacket of the Osgiliath Peace-caller	201	1871				360	180										804																																																
+Jacket of the Osgiliath Skald	201	1871				360	90							804	2450																																																		
+Jacket of the Osgiliath Song-protector	201	1871				360	180								2450																																																		
+Jacket of the Osgiliath Thunder-caller	201	1871				360	90							804	2450																																																		
+Jacket of the Osgiliath Watcher	201	1871				360	180										804																																																
+Robe of Faramir's Faithful (5s):	201	1871																																																															
+Jacket of the Archivist	192	1811			205	239								768	1874																																																		
+Robe of the Night Watcher	192	1811			205	239								768			614																																																
+Jacket of the Storied Mariner	192	1811			205	239								768	1874																																																		
+Light Nadhin Robe (4s):	192	1811				119																																																											
+Tiriacham	192	1811			85	171	256							768																																																			
+Formen Falas	192	1811			171	85	171										1536																																																
+Light Nadhin Robe (3s):	192	1721				153																																																											
+Jacket of the Great Shore	192	1721			171	205								768			461																																																
+Supple Fangorn Robe of Insight	182	1745			193	225	128							146																																																			
+Supple Fangorn Robe of Spirit	182	1745			193	225	128										146																																																
+Hands																																																																	
+Battle-crier's Gloves (4s):	222	1005				80		391																																																									
+Gloves of Biting Wit (4s):	222	1005				80		391																																																									
+Gloves of the War-counselor (4s):	222	1005				80		391																																																									
+Ancient Gloves of Graven Word (2s):	222	1005				201		652						355											1599																																								
+Ancient Gloves of the Elder Days (2s):	222	1005				201		652						355											1599																																								
+Ancient Wandering Bard's Gloves (2s):	222	1005				201		652						355											1599																																								
+Fine Mathom-Hunter's Mitts (105)	207	1008			186	372	93							828																																																			
+Mathom-hunter's Mitts (105)	207	955			186	279	93							828																																																			
+Exemplary Gloves of Anórien Sun (3s):	204	945				128		824																																																									
+Anórien Assault Gloves (3s):	201	935					90	1041																																																									
+Ancient Osgiliath Gloves	201	935			180	360								804																																																			
+Gloves of Osgiliath's Fury	201	935			90	360											1608																																																
+Gloves of the Osgiliath Animal-friend	201	935			90	360	90								2450																																																		
+Gloves of the Osgiliath Cleanser	201	935			90	360	90								2450																																																		
+Gloves of the Osgiliath Peace-caller	201	935			90	360	90												2020																																														
+Gloves of the Osgiliath Skald	201	935			90	360											1608																																																
+Gloves of the Osgiliath Song-protector	201	935			180	360		578																																																									
+Gloves of the Osgiliath Thunder-caller	201	935			90	360											1608																																																
+Gloves of the Osgiliath Watcher	201	935			90	360	90												2020																																														
+Fine Gloves of Faramir's Faithful (5s):	201	935																																																															
+Gloves of the Archivist	192	905			205	239	68										768																																																
+Gloves of the Night Watcher	192	905			205	239											768		1544																																														
+Gloves of the Storied Mariner	192	905			205	239	68										768																																																
+Light Nadhin Gauntlets (4s):	192	905				119																																																											
+Braigmaib	192	905			171	171								768			1536																																																
+Aelin	192	905				171	171							1536	2343																																																		
+Greater Resolute Gloves of Tactics	192	905			205	239								461			922																																																
+Gloves of the Great Shore	192	905			205	239	68							307			461																																																
+Nadhin Footman's Gauntlets (3s):	192	861				119	34																																																										
+Supple Fangorn Gloves of Insight	182	872			193	225	128							146																																																			
+Supple Fangorn Gloves of Spirit	182	872			193	225	128										146																																																
+Greater Resolute Gloves of Penetration	176	844			186	217								704	1721																																																		
+Nadhin Footman's Gauntlets (3s):	176	803				108	31																																																										
+Legs																																																																	
+Battle-crier's Leggings (4s):	222	1675				80		391																																																									
+Leggings of Biting Wit (4s):	222	1675				80		391																																																									
+Leggings of the War-counselor (4s):	222	1675				80		391																																																									
+Ancient Leggings of the Elder Days (2s):	222	1675				201		652									355							1599																																									
+Ancient Trousers of Graven Word (2s):	222	1675				201		652									355							1599																																									
+Ancient Wandering Bard's Leggings (2s):	222	1675				201		652									355							1599																																									
+Fine Mathom-Hunter's Trousers (105)	207	1681			186	372		1198																																																									
+Mathom-hunter's Trousers (105)	207	1592			186	279		1198																																																									
+Exemplary Leggings of Anórien Sun (3s):	204	1576				128		824																																																									
+Anórien Assault Leggings (3s):	201	1559					90	1041																																																									
+Ancient Osgiliath Leggings	201	1559			90	360	90										804																																																
+Leggings of Osgiliath's Fury	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Animal-friend	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Cleanser	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Peace-caller	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Skald	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Song-protector	201	1559			90	360	90										804																																																
+Leggings of the Osgiliath Thunder-caller	201	1559			90	360	90	578																																																									
+Leggings of the Osgiliath Watcher	201	1559			90	360	90	578																																																									
+Light Leggings of Faramir's Faithful (5s):	201	1559																																																															
+Leggings of the Archivist	192	1509			205	239	85		377																																																								
+Leggings of the Night Watcher	192	1509			205	239	85		377																																																								
+Leggings of the Storied Mariner	192	1509			205	239	85		377																																																								
+Light Nadhin Leggings (4s):	192	1509				119																																																											
+Thorembadanir	192	1509			171	171	85										1536																																																
+Andune	192	1509			171		171								2343		1536																																																
+Dwarf-lord's leggings	192	1509			205	239	85								1874																																																		
+Leggings of the Festive Bard	192	1509			205	239								768			614																																																
+Greater Resolute Leggings of Penetration	192	1509			205	239								922			461																																																
+Leggings of the Great Shore	192	1433			171	205								461			768																																																
+Supple Fangorn Trousers of Insight	182	1454			193	225	128							146																																																			
+Supple Fangorn Trousers of Spirit	182	1454			193	225	128										146																																																
+Feet																																																																	
+Battle-crier's Boots (4s):	222	805				80		391																																																									
+Boots of the War-counselor (4s):	222	805				80		391																																																									
+Shoes of Biting Wit (4s):	222	805				80		391																																																									
+Ancient Boots of the Elder Days (2s):	222	805				201		652						355											1599																																								
+Ancient Shoes of Graven Word (2s):	222	805				201		652						355											1599																																								
+Ancient Wandering Bard's Boots (2s):	222	805				201		652						355											1599																																								
+Fine Mathom-Hunter's Shoes (105)	207	806			186	372											1656																																																
+Mathom-hunter's Shoes (105)	207	766			186	279											1656																																																
+Exemplary Shoes of Anórien Sun (3s):	204	758				128		824																																																									
+Anórien Assault Shoes (3s):	201	750					90	1041																																																									
+Ancient Osgiliath Boots	201	750			180	360													2020																																														
+Boots of Osgiliath's Fury	201	750			180	360								804																																																			
+Boots of the Osgiliath Animal-friend	201	750			180	360											804																																																
+Boots of the Osgiliath Cleanser	201	750			180	360											804																																																
+Boots of the Osgiliath Peace-caller	201	750			180	360											804																																																
+Boots of the Osgiliath Skald	201	750			180	360								804																																																			
+Boots of the Osgiliath Song-protector	201	750			180	360											804																																																
+Boots of the Osgiliath Thunder-caller	201	750			180	360								804																																																			
+Boots of the Osgiliath Watcher	201	750			180	360											804																																																
+Shoes of Faramir's Faithful (5s):	201	750																																																															
+Boots of the Archivist	192	726			205	239	68							768																																																			
+Boots of the Night Watcher	192	726			205	239	68							768																																																			
+Boots of the Storied Mariner	192	726			205	239								768					1544																																														
+Light Nadhin Shoes (4s):	192	726				119																																																											
+Delendail	192	726			171	85	171							768			768																																																
+Helegdail	192	726			171	171	171										768																																																
+Supple Fangorn Shoes of Insight	182	699			193	225	128							146																																																			
+Supple Fangorn Shoes of Spirit	182	699			193	225	128										146																																																
+Padded Boots of the Dragon Clan	164	597			143	171								656	1205																																																		
+Shields																																																																	
+Anórien Assault-shield of Might	201	1971	252		180		108							804					1616																																														
+Anórien Assault-shield of Will	201	1971			180	252	108							804					1616																																														
+Shield of the Preserver	201	1971			216	252	108										482		1616																																														
+Gallant Captain's Buckler	192	1931	205		239		102												1544		1555																																												
+Buckler of the Lonely Mountain	192	1931			205	239								614			768		1544																																														
+Song-weaver's Buckler	192	1931			205	239	102										461		1544																																														
+Greater Resolute Shield of Fate	192	1931			205	239	102										461		1544																																														
+Greater Resolute Shield of Finesse	192	1931			205	239								461	2811				1544																																														
+Blackroot Vibrant Shield	192	1922			171	205								461	2343				1544																																														
+Blackroot Tempered Shield	192	1922	171		205														1544		2592		1037																																										
+Fangorn Assault-shield of Endurance 	182	1887	193		225														1464		983	1310	983																																										
+Fangorn Assault-shield of Spirit 	182	1887			193	225	64							582	445				1464																																														
+Greater Enduring Shield of Fate	176	1825	186		217		77												1416			1267																																											
+Greater Enduring Shield of Evasion	176	1825	186		217														1416		1901		1584																																										
+Greater Enduring Shield of Parrying	176	1825	186		217														1416			1901	950																																										

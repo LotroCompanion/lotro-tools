@@ -1,0 +1,60 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Veteran Pelennor Guardsman's Valourous Axe	213		230		192		96									511												Ancient Dwarf-make Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Valourous Club	213		230		192									852		511												Ancient Dwarf-make Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Valourous Dagger	213		230		192										1556	852												Ancient Dwarf-make Damage Type, +19 Damage to Orc-kind																									1,0%												
+Veteran Pelennor Guardsman's Valourous Hammer	213		230		192										1556	852												Beleriand Damage Type, +19 Damage to Spiders and Insects																									1,0%												
+Veteran Pelennor Guardsman's Valourous Mace	213		230		192		96								1556													Beleriand Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Valourous Sword	213		230		192									511		852												Westernesse Damage Type, +19 Damage to Spiders and Insects																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Axe	213			230	192		96							511														Ancient Dwarf-make Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Club	213			230	192									511		852												Ancient Dwarf-make Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Dagger	213			230	192									511		852												Ancient Dwarf-make Damage Type, +19 Damage to Orc-kind																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Hammer	213			230	192		96									511												Beleriand Damage Type, +19 Damage to Spiders and Insects																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Mace	213			230	192									852	1556													Beleriand Damage Type, +19 Damage to Ancient Evil																									1,0%												
+Veteran Pelennor Guardsman's Dextrous Sword	213			230	192									852	1556													Westernesse Damage Type, +19 Damage to Spiders and Insects																									1,0%												
+Fine Anórien Dextrous Axe	201			216	180									965									2533					Beleriand Damage Type																																					
+Fine Anórien Dextrous Bow	201			216	216									965					2020									Ancient Dwarf-make Damage Type																																					
+Fine Anórien Dextrous Club	201			216	180									965								2533						Ancient Dwarf-make Damage Type																																					
+Fine Anórien Dextrous Dagger	201			216	180									965								2533						Beleriand Damage Type																																					
+Fine Anórien Dextrous Hammer	201			216	180									965									2533					Beleriand Damage Type																																					
+Fine Anórien Dextrous Mace	201			216	180									965									2533					Westernesse Damage Type																																					
+Fine Anórien Dextrous Sword	201			216	180									965								2533						Beleriand Damage Type																									1,0%												
+Fine Anórien Resolute Sword	201				180	216								965								2533						Beleriand Damage Type																									1,0%												
+Fine Anórien Valourous Axe	201		216		180									965									2533					Beleriand Damage Type																																					
+Fine Anórien Valourous Bow	201		216		216									965					2020									Ancient Dwarf-make Damage Type																																					
+Fine Anórien Valourous Club	201		216		180									965								2533						Ancient Dwarf-make Damage Type																																					
+Fine Anórien Valourous Dagger	201		216		180									965								2533						Beleriand Damage Type																																					
+Fine Anórien Valourous Hammer	201		216		180									965									2533					Beleriand Damage Type																																					
+Fine Anórien Valourous Mace	201		216		180									965									2533					Westernesse Damage Type																																					
+Fine Anórien Valourous Sword	201		216		180									965								2533						Beleriand Damage Type																									1,0%												
+Mumak-rider's Bow	201		270		216		72									643												Ancient Dwarf-make Damage Type																																					
+Blade of Harad	201		252		216		72								1470	322												Westernesse Damage Type																									1,0%												
+Half-troll's Cleaver	201		252		216									322	1960	482												Beleriand Damage Type																																					
+Half-troll's Club	201		252		216		108							482														Westernesse Damage Type																																					
+Blackjack of the Overseer	201			270	216		72							643														Ancient Dwarf-make Damage Type																																					
+Dagger of Fallen Stars	201			270	216		90								1470													Westernesse Damage Type																																					
+Axe of Harad	201			252	216		90								1960													Westernesse Damage Type																																					
+Sword of Harad	201			252	216		90								1960													Beleriand Damage Type																									1,0%												
+Sword of the Brotherhood	201				216	252	72								1470		322											Beleriand Damage Type																									1,0%												
+Enduring Half-troll's Club	198		212		212		106																					Westernesse Damage Type																																					
+Enduring Half-troll's Cleaver	198		212		212									317	1932													Beleriand Damage Type																																					
+Enduring Blade of Harad	198		212		212		70									317												Westernesse Damage Type																									1,0%												
+Enduring Mumak-rider's Bow	198		212		212		53									475												Ancient Dwarf-make Damage Type																																					
+Steadfast Axe of Harad	198			212	212		35								1932													Westernesse Damage Type																																					
+Steadfast Blackjack of the Overseer	198			212	177		70							634														Ancient Dwarf-make Damage Type																																					
+Steadfast Dagger of Fallen Stars	198			212	177		88								1449													Westernesse Damage Type																																					
+Steadfast Sword of Harad	198			212	212		35								1932													Beleriand Damage Type																									1,0%												
+Resolute Sword of the Brotherhood	198				212	212	70										317											Beleriand Damage Type																									1,0%												
+Greater Valourous Mace of Penetration	176		217		186									704	1721													Ancient Dwarf-make Damage Type																																					
+Greater Dextrous Axe of Fate	176			217	186		77							563														Westernesse Damage Type																																					
+Greater Dextrous Sword of Fate	176			217	186		77								1721													Beleriand Damage Type																									1,0%												
+Agile Hammer of the Deep	176			217	186										430	1126																																																	
+Greater Dextrous Axe of Prowess	176			217	186									282	1291	563												Ancient Dwarf-make Damage Type																																					
+Greater Dextrous Dagger of Finesse	176			217	186										2152	563												Beleriand Damage Type																																					
+Greater Dextrous Dagger of Penetration	176			217	186									845	1291													Westernesse Damage Type																																					
+Greater Dextrous Hammer of Finesse	176			217	186									563	2152													Ost Dunhoth - Gortheron																																					
+Greater Dextrous Hammer of Penetration	176			217	186									845		422												Ost Dunhoth - Gortheron																																					
+Greater Dextrous Club of Penetration	176			217	186									704		563												Dol Guldur - Dungeons of Dol Guldur																																					
+Greater Dextrous Mace of Penetration	176			217	186									845	1291													Ancient Dwarf-make Damage Type																																					
+Greater Dextrous Club of Prowess	176			217	186										1291	845																																																	
+Greater Dextrous Sword of Prowess	176			217	186									422	861	563																																					1,0%												
+Greater Resolute Sword of Penetration	176				186	217								704	1721													Beleriand Damage Type																									1,0%												
