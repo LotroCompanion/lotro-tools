@@ -107,16 +107,17 @@ public class DataLotroCharacterPageParser
             {
               NamedNodeMap itemAttrs=itemTag.getAttributes();
               // Identifier
-              int id=DOMParsingTools.getIntAttribute(itemAttrs,"item_id",0);
-              String objectPageURL=DOMParsingTools.getStringAttribute(itemAttrs,"lorebookEntry",null);
+              int itemId=DOMParsingTools.getIntAttribute(itemAttrs,"item_id",0);
+              //String objectPageURL=DOMParsingTools.getStringAttribute(itemAttrs,"lorebookEntry",null);
               String slotName=DOMParsingTools.getStringAttribute(itemAttrs,"slot",null);
               EQUIMENT_SLOT slot=getSlotByName(slotName);
               if (slot!=null)
               {
                 SlotContents contents=equipment.getSlotContents(slot,true);
-                String iconURL="http://lorebook.lotro.com/icon.php?id="+id+"&type=item";
-                contents.setIconURL(iconURL);
-                contents.setObjectURL(objectPageURL);
+                if (itemId!=0)
+                {
+                  contents.setItemId(Integer.valueOf(itemId));
+                }
               }
             }
           }

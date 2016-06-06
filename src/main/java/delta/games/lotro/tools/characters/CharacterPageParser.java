@@ -14,6 +14,7 @@ import delta.games.lotro.character.Character;
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
+import delta.games.lotro.character.io.xml.CharacterXMLParser;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
@@ -115,12 +116,11 @@ public class CharacterPageParser
           slotNumber=NumericTools.parseInteger(slotName);
           if (slotNumber!=null)
           {
-            String iconURL=img.getAttributeValue("src");
+            //String iconURL=img.getAttributeValue("src");
             EQUIMENT_SLOT slot=CharacterEquipment.getSlotByIndex(slotNumber.intValue());
             SlotContents contents=equipment.getSlotContents(slot,true);
-            
-            contents.setIconURL(iconURL);
-            contents.setObjectURL(objectPageURL);
+            Integer itemId=CharacterXMLParser.idFromURL(objectPageURL);
+            contents.setItemId(itemId);
             //System.out.println("Slot ["+slotNumber+"], Icon URL ["+iconURL+"]");
           }
         }
