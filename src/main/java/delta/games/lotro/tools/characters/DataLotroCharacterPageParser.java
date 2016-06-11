@@ -10,7 +10,7 @@ import org.w3c.dom.NamedNodeMap;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.xml.DOMParsingTools;
-import delta.games.lotro.character.Character;
+import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
@@ -29,9 +29,9 @@ public class DataLotroCharacterPageParser
 {
   private static final Logger _logger=LotroLoggers.getWebInputLogger();
 
-  private Character parseCharacter(byte[] xmlBuffer)
+  private CharacterData parseCharacter(byte[] xmlBuffer)
   {
-    Character ret=null;
+    CharacterData ret=null;
     if (xmlBuffer!=null)
     {
       ByteArrayInputStream bis=new ByteArrayInputStream(xmlBuffer);
@@ -41,7 +41,7 @@ public class DataLotroCharacterPageParser
         Element characterTag=DOMParsingTools.getChildTagByName(root,"character");
         if (characterTag!=null)
         {
-          ret=new Character();
+          ret=new CharacterData();
           // Character name
           NamedNodeMap attrs=characterTag.getAttributes();
           String charName=DOMParsingTools.getStringAttribute(attrs,"name",null);
@@ -180,14 +180,14 @@ public class DataLotroCharacterPageParser
    * @param url URL of character page.
    * @return A character or <code>null</code> if an error occurred..
    */
-  public Character parseMainPage(String name, String url)
+  public CharacterData parseMainPage(String name, String url)
   {
-    Character ret=null;
+    CharacterData ret=null;
     int maxTries=3;
     int retryNumber=0;
     while(retryNumber<maxTries)
     {
-      Character subRet=parseMainPage(name,url,retryNumber);
+      CharacterData subRet=parseMainPage(name,url,retryNumber);
       if (subRet!=null)
       {
         ret=subRet;
@@ -212,13 +212,13 @@ public class DataLotroCharacterPageParser
    * @param retryNumber Number of previous tries.
    * @return A character or <code>null</code> if an error occurred..
    */
-  private Character parseMainPage(String name, String url, int retryNumber)
+  private CharacterData parseMainPage(String name, String url, int retryNumber)
   {
     if (_logger.isInfoEnabled())
     {
       _logger.info("Character description page parsing for toon ["+name+"] "+((retryNumber>0)?" try #"+retryNumber:""));
     }
-    Character ret=null;
+    CharacterData ret=null;
     try
     {
       DownloadService downloader=DownloadService.getInstance();

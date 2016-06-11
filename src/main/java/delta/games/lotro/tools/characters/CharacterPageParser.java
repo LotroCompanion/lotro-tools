@@ -10,7 +10,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
-import delta.games.lotro.character.Character;
+import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
@@ -33,7 +33,7 @@ public class CharacterPageParser
 
   private static final String SLOT_SEED="slot_";
   private static final String OF=" of ";
-  private Character _character;
+  private CharacterData _character;
 
   private void parseCharacterDescription(Element charPanel)
   {
@@ -190,14 +190,14 @@ public class CharacterPageParser
    * @param url URL of character page.
    * @return A character or <code>null</code> if an error occurred..
    */
-  public Character parseMainPage(String name, String url)
+  public CharacterData parseMainPage(String name, String url)
   {
-    Character ret=null;
+    CharacterData ret=null;
     int maxTries=3;
     int retryNumber=0;
     while(retryNumber<maxTries)
     {
-      Character subRet=parseMainPage(name,url,retryNumber);
+      CharacterData subRet=parseMainPage(name,url,retryNumber);
       if (subRet!=null)
       {
         ret=subRet;
@@ -222,13 +222,13 @@ public class CharacterPageParser
    * @param retryNumber Number of previous tries.
    * @return A character or <code>null</code> if an error occurred..
    */
-  private Character parseMainPage(String name, String url, int retryNumber)
+  private CharacterData parseMainPage(String name, String url, int retryNumber)
   {
     if (_logger.isInfoEnabled())
     {
       _logger.info("Character description page parsing for toon ["+name+"] "+((retryNumber>0)?" try #"+retryNumber:""));
     }
-    Character ret=null;
+    CharacterData ret=null;
     try
     {
       DownloadService downloader=DownloadService.getInstance();
@@ -240,7 +240,7 @@ public class CharacterPageParser
       Element charPanel=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.TABLE,"class","char_panel freep");
       if (charPanel!=null)
       {
-        _character=new Character();
+        _character=new CharacterData();
         parseCharacterDescription(charPanel);
         parseStats(charPanel);
       }
