@@ -7,6 +7,7 @@ import delta.games.lotro.MyLotroConfig;
 import delta.games.lotro.character.CharacterFile;
 import delta.games.lotro.character.log.CharacterLog;
 import delta.games.lotro.character.log.CharacterLogsManager;
+import delta.games.lotro.character.log.LotroTestUtils;
 
 /**
  * Test for character log parsing.
@@ -21,7 +22,8 @@ public class MainTestCharacterActivityLogIO
   public static void main(String[] args)
   {
     List<CharacterFile> toons=new ArrayList<CharacterFile>();
-    CharacterFile glumlug=CharacterFile.build("Elendilmir","Glumlug");
+    LotroTestUtils utils=new LotroTestUtils();
+    CharacterFile glumlug=utils.getMainToon();
     toons.add(glumlug);
 
     MyLotroConfig cfg=MyLotroConfig.getInstance();
