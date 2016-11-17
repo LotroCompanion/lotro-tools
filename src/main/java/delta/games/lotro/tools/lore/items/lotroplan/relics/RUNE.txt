@@ -1,0 +1,13 @@
+Name	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Insightful Rune of Defence	10																			1244	622																																							
+Insightful Rune of Deflection	10									148,2												622																																						
+Insightful Rune of Avoidance	10											139,8											622																																					
+Westemnet Rune of Courage	90			35																		727						+Partial Evade and Parry Mitigation																															2,0%	4,0%
+Westemnet Rune of Power	90						35									727	727							205																																				
+Westemnet Rune of Wisdom	90					35																	727					-2.5% Attack Duration																				-2,5%												
+True Rune of the Dark Watch	65		17	17	17	17	17																																																					
+True Rune of the Two Trees	65							180	160	96		90																																																
+True Rune of the First Battle	75																					606	606					+Partial Evade and Parry Mitigation																															2,0%	4,0%
+True Rune of the Swift-light	75							296	276																			-2.5% Attack Duration																				-2,5%												
+True Rune of the Dark Wood	80							330	310															242																																				
+True Rune of the White Mountains	80			35												646	646											-2.5% Attack Duration																				-2,5%												

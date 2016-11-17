@@ -1,0 +1,14 @@
+Name	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Westemnet Device of Might	90		50																						
+Westemnet Device of Agility	90			50																					
+Westemnet Device of Vitality	90				50																				
+Westemnet Device of Will	90					50																			
+Westemnet Device of Fate	90						50																		
+Westemnet Device of Morale	90							250																	
+Westemnet Device of Power	90								250																
+Westemnet Device of Battle	95		40											740		740									
+Westemnet Device of Accuracy	95			40										740		740									
+Westemnet Device of Tactics	95					40								740			740								
+Westemnet Device of Insight	95						40							740			740								
+Westemnet Device of Potency	95						40							740		740									
+Westemnet Device of Protection	95																		370					740	740

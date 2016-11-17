@@ -1,0 +1,13 @@
+Name	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+Emerald Gem of Dexterity	10			28										1244																																													
+Emerald Gem of Endurance	10				28									1244																																													
+Emerald Gem of Fortune	10						28							1244																																													
+Westemnet Gem of Charity	90								376								909								205																																		
+Westemnet Gem of Faith	90		35																		727							+Partial Block and Parry Mitigation																														4,0%	2,0%
+Westemnet Gem of Hope	90							396	376										364																																								
+True Gem of the Encircling Seas	65									117		126				525	525																																										
+True Gem of the Mountain King	65				25						126										263	263	263																																				
+True Gem of the Watchwood	75				30														303		303	303	303																																				
+True Gem of the Wizard's Vale	75						30					90		1212																																													
+True Gem of the Rising Moon	80				35		35									646	646																																										
+True Gem of the Twilight	80							330											323						242																																		
