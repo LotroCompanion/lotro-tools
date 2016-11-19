@@ -256,16 +256,16 @@ public class RelicsIndexPageParser
       Source source=new Source(url);
       source.fullSequentialParse();
 
-      handleTable("Tier 1",source,"Tier_1_Relics",Integer.valueOf(1));
-      handleTable("Tier 2",source,"Tier_2_Relics",Integer.valueOf(2));
-      handleTable("Tier 3",source,"Tier_3_Relics",Integer.valueOf(3));
-      handleTable("Tier 4",source,"Tier_4_Relics",Integer.valueOf(4));
-      handleTable("Tier 5",source,"Tier_5_Relics",Integer.valueOf(5));
-      handleTable("Tier 6",source,"Tier_6_Relics",Integer.valueOf(6));
-      handleTable("Tier 7",source,"Tier_7_Relics",Integer.valueOf(7));
-      handleTable("Tier 8",source,"Tier_8_Relics",Integer.valueOf(8));
-      handleTable("Tier 9",source,"Tier_9_Relics",Integer.valueOf(9));
-      handleTable("Tier 10",source,"Tier_10_Relics",Integer.valueOf(10));
+      handleTable("Tier 1",source,"Tier_1_Relics",null);
+      handleTable("Tier 2",source,"Tier_2_Relics",null);
+      handleTable("Tier 3",source,"Tier_3_Relics",null);
+      handleTable("Tier 4",source,"Tier_4_Relics",null);
+      handleTable("Tier 5",source,"Tier_5_Relics",null);
+      handleTable("Tier 6",source,"Tier_6_Relics",null);
+      handleTable("Tier 7",source,"Tier_7_Relics",null);
+      handleTable("Tier 8",source,"Tier_8_Relics",null);
+      handleTable("Tier 9",source,"Tier_9_Relics",null);
+      handleTable("Tier 10",source,"Tier_10_Relics",null);
       // Unique relics (55)
       handleTable("Unique relics (55)",source,"Unique_Relics_.28Level_55.29",Integer.valueOf(55));
       // Singular relics (60)
