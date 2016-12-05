@@ -20,11 +20,25 @@ public class ScreenshotsRename
   private static void doRename(File f)
   {
     long time=f.lastModified();
-    String name=sdf.format(new Date(time))+".jpg";
-    File to=new File(f.getParentFile(),name);
+    File to=null;
+    int index=0;
+    do
+    {
+      String name=null;
+      if (index==0)
+      {
+        name=sdf.format(new Date(time))+".jpg";
+      }
+      else
+      {
+        name=sdf.format(new Date(time))+"-"+index+".jpg";
+      }
+      to=new File(f.getParentFile(),name);
+      index++;
+    } while (to.exists());
     if(!to.exists())
     {
-      System.out.println("Rename to: "+name);
+      System.out.println("Rename to: "+to.getName());
       f.renameTo(to);
     }
   }
