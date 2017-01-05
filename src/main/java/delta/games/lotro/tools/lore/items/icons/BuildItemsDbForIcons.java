@@ -22,6 +22,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
  */
 public class BuildItemsDbForIcons
 {
+  private static final boolean USE_UNIQUE_ICONS=true;
   private static final File LUA_FILE=new File("items.lua");
   private static final File ICON_IDS_FILE=new File("iconIds.txt");
   private HashMap<String,List<Integer>> _iconIds2Ids;
@@ -55,8 +56,14 @@ public class BuildItemsDbForIcons
     List<Integer> ids=new ArrayList<Integer>();
     for(Map.Entry<String,List<Integer>> entry : _iconIds2Ids.entrySet())
     {
-      //ids.add(entry.getValue().get(0));
-      ids.addAll(entry.getValue());
+      if (USE_UNIQUE_ICONS)
+      {
+        ids.add(entry.getValue().get(0));
+      }
+      else
+      {
+        ids.addAll(entry.getValue());
+      }
     }
     buildDb(items,ids);
   }
@@ -113,13 +120,16 @@ public class BuildItemsDbForIcons
     File toFile=new File("items.xml").getAbsoluteFile();
     HashMap<Integer,Item> items=loadItemsFile(toFile);
     System.out.println(items.size());
-    
+
     for(Integer id : items.keySet())
     {
       Item item=items.get(id);
+      // Filter on essences: (set USE_UNIQUE_ICONS to false)
       //String tulkas=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
-      String category=item.getSubCategory();
-      if ((category==null) || (!category.contains("Essence"))) continue;
+      //String category=item.getSubCategory();
+      //if ((category==null) || (!category.contains("Essence"))) continue;
+
+      // Filter on some specific item ids:
       //int idValue=id.intValue();
       //if ((idValue==1879097298) || (idValue==1879109623)
       //    || (idValue==1879109618) || (idValue==1879083770) || (idValue==1879115686))
