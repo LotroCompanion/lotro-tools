@@ -104,7 +104,13 @@ public class EssenceStatsInjector
   {
     List<Integer> tiers=loadTiers();
     HashMap<Integer,HashMap<String,Item>> essencesByTier=new HashMap<Integer,HashMap<String,Item>>();
-    int nb=Math.min(essences.size(),tiers.size());
+    int nbEssences=essences.size();
+    int nbTierSpecifications=tiers.size();
+    if (nbEssences!=nbTierSpecifications)
+    {
+      System.err.println("Warning! Bad tier specifications: nbEssences="+nbEssences+"!=nbTierSpecifications"+nbTierSpecifications);
+    }
+    int nb=Math.min(nbEssences,nbTierSpecifications);
     for(int i=0;i<nb;i++)
     {
       Item item=essences.get(i);

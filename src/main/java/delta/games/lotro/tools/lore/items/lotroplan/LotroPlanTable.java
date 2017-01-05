@@ -87,7 +87,7 @@ public class LotroPlanTable
       }
       else
       {
-        valueStr=valueStr.replace(',','.');
+        valueStr=valueStr.replace(',','.').trim();
         if (valueStr.contains("."))
         {
           Float statValue=NumericTools.parseFloat(valueStr);

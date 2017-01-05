@@ -75,8 +75,15 @@ public class ItemNormalization
     }
     // Essences stats injection
     new EssenceStatsInjector().doIt(sourceItems.values());
-    File toFile=new File("items.xml").getAbsoluteFile();
+
+    // Build final items list
     List<Item> items=new ArrayList<Item>(sourceItems.values());
+
+    // Consistency checks
+    consistencyChecks(items);
+
+    // Write result file
+    File toFile=new File("items.xml").getAbsoluteFile();
     ItemsManager.getInstance().writeItemsFile(toFile,items);
     List<String> categories=new ArrayList<String>(_byCategory.keySet());
     Collections.sort(categories);
@@ -84,10 +91,51 @@ public class ItemNormalization
     for(String category : categories)
     {
       int size=_byCategory.get(category).size();
-      System.out.println(category+ "  =>  " + size);
+      System.out.println(category+ "  =>  " + size + _byCategory.get(category));
       totalSize+=size;
     }
     System.out.println(totalSize);
+  }
+
+  private void consistencyChecks(List<Item> items)
+  {
+    int nbArmours=0;
+    int nbWeapons=0;
+    for(Item item : items)
+    {
+      int id=item.getIdentifier();
+      String name=item.getName();
+      // Armours
+      if (item instanceof Armour)
+      {
+        Armour armour=(Armour)item;
+        ArmourType type=armour.getArmourType();
+        if (type==null)
+        {
+          nbArmours++;
+          System.out.println("No armour type for: " + name + " (" + id + ')');
+        }
+      }
+      // Weapons
+      if (item instanceof Weapon)
+      {
+        Weapon weapon=(Weapon)item;
+        WeaponType type=weapon.getWeaponType();
+        if (type==null)
+        {
+          nbWeapons++;
+          System.out.println("No weapon type for: " + name + " (" + id + ')');
+        }
+      }
+    }
+    if (nbArmours>0)
+    {
+      System.out.println("Nb failed armours: " + nbArmours);
+    }
+    if (nbWeapons>0)
+    {
+      System.out.println("Nb failed weapons: " + nbWeapons);
+    }
   }
 
   private Item normalizeItem(Item item)

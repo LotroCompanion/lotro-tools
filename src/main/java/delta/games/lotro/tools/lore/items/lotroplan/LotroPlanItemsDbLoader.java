@@ -14,6 +14,8 @@ import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 
@@ -57,6 +59,10 @@ public class LotroPlanItemsDbLoader
 
   private void handleAdditionalTable(String tableName, HashMap<String,List<Item>> map)
   {
+    ArmourType armourType=null;
+    if ("heavy.txt".equals(tableName)) armourType=ArmourType.HEAVY;
+    else if ("medium.txt".equals(tableName)) armourType=ArmourType.MEDIUM;
+    else if ("light.txt".equals(tableName)) armourType=ArmourType.LIGHT;
     List<Item> items=loadTable(tableName);
     for(Item item : items)
     {
@@ -66,13 +72,15 @@ public class LotroPlanItemsDbLoader
         name=name.substring(0,name.length()-1);
       }
       name=name.replace(' ',' ');
+      Integer slots=null;
       if (name.endsWith("s)"))
       {
         name=name.substring(0,name.length()-2);
         int index=name.lastIndexOf('(');
         int nbSlots=NumericTools.parseInt(name.substring(index+1),0);
         name=name.substring(0,index).trim();
-        System.out.println("Name: "+name+": "+nbSlots+" slots");
+        slots=Integer.valueOf(nbSlots);
+        System.out.println("Name: "+name+": "+slots+" slots");
       }
       List<Item> selectedItems=map.get(name);
       Item selectedItem=findItem(selectedItems,item);
@@ -81,6 +89,7 @@ public class LotroPlanItemsDbLoader
         BasicStatsSet itemStats=selectedItem.getStats();
         itemStats.clear();
         itemStats.setStats(item.getStats());
+        updateArmourType(armourType,selectedItem);
       }
       else
       {
@@ -93,6 +102,24 @@ public class LotroPlanItemsDbLoader
             _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
           }
         }
+      }
+    }
+  }
+
+  private void updateArmourType(ArmourType type, Item selectedItem)
+  {
+    if (type!=null)
+    {
+      if (selectedItem instanceof Armour)
+      {
+        Armour armour=(Armour)selectedItem;
+        if (selectedItem.getEquipmentLocation()==EquipmentLocation.OFF_HAND)
+        {
+          if (type==ArmourType.HEAVY) type=ArmourType.HEAVY_SHIELD;
+          else if (type==ArmourType.MEDIUM) type=ArmourType.WARDEN_SHIELD;
+          else if (type==ArmourType.LIGHT) type=ArmourType.SHIELD;
+        }
+        armour.setArmourType(type);
       }
     }
   }
