@@ -1,0 +1,34 @@
+Items scanning:
+1) Install the plugin into the directory:
+C:\Users\XXX\Documents\The Lord of the Rings Online\Plugins\GaluhadPlugins\ItemTreasury
+
+2) Setup the range of items to scan:
+In file, Utils\GeneralFunctions.lua look for lines like:
+
+Turbine.Shell.WriteLine(GetItemFromID(1879230113):GetItemInfo():GetName()); -- Crumpet
+-- 19.2.2: 1879049233->1879342508
+--GetAllItemFromID(1879049233,1879049233+50000);
+
+If line is commented, no scan is performed on plugin startup.
+
+3) Start & configure game
+Unload all plugins
+Configure a new tab for console and use select only "Standard" in the filters
+
+4) Scan session:
+- update the lua file to setup the scan range
+- Start logging in the new tab
+- load plugin "Item Treasury"
+
+The plugin will start and the game will scan all specified items, until it finishes the range, or it crashes.
+The log file is available in:
+C:\Users\XXX\Documents\The Lord of the Rings Online\<TabName>_<Date>_<Index>.txt
+
+Repeat scan sessions until all items are scanned.
+
+5) Build the LUA file:
+Merge all console logs into one file.
+Add a line with "{" at the beginning of file.
+Add a line with "};" at the end of file.
+
+6) Use this file as input for the TulkasItemsDBParser (INDEX version).

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>870</Id>
+  <Name>ItemTreasury</Name>
+  <Version>17.1.0</Version>
+  <Author>Galuhad</Author>
+  <InfoUrl>http://www.lotrointerface.com/downloads/info870</InfoUrl>
+  <DownloadUrl>http://www.lotrointerface.com/downloads/download870</DownloadUrl>
+  <Descriptors>
+    <descriptor>GaluhadPlugins\ItemTreasury.plugin</descriptor>
+  </Descriptors>
+  <Dependencies />
+</PluginConfig>
