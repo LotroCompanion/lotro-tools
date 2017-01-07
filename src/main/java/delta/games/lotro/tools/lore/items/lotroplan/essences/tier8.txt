@@ -1,10 +1,23 @@
+Pelennor Essence of Morale	270						49.00	1148.34																	
+Ithilien-tempered Essence of Agility	258			165.00												412.80									
+Ithilien-tempered Essence of Critical Rating	258													1444.80					1036.00						
+Ithilien-tempered Essence of Fate	258						165.00										412.80								
+Ithilien-tempered Essence of Might	258		165.00													412.80									
+Ithilien-tempered Essence of Morale	258						47.00	1089.41																	
+Ithilien-tempered Essence of Physical Mastery	258													412.80		1444.80									
+Ithilien-tempered Essence of Physical Mitigation	258																		1036.00					3251.50	
+Ithilien-tempered Essence of Tactical Mastery	258													412.80			1444.80								
+Ithilien-tempered Essence of Tactical Mitigation	258																		1036.00						3251.50
+Ithilien-tempered Essence of Vitality	258				165.00											412.80									
+Ithilien-tempered Essence of Will	258					165.00											412.80								
+Superlative Essence of Morale	250						45.00	1050.12																	
 Supreme Essence of Masterful Agility	234			149.00												374.40									
 Supreme Essence of Robust Agility	234			149.00				277.58																	
 Supreme Essence of Blocking	234						42.00														2948.40				
 Supreme Essence of Critical Defence	234													374.40					3290.00						
 Supreme Essence of Critical Rating	234													1310.40					940.00						
 Supreme Essence of Evasion	234						42.00																2948.40		
-Supreme Essence of Finesse	234														3982.73	374.40	374.40								
+Supreme Essence of Finesse	234														3982.72	374.40	374.40								
 Supreme Essence of Masterful Might	234		149.00													374.40									
 Supreme Essence of Robust Might	234		149.00					277.58																	
 Supreme Essence of Morale	234						42.00	971.54																	
@@ -15,6 +28,28 @@ Supreme Essence of Tactical Mastery	234													374.40			1310.40
 Supreme Essence of Tactical Mitigation	234																		940.00						2949.10
 Supreme Essence of Masterful Will	234					149.00											374.40								
 Supreme Essence of Robust Will	234					149.00		277.58																	
+Ithilien-infused Essence of Agility	258			165.00												206.40									
+Ithilien-infused Essence of Critical Rating	258													1444.80					518.00						
+Ithilien-infused Essence of Fate	258						165.00										206.40								
+Ithilien-infused Essence of Might	258		165.00													206.40									
+Ithilien-infused Essence of Morale	258						23.00	1089.41																	
+Ithilien-infused Essence of Physical Mastery	258													206.40		1444.80									
+Ithilien-infused Essence of Physical Mitigation	258																		518.00					3251.50	
+Ithilien-infused Essence of Tactical Mastery	258													206.40			1444.80								
+Ithilien-infused Essence of Tactical Mitigation	258																		518.00						3251.50
+Ithilien-infused Essence of Vitality	258				165.00											206.40									
+Ithilien-infused Essence of Will	258					165.00											206.40								
+Ithilien Essence of Agility	246			157.00												196.80									
+Ithilien Essence of Critical Rating	246													1377.60					494.00						
+Ithilien Essence of Fate	246						157.00										196.80								
+Ithilien Essence of Might	246		157.00													196.80									
+Ithilien Essence of Morale	246						22.00	1030.47																	
+Ithilien Essence of Physical Mastery	246													196.80		1377.60									
+Ithilien Essence of Physical Mitigation	246																		494.00					3100.30	
+Ithilien Essence of Tactical Mastery	246													196.80			1377.60								
+Ithilien Essence of Tactical Mitigation	246																		494.00						3100.30
+Ithilien Essence of Vitality	246			157.00												196.80									
+Ithilien Essence of Will	246					157.00											196.80								
 Greater Essence of Agility	222			140.00				130.37																	
 Greater Essence of Blocking	222																	270.00			2797.20				
 Greater Essence of Critical Defence	222													177.60					3122.00						
@@ -34,7 +69,7 @@ Major Essence of Blocking	213																				2683.80
 Major Essence of Critical Defence	213																		2996.00						
 Major Essence of Critical Rating	213													1192.80											
 Major Essence of Evasion	213																						2683.80		
-Major Essence of Finesse	213														3631.34										
+Major Essence of Finesse	213														3631.33										
 Major Essence of Might	213		134.00																						
 Major Essence of Morale	213							868.41																	
 Major Essence of Parrying	213																					2683.80			

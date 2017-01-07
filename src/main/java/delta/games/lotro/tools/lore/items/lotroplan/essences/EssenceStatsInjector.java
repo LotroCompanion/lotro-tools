@@ -41,6 +41,7 @@ public class EssenceStatsInjector
       HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
       handleTier(tier.intValue(),essencesOfTier);
     }
+    handleTier(8,essencesByTier.get(Integer.valueOf(-1)));
     System.out.println("Nb essences: "+essences.size());
   }
 
@@ -58,11 +59,14 @@ public class EssenceStatsInjector
       for(String line : lines)
       {
         String[] fields=StringSplitter.split(line,'\t');
-        // Name
-        String name=fields[LotroPlanTable.NAME_INDEX];
-        if (name.startsWith("-"))
+        if (fields.length>2)
         {
-          name=name.substring(1).trim();
+          // Name
+          String name=fields[LotroPlanTable.NAME_INDEX];
+          if (name.startsWith("-"))
+          {
+            name=name.substring(1).trim();
+          }
           Item item=essences.get(name);
           if (item!=null)
           {
@@ -82,6 +86,8 @@ public class EssenceStatsInjector
                 item.getBonus().add(notes);
               }
             }
+            // Tier
+            item.setSubCategory("Essence:Tier"+tier);
             // Stats
             BasicStatsSet itemStats=table.loadStats(fields);
             BasicStatsSet stats=item.getStats();
@@ -110,24 +116,27 @@ public class EssenceStatsInjector
     {
       System.err.println("Warning! Bad tier specifications: nbEssences="+nbEssences+"!=nbTierSpecifications"+nbTierSpecifications);
     }
-    int nb=Math.min(nbEssences,nbTierSpecifications);
-    for(int i=0;i<nb;i++)
+    for(int i=0;i<nbEssences;i++)
     {
       Item item=essences.get(i);
-      Integer tier=tiers.get(i);
+      Integer tier=(i<nbTierSpecifications)?tiers.get(i):null;
       //System.out.println(item.getName()+"  =>  "+tier);
       if (tier!=null)
       {
         String category="Essence:Tier"+tier;
         item.setSubCategory(category);
-        HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
-        if (essencesOfTier==null)
-        {
-          essencesOfTier=new HashMap<String,Item>();
-          essencesByTier.put(tier,essencesOfTier);
-        }
-        essencesOfTier.put(item.getName(),item);
       }
+      else
+      {
+        tier=Integer.valueOf(-1); // Unspecified
+      }
+      HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
+      if (essencesOfTier==null)
+      {
+        essencesOfTier=new HashMap<String,Item>();
+        essencesByTier.put(tier,essencesOfTier);
+      }
+      essencesOfTier.put(item.getName(),item);
     }
     return essencesByTier;
   }
