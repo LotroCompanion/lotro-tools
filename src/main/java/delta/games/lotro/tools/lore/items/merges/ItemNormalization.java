@@ -85,16 +85,29 @@ public class ItemNormalization
     // Write result file
     File toFile=new File("items.xml").getAbsoluteFile();
     ItemsManager.getInstance().writeItemsFile(toFile,items);
-    List<String> categories=new ArrayList<String>(_byCategory.keySet());
-    Collections.sort(categories);
-    int totalSize=0;
-    for(String category : categories)
+    // Dump unmanaged items
+    if (_byCategory.size()>0)
     {
-      int size=_byCategory.get(category).size();
-      System.out.println(category+ "  =>  " + size + _byCategory.get(category));
-      totalSize+=size;
+      System.out.println("There are unmanaged item categories:");
+      List<String> categories=new ArrayList<String>(_byCategory.keySet());
+      Collections.sort(categories);
+      int totalSize=0;
+      for(String category : categories)
+      {
+        int size=_byCategory.get(category).size();
+        System.out.println(category+ "  =>  " + size + _byCategory.get(category));
+        totalSize+=size;
+      }
+      System.out.println(totalSize);
     }
-    System.out.println(totalSize);
+
+    /*
+    ItemsSorter sorter=new ItemsSorter();
+    sorter.sortItems(items);
+    File rootDir=new File("sorted");
+    rootDir.mkdirs();
+    sorter.writeToFiles(rootDir);
+    */
   }
 
   private void consistencyChecks(List<Item> items)
