@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.Item;
@@ -18,14 +19,25 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
  */
 public class MergeWithLotroPlanDb
 {
-  private HashMap<Integer,Item> loadItemsFile(File file)
+  private HashMap<Integer,Item> loadItemsFile(File file, Map<String,Item> noIdItems)
   {
     ItemXMLParser parser=new ItemXMLParser();
     List<Item> items=parser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {
-      ret.put(Integer.valueOf(item.getIdentifier()),item);
+      int id=item.getIdentifier();
+      if (id>0)
+      {
+        ret.put(Integer.valueOf(id),item);
+      }
+      else
+      {
+        if (noIdItems!=null)
+        {
+          noIdItems.put(item.getName(),item);
+        }
+      }
     }
     return ret;
   }
@@ -44,11 +56,13 @@ public class MergeWithLotroPlanDb
   public void doIt()
   {
     File file1=new File("itemsLegacy+Tulkas.xml");
-    HashMap<Integer,Item> sourceItems=loadItemsFile(file1);
+    HashMap<Integer,Item> sourceItems=loadItemsFile(file1,null);
     System.out.println(sourceItems.size());
     File file2=new File("itemsdb.xml");
-    HashMap<Integer,Item> lotroPlanItems=loadItemsFile(file2);
-    System.out.println(lotroPlanItems.size());
+    Map<String,Item> itemsWithNoId=new HashMap<String,Item>();
+    HashMap<Integer,Item> lotroPlanItems=loadItemsFile(file2,itemsWithNoId);
+    System.out.println("LOTRO plan items (with ID): " + lotroPlanItems.size());
+    System.out.println("LOTRO plan items (no ID): " + itemsWithNoId.size());
     HashMap<Integer,Item> mergeResult=new HashMap<Integer,Item>();
 
     for(Integer id : sourceItems.keySet())
@@ -56,14 +70,32 @@ public class MergeWithLotroPlanDb
       Item sourceItem=sourceItems.get(id);
       Item result=sourceItem;
       Item lotroPlanItem=lotroPlanItems.get(id);
+      if (lotroPlanItem==null)
+      {
+        lotroPlanItem=itemsWithNoId.get(sourceItem.getName());
+        if (lotroPlanItem!=null)
+        {
+          itemsWithNoId.remove(sourceItem.getName());
+        }
+      }
+      else
+      {
+        lotroPlanItems.remove(id);
+      }
       if (lotroPlanItem!=null)
       {
         result=mergeItems(sourceItem,lotroPlanItem);
-        lotroPlanItems.remove(id);
       }
       mergeResult.put(Integer.valueOf(result.getIdentifier()),result);
     }
-    System.out.println(lotroPlanItems.size() + ": " + lotroPlanItems);
+    if (lotroPlanItems.size()>0)
+    {
+      System.out.println("LOTRO plan items (with ID), not used: " + lotroPlanItems.size() + ": " + lotroPlanItems);
+    }
+    if (itemsWithNoId.size()>0)
+    {
+      System.out.println("LOTRO plan items (no ID), not used: " + itemsWithNoId.size() + ": " + itemsWithNoId);
+    }
     File toFile=new File("items-rc.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);
@@ -185,6 +217,8 @@ public class MergeWithLotroPlanDb
     {
       result.getStats().setStats(lotroplan.getStats());
     }
+    // Essence slots
+    result.setEssenceSlots(lotroplan.getEssenceSlots());
 
     return result;
   }

@@ -25,8 +25,8 @@ import delta.games.lotro.lore.items.ItemsManager;
  */
 public class LotroPlanItemsDbLoader
 {
-  private static final String[] NAMES={};
-  //private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt"};
+  //private static final String[] NAMES={};
+  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt"};
 
   private HashMap<Integer,Item> _failedItems=new HashMap<Integer,Item>();
 
@@ -48,7 +48,7 @@ public class LotroPlanItemsDbLoader
     HashMap<String,List<Item>> map=asMap(items);
     for(String tableName : NAMES)
     {
-      handleAdditionalTable(tableName,map);
+      handleAdditionalTable(tableName,items,map);
     }
     ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("itemsdb.xml").getAbsoluteFile();
@@ -57,7 +57,7 @@ public class LotroPlanItemsDbLoader
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);
   }
 
-  private void handleAdditionalTable(String tableName, HashMap<String,List<Item>> map)
+  private void handleAdditionalTable(String tableName, List<Item> allItems, HashMap<String,List<Item>> map)
   {
     ArmourType armourType=null;
     if ("heavy.txt".equals(tableName)) armourType=ArmourType.HEAVY;
@@ -67,39 +67,36 @@ public class LotroPlanItemsDbLoader
     for(Item item : items)
     {
       String name=item.getName();
-      if (name.endsWith(":"))
-      {
-        name=name.substring(0,name.length()-1);
-      }
-      name=name.replace(' ',' ');
-      Integer slots=null;
-      if (name.endsWith("s)"))
-      {
-        name=name.substring(0,name.length()-2);
-        int index=name.lastIndexOf('(');
-        int nbSlots=NumericTools.parseInt(name.substring(index+1),0);
-        name=name.substring(0,index).trim();
-        slots=Integer.valueOf(nbSlots);
-        System.out.println("Name: "+name+": "+slots+" slots");
-      }
+      updateArmourType(armourType,item);
       List<Item> selectedItems=map.get(name);
-      Item selectedItem=findItem(selectedItems,item);
-      if (selectedItem!=null)
+      if (selectedItems==null)
       {
-        BasicStatsSet itemStats=selectedItem.getStats();
-        itemStats.clear();
-        itemStats.setStats(item.getStats());
-        updateArmourType(armourType,selectedItem);
+        List<Item> newList=new ArrayList<Item>();
+        newList.add(item);
+        map.put(name,newList);
+        allItems.add(item);
       }
       else
       {
-        Integer itemLevel=item.getItemLevel();
-        System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
-        if (selectedItems!=null)
+        Item selectedItem=findItem(selectedItems,item);
+        if (selectedItem!=null)
         {
-          for(Item currentItem : selectedItems)
+          BasicStatsSet itemStats=selectedItem.getStats();
+          itemStats.clear();
+          itemStats.setStats(item.getStats());
+          updateArmourType(armourType,selectedItem);
+          selectedItem.setEssenceSlots(item.getEssenceSlots());
+        }
+        else
+        {
+          Integer itemLevel=item.getItemLevel();
+          System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
+          if (selectedItems!=null)
           {
-            _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
+            for(Item currentItem : selectedItems)
+            {
+              _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
+            }
           }
         }
       }
@@ -196,6 +193,11 @@ public class LotroPlanItemsDbLoader
       System.out.println("Ignored: "+line);
       return null;
     }
+    if (line.startsWith("#"))
+    {
+      System.out.println("Ignored: "+line);
+      return null;
+    }
     String[] fields=StringSplitter.split(line,'\t');
     Integer armor=null;
     if (fields[LotroPlanTable.ARMOUR_INDEX].length()>0)
@@ -225,6 +227,40 @@ public class LotroPlanItemsDbLoader
     item.setIdentifier(id);
     // Name
     String name=fields[LotroPlanTable.NAME_INDEX];
+    if (name.endsWith(":"))
+    {
+      name=name.substring(0,name.length()-1);
+    }
+    name=name.replace(' ',' ');
+    if (name.endsWith("s)"))
+    {
+      name=name.substring(0,name.length()-2);
+      int index=name.lastIndexOf('(');
+      int nbSlots=NumericTools.parseInt(name.substring(index+1),0);
+      name=name.substring(0,index).trim();
+      item.setEssenceSlots(nbSlots);
+    }
+    if (name.endsWith(")"))
+    {
+      String newName=name.substring(0,name.length()-1);
+      int index=newName.lastIndexOf('(');
+      String valueStr=newName.substring(index+1);
+      int minLevel;
+      if ("TBD".equals(valueStr))
+      {
+        minLevel=-1;
+      }
+      else
+      {
+        minLevel=NumericTools.parseInt(valueStr,-1);
+        name=newName.substring(0,index).trim();
+      }
+      if (minLevel>0)
+      {
+        item.setMinLevel(Integer.valueOf(minLevel));
+      }
+    }
+    name=name.trim();
     item.setName(name);
     // Item level
     int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
