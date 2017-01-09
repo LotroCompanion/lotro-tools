@@ -26,7 +26,7 @@ Fine Anórien Valourous Dagger	201		216		180									965								2533						Beleri
 Fine Anórien Valourous Hammer	201		216		180									965									2533					Beleriand Damage Type																																					
 Fine Anórien Valourous Mace	201		216		180									965									2533					Westernesse Damage Type																																					
 Fine Anórien Valourous Sword	201		216		180									965								2533						Beleriand Damage Type																									1,0%												
-Mumak-rider's Bow	201		270		216		72									643												Ancient Dwarf-make Damage Type																																					
+Mûmak-rider's Bow	201		270		216		72									643												Ancient Dwarf-make Damage Type																																					
 Blade of Harad	201		252		216		72								1470	322												Westernesse Damage Type																									1,0%												
 Half-troll's Cleaver	201		252		216									322	1960	482												Beleriand Damage Type																																					
 Half-troll's Club	201		252		216		108							482														Westernesse Damage Type																																					
@@ -38,7 +38,7 @@ Sword of the Brotherhood	201				216	252	72								1470		322											Beleriand 
 Enduring Half-troll's Club	198		212		212		106																					Westernesse Damage Type																																					
 Enduring Half-troll's Cleaver	198		212		212									317	1932													Beleriand Damage Type																																					
 Enduring Blade of Harad	198		212		212		70									317												Westernesse Damage Type																									1,0%												
-Enduring Mumak-rider's Bow	198		212		212		53									475												Ancient Dwarf-make Damage Type																																					
+Enduring Mûmak-rider's Bow	198		212		212		53									475												Ancient Dwarf-make Damage Type																																					
 Steadfast Axe of Harad	198			212	212		35								1932													Westernesse Damage Type																																					
 Steadfast Blackjack of the Overseer	198			212	177		70							634														Ancient Dwarf-make Damage Type																																					
 Steadfast Dagger of Fallen Stars	198			212	177		88								1449													Westernesse Damage Type																																					

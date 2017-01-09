@@ -91,7 +91,7 @@ Exquisite Anórien Bracelet of Succour (3s):	201					126		809
 Siege-breaker's Bracelet of Warfare (2s):	201		180					694						804																																																			
 Siege-breaker's Bracelet of Strategy (2s):	201			180				694						804																																																			
 Siege-breaker's Bracelet of Tactics (2s):	201					180		694						804																																																			
-Armlet of Anarion (3s):	201		252																																																														
+Armlet of Anárion (3s):	201		252																																																														
 Armlet of Siriondil (3s):	201		126		126																																																												
 Bracelet of Mighty Defiance (3s):	201		252																																																														
 Hearty Bracelet of Mighty Defiance (3s):	201		126		126																																																												
@@ -210,7 +210,7 @@ Phial of Bear's Strength (2s):	195		243		121
 Sturdy Bauble of Sirith	195			243	174		52	446	385																																																								
 Phial of Ground Athelas (2s):	195			243	121																																																												
 Gleaming Bauble of Sirith	195				174	243	52	446	385																																																								
-Phial of Anduin's Waters (2s):	195				121	243																																																											
+Phial of The Anduin's Waters (2s):	195				121	243																																																											
 Small Golden Dish	192		205		239				189												1382	1037																																											
 Leather-bound Diary	192		239		205									614		768																																																	
 Fancy Gems in a Shell	192				205	239		219						614	1406																																																		
@@ -224,10 +224,10 @@ Adept Officer's Valourous Token	176		217		186		77								1721
 Gleaming Brass Bauble of The Grey Company	176		217		186		77								1721																																																		
 Adept Officer's Enduring Token	176		186		217														1416				1584																																										
 Skilled Vanguard's Enduring Token	176		186		217		62		170													950																																											
-Greater Steadfast Pocket of Parrying	176		186		217																	1901	950																																										
+Greater Steadfast Bauble of Parrying	176		186		217																	1901	950																																										
 Drakeling's Preserved Claw	176			217	186		93							422																																																			
 Master Engineer's Dextrous Token	176			217	186		93								1291																																																		
-Greater Dextrous Pocket of Prowess	176			217	186				339							704																																																	
+Greater Dextrous Bauble of Prowess	176			217	186				339							704																																																	
 Gleaming Bronze Bauble of The Grey Company	176			186	217			491													1267																																												
 Gleaming Silver Bauble of The Grey Company	176				186	217								563	861		422																																																
 Greater Resolute Bauble of Fate	176				186	217	93							422																																																			

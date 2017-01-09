@@ -1,14 +1,14 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
-Armour of a Beorning's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Armour of a Burglar's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Armour of a Hunter's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Armour of a Warden's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Pelennor Ambusher's Armour: 4 Equipped	222																																							10,0%																									
-Pelennor Battle-outrider's Armour: 4 Equipped	222																																								10,0%																								
-Pelennor Juggernaut's Armour: 4 Equipped	222																																							10,0%																									
-Pelennor War-bear's Armour: 4 Equipped	222																																							10,0%																									
-Orophin's Watch set bonus: 6 Equipped	192			170	170											768							1728																																										
-Spyhill set bonus: 6 Equipped	192			255	170									768																																																			
+#Armour of a Beorning's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Armour of a Burglar's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Armour of a Hunter's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Armour of a Warden's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Pelennor Ambusher's Armour: 4 Equipped	222																																							10,0%																									
+#Pelennor Battle-outrider's Armour: 4 Equipped	222																																								10,0%																								
+#Pelennor Juggernaut's Armour: 4 Equipped	222																																							10,0%																									
+#Pelennor War-bear's Armour: 4 Equipped	222																																							10,0%																									
+#Orophin's Watch set bonus: 6 Equipped	192			170	170											768							1728																																										
+#Spyhill set bonus: 6 Equipped	192			255	170									768																																																			
 Head																																																																	
 Ambusher's Helm (4s):	222	892		80				391																																																									
 Battle-outrider's Helm (4s):	222	892		80				391																																																									
@@ -18,10 +18,10 @@ Ancient Doom-hunter's Helm (2s):	222	892		201				652								355								1599
 Ancient Rift-reaper's Helm (2s):	222	892	201					652															799	1599																																									
 Ancient Thrill-seeker's Helm (2s):	222	892		201				652								355								1599																																									
 Ancient Town-saver's Helm (2s):	222	892		201				652													799			1599																																									
-Fine Mathom-Hunter's Helmet (105)	207	890		372	279											828																																																	
+Fine Mathom-hunter's Helmet (105)	207	890		372	279											828																																																	
 Mathom-hunter's Helmet (105)	207	845		372	186											828																																																	
-Exemplary Tough Mask of the Anórien Tree (3s):	204	836	128					824																																																									
-Exemplary Mask of the Anórien Tree (3s):	204	836		128				824																																																									
+Exemplary Tough Hood of the Anórien Tree (3s):	204	836	128					824																																																									
+Exemplary Hood of the Anórien Tree (3s):	204	836		128				824																																																									
 Anórien Combat Helm (3s):	201	827					90	1041																																																									
 Helm of the Osgiliath Bowmaster	201	827		360	90			578						804																																																			
 Helm of the Osgiliath Claw	201	827	324		126									1608																																																			
@@ -77,7 +77,7 @@ Ancient Doom-hunter's Shoulders (2s):	222	892		201				652						355											159
 Ancient Rift-reaper's Shoulders (2s):	222	892	201					652														799			1599																																								
 Ancient Thrill-seeker's Shoulders (2s):	222	892		201				652						355											1599																																								
 Ancient Town-saver's Shoulders (2s):	222	892		201				652														799			1599																																								
-Fine Mathom-Hunter's Shoulder-pads (105)	207	890		279	186		279																																																										
+Fine Mathom-hunter's Shoulder-pads (105)	207	890		279	186		279																																																										
 Mathom-hunter's Shoulder-pads (105)	207	845		279	186		186																																																										
 Exemplary Tough Shoulders of the Anórien Tree (3s):	204	836	128					824																																																									
 Exemplary Shoulders of the Anórien Tree (3s):	204	836		128				824																																																									
@@ -102,20 +102,20 @@ Pauldrons of the Seafarer	192	798		239	205				377							768
 Medium Nadhin Shoulders (4s):	192	798		119																																																													
 Vanwaranc	192	798		171										768	2343	1536							1728																																										
 Nedhranc	192	798		171										768		1536							3456																																										
-Nimble Ancient Assault Schoulderguards of the Onodrim	188	827	267		233		133								918																																																		
-Nimble Ancient Schoulderguards of the Onodrim	188	827		267	233		133								918																																																		
-Potent Ancient Assault Schoulderguards of the Onodrim	188	827	267		233									752		752																																																	
-Potent Ancient Schoulderguards of the Onodrim	188	827		267	233									752		752																																																	
-Gifted Ancient Assault Schoulderguards of the Onodrim	188	827	233		267		133												756																																														
-Gifted Ancient Schoulderguards of the Onodrim	188	827		233	267		133												756																																														
-Potent Assault Schoulderguards of the Onodrim	188	786	233		200									752		602																																																	
-Potent Schoulderguards of the Onodrim	188	786		233	200									752		602																																																	
-Enduring Fangorn Assault Schoulderguards of Fate	182	767	225		193		128								445																																																		
-Enduring Fangorn Schoulderguards of Fate	182	767		225	193		128								445																																																		
-Enduring Fangorn Assault Schoulderguards of Skill	182	767	225		193									582	445	582																																																	
-Enduring Fangorn Schoulderguards of Skill	182	767		225	193									582	445	582																																																	
-Enduring Fangorn Assault Schoulderguards of Protection	182	767	193		225		80												366				983																																										
-Enduring Fangorn Schoulderguards of Protection	182	767		193	225		80												366				983																																										
+Nimble Ancient Assault Shoulderguards of the Onodrim	188	827	267		233		133								918																																																		
+Nimble Ancient Shoulderguards of the Onodrim	188	827		267	233		133								918																																																		
+Potent Ancient Assault Shoulderguards of the Onodrim	188	827	267		233									752		752																																																	
+Potent Ancient Shoulderguards of the Onodrim	188	827		267	233									752		752																																																	
+Gifted Ancient Assault Shoulderguards of the Onodrim	188	827	233		267		133												756																																														
+Gifted Ancient Shoulderguards of the Onodrim	188	827		233	267		133												756																																														
+Potent Assault Shoulderguards of the Onodrim	188	786	233		200									752		602																																																	
+Potent Shoulderguards of the Onodrim	188	786		233	200									752		602																																																	
+Enduring Fangorn Assault Shoulderguards of Fate	182	767	225		193		128								445																																																		
+Enduring Fangorn Shoulderguards of Fate	182	767		225	193		128								445																																																		
+Enduring Fangorn Assault Shoulderguards of Skill	182	767	225		193									582	445	582																																																	
+Enduring Fangorn Shoulderguards of Skill	182	767		225	193									582	445	582																																																	
+Enduring Fangorn Assault Shoulderguards of Protection	182	767	193		225		80												366				983																																										
+Enduring Fangorn Shoulderguards of Protection	182	767		193	225		80												366				983																																										
 Medium Nadhin Shoulders (3s):	182	727		144																																																													
 Fated Combat Pauldrons of the Deep	176	741		217	186		124								430																																																		
 Gutarmas	176	741		217	186		93							422																																																			
@@ -132,7 +132,7 @@ Ancient Doom-hunter's Breastplate (2s):	222	2970		201				652								355								1
 Ancient Rift-reaper's Jacket (2s):	222	2970	201					652															799	1599																																									
 Ancient Thrill-seeker's Jacket (2s):	222	2970		201				652								355								1599																																									
 Ancient Town-saver's Jacket (2s):	222	2970		201				652															799	1599																																									
-Fine Mathom-Hunter's Jacket (105)	207	2968		279	372		93																																																										
+Fine Mathom-hunter's Jacket (105)	207	2968		279	372		93																																																										
 Mathom-hunter's Jacket (105)	207	2813		279	279		93																																																										
 Exemplary Tough Jacket of the Anórien Tree (3s):	204	2782	128					824																																																									
 Exemplary Jacket of the Anórien Tree (3s):	204	2782		128				824																																																									
@@ -158,7 +158,7 @@ Medium Nadhin Jacket (4s):	192	2657		119
 Nelegham	192	2657		171	171											768			3860																																														
 Ethiram	192	2657		85	171									1536		1536																																																	
 Tattered Gondorian Leathers	192	2657		205	239																	1728	1382																																										
-Medium Nadhin Jacket (3s):	192	2525		153																																																													
+Medium Nadhin Jacket (3s):	192	2525		153																																																													
 Enduring Fangorn Assault Armour of Fate	182	2552	225		193		128								445																																																		
 Enduring Fangorn Armour of Fate	182	2552		225	193		128								445																																																		
 Enduring Fangorn Assault Armour of Skill	182	2552	225		193									582	445	582																																																	
@@ -181,10 +181,10 @@ Ancient Doom-hunter's Gloves (2s):	222	1485		201				652						355											1599
 Ancient Rift-reaper's Gloves (2s):	222	1485	201					652														799			1599																																								
 Ancient Thrill-seeker's Gloves (2s):	222	1485		201				652						355											1599																																								
 Ancient Town-saver's Gauntlets (2s):	222	1485		201				652													799				1599																																								
-Fine Mathom-Hunter's Gloves (105)	207	1484		372	186		93							828																																																			
+Fine Mathom-hunter's Gloves (105)	207	1484		372	186		93							828																																																			
 Mathom-hunter's Gloves (105)	207	1406		279	186		93							828																																																			
-Exemplary Tough Gauntlets of the Anórien Tree (3s):	204	1391	128					824																																																									
-Exemplary Gauntlets of the Anórien Tree (3s):	204	1391		128				824																																																									
+Exemplary Tough Bracers of the Anórien Tree (3s):	204	1391	128					824																																																									
+Exemplary Bracers of the Anórien Tree (3s):	204	1391		128				824																																																									
 Anórien Combat Gauntlets (3s):	201	1375					90	1041																																																									
 Gloves of the Osgiliath Bowmaster	201	1375		360	90									804		804																																																	
 Gloves of the Osgiliath Claw	201	1375	360		126											1286																																																	
@@ -231,7 +231,7 @@ Ancient Doom-hunter's Leggings (2s):	222	2475		201				652								355								1599
 Ancient Rift-reaper's Leggings (2s):	222	2475	201					652															799	1599																																									
 Ancient Thrill-seeker's Leggings (2s):	222	2475		201				652								355								1599																																									
 Ancient Town-saver's Leggings (2s):	222	2475		201				652															799	1599																																									
-Fine Mathom-Hunter's Leggings (105)	207	2475		372	186			1198																																																									
+Fine Mathom-hunter's Leggings (105)	207	2475		372	186			1198																																																									
 Mathom-hunter's Leggings (105)	207	2344		279	186			1198																																																									
 Exemplary Tough Leggings of the Anórien Tree (3s):	204	2318	128					824																																																									
 Exemplary Leggings of the Anórien Tree (3s):	204	2318		128				824																																																									
@@ -277,7 +277,7 @@ Ancient Doom-hunter's Boots (2s):	222	1190		201				652						355											1599
 Ancient Rift-reaper's Boots (2s):	222	1190	201					652														799			1599																																								
 Ancient Thrill-seeker's Boots (2s):	222	1190		201				652						355											1599																																								
 Ancient Town-saver's Boots (2s):	222	1190		201				652														799			1599																																								
-Fine Mathom-Hunter's Boots (105)	207	1187		372	186											1656																																																	
+Fine Mathom-hunter's Boots (105)	207	1187		372	186											1656																																																	
 Mathom-hunter's Boots (105)	207	1127		279	186											1656																																																	
 Exemplary Tough Boots of the Anórien Tree (3s):	204	1115	128					824																																																									
 Exemplary Boots of the Anórien Tree (3s):	204	1115		128				824																																																									

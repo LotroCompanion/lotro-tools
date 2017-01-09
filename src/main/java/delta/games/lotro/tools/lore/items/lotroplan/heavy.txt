@@ -1,12 +1,12 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
-Armour of a Captain's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Armour of a Champion's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Armour of a Guardian's Recollection set bonus: 4 Equipped	222																																																10,0%																
-Pelennor Armour of the Rampart set bonus: 4 Equipped	222																																							10,0%																									
-Pelennor Battle-commander's Armour set bonus: 4 Equipped	222																																							10,0%																									
-Pelennor Orc-carver's Armour set bonus: 4 Equipped	222																																							10,0%																									
-Deeping-rift set bonus: 6 Equipped	192		255													1536		1170																																															
-Wall's End set bonus: 6 Equipped	192				340											1536																																																	
+#Armour of a Captain's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Armour of a Champion's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Armour of a Guardian's Recollection set bonus: 4 Equipped	222																																																10,0%																
+#Pelennor Armour of the Rampart set bonus: 4 Equipped	222																																							10,0%																									
+#Pelennor Battle-commander's Armour set bonus: 4 Equipped	222																																							10,0%																									
+#Pelennor Orc-carver's Armour set bonus: 4 Equipped	222																																							10,0%																									
+#Deeping-rift set bonus: 6 Equipped	192		255													1536		1170																																															
+#Wall's End set bonus: 6 Equipped	192				340											1536																																																	
 Head																																																																	
 Battle-commander's Helm (4s):	222	1152	80					391																																																									
 Helm of the Rampart (4s):	222	1152	80					391																																																									
@@ -14,9 +14,9 @@ Orc-carver's Helm (4s):	222	1152	80					391
 Ancient Helm of the Gloom-bane (2s):	222	1152	201					652															799	1599																																									
 Ancient Helm of the North Star (2s):	222	1152	201					652															799	1599																																									
 Ancient Rift-defender's Helm (2s):	222	1152	201					652													799			1599																																									
-Fine Mathom-Hunter's Helm (105)	207	1145	372		279											828																																																	
+Fine Mathom-hunter's Helm (105)	207	1145	372		279											828																																																	
 Mathom-hunter's Helm (105)	207	1088	372		186											828																																																	
-Exemplary Mask of the Anórien Fields (3s):	204	1075	128					824																																																									
+Exemplary Helmet of the Anórien Fields (3s):	204	1075	128					824																																																									
 Anórien War Helmet (3s):	201	1062					90	1041																																																									
 Helm of the Osgiliath Berserker	201	1062	360		90									1608																																																			
 Helm of the Osgiliath Blade	201	1062	360		90									1608																																																			
@@ -43,7 +43,7 @@ Protective Ancient Helmet of the Onodrim	188	1059	233		267		133												756
 Commanding Helmet of the Onodrim	188	1006	233		200		133								459																																																		
 Strong Helmet of the Onodrim	188	1006	233		200									752		602																																																	
 Protective Helmet of the Onodrim	188	1006	200		233		133												378																																														
-Potent Fangorn Helmet of Valor	182	981	225		193		128									146																																																	
+Potent Fangorn Helmet of Valour	182	981	225		193		128									146																																																	
 Potent Fangorn Helmet of Command	182	981	225		193		128							146																																																			
 Potent Fangorn Helmet of Defence	182	981	193		225		128												366																																														
 Valiant War Helmet of the Deep	176	948	217		186		124								430																																																		
@@ -62,7 +62,7 @@ Shoulders of the Rampart (4s):	222	1152	80					391
 Ancient Rift-defender's Shoulders (2s):	222	1152	201					652														799			1599																																								
 Ancient Shoulders of the Gloom-bane (2s):	222	1152	201					652														799			1599																																								
 Ancient Shoulders of the North Star (2s):	222	1152	201					652														799			1599																																								
-Fine Mathom-Hunter's Pauldrons (105)	207	1145	279		186		279																																																										
+Fine Mathom-hunter's Pauldrons (105)	207	1145	279		186		279																																																										
 Mathom-hunter's Pauldrons (105)	207	1088	279		186		186																																																										
 Exemplary Shoulders of the Anórien Fields (3s):	204	1075	128					824																																																									
 Anórien War Pauldrons (3s):	201	1062					90	1041																																																									
@@ -89,12 +89,12 @@ Protective Ancient Pauldrons of the Onodrim	188	1059	233		267		133												
 Commanding Pauldrons of the Onodrim	188	1006	233		200		133								459																																																		
 Strong Pauldrons of the Onodrim	188	1006	233		200									752		602																																																	
 Protective Pauldrons of the Onodrim	188	1006	200		233		133												378																																														
-Potent Fangorn Pauldrons of Valor	182	981	225		193		128									146																																																	
+Potent Fangorn Pauldrons of Valour	182	981	225		193		128									146																																																	
 Potent Fangorn Pauldrons of Command	182	981	225		193		128							146																																																			
 Potent Fangorn Pauldrons of Defence	182	981	193		225		80												366				983																																										
 Heavy Nadhin Shoulders (3s):	182	934	144																																																														
 Valiant War Pauldrons of the Deep	176	948	217		186		124								430																																																		
-Larowarmas	176	948	217		186		93							422																																																			
+Lárowarmas	176	948	217		186		93							422																																																			
 Forceful War Pauldrons of the Deep	176	948	217		186		77								430	422																																																	
 Commanding War Pauldrons of the Deep	176	948	217		186									563	430	563																																																	
 Defensive War Pauldrons of the Deep	176	948	186		217		77												1416																																														
@@ -107,7 +107,7 @@ Orc-carver's Breastplate (4s):	222	3832	80					391
 Ancient Breastplate of the Gloom-bane (2s):	222	3832	201					652															799	1599																																									
 Ancient Breastplate of the North Star (2s):	222	3832	201					652															799	1599																																									
 Ancient Rift-defender's Breastplate (2s):	222	3832	201					652															799	1599																																									
-Fine Mathom-Hunter's Breastplate (105)	207	3818	279		372		93																																																										
+Fine Mathom-hunter's Breastplate (105)	207	3818	279		372		93																																																										
 Mathom-hunter's Breastplate (105)	207	3619	279		279		93																																																										
 Exemplary Jacket of the Anórien Fields (3s):	204	3576	128					824																																																									
 Anórien War Armour (3s):	201	3534					90	1041																																																									
@@ -128,7 +128,7 @@ Heavy Nadhin Armour (4s):	192	3406	119
 Asham	192	3406	171		171														1930				3456																																										
 Amon Beleg	192	3406	171		85									1536		1536																																																	
 Heavy Nadhin Armour (3s):	192	3237	153																																																														
-Potent Fangorn Armour of Valor	182	3263	225		193		128									146																																																	
+Potent Fangorn Armour of Valour	182	3263	225		193		128									146																																																	
 Potent Fangorn Armour of Command	182	3263	225		193		128							146																																																			
 Potent Fangorn Armour of Defence	182	3263	193		225		80												366			983																																											
 Breastplate of the Turned Tide	176	3155	186		217																	1584	1267																																										
@@ -147,7 +147,7 @@ Orc-carver's Gloves (4s):	222	1916	80					391
 Ancient Gloves of the Gloom-bane (2s):	222	1916	201					652														799			1599																																								
 Ancient Gloves of the North Star (2s):	222	1916	201					652														799			1599																																								
 Ancient Rift-defender's Gloves (2s):	222	1916	201					652													799				1599																																								
-Fine Mathom-Hunter's Gauntlets (105)	207	1909	372		186		93							828																																																			
+Fine Mathom-hunter's Gauntlets (105)	207	1909	372		186		93							828																																																			
 Mathom-hunter's Gauntlets (105)	207	1809	279		186		93							828																																																			
 Exemplary Gauntlets of the Anórien Fields (3s):	204	1788	128					824																																																									
 Anórien War Gauntlets (3s):	201	1767					90	1041																																																									
@@ -169,7 +169,7 @@ Eithelaim	192	1703	119		119										2343	1075			1930				1382
 Sermaib	192	1703	171		171											1536			1930																																														
 Gauntlets of the Great Shore	192	1703	239		205		102									461																																																	
 Nadhin Footman's Gauntlets (3s):	192	1620	119				34																																																										
-Potent Fangorn Gauntlets of Valor	182	1631	225		193		128									146																																																	
+Potent Fangorn Gauntlets of Valour	182	1631	225		193		128									146																																																	
 Potent Fangorn Gauntlets of Command	182	1631	225		193		128							146																																																			
 Potent Fangorn Gauntlets of Defence	182	1631	193		225		128												366																																														
 Valiant War Gauntlets of the Deep	176	1577	217		186		124								430																																																		
@@ -188,7 +188,7 @@ Orc-carver's Leggings (4s):	222	3193	80					391
 Ancient Leggings of the Gloom-bane (2s):	222	3193	201					652															799	1599																																									
 Ancient Leggings of the North Star (2s):	222	3193	201					652															799	1599																																									
 Ancient Rift-defender's Leggings (2s):	222	3193	201					652															799	1599																																									
-Fine Mathom-Hunter's Greaves (105)	207	3184	372		186			1198																																																									
+Fine Mathom-hunter's Greaves (105)	207	3184	372		186			1198																																																									
 Mathom-hunter's Greaves (105)	207	3016	279		186			1198																																																									
 Exemplary Leggings of the Anórien Fields (3s):	204	2980	128					824																																																									
 Anórien War Leggings (3s):	201	2945					90	1041																																																									
@@ -209,7 +209,7 @@ Heavy Nadhin Leggings (4s):	192	2838	119
 Bragollachnir	192	2838	171		171									768	2343								1728																																										
 Ramdnir	192	2838	171											1536		1536							1728																																										
 Greater Enduring Leggings of Parrying	192	2838	205		239														1544			1728																																											
-Potent Fangorn Leggings of Valor	182	2719	225		193		128									146																																																	
+Potent Fangorn Leggings of Valour	182	2719	225		193		128									146																																																	
 Potent Fangorn Leggings of Command	182	2719	225		193		128							146																																																			
 Potent Fangorn Leggings of Defence	182	2719	193		225		80												366		983																																												
 Valiant War Leggings of the Deep	176	2629	217		186		124								430																																																		
@@ -226,7 +226,7 @@ Orc-carver's Boots (4s):	222	1536	80					391
 Ancient Boots of the Gloom-bane (2s):	222	1536	201					652														799			1599																																								
 Ancient Boots of the North Star (2s):	222	1536	201					652														799			1599																																								
 Ancient Rift-defender's Boots (2s):	222	1536	201					652														799			1599																																								
-Fine Mathom-Hunter's Sabatons (105)	207	1527	372		186											1656																																																	
+Fine Mathom-hunter's Sabatons (105)	207	1527	372		186											1656																																																	
 Mathom-hunter's Sabatons (105)	207	1450	279		186											1656																																																	
 Exemplary Boots of the Anórien Fields (3s):	204	1433	128					824																																																									
 Anórien War Boots (3s):	201	1416					90	1041																																																									
@@ -244,10 +244,10 @@ Boots of the Coastal Bulwark	192	1365	239		205		85												1544
 Boots of the Sea Reaver	192	1365	239		205		68							768																																																			
 Boots of the Watchman	192	1365	239		205									768					1544																																														
 Heavy Nadhin Boots (4s):	192	1365	119																																																														
-Nirdail	192	1365	171		171											1536							1728																																										
+Nírdail	192	1365	171		171											1536							1728																																										
 Tirithdail	192	1365	171		85									1536		1536																																																	
 Steel Boots of the Great Shore	192	1293	205		171									768	1406																																																		
-Potent Fangorn Boots of Valor	182	1308	225		193		128									146																																																	
+Potent Fangorn Boots of Valour	182	1308	225		193		128									146																																																	
 Potent Fangorn Boots of Command	182	1308	225		193		128							146																																																			
 Potent Fangorn Boots of Defence	182	1308	193		225		80												366		983																																												
 Valiant War Boots of the Deep	176	1265	217		186		124								430																																																		
