@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
@@ -219,6 +220,22 @@ public class MergeWithLotroPlanDb
     }
     // Essence slots
     result.setEssenceSlots(lotroplan.getEssenceSlots());
+    // Slot
+    EquipmentLocation lpLocation=lotroplan.getEquipmentLocation();
+    if (lpLocation!=null)
+    {
+      EquipmentLocation location=result.getEquipmentLocation();
+      boolean conflict=false;
+      if ((location!=null) && (location!=lpLocation))
+      {
+        conflict=true;
+      }
+      if (conflict)
+      {
+        System.out.println("ID: " + id+": slot conflict: lotroplan=" + lpLocation + ", source=" + location);
+      }
+      result.setEquipmentLocation(lpLocation);
+    }
 
     return result;
   }

@@ -1280,17 +1280,13 @@ public class ItemNormalization
           normalizeJewelByName(ret,"Choker",EquipmentLocation.NECK);
           normalizeJewelByName(ret,"Band ",EquipmentLocation.FINGER);
           normalizeJewelByName(ret,"Armlet",EquipmentLocation.WRIST);
-          normalizeJewelByName(ret,"Bangle of Deep Waters",EquipmentLocation.WRIST);
+          //normalizeJewelByName(ret,"Bangle of Deep Waters",EquipmentLocation.WRIST);
           normalizeJewelByName(ret,"Mountain-stone",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Scroll",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Phial",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Pocket-square",EquipmentLocation.POCKET);
           // Specific names for pocket items
-          normalizeJewelByName(ret,"Small Golden Dish",EquipmentLocation.POCKET);
-          normalizeJewelByName(ret,"Leather-bound Diary",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Carved Jewellery Box",EquipmentLocation.POCKET);
-          normalizeJewelByName(ret,"Fancy Gems in a Shell",EquipmentLocation.POCKET);
-          normalizeJewelByName(ret,"Small Golden Dish",EquipmentLocation.POCKET);
           String name=ret.getName();
           if ("Plains Walker's Symbol".equals(name))
           {

@@ -28,6 +28,7 @@ public class LotroPlanItemsDbLoader
   //private static final String[] NAMES={};
   private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt"};
 
+  private String _section;
   private HashMap<Integer,Item> _failedItems=new HashMap<Integer,Item>();
 
   /**
@@ -86,6 +87,7 @@ public class LotroPlanItemsDbLoader
           itemStats.setStats(item.getStats());
           updateArmourType(armourType,selectedItem);
           selectedItem.setEssenceSlots(item.getEssenceSlots());
+          selectedItem.setEquipmentLocation(item.getEquipmentLocation());
         }
         else
         {
@@ -167,6 +169,7 @@ public class LotroPlanItemsDbLoader
 
   private List<Item> loadTable(String filename)
   {
+    _section=null;
     URL url=URLTools.getFromClassPath(filename,LotroPlanItemsDbLoader.class.getPackage());
     TextFileReader reader=new TextFileReader(url, EncodingNames.UTF_8);
     List<String> lines=TextUtils.readAsLines(reader);
@@ -188,14 +191,15 @@ public class LotroPlanItemsDbLoader
   private Item buildItemFromLine(LotroPlanTable table, String line)
   {
     String[] fieldsTrimmed=StringSplitter.split(line.trim(),'\t');
-    if (fieldsTrimmed.length<2)
+    if (line.startsWith("#"))
     {
       System.out.println("Ignored: "+line);
       return null;
     }
-    if (line.startsWith("#"))
+    if (fieldsTrimmed.length<2)
     {
-      System.out.println("Ignored: "+line);
+      _section=line.trim();
+      System.out.println("Section: "+_section);
       return null;
     }
     String[] fields=StringSplitter.split(line,'\t');
@@ -272,6 +276,24 @@ public class LotroPlanItemsDbLoader
     BasicStatsSet itemStats=table.loadStats(fields);
     BasicStatsSet stats=item.getStats();
     stats.setStats(itemStats);
+    // Slot
+    EquipmentLocation slot=null;
+    if ("Head".equals(_section)) slot=EquipmentLocation.HEAD;
+    else if ("Shoulders".equals(_section)) slot=EquipmentLocation.SHOULDER;
+    else if ("Chest".equals(_section)) slot=EquipmentLocation.CHEST;
+    else if ("Hands".equals(_section)) slot=EquipmentLocation.HAND;
+    else if ("Legs".equals(_section)) slot=EquipmentLocation.LEGS;
+    else if ("Feet".equals(_section)) slot=EquipmentLocation.FEET;
+    else if ("Shields".equals(_section)) slot=EquipmentLocation.OFF_HAND;
+    else if ("Ears".equals(_section)) slot=EquipmentLocation.EAR;
+    else if ("Neck".equals(_section)) slot=EquipmentLocation.NECK;
+    else if ("Wrists".equals(_section)) slot=EquipmentLocation.WRIST;
+    else if ("Fingers".equals(_section)) slot=EquipmentLocation.FINGER;
+    else if ("Pockets".equals(_section)) slot=EquipmentLocation.POCKET;
+    if (slot!=null)
+    {
+      item.setEquipmentLocation(slot);
+    }
     return item;
   }
 }
