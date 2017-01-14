@@ -26,7 +26,9 @@ public class ItemsDatabaseGenerator
     // Build from Tulkas items index
     // 17_1_Items.lua -> itemsTulkasIndex.xml
     {
-      File from=new File("17_1_Items.lua").getAbsoluteFile();
+      //File from=new File("17_1_Items.lua").getAbsoluteFile();
+      //File from=new File("items18.lua").getAbsoluteFile();
+      File from=new File("19_2_2_Items.lua").getAbsoluteFile();
       new TulkasItemsDBParser(from,EncodingNames.UTF_8,TulkasItemsDBParser.INDEX).doIt();
     }
     // Build from LATEST Tulkas items with stats

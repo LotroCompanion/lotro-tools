@@ -1,4 +1,16 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+#Set Bonuses																																																																	
+#Supreme Armour of the Storm-bringer set bonus: 5 Equipped	258																																			15,0%	15,0%	15,0%																											
+#Greater Armour of the Storm-bringer set bonus: 5 Equipped	234																																			15,0%	15,0%	15,0%																											
+#Armour of the Honed Blade set bonus: 5 Equipped	222		201																																																														
+#Armour of the Martial Defender set bonus: 5 Equipped	222		201																																																														
+#Armour of the Resolute Leader set bonus: 5 Equipped	222		201																																																														
+#Armour of the Shadow-bane set bonus: 5 Equipped	222		201																																																														
+#Armour of the Siege-breaker set bonus: 5 Equipped	222		201																																																														
+#Armour of the Steadfast Renewer set bonus: 5 Equipped	222		201																																																														
+#Armour of the Storm-bringer set bonus: 5 Equipped	222		201																																																														
+#Armour of the Unwavering Charge set bonus: 5 Equipped	222		201																																																														
+#Armour of the Unyielding Defender set bonus: 5 Equipped	222		201																																																														
 #Armour of a Captain's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Champion's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Guardian's Recollection set bonus: 4 Equipped	222																																																10,0%																
@@ -8,6 +20,34 @@
 #Deeping-rift set bonus: 6 Equipped	192		255													1536		1170																																															
 #Wall's End set bonus: 6 Equipped	192				340											1536																																																	
 Head																																																																	
+Supreme Helm of the Honed Blade (4s):	258	1306	94					467																																																									
+Supreme Helm of the Martial Defender (4s):	258	1306	94					467																																																									
+Supreme Helm of the Resolute Leader (4s):	258	1306	94					467																																																									
+Supreme Helm of the Shadow-bane (4s):	258	1306	94					467																																																									
+Supreme Helm of the Siege-breaker (4s):	258	1306	94					467																																																									
+Supreme Helm of the Steadfast Renewer (4s):	258	1306	94					467																																																									
+Supreme Helm of the Storm-bringer (4s):	258	1306	94					467																																																									
+Supreme Helm of the Unwavering Charge (4s):	258	1306	94					467																																																									
+Supreme Helm of the Unyielding Defender (4s):	258	1306	94					467																																																									
+Lacquered Helm of the Ithilien Captain (4s):	246	1254	90					442																																																									
+Greater Helm of the Honed Blade (4s):	234	1203	85					416																																																									
+Greater Helm of the Martial Defender (4s):	234	1203	85					416																																																									
+Greater Helm of the Resolute Leader (4s):	234	1203	85					416																																																									
+Greater Helm of the Shadow-bane (4s):	234	1203	85					416																																																									
+Greater Helm of the Siege-breaker (4s):	234	1203	85					416																																																									
+Greater Helm of the Steadfast Renewer (4s):	234	1203	85					416																																																									
+Greater Helm of the Storm-bringer (4s):	234	1203	85					416																																																									
+Greater Helm of the Unwavering Charge (4s):	234	1203	85					416																																																									
+Greater Helm of the Unyielding Defender (4s):	234	1203	85					416																																																									
+Helm of the Honed Blade (4s):	222	1152	80					391																																																									
+Helm of the Martial Defender (4s):	222	1152	80					391																																																									
+Helm of the Resolute Leader (4s):	222	1152	80					391																																																									
+Helm of the Shadow-bane (4s):	222	1152	80					391																																																									
+Helm of the Siege-breaker (4s):	222	1152	80					391																																																									
+Helm of the Steadfast Renewer (4s):	222	1152	80					391																																																									
+Helm of the Storm-bringer (4s):	222	1152	80					391																																																									
+Helm of the Unwavering Charge (4s):	222	1152	80					391																																																									
+Helm of the Unyielding Defender (4s):	222	1152	80					391																																																									
 Battle-commander's Helm (4s):	222	1152	80					391																																																									
 Helm of the Rampart (4s):	222	1152	80					391																																																									
 Orc-carver's Helm (4s):	222	1152	80					391																																																									
@@ -56,6 +96,34 @@ Stalwart War Helmet of the Deep	176	948	186		217														354			1267	1267
 Helm of the Ancient Flame	176	948	186		217														1062			1267	634																																										
 Nadhin Footman's Helm (3s):	176	898	108		31																																																												
 Shoulders																																																																	
+Supreme Pauldrons of the Honed Blade (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Martial Defender (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Resolute Leader (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Shadow-bane (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Siege-breaker (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Steadfast Renewer (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Storm-bringer (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Unwavering Charge (4s):	258	1306	94					467																																																									
+Supreme Pauldrons of the Unyielding Defender (4s):	258	1306	94					467																																																									
+Lacquered Mantle of the Ithilien Captain (4s):	246	1254	90					442																																																									
+Greater Pauldrons of the Honed Blade (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Martial Defender (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Resolute Leader (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Shadow-bane (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Siege-breaker (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Steadfast Renewer (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Storm-bringer (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Unwavering Charge (4s):	234	1203	85					416																																																									
+Greater Pauldrons of the Unyielding Defender (4s):	234	1203	85					416																																																									
+Pauldrons of the Honed Blade (4s):	222	1152	80					391																																																									
+Pauldrons of the Martial Defender (4s):	222	1152	80					391																																																									
+Pauldrons of the Resolute Leader (4s):	222	1152	80					391																																																									
+Pauldrons of the Shadow-bane (4s):	222	1152	80					391																																																									
+Pauldrons of the Siege-breaker (4s):	222	1152	80					391																																																									
+Pauldrons of the Steadfast Renewer (4s):	222	1152	80					391																																																									
+Pauldrons of the Storm-bringer (4s):	222	1152	80					391																																																									
+Pauldrons of the Unwavering Charge (4s):	222	1152	80					391																																																									
+Pauldrons of the Unyielding Defender (4s):	222	1152	80					391																																																									
 Battle-commander's Shoulders (4s):	222	1152	80					391																																																									
 Orc-carver's Shoulders (4s):	222	1152	80					391																																																									
 Shoulders of the Rampart (4s):	222	1152	80					391																																																									
@@ -101,6 +169,34 @@ Defensive War Pauldrons of the Deep	176	948	186		217		77												1416
 Stalwart War Pauldrons of the Deep	176	948	186		217														354			1267	1267																																										
 Potent Great River Pauldrons of Endurance	84	450	63		63															672			756		757																																								
 Chest																																																																	
+Supreme Breastplate of the Honed Blade (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Martial Defender (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Resolute Leader (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Shadow-bane (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Siege-breaker (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Steadfast Renewer (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Storm-bringer (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Unwavering Charge (4s):	258	4344	94					467																																																									
+Supreme Breastplate of the Unyielding Defender (4s):	258	4344	94					467																																																									
+Lacquered Chestplate of the Ithilien Captain (4s):	246	4174	90					442																																																									
+Greater Breastplate of the Honed Blade (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Martial Defender (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Resolute Leader (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Shadow-bane (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Siege-breaker (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Steadfast Renewer (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Storm-bringer (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Unwavering Charge (4s):	234	4003	85					416																																																									
+Greater Breastplate of the Unyielding Defender (4s):	234	4003	85					416																																																									
+Breastplate of the Honed Blade (4s):	222	3832	80					391																																																									
+Breastplate of the Martial Defender (4s):	222	3832	80					391																																																									
+Breastplate of the Resolute Leader (4s):	222	3832	80					391																																																									
+Breastplate of the Shadow-bane (4s):	222	3832	80					391																																																									
+Breastplate of the Siege-breaker (4s):	222	3832	80					391																																																									
+Breastplate of the Steadfast Renewer (4s):	222	3832	80					391																																																									
+Breastplate of the Storm-bringer (4s):	222	3832	80					391																																																									
+Breastplate of the Unwavering Charge (4s):	222	3832	80					391																																																									
+Breastplate of the Unyielding Defender (4s):	222	3832	80					391																																																									
 Battle-commander's Breastplate (4s):	222	3832	80					391																																																									
 Breastplate of the Rampart (4s):	222	3832	80					391																																																									
 Orc-carver's Breastplate (4s):	222	3832	80					391																																																									
@@ -109,7 +205,7 @@ Ancient Breastplate of the North Star (2s):	222	3832	201					652															7
 Ancient Rift-defender's Breastplate (2s):	222	3832	201					652															799	1599																																									
 Fine Mathom-hunter's Breastplate (105)	207	3818	279		372		93																																																										
 Mathom-hunter's Breastplate (105)	207	3619	279		279		93																																																										
-Exemplary Jacket of the Anórien Fields (3s):	204	3576	128					824																																																									
+Exemplary Armour of the Anórien Fields (3s):	204	3576	128					824																																																									
 Anórien War Armour (3s):	201	3534					90	1041																																																									
 Jacket of the Osgiliath Berserker	201	3534	360				90							1608																																																			
 Jacket of the Osgiliath Blade	201	3534	360				90							804											1810																																								
@@ -141,6 +237,34 @@ Greater Enduring Breastplate of Evasion	176	3155	186		217																	950	19
 Stalwart War Armour of the Deep	176	3155	186		217														354			1267	1267																																										
 Breastplate of the Rider	176	2999	186		155									422	2152																																																		
 Hands																																																																	
+Supreme Gauntlets of the Honed Blade (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Martial Defender (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Resolute Leader (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Shadow-bane (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Siege-breaker (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Steadfast Renewer (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Storm-bringer (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Unwavering Charge (4s):	258	2172	94					467																																																									
+Supreme Gauntlets of the Unyielding Defender (4s):	258	2172	94					467																																																									
+Lacquered Gauntlets of the Ithilien Captain (4s):	246	2087	90					442																																																									
+Greater Gauntlets of the Honed Blade (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Martial Defender (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Resolute Leader (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Shadow-bane (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Siege-breaker (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Steadfast Renewer (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Storm-bringer (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Unwavering Charge (4s):	234	2001	85					416																																																									
+Greater Gauntlets of the Unyielding Defender (4s):	234	2001	85					416																																																									
+Gauntlets of the Honed Blade (4s):	222	1916	80					391																																																									
+Gauntlets of the Martial Defender (4s):	222	1916	80					391																																																									
+Gauntlets of the Resolute Leader (4s):	222	1916	80					391																																																									
+Gauntlets of the Shadow-bane (4s):	222	1916	80					391																																																									
+Gauntlets of the Siege-breaker (4s):	222	1916	80					391																																																									
+Gauntlets of the Steadfast Renewer (4s):	222	1916	80					391																																																									
+Gauntlets of the Storm-bringer (4s):	222	1916	80					391																																																									
+Gauntlets of the Unwavering Charge (4s):	222	1916	80					391																																																									
+Gauntlets of the Unyielding Defender (4s):	222	1916	80					391																																																									
 Battle-commander's Gloves (4s):	222	1916	80					391																																																									
 Gloves of the Rampart (4s):	222	1916	80					391																																																									
 Orc-carver's Gloves (4s):	222	1916	80					391																																																									
@@ -182,6 +306,34 @@ Gauntlets of the Fabled Protector	176	1577	186		217														708			950	1267
 Stalwart War Gauntlets of the Deep	176	1577	186		217														354			1267	1267																																										
 Nadhin Footman's Gauntlets (3s):	176	1501	108				31																																																										
 Legs																																																																	
+Supreme Battle Leggings of the Honed Blade (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Martial Defender (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Resolute Leader (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Shadow-bane (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Siege-breaker (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Steadfast Renewer (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Storm-bringer (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Unwavering Charge (4s):	258	3620	94					467																																																									
+Supreme Battle Leggings of the Unyielding Defender (4s):	258	3620	94					467																																																									
+Lacquered Leggings of the Ithilien Captain (4s):	246	3478	90					442																																																									
+Greater Battle Leggings of the Honed Blade (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Martial Defender (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Resolute Leader (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Shadow-bane (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Siege-breaker (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Steadfast Renewer (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Storm-bringer (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Unwavering Charge (4s):	234	3336	85					416																																																									
+Greater Battle Leggings of the Unyielding Defender (4s):	234	3336	85					416																																																									
+Battle Leggings of the Honed Blade (4s):	222	3193	80					391																																																									
+Battle Leggings of the Martial Defender (4s):	222	3193	80					391																																																									
+Battle Leggings of the Resolute Leader (4s):	222	3193	80					391																																																									
+Battle Leggings of the Shadow-bane (4s):	222	3193	80					391																																																									
+Battle Leggings of the Siege-breaker (4s):	222	3193	80					391																																																									
+Battle Leggings of the Steadfast Renewer (4s):	222	3193	80					391																																																									
+Battle Leggings of the Storm-bringer (4s):	222	3193	80					391																																																									
+Battle Leggings of the Unwavering Charge (4s):	222	3193	80					391																																																									
+Battle Leggings of the Unyielding Defender (4s):	222	3193	80					391																																																									
 Battle-commander's Leggings (4s):	222	3193	80					391																																																									
 Leggings of the Rampart (4s):	222	3193	80					391																																																									
 Orc-carver's Leggings (4s):	222	3193	80					391																																																									
@@ -220,6 +372,34 @@ Defensive War Leggings of the Deep	176	2629	186		217		77												1416
 Stalwart War Leggings of the Deep	176	2629	186		217														354			1267	1267																																										
 Greater Valourous Leggings of Penetration	176	2629	217		186									704		563																																																	
 Feet																																																																	
+Supreme Greaves of the Honed Blade (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Martial Defender (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Resolute Leader (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Shadow-bane (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Siege-breaker (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Steadfast Renewer (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Storm-bringer (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Unwavering Charge (4s):	258	1741	94					467																																																									
+Supreme Greaves of the Unyielding Defender (4s):	258	1741	94					467																																																									
+Lacquered Boots of the Ithilien Captain (4s):	246	1673	90					442																																																									
+Greater Greaves of the Honed Blade (4s):	234	1604	85					416																																																									
+Greater Greaves of the Martial Defender (4s):	234	1604	85					416																																																									
+Greater Greaves of the Resolute Leader (4s):	234	1604	85					416																																																									
+Greater Greaves of the Shadow-bane (4s):	234	1604	85					416																																																									
+Greater Greaves of the Siege-breaker (4s):	234	1604	85					416																																																									
+Greater Greaves of the Steadfast Renewer (4s):	234	1604	85					416																																																									
+Greater Greaves of the Storm-bringer (4s):	234	1604	85					416																																																									
+Greater Greaves of the Unwavering Charge (4s):	234	1604	85					416																																																									
+Greater Greaves of the Unyielding Defender (4s):	234	1604	85					416																																																									
+Greaves of the Honed Blade (4s):	222	1536	80					391																																																									
+Greaves of the Martial Defender (4s):	222	1536	80					391																																																									
+Greaves of the Resolute Leader (4s):	222	1536	80					391																																																									
+Greaves of the Shadow-bane (4s):	222	1536	80					391																																																									
+Greaves of the Siege-breaker (4s):	222	1536	80					391																																																									
+Greaves of the Steadfast Renewer (4s):	222	1536	80					391																																																									
+Greaves of the Storm-bringer (4s):	222	1536	80					391																																																									
+Greaves of the Unwavering Charge (4s):	222	1536	80					391																																																									
+Greaves of the Unyielding Defender (4s):	222	1536	80					391																																																									
 Battle-commander's Boots (4s):	222	1536	80					391																																																									
 Boots of the Rampart (4s):	222	1536	80					391																																																									
 Orc-carver's Boots (4s):	222	1536	80					391																																																									
@@ -259,9 +439,10 @@ Greater Enduring Boots of Evasion	176	1265	186		217														1062				1901
 Stalwart War Boots of the Deep	176	1265	186		217														354			1267	1267																																										
 Steel Boots of the Dragon Clan	164	1116	171		143									656	1205																																																		
 Shields																																																																	
-Anórien War-shield	201	6302	144		216														4040		2714	1809	1809					10% Ranged Defence																																		-10,0%			
-Bulwark of the Defender	201	6302	216		252		90												4040				1447					10% Ranged Defence																																		-10,0%			
-Heavy Oaken Bulwark	192	6175	205		239		102												3860		1555							10% Ranged Defence																																		-10,0%			
-Blackroot Tempered Heavy Shield	192	4980	171		205														3860		2592		1037					10% Ranged Defence																																		-10,0%			
-Fangorn War-shield of Command	182	6034	225		193		64							582	445				3660									10% Ranged Defence																																		-10,0%			
-Fangorn War-shield of Defence	182	6034	193		225														3660		983	1310	983					10% Ranged Defence																																		-10,0%			
+Bulwark of the Lost Causeway	234	6768	298					1665											4700		1895	1264	1264																																							-10,0%			
+Anórien War-shield	201	6302	144		216														4040		2714	1809	1809																																							-10,0%			
+Bulwark of the Defender	201	6302	216		252		90												4040				1447																																							-10,0%			
+Heavy Oaken Bulwark	234	6768	255		298		127												4700		1895																																									-10,0%			
+Blackroot Tempered Heavy Shield	192	4980	171		205														3860		2592		1037																																							-10,0%			
+Fangorn War-shield of Command	182	6034	225		193		64							582	445				3660																																											-10,0%			
+Fangorn War-shield of Defence	182	6034	193		225														3660		983	1310	983																																							-10,0%			

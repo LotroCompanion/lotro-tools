@@ -1,8 +1,20 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
 Ears																																																																	
-Earring of Absent Friends (2s):	222		221					782																799	799																																								
-Earring of Forgotten Spirits (2s):	222					221		782																799	799																																								
-Earring of Outcast Brethren (2s):	222			221				782																799	799																																								
+Delicate Agate Earring of Ithilien's Bounty (3s):	246					225		589																																																									
+Heavy Garnet Earring of Ithilien's Bounty (3s):	246		225					589																																																									
+Patterned Umber-brushed Earring of Ithilien's Bounty (3s):	246			225				589																																																									
+Greater Earring of the Pelennor Sage (3s):	234					213		555																																																									
+Greater Earring of the Pelennor Scout (3s):	234			213				555																																																									
+Greater Earring of the Pelennor Warrior (3s):	234		213					555																																																									
+(1879338212) Earring of Absent Friends (2s):	234		234					833																843	843																																								
+(1879338210) Earring of Forgotten Spirits (2s):	234					234		833																843	843																																								
+(1879338205) Earring of Outcast Brethren (2s):	234			234				833																843	843																																								
+Lesser Earring of the Pelennor Sage (2s):	222					281		913																																																									
+Lesser Earring of the Pelennor Scout (2s):	222			281				913																																																									
+Lesser Earring of the Pelennor Warrior (2s):	222		281					913																																																									
+(1879338212) Earring of Absent Friends (2s):	222		221					782																799	799																																								
+(1879331937) Earring of Forgotten Spirits (2s):	222					221		782																799	799																																								
+(1879331935) Earring of Outcast Brethren (2s):	222			221				782																799	799																																								
 Exquisite Anórien Earring of Combat (3s):	201		126					809																																																									
 Exquisite Anórien Earring of Skill (3s):	201			126				809																																																									
 Exquisite Anórien Earring of Succour (3s):	201					126		809																																																									
@@ -18,11 +30,11 @@ Polished Star-set Earring of the Nobleman	201				180	270								804	2450
 Sturdy Earrings of the Vale	195		174		174											1560								1756																																									
 Gleaming Earrings of the Vale	195			174	174											1560								1756																																									
 Polished Earrings of the Vale	195				174	174											1560								1756																																								
-Golden Hare Earring	192		239		205		102								1406																																																		
-Gold Dwarf-make Earring	192		205		239																	1728	1382																																										
-Luminescent Earring	192			239	205									307	1406	614																																																	
-Large Ruby Earring	192				205	239		219							1874		461																																																
-Bloodstone Earring	192				205	239	85		377																																																								
+Golden Hare Earring	234		298		255		127								1707																																																		
+Gold Dwarf-make Earring	234		255		298																	2106	1685																																										
+Luminescent Earring	234			298	255									374	1707	749																																																	
+Large Ruby Earring	234				255	298		278							2276		562																																																
+Bloodstone Earring	234				255	298	106		478																																																								
 Greater Valourous Earring of Finesse	192		239		205										2343	614																																																	
 Adept Officer's Enduring Earring	192		205		239		85															1382																																											
 Master Engineer's Enduring Earring	192		205		239														1158				2074																																										
@@ -45,9 +57,21 @@ Adept Officer's Dextrous Earring	176			217	186										2152	563
 Adept Officer's Resilient Earring	176			186	217										2152	563																																																	
 Exquisite Emerald Earring of Combat	156		162		135			420						374																																																			
 Neck																																																																	
-Necklace of Absent Friends (2s):	222		221					782																799	799																																								
-Necklace of Forgotten Spirits (2s):	222					221		782																799	799																																								
-Necklace of Outcast Brethren (2s):	222			221				782																799	799																																								
+Braided Herb-brushed Choker of Ithilien's Bounty (3s):	246			225				589																																																									
+Delicate Vine-woven Necklace of Ithilien's Bounty (3s):	246					225		589																																																									
+Heavy Emerald Pendant of Ithilien's Bounty (3s):	246		225					589																																																									
+Greater Necklace of the Pelennor Sage (3s):	234					213		555																																																									
+Greater Necklace of the Pelennor Scout (3s):	234			213				555																																																									
+Greater Necklace of the Pelennor Warrior (3s):	234		213					555																																																									
+(1879338213) Necklace of Absent Friends (2s):	234		234					833																843	843																																								
+(1879338214) Necklace of Forgotten Spirits (2s):	234					234		833																843	843																																								
+(1879338215) Necklace of Outcast Brethren (2s):	234			234				833																843	843																																								
+Lesser Necklace of the Pelennor Sage (2s):	222					281		913																																																									
+Lesser Necklace of the Pelennor Scout (2s):	222			281				913																																																									
+Lesser Necklace of the Pelennor Warrior (2s):	222		281					913																																																									
+(1879331936) Necklace of Absent Friends (2s):	222		221					782																799	799																																								
+(1879331930) Necklace of Forgotten Spirits (2s):	222					221		782																799	799																																								
+(1879331934) Necklace of Outcast Brethren (2s):	222			221				782																799	799																																								
 Exquisite Anórien Necklace of Combat (3s):	201		126					809																																																									
 Exquisite Anórien Necklace of Skill (3s):	201			126				809																																																									
 Exquisite Anórien Necklace of Succour (3s):	201					126		809																																																									
@@ -57,13 +81,13 @@ Siege-breaker's Necklace of Tactics (2s):	201					180		694						804
 Damrod's Pendant (3s):	201		252																																																														
 Anborn's Pendant (3s):	201			252																																																													
 Mablung's Pendant (3s):	201					252																																																											
-Ancient Jade Necklace	192		239		205										2811	461																																																	
-Choker of the Spearhead	192		205		239		102														1037																																												
-Large Opal Necklace	192			239	205				189						1874	461																																																	
-Compass Rose Necklace	192			205	239																	1382	1728																																										
-Pendant of the Golden Triangle	192			205	239																1037	2074																																											
-Elegant Jade Choker	192				205	239								614			768																																																
-Shimmering Gold Pendant	192				205	239	102										461																																																
+Ancient Jade Necklace	234		298		255										3414	562																																																	
+Choker of the Spearhead	234		255		298		127														1264																																												
+Large Opal Necklace	234			298	255				239						2276	562																																																	
+Compass Rose Necklace	234			255	298																	1685	2106																																										
+Pendant of the Golden Triangle	234			255	298																1264	2527																																											
+Elegant Jade Choker	234				255	298								749			936																																																
+Shimmering Gold Pendant	234				255	298	127										562																																																
 Exquisite Necklace of Fangorn	182		225		193			307						437		437																																																	
 Exquisite Fangorn Necklace of Skill	182			225	193			307						437		437																																																	
 Exquisite Fangorn Necklace of Tactics	182				193	225		307						437			437																																																
@@ -82,9 +106,24 @@ Greater Resolute Necklace of Tactics	176				186	217		196						422			563
 Greater Resolute Necklace of Penetration	176				186	217			254					845																																																			
 Exquisite Great River Necklace of Morale	84				63			235												1075,2				757	757																																								
 Wrists																																																																	
-Bracelet of Absent Friends (2s):	222		221					782																799	799																																								
-Bracelet of Forgotten Spirits (2s):	222					221		782																799	799																																								
-Bracelet of Outcast Brethren (2s):	222			221				782																799	799																																								
+Bold Cuff of the Pelennor (3s):	258		355					623																																																									
+Glimmering Cuff of the Pelennor (3s):	258					355		623																																																									
+Weightless Cuff of the Pelennor (3s):	258			355				623																																																									
+Braided Amber-brushed Bracer of Ithilien's Bounty (3s):	246			225				589																																																									
+Delicate Amber Wristlet of Ithilien's Bounty (3s):	246					225		589																																																									
+Heavy Citrine Bracelet of Ithilien's Bounty (3s):	246		225					589																																																									
+Greater Bracelet of the Pelennor Sage (3s):	234					213		555																																																									
+Greater Bracelet of the Pelennor Scout (3s):	234			213				555																																																									
+Greater Bracelet of the Pelennor Warrior (3s):	234		213					555																																																									
+(1879338204) Bracelet of Absent Friends (2s):	234		234					833																843	843																																								
+(1879338206) Bracelet of Forgotten Spirits (2s):	234					234		833																843	843																																								
+(1879338209) Bracelet of Outcast Brethren (2s):	234			234				833																843	843																																								
+Lesser Bracelet of the Pelennor Sage (2s):	222					281		913																																																									
+Lesser Bracelet of the Pelennor Scout (2s):	222			281				913																																																									
+Lesser Bracelet of the Pelennor Warrior (2s):	222		281					913																																																									
+(1879331933) Bracelet of Absent Friends (2s):	222		221					782																799	799																																								
+(1879331938) Bracelet of Forgotten Spirits (2s):	222					221		782																799	799																																								
+(1879331932) Bracelet of Outcast Brethren (2s):	222			221				782																799	799																																								
 Exquisite Anórien Bracelet of Combat (3s):	201		126					809																																																									
 Exquisite Anórien Bracelet of Skill (3s):	201			126				809																																																									
 Exquisite Anórien Bracelet of Succour (3s):	201					126		809																																																									
@@ -106,11 +145,11 @@ Hearty Bracelet of Skilled Defiance (3s):	201				126	126
 Gleaming Bracelet of the Prince	195		261		174																			1756	1756																																								
 Polished Bracelet of the Prince	195			261	174																			1756	1756																																								
 Shining Bracelet of the Prince	195				174	261																		1756	1756																																								
-Spun Gold Bracelet	192		239		205			328						614		307																																																	
-Lapis Lazuli Cuff	192		205		239		102												1158																																														
-Silver Cuff	192			239	205		85	437																																																									
-Bracelet of the Three Stars	192				205	239	85								1874																																																		
-Bangle of Deep Waters	192				205	239		656						461																																																			
+Spun Gold Bracelet	234		298		255			416						749		374																																																	
+Lapis Lazuli Cuff	234		255		298		127												1410																																														
+Silver Cuff	234			298	255		106	555																																																									
+Bracelet of the Three Stars	234				255	298	106								2276																																																		
+Bangle of Deep Waters	234				255	298		833						562																																																			
 Adept Officer's Enduring Bracelet	192		239		205		85								1874																																																		
 Skilled Vanguard's Resolute Bracelet	192				205	239	68	219							1406																																																		
 Adept Officer's Persevering Bracelet	192				205	239								614			768																																																
@@ -131,9 +170,21 @@ Tactical Bracelet of the Deep	176				186	217		491						422	430
 Veteran Rohirric Esquire's Valourous Bracelet	156		162		135									624	1148																																																		
 Exquisite Emerald Bracelet of Succour	156				135	162		420						374																																																			
 Fingers																																																																	
-Ring of Absent Friends (2s):	222		221					782																799	799																																								
-Ring of Forgotten Spirits (2s):	222					221		782																799	799																																								
-Ring of Outcast Brethren (2s):	222			221				782																799	799																																								
+Braided Crimson-brushed Band of Ithilien's Bounty (3s):	246			225				589																																																									
+Delicate Crimson-glossed Loop of Ithilien's Bounty (3s):	246					225		589																																																									
+Heavy Ruby Ring of Ithilien's Bounty (3s):	246		225					589																																																									
+Greater Ring of the Pelennor Sage (3s):	234					213		555																																																									
+Greater Ring of the Pelennor Scout (3s):	234			213				555																																																									
+Greater Ring of the Pelennor Warrior (3s):	234		213					555																																																									
+(1879338207) Ring of Absent Friends (2s):	234		234					833																843	843																																								
+(1879338208) Ring of Forgotten Spirits (2s):	234					234		833																843	843																																								
+(1879338211) Ring of Outcast Brethren (2s):	234			234				833																843	843																																								
+Lesser Ring of the Pelennor Sage (2s):	222					281		913																																																									
+Lesser Ring of the Pelennor Scout (2s):	222			281				913																																																									
+Lesser Ring of the Pelennor Warrior (2s):	222		281					913																																																									
+(1879331931) Ring of Absent Friends (2s):	222		221					782																799	799																																								
+(1879331939) Ring of Forgotten Spirits (2s):	222					221		782																799	799																																								
+(1879331941) Ring of Outcast Brethren (2s):	222			221				782																799	799																																								
 Exquisite Anórien Ring of Combat (3s):	201		126					809																																																									
 Exquisite Anórien Ring of Skill (3s):	201			126				809																																																									
 Exquisite Anórien Ring of Succour (3s):	201					126		809																																																									
@@ -161,15 +212,15 @@ Scout's Fateful Ring (1s):	192			256			136								2343
 Scout's Sturdy Ring (1s):	192			256	171									461																																																			
 Soldier's Fateful Ring (1s):	192		256				136								2343																																																		
 Soldier's Sturdy Ring (1s):	192		256		171																				1037																																								
-Glittering Ring of the Blessed	192		239		205		85		377																																																								
-Ring of the Ciphered Message	192		205		239			328											772				1382																																										
+Glittering Ring of the Blessed	234		298		255		106		478																																																								
+Ring of the Ciphered Message	234		255		298			416											940				1685																																										
 Skilled Vanguard's Enduring Ring	192		205		239			547														1382																																											
-Melted Bronze Ring	192			239	205				283					922																																																			
-Ring of the Burnt Offering	192			205	239		85	437																																																									
+Melted Bronze Ring	234			298	255				358					1123																																																			
+Ring of the Burnt Offering	234			255	298		106	555																																																									
 Greater Resolute Ring of Fate	192				205	239	68								1406		307																																																
 Greater Resolute Ring of Penetration	192				205	239		437						768																																																			
-Lost Wedding Ring	192				205	239			283								922																																																
-Ring of the Broken Promise	192				205	239		328	377						937																																																		
+Lost Wedding Ring	234				255	298			358								1123																																																
+Ring of the Broken Promise	234				255	298		416	478						1138																																																		
 Master Engineer's Persevering Ring	192				205	239	102							461																																																			
 Skilled Vanguard's Persevering Ring	192				205	239		219						614			461																																																
 Skilled Vanguard's Resolute Ring	192				205	239		219							1406		614																																																
@@ -190,6 +241,12 @@ Pockets
 Hilt of Eärnil (3s):	234		255		149																																																												
 Hilt of Eärnil (3s):	234			255	149																																																												
 Hilt of Eärnil (3s):	234				149	255																																																											
+Greater Bauble of the Pelennor Sage (3s):	234					213		555																																																									
+Greater Bauble of the Pelennor Scout (3s):	234			213				555																																																									
+Greater Bauble of the Pelennor Warrior (3s):	234		213					555																																																									
+#Lesser Bauble of the Pelennor Sage (2s):	222					281		913																																																									
+#Lesser Bauble of the Pelennor Scout (2s):	222			281				913																																																									
+#Lesser Bauble of the Pelennor Warrior (2s):	222		281					913																																																									
 Figurine of a Beorning	222		241		201		60	652						888																																																			
 Figurine of a Burglar	222			241	201		60	652						888																																																			
 Figurine of a Captain	222		241		201		60	652						888																																																			
@@ -211,11 +268,11 @@ Sturdy Bauble of Sirith	195			243	174		52	446	385
 Phial of Ground Athelas (2s):	195			243	121																																																												
 Gleaming Bauble of Sirith	195				174	243	52	446	385																																																								
 Phial of The Anduin's Waters (2s):	195				121	243																																																											
-Small Golden Dish	192		205		239				189												1382	1037																																											
-Leather-bound Diary	192		239		205									614		768																																																	
-Fancy Gems in a Shell	192				205	239		219						614	1406																																																		
+Small Golden Dish	234		255		298				239												1685	1264																																											
+Leather-bound Diary	234		298		255									749		936																																																	
+Fancy Gems in a Shell	234				255	298		278						749	1707																																																		
 Adept Officer's Persevering Token	192				205	239								768			614																																																
-Carved Jewelry Box	192			239	205		102							461																																																			
+Carved Jewellery Box	234			298	255		127							562																																																			
 Illuminated Fangorn Book of Combat	182		225		193		80	409																																																									
 Illuminated Fangorn Book of Precision	182			225	193		80	409																																																									
 Illuminated Fangorn Book of Spirit	182				193	225	80	409																																																									

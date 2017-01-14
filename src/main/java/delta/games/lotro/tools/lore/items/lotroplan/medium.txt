@@ -1,4 +1,19 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+#Set Bonuses																																																																	
+#Supreme Armour of the Fearless Soldier set bonus: 5 Equipped	258																																																	5,0%															
+#Greater Armour of the Fearless Soldier set bonus: 5 Equipped	234																																																	5,0%															
+#Armour of the Fearless Soldier set bonus: 5 Equipped	222			201																																																													
+#Armour of the Shield-splinterer set bonus: 5 Equipped	222			201																																																													
+#Armour of the Unshakeable Spear set bonus: 5 Equipped	222			201																																																													
+#Battle-dress of the Hidden Blade set bonus: 5 Equipped	222			201																																																													
+#Battle-dress of the Luck-maker set bonus: 5 Equipped	222			201																																																													
+#Battle-dress of the Trickster set bonus: 5 Equipped	222			201																																																													
+#Battle-gear of the Fierce Skin-changer set bonus: 5 Equipped	222		201																																																														
+#Battle-gear of the Resilient Skin-changer set bonus: 5 Equipped	222		201																																																														
+#Battle-gear of the Tenacious Skin-changer set bonus: 5 Equipped	222		201																																																														
+#The Clever Trapper's Battle-gear set bonus: 5 Equipped	222			201																																																													
+#The Precise Bowmaster's Battle-gear set bonus: 5 Equipped	222			201																																																													
+#The Sure-footed Huntsman's Battle-gear set bonus: 5 Equipped	222			201																																																													
 #Armour of a Beorning's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Burglar's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Hunter's Recollection set bonus: 4 Equipped	222																																																10,0%																
@@ -10,6 +25,43 @@
 #Orophin's Watch set bonus: 6 Equipped	192			170	170											768							1728																																										
 #Spyhill set bonus: 6 Equipped	192			255	170									768																																																			
 Head																																																																	
+Supreme Helm of the Clever Trapper (4s):	258	1005		94				467																																																									
+Supreme Helm of the Fearless Soldier (4s):	258	1005		94				467																																																									
+Supreme Helm of the Fierce Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Helm of the Hidden Blade (4s):	258	1005		94				467																																																									
+Supreme Helm of the Luck-maker (4s):	258	1005		94				467																																																									
+Supreme Helm of the Precise Bowmaster (4s):	258	1005		94				467																																																									
+Supreme Helm of the Resilient Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Helm of the Shield-splinterer (4s):	258	1005		94				467																																																									
+Supreme Helm of the Sure-footed Huntsman (4s):	258	1005		94				467																																																									
+Supreme Helm of the Tenacious Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Helm of the Trickster (4s):	258	1005		94				467																																																									
+Supreme Helm of the Unshakeable Spear (4s):	258	1005		94				467																																																									
+Brushed Helmet of the Ithilien Path-finder (4s):	246	968			90			442																																																									
+Greater Helm of the Clever Trapper (4s):	234	930		85				416																																																									
+Greater Helm of the Fearless Soldier (4s):	234	930		85				416																																																									
+Greater Helm of the Fierce Skin-changer (4s):	234	930	85					416																																																									
+Greater Helm of the Hidden Blade (4s):	234	930		85				416																																																									
+Greater Helm of the Luck-maker (4s):	234	930		85				416																																																									
+Greater Helm of the Precise Bowmaster (4s):	234	930		85				416																																																									
+Greater Helm of the Resilient Skin-changer (4s):	234	930	85					416																																																									
+Greater Helm of the Shield-splinterer (4s):	234	930		85				416																																																									
+Greater Helm of the Sure-footed Huntsman (4s):	234	930		85				416																																																									
+Greater Helm of the Tenacious Skin-changer (4s):	234	930	85					416																																																									
+Greater Helm of the Trickster (4s):	234	930		85				416																																																									
+Greater Helm of the Unshakeable Spear (4s):	234	930		85				416																																																									
+Helm of the Clever Trapper (4s):	222	892		80				391																																																									
+Helm of the Fearless Soldier (4s):	222	892		80				391																																																									
+Helm of the Fierce Skin-changer (4s):	222	892	80					391																																																									
+Helm of the Hidden Blade (4s):	222	892		80				391																																																									
+Helm of the Luck-maker (4s):	222	892		80				391																																																									
+Helm of the Precise Bowmaster (4s):	222	892		80				391																																																									
+Helm of the Resilient Skin-changer (4s):	222	892	80					391																																																									
+Helm of the Shield-splinterer (4s):	222	892		80				391																																																									
+Helm of the Sure-footed Huntsman (4s):	222	892		80				391																																																									
+Helm of the Tenacious Skin-changer (4s):	222	892	80					391																																																									
+Helm of the Trickster (4s):	222	892		80				391																																																									
+Helm of the Unshakeable Spear (4s):	222	892		80				391																																																									
 Ambusher's Helm (4s):	222	892		80				391																																																									
 Battle-outrider's Helm (4s):	222	892		80				391																																																									
 Juggernaut's Helm (4s):	222	892		80				391																																																									
@@ -69,6 +121,43 @@ Watchful Combat Helm of the Deep	176	741		186	217														354			1267	1267
 Nadhin Footman's Padded Helm (3s):	176	702	108		31																																																												
 Nadhin Footman's Helm (3s):	176	702		108	31																																																												
 Shoulders																																																																	
+Supreme Shoulders of the Clever Trapper (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Fearless Soldier (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Fierce Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Shoulders of the Hidden Blade (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Luck-maker (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Precise Bowmaster (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Resilient Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Shoulders of the Shield-splinterer (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Sure-footed Huntsman (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Tenacious Skin-changer (4s):	258	1005	94					467																																																									
+Supreme Shoulders of the Trickster (4s):	258	1005		94				467																																																									
+Supreme Shoulders of the Unshakeable Spear (4s):	258	1005		94				467																																																									
+Brushed Mantle of the Ithilien Path-finder (4s):	246	968			90			442																																																									
+Greater Shoulders of the Clever Trapper (4s):	234	930		85				416																																																									
+Greater Shoulders of the Fearless Soldier (4s):	234	930		85				416																																																									
+Greater Shoulders of the Fierce Skin-changer (4s):	234	930	85					416																																																									
+Greater Shoulders of the Hidden Blade (4s):	234	930		85				416																																																									
+Greater Shoulders of the Luck-maker (4s):	234	930		85				416																																																									
+Greater Shoulders of the Precise Bowmaster (4s):	234	930		85				416																																																									
+Greater Shoulders of the Resilient Skin-changer (4s):	234	930	85					416																																																									
+Greater Shoulders of the Shield-splinterer (4s):	234	930		85				416																																																									
+Greater Shoulders of the Sure-footed Huntsman (4s):	234	930		85				416																																																									
+Greater Shoulders of the Tenacious Skin-changer (4s):	234	930	85					416																																																									
+Greater Shoulders of the Trickster (4s):	234	930		85				416																																																									
+Greater Shoulders of the Unshakeable Spear (4s):	234	930		85				416																																																									
+Shoulders of the Clever Trapper (4s):	222	892		80				391																																																									
+Shoulders of the Fearless Soldier (4s):	222	892		80				391																																																									
+Shoulders of the Fierce Skin-changer (4s):	222	892	80					391																																																									
+Shoulders of the Hidden Blade (4s):	222	892		80				391																																																									
+Shoulders of the Luck-maker (4s):	222	892		80				391																																																									
+Shoulders of the Precise Bowmaster (4s):	222	892		80				391																																																									
+Shoulders of the Resilient Skin-changer (4s):	222	892	80					391																																																									
+Shoulders of the Shield-splinterer (4s):	222	892		80				391																																																									
+Shoulders of the Sure-footed Huntsman (4s):	222	892		80				391																																																									
+Shoulders of the Tenacious Skin-changer (4s):	222	892	80					391																																																									
+Shoulders of the Trickster (4s):	222	892		80				391																																																									
+Shoulders of the Unshakeable Spear (4s):	222	892		80				391																																																									
 Ambusher's Shoulders (4s):	222	892		80				391																																																									
 Battle-outrider's Shoulders (4s):	222	892		80				391																																																									
 Juggernaut's Shoulders (4s):	222	892		80				391																																																									
@@ -124,6 +213,43 @@ Skillful Combat Pauldrons of the Deep	176	741		217	186									563	430	563
 Steadfast Combat Pauldrons of the Deep	176	741		186	217		77												1416																																														
 Watchful Combat Pauldrons of the Deep	176	741		186	217														354			1267	1267																																										
 Chest																																																																	
+Supreme Chestplate of the Clever Trapper (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Fearless Soldier (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Fierce Skin-changer (4s):	258	3345	94					467																																																									
+Supreme Chestplate of the Hidden Blade (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Luck-maker (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Precise Bowmaster (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Resilient Skin-changer (4s):	258	3345	94					467																																																									
+Supreme Chestplate of the Shield-splinterer (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Sure-footed Huntsman (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Tenacious Skin-changer (4s):	258	3345	94					467																																																									
+Supreme Chestplate of the Trickster (4s):	258	3345		94				467																																																									
+Supreme Chestplate of the Unshakeable Spear (4s):	258	3345		94				467																																																									
+Brushed Chestguard of the Ithilien Path-finder (4s):	246	3220			90			442																																																									
+Greater Chestplate of the Clever Trapper (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Fearless Soldier (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Fierce Skin-changer (4s):	234	3095	85					416																																																									
+Greater Chestplate of the Hidden Blade (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Luck-maker (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Precise Bowmaster (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Resilient Skin-changer (4s):	234	3095	85					416																																																									
+Greater Chestplate of the Shield-splinterer (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Sure-footed Huntsman (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Tenacious Skin-changer (4s):	234	3095	85					416																																																									
+Greater Chestplate of the Trickster (4s):	234	3095		85				416																																																									
+Greater Chestplate of the Unshakeable Spear (4s):	234	3095		85				416																																																									
+Chestplate of the Clever Trapper (4s):	222	2970		80				391																																																									
+Chestplate of the Fearless Soldier (4s):	222	2970		80				391																																																									
+Chestplate of the Fierce Skin-changer (4s):	222	2970	80					391																																																									
+Chestplate of the Hidden Blade (4s):	222	2970		80				391																																																									
+Chestplate of the Luck-maker (4s):	222	2970		80				391																																																									
+Chestplate of the Precise Bowmaster (4s):	222	2970		80				391																																																									
+Chestplate of the Resilient Skin-changer (4s):	222	2970	80					391																																																									
+Chestplate of the Shield-splinterer (4s):	222	2970		80				391																																																									
+Chestplate of the Sure-footed Huntsman (4s):	222	2970		80				391																																																									
+Chestplate of the Tenacious Skin-changer (4s):	222	2970	80					391																																																									
+Chestplate of the Trickster (4s):	222	2970		80				391																																																									
+Chestplate of the Unshakeable Spear (4s):	222	2970		80				391																																																									
 Ambusher's Jacket (4s):	222	2970		80				391																																																									
 Battle-outrider's Breastplate (4s):	222	2970		80				391																																																									
 Juggernaut's Jacket (4s):	222	2970		80				391																																																									
@@ -158,7 +284,7 @@ Medium Nadhin Jacket (4s):	192	2657		119
 Nelegham	192	2657		171	171											768			3860																																														
 Ethiram	192	2657		85	171									1536		1536																																																	
 Tattered Gondorian Leathers	192	2657		205	239																	1728	1382																																										
-Medium Nadhin Jacket (3s):	192	2525		153																																																													
+Medium Nadhin Jacket (3s):	192	2525		153																																																													
 Enduring Fangorn Assault Armour of Fate	182	2552	225		193		128								445																																																		
 Enduring Fangorn Armour of Fate	182	2552		225	193		128								445																																																		
 Enduring Fangorn Assault Armour of Skill	182	2552	225		193									582	445	582																																																	
@@ -173,6 +299,43 @@ Skillful Combat Armour of the Deep	176	2467		217	186									563	430	563
 Steadfast Combat Armour of the Deep	176	2467		186	217		77												1416																																														
 Watchful Combat Armour of the Deep	176	2467		186	217														354			1267	1267																																										
 Hands																																																																	
+Supreme Gauntlets of the Clever Trapper (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Fearless Soldier (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Fierce Skin-changer (4s):	258	1672	94					467																																																									
+Supreme Gauntlets of the Hidden Blade (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Luck-maker (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Precise Bowmaster (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Resilient Skin-changer (4s):	258	1672	94					467																																																									
+Supreme Gauntlets of the Shield-splinterer (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Sure-footed Huntsman (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Tenacious Skin-changer (4s):	258	1672	94					467																																																									
+Supreme Gauntlets of the Trickster (4s):	258	1672		94				467																																																									
+Supreme Gauntlets of the Unshakeable Spear (4s):	258	1672		94				467																																																									
+Brushed Gloves of the Ithilien Path-finder (4s):	246	1610			90			442																																																									
+Greater Gauntlets of the Clever Trapper (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Fearless Soldier (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Fierce Skin-changer (4s):	234	1547	85					416																																																									
+Greater Gauntlets of the Hidden Blade (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Luck-maker (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Precise Bowmaster (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Resilient Skin-changer (4s):	234	1547	85					416																																																									
+Greater Gauntlets of the Shield-splinterer (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Sure-footed Huntsman (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Tenacious Skin-changer (4s):	234	1547	85					416																																																									
+Greater Gauntlets of the Trickster (4s):	234	1547		85				416																																																									
+Greater Gauntlets of the Unshakeable Spear (4s):	234	1547		85				416																																																									
+Gauntlets of the Clever Trapper (4s):	222	1485		80				391																																																									
+Gauntlets of the Fearless Soldier (4s):	222	1485		80				391																																																									
+Gauntlets of the Fierce Skin-changer (4s):	222	1485	80					391																																																									
+Gauntlets of the Hidden Blade (4s):	222	1485		80				391																																																									
+Gauntlets of the Luck-maker (4s):	222	1485		80				391																																																									
+Gauntlets of the Precise Bowmaster (4s):	222	1485		80				391																																																									
+Gauntlets of the Resilient Skin-changer (4s):	222	1485	80					391																																																									
+Gauntlets of the Shield-splinterer (4s):	222	1485		80				391																																																									
+Gauntlets of the Sure-footed Huntsman (4s):	222	1485		80				391																																																									
+Gauntlets of the Tenacious Skin-changer (4s):	222	1485	80					391																																																									
+Gauntlets of the Trickster (4s):	222	1485		80				391																																																									
+Gauntlets of the Unshakeable Spear (4s):	222	1485		80				391																																																									
 Ambusher's Gloves (4s):	222	1485		80				391																																																									
 Battle-outrider's Gloves (4s):	222	1485		80				391																																																									
 Juggernaut's Gauntlets (4s):	222	1485		80				391																																																									
@@ -223,6 +386,43 @@ Watchful Combat Gauntlets of the Deep	176	1233		186	217														354			1267	
 Nadhin Footman's Padded Gauntlets (3s):	176	1173	108													282																																																	
 Nadhin Footman's Gauntlets (3s):	176	1173		108												282																																																	
 Legs																																																																	
+Supreme Leggings of the Clever Trapper (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Fearless Soldier (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Fierce Skin-changer (4s):	258	2787	94					467																																																									
+Supreme Leggings of the Hidden Blade (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Luck-maker (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Precise Bowmaster (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Resilient Skin-changer (4s):	258	2787	94					467																																																									
+Supreme Leggings of the Shield-splinterer (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Sure-footed Huntsman (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Tenacious Skin-changer (4s):	258	2787	94					467																																																									
+Supreme Leggings of the Trickster (4s):	258	2787		94				467																																																									
+Supreme Leggings of the Unshakeable Spear (4s):	258	2787		94				467																																																									
+Brushed Leggings of the Ithilien Path-finder (4s):	246	2683			90			442																																																									
+Greater Leggings of the Clever Trapper (4s):	234	2579		85				416																																																									
+Greater Leggings of the Fearless Soldier (4s):	234	2579		85				416																																																									
+Greater Leggings of the Fierce Skin-changer (4s):	234	2579	85					416																																																									
+Greater Leggings of the Hidden Blade (4s):	234	2579		85				416																																																									
+Greater Leggings of the Luck-maker (4s):	234	2579		85				416																																																									
+Greater Leggings of the Precise Bowmaster (4s):	234	2579		85				416																																																									
+Greater Leggings of the Resilient Skin-changer (4s):	234	2579	85					416																																																									
+Greater Leggings of the Shield-splinterer (4s):	234	2579		85				416																																																									
+Greater Leggings of the Sure-footed Huntsman (4s):	234	2579		85				416																																																									
+Greater Leggings of the Tenacious Skin-changer (4s):	234	2579	85					416																																																									
+Greater Leggings of the Trickster (4s):	234	2579		85				416																																																									
+Greater Leggings of the Unshakeable Spear (4s):	234	2579		85				416																																																									
+Leggings of the Clever Trapper (4s):	222	2475		80				391																																																									
+Leggings of the Fearless Soldier (4s):	222	2475		80				391																																																									
+Leggings of the Fierce Skin-changer (4s):	222	2475	80					391																																																									
+Leggings of the Hidden Blade (4s):	222	2475		80				391																																																									
+Leggings of the Luck-maker (4s):	222	2475		80				391																																																									
+Leggings of the Precise Bowmaster (4s):	222	2475		80				391																																																									
+Leggings of the Resilient Skin-changer (4s):	222	2475	80					391																																																									
+Leggings of the Shield-splinterer (4s):	222	2475		80				391																																																									
+Leggings of the Sure-footed Huntsman (4s):	222	2475		80				391																																																									
+Leggings of the Tenacious Skin-changer (4s):	222	2475	80					391																																																									
+Leggings of the Trickster (4s):	222	2475		80				391																																																									
+Leggings of the Unshakeable Spear (4s):	222	2475		80				391																																																									
 Ambusher's Leggings (4s):	222	2475		80				391																																																									
 Battle-outrider's Leggings (4s):	222	2475		80				391																																																									
 Juggernaut's Leggings (4s):	222	2475		80				391																																																									
@@ -269,6 +469,43 @@ Skillful Combat Leggings of the Deep	176	2056		217	186									563	430	563
 Steadfast Combat Leggings of the Deep	176	2056		186	217		77												1416																																														
 Watchful Combat Leggings of the Deep	176	2056		186	217														354			1267	1267																																										
 Feet																																																																	
+Supreme Boots of the Clever Trapper (4s):	258	1341		94				467																																																									
+Supreme Boots of the Fearless Soldier (4s):	258	1341		94				467																																																									
+Supreme Boots of the Fierce Skin-changer (4s):	258	1341	94					467																																																									
+Supreme Boots of the Hidden Blade (4s):	258	1341		94				467																																																									
+Supreme Boots of the Luck-maker (4s):	258	1341		94				467																																																									
+Supreme Boots of the Precise Bowmaster (4s):	258	1341		94				467																																																									
+Supreme Boots of the Resilient Skin-changer (4s):	258	1341	94					467																																																									
+Supreme Boots of the Shield-splinterer (4s):	258	1341		94				467																																																									
+Supreme Boots of the Sure-footed Huntsman (4s):	258	1341		94				467																																																									
+Supreme Boots of the Tenacious Skin-changer (4s):	258	1341	94					467																																																									
+Supreme Boots of the Trickster (4s):	258	1341		94				467																																																									
+Supreme Boots of the Unshakeable Spear (4s):	258	1341		94				467																																																									
+Brushed Boots of the Ithilien Path-finder (4s):	246	1290			90			442																																																									
+Greater Boots of the Clever Trapper (4s):	234	1240		85				416																																																									
+Greater Boots of the Fearless Soldier (4s):	234	1240		85				416																																																									
+Greater Boots of the Fierce Skin-changer (4s):	234	1240	85					416																																																									
+Greater Boots of the Hidden Blade (4s):	234	1240		85				416																																																									
+Greater Boots of the Luck-maker (4s):	234	1240		85				416																																																									
+Greater Boots of the Precise Bowmaster (4s):	234	1240		85				416																																																									
+Greater Boots of the Resilient Skin-changer (4s):	234	1240	85					416																																																									
+Greater Boots of the Shield-splinterer (4s):	234	1240		85				416																																																									
+Greater Boots of the Sure-footed Huntsman (4s):	234	1240		85				416																																																									
+Greater Boots of the Tenacious Skin-changer (4s):	234	1240	85					416																																																									
+Greater Boots of the Trickster (4s):	234	1240		85				416																																																									
+Greater Boots of the Unshakeable Spear (4s):	234	1240		85				416																																																									
+Boots of the Clever Trapper (4s):	222	1190		80				391																																																									
+Boots of the Fearless Soldier (4s):	222	1190		80				391																																																									
+Boots of the Fierce Skin-changer (4s):	222	1190	80					391																																																									
+Boots of the Hidden Blade (4s):	222	1190		80				391																																																									
+Boots of the Luck-maker (4s):	222	1190		80				391																																																									
+Boots of the Precise Bowmaster (4s):	222	1190		80				391																																																									
+Boots of the Resilient Skin-changer (4s):	222	1190	80					391																																																									
+Boots of the Shield-splinterer (4s):	222	1190		80				391																																																									
+Boots of the Sure-footed Huntsman (4s):	222	1190		80				391																																																									
+Boots of the Tenacious Skin-changer (4s):	222	1190	80					391																																																									
+Boots of the Trickster (4s):	222	1190		80				391																																																									
+Boots of the Unshakeable Spear (4s):	222	1190		80				391																																																									
 Ambusher's Boots (4s):	222	1190		80				391																																																									
 Battle-outrider's Boots (4s):	222	1190		80				391																																																									
 Juggernaut's Boots (4s):	222	1190		80				391																																																									
@@ -315,10 +552,11 @@ Skillful Combat Boots of the Deep	176	989		217	186									563	430	563
 Steadfast Combat Boots of the Deep	176	989		186	217		77												1416																																														
 Watchful Combat Boots of the Deep	176	989		186	217														354			1267	1267																																										
 Shields																																																																	
+Shield of the Relentless Spearman	234	3096		298			85	1665						562		374			3760																																														
 Anórien Combat-shield	201	2883		252	180		108							804					3232																																														
 Bridge-warden's Shield	201	2883		252	216		72							482		322			3232																																														
-Shield of the Regal Warden	192	2825		205	239		102												3088		1555																																												
-Shield of the Tireless Defender	192	2825		239	205									614		768			3088																																														
+Shield of the Regal Warden	234	3096		255	298		127												3760		1895																																												
+Shield of the Tireless Defender	234	3096		298	255									749		936			3760																																														
 Blackroot Strong Warden Shield	192	2673		205	171									461	2343				3088																																														
 Blackroot Tempered Warden Shield	192	2673		171	205														1544		2592		1037																																										
 Fangorn Combat-shield of Force	182	2760		225	193		64							582	445				2928																																														

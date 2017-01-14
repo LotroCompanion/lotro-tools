@@ -231,6 +231,14 @@ public class LotroPlanItemsDbLoader
     item.setIdentifier(id);
     // Name
     String name=fields[LotroPlanTable.NAME_INDEX];
+    if (name.startsWith("("))
+    {
+      int index=name.indexOf(')');
+      idStr=name.substring(1,index).trim();
+      id=NumericTools.parseInt(idStr,-1);
+      item.setIdentifier(id);
+      name=name.substring(index+1).trim();
+    }
     if (name.endsWith(":"))
     {
       name=name.substring(0,name.length()-1);

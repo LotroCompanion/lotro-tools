@@ -1,15 +1,57 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+#Set Bonuses																																																																	
+#Supreme Raiments of the Peace-mender set bonus: 5 Equipped	258																																		5,0%																														
+#Supreme Trappings of the Vigilant Watcher set bonus: 5 Equipped	258																																		5,0%																														
+#Greater Raiments of the Peace-mender set bonus: 5 Equipped	234																																		5,0%																														
+	105																																																																
+#Greater Trappings of the Vigilant Watcher set bonus: 5 Equipped	234																																		5,0%																														
+#Garb of the Fury-wielder set bonus: 5 Equipped	222					201																																																											
+#Garb of the Knowledge-seeker set bonus: 5 Equipped	222					201																																																											
+#Garb of the Nature-friend set bonus: 5 Equipped	222					201																																																											
+#Raiments of the Flame-scourer set bonus: 5 Equipped	222					201																																																											
+#Raiments of the Peace-mender set bonus: 5 Equipped	222					201																													5,0%																														
+#Raiments of the Thunder-wielder set bonus: 5 Equipped	222					201																																																											
+#Trappings of the Harmonious Protector set bonus: 5 Equipped	222					201																																																											
+#Trappings of the Song-warrior set bonus: 5 Equipped	222					201																																																											
+#Trappings of the Vigilant Watcher set bonus: 5 Equipped	222					201																													5,0%																														
 #Armour of a Lore-master's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Minstrel's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Armour of a Rune-keeper's Recollection set bonus: 4 Equipped	222																																																10,0%																
 #Pelennor Armour of the Biting Wit: 4 Equipped	222																																									10,0%																							
-	105																																																																
 #Pelennor Armour of the War-counselor: 4 Equipped	222																																									10,0%																							
 #Pelennor Battle-crier's Armour: 4 Equipped	222																																									10,0%																							
 #Guardian of Watchwood set bonus: 6 Equipped	192				85	170	170										768																																																
 #Western Shore set bonus: 6 Equipped	192					85	170										2304																																																
 #Armour of the Storied Mariner set bonus: 6 Equipped	192																																		5,0%																														
 Head																																																																	
+Supreme Hood of the Flame-scourer (4s):	258	676				94		467																																																									
+Supreme Hood of the Fury-wielder (4s):	258	676				94		467																																																									
+Supreme Hood of the Harmonious Protector (4s):	258	676				94		467																																																									
+Supreme Hood of the Knowledge-seeker (4s):	258	676				94		467																																																									
+Supreme Hood of the Nature-friend (4s):	258	676				94		467																																																									
+Supreme Hood of the Peace-mender (4s):	258	676				94		467																																																									
+Supreme Hood of the Song-warrior (4s):	258	676				94		467																																																									
+Supreme Hood of the Thunder-wielder (4s):	258	676				94		467																																																									
+Supreme Hood of the Vigilant Watcher (4s):	258	676				94		467																																																									
+Weave-padded Helmet of the Ithilien Seeker (4s):	246	652				90		442																																																									
+Greater Hood of the Flame-scourer (4s):	234	628				85		416																																																									
+Greater Hood of the Fury-wielder (4s):	234	628				85		416																																																									
+Greater Hood of the Harmonious Protector (4s):	234	628				85		416																																																									
+Greater Hood of the Knowledge-seeker (4s):	234	628				85		416																																																									
+Greater Hood of the Nature-friend (4s):	234	628				85		416																																																									
+Greater Hood of the Peace-mender (4s):	234	628				85		416																																																									
+Greater Hood of the Song-warrior (4s):	234	628				85		416																																																									
+Greater Hood of the Thunder-wielder (4s):	234	628				85		416																																																									
+Greater Hood of the Vigilant Watcher (4s):	234	628				85		416																																																									
+Lesser Hood of the Fury-wielder (4s):	222	604				80		391																																																									
+Lesser Hood of the Knowledge-seeker (4s):	222	604				80		391																																																									
+Lesser Hood of the Nature-friend (4s):	222	604				80		391																																																									
+Hood of the Flame-scourer (4s):	222	604				80		391																																																									
+Hood of the Harmonious Protector (4s):	222	604				80		391																																																									
+Hood of the Peace-mender (4s):	222	604				80		391																																																									
+Hood of the Song-warrior (4s):	222	604				80		391																																																									
+Hood of the Thunder-wielder (4s):	222	604				80		391																																																									
+Hood of the Vigilant Watcher (4s):	222	604				80		391																																																									
 Battle-crier's Helm (4s):	222	604				80		391																																																									
 Circlet of Biting Wit (4s):	222	604				80		391																																																									
 Hat of the War-counselor (4s):	222	604				80		391																																																									
@@ -19,8 +61,8 @@ Ancient Wandering Bard's Helm (2s):	222	604				201		652									355							1599
 Fine Mathom-hunter's Hat (105)	207	604			279	372											828																																																
 Mathom-hunter's Hat (105)	207	574			186	372											828																																																
 Exemplary Hood of the Anórien Sun (3s):	204	568				128		824																																																									
-Anórien Assault Circlet (3s):	201	562					90	1041																																																									
-Ancient Osgiliath Helm	201	562			90	360									2450				2020																																														
+Anórien Assault Helm (3s):	201	562					90	1041																																																									
+Ancient Osgiliath Circlet	201	562			90	360									2450				2020																																														
 Helm of Osgiliath's Fury	201	562			90	360								1608																																																			
 Helm of the Osgiliath Animal-friend	201	562			90	360											1608																																																
 Helm of the Osgiliath Cleanser	201	562			90	360								804			804																																																
@@ -41,11 +83,39 @@ Nadhin Footman's Helm (3s):	192	515			34	119
 Vibrant Ancient Circlet of the Onodrim	188	564			233	267	133												756																																														
 Tactical Ancient Circlet of the Onodrim	188	564			233	267								752			752																																																
 Tactical Circlet of the Onodrim	188	536			200	233								752			602																																																
-Supple Fangorn Hat of Insight	182	524			193	225	128							146																																																			
-Supple Fangorn Hat of Spirit	182	524			193	225	128										146																																																
+Supple Fangorn Hood of Insight	182	524			193	225	128							146																																																			
+Supple Fangorn Hood of Spirit	182	524			193	225	128										146																																																
 Nadhin Footman's Helm (3s):	176	480			31	108																																																											
 Hope of Helm's Deep	176	507			186	217	77										563																																																
 Shoulders																																																																	
+Supreme Mantle of the Flame-scourer (4s):	258	676				94		467																																																									
+Supreme Mantle of the Fury-wielder (4s):	258	676				94		467																																																									
+Supreme Mantle of the Harmonious Protector (4s):	258	676				94		467																																																									
+Supreme Mantle of the Knowledge-seeker (4s):	258	676				94		467																																																									
+Supreme Mantle of the Nature-friend (4s):	258	676				94		467																																																									
+Supreme Mantle of the Peace-mender (4s):	258	676				94		467																																																									
+Supreme Mantle of the Song-warrior (4s):	258	676				94		467																																																									
+Supreme Mantle of the Thunder-wielder (4s):	258	676				94		467																																																									
+Supreme Mantle of the Vigilant Watcher (4s):	258	676				94		467																																																									
+Weave-padded Shoulders of the Ithilien Seeker (4s):	246	652				90		442																																																									
+Greater Mantle of the Flame-scourer (4s):	234	628				85		416																																																									
+Greater Mantle of the Fury-wielder (4s):	234	628				85		416																																																									
+Greater Mantle of the Harmonious Protector (4s):	234	628				85		416																																																									
+Greater Mantle of the Knowledge-seeker (4s):	234	628				85		416																																																									
+Greater Mantle of the Nature-friend (4s):	234	628				85		416																																																									
+Greater Mantle of the Peace-mender (4s):	234	628				85		416																																																									
+Greater Mantle of the Song-warrior (4s):	234	628				85		416																																																									
+Greater Mantle of the Thunder-wielder (4s):	234	628				85		416																																																									
+Greater Mantle of the Vigilant Watcher (4s):	234	628				85		416																																																									
+Lesser Mantle of the Fury-wielder (4s):	222	604				80		391																																																									
+Lesser Mantle of the Knowledge-seeker (4s):	222	604				80		391																																																									
+Lesser Mantle of the Nature-friend (4s):	222	604				80		391																																																									
+Mantle of the Flame-scourer (4s):	222	604				80		391																																																									
+Mantle of the Harmonious Protector (4s):	222	604				80		391																																																									
+Mantle of the Peace-mender (4s):	222	604				80		391																																																									
+Mantle of the Song-warrior (4s):	222	604				80		391																																																									
+Mantle of the Thunder-wielder (4s):	222	604				80		391																																																									
+Mantle of the Vigilant Watcher (4s):	222	604				80		391																																																									
 Battle-crier's Shoulders (4s):	222	604				80		391																																																									
 Shoulders of Biting Wit (4s):	222	604				80		391																																																									
 Shoulders of the War-counselor (4s):	222	604				80		391																																																									
@@ -60,7 +130,7 @@ Ancient Osgiliath Shoulderpads	201	562			90	360		578									804
 Shoulderpads of Osgiliath's Fury	201	562			90	360	90							804																																																			
 Shoulderpads of the Osgiliath Animal-friend	201	562			90	360								804			804																																																
 Shoulderpads of the Osgiliath Cleanser	201	562			90	360								804			804																																																
-Shoulderpads of the Osgiliath Peace-caller	201	562			90	360								804			804																																																
+Shoulderpads of the Osgiliath Peace-caller	201	562			90	360								804			804																																																
 Shoulderpads of the Osgiliath Skald	201	562			90	360	90							804																																																			
 Shoulderpads of the Osgiliath Song-protector	201	562			90	360		578									804																																																
 Shoulderpads of the Osgiliath Thunder-caller	201	562			90	360	90							804																																																			
@@ -74,11 +144,18 @@ Eiliadhranc	192	544				171	171							768			1536
 Gweluranc	192	544				171	171							1536	2343																																																		
 Vibrant Ancient Shoulderpads of the Onodrim	188	564			233	267	133												756																																														
 Tactical Ancient Shoulderpads of the Onodrim	188	564			233	267								752			752																																																
-Tactical Shoulderpads of the Onodrim	188	536			200	233								752			602																																																
-Supple Fangorn Shoulderpads of Insight	182	524			193	225	128							146																																																			
+Tactical Shoulderpads of the Onodrim	188	536			200	233								752			602																																																
+Supple Fangorn Shoulderpads of Insight	182	524			193	225	128							146																																																			
 Supple Fangorn Shoulderpads of Spirit	182	524			193	225	128										146																																																
-Light Nadhin Shoulders (3s):	182	497				144																																																											
+Light Nadhin Shoulders (3s):	182	497				144																																																											
 Back																																																																	
+Cloak of the Resolute March (1s):	246	1536			315	315																																																											
+Cloak of the Steadfast March (1s):	246	1536		225	225									1574																																																			
+Cloak of the Unwavering March (1s):	246	1536	225		225									1574																																																			
+Drape of Fallen Royalty	234	1397	255		298														1410				2527																																										
+Sage's Cloak of the Undarkened Sky	234	1397				255		1665						374					4230									0.2 extra slice																																					
+Scout's Cloak of the Undarkened Sky	234	1397		255				1665						374					4230									0.2 extra slice																																					
+Warrior's Cloak of the Undarkened Sky	234	1397	255					1665						374					4230									0.2 extra slice																																					
 Adroit Cloak of the Citadel Guard Captain (1s):	204	1326		219	183		109								2486																																																		
 Careful Cloak of the Citadel Guard Captain (1s):	204	1326			256	256													2050																																														
 Clever Cloak of the Citadel Guard Captain (1s):	204	1326			91	366								1306																																																			
@@ -100,8 +177,8 @@ Cloak of the Healers	201	1241			90	270	180		499
 Cloak of the Nobleman	201	1241			90	360								1608																																																			
 Cloak of the Rangers	201	1241		360	90									1608																																																			
 Cloak of the Ruined City	201	1241		216	180		144								2450																																																		
-Cloak of the Fallen Tower	192	1198	239		205									922	1406																																																		
-Watchman's Woolen Cloak	192	1198		205	239														1158				2074																																										
+Cloak of the Fallen Tower	234	1397	298		255									1123	1707																																																		
+Watchman's Woolen Cloak	234	1397		255	298														1410				2527																																										
 Greater Enduring Cloak of Fate	192	1198	205		239		85															1382																																											
 Greater Resolute Cloak of Tactics	192	1198			205	239								614			768																																																
 Gondorian Guardsman's Light Cloak	192	1139			171	171								614			768																																																
@@ -120,6 +197,34 @@ Heavy Cloak of Westfold	168	1006	147		176																	1814	605
 Sarchol	84	501						336							1052									1513	1513			Pits T2																																					
 Shield of the Hammerhand	105	611			84									334														Gives +25% to all forms of XP until level 85.																																					
 Chest																																																																	
+Supreme Coat of the Flame-scourer (4s):	258	2249				94		467																																																									
+Supreme Coat of the Fury-wielder (4s):	258	2249				94		467																																																									
+Supreme Coat of the Harmonious Protector (4s):	258	2249				94		467																																																									
+Supreme Coat of the Knowledge-seeker (4s):	258	2249				94		467																																																									
+Supreme Coat of the Nature-friend (4s):	258	2249				94		467																																																									
+Supreme Coat of the Peace-mender (4s):	258	2249				94		467																																																									
+Supreme Coat of the Song-warrior (4s):	258	2249				94		467																																																									
+Supreme Coat of the Thunder-wielder (4s):	258	2249				94		467																																																									
+Supreme Coat of the Vigilant Watcher (4s):	258	2249				94		467																																																									
+Weave-padded Armour of the Ithilien Seeker (4s):	246	2169				90		442																																																									
+Greater Coat of the Flame-scourer (4s):	234	2090				85		416																																																									
+Greater Coat of the Fury-wielder (4s):	234	2090				85		416																																																									
+Greater Coat of the Harmonious Protector (4s):	234	2090				85		416																																																									
+Greater Coat of the Knowledge-seeker (4s):	234	2090				85		416																																																									
+Greater Coat of the Nature-friend (4s):	234	2090				85		416																																																									
+Greater Coat of the Peace-mender (4s):	234	2090				85		416																																																									
+Greater Coat of the Song-warrior (4s):	234	2090				85		416																																																									
+Greater Coat of the Thunder-wielder (4s):	234	2090				85		416																																																									
+Greater Coat of the Vigilant Watcher (4s):	234	2090				85		416																																																									
+Lesser Coat of the Fury-wielder (4s):	222	2010				80		391																																																									
+Lesser Coat of the Knowledge-seeker (4s):	222	2010				80		391																																																									
+Lesser Coat of the Nature-friend (4s):	222	2010				80		391																																																									
+Coat of the Flame-scourer (4s):	222	2010				80		391																																																									
+Coat of the Harmonious Protector (4s):	222	2010				80		391																																																									
+Coat of the Peace-mender (4s):	222	2010				80		391																																																									
+Coat of the Song-warrior (4s):	222	2010				80		391																																																									
+Coat of the Thunder-wielder (4s):	222	2010				80		391																																																									
+Coat of the Vigilant Watcher (4s):	222	2010				80		391																																																									
 Battle-crier's Robe (4s):	222	2010				80		391																																																									
 Robe of Biting Wit (4s):	222	2010				80		391																																																									
 Robe of the War-counselor (4s):	222	2010				80		391																																																									
@@ -134,7 +239,7 @@ Ancient Osgiliath Jacket	201	1871				360	180							804
 Jacket of Osgiliath's Fury	201	1871				360	90							804	2450																																																		
 Jacket of the Osgiliath Animal-friend	201	1871				360	90							804			804																																																
 Jacket of the Osgiliath Cleanser	201	1871				360	90										1608																																																
-Jacket of the Osgiliath Peace-caller	201	1871				360	180										804																																																
+Jacket of the Osgiliath Peace-caller	201	1871				360	180										804																																																
 Jacket of the Osgiliath Skald	201	1871				360	90							804	2450																																																		
 Jacket of the Osgiliath Song-protector	201	1871				360	180								2450																																																		
 Jacket of the Osgiliath Thunder-caller	201	1871				360	90							804	2450																																																		
@@ -151,6 +256,34 @@ Jacket of the Great Shore	192	1721			171	205								768			461
 Supple Fangorn Robe of Insight	182	1745			193	225	128							146																																																			
 Supple Fangorn Robe of Spirit	182	1745			193	225	128										146																																																
 Hands																																																																	
+Supreme Gloves of the Flame-scourer (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Fury-wielder (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Harmonious Protector (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Knowledge-seeker (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Nature-friend (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Peace-mender (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Song-warrior (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Thunder-wielder (4s):	258	1124				94		467																																																									
+Supreme Gloves of the Vigilant Watcher (4s):	258	1124				94		467																																																									
+Weave-padded Gloves of the Ithilien Seeker (4s):	246	1084				90		442																																																									
+Greater Gloves of the Flame-scourer (4s):	234	1045				85		416																																																									
+Greater Gloves of the Fury-wielder (4s):	234	1045				85		416																																																									
+Greater Gloves of the Harmonious Protector (4s):	234	1045				85		416																																																									
+Greater Gloves of the Knowledge-seeker (4s):	234	1045				85		416																																																									
+Greater Gloves of the Nature-friend (4s):	234	1045				85		416																																																									
+Greater Gloves of the Peace-mender (4s):	234	1045				85		416																																																									
+Greater Gloves of the Song-warrior (4s):	234	1045				85		416																																																									
+Greater Gloves of the Thunder-wielder (4s):	234	1045				85		416																																																									
+Greater Gloves of the Vigilant Watcher (4s):	234	1045				85		416																																																									
+Lesser Gloves of the Fury-wielder (4s):	222	1005				80		391																																																									
+Lesser Gloves of the Knowledge-seeker (4s):	222	1005				80		391																																																									
+Lesser Gloves of the Nature-friend (4s):	222	1005				80		391																																																									
+Gloves of the Flame-scourer (4s):	222	1005				80		391																																																									
+Gloves of the Harmonious Protector (4s):	222	1005				80		391																																																									
+Gloves of the Peace-mender (4s):	222	1005				80		391																																																									
+Gloves of the Song-warrior (4s):	222	1005				80		391																																																									
+Gloves of the Thunder-wielder (4s):	222	1005				80		391																																																									
+Gloves of the Vigilant Watcher (4s):	222	1005				80		391																																																									
 Battle-crier's Gloves (4s):	222	1005				80		391																																																									
 Gloves of Biting Wit (4s):	222	1005				80		391																																																									
 Gloves of the War-counselor (4s):	222	1005				80		391																																																									
@@ -179,12 +312,40 @@ Braigmaib	192	905			171	171								768			1536
 Aelin	192	905				171	171							1536	2343																																																		
 Greater Resolute Gloves of Tactics	192	905			205	239								461			922																																																
 Gloves of the Great Shore	192	905			205	239	68							307			461																																																
-Nadhin Footman's Gauntlets (3s):	192	861				119	34																																																										
+Nadhin Footman's Gauntlets (3s):	192	861				119	34																																																										
 Supple Fangorn Gloves of Insight	182	872			193	225	128							146																																																			
 Supple Fangorn Gloves of Spirit	182	872			193	225	128										146																																																
 Greater Resolute Gloves of Penetration	176	844			186	217								704	1721																																																		
 Nadhin Footman's Gauntlets (3s):	176	803				108	31																																																										
 Legs																																																																	
+Supreme Leggings of the Flame-scourer (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Fury-wielder (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Harmonious Protector (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Knowledge-seeker (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Nature-friend (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Peace-mender (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Song-warrior (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Thunder-wielder (4s):	258	1874				94		467																																																									
+Supreme Leggings of the Vigilant Watcher (4s):	258	1874				94		467																																																									
+Weave-padded Leggings of the Ithilien Seeker (4s):	246	1808				90		442																																																									
+Greater Leggings of the Flame-scourer (4s):	234	1741				85		416																																																									
+Greater Leggings of the Fury-wielder (4s):	234	1741				85		416																																																									
+Greater Leggings of the Harmonious Protector (4s):	234	1741				85		416																																																									
+Greater Leggings of the Knowledge-seeker (4s):	234	1741				85		416																																																									
+Greater Leggings of the Nature-friend (4s):	234	1741				85		416																																																									
+Greater Leggings of the Peace-mender (4s):	234	1741				85		416																																																									
+Greater Leggings of the Song-warrior (4s):	234	1741				85		416																																																									
+Greater Leggings of the Thunder-wielder (4s):	234	1741				85		416																																																									
+Greater Leggings of the Vigilant Watcher (4s):	234	1741				85		416																																																									
+Lesser Leggings of the Fury-wielder (4s):	222	1675				80		391																																																									
+Lesser Leggings of the Knowledge-seeker (4s):	222	1675				80		391																																																									
+Lesser Leggings of the Nature-friend (4s):	222	1675				80		391																																																									
+Leggings of the Flame-scourer (4s):	222	1675				80		391																																																									
+Leggings of the Harmonious Protector (4s):	222	1675				80		391																																																									
+Leggings of the Peace-mender (4s):	222	1675				80		391																																																									
+Leggings of the Song-warrior (4s):	222	1675				80		391																																																									
+Leggings of the Thunder-wielder (4s):	222	1675				80		391																																																									
+Leggings of the Vigilant Watcher (4s):	222	1675				80		391																																																									
 Battle-crier's Leggings (4s):	222	1675				80		391																																																									
 Trousers of Biting Wit (4s):	222	1675				80		391																																																									
 Leggings of the War-counselor (4s):	222	1675				80		391																																																									
@@ -208,7 +369,7 @@ Light Leggings of Faramir's Faithful (5s):	201	1559
 Leggings of the Archivist	192	1509			205	239	85		377																																																								
 Leggings of the Night Watcher	192	1509			205	239	85		377																																																								
 Leggings of the Storied Mariner	192	1509			205	239	85		377																																																								
-Light Nadhin Leggings (4s):	192	1509				119																																																											
+Light Nadhin Leggings (4s):	192	1509				119																																																											
 Thorembadanir	192	1509			171	171	85										1536																																																
 Andúnë	192	1509			171		171								2343		1536																																																
 Dwarf-lord's Leggings	192	1509			205	239	85								1874																																																		
@@ -218,6 +379,34 @@ Leggings of the Great Shore	192	1433			171	205								461			768
 Supple Fangorn Trousers of Insight	182	1454			193	225	128							146																																																			
 Supple Fangorn Trousers of Spirit	182	1454			193	225	128										146																																																
 Feet																																																																	
+Supreme Boots of the Flame-scourer (4s):	258	901				94		467																																																									
+Supreme Boots of the Fury-wielder (4s):	258	901				94		467																																																									
+Supreme Boots of the Harmonious Protector (4s):	258	901				94		467																																																									
+Supreme Boots of the Knowledge-seeker (4s):	258	901				94		467																																																									
+Supreme Boots of the Nature-friend (4s):	258	901				94		467																																																									
+Supreme Boots of the Peace-mender (4s):	258	901				94		467																																																									
+Supreme Boots of the Song-warrior (4s):	258	901				94		467																																																									
+Supreme Boots of the Thunder-wielder (4s):	258	901				94		467																																																									
+Supreme Boots of the Vigilant Watcher (4s):	258	901				94		467																																																									
+Weave-padded Shoes of the Ithilien Seeker (4s):	246	869				90		442																																																									
+Greater Boots of the Flame-scourer (4s):	234	837				85		416																																																									
+Greater Boots of the Fury-wielder (4s):	234	837				85		416																																																									
+Greater Boots of the Harmonious Protector (4s):	234	837				85		416																																																									
+Greater Boots of the Knowledge-seeker (4s):	234	837				85		416																																																									
+Greater Boots of the Nature-friend (4s):	234	837				85		416																																																									
+Greater Boots of the Peace-mender (4s):	234	837				85		416																																																									
+Greater Boots of the Song-warrior (4s):	234	837				85		416																																																									
+Greater Boots of the Thunder-wielder (4s):	234	837				85		416																																																									
+Greater Boots of the Vigilant Watcher (4s):	234	837				85		416																																																									
+Lesser Boots of the Fury-wielder (4s):	222	805				80		391																																																									
+Lesser Boots of the Knowledge-seeker (4s):	222	805				80		391																																																									
+Lesser Boots of the Nature-friend (4s):	222	805				80		391																																																									
+Boots of the Flame-scourer (4s):	222	805				80		391																																																									
+Boots of the Harmonious Protector (4s):	222	805				80		391																																																									
+Boots of the Peace-mender (4s):	222	805				80		391																																																									
+Boots of the Song-warrior (4s):	222	805				80		391																																																									
+Boots of the Thunder-wielder (4s):	222	805				80		391																																																									
+Boots of the Vigilant Watcher (4s):	222	805				80		391																																																									
 Battle-crier's Boots (4s):	222	805				80		391																																																									
 Boots of the War-counselor (4s):	222	805				80		391																																																									
 Shoes of Biting Wit (4s):	222	805				80		391																																																									
@@ -228,7 +417,7 @@ Fine Mathom-hunter's Shoes (105)	207	806			186	372											1656
 Mathom-hunter's Shoes (105)	207	766			186	279											1656																																																
 Exemplary Shoes of the Anórien Sun (3s):	204	758				128		824																																																									
 Anórien Assault Shoes (3s):	201	750					90	1041																																																									
-Ancient Osgiliath Boots	201	750			180	360													2020																																														
+Ancient Osgiliath Shoes	201	750			180	360													2020																																														
 Boots of Osgiliath's Fury	201	750			180	360								804																																																			
 Boots of the Osgiliath Animal-friend	201	750			180	360											804																																																
 Boots of the Osgiliath Cleanser	201	750			180	360											804																																																
@@ -248,14 +437,17 @@ Supple Fangorn Shoes of Insight	182	699			193	225	128							146
 Supple Fangorn Shoes of Spirit	182	699			193	225	128										146																																																
 Padded Boots of the Dragon Clan	164	597			143	171								656	1205																																																		
 Shields																																																																	
+Shield of the Discordant War	234	2116				298	127	1665									562		1880																																														
+Bulwark of the Last Defence	234	2116	319				170	1665											1880																																														
 Anórien Assault-shield of Might	201	1971	252		180		108							804					1616																																														
 Anórien Assault-shield of Will	201	1971			180	252	108							804					1616																																														
 Shield of the Preserver	201	1971			216	252	108										482		1616																																														
-Gallant Captain's Buckler	192	1931	205		239		102												1544		1555																																												
-Buckler of the Lonely Mountain	192	1931			205	239								614			768		1544																																														
-Song-weaver's Buckler	192	1931			205	239	102										461		1544																																														
+Gallant Captain's Buckler	234	2116	255		298		127												1880		1895																																												
+Buckler of the Lonely Mountain	234	2116			255	298								749			936		1880																																														
+Song-weaver's Buckler	234	2116			255	298	127										562		1880																																														
 Greater Resolute Shield of Fate	192	1931			205	239	102										461		1544																																														
 Greater Resolute Shield of Finesse	192	1931			205	239								461	2811				1544																																														
+Greater Resolute Shield of Tactics	192	1931			205	239								614			768		1544																																														
 Blackroot Vibrant Shield	192	1922			171	205								461	2343				1544																																														
 Blackroot Tempered Shield	192	1922	171		205														1544		2592		1037																																										
 Fangorn Assault-shield of Endurance 	182	1887	193		225														1464		983	1310	983																																										
