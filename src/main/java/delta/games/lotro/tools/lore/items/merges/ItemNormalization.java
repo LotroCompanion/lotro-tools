@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
@@ -234,6 +235,27 @@ public class ItemNormalization
       item.setEquipmentLocation(null);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+    }
+    // Inscribed Riffler of the Veteran Rune-keeper
+    if (id==1879335200)
+    {
+      item.setSubCategory("Rune-keeper:Riffler");
+      item.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+      item.setEssenceSlots(1);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      BasicStatsSet stats=item.getStats();
+      stats.setStat(STAT.TACTICAL_MASTERY,2952);
+      stats.setStat(STAT.MORALE,1472);
+      stats.setStat(STAT.WILL,180);
+    }
+    // Ring of Dryad Loveliness
+    if (id==1879337970)
+    {
+      item.setEssenceSlots(3);
+      BasicStatsSet stats=item.getStats();
+      stats.setStat(STAT.MORALE,1401);
+      stats.setStat(STAT.WILL,237);
     }
     return item;
   }
