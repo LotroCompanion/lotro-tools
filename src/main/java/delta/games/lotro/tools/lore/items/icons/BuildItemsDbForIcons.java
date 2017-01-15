@@ -87,6 +87,8 @@ public class BuildItemsDbForIcons
       int iconId=NumericTools.parseInt(item.getProperty(ItemPropertyNames.ICON_ID),0);
       String name=item.getName();
       if (name==null) name="";
+      name=name.replace("\n","");
+      name=name.replace("\r","");
       String hexIconId=Integer.toHexString(iconId).toUpperCase();
       int backgroundIconId=NumericTools.parseInt(item.getProperty(ItemPropertyNames.BACKGROUND_ICON_ID),0);
       String hexBackgroundIconId=Integer.toHexString(backgroundIconId).toUpperCase();
@@ -119,7 +121,7 @@ public class BuildItemsDbForIcons
   {
     File toFile=new File("items.xml").getAbsoluteFile();
     HashMap<Integer,Item> items=loadItemsFile(toFile);
-    System.out.println(items.size());
+    System.out.println("Total items count: "+items.size());
 
     for(Integer id : items.keySet())
     {
@@ -151,9 +153,9 @@ public class BuildItemsDbForIcons
       //}
     }
     buildDb(items);
-    System.out.println(_iconIds2Ids.size());
-    System.out.println(_iconsIds.size());
-    System.out.println(_backgroundIconsIds.size());
+    System.out.println("#Icon/Background icon pairs: "+_iconIds2Ids.size());
+    System.out.println("#Icon IDs: "+_iconsIds.size());
+    System.out.println("#Background icon IDs: "+_backgroundIconsIds.size());
   }
 
   /**
