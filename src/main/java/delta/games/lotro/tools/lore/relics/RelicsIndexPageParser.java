@@ -34,7 +34,7 @@ public class RelicsIndexPageParser
 
   private RelicsManager _relicsMgr;
 
-  private void handleTable(String categoryName, Segment source, String id, Integer level)
+  private void handleTable(String categoryName, Segment source, String id, Integer level, RelicType defaultType)
   {
     Element table=findRelicsTable(source,id);
     if (table!=null)
@@ -47,7 +47,7 @@ public class RelicsIndexPageParser
         String value=tag.getAttributeValue("class");
         if (("odd".equals(value)) || ("even".equals(value)))
         {
-          Relic relic=handTableRow(tr,level);
+          Relic relic=handTableRow(tr,level,defaultType);
           if (relic!=null)
           {
             category.addRelic(relic);
@@ -61,7 +61,7 @@ public class RelicsIndexPageParser
     }
   }
 
-  private Relic handTableRow(Element tr,Integer level)
+  private Relic handTableRow(Element tr, Integer level, RelicType defaultType)
   {
     Relic relic=null;
     List<Element> tds=JerichoHtmlUtils.findElementsByTagName(tr,HTMLElementName.TD);
@@ -81,6 +81,44 @@ public class RelicsIndexPageParser
       // Stats
       Element statsElement=tds.get(2);
       String statsStr=JerichoHtmlUtils.getTextFromTag(statsElement);
+      BasicStatsSet stats=parseStats(statsStr);
+      relic.getStats().setStats(stats);
+    }
+    else if (tds.size()==4) // Retired relics
+    {
+      // Icon
+      Element iconElement=tds.get(0);
+      String iconPath=extractIcon(iconElement);
+      // Name
+      Element nameElement=tds.get(1);
+      String name=JerichoHtmlUtils.getTagContents(nameElement,HTMLElementName.A);
+      if (name==null)
+      {
+        name=JerichoHtmlUtils.getTagContents(nameElement,HTMLElementName.TD);
+      }
+      if (name.startsWith("Relic:"))
+      {
+        name=name.substring(6).trim();
+      }
+      // Level
+      Element tierElement=tds.get(2);
+      String tierStr=JerichoHtmlUtils.getTextFromTag(tierElement);
+      Integer tier=null;
+      if (tierStr.length()>0)
+      {
+        tier=NumericTools.parseInteger(tierStr.trim());
+      }
+      else
+      {
+        tier=null;
+      }
+
+      relic=new Relic(name,defaultType,level);
+      relic.setIconFilename(iconPath);
+      // Stats
+      Element statsElements=tds.get(3);
+      String statsStr=JerichoHtmlUtils.getTextFromTag(statsElements);
+      statsStr=statsStr.replace(", ","\n");
       BasicStatsSet stats=parseStats(statsStr);
       relic.getStats().setStats(stats);
     }
@@ -189,10 +227,31 @@ public class RelicsIndexPageParser
   private STAT[] parseStat(String statName)
   {
     STAT[] ret=null;
+    int index=statName.indexOf("(Requires level");
+    if (index!=-1)
+    {
+      statName=statName.substring(0,index).trim();
+    }
     if ((statName.contains("Block")) && (statName.contains("Parry")) &&
         (statName.contains("Evade")))
     {
       ret=new STAT[]{STAT.BLOCK,STAT.PARRY,STAT.EVADE};
+    }
+    else if (statName.contains("Critical Rating"))
+    {
+      ret=new STAT[]{STAT.CRITICAL_RATING};
+    }
+    else if (statName.contains("Tactical Offence Rating"))
+    {
+      ret=new STAT[]{STAT.TACTICAL_MASTERY};
+    }
+    else if (statName.contains("Melee Critical Defence"))
+    {
+      ret=new STAT[]{STAT.MELEE_CRITICAL_DEFENCE};
+    }
+    else if (statName.contains("Ranged Critical Defence"))
+    {
+      ret=new STAT[]{STAT.RANGED_CRITICAL_DEFENCE};
     }
     else
     {
@@ -252,36 +311,37 @@ public class RelicsIndexPageParser
     _relicsMgr=new RelicsManager();
     try
     {
+      // Relics
       URL url=URLTools.getFromClassPath("relics.txt",RelicsIndexPageParser.class.getPackage());
       Source source=new Source(url);
       source.fullSequentialParse();
 
-      handleTable("Tier 1",source,"Tier_1_Relics",null);
-      handleTable("Tier 2",source,"Tier_2_Relics",null);
-      handleTable("Tier 3",source,"Tier_3_Relics",null);
-      handleTable("Tier 4",source,"Tier_4_Relics",null);
-      handleTable("Tier 5",source,"Tier_5_Relics",null);
-      handleTable("Tier 6",source,"Tier_6_Relics",null);
-      handleTable("Tier 7",source,"Tier_7_Relics",null);
-      handleTable("Tier 8",source,"Tier_8_Relics",null);
-      handleTable("Tier 9",source,"Tier_9_Relics",null);
-      handleTable("Tier 10",source,"Tier_10_Relics",null);
+      handleTable("Tier 1",source,"Tier_1_Relics",null,null);
+      handleTable("Tier 2",source,"Tier_2_Relics",null,null);
+      handleTable("Tier 3",source,"Tier_3_Relics",null,null);
+      handleTable("Tier 4",source,"Tier_4_Relics",null,null);
+      handleTable("Tier 5",source,"Tier_5_Relics",null,null);
+      handleTable("Tier 6",source,"Tier_6_Relics",null,null);
+      handleTable("Tier 7",source,"Tier_7_Relics",null,null);
+      handleTable("Tier 8",source,"Tier_8_Relics",null,null);
+      handleTable("Tier 9",source,"Tier_9_Relics",null,null);
+      handleTable("Tier 10",source,"Tier_10_Relics",null,null);
       // Unique relics (55)
-      handleTable("Unique relics (55)",source,"Unique_Relics_.28Level_55.29",Integer.valueOf(55));
+      handleTable("Unique relics (55)",source,"Unique_Relics_.28Level_55.29",Integer.valueOf(55),null);
       // Singular relics (60)
-      handleTable("Singular relics (60)",source,"Singular_Relics_.28Level_60.29",Integer.valueOf(60));
+      handleTable("Singular relics (60)",source,"Singular_Relics_.28Level_60.29",Integer.valueOf(60),null);
       // Extraordinary Relics (Level 65)
-      handleTable("Extraordinary Relics (Level 65)",source,"Extraordinary_Relics_.28Level_65.29",Integer.valueOf(65));
+      handleTable("Extraordinary Relics (Level 65)",source,"Extraordinary_Relics_.28Level_65.29",Integer.valueOf(65),null);
       // Westfold Relics (Level 70)
-      handleTable("Westfold Relics (Level 70)",source,"Westfold_Relics_.28Level_70.29",Integer.valueOf(70));
+      handleTable("Westfold Relics (Level 70)",source,"Westfold_Relics_.28Level_70.29",Integer.valueOf(70),null);
       // Great River Relics (Level 75)
-      handleTable("Great River Relics (Level 75)",source,"Great_River_Relics_.28Level_75.29",Integer.valueOf(75));
+      handleTable("Great River Relics (Level 75)",source,"Great_River_Relics_.28Level_75.29",Integer.valueOf(75),null);
       // Eastemnet Relics (Level 80)
-      handleTable("Eastemnet Relics (Level 80)",source,"Eastemnet_Relics_.28Level_80.29",Integer.valueOf(80));
+      handleTable("Eastemnet Relics (Level 80)",source,"Eastemnet_Relics_.28Level_80.29",Integer.valueOf(80),null);
       // Wildermore Relics (Level 85)
-      handleTable("Wildermore Relics (Level 85)",source,"Wildermore_Relics_.28Level_85.29",Integer.valueOf(85));
+      handleTable("Wildermore Relics (Level 85)",source,"Wildermore_Relics_.28Level_85.29",Integer.valueOf(85),null);
       // Westemnet Relics (Level 90)
-      handleTable("Westemnet Relics (Level 90)",source,"Westemnet_Relics_.28Level_90.29",Integer.valueOf(90));
+      handleTable("Westemnet Relics (Level 90)",source,"Westemnet_Relics_.28Level_90.29",Integer.valueOf(90),null);
 
       // Ignore bridles
       /*
@@ -298,7 +358,16 @@ public class RelicsIndexPageParser
       */
 
       // Crafted_Relics_Index
-      handleTable("Crafted",source,"Crafted_Relics_Index",null);
+      handleTable("Crafted",source,"Crafted_Relics_Index",null,null);
+
+      // Retired relics
+      URL urlRetired=URLTools.getFromClassPath("retired_relics.txt",RelicsIndexPageParser.class.getPackage());
+      Source sourceRetired=new Source(urlRetired);
+      sourceRetired.fullSequentialParse();
+
+      handleTable("Retired Settings",sourceRetired,"Retired_Settings_Index",null,RelicType.SETTING);
+      handleTable("Retired Gems",sourceRetired,"Retired_Gems_Index",null,RelicType.GEM);
+      handleTable("Retired Runes",sourceRetired,"Retired_Runes_Index",null,RelicType.RUNE);
     }
     catch(Exception e)
     {

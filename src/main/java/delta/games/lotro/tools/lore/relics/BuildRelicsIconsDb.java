@@ -38,6 +38,7 @@ public class BuildRelicsIconsDb
 
   private void doIt()
   {
+    System.out.println("Output dir: "+_toDir);
     RelicsManager relicsMgr=RelicsManager.getInstance();
     List<String> categories=relicsMgr.getCategories();
     for(String categoryName : categories)

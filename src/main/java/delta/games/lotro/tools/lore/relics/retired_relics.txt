@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html dir="ltr" class="client-js" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/ca-pub-3691143277084659.js"></script><script async="" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/load.php"></script>
+<meta charset="UTF-8">
+<title>Retired Relics - Lotro-Wiki.com</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+<meta name="generator" content="MediaWiki 1.23.15">
+<link rel="apple-touch-icon" href="http://lotro-wiki.com/apple-touch-icon.png">
+<link rel="shortcut icon" href="http://lotro-wiki.com/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://lotro-wiki.com/opensearch_desc.php" title="Lotro-Wiki.com (en)">
+<link rel="EditURI" type="application/rsd+xml" href="http://lotro-wiki.com/api.php?action=rsd">
+<link rel="copyright" href="http://www.gnu.org/copyleft/fdl.html">
+<link rel="alternate" type="application/atom+xml" title="Lotro-Wiki.com Atom feed" href="http://lotro-wiki.com/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="Retired%20Relics%20-%20Lotro-Wiki.com_files/load_002.css">
+<style>
+.mw-collapsible-toggle{float:right;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none} caption .mw-collapsible-toggle{float:none} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:6c1d24e90626cec584f0869483f983e7 */
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left; overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.highlight{font-weight:bold}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:9f9511aa4ef920d34591113e825e6a1e */
+.postedit-container{margin:0 auto;position:fixed;top:0;height:0;left:50%;z-index:1000;font-size:13px}.postedit-container:hover{cursor:pointer}.postedit{position:relative;top:0.6em;left:-50%;padding:.6em 3.6em .6em 1.1em;line-height:1.5625em;color:#626465;background-color:#f4f4f4;border:1px solid #dcd9d9;text-shadow:0 0.0625em 0 rgba(255,255,255,0.5);border-radius:5px;-webkit-box-shadow:0 2px 5px 0 #ccc;box-shadow:0 2px 5px 0 #ccc;-webkit-transition:all 0.25s ease-in-out;-moz-transition:all 0.25s ease-in-out;-ms-transition:all 0.25s ease-in-out;-o-transition:all 0.25s ease-in-out;transition:all 0.25s ease-in-out}.skin-monobook .postedit{top:6em !important}.postedit-faded{opacity:0}.postedit-icon{padding-left:41px;  line-height:25px;background-repeat:no-repeat;background-position:8px 50%}.postedit-icon-checkmark{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABblBMVEUAAAD///////9PfTf///80aRdTgjn///9Feij///////////9Rfzf///////////9PfjZRgDh1o1xOfTb///////+bwYqLtnj///////9PfTa82K////9WhT6YxIL///9QgDdTgzr////////j7uDl7eLq8efi693k7OH///////9UhjuBr2rp9uRUhjr///9YljVKgir///9WiTlYjT3////9/v57vFlbkT5PjC9dlD/5/fhuq09stUTs9uhxuElctCpfnT1huDFloEZloUZmpENmvDZpvDxpvTxqvjxrvT5rvT9rwTxsqktswD5uwkBvuUdxw0NztFBztU9ztVBzwkp0tlJ1xkd2t1R3uVR4w1F4xk54x014yE15uVZ5v1R5xVB6v1R7yFJ8wVh9xVl9yFR9yVd9ylN+xVh+yFd/x1l/yFeAylmEx1+Ny2uY0Hqe04Wj1Ymv3Ze33qLD47TJ5L3O6cPU7Mrq9eb2+/Q4j37OAAAAQHRSTlMAAQIEBAUFBQwPFB4fJCUoKiosQEhJS01RUlZZXmdydXaChYuSlJSWmJmoq6uur8LExcvM19fg5ejt8fX2+Pr7SljgewAAAKpJREFUGBkFwQNCAwAAAMDLtl3LtrG4rWXbtvX77gAgZ6grFwC0bhwNVgKgdPZx8b0dgLi+s7Wn0VoAqpfOI9+BNADZI7fLrz2pSEwGHZuH+78lSK8ZLkLezF3ooyUG3VPXq2USei9WngeyoG195yBYWDF3E/2pAhl1e9Gr8bGT+bfOFCC2fnvh4X7rcqIAQNNu+HT6sxkAjceTL/2ZAIhv+PorBwBJxfkA//dFHSCBy/UTAAAAAElFTkSuQmCC);background-image:url(/resources/src/mediawiki.action/images/green-checkmark.png?2014-06-06T02:21:40Z)!ie;background-position:left}.postedit-close{position:absolute;padding:0 .8em;right:0;top:0;font-size:1.25em;font-weight:bold;line-height:2.3em;color:black;text-shadow:0 0.0625em 0 white;text-decoration:none;opacity:0.2;filter:alpha(opacity=20)}.postedit-close:hover{color:black;text-decoration:none;opacity:0.4;filter:alpha(opacity=40)}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:e342dafe83559472d4397ff95e32906e */</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{color:black;text-decoration:none}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}.suggestions a.mw-searchSuggest-link .special-query{ overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:ae3fa4570b5ac0c6cf7b3776c8ae4d6f */</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="Retired%20Relics%20-%20Lotro-Wiki.com_files/load.css">
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:91e57afcf6f764cd47c46d0433d64486 */</style>
+<script type="text/javascript" async="" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/ga.js"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/load_005.php"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/load_003.php"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Retired_Relics","wgTitle":"Retired Relics","wgCurRevisionId":561704,"wgRevisionId":561704,"wgArticleId":97960,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Relics"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Retired_Relics","wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"previewDialog":false,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":20,\"hideprefix\":10,\"showcount\":true,\"namespaces\":[0,2,6,12,14,100,102,104,106,108]}"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"editfont":"default","editondblclick":0,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":1,"extendwatchlist":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nickname":"","norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"rcdays":7,"rclimit":50,"rows":25,"showhiddencats":0,"shownumberswatching":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":1,"watchdefault":1,"watchdeletion":0,"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,
+"useeditwarning":1,"prefershttps":1,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"wikieditor-preview":1,"language":"en","variant-gan":"gan","variant-iu":"iu","variant-kk":"kk","variant-ku":"ku","variant-shi":"shi","variant-sr":"sr","variant-tg":"tg","variant-uz":"uz","variant-zh":"zh","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":true,"searchNs101":false,"searchNs102":true,"searchNs103":false,"searchNs104":true,"searchNs105":false,"searchNs106":true,"searchNs107":false,"searchNs108":true,"searchNs109":false,"gadget-searchFocus":1,"gadget-listStyles":1,"gadget-Edittools":1,"variant":"en"});},{},{});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});},{},
+{});
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-js:7:9c3ae0c5c5b34019b72be41469918c50 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","skins.vector.js"]);
+}</script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/load_002.php"></script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/vector/csshover.min.htc")}</style><![endif]--><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22597294-1']);
+  _gaq.push(['_trackPageview']);
+ 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_003.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_009.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_004.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_002.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_007.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_008.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_006.php" type="text/javascript"></script><script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_005.php" type="text/javascript"></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Retired_Relics skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main"><div id="coordstfb"></div><div id="tfb" style="display: none;"></div>
+			<a id="top"></a>
+			<div id="mw-js-message" style="display:none;"></div>
+<div style="text-align:center; padding 10 px;">
+<script async="" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/adsbygoogle.js"></script>
+<!-- top -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="0148201732" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" height="90" frameborder="0" width="728"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+						<div id="siteNotice"><div id="localNotice" dir="ltr" lang="en"></div></div>
+						<h1 id="firstHeading" class="firstHeading" lang="en"><span dir="auto">Retired Relics</span></h1>
+						<div id="bodyContent">
+								<div id="siteSub">From Lotro-Wiki.com</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-navigation">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="en"><ul>
+<li> <b>Note: This index contain the information of relics before <a href="http://lotro-wiki.com/index.php/Patch_Notes_-_Update_2_Echoes_of_The_Dead" title="Patch Notes - Update 2 Echoes of The Dead">Update 2 Echoes of The Dead</a>. While these relics can no longer be obtained in game, any relics that existed before that patch remain on an individual basis.</b>
+</li>
+</ul>
+<h2><span class="mw-headline" id="Retired_Settings_Index">Retired Settings Index</span></h2>
+<table class="altRowsMed">
+<tbody><tr>
+<th width="40px">
+</th>
+<th width="250px"> Name
+</th>
+<th width="40px"> Tier
+</th>
+<th> Effects
+</th></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Will-icon.png" class="image"><img alt="Bronze Setting of Will-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Will-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Warding" title="Relic:Bronze Setting of Warding">Relic:Bronze Setting of Warding</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Might, +2.5% Partial Block Mitigation
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Might-icon.png" class="image"><img alt="Bronze Setting of Might-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Might-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Deflection" title="Relic:Bronze Setting of Deflection">Relic:Bronze Setting of Deflection</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Agility, +2.5% Partial Parry Mitigation
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Morale-icon.png" class="image"><img alt="Bronze Setting of Morale-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Morale-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Fleetness" title="Relic:Bronze Setting of Fleetness">Relic:Bronze Setting of Fleetness</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Vitality, +2.5% Partial Evade Mitigation
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Might-icon.png" class="image"><img alt="Bronze Setting of Might-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Might-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Might" title="Relic:Bronze Setting of Might">Relic:Bronze Setting of Might</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Might, +10 Vitality
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Deftness-icon.png" class="image"><img alt="Bronze Setting of Deftness-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Deftness-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Deftness" title="Relic:Bronze Setting of Deftness">Relic:Bronze Setting of Deftness</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Agility, +10 Might
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Bronze_Setting_of_Endurance-icon.png" class="image"><img alt="Bronze Setting of Endurance-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Bronze_Setting_of_Endurance-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Bronze_Setting_of_Endurance" title="Relic:Bronze Setting of Endurance">Relic:Bronze Setting of Endurance</a>
+</td>
+<td align="center"> 1
+</td>
+<td> +10 Vitality, +10 Agility
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Copper_Setting_of_Morale-icon.png" class="image"><img alt="Copper Setting of Morale-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Copper_Setting_of_Morale-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Copper_Setting_of_Whelming" title="Relic:Copper Setting of Whelming">Relic:Copper Setting of Whelming</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +204 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +10 Vitality
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Copper_Setting_of_Power-icon.png" class="image"><img alt="Copper Setting of Power-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Copper_Setting_of_Power-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Copper_Setting_of_the_Deft_Hand" title="Relic:Copper Setting of the Deft Hand">Relic:Copper Setting of the Deft Hand</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +204 Ranged <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +10 Agility
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Copper_Setting_of_Might-icon.png" class="image"><img alt="Copper Setting of Might-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Copper_Setting_of_Might-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Copper_Setting_of_Rage" title="Relic:Copper Setting of Rage" class="mw-redirect">Relic:Copper Setting of Rage</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +204 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +10 Might
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Copper_Setting_of_Might-icon.png" class="image"><img alt="Copper Setting of Might-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Copper_Setting_of_Might-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Copper_Setting_of_the_Enduring_Hand" title="Relic:Copper Setting of the Enduring Hand">Relic:Copper Setting of the Enduring Hand</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +204 Ranged <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +10 Vitality
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Steel_Setting_of_Morale-icon.png" class="image"><img alt="Steel Setting of Morale-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Steel_Setting_of_Morale-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Iron_Setting_of_the_Stout_Ward" title="Relic:Iron Setting of the Stout Ward">Relic:Iron Setting of the Stout Ward</a>
+</td>
+<td align="center"> 3
+</td>
+<td> +208 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +2.5% Partial Block Mitigation
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Iron_Setting_of_Stout_Deflection-icon.png" class="image"><img alt="Iron Setting of Stout Deflection-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Iron_Setting_of_Stout_Deflection-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Iron_Setting_of_Stout_Deflection" title="Relic:Iron Setting of Stout Deflection">Relic:Iron Setting of Stout Deflection</a>
+</td>
+<td align="center"> 3
+</td>
+<td> +208 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +2.5% Partial Parry Mitigation
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Iron_Setting_of_the_Fleet_Hand-icon.png" class="image"><img alt="Iron Setting of the Fleet Hand-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Iron_Setting_of_the_Fleet_Hand-icon.png" height="32" width="32"></a>
+</td>
+<td> Iron Setting of the Fleet Hand
+</td>
+<td align="center"> 3
+</td>
+<td> +208 Ranged <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +2.5% Partial Evade Mitigation
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Steel_Setting_of_Great_Might-icon.png" class="image"><img alt="Steel Setting of Great Might-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Steel_Setting_of_Great_Might-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Steel_Setting_of_Great_Might" title="Relic:Steel Setting of Great Might">Relic:Steel Setting of Great Might</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +3% Partial Block Mitigation, +3% Partial Parry Mitigation
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Steel_Setting_of_Great_Rage-icon.png" class="image"><img alt="Steel Setting of Great Rage-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Steel_Setting_of_Great_Rage-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Steel_Setting_of_Great_Rage" title="Relic:Steel Setting of Great Rage">Relic:Steel Setting of Great Rage</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +212 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +12 Agility
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Silver_Setting_of_Power-icon.png" class="image"><img alt="Silver Setting of Power-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Silver_Setting_of_Power-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Silver_Setting_of_Strength" title="Relic:Silver Setting of Strength">Relic:Silver Setting of Strength</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +216 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +2.5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +15 Might
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Silver_Setting_of_Longevity-icon.png" class="image"><img alt="Silver Setting of Longevity-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Silver_Setting_of_Longevity-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Silver_Setting_of_Longevity" title="Relic:Silver Setting of Longevity">Relic:Silver Setting of Longevity</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +216 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +2.5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +15 Vitality
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Iron_Setting_of_Morale-icon.png" class="image"><img alt="Iron Setting of Morale-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Iron_Setting_of_Morale-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Gold_Setting_of_Nimbleness" title="Relic:Gold Setting of Nimbleness">Relic:Gold Setting of Nimbleness</a>
+</td>
+<td align="center"> 6
+</td>
+<td> +5% Partial Evade Mitigation, +220 Ranged <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +15 Agility
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Gold_Setting_of_Quickness-icon.png" class="image"><img alt="Gold Setting of Quickness-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Gold_Setting_of_Quickness-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Gold_Setting_of_Quickness" title="Relic:Gold Setting of Quickness">Relic:Gold Setting of Quickness</a>
+</td>
+<td align="center"> 6
+</td>
+<td> +5% Partial Parry Mitigation, +220 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +15 Agility
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Platinum_Setting_of_the_Bulwark-icon.png" class="image"><img alt="Platinum Setting of the Bulwark-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Platinum_Setting_of_the_Bulwark-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Platinum_Setting_of_the_Bulwark" title="Relic:Platinum Setting of the Bulwark">Relic:Platinum Setting of the Bulwark</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +7.5% Partial Block Mitigation, +5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +230 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Platinum_Setting_of_Hardiness-icon.png" class="image"><img alt="Platinum Setting of Hardiness-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Platinum_Setting_of_Hardiness-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Platinum_Setting_of_Hardiness" title="Relic:Platinum Setting of Hardiness">Relic:Platinum Setting of Hardiness</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +15 Vitality, +15 Might, +15 Agility
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ithild%C3%ADn_Setting_of_the_Biting_Fly-icon.png" class="image"><img alt="Ithildín Setting of the Biting Fly-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ithildn_Setting_of_the_Biting_Fly-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ithild%C3%ADn_Setting_of_the_Biting_Fly" title="Relic:Ithildín Setting of the Biting Fly">Relic:Ithildín Setting of the Biting Fly</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +7.5% Partial Evade Mitigation, +5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +230 Ranged <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ithild%C3%ADn_Setting_of_Reflex-icon.png" class="image"><img alt="Ithildín Setting of Reflex-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ithildn_Setting_of_Reflex-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ithild%C3%ADn_Setting_of_Reflex" title="Relic:Ithildín Setting of Reflex">Relic:Ithildín Setting of Reflex</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +7.5% Partial Parry Mitigation, +5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +230 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Mithril_Setting_of_the_Warrior-icon.png" class="image"><img alt="Mithril Setting of the Warrior-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Mithril_Setting_of_the_Warrior-icon.png" height="32" width="32"></a>
+</td>
+<td> Mithril Setting of the Warrior
+</td>
+<td align="center"> 9
+</td>
+<td> +20 Vitality, +20 Might, +20 Agility (Requires level 61 item)
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Mithril_Setting_of_the_Citadel-icon.png" class="image"><img alt="Mithril Setting of the Citadel-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Mithril_Setting_of_the_Citadel-icon.png" height="32" width="32"></a>
+</td>
+<td> Mithril Setting of the Citadel
+</td>
+<td align="center"> 9
+</td>
+<td> +10% Partial Block Mitigation, +7.5% <a href="http://lotro-wiki.com/index.php/Devastate" title="Devastate" class="mw-redirect">Devastate</a> Magnitude, +350 Melee <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a> (Requires level 61 item)
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Retired_Gems_Index">Retired Gems Index</span></h2>
+<table class="altRowsMed">
+<tbody><tr>
+<th width="40px">
+</th>
+<th width="250px"> Name
+</th>
+<th width="40px"> Tier
+</th>
+<th> Effects
+</th></tr>
+
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Agate_Gem_of_the_Fateful_Word-icon.png" class="image"><img alt="Agate Gem of the Fateful Word-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Agate_Gem_of_the_Fateful_Word-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Agate_Gem_of_the_Fateful_Word" title="Relic:Agate Gem of the Fateful Word">Agate Gem of the Fateful Word</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +480 Tactical Offence Rating, +10 Fate
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Agate_Gem_of_the_Willful_Word-icon.png" class="image"><img alt="Agate Gem of the Willful Word-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Agate_Gem_of_the_Willful_Word-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Agate_Gem_of_the_Willful_Word" title="Relic:Agate Gem of the Willful Word">Agate Gem of the Willful Word</a>
+</td>
+<td align="center"> 2
+</td>
+<td> +480 Tactical Offence Rating, +10 Will
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Amethyst_Gem_of_Destiny-icon.png" class="image"><img alt="Amethyst Gem of Destiny-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Amethyst_Gem_of_Destiny-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Amethyst_Gem_of_Destiny" title="Relic:Amethyst Gem of Destiny">Amethyst Gem of Destiny</a>
+</td>
+<td align="center"> 3
+</td>
+<td> +10 Fate, +10 Will
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Amethyst_Gem_of_Determined_Fate-icon.png" class="image"><img alt="Amethyst Gem of Determined Fate-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Amethyst_Gem_of_Determined_Fate-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Amethyst_Gem_of_Determined_Fate" title="Relic:Amethyst Gem of Determined Fate">Amethyst Gem of Determined Fate</a>
+</td>
+<td align="center"> 3
+</td>
+<td> +60 in-Combat Power Regen, +10 Fate
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Amethyst_Gem_of_the_Determined_Mind-icon.png" class="image"><img alt="Amethyst Gem of the Determined Mind-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Amethyst_Gem_of_the_Determined_Mind-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Amethyst_Gem_of_the_Determined_Mind" title="Relic:Amethyst Gem of the Determined Mind">Amethyst Gem of the Determined Mind</a>
+</td>
+<td align="center"> 3
+</td>
+<td> +60 in-Combat Power Regen, +10 Will
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Garnet_Gem_of_the_Fateful_Touch-icon.png" class="image"><img alt="Garnet Gem of the Fateful Touch-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Garnet_Gem_of_the_Fateful_Touch-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Garnet_Gem_of_the_Fateful_Touch" title="Relic:Garnet Gem of the Fateful Touch">Relic:Garnet Gem of the Fateful Touch</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +600 Incoming Healing Rating, +12 Fate
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Garnet_Gem_of_the_Mindful_Touch-icon.png" class="image"><img alt="Garnet Gem of the Mindful Touch-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Garnet_Gem_of_the_Mindful_Touch-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Garnet_Gem_of_the_Mindful_Touch" title="Relic:Garnet Gem of the Mindful Touch">Relic:Garnet Gem of the Mindful Touch</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +600 Incoming Healing Rating, +12 Will
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Sapphire_Gem_of_the_Sage-icon.png" class="image"><img alt="Sapphire Gem of the Sage-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Sapphire_Gem_of_the_Sage-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Sapphire_Gem_of_the_Sage" title="Relic:Sapphire Gem of the Sage">Relic:Sapphire Gem of the Sage</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +216 Tactical <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +72 in-Combat Power Regen, +15 Fate
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Sapphire_Gem_of_Fortune-icon.png" class="image"><img alt="Sapphire Gem of Fortune-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Sapphire_Gem_of_Fortune-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Sapphire_Gem_of_Empowerment" title="Relic:Sapphire Gem of Empowerment" class="mw-redirect">Relic:Sapphire Gem of Empowerment</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +216 Tactical <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +72 in-Combat Power Regen, +15 Will
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ruby_Gem_of_Fortune-icon.png" class="image"><img alt="Ruby Gem of Fortune-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ruby_Gem_of_Fortune-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ruby_Gem_of_Nobility" title="Relic:Ruby Gem of Nobility">Relic:Ruby Gem of Nobility</a>
+</td>
+<td align="center"> 6
+</td>
+<td> +84 in-Combat Power Regen, +1200 Incoming Healing Rating, +15 Fate
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ruby_Gem_of_Respite-icon.png" class="image"><img alt="Ruby Gem of Respite-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ruby_Gem_of_Respite-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ruby_Gem_of_Respite" title="Relic:Ruby Gem of Respite">Relic:Ruby Gem of Respite</a>
+</td>
+<td align="center"> 6
+</td>
+<td> +84 in-Combat Power Regen, +1200 Incoming Healing Rating, +15 Will
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Moonstone_Gem_of_the_Stars-icon.png" class="image"><img alt="Moonstone Gem of the Stars-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Moonstone_Gem_of_the_Stars-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Moonstone_Gem_of_the_Stars" title="Relic:Moonstone Gem of the Stars">Relic:Moonstone Gem of the Stars</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +1200 Incoming Healing Rating, +480 Tactical Defence Rating, +90 in-Combat Power Regen
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Moonstone_Gem_of_Dexterity-icon.png" class="image"><img alt="Moonstone Gem of Dexterity-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Moonstone_Gem_of_Dexterity-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Moonstone_Gem_of_the_Sundering_Sea" title="Relic:Moonstone Gem of the Sundering Sea">Relic:Moonstone Gem of the Sundering Sea</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +15 Fate, +15 Will, +960 Tactical Offence Rating
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Adamant_Gem_of_the_Moon-icon.png" class="image"><img alt="Adamant Gem of the Moon-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Adamant_Gem_of_the_Moon-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Adamant_Gem_of_the_Moon" title="Relic:Adamant Gem of the Moon">Adamant Gem of the Moon</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +96 in-Combat Power Regen, +1200 Tactical Offence Rating, +600 Tactical Defence Rating
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Adamant_Gem_of_Dreams-icon.png" class="image"><img alt="Adamant Gem of Dreams-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Adamant_Gem_of_Dreams-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Adamant_Gem_of_Dreams" title="Relic:Adamant Gem of Dreams">Adamant Gem of Dreams</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +96 in-Combat Power Regen, +230 Tactical <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>, +1200 Tactical Offence Rating
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Emerald_of_the_Verdant_Glen-icon.png" class="image"><img alt="Emerald of the Verdant Glen-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Emerald_of_the_Verdant_Glen-icon.png" height="32" width="32"></a>
+</td>
+<td> Emerald of the Verdant Glen
+</td>
+<td align="center"> 9
+</td>
+<td> +1500 Incoming Healing Rating, +520 Tactical Defence Rating, +102 in-Combat Power Regen (Requires level 61 item)
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Emerald_of_the_Abyssal_Depths-icon.png" class="image"><img alt="Emerald of the Abyssal Depths-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Emerald_of_the_Abyssal_Depths-icon.png" height="32" width="32"></a>
+</td>
+<td> Emerald of the Abyssal Depths
+</td>
+<td align="center"> 9
+</td>
+<td> +20 Fate, +20 Will, +1200 Tactical <a href="http://lotro-wiki.com/index.php/Offence" title="Offence" class="mw-redirect">Offence</a> Rating (Requires level 61 item)
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Retired_Runes_Index">Retired Runes Index</span></h2>
+<table class="altRowsMed">
+<tbody><tr>
+<th width="40px">
+</th>
+<th width="250px"> Name
+</th>
+<th width="40px"> Tier
+</th>
+<th> Effects
+</th></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Early_Rune_of_the_Heart-icon.png" class="image"><img alt="Early Rune of the Heart-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Early_Rune_of_the_Heart-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Early_Rune_of_the_Heart" title="Relic:Early Rune of the Heart">Relic:Early Rune of the Heart</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +75 Maximum Morale, -2% Attack Duration
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Early_Rune_of_the_Spirit-icon.png" class="image"><img alt="Early Rune of the Spirit-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Early_Rune_of_the_Spirit-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Early_Rune_of_the_Spirit" title="Relic:Early Rune of the Spirit">Relic:Early Rune of the Spirit</a>
+</td>
+<td align="center"> 4
+</td>
+<td> +75 Maximum Power, -2% Attack Duration
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Aged_Rune_of_Courage-icon.png" class="image"><img alt="Aged Rune of Courage-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Aged_Rune_of_Courage-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Aged_Rune_of_Courage" title="Relic:Aged Rune of Courage">Aged Rune of Courage</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +100 Maximum Morale, -5% Item Wear Chance on Hit, +50 Maximum Power
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Aged_Rune_of_Defence-icon.png" class="image"><img alt="Aged Rune of Defence-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Aged_Rune_of_Defence-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Aged_Rune_of_Freedom" title="Relic:Aged Rune of Freedom">Aged Rune of Freedom</a>
+</td>
+<td align="center"> 5
+</td>
+<td> +100 Maximum Power, -5% Item Wear Chance on Hit, +50 Maximum Morale
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Profound_Rune_of_Defence-icon.png" class="image"><img alt="Profound Rune of Defence-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Profound_Rune_of_Defence-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Profound_Rune_of_Action" title="Relic:Profound Rune of Action">Relic:Profound Rune of Action</a>
+</td>
+<td align="center"> 6
+</td>
+<td> -2.5% Attack Duration, +480 Melee Defence Rating, +125 Maximum Morale
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Profound_Rune_of_the_Swift_Step-icon.png" class="image"><img alt="Profound Rune of the Swift Step-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Profound_Rune_of_the_Swift_Step-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Profound_Rune_of_the_Swift_Step" title="Relic:Profound Rune of the Swift Step">Relic:Profound Rune of the Swift Step</a>
+</td>
+<td align="center"> 6
+</td>
+<td> -2.5% Attack Duration, +480 Ranged Defence Rating, +125 Maximum Power
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Deep_Rune_of_the_Mountains-icon.png" class="image"><img alt="Deep Rune of the Mountains-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Deep_Rune_of_the_Mountains-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Deep_Rune_of_the_Mountains" title="Relic:Deep Rune of the Mountains">Relic:Deep Rune of the Mountains</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +150 Maximum Morale, +100 Maximum Power, -2.5% Attack Duration
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Deep_Rune_of_Avoidance-icon.png" class="image"><img alt="Deep Rune of Avoidance-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Deep_Rune_of_Avoidance-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Deep_Rune_of_the_Forest" title="Relic:Deep Rune of the Forest" class="mw-redirect">Relic:Deep Rune of the Forest</a>
+</td>
+<td align="center"> 7
+</td>
+<td> +150 Maximum Power, +100 Maximum Morale, -2.5% Attack Duration
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ancient_Rune_of_the_Thunder-icon.png" class="image"><img alt="Ancient Rune of the Thunder-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ancient_Rune_of_the_Thunder-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ancient_Rune_of_the_Thunder" title="Relic:Ancient Rune of the Thunder">Ancient Rune of the Thunder</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +150 Maximum Morale, +150 Maximum Power, +600 Melee Defence Rating
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Ancient_Rune_of_the_Storm-icon.png" class="image"><img alt="Ancient Rune of the Storm-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Ancient_Rune_of_the_Storm-icon.png" height="32" width="32"></a>
+</td>
+<td> <a href="http://lotro-wiki.com/index.php/Relic:Ancient_Rune_of_the_Storm" title="Relic:Ancient Rune of the Storm">Ancient Rune of the Storm</a>
+</td>
+<td align="center"> 8
+</td>
+<td> +150 Maximum Power, +150 Maximum Morale, +600 Ranged Defence Rating
+</td></tr>
+<tr class="odd">
+<td> <a href="http://lotro-wiki.com/index.php/File:Subtle_Rune_of_the_Marshes-icon.png" class="image"><img alt="Subtle Rune of the Marshes-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Subtle_Rune_of_the_Marshes-icon.png" height="32" width="32"></a>
+</td>
+<td> Subtle Rune of the Marshes
+</td>
+<td align="center"> 9
+</td>
+<td> +200 Maximum Power, +150 Maximum Morale, +250 Ranged Critical Defence (Requires level 61 item)
+</td></tr>
+<tr class="even">
+<td> <a href="http://lotro-wiki.com/index.php/File:Subtle_Rune_of_the_Crags-icon.png" class="image"><img alt="Subtle Rune of the Crags-icon.png" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/Subtle_Rune_of_the_Crags-icon.png" height="32" width="32"></a>
+</td>
+<td> Subtle Rune of the Crags
+</td>
+<td align="center"> 9
+</td>
+<td> +200 Maximum Morale, +150 Maximum Power, +250 Melee Critical Defence (Requires level 61 item)
+</td></tr></tbody></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.147 seconds
+Real time usage: 0.418 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/500
+ExtLoops count: 0/100
+-->
+
+<!-- Saved in parser cache with key lotrowik_wikidb-lotro:pcache:idhash:97960-0!*!0!!*!2!* and timestamp 20170105030904 and revision id 561704
+ -->
+</div>								<div class="printfooter">
+				Retrieved from "<a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;oldid=561704">http://lotro-wiki.com/index.php?title=Retired_Relics&amp;oldid=561704</a>"				</div>
+												<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://lotro-wiki.com/index.php/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="http://lotro-wiki.com/index.php/Category:Relics" title="Category:Relics">Relics</a></li></ul></div></div>												<div id="mw-data-after-content">
+	<div style="text-align:center; margin: 1em 1em 1em 1em"><script async="" src="Retired%20Relics%20-%20Lotro-Wiki.com_files/adsbygoogle.js"></script>
+<!-- bottom -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="4223792731" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" height="90" frameborder="0" width="728"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+</div>
+								<div class="visualClear"></div>
+							<div id="tfbx" class="htt"></div><div id="templatetfbx" class="htt"></div></div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+				<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+	<h3 id="p-personal-label">Personal tools</h3>
+	<ul>
+<li id="pt-login"><a href="http://lotro-wiki.com/index.php?title=Special:UserLogin&amp;returnto=Retired+Relics" title="You are encouraged to log in; however, it is not mandatory [alt-shift-o]" accesskey="o">Log in / create account</a></li>	</ul>
+</div>
+				<div id="left-navigation">
+					<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+	<h3 id="p-namespaces-label">Namespaces</h3>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="http://lotro-wiki.com/index.php/Retired_Relics" title="View the content page [alt-shift-c]" accesskey="c">Page</a></span></li>
+					<li id="ca-talk" class="new"><span><a href="http://lotro-wiki.com/index.php?title=Talk:Retired_Relics&amp;action=edit&amp;redlink=1" title="Discussion about the content page [alt-shift-t]" accesskey="t">Discussion</a></span></li>
+			</ul>
+</div>
+<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+	<h3 id="mw-vector-current-variant">
+		</h3>
+	<h3 id="p-variants-label" tabindex="0"><span>Variants</span><a href="#" tabindex="-1"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+				</div>
+				<div id="right-navigation">
+					<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+	<h3 id="p-views-label">Views</h3>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="http://lotro-wiki.com/index.php/Retired_Relics">Read</a></span></li>
+					<li id="ca-viewsource"><span><a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;action=edit" title="This page is protected.
+You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;action=history" title="Past revisions of this page [alt-shift-h]" accesskey="h">View history</a></span></li>
+			</ul>
+</div>
+<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+	<h3 id="p-cactions-label" tabindex="0"><span>Actions</span><a href="#" tabindex="-1"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+<div id="p-search" role="search">
+	<h3><label for="searchInput">Search</label></h3>
+	<form action="/index.php" id="searchform">
+					<div id="simpleSearch">
+					<input name="search" placeholder="Search" title="Search Lotro-Wiki.com [alt-shift-f]" accesskey="f" id="searchInput" tabindex="1" autocomplete="off" type="search"><input value="Special:Search" name="title" type="hidden"><input name="go" value="Go" title="Go to a page with this exact name if exists" id="searchButton" class="searchButton" type="submit">		</div>
+	</form>
+</div>
+				</div>
+			</div>
+			<div id="mw-panel" class="collapsible-nav">
+					<div id="p-logo" role="banner"><a style="background-image: url(/images/lotro_08_150-trans.png);" href="http://lotro-wiki.com/index.php/Main_Page" title="Visit the main page"></a></div>
+				<div class="portal first persistent" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+	<h3 id="p-navigation-label">Navigation</h3>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage"><a href="http://lotro-wiki.com/index.php/Main_Page" title="Visit the main page [alt-shift-z]" accesskey="z">Main Page</a></li>
+			<li id="n-Contributor.27scorner"><a href="http://lotro-wiki.com/index.php/Lotro-Wiki_Contributors%27_Corner">Contributors' Corner</a></li>
+			<li id="n-Thingstodo"><a href="http://lotro-wiki.com/index.php/Things_to_do">Things to do</a></li>
+			<li id="n-recentchanges"><a href="http://lotro-wiki.com/index.php/Special:RecentChanges" title="A list of recent changes in the wiki [alt-shift-r]" accesskey="r">Recent changes</a></li>
+			<li id="n-Recent-discussions"><a href="http://lotro-wiki.com/index.php/Special:RecentChangesLinked/Talk_Pages_Watchlist">Recent discussions</a></li>
+			<li id="n-randompage"><a href="http://lotro-wiki.com/index.php/Special:Random" title="Load a random page [alt-shift-x]" accesskey="x">Random page</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal expanded" role="navigation" id="p-Help_pages" aria-labelledby="p-Help_pages-label">
+	<h3 id="p-Help_pages-label" tabindex="2"><a href="#" aria-haspopup="true" aria-controls="p-Help_pages-list" role="button" aria-pressed="true" aria-expanded="true">Help pages</a></h3>
+	<div class="body" style="display: block;">
+		<ul id="p-Help_pages-list">
+			<li id="n-Help"><a href="http://lotro-wiki.com/index.php/Help">Help</a></li>
+			<li id="n-IRC"><a href="http://lotro-wiki.com/index.php/IRC">IRC</a></li>
+			<li id="n-Discord"><a href="http://lotro-wiki.com/index.php/Discord">Discord</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal collapsed" role="navigation" id="p-popularpages" aria-labelledby="p-popularpages-label">
+	<h3 id="p-popularpages-label" tabindex="3"><a href="#" aria-haspopup="true" aria-controls="p-popularpages-list" role="button" aria-pressed="false" aria-expanded="false">Popular pages</a></h3>
+	<div class="body">
+		<ul id="p-popularpages-list">
+			<li id="n-Crafting"><a href="http://lotro-wiki.com/index.php/Crafting">Crafting</a></li>
+			<li id="n-Deeds"><a href="http://lotro-wiki.com/index.php/Deeds">Deeds</a></li>
+			<li id="n-Kinships"><a href="http://lotro-wiki.com/index.php/List_of_Kinships">Kinships</a></li>
+			<li id="n-Player-Characters"><a href="http://lotro-wiki.com/index.php/Player_Characters">Player Characters</a></li>
+			<li id="n-Quests"><a href="http://lotro-wiki.com/index.php/Quests">Quests</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal collapsed" role="navigation" id="p-createarticle" aria-labelledby="p-createarticle-label">
+	<h3 id="p-createarticle-label" tabindex="4"><a href="#" aria-haspopup="true" aria-controls="p-createarticle-list" role="button" aria-pressed="false" aria-expanded="false">Create Article</a></h3>
+	<div class="body">
+		<ul id="p-createarticle-list">
+			<li id="n-newquest"><a href="http://lotro-wiki.com/index.php/Create_new_quest">New Quest</a></li>
+			<li id="n-newitem"><a href="http://lotro-wiki.com/index.php/Create_new_item">New Item</a></li>
+			<li id="n-New-Creature"><a href="http://lotro-wiki.com/index.php/Create_new_creature">New Creature</a></li>
+			<li id="n-newlocation"><a href="http://lotro-wiki.com/index.php/Create_new_location">New Location</a></li>
+			<li id="n-newrecipe"><a href="http://lotro-wiki.com/index.php/Create_new_recipe">New Recipe</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal collapsed" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+	<h3 id="p-tb-label" tabindex="5"><a href="#" aria-haspopup="true" aria-controls="p-tb-list" role="button" aria-pressed="false" aria-expanded="false">Tools</a></h3>
+	<div class="body">
+		<ul id="p-tb-list">
+			<li id="t-whatlinkshere"><a href="http://lotro-wiki.com/index.php/Special:WhatLinksHere/Retired_Relics" title="A list of all wiki pages that link here [alt-shift-j]" accesskey="j">What links here</a></li>
+			<li id="t-recentchangeslinked"><a href="http://lotro-wiki.com/index.php/Special:RecentChangesLinked/Retired_Relics" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li>
+			<li id="t-specialpages"><a href="http://lotro-wiki.com/index.php/Special:SpecialPages" title="A list of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li>
+			<li id="t-print"><a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;printable=yes" rel="alternate" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li>
+			<li id="t-permalink"><a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;oldid=561704" title="Permanent link to this revision of the page">Permanent link</a></li>
+			<li id="t-info"><a href="http://lotro-wiki.com/index.php?title=Retired_Relics&amp;action=info">Page information</a></li>
+		</ul>
+	</div>
+</div>
+			</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 30 March 2013, at 15:36.</li>
+											<li id="footer-info-viewcount">This page has been accessed 3,637 times.</li>
+											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://www.gnu.org/copyleft/fdl.html">GNU Free Documentation License 1.3 or later</a> unless otherwise noted.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://lotro-wiki.com/index.php/Lotro-Wiki.com:Privacy_policy" title="Lotro-Wiki.com:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="http://lotro-wiki.com/index.php/Lotro-Wiki.com:About" title="Lotro-Wiki.com:About">About Lotro-Wiki.com</a></li>
+											<li id="footer-places-disclaimer"><a href="http://lotro-wiki.com/index.php/Lotro-Wiki.com:General_disclaimer" title="Lotro-Wiki.com:General disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-copyrightico">
+						<a href="http://www.gnu.org/copyleft/fdl.html"><img src="Retired%20Relics%20-%20Lotro-Wiki.com_files/gnu-fdl.png" alt="GNU Free Documentation License 1.3 or later" height="31" width="88"></a>
+					</li>
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="Retired%20Relics%20-%20Lotro-Wiki.com_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>/*<![CDATA[*/window.jQuery && jQuery.ready();/*]]>*/</script><script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","ext.gadget.Edittools","skins.vector.collapsibleNav"],null,true);
+}</script>
+<script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_010.php"></script><div style="display: none; font-size: 13px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div>
+<script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/index_011.php"></script>
+<script src="Retired%20Relics%20-%20Lotro-Wiki.com_files/load_004.php"></script>
+<script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":465});
+}</script>
+	
+
+
+</body><!-- Cached/compressed 20170105030904 --></html>
