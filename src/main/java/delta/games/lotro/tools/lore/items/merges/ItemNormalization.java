@@ -127,7 +127,7 @@ public class ItemNormalization
         if (type==null)
         {
           nbArmours++;
-          System.out.println("No armour type for: " + name + " (" + id + ')');
+          //System.out.println("No armour type for: " + name + " (" + id + ')');
         }
       }
       // Weapons
@@ -1194,12 +1194,18 @@ public class ItemNormalization
       // Location
       {
         EquipmentLocation previousLoc=ret.getEquipmentLocation();
+        if (previousLoc==null)
+        {
+          armour.setEquipmentLocation(loc);
+        }
+        /* Previous value is probably good, so keep it...
         if ((previousLoc!=null) && (previousLoc!=loc))
         {
           String name=ret.getName();
           System.out.println("ID: " + id+"("+name+"): loc conflict: was=" + previousLoc + ", should be=" + loc);
         }
         armour.setEquipmentLocation(loc);
+        */
       }
       // Sub category
       {
