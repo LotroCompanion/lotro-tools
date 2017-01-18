@@ -75,7 +75,7 @@ Circlet of Faramir's Faithful (5s):	201	562
 Circlet of the Archivist	192	544			205	239								768	1874																																																		
 Circlet of the Night Watcher	192	544			205	239								768	1874																																																		
 Hood of Storied Mariner	192	544			205	239	68							768																																																			
-Light Nadhin Hood (4s):	192	544				119																																																											
+(1879313783) Light Nadhin Hood (4s):	192	544				119																																																											
 Amarthgarab	192	544			171	171	85										1536																																																
 Golthol	192	544				171	256										1536																																																
 Faithful Mender's Hat	192	544			205	239								461			922																																																

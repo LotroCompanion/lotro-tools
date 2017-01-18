@@ -125,19 +125,27 @@ public class LotroPlanItemsDbLoader
 
   private Item findItem(List<Item> selectedItems, Item item)
   {
-    Item selectedItem=null;
     if (selectedItems!=null)
     {
+      if (item.getIdentifier()!=0)
+      {
+        for(Item currentItem : selectedItems)
+        {
+          if (currentItem.getIdentifier()==item.getIdentifier())
+          {
+            return currentItem;
+          }
+        }
+      }
       for(Item currentItem : selectedItems)
       {
         if (areEqual(currentItem.getItemLevel(),item.getItemLevel()))
         {
-          selectedItem=currentItem;
-          break;
+          return currentItem;
         }
       }
     }
-    return selectedItem;
+    return null;
   }
 
   private boolean areEqual(Integer value1, Integer value2)
