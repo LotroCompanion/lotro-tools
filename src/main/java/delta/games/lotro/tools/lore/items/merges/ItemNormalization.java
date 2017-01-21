@@ -980,6 +980,17 @@ public class ItemNormalization
         }
       }
     }
+    if (ret!=null)
+    {
+      if (type.isRanged())
+      {
+        ret.setEquipmentLocation(EquipmentLocation.RANGED_ITEM);
+      }
+      else
+      {
+        ret.setEquipmentLocation(EquipmentLocation.MAIN_HAND);
+      }
+    }
     return (ret!=null)?ret:item;
   }
 
