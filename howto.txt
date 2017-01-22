@@ -101,22 +101,16 @@ Lotro plan loaders sets:
 Check name, warn if different
 Add item level and stats to existing items
 
-Icons consolidation
-===================
-Sources:
-	- lotro.fr: some ID->icon files (50k+)
-	- legacy icons: 10k using web file names
-Data:
-	- legacy: ID -> some icon URLs
-	- tulkas: ID -> icon ID+background icon ID
+Icons
+=====
+Icons are fetched directly in game, using a modified version of the "Item Treasury" plugin and some screenshots.
+- using the items database (tulkas index is all we really need, since we only need icon id and background id for each item), build a list of all (icon id/background id) couples. See class BuildItemsDbForIcons.
+- build a LUA file that contains 1 item for each such couple.
+- integrate this LUA in the modified version of "Item Treasury" (see src\main\lua\ItemTreasury_forItemsScan)
+- start the plugin (/item). We get a window with different icons. Screenshot each page.
+- generate icons from the screenshots, using class IconsExtractor:
+	1) find out right START_X and START_Y (with Gimp for instance)
+	2) configure INPUT_DIR and TO_DIR
+	3) Start the main... you'll get the icons in the TO_DIR.
+- zip the whole thing and push it to project lotro-item-icons-db
 
-Target:
-	- an icons database
-	- a maximum of items have an associated icon
-
-Consolidated DB: ID -> icon ID+background icon ID and some times an icon URL
-Lotro.fr icons:
-	- find out unique icons. Use icon ID+background icon ID to name them?
-		- map CRC+size to IDs. Check (iconID+backgroundID) couples for those IDs. Shall be all identical.
-		- check that files are really identical
-		- use iconID+backgroundID to create a new icon file name.
