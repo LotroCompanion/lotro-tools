@@ -56,10 +56,10 @@ public class MergeWithLotroPlanDb
    */
   public void doIt()
   {
-    File file1=new File("itemsLegacy+Tulkas.xml");
+    File file1=new File("data/items/tmp/itemsLegacy+Tulkas.xml");
     HashMap<Integer,Item> sourceItems=loadItemsFile(file1,null);
     System.out.println(sourceItems.size());
-    File file2=new File("itemsdb.xml");
+    File file2=new File("data/items/tmp/itemsdb.xml");
     Map<String,Item> itemsWithNoId=new HashMap<String,Item>();
     HashMap<Integer,Item> lotroPlanItems=loadItemsFile(file2,itemsWithNoId);
     System.out.println("LOTRO plan items (with ID): " + lotroPlanItems.size());
@@ -97,7 +97,7 @@ public class MergeWithLotroPlanDb
     {
       System.out.println("LOTRO plan items (no ID), not used: " + itemsWithNoId.size() + ": " + itemsWithNoId);
     }
-    File toFile=new File("items-rc.xml").getAbsoluteFile();
+    File toFile=new File("data/items/tmp/items-rc.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);
   }

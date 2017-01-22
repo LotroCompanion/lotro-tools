@@ -52,7 +52,7 @@ public class LotroPlanItemsDbLoader
       handleAdditionalTable(tableName,items,map);
     }
     ItemsManager mgr=ItemsManager.getInstance();
-    File toFile=new File("itemsdb.xml").getAbsoluteFile();
+    File toFile=new File("data/items/tmp/itemsdb.xml").getAbsoluteFile();
     mgr.writeItemsFile(toFile,items);
     //List<Integer> ids=new ArrayList<Integer>(_failedItems.keySet());
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);

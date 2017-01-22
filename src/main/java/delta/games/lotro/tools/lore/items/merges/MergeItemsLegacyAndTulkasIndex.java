@@ -50,10 +50,10 @@ public class MergeItemsLegacyAndTulkasIndex
    */
   public void doIt()
   {
-    File file1=new File("itemsLegacy.xml");
+    File file1=new File("data/items/in/itemsLegacy.xml");
     HashMap<Integer,Item> legacyItems=loadItemsFile(file1);
     System.out.println(legacyItems.size());
-    File file2=new File("itemsTulkasIndex.xml");
+    File file2=new File("data/items/tmp/itemsTulkasIndex.xml");
     HashMap<Integer,Item> tulkasItems=loadItemsFile(file2);
     System.out.println(tulkasItems.size());
     HashMap<Integer,Item> mergeResult=new HashMap<Integer,Item>();
@@ -74,7 +74,7 @@ public class MergeItemsLegacyAndTulkasIndex
       mergeResult.put(Integer.valueOf(result.getIdentifier()),result);
     }
     System.out.println(legacyItems.size());
-    File toFile=new File("itemsLegacy+TulkasIndex.xml").getAbsoluteFile();
+    File toFile=new File("data/items/tmp/itemsLegacy+TulkasIndex.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
     ItemsManager.getInstance().writeItemsFile(toFile,items);
     //dumpCategoriesInfo();

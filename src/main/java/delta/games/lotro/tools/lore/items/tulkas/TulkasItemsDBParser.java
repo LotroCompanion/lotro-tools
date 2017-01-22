@@ -349,6 +349,7 @@ public class TulkasItemsDBParser
    * Main method.
    * @param args Not used.
    */
+  /*
   public static void main(String[] args)
   {
     File old=new File("Items.lua");
@@ -358,4 +359,5 @@ public class TulkasItemsDBParser
     File new13p1=new File("Items13.1.lua");
     new TulkasItemsDBParser(new13p1,EncodingNames.UTF_8,NEW_VERSION).doIt();
   }
+  */
 }

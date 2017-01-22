@@ -56,7 +56,7 @@ public class ItemNormalization
    */
   public void doIt()
   {
-    File file1=new File("items-rc.xml");
+    File file1=new File("data/items/tmp/items-rc.xml");
     HashMap<Integer,Item> sourceItems=loadItemsFile(file1);
     System.out.println(sourceItems.size());
 
@@ -84,7 +84,7 @@ public class ItemNormalization
     consistencyChecks(items);
 
     // Write result file
-    File toFile=new File("items.xml").getAbsoluteFile();
+    File toFile=new File("data/items/items.xml").getAbsoluteFile();
     ItemsManager.getInstance().writeItemsFile(toFile,items);
     // Dump unmanaged items
     if (_byCategory.size()>0)

@@ -24,17 +24,15 @@ public class ItemsDatabaseGenerator
   {
     // 1) Generate independant databases
     // Build from Tulkas items index
-    // 17_1_Items.lua -> itemsTulkasIndex.xml
+    // items19.2.2.txt -> itemsTulkasIndex.xml
     {
-      //File from=new File("17_1_Items.lua").getAbsoluteFile();
-      //File from=new File("items18.lua").getAbsoluteFile();
-      File from=new File("19_2_2_Items.lua").getAbsoluteFile();
+      File from=new File("data/items/in/items19.2.2.txt").getAbsoluteFile();
       new TulkasItemsDBParser(from,EncodingNames.UTF_8,TulkasItemsDBParser.INDEX).doIt();
     }
     // Build from LATEST Tulkas items with stats
     // Items13.1.lua -> itemsTulkas13.1.xml
     {
-      File from=new File("Items13.1.lua").getAbsoluteFile();
+      File from=new File("data/items/in/items13.1.txt").getAbsoluteFile();
       new TulkasItemsDBParser(from,EncodingNames.UTF_8,TulkasItemsDBParser.NEW_VERSION).doIt();
     }
     // Build from lotroplan database
