@@ -291,7 +291,7 @@ Gloves of the Watchman	192	1703	239		205										2343	614
 Heavy Nadhin Gauntlets (4s):	192	1703	119																																																														
 Eithelaim	192	1703	119		119										2343	1075			1930				1382																																										
 Sermaib	192	1703	171		171											1536			1930																																														
-Gauntlets of the Great Shore	192	1703	239		205		102									461																																																	
+Gauntlets of the Great Shore	192	1703	205		239		102									461																																																	
 Nadhin Footman's Gauntlets (3s):	192	1620	119				34																																																										
 Potent Fangorn Gauntlets of Valour	182	1631	225		193		128									146																																																	
 Potent Fangorn Gauntlets of Command	182	1631	225		193		128							146																																																			
