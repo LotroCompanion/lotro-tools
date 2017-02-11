@@ -41,6 +41,7 @@ public class EssenceStatsInjector
       HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
       handleTier(tier.intValue(),essencesOfTier);
     }
+    System.out.println("Tier: 8");
     handleTier(8,essencesByTier.get(Integer.valueOf(-1)));
     System.out.println("Nb essences: "+essences.size());
   }
