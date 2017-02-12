@@ -32,13 +32,13 @@ public class EssenceStatsInjector
   public void doIt(Collection<Item> items)
   {
     List<Item> essences=getEssences(items);
-    HashMap<Integer,HashMap<String,Item>> essencesByTier=sortByTier(essences);
+    HashMap<Integer,HashMap<Integer,Item>> essencesByTier=sortByTier(essences);
     List<Integer> tiers=new ArrayList<Integer>(essencesByTier.keySet());
     Collections.sort(tiers);
     for(Integer tier : tiers)
     {
       System.out.println("Tier: "+tier);
-      HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
+      HashMap<Integer,Item> essencesOfTier=essencesByTier.get(tier);
       handleTier(tier.intValue(),essencesOfTier);
     }
     System.out.println("Tier: 8");
@@ -46,7 +46,7 @@ public class EssenceStatsInjector
     System.out.println("Nb essences: "+essences.size());
   }
 
-  private void handleTier(int tier, HashMap<String,Item> essences)
+  private void handleTier(int tier, HashMap<Integer,Item> essences)
   {
     URL url=URLTools.getFromClassPath("tier"+tier+".txt",EssenceStatsInjector.class.getPackage());
     if (url!=null)
@@ -54,7 +54,7 @@ public class EssenceStatsInjector
       TextFileReader reader=new TextFileReader(url, EncodingNames.UTF_8);
       List<String> lines=TextUtils.readAsLines(reader);
       lines.remove(0);
-      HashSet<String> unmanaged=new HashSet<String>();
+      HashSet<Integer> unmanaged=new HashSet<Integer>();
       unmanaged.addAll(essences.keySet());
       LotroPlanTable table=new LotroPlanTable();
       for(String line : lines)
@@ -68,31 +68,34 @@ public class EssenceStatsInjector
           {
             name=name.substring(1).trim();
           }
-          Item item=essences.get(name);
-          if (item!=null)
+          List<Item> items=findEssencesByName(essences,name);
+          if (items!=null)
           {
-            unmanaged.remove(name);
-            // Item level
-            int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
-            if (itemLevel!=-1)
+            for(Item item : items)
             {
-              item.setItemLevel(Integer.valueOf(itemLevel));
-            }
-            // Notes
-            if (fields.length>LotroPlanTable.NOTES)
-            {
-              String notes=fields[LotroPlanTable.NOTES].trim();
-              if (notes.length()>0)
+              unmanaged.remove(Integer.valueOf(item.getIdentifier()));
+              // Item level
+              int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
+              if (itemLevel!=-1)
               {
-                item.getBonus().add(notes);
+                item.setItemLevel(Integer.valueOf(itemLevel));
               }
+              // Notes
+              if (fields.length>LotroPlanTable.NOTES)
+              {
+                String notes=fields[LotroPlanTable.NOTES].trim();
+                if (notes.length()>0)
+                {
+                  item.getBonus().add(notes);
+                }
+              }
+              // Tier
+              item.setSubCategory("Essence:Tier"+tier);
+              // Stats
+              BasicStatsSet itemStats=table.loadStats(fields);
+              BasicStatsSet stats=item.getStats();
+              stats.setStats(itemStats);
             }
-            // Tier
-            item.setSubCategory("Essence:Tier"+tier);
-            // Stats
-            BasicStatsSet itemStats=table.loadStats(fields);
-            BasicStatsSet stats=item.getStats();
-            stats.setStats(itemStats);
           }
           else
           {
@@ -102,15 +105,37 @@ public class EssenceStatsInjector
       }
       if (unmanaged.size()>0)
       {
-        System.out.println(unmanaged);
+        System.out.println(unmanaged+" unmanaged essences:");
+        for(Integer id : unmanaged)
+        {
+          Item essence=essences.get(id);
+          System.out.println("\t"+essence);
+        }
       }
     }
   }
 
-  private HashMap<Integer,HashMap<String,Item>> sortByTier(List<Item> essences)
+  private List<Item> findEssencesByName(HashMap<Integer,Item> essences, String name)
+  {
+    List<Item> ret=null;
+    for(Item essence : essences.values())
+    {
+      if (name.equals(essence.getName()))
+      {
+        if (ret==null)
+        {
+          ret=new ArrayList<Item>();
+        }
+        ret.add(essence);
+      }
+    }
+    return ret;
+  }
+
+  private HashMap<Integer,HashMap<Integer,Item>> sortByTier(List<Item> essences)
   {
     List<Integer> tiers=loadTiers();
-    HashMap<Integer,HashMap<String,Item>> essencesByTier=new HashMap<Integer,HashMap<String,Item>>();
+    HashMap<Integer,HashMap<Integer,Item>> essencesByTier=new HashMap<Integer,HashMap<Integer,Item>>();
     int nbEssences=essences.size();
     int nbTierSpecifications=tiers.size();
     if (nbEssences!=nbTierSpecifications)
@@ -131,13 +156,13 @@ public class EssenceStatsInjector
       {
         tier=Integer.valueOf(-1); // Unspecified
       }
-      HashMap<String,Item> essencesOfTier=essencesByTier.get(tier);
+      HashMap<Integer,Item> essencesOfTier=essencesByTier.get(tier);
       if (essencesOfTier==null)
       {
-        essencesOfTier=new HashMap<String,Item>();
+        essencesOfTier=new HashMap<Integer,Item>();
         essencesByTier.put(tier,essencesOfTier);
       }
-      essencesOfTier.put(item.getName(),item);
+      essencesOfTier.put(Integer.valueOf(item.getIdentifier()),item);
     }
     return essencesByTier;
   }
