@@ -13,11 +13,13 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Loads starter stats from a raw data file.
@@ -127,6 +129,7 @@ public class LotroPlanItemsDbLoader
   {
     if (selectedItems!=null)
     {
+      // Use identifier if we can
       if (item.getIdentifier()!=0)
       {
         for(Item currentItem : selectedItems)
@@ -137,15 +140,81 @@ public class LotroPlanItemsDbLoader
           }
         }
       }
+      List<Item> goodItems=null;
+      // Use item level
       for(Item currentItem : selectedItems)
       {
         if (areEqual(currentItem.getItemLevel(),item.getItemLevel()))
         {
-          return currentItem;
+          if (goodItems==null)
+          {
+            goodItems=new ArrayList<Item>();
+          }
+          goodItems.add(currentItem);
         }
+      }
+      if (goodItems!=null)
+      {
+        if (goodItems.size()==1)
+        {
+          return goodItems.get(0);
+        }
+        // Several items do match...
+        Item usingMight=findItemUsingStat(STAT.MIGHT,selectedItems,item);
+        if (usingMight!=null)
+        {
+          return usingMight;
+        }
+        Item usingAgility=findItemUsingStat(STAT.AGILITY,selectedItems,item);
+        if (usingAgility!=null)
+        {
+          return usingAgility;
+        }
+        Item usingWill=findItemUsingStat(STAT.WILL,selectedItems,item);
+        if (usingWill!=null)
+        {
+          return usingWill;
+        }
+        System.out.println("Several items do match " + item + ": " + goodItems);
       }
     }
     return null;
+  }
+
+  private Item findItemUsingStat(STAT stat, List<Item> selectedItems, Item item)
+  {
+    List<Item> goodItems=null;
+    for(Item currentItem : selectedItems)
+    {
+      if (areEqualUsingStat(stat,currentItem,item))
+      {
+        if (goodItems==null)
+        {
+          goodItems=new ArrayList<Item>();
+        }
+        goodItems.add(currentItem);
+      }
+    }
+    if (goodItems!=null)
+    {
+      if (goodItems.size()==1)
+      {
+        return goodItems.get(0);
+      }
+    }
+    return null;
+  }
+
+  private boolean areEqualUsingStat(STAT stat, Item item1, Item item2)
+  {
+    FixedDecimalsInteger value1=item1.getStats().getStat(stat);
+    FixedDecimalsInteger value2=item2.getStats().getStat(stat);
+    if (value1!=null)
+    {
+      if (value2==null) return false;
+      return value1.getInternalValue()==value2.getInternalValue();
+    }
+    return value2==null;
   }
 
   private boolean areEqual(Integer value1, Integer value2)
