@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.TextUtils;
 

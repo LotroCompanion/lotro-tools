@@ -100,7 +100,8 @@ public class RelicsIndexPageParser
       {
         name=name.substring(6).trim();
       }
-      // Level
+      // Tier
+      /*
       Element tierElement=tds.get(2);
       String tierStr=JerichoHtmlUtils.getTextFromTag(tierElement);
       Integer tier=null;
@@ -112,6 +113,7 @@ public class RelicsIndexPageParser
       {
         tier=null;
       }
+      */
 
       relic=new Relic(name,defaultType,level);
       relic.setIconFilename(iconPath);
