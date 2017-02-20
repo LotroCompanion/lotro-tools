@@ -119,7 +119,7 @@ public class BuildItemsDbForIcons
 
   private void doIt()
   {
-    File toFile=new File("items.xml").getAbsoluteFile();
+    File toFile=new File("data\\items\\items.xml").getAbsoluteFile();
     HashMap<Integer,Item> items=loadItemsFile(toFile);
     System.out.println("Total items count: "+items.size());
 
