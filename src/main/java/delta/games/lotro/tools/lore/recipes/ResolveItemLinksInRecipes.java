@@ -16,11 +16,11 @@ import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.recipes.CraftingResult;
+import delta.games.lotro.lore.recipes.Ingredient;
+import delta.games.lotro.lore.recipes.ItemReference;
 import delta.games.lotro.lore.recipes.Recipe;
-import delta.games.lotro.lore.recipes.Recipe.CraftingResult;
-import delta.games.lotro.lore.recipes.Recipe.Ingredient;
-import delta.games.lotro.lore.recipes.Recipe.ItemReference;
-import delta.games.lotro.lore.recipes.Recipe.RecipeVersion;
+import delta.games.lotro.lore.recipes.RecipeVersion;
 import delta.games.lotro.lore.recipes.RecipesManager;
 
 /**

@@ -20,11 +20,11 @@ import org.xml.sax.InputSource;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.xml.DOMParsingTools;
+import delta.games.lotro.lore.recipes.CraftingResult;
+import delta.games.lotro.lore.recipes.Ingredient;
+import delta.games.lotro.lore.recipes.ItemReference;
 import delta.games.lotro.lore.recipes.Recipe;
-import delta.games.lotro.lore.recipes.Recipe.CraftingResult;
-import delta.games.lotro.lore.recipes.Recipe.Ingredient;
-import delta.games.lotro.lore.recipes.Recipe.ItemReference;
-import delta.games.lotro.lore.recipes.Recipe.RecipeVersion;
+import delta.games.lotro.lore.recipes.RecipeVersion;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.DownloadService;
 import delta.games.lotro.utils.LotroLoggers;
