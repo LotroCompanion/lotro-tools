@@ -36,7 +36,9 @@ public class MergeWithLotroPlanDb
       {
         if (noIdItems!=null)
         {
-          noIdItems.put(item.getName(),item);
+          String name=item.getName();
+          name=name.replace(' ',' ');
+          noIdItems.put(name,item);
         }
       }
     }
@@ -73,10 +75,15 @@ public class MergeWithLotroPlanDb
       Item lotroPlanItem=lotroPlanItems.get(id);
       if (lotroPlanItem==null)
       {
-        lotroPlanItem=itemsWithNoId.get(sourceItem.getName());
+        String sourceName=sourceItem.getName();
+        if (sourceName!=null)
+        {
+          sourceName=sourceName.replace(' ',' ');
+        }
+        lotroPlanItem=itemsWithNoId.get(sourceName);
         if (lotroPlanItem!=null)
         {
-          itemsWithNoId.remove(sourceItem.getName());
+          itemsWithNoId.remove(sourceName);
         }
       }
       else

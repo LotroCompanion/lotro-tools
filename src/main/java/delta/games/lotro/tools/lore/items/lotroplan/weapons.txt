@@ -1,7 +1,18 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
-Finely-strung Bow of the Veteran Beorning (1s):	246		337					2650																																																									
-Finely-strung Bow of the Veteran Champion (1s):	246		337					2650																																																									
-Finely-strung Bow of the Veteran Guardian (1s):	246		337					2650																																																									
+Sword of the Night's sky	1																																																				2,0%
+Winged Blade	1																																																				2,0%
+Treebeard's Ladle	1																																																				
+Master-wrought Axe of the Looming Gate	258		474					2490								826												Beleriand Damage Type																									
+Master-wrought Balanced Axe of the Rangers	258			474				2490								826												Westernesse Damage Type																									
+Master-wrought Blade of the Tactician	258					474		2490									826											Beleriand Damage Type																									1,0%
+Master-wrought Dirk of the Great Ruse	258			474				2490								826												Westernesse Damage Type																									
+Finely-strung Bow of the Veteran Beorning (1s):	246		337					2650																																													
+Finely-strung Bow of the Veteran Champion (1s):	246		337					2650																																													
+Finely-strung Bow of the Veteran Guardian (1s):	246		337					2650																																													
+Axe of the Looming Gate	246		337					2355								787												Beleriand Damage Type																									
+Balanced Axe of the Rangers	246			337				2355								787												Westernesse Damage Type																									
+Blade of the Tactician	246					337		2355									787											Beleriand Damage Type																									1,0%
+Dirk of the Great Ruse	246			337				2355								787												Westernesse Damage Type																									
 Ancient Bronze Woodman's Axe	234			298	255									936		749																																																	
 Axe of Dusk	234			255	298		85															1264	842																																										
 Blade of Old Foes	234				255	298								749			936											Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												

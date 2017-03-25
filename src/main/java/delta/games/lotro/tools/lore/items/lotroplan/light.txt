@@ -24,6 +24,15 @@
 #Western Shore set bonus: 6 Equipped	192					85	170										2304																																																
 #Armour of the Storied Mariner set bonus: 6 Equipped	192																																		5,0%																														
 Head																																																																	
+Flame-scourer's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Ru
+Fury-wielder's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Lo
+Harmonious Protector's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Mi
+Knowledge-seeker's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Lo
+Nature-friend's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Lo
+Peace-mender's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Ru
+Song-warrior's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Mi
+Thunder-wielder's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Ru
+Vigilant Watcher's Hood of the Morannon (4s):	282	724				104		517																																																										Head	Mi
 Supreme Hood of the Flame-scourer (4s):	258	676				94		467																																																									
 Supreme Hood of the Fury-wielder (4s):	258	676				94		467																																																									
 Supreme Hood of the Harmonious Protector (4s):	258	676				94		467																																																									
@@ -88,6 +97,15 @@ Supple Fangorn Hood of Spirit	182	524			193	225	128										146
 Nadhin Footman's Helm (3s):	176	480			31	108																																																											
 Hope of Helm's Deep	176	507			186	217	77										563																																																
 Shoulders																																																																	
+Flame-scourer's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Ru
+Fury-wielder's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Lo
+Harmonious Protector's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Mi
+Knowledge-seeker's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Lo
+Nature-friend's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Lo
+Peace-mender's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Ru
+Song-warrior's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Mi
+Thunder-wielder's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Ru
+Vigilant Watcher's Mantle of the Morannon (4s):	282	724				104		517																																																										Shoulders	Mi
 Supreme Mantle of the Flame-scourer (4s):	258	676				94		467																																																									
 Supreme Mantle of the Fury-wielder (4s):	258	676				94		467																																																									
 Supreme Mantle of the Harmonious Protector (4s):	258	676				94		467																																																									
@@ -149,6 +167,12 @@ Supple Fangorn Shoulderpads of Insight	182	524			193	225	128							146
 Supple Fangorn Shoulderpads of Spirit	182	524			193	225	128										146																																																
 Light Nadhin Shoulders (3s):	182	497				144																																																											
 Back																																																																	
+Quartermaster of the Host's Lightest Cloak (1s):	258	1596			118	474								1651																																																				Back	LoMiRu
+Quartermaster of the Host's Most Flexible Cloak (1s):	258	1596		474	118									1651																																																				Back	BuHuWa
+Quartermaster of the Host's Strongest Cloak (1s):	258	1596	474		118									1651																																																				Back	BeCaChGuWa
+Enduring Cloak of the Black Gate (1s):	258	1596	355		118									1651																																																				Back	BeCaChGuWa
+Feather-light Cloak of the Black Gate (1s):	258	1596			118	355								1651																																																				Back	LoMiRu
+Swift Cloak of the Black Gate (1s):	258	1596		355	118									1651																																																				Back	BuHuWa
 Cloak of the Resolute March (1s):	246	1536			315	315																																																											
 Cloak of the Steadfast March (1s):	246	1536		225	225									1574																																																			
 Cloak of the Unwavering March (1s):	246	1536	225		225									1574																																																			
@@ -197,6 +221,15 @@ Heavy Cloak of Westfold	168	1006	147		176																	1814	605
 Sarchol	84	501						336							1052									1513	1513			Pits T2																																					
 Shield of the Hammerhand	105	611			84									334														Gives +25% to all forms of XP until level 85.																																					
 Chest																																																																	
+Flame-scourer's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Ru
+Fury-wielder's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Lo
+Harmonious Protector's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Mi
+Knowledge-seeker's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Lo
+Nature-friend's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Lo
+Peace-mender's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Ru
+Song-warrior's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Mi
+Thunder-wielder's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Ru
+Vigilant Watcher's Coat of the Morannon (4s):	282	2408				104		517																																																										Chest	Mi
 Supreme Coat of the Flame-scourer (4s):	258	2249				94		467																																																									
 Supreme Coat of the Fury-wielder (4s):	258	2249				94		467																																																									
 Supreme Coat of the Harmonious Protector (4s):	258	2249				94		467																																																									
@@ -256,6 +289,15 @@ Jacket of the Great Shore	192	1721			171	205								768			461
 Supple Fangorn Robe of Insight	182	1745			193	225	128							146																																																			
 Supple Fangorn Robe of Spirit	182	1745			193	225	128										146																																																
 Hands																																																																	
+Flame-scourer's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Ru
+Fury-wielder's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Lo
+Harmonious Protector's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Mi
+Knowledge-seeker's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Lo
+Nature-friend's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Lo
+Peace-mender's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Ru
+Song-warrior's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Mi
+Thunder-wielder's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Ru
+Vigilant Watcher's Gloves of the Morannon (4s):	282	1204				104		517																																																										Hands	Mi
 Supreme Gloves of the Flame-scourer (4s):	258	1124				94		467																																																									
 Supreme Gloves of the Fury-wielder (4s):	258	1124				94		467																																																									
 Supreme Gloves of the Harmonious Protector (4s):	258	1124				94		467																																																									
@@ -318,6 +360,15 @@ Supple Fangorn Gloves of Spirit	182	872			193	225	128										146
 Greater Resolute Gloves of Penetration	176	844			186	217								704	1721																																																		
 Nadhin Footman's Gauntlets (3s):	176	803				108	31																																																										
 Legs																																																																	
+Flame-scourer's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Ru
+Fury-wielder's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Lo
+Harmonious Protector's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Mi
+Knowledge-seeker's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Lo
+Nature-friend's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Lo
+Peace-mender's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Ru
+Song-warrior's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Mi
+Thunder-wielder's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Ru
+Vigilant Watcher's Leggings of the Morannon (4s):	282	2007				104		517																																																										Legs	Mi
 Supreme Leggings of the Flame-scourer (4s):	258	1874				94		467																																																									
 Supreme Leggings of the Fury-wielder (4s):	258	1874				94		467																																																									
 Supreme Leggings of the Harmonious Protector (4s):	258	1874				94		467																																																									
@@ -379,6 +430,15 @@ Leggings of the Great Shore	192	1433			171	205								461			768
 Supple Fangorn Trousers of Insight	182	1454			193	225	128							146																																																			
 Supple Fangorn Trousers of Spirit	182	1454			193	225	128										146																																																
 Feet																																																																	
+Flame-scourer's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Ru
+Fury-wielder's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Lo
+Harmonious Protector's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Mi
+Knowledge-seeker's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Lo
+Nature-friend's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Lo
+Peace-mender's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Ru
+Song-warrior's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Mi
+Thunder-wielder's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Ru
+Vigilant Watcher's Boots of the Morannon (4s):	282	965				104		517																																																										Feet	Mi
 Supreme Boots of the Flame-scourer (4s):	258	901				94		467																																																									
 Supreme Boots of the Fury-wielder (4s):	258	901				94		467																																																									
 Supreme Boots of the Harmonious Protector (4s):	258	901				94		467																																																									
@@ -437,6 +497,14 @@ Supple Fangorn Shoes of Insight	182	699			193	225	128							146
 Supple Fangorn Shoes of Spirit	182	699			193	225	128										146																																																
 Padded Boots of the Dragon Clan	164	597			143	171								656	1205																																																		
 Shields																																																																	
+Shield of the Midnight Sky	1	5																	16
+Shield of the Wilds	1	5																	16
+Shield of the Golden Sky	1	5																	16
+Ithilien Shield	1	5																	16
+Runed Buckler of the Battle-singer	258	2222				474	47	2334									619		2072
+Runed Shield of the Last Stand	258	2222	474				118	2334											2072
+Buckler of the Battle-singer	246	2169				450	112	1472											1976
+Shield of the Last Stand	246	2169	450				112	1472											1976
 Shield of the Discordant War	234	2116				298	127	1665									562		1880																																														
 Bulwark of the Last Defence	234	2116	319				170	1665											1880																																														
 Anórien Assault-shield of Might	201	1971	252		180		108							804					1616																																														

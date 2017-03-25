@@ -1,6 +1,15 @@
 	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
 Ears																																																																	
+Empowered Earring of the Battle-readied Warrior (3s):	282		391					690																																																										Ears	BeCaChGuWa
+Empowered Earring of the Deft Watcher (3s):	282			391				690																																																										Ears	BuHuWa
+Empowered Earring of the Willful Defender (3s):	282					391		690																																																										Ears	LoMiRu
+Master-provisioner's Earring of the Battle-readied Warrior (3s):	258		355					623																																																										Ears	BeCaChGuWa
+Master-provisioner's Earring of the Deft Watcher (3s):	258			355				623																																																										Ears	BuHuWa
+Master-provisioner's Earring of the Willful Defender (3s):	258					355		623																																																										Ears	LoMiRu
 Delicate Agate Earring of Ithilien's Bounty (3s):	246					225		589																																																									
+Earring of the Battle-readied Warrior (3s):	246		225					589																																																										Ears	BeCaChGuWa
+Earring of the Deft Watcher (3s):	246			225				589																																																										Ears	BuHuWa
+Earring of the Willful Defender (3s):	246					225		589																																																										Ears	LoMiRu
 Heavy Garnet Earring of Ithilien's Bounty (3s):	246		225					589																																																									
 Patterned Umber-brushed Earring of Ithilien's Bounty (3s):	246			225				589																																																									
 Greater Earring of the Pelennor Sage (3s):	234					213		555																																																									
@@ -57,8 +66,17 @@ Adept Officer's Dextrous Earring	176			217	186										2152	563
 Adept Officer's Resilient Earring	176			186	217										2152	563																																																	
 Exquisite Emerald Earring of Combat	156		162		135			420						374																																																			
 Neck																																																																	
+Empowered Corded Necklace of the West (3s):	282			391				690																																																										Neck	BuHuWa
+Empowered Elegant Necklace of the West (3s):	282					391		690																																																										Neck	LoMiRu
+Empowered Enduring Necklace of the West (3s):	282		391					690																																																										Neck	BeCaChGuWa
+Master-weaponist's Corded Necklace of the West (3s):	258			355				623																																																										Neck	BuHuWa
+Master-weaponist's Elegant Necklace of the West (3s):	258					355		623																																																										Neck	LoMiRu
+Master-weaponist's Enduring Necklace of the West (3s):	258		355					623																																																										Neck	BeCaChGuWa
 Braided Herb-brushed Choker of Ithilien's Bounty (3s):	246			225				589																																																									
+Corded Necklace of the West (3s):	246			225				589																																																										Neck	BuHuWa
 Delicate Vine-woven Necklace of Ithilien's Bounty (3s):	246					225		589																																																									
+Elegant Necklace of the West (3s):	246					225		589																																																										Neck	LoMiRu
+Enduring Necklace of the West (3s):	246		225					589																																																										Neck	BeCaChGuWa
 Heavy Emerald Pendant of Ithilien's Bounty (3s):	246		225					589																																																									
 Greater Necklace of the Pelennor Sage (3s):	234					213		555																																																									
 Greater Necklace of the Pelennor Scout (3s):	234			213				555																																																									
@@ -238,6 +256,15 @@ Adept Officer's Resilient Ring	176			186	217		77									563
 Master Engineer's Resilient Ring	176			186	217									422		845																																																	
 Exquisite Emerald Ring of Combat	156		162		135			420						374																																																			
 Pockets																																																																	
+Empowered Crest of Gondor's Strength (3s):	282		391					690																																																										Pocket	BeCaChGuWa
+Empowered Crest of Gondor's Swiftness (3s):	282			391				690																																																										Pocket	BuHuWa
+Empowered Crest of Gondor's Wisdom (3s):	282					391		690																																																										Pocket	LoMiRu
+Master-armourer's Crest of Gondor's Strength (3s):	258		355					623																																																										Pocket	BeCaChGuWa
+Master-armourer's Crest of Gondor's Swiftness (3s):	258			355				623																																																										Pocket	BuHuWa
+Master-armourer's Crest of Gondor's Wisdom (3s):	258					355		623																																																										Pocket	LoMiRu
+Crest of Gondor's Strength (3s):	246		225					589																																																										Pocket	BeCaChGuWa
+Crest of Gondor's Swiftness (3s):	246			225				589																																																										Pocket	BuHuWa
+Crest of Gondor's Wisdom (3s):	246					225		589																																																										Pocket	LoMiRu
 Hilt of Eärnil (3s):	234		255		149																																																												
 Hilt of Eärnil (3s):	234			255	149																																																												
 Hilt of Eärnil (3s):	234				149	255																																																											

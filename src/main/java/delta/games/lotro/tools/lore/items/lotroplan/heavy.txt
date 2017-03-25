@@ -20,6 +20,15 @@
 #Deeping-rift set bonus: 6 Equipped	192		255													1536		1170																																															
 #Wall's End set bonus: 6 Equipped	192				340											1536																																																	
 Head																																																																	
+Honed Blade's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Gu
+Martial Defender's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ch
+Resolute Leader's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ca
+Shadow-bane's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Gu
+Siege-breaker's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ch
+Steadfast Renewer's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ca
+Storm-bringer's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ch
+Unwavering Charger's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Ca
+Unyielding Defender's Helm of the Morannon (4s):	282	1408	104					517																																																										Head	Gu
 Supreme Helm of the Honed Blade (4s):	258	1306	94					467																																																									
 Supreme Helm of the Martial Defender (4s):	258	1306	94					467																																																									
 Supreme Helm of the Resolute Leader (4s):	258	1306	94					467																																																									
@@ -96,6 +105,15 @@ Stalwart War Helmet of the Deep	176	948	186		217														354			1267	1267
 Helm of the Ancient Flame	176	948	186		217														1062			1267	634																																										
 Nadhin Footman's Helm (3s):	176	898	108		31																																																												
 Shoulders																																																																	
+Honed Blade's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Gu
+Martial Defender's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ch
+Resolute Leader's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ca
+Shadow-bane's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Gu
+Siege-breaker's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ch
+Steadfast Renewer's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ca
+Storm-bringer's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ch
+Unwavering Charger's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Ca
+Unyielding Defender's Pauldrons of the Morannon (4s):	282	1408	104					517																																																										Shoulders	Gu
 Supreme Pauldrons of the Honed Blade (4s):	258	1306	94					467																																																									
 Supreme Pauldrons of the Martial Defender (4s):	258	1306	94					467																																																									
 Supreme Pauldrons of the Resolute Leader (4s):	258	1306	94					467																																																									
@@ -169,6 +187,15 @@ Defensive War Pauldrons of the Deep	176	948	186		217		77												1416
 Stalwart War Pauldrons of the Deep	176	948	186		217														354			1267	1267																																										
 Potent Great River Pauldrons of Endurance	84	450	63		63															672			756		757																																								
 Chest																																																																	
+Honed Blade's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Gu
+Martial Defender's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ch
+Resolute Leader's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ca
+Shadow-bane's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Gu
+Siege-breaker's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ch
+Steadfast Renewer's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ca
+Storm-bringer's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ch
+Unwavering Charger's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Ca
+Unyielding Defender's Breastplate of the Morannon (4s):	282	4685	104					517																																																										Chest	Gu
 Supreme Breastplate of the Honed Blade (4s):	258	4344	94					467																																																									
 Supreme Breastplate of the Martial Defender (4s):	258	4344	94					467																																																									
 Supreme Breastplate of the Resolute Leader (4s):	258	4344	94					467																																																									
@@ -237,6 +264,15 @@ Greater Enduring Breastplate of Evasion	176	3155	186		217																	950	19
 Stalwart War Armour of the Deep	176	3155	186		217														354			1267	1267																																										
 Breastplate of the Rider	176	2999	186		155									422	2152																																																		
 Hands																																																																	
+Honed Blade's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Gu
+Martial Defender's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ch
+Resolute Leader's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ca
+Shadow-bane's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Gu
+Siege-breaker's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ch
+Steadfast Renewer's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ca
+Storm-bringer's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ch
+Unwavering Charger's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Ca
+Unyielding Defender's Gauntlets of the Morannon (4s):	282	2342	104					517																																																										Hands	Gu
 Supreme Gauntlets of the Honed Blade (4s):	258	2172	94					467																																																									
 Supreme Gauntlets of the Martial Defender (4s):	258	2172	94					467																																																									
 Supreme Gauntlets of the Resolute Leader (4s):	258	2172	94					467																																																									
@@ -306,6 +342,15 @@ Gauntlets of the Fabled Protector	176	1577	186		217														708			950	1267
 Stalwart War Gauntlets of the Deep	176	1577	186		217														354			1267	1267																																										
 Nadhin Footman's Gauntlets (3s):	176	1501	108				31																																																										
 Legs																																																																	
+Honed Blade's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Gu
+Martial Defender's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ch
+Resolute Leader's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ca
+Shadow-bane's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Gu
+Siege-breaker's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ch
+Steadfast Renewer's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ca
+Storm-bringer's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ch
+Unwavering Charger's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Ca
+Unyielding Defender's Battle Leggings of the Morannon (4s):	282	3904	104					517																																																										Legs	Gu
 Supreme Battle Leggings of the Honed Blade (4s):	258	3620	94					467																																																									
 Supreme Battle Leggings of the Martial Defender (4s):	258	3620	94					467																																																									
 Supreme Battle Leggings of the Resolute Leader (4s):	258	3620	94					467																																																									
@@ -372,6 +417,15 @@ Defensive War Leggings of the Deep	176	2629	186		217		77												1416
 Stalwart War Leggings of the Deep	176	2629	186		217														354			1267	1267																																										
 Greater Valourous Leggings of Penetration	176	2629	217		186									704		563																																																	
 Feet																																																																	
+Honed Blade's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Gu
+Martial Defender's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ch
+Resolute Leader's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ca
+Shadow-bane's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Gu
+Siege-breaker's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ch
+Steadfast Renewer's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ca
+Storm-bringer's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ch
+Unwavering Charger's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Ca
+Unyielding Defender's Greaves of the Morannon (4s):	282	1878	104					517																																																										Feet	Gu
 Supreme Greaves of the Honed Blade (4s):	258	1741	94					467																																																									
 Supreme Greaves of the Martial Defender (4s):	258	1741	94					467																																																									
 Supreme Greaves of the Resolute Leader (4s):	258	1741	94					467																																																									
@@ -439,6 +493,8 @@ Greater Enduring Boots of Evasion	176	1265	186		217														1062				1901
 Stalwart War Boots of the Deep	176	1265	186		217														354			1267	1267																																										
 Steel Boots of the Dragon Clan	164	1116	171		143									656	1205																																																		
 Shields																																																																	
+Runed Bulwark of the Great Host	258	7106	474					2334											5180			1393	929																																							-10,0%
+Bulwark of the Great Host	246	6937	450					1472											4940			1328	886																																							-10,0%
 Bulwark of the Lost Causeway	234	6768	298					1665											4700		1895	1264	1264																																							-10,0%			
 Anórien War-shield	201	6302	144		216														4040		2714	1809	1809																																							-10,0%			
 Bulwark of the Defender	201	6302	216		252		90												4040				1447																																							-10,0%			

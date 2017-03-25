@@ -70,6 +70,7 @@ public class LotroPlanItemsDbLoader
     for(Item item : items)
     {
       String name=item.getName();
+      name=name.replace(' ',' ');
       updateArmourType(armourType,item);
       List<Item> selectedItems=map.get(name);
       if (selectedItems==null)
@@ -233,6 +234,7 @@ public class LotroPlanItemsDbLoader
     {
       String name=item.getName();
       if (name==null) name="";
+      name=name.replace(' ',' ');
       List<Item> itemsForName=map.get(name);
       if (itemsForName==null)
       {
@@ -298,7 +300,11 @@ public class LotroPlanItemsDbLoader
       item=new Item();
     }
     // ID
-    String idStr=fields[LotroPlanTable.NOTES].trim();
+    String idStr="";
+    if (fields.length>=LotroPlanTable.NOTES)
+    {
+      idStr=fields[LotroPlanTable.NOTES].trim();
+    }
     int id=0;
     if (idStr.startsWith("ID:"))
     {

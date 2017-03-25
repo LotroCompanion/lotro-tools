@@ -25,6 +25,18 @@
 #Orophin's Watch set bonus: 6 Equipped	192			170	170											768							1728																																										
 #Spyhill set bonus: 6 Equipped	192			255	170									768																																																			
 Head																																																																	
+Clever Trapper's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Hu
+Fearless Soldier's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Wa
+Fierce Skin-changer's Helm of the Morannon (4s):	282	1081	104					517																																																										Head	Be
+Hidden Blade's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Bu
+Luck-maker's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Bu
+Precise Bowmaster's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Hu
+Resilient Skin-changer's Helm of the Morannon (4s):	282	1081	104					517																																																										Head	Be
+Shield-splinterer's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Wa
+Sure-footed Huntsman's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Hu
+Tenacious Skin-changer's Helm of the Morannon (4s):	282	1081	104					517																																																										Head	Be
+Trickster's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Bu
+Unshakeable Spearman's Helm of the Morannon (4s):	282	1081		104				517																																																										Head	Wa
 Supreme Helm of the Clever Trapper (4s):	258	1005		94				467																																																									
 Supreme Helm of the Fearless Soldier (4s):	258	1005		94				467																																																									
 Supreme Helm of the Fierce Skin-changer (4s):	258	1005	94					467																																																									
@@ -121,6 +133,18 @@ Watchful Combat Helm of the Deep	176	741		186	217														354			1267	1267
 Nadhin Footman's Padded Helm (3s):	176	702	108		31																																																												
 Nadhin Footman's Helm (3s):	176	702		108	31																																																												
 Shoulders																																																																	
+Clever Trapper's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Hu
+Fearless Soldier's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Wa
+Fierce Skin-changer's Shoulders of the Morannon (4s):	282	1081	104					517																																																										Shoulders	Be
+Hidden Blade's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Bu
+Luck-maker's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Bu
+Precise Bowmaster's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Hu
+Resilient Skin-changer's Shoulders of the Morannon (4s):	282	1081	104					517																																																										Shoulders	Be
+Shield-splinterer's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Wa
+Sure-footed Huntsman's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Hu
+Tenacious Skin-changer's Shoulders of the Morannon (4s):	282	1081	104					517																																																										Shoulders	Be
+Trickster's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Bu
+Unshakeable Spearman's Shoulders of the Morannon (4s):	282	1081		104				517																																																										Shoulders	Wa
 Supreme Shoulders of the Clever Trapper (4s):	258	1005		94				467																																																									
 Supreme Shoulders of the Fearless Soldier (4s):	258	1005		94				467																																																									
 Supreme Shoulders of the Fierce Skin-changer (4s):	258	1005	94					467																																																									
@@ -213,6 +237,18 @@ Skillful Combat Pauldrons of the Deep	176	741		217	186									563	430	563
 Steadfast Combat Pauldrons of the Deep	176	741		186	217		77												1416																																														
 Watchful Combat Pauldrons of the Deep	176	741		186	217														354			1267	1267																																										
 Chest																																																																	
+Clever Trapper's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Hu
+Fearless Soldier's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Wa
+Fierce Skin-changer's Chestplate of the Morannon (4s):	282	3595	104					517																																																										Chest	Be
+Hidden Blade's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Bu
+Luck-maker's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Bu
+Precise Bowmaster's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Hu
+Resilient Skin-changer's Chestplate of the Morannon (4s):	282	3595	104					517																																																										Chest	Be
+Shield-splinterer's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Wa
+Sure-footed Huntsman's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Hu
+Tenacious Skin-changer's Chestplate of the Morannon (4s):	282	3595	104					517																																																										Chest	Be
+Trickster's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Bu
+Unshakeable Spearman's Chestplate of the Morannon (4s):	282	3595		104				517																																																										Chest	Wa
 Supreme Chestplate of the Clever Trapper (4s):	258	3345		94				467																																																									
 Supreme Chestplate of the Fearless Soldier (4s):	258	3345		94				467																																																									
 Supreme Chestplate of the Fierce Skin-changer (4s):	258	3345	94					467																																																									
@@ -299,6 +335,18 @@ Skillful Combat Armour of the Deep	176	2467		217	186									563	430	563
 Steadfast Combat Armour of the Deep	176	2467		186	217		77												1416																																														
 Watchful Combat Armour of the Deep	176	2467		186	217														354			1267	1267																																										
 Hands																																																																	
+Clever Trapper's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Hu
+Fearless Soldier's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Wa
+Fierce Skin-changer's Gauntlets of the Morannon (4s):	282	1797	104					517																																																										Hands	Be
+Hidden Blade's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Bu
+Luck-maker's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Bu
+Precise Bowmaster's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Hu
+Resilient Skin-changer's Gauntlets of the Morannon (4s):	282	1797	104					517																																																										Hands	Be
+Shield-splinterer's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Wa
+Sure-footed Huntsman's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Hu
+Tenacious Skin-changer's Gauntlets of the Morannon (4s):	282	1797	104					517																																																										Hands	Be
+Trickster's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Bu
+Unshakeable Spearman's Gauntlets of the Morannon (4s):	282	1797		104				517																																																										Hands	Wa
 Supreme Gauntlets of the Clever Trapper (4s):	258	1672		94				467																																																									
 Supreme Gauntlets of the Fearless Soldier (4s):	258	1672		94				467																																																									
 Supreme Gauntlets of the Fierce Skin-changer (4s):	258	1672	94					467																																																									
@@ -386,6 +434,18 @@ Watchful Combat Gauntlets of the Deep	176	1233		186	217														354			1267	
 Nadhin Footman's Padded Gauntlets (3s):	176	1173	108													282																																																	
 Nadhin Footman's Gauntlets (3s):	176	1173		108												282																																																	
 Legs																																																																	
+Clever Trapper's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Hu
+Fearless Soldier's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Wa
+Fierce Skin-changer's Leggings of the Morannon (4s):	282	2996	104					517																																																										Legs	Be
+Hidden Blade's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Bu
+Luck-maker's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Bu
+Precise Bowmaster's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Hu
+Resilient Skin-changer's Leggings of the Morannon (4s):	282	2996	104					517																																																										Legs	Be
+Shield-splinterer's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Wa
+Sure-footed Huntsman's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Hu
+Tenacious Skin-changer's Leggings of the Morannon (4s):	282	2996	104					517																																																										Legs	Be
+Trickster's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Bu
+Unshakeable Spearman's Leggings of the Morannon (4s):	282	2996		104				517																																																										Legs	Wa
 Supreme Leggings of the Clever Trapper (4s):	258	2787		94				467																																																									
 Supreme Leggings of the Fearless Soldier (4s):	258	2787		94				467																																																									
 Supreme Leggings of the Fierce Skin-changer (4s):	258	2787	94					467																																																									
@@ -469,6 +529,18 @@ Skillful Combat Leggings of the Deep	176	2056		217	186									563	430	563
 Steadfast Combat Leggings of the Deep	176	2056		186	217		77												1416																																														
 Watchful Combat Leggings of the Deep	176	2056		186	217														354			1267	1267																																										
 Feet																																																																	
+Clever Trapper's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Hu
+Fearless Soldier's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Wa
+Fierce Skin-changer's Boots of the Morannon (4s):	282	1441	104					517																																																										Feet	Be
+Hidden Blade's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Bu
+Luck-maker's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Bu
+Precise Bowmaster's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Hu
+Resilient Skin-changer's Boots of the Morannon (4s):	282	1441	104					517																																																										Feet	Be
+Shield-splinterer's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Wa
+Sure-footed Huntsman's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Hu
+Tenacious Skin-changer's Boots of the Morannon (4s):	282	1441	104					517																																																										Feet	Be
+Trickster's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Bu
+Unshakeable Spearman's Boots of the Morannon (4s):	282	1441		104				517																																																										Feet	Wa
 Supreme Boots of the Clever Trapper (4s):	258	1341		94				467																																																									
 Supreme Boots of the Fearless Soldier (4s):	258	1341		94				467																																																									
 Supreme Boots of the Fierce Skin-changer (4s):	258	1341	94					467																																																									
@@ -552,6 +624,8 @@ Skillful Combat Boots of the Deep	176	989		217	186									563	430	563
 Steadfast Combat Boots of the Deep	176	989		186	217		77												1416																																														
 Watchful Combat Boots of the Deep	176	989		186	217														354			1267	1267																																										
 Shields																																																																	
+Runed Warden's Shield of the Final Gambit	258	3250		474				2334						619		413			4144
+Warden's Shield of the Final Gambit	246	3173		450				1472						590		394			3952
 Shield of the Relentless Spearman	234	3096		298			85	1665						562		374			3760																																														
 Anórien Combat-shield	201	2883		252	180		108							804					3232																																														
 Bridge-warden's Shield	201	2883		252	216		72							482		322			3232																																														
