@@ -39,11 +39,11 @@ Polished Star-set Earring of the Nobleman	201				180	270								804	2450
 Sturdy Earrings of the Vale	195		174		174											1560								1756																																									
 Gleaming Earrings of the Vale	195			174	174											1560								1756																																									
 Polished Earrings of the Vale	195				174	174											1560								1756																																								
-Golden Hare Earring	234		298		255		127								1707																																																		
-Gold Dwarf-make Earring	234		255		298																	2106	1685																																										
-Luminescent Earring	234			298	255									374	1707	749																																																	
-Large Ruby Earring	234				255	298		278							2276		562																																																
-Bloodstone Earring	234				255	298	106		478																																																								
+(1879339540) Golden Hare Earring	234		298		255		127								1707																																																		
+(1879339508) Gold Dwarf-make Earring	234		255		298																	2106	1685																																										
+(1879339536) Luminescent Earring	234			298	255									374	1707	749																																																	
+(1879339513) Large Ruby Earring	234				255	298		278							2276		562																																																
+(1879339554) Bloodstone Earring	234				255	298	106		478																																																								
 Greater Valourous Earring of Finesse	192		239		205										2343	614																																																	
 Adept Officer's Enduring Earring	192		205		239		85															1382																																											
 Master Engineer's Enduring Earring	192		205		239														1158				2074																																										

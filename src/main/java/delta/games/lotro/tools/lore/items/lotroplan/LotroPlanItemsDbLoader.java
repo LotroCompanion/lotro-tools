@@ -48,10 +48,11 @@ public class LotroPlanItemsDbLoader
   public void doIt()
   {
     List<Item> items=loadTable("itemsdb.txt");
-    HashMap<String,List<Item>> map=asMap(items);
+    HashMap<String,List<Item>> map=asMapByName(items);
+    HashMap<Integer,Item> mapById=asMapById(items);
     for(String tableName : NAMES)
     {
-      handleAdditionalTable(tableName,items,map);
+      handleAdditionalTable(tableName,items,map,mapById);
     }
     ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("data/items/tmp/itemsdb.xml").getAbsoluteFile();
@@ -60,7 +61,7 @@ public class LotroPlanItemsDbLoader
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);
   }
 
-  private void handleAdditionalTable(String tableName, List<Item> allItems, HashMap<String,List<Item>> map)
+  private void handleAdditionalTable(String tableName, List<Item> allItems, HashMap<String,List<Item>> map,HashMap<Integer,Item> mapById)
   {
     ArmourType armourType=null;
     if ("heavy.txt".equals(tableName)) armourType=ArmourType.HEAVY;
@@ -94,13 +95,27 @@ public class LotroPlanItemsDbLoader
         }
         else
         {
-          Integer itemLevel=item.getItemLevel();
-          System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
-          if (selectedItems!=null)
+          boolean doComplain=true;
+          int id=item.getIdentifier();
+          if (id!=0)
           {
-            for(Item currentItem : selectedItems)
+            Item itemsdbItem=mapById.get(Integer.valueOf(id));
+            if (itemsdbItem==null)
             {
-              _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
+              allItems.add(item);
+              doComplain=false;
+            }
+          }
+          if (doComplain)
+          {
+            Integer itemLevel=item.getItemLevel();
+            System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
+            if (selectedItems!=null)
+            {
+              for(Item currentItem : selectedItems)
+              {
+                _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
+              }
             }
           }
         }
@@ -140,6 +155,7 @@ public class LotroPlanItemsDbLoader
             return currentItem;
           }
         }
+        return null;
       }
       List<Item> goodItems=null;
       // Use item level
@@ -227,7 +243,7 @@ public class LotroPlanItemsDbLoader
     return false;
   }
 
-  private HashMap<String,List<Item>> asMap(List<Item> items)
+  private HashMap<String,List<Item>> asMapByName(List<Item> items)
   {
     HashMap<String,List<Item>> map=new HashMap<String,List<Item>>();
     for(Item item : items)
@@ -242,6 +258,20 @@ public class LotroPlanItemsDbLoader
         map.put(name,itemsForName);
       }
       itemsForName.add(item);
+    }
+    return map;
+  }
+
+  private HashMap<Integer,Item> asMapById(List<Item> items)
+  {
+    HashMap<Integer,Item> map=new HashMap<Integer,Item>();
+    for(Item item : items)
+    {
+      int id=item.getIdentifier();
+      if (id!=0)
+      {
+        map.put(Integer.valueOf(id),item);
+      }
     }
     return map;
   }
