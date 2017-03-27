@@ -99,13 +99,13 @@ Siege-breaker's Necklace of Tactics (2s):	201					180		694						804
 Damrod's Pendant (3s):	201		252																																																														
 Anborn's Pendant (3s):	201			252																																																													
 Mablung's Pendant (3s):	201					252																																																											
-Ancient Jade Necklace	234		298		255										3414	562																																																	
-Choker of the Spearhead	234		255		298		127														1264																																												
-Large Opal Necklace	234			298	255				239						2276	562																																																	
-Compass Rose Necklace	234			255	298																	1685	2106																																										
-Pendant of the Golden Triangle	234			255	298																1264	2527																																											
-Elegant Jade Choker	234				255	298								749			936																																																
-Shimmering Gold Pendant	234				255	298	127										562																																																
+(1879339535) Ancient Jade Necklace	234		298		255										3414	562																																																	
+(1879339547) Choker of the Spearhead	234		255		298		127														1264																																												
+(1879339522) Large Opal Necklace	234			298	255				239						2276	562																																																	
+(1879339538) Compass Rose Necklace	234			255	298																	1685	2106																																										
+(1879339561) Pendant of the Golden Triangle	234			255	298																1264	2527																																											
+(1879339515) Elegant Jade Choker	234				255	298								749			936																																																
+(1879339524) Shimmering Gold Pendant	234				255	298	127										562																																																
 Exquisite Necklace of Fangorn	182		225		193			307						437		437																																																	
 Exquisite Fangorn Necklace of Skill	182			225	193			307						437		437																																																	
 Exquisite Fangorn Necklace of Tactics	182				193	225		307						437			437																																																
@@ -163,11 +163,11 @@ Hearty Bracelet of Skilled Defiance (3s):	201				126	126
 Gleaming Bracelet of the Prince	195		261		174																			1756	1756																																								
 Polished Bracelet of the Prince	195			261	174																			1756	1756																																								
 Shining Bracelet of the Prince	195				174	261																		1756	1756																																								
-Spun Gold Bracelet	234		298		255			416						749		374																																																	
-Lapis Lazuli Cuff	234		255		298		127												1410																																														
-Silver Cuff	234			298	255		106	555																																																									
-Bracelet of the Three Stars	234				255	298	106								2276																																																		
-Bangle of Deep Waters	234				255	298		833						562																																																			
+(1879339501) Spun Gold Bracelet	234		298		255			416						749		374																																																	
+(1879339533) Lapis Lazuli Cuff	234		255		298		127												1410																																														
+(1879339537) Silver Cuff	234			298	255		106	555																																																									
+(1879339558) Bracelet of the Three Stars	234				255	298	106								2276																																																		
+(1879339502) Bangle of Deep Waters	234				255	298		833						562																																																			
 Adept Officer's Enduring Bracelet	192		239		205		85								1874																																																		
 Skilled Vanguard's Resolute Bracelet	192				205	239	68	219							1406																																																		
 Adept Officer's Persevering Bracelet	192				205	239								614			768																																																
@@ -230,15 +230,15 @@ Scout's Fateful Ring (1s):	192			256			136								2343
 Scout's Sturdy Ring (1s):	192			256	171									461																																																			
 Soldier's Fateful Ring (1s):	192		256				136								2343																																																		
 Soldier's Sturdy Ring (1s):	192		256		171																				1037																																								
-Glittering Ring of the Blessed	234		298		255		106		478																																																								
-Ring of the Ciphered Message	234		255		298			416											940				1685																																										
+(1879339562) Glittering Ring of the Blessed	234		298		255		106		478																																																								
+(1879339506) Ring of the Ciphered Message	234		255		298			416											940				1685																																										
 Skilled Vanguard's Enduring Ring	192		205		239			547														1382																																											
-Melted Bronze Ring	234			298	255				358					1123																																																			
-Ring of the Burnt Offering	234			255	298		106	555																																																									
+(1879339541) Melted Bronze Ring	234			298	255				358					1123																																																			
+(1879339500) Ring of the Burnt Offering	234			255	298		106	555																																																									
 Greater Resolute Ring of Fate	192				205	239	68								1406		307																																																
 Greater Resolute Ring of Penetration	192				205	239		437						768																																																			
-Lost Wedding Ring	234				255	298			358								1123																																																
-Ring of the Broken Promise	234				255	298		416	478						1138																																																		
+(1879339503) Lost Wedding Ring	234				255	298			358								1123																																																
+(1879339542) Ring of the Broken Promise	234				255	298		416	478						1138																																																		
 Master Engineer's Persevering Ring	192				205	239	102							461																																																			
 Skilled Vanguard's Persevering Ring	192				205	239		219						614			461																																																
 Skilled Vanguard's Resolute Ring	192				205	239		219							1406		614																																																
@@ -299,7 +299,7 @@ Small Golden Dish	234		255		298				239												1685	1264
 Leather-bound Diary	234		298		255									749		936																																																	
 Fancy Gems in a Shell	234				255	298		278						749	1707																																																		
 Adept Officer's Persevering Token	192				205	239								768			614																																																
-Carved Jewellery Box	234			298	255		127							562																																																			
+(1879339560) Carved Jewellery Box	234			298	255		127							562																																																			
 Illuminated Fangorn Book of Combat	182		225		193		80	409																																																									
 Illuminated Fangorn Book of Precision	182			225	193		80	409																																																									
 Illuminated Fangorn Book of Spirit	182				193	225	80	409																																																									

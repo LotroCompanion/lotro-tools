@@ -87,7 +87,7 @@ Hood of Storied Mariner	192	544			205	239	68							768
 (1879313783) Light Nadhin Hood (4s):	192	544				119																																																											
 Amarthgarab	192	544			171	171	85										1536																																																
 Golthol	192	544				171	256										1536																																																
-Faithful Mender's Hat	192	544			205	239								461			922																																																
+(1879339463) Faithful Mender's Hat	192	544			205	239								461			922																																																
 Nadhin Footman's Helm (3s):	192	515			34	119																																																											
 Vibrant Ancient Circlet of the Onodrim	188	564			233	267	133												756																																														
 Tactical Ancient Circlet of the Onodrim	188	564			233	267								752			752																																																
