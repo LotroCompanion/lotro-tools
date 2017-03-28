@@ -13,31 +13,31 @@ Axe of the Looming Gate	246		337					2355								787												Beleriand Damage
 Balanced Axe of the Rangers	246			337				2355								787												Westernesse Damage Type																									
 Blade of the Tactician	246					337		2355									787											Beleriand Damage Type																									1,0%
 Dirk of the Great Ruse	246			337				2355								787												Westernesse Damage Type																									
-Ancient Bronze Woodman's Axe	234			298	255									936		749																																																	
-Axe of Dusk	234			255	298		85															1264	842																																										
-Blade of Old Foes	234				255	298								749			936											Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
-Brigand's Boot Knife	234			298	255										2276	936												Ancient Dwarf-make Damage Type, +21 Damage to Orc-kind																																					
-Bronze Northman's Mace	234		255		298		127																1264					Beleriand Damage Type, +21 Damage to Ancient Evil																																					
-Butterbur's Walloper	234		298		255		127								1707													Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
+(1879339543) Ancient Bronze Woodman's Axe	234			298	255									936		749																																																	
+(1879339529) Axe of Dusk	234			255	298		85															1264	842																																										
+(1879339539) Blade of Old Foes	234				255	298								749			936											Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
+(1879339549) Brigand's Boot Knife	234			298	255										2276	936												Ancient Dwarf-make Damage Type, +21 Damage to Orc-kind																																					
+(1879339556) Bronze Northman's Mace	234		255		298		127																1264					Beleriand Damage Type, +21 Damage to Ancient Evil																																					
+(1879339512) Butterbur's Walloper	234		298		255		127								1707													Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
 Crossbow of the Grand Charge	234		298		255		85															1264	842					Ancient Dwarf-make Damage Type																																					
-Diplomat's Last Resort	234		298		255										2845	749												Ancient Dwarf-make Damage Type, +21 Damage to Orc-kind																																					
-Eldar-steel Blade	234				255	298	127								1707													Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
+(1879339521) Diplomat's Last Resort	234		298		255										2845	749												Ancient Dwarf-make Damage Type, +21 Damage to Orc-kind																																					
+(1879339532) Eldar-steel Blade	234				255	298	127								1707													Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
 Footman's Heavy Crossbow	234		298		255									936		749												Ancient Dwarf-make Damage Type																																					
-Gilded Ceremonial Mace	234		298		255									562	1138	749												Beleriand Damage Type, +21 Damage to Ancient Evil																																					
+(1879339510) Gilded Ceremonial Mace	234		298		255									562	1138	749												Beleriand Damage Type, +21 Damage to Ancient Evil																																					
 Gilded Hunting Bow	234		255		298														1410			2527						Beleriand Damage Type																																					
 Great Stonemason's Mallet	234		255		298														2820				1264					Beleriand Damage Type, +21 Damage to Spiders and Insects																																					
-Hammer of Blissful Slumber	234			298	255		85								1707	374												Beleriand Damage Type, +21 Damage to Spiders and Insects																																					
-Hewn Birch Club	234			255	298														1880			2106						Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
-Lossoth Bone Axe	234		298		255		106									749																																																	
-Mace of Ancient Authority	234			255	298		127																1264					Beleriand Damage Type, +21 Damage to Ancient Evil																																					
+(1879339567) Hammer of Blissful Slumber	234			298	255		85								1707	374												Beleriand Damage Type, +21 Damage to Spiders and Insects																																					
+(1879339551) Hewn Birch Club	234			255	298														1880			2106						Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
+(1879339546) Lossoth Bone Axe	234		298		255		106									749																																																	
+(1879339518) Mace of Ancient Authority	234			255	298		127																1264					Beleriand Damage Type, +21 Damage to Ancient Evil																																					
 Old Sentry's Mallet	234			255	298														2820				1264					Beleriand Damage Type, +21 Damage to Spiders and Insects																																					
-Pitted Headsman's Axe	234		255		298														940			1264	1685																																										
-Ruffian's Maple Blackjack	234			298	255		127								1707													Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
-Scout's Deft Blade	234			298	255									562	3414													Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
+(1879339525) Pitted Headsman's Axe	234		255		298														940			1264	1685																																										
+(1879339523) Ruffian's Maple Blackjack	234			298	255		127								1707													Ancient Dwarf-make Damage Type, +21 Damage to Ancient Evil																																					
+(1879339527) Scout's Deft Blade	234			298	255									562	3414													Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
 Sentryman's Horn Bow	234		298		255									374	1707	749												Beleriand Damage Type																																					
-Swift Flanged Mace	234			298	255									562	1138	749												Beleriand Damage Type, +21 Damage to Ancient Evil																																					
-Sword of Fallen Leaves	234			255	298									749									2106					Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
-Tower-guard's Blade	234		255		298		106												1880									Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
+(1879339526) Swift Flanged Mace	234			298	255									562	1138	749												Beleriand Damage Type, +21 Damage to Ancient Evil																																					
+(1879339559) Sword of Fallen Leaves	234			255	298									749									2106					Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
+(1879339566) Tower-guard's Blade	234		255		298		106												1880									Westernesse Damage Type, +21 Damage to Spiders and Insects																									1,0%												
 Well-worn Half-troll's Cleaver	234		319					2221								749												Beleriand Damage Type																																					
 Well-worn Axe of Harad	234			319				2221								749												Westernesse Damage Type																																					
 Well-worn Dagger of Fallen Stars	234			319				2221								749												Westernesse Damage Type																																					

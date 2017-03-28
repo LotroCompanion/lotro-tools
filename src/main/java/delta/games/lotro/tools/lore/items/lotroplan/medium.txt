@@ -629,8 +629,8 @@ Warden's Shield of the Final Gambit	246	3173		450				1472						590		394			3952
 Shield of the Relentless Spearman	234	3096		298			85	1665						562		374			3760																																														
 Anórien Combat-shield	201	2883		252	180		108							804					3232																																														
 Bridge-warden's Shield	201	2883		252	216		72							482		322			3232																																														
-Shield of the Regal Warden	234	3096		255	298		127												3760		1895																																												
-Shield of the Tireless Defender	234	3096		298	255									749		936			3760																																														
+(1879339528) Shield of the Regal Warden	234	3096		255	298		127												3760		1895																																												
+(1879339517) Shield of the Tireless Defender	234	3096		298	255									749		936			3760																																														
 Blackroot Strong Warden Shield	192	2673		205	171									461	2343				3088																																														
 Blackroot Tempered Warden Shield	192	2673		171	205														1544		2592		1037																																										
 Fangorn Combat-shield of Force	182	2760		225	193		64							582	445				2928																																														

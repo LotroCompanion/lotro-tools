@@ -87,7 +87,7 @@ Hood of Storied Mariner	192	544			205	239	68							768
 (1879313783) Light Nadhin Hood (4s):	192	544				119																																																											
 Amarthgarab	192	544			171	171	85										1536																																																
 Golthol	192	544				171	256										1536																																																
-(1879339463) Faithful Mender's Hat	192	544			205	239								461			922																																																
+Faithful Mender's Hat	192	544			205	239								461			922																																																
 Nadhin Footman's Helm (3s):	192	515			34	119																																																											
 Vibrant Ancient Circlet of the Onodrim	188	564			233	267	133												756																																														
 Tactical Ancient Circlet of the Onodrim	188	564			233	267								752			752																																																
@@ -510,9 +510,9 @@ Bulwark of the Last Defence	234	2116	319				170	1665											1880
 Anórien Assault-shield of Might	201	1971	252		180		108							804					1616																																														
 Anórien Assault-shield of Will	201	1971			180	252	108							804					1616																																														
 Shield of the Preserver	201	1971			216	252	108										482		1616																																														
-Gallant Captain's Buckler	234	2116	255		298		127												1880		1895																																												
-Buckler of the Lonely Mountain	234	2116			255	298								749			936		1880																																														
-Song-weaver's Buckler	234	2116			255	298	127										562		1880																																														
+(1879339514) Gallant Captain's Buckler	234	2116	255		298		127												1880		1895																																												
+(1879339564) Buckler of the Lonely Mountain	234	2116			255	298								749			936		1880																																														
+(1879339511) Song-weaver's Buckler	234	2116			255	298	127										562		1880																																														
 Greater Resolute Shield of Fate	192	1931			205	239	102										461		1544																																														
 Greater Resolute Shield of Finesse	192	1931			205	239								461	2811				1544																																														
 Greater Resolute Shield of Tactics	192	1931			205	239								614			768		1544																																														
