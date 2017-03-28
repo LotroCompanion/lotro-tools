@@ -80,6 +80,9 @@ public class ItemNormalization
     // Build final items list
     List<Item> items=new ArrayList<Item>(sourceItems.values());
 
+    // Trim useless data
+    trimData(items);
+
     // Consistency checks
     consistencyChecks(items);
 
@@ -109,6 +112,24 @@ public class ItemNormalization
     rootDir.mkdirs();
     sorter.writeToFiles(rootDir);
     */
+  }
+
+  private void trimData(List<Item> items)
+  {
+    for(Item item : items)
+    {
+      // Remove money
+      item.setValue(null);
+      // Remove bonuses
+      item.getBonus().clear();
+      // Remove useless properties
+      item.removeProperty(ItemPropertyNames.ICON_URL);
+      item.removeProperty(ItemPropertyNames.ITEM_KEY);
+      item.removeProperty(ItemPropertyNames.LEGACY_NAME);
+      item.removeProperty(ItemPropertyNames.OLD_TULKAS_NAME);
+      item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
+      item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+    }
   }
 
   private void consistencyChecks(List<Item> items)
