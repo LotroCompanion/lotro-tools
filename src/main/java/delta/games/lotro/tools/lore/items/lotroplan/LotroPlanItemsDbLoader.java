@@ -14,6 +14,7 @@ import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -28,7 +29,7 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
 public class LotroPlanItemsDbLoader
 {
   //private static final String[] NAMES={};
-  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt"};
+  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt"};
 
   private String _section;
   private HashMap<Integer,Item> _failedItems=new HashMap<Integer,Item>();
@@ -92,6 +93,8 @@ public class LotroPlanItemsDbLoader
           updateArmourType(armourType,selectedItem);
           selectedItem.setEssenceSlots(item.getEssenceSlots());
           selectedItem.setEquipmentLocation(item.getEquipmentLocation());
+          selectedItem.setSubCategory(item.getSubCategory());
+          selectedItem.setRequiredClass(item.getRequiredClass());
         }
         else
         {
@@ -123,14 +126,14 @@ public class LotroPlanItemsDbLoader
     }
   }
 
-  private void updateArmourType(ArmourType type, Item selectedItem)
+  private void updateArmourType(ArmourType type, Item item)
   {
     if (type!=null)
     {
-      if (selectedItem instanceof Armour)
+      if (item instanceof Armour)
       {
-        Armour armour=(Armour)selectedItem;
-        if (selectedItem.getEquipmentLocation()==EquipmentLocation.OFF_HAND)
+        Armour armour=(Armour)item;
+        if (item.getEquipmentLocation()==EquipmentLocation.OFF_HAND)
         {
           if (type==ArmourType.HEAVY) type=ArmourType.HEAVY_SHIELD;
           else if (type==ArmourType.MEDIUM) type=ArmourType.WARDEN_SHIELD;
@@ -411,6 +414,55 @@ public class LotroPlanItemsDbLoader
     else if ("Wrists".equals(_section)) slot=EquipmentLocation.WRIST;
     else if ("Fingers".equals(_section)) slot=EquipmentLocation.FINGER;
     else if ("Pockets".equals(_section)) slot=EquipmentLocation.POCKET;
+
+    if ("Burglar Signals".equals(_section))
+    {
+      item.setSubCategory("Burglar:Signal");
+      slot=EquipmentLocation.RANGED_ITEM;
+      item.setRequiredClass(CharacterClass.BURGLAR);
+    }
+    else if ("Captain Standards".equals(_section))
+    {
+      item.setSubCategory("Captain:Standard");
+      slot=EquipmentLocation.RANGED_ITEM;
+      item.setRequiredClass(CharacterClass.CAPTAIN);
+    }
+    else if ("Hunter Tomes".equals(_section))
+    {
+      String subCategory="Tome";
+      if (name.contains("Wind-rider")) subCategory="Wind-rider";
+      if (name.contains("Whisper-draw")) subCategory="Whisper-draw";
+      item.setSubCategory("Hunter:"+subCategory);
+      slot=EquipmentLocation.CLASS_SLOT;
+      item.setRequiredClass(CharacterClass.HUNTER);
+    }
+    else if ("Lore-master Brooches".equals(_section))
+    {
+      item.setSubCategory("Lore-master:Stickpin");
+      slot=EquipmentLocation.RANGED_ITEM;
+      item.setRequiredClass(CharacterClass.LORE_MASTER);
+    }
+    else if ("Minstrel Instruments".equals(_section))
+    {
+      item.setSubCategory("Instrument");
+      slot=EquipmentLocation.RANGED_ITEM;
+      item.setRequiredClass(CharacterClass.MINSTREL);
+    }
+    else if ("Rune-keeper Chisels".equals(_section))
+    {
+      String subCategory="Other";
+      if (name.contains("Riffler")) subCategory="Riffler";
+      if (name.contains("Chisel")) subCategory="Chisel";
+      item.setSubCategory("Rune-keeper:"+subCategory);
+      slot=EquipmentLocation.RANGED_ITEM;
+      item.setRequiredClass(CharacterClass.RUNE_KEEPER);
+    }
+    else if ("Warden Carvings".equals(_section))
+    {
+      item.setSubCategory("Warden:Carving");
+      slot=EquipmentLocation.CLASS_SLOT;
+      item.setRequiredClass(CharacterClass.WARDEN);
+    }
     if (slot!=null)
     {
       item.setEquipmentLocation(slot);

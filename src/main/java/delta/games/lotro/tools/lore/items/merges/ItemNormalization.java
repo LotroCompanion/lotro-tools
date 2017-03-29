@@ -144,12 +144,20 @@ public class ItemNormalization
       if (item instanceof Armour)
       {
         Armour armour=(Armour)item;
+        int armourValue=armour.getArmourValue();
+        if (armourValue==0)
+        {
+          nbArmours++;
+          System.out.println("No armour value for: " + name + " (" + id + ')');
+        }
+        /*
         ArmourType type=armour.getArmourType();
         if (type==null)
         {
           nbArmours++;
           //System.out.println("No armour type for: " + name + " (" + id + ')');
         }
+        */
       }
       // Weapons
       if (item instanceof Weapon)
@@ -179,6 +187,13 @@ public class ItemNormalization
     if (ret==null)
     {
       return null;
+    }
+    String subCategory=ret.getSubCategory();
+    if ((subCategory!=null) && (subCategory.startsWith("LP:")))
+    {
+      subCategory=subCategory.substring(3);
+      ret.setSubCategory(subCategory);
+      ret.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
     }
     ret=normalizeSpecifics(ret);
     ret=normalizeArmours(ret);

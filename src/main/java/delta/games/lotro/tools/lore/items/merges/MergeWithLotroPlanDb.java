@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
@@ -242,6 +243,40 @@ public class MergeWithLotroPlanDb
         System.out.println("ID: " + id+": slot conflict: lotroplan=" + lpLocation + ", source=" + location);
       }
       result.setEquipmentLocation(lpLocation);
+    }
+    // Sub-category
+    String lpSubCategory=lotroplan.getSubCategory();
+    if ((lpSubCategory!=null) && (lpSubCategory.length()>0))
+    {
+      /*
+      String subCategory=result.getSubCategory();
+      boolean conflict=false;
+      if ((subCategory!=null) && (!subCategory.equals(lpSubCategory)))
+      {
+        conflict=true;
+      }
+      if (conflict)
+      {
+        System.out.println("ID: " + id+": category conflict: lotroplan=" + lpSubCategory + ", source=" + subCategory);
+      }
+      */
+      result.setSubCategory("LP:"+lpSubCategory);
+    }
+    // Class requirement
+    CharacterClass lpClass=lotroplan.getRequiredClass();
+    if (lpClass!=null)
+    {
+      CharacterClass cClass=result.getRequiredClass();
+      boolean conflict=false;
+      if ((cClass!=null) && (cClass!=lpClass))
+      {
+        conflict=true;
+      }
+      if (conflict)
+      {
+        System.out.println("ID: " + id+": class conflict: lotroplan=" + lpClass + ", source=" + cClass);
+      }
+      result.setRequiredClass(lpClass);
     }
 
     return result;
