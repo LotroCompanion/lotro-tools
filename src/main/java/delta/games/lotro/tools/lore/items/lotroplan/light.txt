@@ -317,6 +317,8 @@ Greater Gloves of the Peace-mender (4s):	234	1045				85		416
 Greater Gloves of the Song-warrior (4s):	234	1045				85		416																																																									
 Greater Gloves of the Thunder-wielder (4s):	234	1045				85		416																																																									
 Greater Gloves of the Vigilant Watcher (4s):	234	1045				85		416																																																									
+(1879339460) Gloves of the Watchful Keeper	234	1045			255	298									3414		562																																																
+(1879339493) Wizened Traveller's Gloves	234	1045			255	298								1123			562																																																
 Lesser Gloves of the Fury-wielder (4s):	222	1005				80		391																																																									
 Lesser Gloves of the Knowledge-seeker (4s):	222	1005				80		391																																																									
 Lesser Gloves of the Nature-friend (4s):	222	1005				80		391																																																									

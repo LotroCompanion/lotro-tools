@@ -372,6 +372,8 @@ Greater Gauntlets of the Sure-footed Huntsman (4s):	234	1547		85				416
 Greater Gauntlets of the Tenacious Skin-changer (4s):	234	1547	85					416																																																									
 Greater Gauntlets of the Trickster (4s):	234	1547		85				416																																																									
 Greater Gauntlets of the Unshakeable Spear (4s):	234	1547		85				416																																																									
+(1879339484) Gloves of Elder Kings	234	1547		255	298														940			1264	1685																																										
+(1879339473) Sleek Finger-less Gloves	234	1547		298	255										3414	562																																																	
 Gauntlets of the Clever Trapper (4s):	222	1485		80				391																																																									
 Gauntlets of the Fearless Soldier (4s):	222	1485		80				391																																																									
 Gauntlets of the Fierce Skin-changer (4s):	222	1485	80					391																																																									

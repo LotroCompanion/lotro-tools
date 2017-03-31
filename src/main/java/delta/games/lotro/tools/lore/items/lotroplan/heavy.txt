@@ -292,6 +292,8 @@ Greater Gauntlets of the Steadfast Renewer (4s):	234	2001	85					416
 Greater Gauntlets of the Storm-bringer (4s):	234	2001	85					416																																																									
 Greater Gauntlets of the Unwavering Charge (4s):	234	2001	85					416																																																									
 Greater Gauntlets of the Unyielding Defender (4s):	234	2001	85					416																																																									
+(1879339492) Arnorian Iron Gauntlets	234	2001	298		255										3414	562																																																	
+(1879339470) Gauntlets of the Fabled Protector	234	2001	255		298														940			1264	1685																																										
 Gauntlets of the Honed Blade (4s):	222	1916	80					391																																																									
 Gauntlets of the Martial Defender (4s):	222	1916	80					391																																																									
 Gauntlets of the Resolute Leader (4s):	222	1916	80					391																																																									
