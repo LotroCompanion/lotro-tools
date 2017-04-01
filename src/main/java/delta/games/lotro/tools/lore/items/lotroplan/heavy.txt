@@ -500,7 +500,7 @@ Bulwark of the Great Host	246	6937	450					1472											4940			1328	886							
 Bulwark of the Lost Causeway	234	6768	298					1665											4700		1895	1264	1264																																							-10,0%			
 Anórien War-shield	201	6302	144		216														4040		2714	1809	1809																																							-10,0%			
 Bulwark of the Defender	201	6302	216		252		90												4040				1447																																							-10,0%			
-Heavy Oaken Bulwark	234	6768	255		298		127												4700		1895																																									-10,0%			
+(1879339550) Heavy Oaken Bulwark	234	6768	255		298		127												4700		1895																																									-10,0%			
 Blackroot Tempered Heavy Shield	192	4980	171		205														3860		2592		1037																																							-10,0%			
 Fangorn War-shield of Command	182	6034	225		193		64							582	445				3660																																											-10,0%			
 Fangorn War-shield of Defence	182	6034	193		225														3660		983	1310	983																																							-10,0%			

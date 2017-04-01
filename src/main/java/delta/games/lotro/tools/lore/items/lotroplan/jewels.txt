@@ -295,9 +295,9 @@ Sturdy Bauble of Sirith	195			243	174		52	446	385
 Phial of Ground Athelas (2s):	195			243	121																																																												
 Gleaming Bauble of Sirith	195				174	243	52	446	385																																																								
 Phial of The Anduin's Waters (2s):	195				121	243																																																											
-Small Golden Dish	234		255		298				239												1685	1264																																											
-Leather-bound Diary	234		298		255									749		936																																																	
-Fancy Gems in a Shell	234				255	298		278						749	1707																																																		
+(1879339563) Small Golden Dish	234		255		298				239												1685	1264																																											
+(1879339507) Leather-bound Diary	234		298		255									749		936																																																	
+(1879339519) Fancy Gems in a Shell	234				255	298		278						749	1707																																																		
 Adept Officer's Persevering Token	192				205	239								768			614																																																
 (1879339560) Carved Jewellery Box	234			298	255		127							562																																																			
 Illuminated Fangorn Book of Combat	182		225		193		80	409																																																									
