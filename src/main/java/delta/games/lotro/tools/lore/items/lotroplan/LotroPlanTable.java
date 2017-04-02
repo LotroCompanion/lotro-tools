@@ -100,13 +100,24 @@ public class LotroPlanTable
       }
       else
       {
+        boolean isPercent=false;
+        if (valueStr.startsWith("="))
+        {
+          valueStr=valueStr.substring(1);
+          isPercent=true;
+        }
         valueStr=valueStr.replace(',','.').trim();
         if (valueStr.contains("."))
         {
           Float statValue=NumericTools.parseFloat(valueStr);
           if (statValue!=null)
           {
-            stats.setStat(entry.getValue(),statValue.floatValue());
+            float value=statValue.floatValue();
+            if (isPercent)
+            {
+              value*=100;
+            }
+            stats.setStat(entry.getValue(),value);
           }
         }
         else
@@ -114,7 +125,12 @@ public class LotroPlanTable
           Integer statValue=NumericTools.parseInteger(valueStr);
           if (statValue!=null)
           {
-            stats.setStat(entry.getValue(),statValue.intValue());
+            int value=statValue.intValue();
+            if (isPercent)
+            {
+              value*=100;
+            }
+            stats.setStat(entry.getValue(),value);
           }
         }
       }
