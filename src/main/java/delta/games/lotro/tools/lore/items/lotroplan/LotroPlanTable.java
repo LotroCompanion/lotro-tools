@@ -85,6 +85,19 @@ public class LotroPlanTable
           stats.setStat(entry.getValue(),statValue.floatValue());
         }
       }
+      else if (valueStr.contains("CALCSLICE"))
+      {
+        int itemLevel=NumericTools.parseInt(fields[ITEM_LEVEL_INDEX],-1);
+        Double statValue=StatsComputer.getValue(itemLevel,valueStr);
+        if (statValue!=null)
+        {
+          stats.setStat(entry.getValue(),statValue.floatValue());
+        }
+        else
+        {
+          // TODO warning
+        }
+      }
       else
       {
         valueStr=valueStr.replace(',','.').trim();

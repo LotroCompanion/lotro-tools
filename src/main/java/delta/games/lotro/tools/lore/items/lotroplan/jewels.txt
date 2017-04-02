@@ -1,318 +1,318 @@
-	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP	Category	Classes
 Ears																																																																	
-Empowered Earring of the Battle-readied Warrior (3s):	282		391					690																																																										Ears	BeCaChGuWa
-Empowered Earring of the Deft Watcher (3s):	282			391				690																																																										Ears	BuHuWa
-Empowered Earring of the Willful Defender (3s):	282					391		690																																																										Ears	LoMiRu
-Master-provisioner's Earring of the Battle-readied Warrior (3s):	258		355					623																																																										Ears	BeCaChGuWa
-Master-provisioner's Earring of the Deft Watcher (3s):	258			355				623																																																										Ears	BuHuWa
-Master-provisioner's Earring of the Willful Defender (3s):	258					355		623																																																										Ears	LoMiRu
-Delicate Agate Earring of Ithilien's Bounty (3s):	246					225		589																																																									
-Earring of the Battle-readied Warrior (3s):	246		225					589																																																										Ears	BeCaChGuWa
-Earring of the Deft Watcher (3s):	246			225				589																																																										Ears	BuHuWa
-Earring of the Willful Defender (3s):	246					225		589																																																										Ears	LoMiRu
-Heavy Garnet Earring of Ithilien's Bounty (3s):	246		225					589																																																									
-Patterned Umber-brushed Earring of Ithilien's Bounty (3s):	246			225				589																																																									
-Greater Earring of the Pelennor Sage (3s):	234					213		555																																																									
-Greater Earring of the Pelennor Scout (3s):	234			213				555																																																									
-Greater Earring of the Pelennor Warrior (3s):	234		213					555																																																									
-(1879338212) Earring of Absent Friends (2s):	234		234					833																843	843																																								
-(1879338210) Earring of Forgotten Spirits (2s):	234					234		833																843	843																																								
-(1879338205) Earring of Outcast Brethren (2s):	234			234				833																843	843																																								
-Lesser Earring of the Pelennor Sage (2s):	222					281		913																																																									
-Lesser Earring of the Pelennor Scout (2s):	222			281				913																																																									
-Lesser Earring of the Pelennor Warrior (2s):	222		281					913																																																									
-(1879338212) Earring of Absent Friends (2s):	222		221					782																799	799																																								
-(1879331937) Earring of Forgotten Spirits (2s):	222					221		782																799	799																																								
-(1879331935) Earring of Outcast Brethren (2s):	222			221				782																799	799																																								
-Exquisite Anórien Earring of Combat (3s):	201		126					809																																																									
-Exquisite Anórien Earring of Skill (3s):	201			126				809																																																									
-Exquisite Anórien Earring of Succour (3s):	201					126		809																																																									
-Siege-breaker's Earring of Warfare (2s):	201		180					694						804																																																			
-Siege-breaker's Earring of Strategy (2s):	201			180				694						804																																																			
-Siege-breaker's Earring of Tactics (2s):	201					180		694						804																																																			
-Polished Star-set Earring of the Warrior	201		270		180									804	2450																																																		
-Polished Star-set Earring of the Defender	201		180		270										2450							1809																																											
-Polished Star-set Earring of the Rangers	201			270	180									804	1470	322																																																	
-Polished Star-set Earring of the Bridge-warden	201			180	270										2450								1809																																										
-Polished Star-set Earring of the Healers	201				216	270									1470		804																																																
-Polished Star-set Earring of the Nobleman	201				180	270								804	2450																																																		
-Sturdy Earrings of the Vale	195		174		174											1560								1756																																									
-Gleaming Earrings of the Vale	195			174	174											1560								1756																																									
-Polished Earrings of the Vale	195				174	174											1560								1756																																								
-(1879339540) Golden Hare Earring	234		298		255		127								1707																																																		
-(1879339508) Gold Dwarf-make Earring	234		255		298																	2106	1685																																										
-(1879339536) Luminescent Earring	234			298	255									374	1707	749																																																	
-(1879339513) Large Ruby Earring	234				255	298		278							2276		562																																																
-(1879339554) Bloodstone Earring	234				255	298	106		478																																																								
-Greater Valourous Earring of Finesse	192		239		205										2343	614																																																	
-Adept Officer's Enduring Earring	192		205		239		85															1382																																											
-Master Engineer's Enduring Earring	192		205		239														1158				2074																																										
-Adept Officer's Persevering Earring	192				205	239	85							614																																																			
-Adept Officer's Resolute Earring	192				205	239	85										614																																																
-Master Engineer's Persevering Earring	192				205	239								922			461																																																
-Master Engineer's Resolute Earring	192				205	239									1406		922																																																
-Opulent Earrings of the Great Shore	192				171	205	85							461																																																			
-Exquisite Earring of Fangorn	182		225		193			307						437		437																																																	
-Exquisite Fangorn Earring of Skill	182			225	193			307						437		437																																																	
-Exquisite Fangorn Earring of Tactics	182				193	225		307						437			437																																																
-Exquisite Fangorn Earring of Endurance	182				225		193	409	354										366																																														
-Master Engineer's Valourous Earring	176		217		186		93							422																																																			
-Skilled Vanguard's Valourous Earring	176		217		186			196						563		422																																																	
-Battle Earring of the Deep	176		217		186			491						422	430																																																		
-Master Engineer's Enduring Earring	176		186		217														1062				1901																																										
-Greater Dextrous Earring of Fate	176			217	186		77									563																																																	
-Greater Dextrous Earring of Penetration	176			217	186									845		422																																																	
-Adept Officer's Dextrous Earring	176			217	186										2152	563																																																	
-Adept Officer's Resilient Earring	176			186	217										2152	563																																																	
-Exquisite Emerald Earring of Combat	156		162		135			420						374																																																			
+Empowered Earring of the Battle-readied Warrior (3s):	282		=CALCSLICE("Might";B3;3)					=CALCSLICE("Morale";B3;0,8)																																																										Ears	BeCaChGuWa
+Empowered Earring of the Deft Watcher (3s):	282			=CALCSLICE("Agility";B4;3)				=CALCSLICE("Morale";B4;0,8)																																																										Ears	BuHuWa
+Empowered Earring of the Willful Defender (3s):	282					=CALCSLICE("Will";B5;3)		=CALCSLICE("Morale";B5;0,8)																																																										Ears	LoMiRu
+Master-provisioner's Earring of the Battle-readied Warrior (3s):	258		=CALCSLICE("Might";B6;3)					=CALCSLICE("Morale";B6;0,8)																																																										Ears	BeCaChGuWa
+Master-provisioner's Earring of the Deft Watcher (3s):	258			=CALCSLICE("Agility";B7;3)				=CALCSLICE("Morale";B7;0,8)																																																										Ears	BuHuWa
+Master-provisioner's Earring of the Willful Defender (3s):	258					=CALCSLICE("Will";B8;3)		=CALCSLICE("Morale";B8;0,8)																																																										Ears	LoMiRu
+Delicate Agate Earring of Ithilien's Bounty (3s):	246					=CALCSLICE("Will";B9;2)		=CALCSLICE("Morale";B9;0,8)																																																										Ears	LoMiRu
+Earring of the Battle-readied Warrior (3s):	246		=CALCSLICE("Might";B10;2)					=CALCSLICE("Morale";B10;0,8)																																																										Ears	BeCaChGuWa
+Earring of the Deft Watcher (3s):	246			=CALCSLICE("Agility";B11;2)				=CALCSLICE("Morale";B11;0,8)																																																										Ears	BuHuWa
+Earring of the Willful Defender (3s):	246					=CALCSLICE("Will";B12;2)		=CALCSLICE("Morale";B12;0,8)																																																										Ears	LoMiRu
+Heavy Garnet Earring of Ithilien's Bounty (3s):	246		=CALCSLICE("Might";B13;2)					=CALCSLICE("Morale";B13;0,8)																																																										Ears	BeCaChGuWa
+Patterned Umber-brushed Earring of Ithilien's Bounty (3s):	246			=CALCSLICE("Agility";B14;2)				=CALCSLICE("Morale";B14;0,8)																																																										Ears	BuHuWa
+Greater Earring of the Pelennor Sage (3s):	234					=CALCSLICE("Will";B15;2)		=CALCSLICE("Morale";B15;0,8)																																																										Ears	LoMiRu
+Greater Earring of the Pelennor Scout (3s):	234			=CALCSLICE("Agility";B16;2)				=CALCSLICE("Morale";B16;0,8)																																																										Ears	BuHuWa
+Greater Earring of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B17;2)					=CALCSLICE("Morale";B17;0,8)																																																										Ears	BeCaChGuWa
+(1879338212) Earring of Absent Friends (2s):	234		=CALCSLICE("Might";B18;2,2)					=CALCSLICE("Morale";B18;1,2)																=CALCSLICE("PhyMit";B18;0,4)	=CALCSLICE("TacMit";B18;0,4)																																									Ears	BeCaChGuWa
+(1879338210) Earring of Forgotten Spirits (2s):	234					=CALCSLICE("Will";B19;2,2)		=CALCSLICE("Morale";B19;1,2)																=CALCSLICE("PhyMit";B19;0,4)	=CALCSLICE("TacMit";B19;0,4)																																									Ears	LoMiRu
+(1879338205) Earring of Outcast Brethren (2s):	234			=CALCSLICE("Agility";B20;2,2)				=CALCSLICE("Morale";B20;1,2)																=CALCSLICE("PhyMit";B20;0,4)	=CALCSLICE("TacMit";B20;0,4)																																									Ears	BuHuWa
+(1879339554) Bloodstone Earring	234				=CALCSLICE("Vitality";B21;2,4)	=CALCSLICE("Will";B21;2,8)	=CALCSLICE("Fate";B21;1)		=CALCSLICE("Power";B21;0,8)																																																										
+(1879339508) Gold Dwarf-make Earring	234		=CALCSLICE("Might";B22;2,4)		=CALCSLICE("Vitality";B22;2,8)																	=CALCSLICE("Parry";B22;1)	=CALCSLICE("Evade";B22;0,8)																																												
+(1879339540) Golden Hare Earring	234		=CALCSLICE("Might";B23;2,8)		=CALCSLICE("Vitality";B23;2,4)		=CALCSLICE("Fate";B23;1,2)								=CALCSLICE("Finesse";B23;0,6)																																																				
+(1879339513) Large Ruby Earring	234				=CALCSLICE("Vitality";B24;2,4)	=CALCSLICE("Will";B24;2,8)		=CALCSLICE("Morale";B24;0,4)							=CALCSLICE("Finesse";B24;0,8)		=CALCSLICE("TacMas";B24;0,6)																																																		
+(1879339536) Luminescent Earring	234			=CALCSLICE("Agility";B25;2,8)	=CALCSLICE("Vitality";B25;2,4)									=CALCSLICE("CritHit";B25;0,4)	=CALCSLICE("Finesse";B25;0,6)	=CALCSLICE("PhyMas";B25;0,8)																																																			
+Lesser Earring of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B26;2,8)		=CALCSLICE("Morale";B26;1,4)																																																										Ears	LoMiRu
+Lesser Earring of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B27;2,8)				=CALCSLICE("Morale";B27;1,4)																																																										Ears	BuHuWa
+Lesser Earring of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B28;2,8)					=CALCSLICE("Morale";B28;1,4)																																																										Ears	BeCaChGuWa
+(1879338212) Earring of Absent Friends (2s):	222		=CALCSLICE("Might";B29;2,2)					=CALCSLICE("Morale";B29;1,2)																=CALCSLICE("PhyMit";B29;0,4)	=CALCSLICE("TacMit";B29;0,4)																																									Ears	BeCaChGuWa
+(1879331937) Earring of Forgotten Spirits (2s):	222					=CALCSLICE("Will";B30;2,2)		=CALCSLICE("Morale";B30;1,2)																=CALCSLICE("PhyMit";B30;0,4)	=CALCSLICE("TacMit";B30;0,4)																																									Ears	LoMiRu
+(1879331935) Earring of Outcast Brethren (2s):	222			=CALCSLICE("Agility";B31;2,2)				=CALCSLICE("Morale";B31;1,2)																=CALCSLICE("PhyMit";B31;0,4)	=CALCSLICE("TacMit";B31;0,4)																																									Ears	BuHuWa
+Exquisite Anórien Earring of Combat (3s):	201		=CALCSLICE("Might";B32;1,4)					=CALCSLICE("Morale";B32;1,4)																																																										Ears	BeCaChGuWa
+Exquisite Anórien Earring of Skill (3s):	201			=CALCSLICE("Agility";B33;1,4)				=CALCSLICE("Morale";B33;1,4)																																																										Ears	BuHuWa
+Exquisite Anórien Earring of Succour (3s):	201					=CALCSLICE("Will";B34;1,4)		=CALCSLICE("Morale";B34;1,4)																																																										Ears	LoMiRu
+Siege-breaker's Earring of Warfare (2s):	201		=CALCSLICE("Might";B35;2)					=CALCSLICE("Morale";B35;1,2)						=CALCSLICE("CritHit";B35;1)																																																				Ears	BeCaChGuWa
+Siege-breaker's Earring of Strategy (2s):	201			=CALCSLICE("Agility";B36;2)				=CALCSLICE("Morale";B36;1,2)						=CALCSLICE("CritHit";B36;1)																																																				Ears	BuHuWa
+Siege-breaker's Earring of Tactics (2s):	201					=CALCSLICE("Will";B37;2)		=CALCSLICE("Morale";B37;1,2)						=CALCSLICE("CritHit";B37;1)																																																				Ears	LoMiRu
+Polished Star-set Earring of the Warrior	201		=CALCSLICE("Might";B38;3)		=CALCSLICE("Vitality";B38;2)									=CALCSLICE("CritHit";B38;1)	=CALCSLICE("Finesse";B38;1)																																																				
+Polished Star-set Earring of the Defender	201		=CALCSLICE("Might";B39;2)		=CALCSLICE("Vitality";B39;3)										=CALCSLICE("Finesse";B39;1)							=CALCSLICE("Parry";B39;1)																																													
+Polished Star-set Earring of the Rangers	201			=CALCSLICE("Agility";B40;3)	=CALCSLICE("Vitality";B40;2)									=CALCSLICE("CritHit";B40;1)	=CALCSLICE("Finesse";B40;0,6)	=CALCSLICE("PhyMas";B40;0,4)																																																			
+Polished Star-set Earring of the Bridge-warden	201			=CALCSLICE("Agility";B41;2)	=CALCSLICE("Vitality";B41;3)										=CALCSLICE("Finesse";B41;1)								=CALCSLICE("Evade";B41;1)																																												
+Polished Star-set Earring of the Healers	201				=CALCSLICE("Vitality";B42;2,4)	=CALCSLICE("Will";B42;3)									=CALCSLICE("Finesse";B42;0,6)		=CALCSLICE("TacMas";B42;1)																																																		
+Polished Star-set Earring of the Nobleman	201				=CALCSLICE("Vitality";B43;2)	=CALCSLICE("Will";B43;3)								=CALCSLICE("CritHit";B43;1)	=CALCSLICE("Finesse";B43;1)																																																				
+Sturdy Earrings of the Vale	195		=CALCSLICE("Might";B44;2)		=CALCSLICE("Vitality";B44;2)											=CALCSLICE("PhyMas";B44;2)								=CALCSLICE("PhyMit";B44;1)																																											
+Gleaming Earrings of the Vale	195			=CALCSLICE("Agility";B45;2)	=CALCSLICE("Vitality";B45;2)											=CALCSLICE("PhyMas";B45;2)								=CALCSLICE("PhyMit";B45;1)																																											
+Polished Earrings of the Vale	195				=CALCSLICE("Vitality";B46;2)	=CALCSLICE("Will";B46;2)											=CALCSLICE("TacMas";B46;2)								=CALCSLICE("TacMit";B46;1)																																										
+Greater Valourous Earring of Finesse	192		=CALCSLICE("Might";B47;2,8)		=CALCSLICE("Vitality";B47;2,4)										=CALCSLICE("Finesse";B47;1)	=CALCSLICE("PhyMas";B47;0,8)																																																			
+Adept Officer's Enduring Earring	192		=CALCSLICE("Might";B48;2,4)		=CALCSLICE("Vitality";B48;2,8)		=CALCSLICE("Fate";B48;1)															=CALCSLICE("Parry";B48;0,8)																																													
+Master Engineer's Enduring Earring	192		=CALCSLICE("Might";B49;2,4)		=CALCSLICE("Vitality";B49;2,8)														=CALCSLICE("CritDef";B49;0,6)				=CALCSLICE("Evade";B49;1,2)																																												
+Adept Officer's Persevering Earring	192				=CALCSLICE("Vitality";B50;2,4)	=CALCSLICE("Will";B50;2,8)	=CALCSLICE("Fate";B50;1)							=CALCSLICE("CritHit";B50;0,8)																																																					
+Adept Officer's Resolute Earring	192				=CALCSLICE("Vitality";B51;2,4)	=CALCSLICE("Will";B51;2,8)	=CALCSLICE("Fate";B51;1)										=CALCSLICE("TacMas";B51;0,8)																																																		
+Master Engineer's Persevering Earring	192				=CALCSLICE("Vitality";B52;2,4)	=CALCSLICE("Will";B52;2,8)								=CALCSLICE("CritHit";B52;1,2)			=CALCSLICE("TacMas";B52;0,6)																																																		
+Master Engineer's Resolute Earring	192				=CALCSLICE("Vitality";B53;2,4)	=CALCSLICE("Will";B53;2,8)									=CALCSLICE("Finesse";B53;0,6)		=CALCSLICE("TacMas";B53;1,2)																																																		
+Opulent Earrings of the Great Shore	192				=CALCSLICE("Vitality";B54;2)	=CALCSLICE("Will";B54;2,4)	=CALCSLICE("Fate";B54;1)							=CALCSLICE("CritHit";B54;0,6)																																																					
+Exquisite Earring of Fangorn	182		=CALCSLICE("Might";B55;2,8)		=CALCSLICE("Vitality";B55;2,4)			=CALCSLICE("Morale";B55;0,6)						=CALCSLICE("CritHit";B55;0,6)		=CALCSLICE("PhyMas";B55;0,6)																																																			
+Exquisite Fangorn Earring of Skill	182			=CALCSLICE("Agility";B56;2,8)	=CALCSLICE("Vitality";B56;2,4)			=CALCSLICE("Morale";B56;0,6)						=CALCSLICE("CritHit";B56;0,6)		=CALCSLICE("PhyMas";B56;0,6)																																																			
+Exquisite Fangorn Earring of Tactics	182				=CALCSLICE("Vitality";B57;2,4)	=CALCSLICE("Will";B57;2,8)		=CALCSLICE("Morale";B57;0,6)						=CALCSLICE("CritHit";B57;0,6)			=CALCSLICE("TacMas";B57;0,6)																																																		
+Exquisite Fangorn Earring of Endurance	182				=CALCSLICE("Vitality";B58;2,8)		=CALCSLICE("Fate";B58;2,4)	=CALCSLICE("Morale";B58;0,8)	=CALCSLICE("Power";B58;0,8)										=CALCSLICE("CritDef";B58;0,2)																																																
+Master Engineer's Valourous Earring	176		=CALCSLICE("Might";B59;2,8)		=CALCSLICE("Vitality";B59;2,4)		=CALCSLICE("Fate";B59;1,2)							=CALCSLICE("CritHit";B59;0,6)																																																					
+Skilled Vanguard's Valourous Earring	176		=CALCSLICE("Might";B60;2,8)		=CALCSLICE("Vitality";B60;2,4)			=CALCSLICE("Morale";B60;0,4)						=CALCSLICE("CritHit";B60;0,8)		=CALCSLICE("PhyMas";B60;0,6)																																																			
+Battle Earring of the Deep	176		=CALCSLICE("Might";B61;2,8)		=CALCSLICE("Vitality";B61;2,4)			=CALCSLICE("Morale";B61;1)						=CALCSLICE("CritHit";B61;0,6)	=CALCSLICE("Finesse";B61;0,2)																																																				
+Master Engineer's Enduring Earring	176		=CALCSLICE("Might";B62;2,4)		=CALCSLICE("Vitality";B62;2,8)														=CALCSLICE("CritDef";B62;0,6)				=CALCSLICE("Evade";B62;1,2)																																												
+Greater Dextrous Earring of Fate	176			=CALCSLICE("Agility";B63;2,8)	=CALCSLICE("Vitality";B63;2,4)		=CALCSLICE("Fate";B63;1)									=CALCSLICE("PhyMas";B63;0,8)																																																			
+Greater Dextrous Earring of Penetration	176			=CALCSLICE("Agility";B64;2,8)	=CALCSLICE("Vitality";B64;2,4)									=CALCSLICE("CritHit";B64;1,2)		=CALCSLICE("PhyMas";B64;0,6)																																																			
+Adept Officer's Dextrous Earring	176			=CALCSLICE("Agility";B65;2,8)	=CALCSLICE("Vitality";B65;2,4)										=CALCSLICE("Finesse";B65;1)	=CALCSLICE("PhyMas";B65;0,8)																																																			
+Adept Officer's Resilient Earring	176			=CALCSLICE("Agility";B66;2,4)	=CALCSLICE("Vitality";B66;2,8)										=CALCSLICE("Finesse";B66;1)	=CALCSLICE("PhyMas";B66;0,8)																																																			
+Exquisite Emerald Earring of Combat	156		=CALCSLICE("Might";B67;2,4)		=CALCSLICE("Vitality";B67;2)			=CALCSLICE("Morale";B67;1)						=CALCSLICE("CritHit";B67;0,6)																																																					
 Neck																																																																	
-Empowered Corded Necklace of the West (3s):	282			391				690																																																										Neck	BuHuWa
-Empowered Elegant Necklace of the West (3s):	282					391		690																																																										Neck	LoMiRu
-Empowered Enduring Necklace of the West (3s):	282		391					690																																																										Neck	BeCaChGuWa
-Master-weaponist's Corded Necklace of the West (3s):	258			355				623																																																										Neck	BuHuWa
-Master-weaponist's Elegant Necklace of the West (3s):	258					355		623																																																										Neck	LoMiRu
-Master-weaponist's Enduring Necklace of the West (3s):	258		355					623																																																										Neck	BeCaChGuWa
-Braided Herb-brushed Choker of Ithilien's Bounty (3s):	246			225				589																																																									
-Corded Necklace of the West (3s):	246			225				589																																																										Neck	BuHuWa
-Delicate Vine-woven Necklace of Ithilien's Bounty (3s):	246					225		589																																																									
-Elegant Necklace of the West (3s):	246					225		589																																																										Neck	LoMiRu
-Enduring Necklace of the West (3s):	246		225					589																																																										Neck	BeCaChGuWa
-Heavy Emerald Pendant of Ithilien's Bounty (3s):	246		225					589																																																									
-Greater Necklace of the Pelennor Sage (3s):	234					213		555																																																									
-Greater Necklace of the Pelennor Scout (3s):	234			213				555																																																									
-Greater Necklace of the Pelennor Warrior (3s):	234		213					555																																																									
-(1879338213) Necklace of Absent Friends (2s):	234		234					833																843	843																																								
-(1879338214) Necklace of Forgotten Spirits (2s):	234					234		833																843	843																																								
-(1879338215) Necklace of Outcast Brethren (2s):	234			234				833																843	843																																								
-Lesser Necklace of the Pelennor Sage (2s):	222					281		913																																																									
-Lesser Necklace of the Pelennor Scout (2s):	222			281				913																																																									
-Lesser Necklace of the Pelennor Warrior (2s):	222		281					913																																																									
-(1879331936) Necklace of Absent Friends (2s):	222		221					782																799	799																																								
-(1879331930) Necklace of Forgotten Spirits (2s):	222					221		782																799	799																																								
-(1879331934) Necklace of Outcast Brethren (2s):	222			221				782																799	799																																								
-Exquisite Anórien Necklace of Combat (3s):	201		126					809																																																									
-Exquisite Anórien Necklace of Skill (3s):	201			126				809																																																									
-Exquisite Anórien Necklace of Succour (3s):	201					126		809																																																									
-Siege-breaker's Necklace of Warfare (2s):	201		180					694						804																																																			
-Siege-breaker's Necklace of Strategy (2s):	201			180				694						804																																																			
-Siege-breaker's Necklace of Tactics (2s):	201					180		694						804																																																			
-Damrod's Pendant (3s):	201		252																																																														
-Anborn's Pendant (3s):	201			252																																																													
-Mablung's Pendant (3s):	201					252																																																											
-(1879339535) Ancient Jade Necklace	234		298		255										3414	562																																																	
-(1879339547) Choker of the Spearhead	234		255		298		127														1264																																												
-(1879339522) Large Opal Necklace	234			298	255				239						2276	562																																																	
-(1879339538) Compass Rose Necklace	234			255	298																	1685	2106																																										
-(1879339561) Pendant of the Golden Triangle	234			255	298																1264	2527																																											
-(1879339515) Elegant Jade Choker	234				255	298								749			936																																																
-(1879339524) Shimmering Gold Pendant	234				255	298	127										562																																																
-Exquisite Necklace of Fangorn	182		225		193			307						437		437																																																	
-Exquisite Fangorn Necklace of Skill	182			225	193			307						437		437																																																	
-Exquisite Fangorn Necklace of Tactics	182				193	225		307						437			437																																																
-Exquisite Fangorn Necklace of Endurance	182				225		193	409	354										366																																														
-Master Engineer's Valourous Necklace	176		217		186		93							422																																																			
-Skilled Vanguard's Valourous Necklace	176		217		186				170					422		563																																																	
-Battle Necklace of the Deep	176		217		186			491						422	430																																																		
-Adept Officer's Enduring Necklace	176		186		217		77														1267																																												
-Master Engineer's Enduring Necklace	176		186		217																1901	950																																											
-Greater Steadfast Necklace of Parrying	176		186		217																1267	1584																																											
-Greater Dextrous Necklace of Fate	176			217	186		77									563																																																	
-Skilled Vanguard's Resilient Necklace	176			186	217		62	196						422																																																			
-Adept Officer's Resilient Necklace	176			186	217									563		704																																																	
-Tactical Necklace of the Deep	176				186	217		491						422	430																																																		
-Greater Resolute Necklace of Tactics	176				186	217		196						422			563																																																
-Greater Resolute Necklace of Penetration	176				186	217			254					845																																																			
-Exquisite Great River Necklace of Morale	84				63			235												1075,2				757	757																																								
+Empowered Corded Necklace of the West (3s):	282			=CALCSLICE("Agility";B69;3)				=CALCSLICE("Morale";B69;0,8)																																																										Neck	BuHuWa
+Empowered Elegant Necklace of the West (3s):	282					=CALCSLICE("Will";B70;3)		=CALCSLICE("Morale";B70;0,8)																																																										Neck	LoMiRu
+Empowered Enduring Necklace of the West (3s):	282		=CALCSLICE("Might";B71;3)					=CALCSLICE("Morale";B71;0,8)																																																										Neck	BeCaChGuWa
+Master-weaponist's Corded Necklace of the West (3s):	258			=CALCSLICE("Agility";B72;3)				=CALCSLICE("Morale";B72;0,8)																																																										Neck	BuHuWa
+Master-weaponist's Elegant Necklace of the West (3s):	258					=CALCSLICE("Will";B73;3)		=CALCSLICE("Morale";B73;0,8)																																																										Neck	LoMiRu
+Master-weaponist's Enduring Necklace of the West (3s):	258		=CALCSLICE("Might";B74;3)					=CALCSLICE("Morale";B74;0,8)																																																										Neck	BeCaChGuWa
+Braided Herb-brushed Choker of Ithilien's Bounty (3s):	246			=CALCSLICE("Agility";B75;2)				=CALCSLICE("Morale";B75;0,8)																																																										Neck	BuHuWa
+Corded Necklace of the West (3s):	246			=CALCSLICE("Agility";B76;2)				=CALCSLICE("Morale";B76;0,8)																																																										Neck	BuHuWa
+Delicate Vine-woven Necklace of Ithilien's Bounty (3s):	246					=CALCSLICE("Will";B77;2)		=CALCSLICE("Morale";B77;0,8)																																																										Neck	LoMiRu
+Elegant Necklace of the West (3s):	246					=CALCSLICE("Will";B78;2)		=CALCSLICE("Morale";B78;0,8)																																																										Neck	LoMiRu
+Enduring Necklace of the West (3s):	246		=CALCSLICE("Might";B79;2)					=CALCSLICE("Morale";B79;0,8)																																																										Neck	BeCaChGuWa
+Heavy Emerald Pendant of Ithilien's Bounty (3s):	246		=CALCSLICE("Might";B80;2)					=CALCSLICE("Morale";B80;0,8)																																																										Neck	BeCaChGuWa
+Greater Necklace of the Pelennor Sage (3s):	234					=CALCSLICE("Will";B81;2)		=CALCSLICE("Morale";B81;0,8)																																																										Neck	LoMiRu
+Greater Necklace of the Pelennor Scout (3s):	234			=CALCSLICE("Agility";B82;2)				=CALCSLICE("Morale";B82;0,8)																																																										Neck	BuHuWa
+Greater Necklace of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B83;2)					=CALCSLICE("Morale";B83;0,8)																																																										Neck	BeCaChGuWa
+(1879338213) Necklace of Absent Friends (2s):	234		=CALCSLICE("Might";B84;2,2)					=CALCSLICE("Morale";B84;1,2)																=CALCSLICE("PhyMit";B84;0,4)	=CALCSLICE("TacMit";B84;0,4)																																									Neck	BeCaChGuWa
+(1879338214) Necklace of Forgotten Spirits (2s):	234					=CALCSLICE("Will";B85;2,2)		=CALCSLICE("Morale";B85;1,2)																=CALCSLICE("PhyMit";B85;0,4)	=CALCSLICE("TacMit";B85;0,4)																																									Neck	LoMiRu
+(1879338215) Necklace of Outcast Brethren (2s):	234			=CALCSLICE("Agility";B86;2,2)				=CALCSLICE("Morale";B86;1,2)																=CALCSLICE("PhyMit";B86;0,4)	=CALCSLICE("TacMit";B86;0,4)																																									Neck	BuHuWa
+(1879339535) Ancient Jade Necklace	234		=CALCSLICE("Might";B87;2,8)		=CALCSLICE("Vitality";B87;2,4)										=CALCSLICE("Finesse";B87;1,2)	=CALCSLICE("PhyMas";B87;0,6)																																																			
+(1879339547) Choker of the Spearhead	234		=CALCSLICE("Might";B88;2,4)		=CALCSLICE("Vitality";B88;2,8)		=CALCSLICE("Fate";B88;1,2)														=CALCSLICE("Block";B88;0,6)																																														
+(1879339538) Compass Rose Necklace	234			=CALCSLICE("Agility";B89;2,4)	=CALCSLICE("Vitality";B89;2,8)																	=CALCSLICE("Parry";B89;0,8)	=CALCSLICE("Evade";B89;1)																																												
+(1879339515) Elegant Jade Choker	234				=CALCSLICE("Vitality";B90;2,4)	=CALCSLICE("Will";B90;2,8)								=CALCSLICE("CritHit";B90;0,8)			=CALCSLICE("TacMas";B90;1)																																																		
+(1879339522) Large Opal Necklace	234			=CALCSLICE("Agility";B91;2,8)	=CALCSLICE("Vitality";B91;2,4)				=CALCSLICE("Power";B91;0,4)						=CALCSLICE("Finesse";B91;0,8)	=CALCSLICE("PhyMas";B91;0,6)																																																			
+(1879339561) Pendant of the Golden Triangle	234			=CALCSLICE("Agility";B92;2,4)	=CALCSLICE("Vitality";B92;2,8)																=CALCSLICE("Block";B92;0,6)	=CALCSLICE("Parry";B92;1,2)																																													
+(1879339524) Shimmering Gold Pendant	234				=CALCSLICE("Vitality";B93;2,4)	=CALCSLICE("Will";B93;2,8)	=CALCSLICE("Fate";B93;1,2)										=CALCSLICE("TacMas";B93;0,6)																																																		
+Lesser Necklace of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B94;2,8)		=CALCSLICE("Morale";B94;1,4)																																																										Neck	LoMiRu
+Lesser Necklace of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B95;2,8)				=CALCSLICE("Morale";B95;1,4)																																																										Neck	BuHuWa
+Lesser Necklace of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B96;2,8)					=CALCSLICE("Morale";B96;1,4)																																																										Neck	BeCaChGuWa
+(1879331936) Necklace of Absent Friends (2s):	222		=CALCSLICE("Might";B97;2,2)					=CALCSLICE("Morale";B97;1,2)																=CALCSLICE("PhyMit";B97;0,4)	=CALCSLICE("TacMit";B97;0,4)																																									Neck	BeCaChGuWa
+(1879331930) Necklace of Forgotten Spirits (2s):	222					=CALCSLICE("Will";B98;2,2)		=CALCSLICE("Morale";B98;1,2)																=CALCSLICE("PhyMit";B98;0,4)	=CALCSLICE("TacMit";B98;0,4)																																									Neck	LoMiRu
+(1879331934) Necklace of Outcast Brethren (2s):	222			=CALCSLICE("Agility";B99;2,2)				=CALCSLICE("Morale";B99;1,2)																=CALCSLICE("PhyMit";B99;0,4)	=CALCSLICE("TacMit";B99;0,4)																																									Neck	BuHuWa
+Exquisite Anórien Necklace of Combat (3s):	201		=CALCSLICE("Might";B100;1,4)					=CALCSLICE("Morale";B100;1,4)																																																										Neck	BeCaChGuWa
+Exquisite Anórien Necklace of Skill (3s):	201			=CALCSLICE("Agility";B101;1,4)				=CALCSLICE("Morale";B101;1,4)																																																										Neck	BuHuWa
+Exquisite Anórien Necklace of Succour (3s):	201					=CALCSLICE("Will";B102;1,4)		=CALCSLICE("Morale";B102;1,4)																																																										Neck	LoMiRu
+Siege-breaker's Necklace of Warfare (2s):	201		=CALCSLICE("Might";B103;2)					=CALCSLICE("Morale";B103;1,2)						=CALCSLICE("CritHit";B103;1)																																																				Neck	BeCaChGuWa
+Siege-breaker's Necklace of Strategy (2s):	201			=CALCSLICE("Agility";B104;2)				=CALCSLICE("Morale";B104;1,2)						=CALCSLICE("CritHit";B104;1)																																																				Neck	BuHuWa
+Siege-breaker's Necklace of Tactics (2s):	201					=CALCSLICE("Will";B105;2)		=CALCSLICE("Morale";B105;1,2)						=CALCSLICE("CritHit";B105;1)																																																				Neck	LoMiRu
+Damrod's Pendant (3s):	201		=CALCSLICE("Might";B106;2,8)																																																															Neck	BeCaChGuWa
+Anborn's Pendant (3s):	201			=CALCSLICE("Agility";B107;2,8)																																																														Neck	BuHuWa
+Mablung's Pendant (3s):	201					=CALCSLICE("Will";B108;2,8)																																																												Neck	LoMiRu
+Exquisite Necklace of Fangorn	182		=CALCSLICE("Might";B109;2,8)		=CALCSLICE("Vitality";B109;2,4)			=CALCSLICE("Morale";B109;0,6)						=CALCSLICE("CritHit";B109;0,6)		=CALCSLICE("PhyMas";B109;0,6)																																																			
+Exquisite Fangorn Necklace of Skill	182			=CALCSLICE("Agility";B110;2,8)	=CALCSLICE("Vitality";B110;2,4)			=CALCSLICE("Morale";B110;0,6)						=CALCSLICE("CritHit";B110;0,6)		=CALCSLICE("PhyMas";B110;0,6)																																																			
+Exquisite Fangorn Necklace of Tactics	182				=CALCSLICE("Vitality";B111;2,4)	=CALCSLICE("Will";B111;2,8)		=CALCSLICE("Morale";B111;0,6)						=CALCSLICE("CritHit";B111;0,6)			=CALCSLICE("TacMas";B111;0,6)																																																		
+Exquisite Fangorn Necklace of Endurance	182				=CALCSLICE("Vitality";B112;2,8)		=CALCSLICE("Fate";B112;2,4)	=CALCSLICE("Morale";B112;0,8)	=CALCSLICE("Power";B112;0,8)										=CALCSLICE("CritDef";B112;0,2)																																																
+Master Engineer's Valourous Necklace	176		=CALCSLICE("Might";B113;2,8)		=CALCSLICE("Vitality";B113;2,4)		=CALCSLICE("Fate";B113;1,2)							=CALCSLICE("CritHit";B113;0,6)																																																					
+Skilled Vanguard's Valourous Necklace	176		=CALCSLICE("Might";B114;2,8)		=CALCSLICE("Vitality";B114;2,4)				=CALCSLICE("Power";B114;0,4)					=CALCSLICE("CritHit";B114;0,6)		=CALCSLICE("PhyMas";B114;0,8)																																																			
+Battle Necklace of the Deep	176		=CALCSLICE("Might";B115;2,8)		=CALCSLICE("Vitality";B115;2,4)			=CALCSLICE("Morale";B115;1)						=CALCSLICE("CritHit";B115;0,6)	=CALCSLICE("Finesse";B115;0,2)																																																				
+Adept Officer's Enduring Necklace	176		=CALCSLICE("Might";B116;2,4)		=CALCSLICE("Vitality";B116;2,8)		=CALCSLICE("Fate";B116;1)														=CALCSLICE("Block";B116;0,8)																																														
+Master Engineer's Enduring Necklace	176		=CALCSLICE("Might";B117;2,4)		=CALCSLICE("Vitality";B117;2,8)																=CALCSLICE("Block";B117;1,2)	=CALCSLICE("Parry";B117;0,6)																																													
+Greater Steadfast Necklace of Parrying	176		=CALCSLICE("Might";B118;2,4)		=CALCSLICE("Vitality";B118;2,8)																=CALCSLICE("Block";B118;0,8)	=CALCSLICE("Parry";B118;1)																																													
+Greater Dextrous Necklace of Fate	176			=CALCSLICE("Agility";B119;2,8)	=CALCSLICE("Vitality";B119;2,4)		=CALCSLICE("Fate";B119;1)									=CALCSLICE("PhyMas";B119;0,8)																																																			
+Skilled Vanguard's Resilient Necklace	176			=CALCSLICE("Agility";B120;2,4)	=CALCSLICE("Vitality";B120;2,8)		=CALCSLICE("Fate";B120;0,8)	=CALCSLICE("Morale";B120;0,4)						=CALCSLICE("CritHit";B120;0,6)																																																					
+Adept Officer's Resilient Necklace	176			=CALCSLICE("Agility";B121;2,4)	=CALCSLICE("Vitality";B121;2,8)									=CALCSLICE("CritHit";B121;0,8)		=CALCSLICE("PhyMas";B121;1)																																																			
+Tactical Necklace of the Deep	176				=CALCSLICE("Vitality";B122;2,4)	=CALCSLICE("Will";B122;2,8)		=CALCSLICE("Morale";B122;1)						=CALCSLICE("CritHit";B122;0,6)	=CALCSLICE("Finesse";B122;0,2)																																																				
+Greater Resolute Necklace of Tactics	176				=CALCSLICE("Vitality";B123;2,4)	=CALCSLICE("Will";B123;2,8)		=CALCSLICE("Morale";B123;0,4)						=CALCSLICE("CritHit";B123;0,6)			=CALCSLICE("TacMas";B123;0,8)																																																		
+Greater Resolute Necklace of Penetration	176				=CALCSLICE("Vitality";B124;2,4)	=CALCSLICE("Will";B124;2,8)			=CALCSLICE("Power";B124;0,6)					=CALCSLICE("CritHit";B124;1,2)																																																					
+Exquisite Great River Necklace of Morale	84				=CALCSLICE("Vitality";B125;2)			=CALCSLICE("Morale";B125;1,4)												=CALCSLICE("InHeal";B125;1,6)				=CALCSLICE("PhyMit";B125;1)	=CALCSLICE("TacMit";B125;1)																																										
 Wrists																																																																	
-Bold Cuff of the Pelennor (3s):	258		355					623																																																									
-Glimmering Cuff of the Pelennor (3s):	258					355		623																																																									
-Weightless Cuff of the Pelennor (3s):	258			355				623																																																									
-Braided Amber-brushed Bracer of Ithilien's Bounty (3s):	246			225				589																																																									
-Delicate Amber Wristlet of Ithilien's Bounty (3s):	246					225		589																																																									
-Heavy Citrine Bracelet of Ithilien's Bounty (3s):	246		225					589																																																									
-Greater Bracelet of the Pelennor Sage (3s):	234					213		555																																																									
-Greater Bracelet of the Pelennor Scout (3s):	234			213				555																																																									
-Greater Bracelet of the Pelennor Warrior (3s):	234		213					555																																																									
-(1879338204) Bracelet of Absent Friends (2s):	234		234					833																843	843																																								
-(1879338206) Bracelet of Forgotten Spirits (2s):	234					234		833																843	843																																								
-(1879338209) Bracelet of Outcast Brethren (2s):	234			234				833																843	843																																								
-Lesser Bracelet of the Pelennor Sage (2s):	222					281		913																																																									
-Lesser Bracelet of the Pelennor Scout (2s):	222			281				913																																																									
-Lesser Bracelet of the Pelennor Warrior (2s):	222		281					913																																																									
-(1879331933) Bracelet of Absent Friends (2s):	222		221					782																799	799																																								
-(1879331938) Bracelet of Forgotten Spirits (2s):	222					221		782																799	799																																								
-(1879331932) Bracelet of Outcast Brethren (2s):	222			221				782																799	799																																								
-Exquisite Anórien Bracelet of Combat (3s):	201		126					809																																																									
-Exquisite Anórien Bracelet of Skill (3s):	201			126				809																																																									
-Exquisite Anórien Bracelet of Succour (3s):	201					126		809																																																									
-Siege-breaker's Bracelet of Warfare (2s):	201		180					694						804																																																			
-Siege-breaker's Bracelet of Strategy (2s):	201			180				694						804																																																			
-Siege-breaker's Bracelet of Tactics (2s):	201					180		694						804																																																			
-Armlet of Anárion (3s):	201		252																																																														
-Armlet of Siriondil (3s):	201		126		126																																																												
-Bracelet of Mighty Defiance (3s):	201		252																																																														
-Hearty Bracelet of Mighty Defiance (3s):	201		126		126																																																												
-Armlet of Meneldil (3s):	201			252																																																													
-Armlet of Alcarin (3s):	201			126	126																																																												
-Bracelet of Willful Defiance (3s):	201			252																																																													
-Hearty Bracelet of Willful Defiance (3s):	201			126	126																																																												
-Armlet of Ostoher (3s):	201					252																																																											
-Armlet of Eldacar (3s):	201				126	126																																																											
-Bracelet of Skilled Defiance (3s):	201					252																																																											
-Hearty Bracelet of Skilled Defiance (3s):	201				126	126																																																											
-Gleaming Bracelet of the Prince	195		261		174																			1756	1756																																								
-Polished Bracelet of the Prince	195			261	174																			1756	1756																																								
-Shining Bracelet of the Prince	195				174	261																		1756	1756																																								
-(1879339501) Spun Gold Bracelet	234		298		255			416						749		374																																																	
-(1879339533) Lapis Lazuli Cuff	234		255		298		127												1410																																														
-(1879339537) Silver Cuff	234			298	255		106	555																																																									
-(1879339558) Bracelet of the Three Stars	234				255	298	106								2276																																																		
-(1879339502) Bangle of Deep Waters	234				255	298		833						562																																																			
-Adept Officer's Enduring Bracelet	192		239		205		85								1874																																																		
-Skilled Vanguard's Resolute Bracelet	192				205	239	68	219							1406																																																		
-Adept Officer's Persevering Bracelet	192				205	239								614			768																																																
-Adept Officer's Resolute Bracelet	192				205	239								768	1874																																																		
-Veteran Engineer's Valourous Bracelet	192		205		171									307	2811																																																		
-Exquisite Bracelet of Fangorn	182		225		193			307						437		437																																																	
-Exquisite Fangorn Bracelet of Skill	182			225	193			307						437		437																																																	
-Exquisite Fangorn Bracelet of Tactics	182				193	225		307						437			437																																																
-Exquisite Fangorn Bracelet of Endurance	182				225		193	409	354										366																																														
-Master Engineer's Valourous Bracelet	176		217		186									422	2582																																																		
-Battle Bracelet of the Deep	176		217		186			491						422	430																																																		
-Skilled Vanguard's Enduring Bracelet	176		186		217		62	196															950																																										
-Adept Officer's Enduring Bracelet	176		186		217														1770				1267																																										
-Greater Dextrous Bracelet of Fate	176			217	186		93							422														Inn of the Forsaken,The Flight to the Lonely Mountain																																					
-Master Engineer's Dextrous Bracelet	176			217	186		93								1291																																																		
-Greater Dextrous Bracelet of Penetration	176			217	186									563	1291	282																																																	
-Tactical Bracelet of the Deep	176				186	217		491						422	430																																																		
-Veteran Rohirric Esquire's Valourous Bracelet	156		162		135									624	1148																																																		
-Exquisite Emerald Bracelet of Succour	156				135	162		420						374																																																			
+Bold Cuff of the Pelennor (3s):	258		=CALCSLICE("Might";B127;3)					=CALCSLICE("Morale";B127;0,8)																																																										Wrists	BeCaChGuWa
+Glimmering Cuff of the Pelennor (3s):	258					=CALCSLICE("Will";B128;3)		=CALCSLICE("Morale";B128;0,8)																																																										Wrists	LoMiRu
+Weightless Cuff of the Pelennor (3s):	258			=CALCSLICE("Agility";B129;3)				=CALCSLICE("Morale";B129;0,8)																																																										Wrists	BuHuWa
+Braided Amber-brushed Bracer of Ithilien's Bounty (3s):	246			=CALCSLICE("Agility";B130;2)				=CALCSLICE("Morale";B130;0,8)																																																										Wrists	BuHuWa
+Delicate Amber Wristlet of Ithilien's Bounty (3s):	246					=CALCSLICE("Will";B131;2)		=CALCSLICE("Morale";B131;0,8)																																																										Wrists	LoMiRu
+Heavy Citrine Bracelet of Ithilien's Bounty (3s):	246		=CALCSLICE("Might";B132;2)					=CALCSLICE("Morale";B132;0,8)																																																										Wrists	BeCaChGuWa
+Greater Bracelet of the Pelennor Sage (3s):	234					=CALCSLICE("Will";B133;2)		=CALCSLICE("Morale";B133;0,8)																																																										Wrists	LoMiRu
+Greater Bracelet of the Pelennor Scout (3s):	234			=CALCSLICE("Agility";B134;2)				=CALCSLICE("Morale";B134;0,8)																																																										Wrists	BuHuWa
+Greater Bracelet of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B135;2)					=CALCSLICE("Morale";B135;0,8)																																																										Wrists	BeCaChGuWa
+(1879338204) Bracelet of Absent Friends (2s):	234		=CALCSLICE("Might";B136;2,2)					=CALCSLICE("Morale";B136;1,2)																=CALCSLICE("PhyMit";B136;0,4)	=CALCSLICE("TacMit";B136;0,4)																																									Wrists	BeCaChGuWa
+(1879338206) Bracelet of Forgotten Spirits (2s):	234					=CALCSLICE("Will";B137;2,2)		=CALCSLICE("Morale";B137;1,2)																=CALCSLICE("PhyMit";B137;0,4)	=CALCSLICE("TacMit";B137;0,4)																																									Wrists	LoMiRu
+(1879338209) Bracelet of Outcast Brethren (2s):	234			=CALCSLICE("Agility";B138;2,2)				=CALCSLICE("Morale";B138;1,2)																=CALCSLICE("PhyMit";B138;0,4)	=CALCSLICE("TacMit";B138;0,4)																																									Wrists	BuHuWa
+(1879339502) Bangle of Deep Waters	234				=CALCSLICE("Vitality";B139;2,4)	=CALCSLICE("Will";B139;2,8)		=CALCSLICE("Morale";B139;1,2)						=CALCSLICE("CritHit";B139;0,6)																																																					
+(1879339558) Bracelet of the Three Stars	234				=CALCSLICE("Vitality";B140;2,4)	=CALCSLICE("Will";B140;2,8)	=CALCSLICE("Fate";B140;1)								=CALCSLICE("Finesse";B140;0,8)																																																				
+(1879339533) Lapis Lazuli Cuff	234		=CALCSLICE("Might";B141;2,4)		=CALCSLICE("Vitality";B141;2,8)		=CALCSLICE("Fate";B141;1,2)												=CALCSLICE("CritDef";B141;0,6)																																																
+(1879339537) Silver Cuff	234			=CALCSLICE("Agility";B142;2,8)	=CALCSLICE("Vitality";B142;2,4)		=CALCSLICE("Fate";B142;1)	=CALCSLICE("Morale";B142;0,8)																																																											
+(1879339501) Spun Gold Bracelet	234		=CALCSLICE("Might";B143;2,8)		=CALCSLICE("Vitality";B143;2,4)			=CALCSLICE("Morale";B143;0,6)						=CALCSLICE("CritHit";B143;0,8)		=CALCSLICE("PhyMas";B143;0,4)																																																			
+Lesser Bracelet of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B144;2,8)		=CALCSLICE("Morale";B144;1,4)																																																										Wrists	LoMiRu
+Lesser Bracelet of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B145;2,8)				=CALCSLICE("Morale";B145;1,4)																																																										Wrists	BuHuWa
+Lesser Bracelet of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B146;2,8)					=CALCSLICE("Morale";B146;1,4)																																																										Wrists	BeCaChGuWa
+(1879331933) Bracelet of Absent Friends (2s):	222		=CALCSLICE("Might";B147;2,2)					=CALCSLICE("Morale";B147;1,2)																=CALCSLICE("PhyMit";B147;0,4)	=CALCSLICE("TacMit";B147;0,4)																																									Wrists	BeCaChGuWa
+(1879331938) Bracelet of Forgotten Spirits (2s):	222					=CALCSLICE("Will";B148;2,2)		=CALCSLICE("Morale";B148;1,2)																=CALCSLICE("PhyMit";B148;0,4)	=CALCSLICE("TacMit";B148;0,4)																																									Wrists	LoMiRu
+(1879331932) Bracelet of Outcast Brethren (2s):	222			=CALCSLICE("Agility";B149;2,2)				=CALCSLICE("Morale";B149;1,2)																=CALCSLICE("PhyMit";B149;0,4)	=CALCSLICE("TacMit";B149;0,4)																																									Wrists	BuHuWa
+Exquisite Anórien Bracelet of Combat (3s):	201		=CALCSLICE("Might";B150;1,4)					=CALCSLICE("Morale";B150;1,4)																																																										Wrists	BeCaChGuWa
+Exquisite Anórien Bracelet of Skill (3s):	201			=CALCSLICE("Agility";B151;1,4)				=CALCSLICE("Morale";B151;1,4)																																																										Wrists	BuHuWa
+Exquisite Anórien Bracelet of Succour (3s):	201					=CALCSLICE("Will";B152;1,4)		=CALCSLICE("Morale";B152;1,4)																																																										Wrists	LoMiRu
+Siege-breaker's Bracelet of Warfare (2s):	201		=CALCSLICE("Might";B153;2)					=CALCSLICE("Morale";B153;1,2)						=CALCSLICE("CritHit";B153;1)																																																				Wrists	BeCaChGuWa
+Siege-breaker's Bracelet of Strategy (2s):	201			=CALCSLICE("Agility";B154;2)				=CALCSLICE("Morale";B154;1,2)						=CALCSLICE("CritHit";B154;1)																																																				Wrists	BuHuWa
+Siege-breaker's Bracelet of Tactics (2s):	201					=CALCSLICE("Will";B155;2)		=CALCSLICE("Morale";B155;1,2)						=CALCSLICE("CritHit";B155;1)																																																				Wrists	LoMiRu
+Armlet of Anárion (3s):	201		=CALCSLICE("Might";B156;2,8)																																																															Wrists	BeCaChGuWa
+Armlet of Siriondil (3s):	201		=CALCSLICE("Might";B157;1,4)		=CALCSLICE("Vitality";B157;1,4)																																																													Wrists	BeCaChGuWa
+Bracelet of Mighty Defiance (3s):	201		=CALCSLICE("Might";B158;2,8)																																																															Wrists	BeCaChGuWa
+Hearty Bracelet of Mighty Defiance (3s):	201		=CALCSLICE("Might";B159;1,4)		=CALCSLICE("Vitality";B159;1,4)																																																													Wrists	BeCaChGuWa
+Armlet of Meneldil (3s):	201			=CALCSLICE("Agility";B160;2,8)																																																														Wrists	BuHuWa
+Armlet of Alcarin (3s):	201			=CALCSLICE("Agility";B161;1,4)	=CALCSLICE("Vitality";B161;1,4)																																																													Wrists	BuHuWa
+Bracelet of Willful Defiance (3s):	201			=CALCSLICE("Agility";B162;2,8)																																																														Wrists	BuHuWa
+Hearty Bracelet of Willful Defiance (3s):	201			=CALCSLICE("Agility";B163;1,4)	=CALCSLICE("Vitality";B163;1,4)																																																													Wrists	BuHuWa
+Armlet of Ostoher (3s):	201					=CALCSLICE("Will";B164;2,8)																																																												Wrists	LoMiRu
+Armlet of Eldacar (3s):	201				=CALCSLICE("Vitality";B165;1,4)	=CALCSLICE("Will";B165;1,4)																																																												Wrists	LoMiRu
+Bracelet of Skilled Defiance (3s):	201					=CALCSLICE("Will";B166;2,8)																																																												Wrists	LoMiRu
+Hearty Bracelet of Skilled Defiance (3s):	201				=CALCSLICE("Vitality";B167;1,4)	=CALCSLICE("Will";B167;1,4)																																																												Wrists	LoMiRu
+Gleaming Bracelet of the Prince	195		=CALCSLICE("Might";B168;3)		=CALCSLICE("Vitality";B168;2)																			=CALCSLICE("PhyMit";B168;1)	=CALCSLICE("TacMit";B168;1)																																										
+Polished Bracelet of the Prince	195			=CALCSLICE("Agility";B169;3)	=CALCSLICE("Vitality";B169;2)																			=CALCSLICE("PhyMit";B169;1)	=CALCSLICE("TacMit";B169;1)																																										
+Shining Bracelet of the Prince	195				=CALCSLICE("Vitality";B170;2)	=CALCSLICE("Will";B170;3)																		=CALCSLICE("PhyMit";B170;1)	=CALCSLICE("TacMit";B170;1)																																										
+Adept Officer's Enduring Bracelet	192		=CALCSLICE("Might";B171;2,8)		=CALCSLICE("Vitality";B171;2,4)		=CALCSLICE("Fate";B171;1)								=CALCSLICE("Finesse";B171;0,8)																																																				
+Skilled Vanguard's Resolute Bracelet	192				=CALCSLICE("Vitality";B172;2,4)	=CALCSLICE("Will";B172;2,8)	=CALCSLICE("Fate";B172;0,8)	=CALCSLICE("Morale";B172;0,4)							=CALCSLICE("Finesse";B172;0,6)																																																				
+Adept Officer's Persevering Bracelet	192				=CALCSLICE("Vitality";B173;2,4)	=CALCSLICE("Will";B173;2,8)								=CALCSLICE("CritHit";B173;0,8)			=CALCSLICE("TacMas";B173;1)																																																		
+Adept Officer's Resolute Bracelet	192				=CALCSLICE("Vitality";B174;2,4)	=CALCSLICE("Will";B174;2,8)								=CALCSLICE("CritHit";B174;1)	=CALCSLICE("Finesse";B174;0,8)																																																				
+Veteran Engineer's Valourous Bracelet	192		=CALCSLICE("Might";B175;2,4)		=CALCSLICE("Vitality";B175;2)									=CALCSLICE("CritHit";B175;0,4)	=CALCSLICE("Finesse";B175;1,2)																																																				
+Exquisite Bracelet of Fangorn	182		=CALCSLICE("Might";B176;2,8)		=CALCSLICE("Vitality";B176;2,4)			=CALCSLICE("Morale";B176;0,6)						=CALCSLICE("CritHit";B176;0,6)		=CALCSLICE("PhyMas";B176;0,6)																																																			
+Exquisite Fangorn Bracelet of Skill	182			=CALCSLICE("Agility";B177;2,8)	=CALCSLICE("Vitality";B177;2,4)			=CALCSLICE("Morale";B177;0,6)						=CALCSLICE("CritHit";B177;0,6)		=CALCSLICE("PhyMas";B177;0,6)																																																			
+Exquisite Fangorn Bracelet of Tactics	182				=CALCSLICE("Vitality";B178;2,4)	=CALCSLICE("Will";B178;2,8)		=CALCSLICE("Morale";B178;0,6)						=CALCSLICE("CritHit";B178;0,6)			=CALCSLICE("TacMas";B178;0,6)																																																		
+Exquisite Fangorn Bracelet of Endurance	182				=CALCSLICE("Vitality";B179;2,8)		=CALCSLICE("Fate";B179;2,4)	=CALCSLICE("Morale";B179;0,8)	=CALCSLICE("Power";B179;0,8)										=CALCSLICE("CritDef";B179;0,2)																																																
+Master Engineer's Valourous Bracelet	176		=CALCSLICE("Might";B180;2,8)		=CALCSLICE("Vitality";B180;2,4)									=CALCSLICE("CritHit";B180;0,6)	=CALCSLICE("Finesse";B180;1,2)																																																				
+Battle Bracelet of the Deep	176		=CALCSLICE("Might";B181;2,8)		=CALCSLICE("Vitality";B181;2,4)			=CALCSLICE("Morale";B181;1)						=CALCSLICE("CritHit";B181;0,6)	=CALCSLICE("Finesse";B181;0,2)																																																				
+Skilled Vanguard's Enduring Bracelet	176		=CALCSLICE("Might";B182;2,4)		=CALCSLICE("Vitality";B182;2,8)		=CALCSLICE("Fate";B182;0,8)	=CALCSLICE("Morale";B182;0,4)															=CALCSLICE("Evade";B182;0,6)																																												
+Adept Officer's Enduring Bracelet	176		=CALCSLICE("Might";B183;2,4)		=CALCSLICE("Vitality";B183;2,8)														=CALCSLICE("CritDef";B183;1)				=CALCSLICE("Evade";B183;0,8)																																												
+Greater Dextrous Bracelet of Fate	176			=CALCSLICE("Agility";B184;2,8)	=CALCSLICE("Vitality";B184;2,4)		=CALCSLICE("Fate";B184;1,2)							=CALCSLICE("CritHit";B184;0,6)														Inn of the Forsaken,The Flight to the Lonely Mountain																																							
+Master Engineer's Dextrous Bracelet	176			=CALCSLICE("Agility";B185;2,8)	=CALCSLICE("Vitality";B185;2,4)		=CALCSLICE("Fate";B185;1,2)								=CALCSLICE("Finesse";B185;0,6)																																																				
+Greater Dextrous Bracelet of Penetration	176			=CALCSLICE("Agility";B186;2,8)	=CALCSLICE("Vitality";B186;2,4)									=CALCSLICE("CritHit";B186;0,8)	=CALCSLICE("Finesse";B186;0,6)	=CALCSLICE("PhyMas";B186;0,4)																																																			
+Tactical Bracelet of the Deep	176				=CALCSLICE("Vitality";B187;2,4)	=CALCSLICE("Will";B187;2,8)		=CALCSLICE("Morale";B187;1)						=CALCSLICE("CritHit";B187;0,6)	=CALCSLICE("Finesse";B187;0,2)																																																				
+Veteran Rohirric Esquire's Valourous Bracelet	156		=CALCSLICE("Might";B188;2,4)		=CALCSLICE("Vitality";B188;2)									=CALCSLICE("CritHit";B188;1)	=CALCSLICE("Finesse";B188;0,6)																																																				
+Exquisite Emerald Bracelet of Succour	156				=CALCSLICE("Vitality";B189;2)	=CALCSLICE("Will";B189;2,4)		=CALCSLICE("Morale";B189;1)						=CALCSLICE("CritHit";B189;0,6)																																																					
 Fingers																																																																	
-Braided Crimson-brushed Band of Ithilien's Bounty (3s):	246			225				589																																																									
-Delicate Crimson-glossed Loop of Ithilien's Bounty (3s):	246					225		589																																																									
-Heavy Ruby Ring of Ithilien's Bounty (3s):	246		225					589																																																									
-Greater Ring of the Pelennor Sage (3s):	234					213		555																																																									
-Greater Ring of the Pelennor Scout (3s):	234			213				555																																																									
-Greater Ring of the Pelennor Warrior (3s):	234		213					555																																																									
-(1879338207) Ring of Absent Friends (2s):	234		234					833																843	843																																								
-(1879338208) Ring of Forgotten Spirits (2s):	234					234		833																843	843																																								
-(1879338211) Ring of Outcast Brethren (2s):	234			234				833																843	843																																								
-Lesser Ring of the Pelennor Sage (2s):	222					281		913																																																									
-Lesser Ring of the Pelennor Scout (2s):	222			281				913																																																									
-Lesser Ring of the Pelennor Warrior (2s):	222		281					913																																																									
-(1879331931) Ring of Absent Friends (2s):	222		221					782																799	799																																								
-(1879331939) Ring of Forgotten Spirits (2s):	222					221		782																799	799																																								
-(1879331941) Ring of Outcast Brethren (2s):	222			221				782																799	799																																								
-Exquisite Anórien Ring of Combat (3s):	201		126					809																																																									
-Exquisite Anórien Ring of Skill (3s):	201			126				809																																																									
-Exquisite Anórien Ring of Succour (3s):	201					126		809																																																									
-Siege-breaker's Ring of Warfare (2s):	201		180					694						804																																																			
-Siege-breaker's Ring of Strategy (2s):	201			180				694						804																																																			
-Siege-breaker's Ring of Tactics (2s):	201					180		694						804																																																			
-Polished Star-set Ring of the Warrior	201		270		180									804	2450																																																		
-Polished Star-set Ring of the Defender	201		180		270										2450							1809																																											
-Polished Star-set Ring of the Rangers	201			270	180									804	1470	322																																																	
-Polished Star-set Ring of the Bridge-warden	201			180	270										2450								1809																																										
-Polished Star-set Ring of the Healers	201				216	270									1470		804																																																
-Polished Star-set Ring of the Nobleman	201				180	270								804	2450																																																		
-Gleaming Ring of the Prince	195		174		174		87	1114																																																									
-Strong Ring of the Prince	195			174	174		87	1114																																																									
-Opulent Ring of the Prince	195				174	174	87	1114																																																									
-Elite Advisor's Fateful Ring (1s):	192					307	171							768																																																			
-Elite Advisor's Sturdy Ring (1s):	192				256	256																	1037																																										
-Elite Scout's Fateful Ring (1s):	192			307			171								2343																																																		
-Elite Scout's Sturdy Ring (1s):	192			256	256									461																																																			
-Elite Soldier's Fateful Ring (1s):	192		307				171								2343																																																		
-Elite Soldier's Sturdy Ring (1s):	192		256		256																				1037																																								
-Advisor's Fateful Ring (1s):	192					256	136							768																																																			
-Advisor's Sturdy Ring (1s):	192				171	256																	1037																																										
-Scout's Fateful Ring (1s):	192			256			136								2343																																																		
-Scout's Sturdy Ring (1s):	192			256	171									461																																																			
-Soldier's Fateful Ring (1s):	192		256				136								2343																																																		
-Soldier's Sturdy Ring (1s):	192		256		171																				1037																																								
-(1879339562) Glittering Ring of the Blessed	234		298		255		106		478																																																								
-(1879339506) Ring of the Ciphered Message	234		255		298			416											940				1685																																										
-Skilled Vanguard's Enduring Ring	192		205		239			547														1382																																											
-(1879339541) Melted Bronze Ring	234			298	255				358					1123																																																			
-(1879339500) Ring of the Burnt Offering	234			255	298		106	555																																																									
-Greater Resolute Ring of Fate	192				205	239	68								1406		307																																																
-Greater Resolute Ring of Penetration	192				205	239		437						768																																																			
-(1879339503) Lost Wedding Ring	234				255	298			358								1123																																																
-(1879339542) Ring of the Broken Promise	234				255	298		416	478						1138																																																		
-Master Engineer's Persevering Ring	192				205	239	102							461																																																			
-Skilled Vanguard's Persevering Ring	192				205	239		219						614			461																																																
-Skilled Vanguard's Resolute Ring	192				205	239		219							1406		614																																																
-Exquisite Ring of Fangorn	182		225		193			307						437		437																																																	
-Exquisite Fangorn Ring of Skill	182			225	193			307						437		437																																																	
-Exquisite Fangorn Ring of Tactics	182				193	225		307						437			437																																																
-Exquisite Fangorn Ring of Endurance	182				225		193	409	354										366																																														
-Greater Valourous Ring of Penetration	176		217		186									704	1721																																																		
-Battle Ring of the Deep	176		217		186			491						422	430																																																		
-Adept Officer's Valourous Ring	176		217		186										1721	704																																																	
-Master Engineer's Enduring Ring	176		186		217		93												1062																																														
-Greater Steadfast Ring of Fate	176		186		217		93																950																																										
-Greater Dextrous Ring of Fate	176			217	186		62								1291	282																																																	
-Adept Officer's Resilient Ring	176			186	217		77									563																																																	
-Master Engineer's Resilient Ring	176			186	217									422		845																																																	
-Exquisite Emerald Ring of Combat	156		162		135			420						374																																																			
+Braided Crimson-brushed Band of Ithilien's Bounty (3s):	246			=CALCSLICE("Agility";B191;2)				=CALCSLICE("Morale";B191;0,8)																																																										Fingers	BuHuWa
+Delicate Crimson-glossed Loop of Ithilien's Bounty (3s):	246					=CALCSLICE("Will";B192;2)		=CALCSLICE("Morale";B192;0,8)																																																										Fingers	LoMiRu
+Heavy Ruby Ring of Ithilien's Bounty (3s):	246		=CALCSLICE("Might";B193;2)					=CALCSLICE("Morale";B193;0,8)																																																										Fingers	BeCaChGuWa
+Greater Ring of the Pelennor Sage (3s):	234					=CALCSLICE("Will";B194;2)		=CALCSLICE("Morale";B194;0,8)																																																										Fingers	LoMiRu
+Greater Ring of the Pelennor Scout (3s):	234			=CALCSLICE("Agility";B195;2)				=CALCSLICE("Morale";B195;0,8)																																																										Fingers	BuHuWa
+Greater Ring of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B196;2)					=CALCSLICE("Morale";B196;0,8)																																																										Fingers	BeCaChGuWa
+(1879338207) Ring of Absent Friends (2s):	234		=CALCSLICE("Might";B197;2,2)					=CALCSLICE("Morale";B197;1,2)																=CALCSLICE("PhyMit";B197;0,4)	=CALCSLICE("TacMit";B197;0,4)																																									Fingers	BeCaChGuWa
+(1879338208) Ring of Forgotten Spirits (2s):	234					=CALCSLICE("Will";B198;2,2)		=CALCSLICE("Morale";B198;1,2)																=CALCSLICE("PhyMit";B198;0,4)	=CALCSLICE("TacMit";B198;0,4)																																									Fingers	LoMiRu
+(1879338211) Ring of Outcast Brethren (2s):	234			=CALCSLICE("Agility";B199;2,2)				=CALCSLICE("Morale";B199;1,2)																=CALCSLICE("PhyMit";B199;0,4)	=CALCSLICE("TacMit";B199;0,4)																																									Fingers	BuHuWa
+(1879339562) Glittering Ring of the Blessed	234		=CALCSLICE("Might";B200;2,8)		=CALCSLICE("Vitality";B200;2,4)		=CALCSLICE("Fate";B200;1)		=CALCSLICE("Power";B200;0,8)																																																										
+(1879339503) Lost Wedding Ring	234				=CALCSLICE("Vitality";B201;2,4)	=CALCSLICE("Will";B201;2,8)			=CALCSLICE("Power";B201;0,6)								=CALCSLICE("TacMas";B201;1,2)																																																		
+(1879339541) Melted Bronze Ring	234			=CALCSLICE("Agility";B202;2,8)	=CALCSLICE("Vitality";B202;2,4)				=CALCSLICE("Power";B202;0,6)					=CALCSLICE("CritHit";B202;1,2)																																																					
+(1879339542) Ring of the Broken Promise	234				=CALCSLICE("Vitality";B203;2,4)	=CALCSLICE("Will";B203;2,8)		=CALCSLICE("Morale";B203;0,6)	=CALCSLICE("Power";B203;0,8)						=CALCSLICE("Finesse";B203;0,4)																																																				
+(1879339500) Ring of the Burnt Offering	234			=CALCSLICE("Agility";B204;2,4)	=CALCSLICE("Vitality";B204;2,8)		=CALCSLICE("Fate";B204;1)	=CALCSLICE("Morale";B204;0,8)																																																											
+(1879339506) Ring of the Ciphered Message	234		=CALCSLICE("Might";B205;2,4)		=CALCSLICE("Vitality";B205;2,8)			=CALCSLICE("Morale";B205;0,6)											=CALCSLICE("CritDef";B205;0,4)				=CALCSLICE("Evade";B205;0,8)																																												
+Lesser Ring of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B206;2,8)		=CALCSLICE("Morale";B206;1,4)																																																										Fingers	LoMiRu
+Lesser Ring of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B207;2,8)				=CALCSLICE("Morale";B207;1,4)																																																										Fingers	BuHuWa
+Lesser Ring of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B208;2,8)					=CALCSLICE("Morale";B208;1,4)																																																										Fingers	BeCaChGuWa
+(1879331931) Ring of Absent Friends (2s):	222		=CALCSLICE("Might";B209;2,2)					=CALCSLICE("Morale";B209;1,2)																=CALCSLICE("PhyMit";B209;0,4)	=CALCSLICE("TacMit";B209;0,4)																																									Fingers	BeCaChGuWa
+(1879331939) Ring of Forgotten Spirits (2s):	222					=CALCSLICE("Will";B210;2,2)		=CALCSLICE("Morale";B210;1,2)																=CALCSLICE("PhyMit";B210;0,4)	=CALCSLICE("TacMit";B210;0,4)																																									Fingers	LoMiRu
+(1879331941) Ring of Outcast Brethren (2s):	222			=CALCSLICE("Agility";B211;2,2)				=CALCSLICE("Morale";B211;1,2)																=CALCSLICE("PhyMit";B211;0,4)	=CALCSLICE("TacMit";B211;0,4)																																									Fingers	BuHuWa
+Exquisite Anórien Ring of Combat (3s):	201		=CALCSLICE("Might";B212;1,4)					=CALCSLICE("Morale";B212;1,4)																																																										Fingers	BeCaChGuWa
+Exquisite Anórien Ring of Skill (3s):	201			=CALCSLICE("Agility";B213;1,4)				=CALCSLICE("Morale";B213;1,4)																																																										Fingers	BuHuWa
+Exquisite Anórien Ring of Succour (3s):	201					=CALCSLICE("Will";B214;1,4)		=CALCSLICE("Morale";B214;1,4)																																																										Fingers	LoMiRu
+Siege-breaker's Ring of Warfare (2s):	201		=CALCSLICE("Might";B215;2)					=CALCSLICE("Morale";B215;1,2)						=CALCSLICE("CritHit";B215;1)																																																				Fingers	BeCaChGuWa
+Siege-breaker's Ring of Strategy (2s):	201			=CALCSLICE("Agility";B216;2)				=CALCSLICE("Morale";B216;1,2)						=CALCSLICE("CritHit";B216;1)																																																				Fingers	BuHuWa
+Siege-breaker's Ring of Tactics (2s):	201					=CALCSLICE("Will";B217;2)		=CALCSLICE("Morale";B217;1,2)						=CALCSLICE("CritHit";B217;1)																																																				Fingers	LoMiRu
+Polished Star-set Ring of the Warrior	201		=CALCSLICE("Might";B218;3)		=CALCSLICE("Vitality";B218;2)									=CALCSLICE("CritHit";B218;1)	=CALCSLICE("Finesse";B218;1)																																																				
+Polished Star-set Ring of the Defender	201		=CALCSLICE("Might";B219;2)		=CALCSLICE("Vitality";B219;3)										=CALCSLICE("Finesse";B219;1)							=CALCSLICE("Parry";B219;1)																																													
+Polished Star-set Ring of the Rangers	201			=CALCSLICE("Agility";B220;3)	=CALCSLICE("Vitality";B220;2)									=CALCSLICE("CritHit";B220;1)	=CALCSLICE("Finesse";B220;0,6)	=CALCSLICE("PhyMas";B220;0,4)																																																			
+Polished Star-set Ring of the Bridge-warden	201			=CALCSLICE("Agility";B221;2)	=CALCSLICE("Vitality";B221;3)										=CALCSLICE("Finesse";B221;1)								=CALCSLICE("Evade";B221;1)																																												
+Polished Star-set Ring of the Healers	201				=CALCSLICE("Vitality";B222;2,4)	=CALCSLICE("Will";B222;3)									=CALCSLICE("Finesse";B222;0,6)		=CALCSLICE("TacMas";B222;1)																																																		
+Polished Star-set Ring of the Nobleman	201				=CALCSLICE("Vitality";B223;2)	=CALCSLICE("Will";B223;3)								=CALCSLICE("CritHit";B223;1)	=CALCSLICE("Finesse";B223;1)																																																				
+Gleaming Ring of the Prince	195		=CALCSLICE("Might";B224;2)		=CALCSLICE("Vitality";B224;2)		=CALCSLICE("Fate";B224;1)	=CALCSLICE("Morale";B224;2)																																																											
+Strong Ring of the Prince	195			=CALCSLICE("Agility";B225;2)	=CALCSLICE("Vitality";B225;2)		=CALCSLICE("Fate";B225;1)	=CALCSLICE("Morale";B225;2)																																																											
+Opulent Ring of the Prince	195				=CALCSLICE("Vitality";B226;2)	=CALCSLICE("Will";B226;2)	=CALCSLICE("Fate";B226;1)	=CALCSLICE("Morale";B226;2)																																																											
+Elite Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B227;3,6)	=CALCSLICE("Fate";B227;2)							=CALCSLICE("CritHit";B227;1)																																																				Fingers	LoMiRu
+Elite Advisor's Sturdy Ring (1s):	192				=CALCSLICE("Vitality";B228;3)	=CALCSLICE("Will";B228;3)																	=CALCSLICE("Evade";B228;0,6)																																											Fingers	LoMiRu
+Elite Scout's Fateful Ring (1s):	192			=CALCSLICE("Agility";B229;3,6)			=CALCSLICE("Fate";B229;2)								=CALCSLICE("Finesse";B229;1)																																																			Fingers	BuHuWa
+Elite Scout's Sturdy Ring (1s):	192			=CALCSLICE("Agility";B230;3)	=CALCSLICE("Vitality";B230;3)									=CALCSLICE("CritHit";B230;0,6)																																																				Fingers	BuHuWa
+Elite Soldier's Fateful Ring (1s):	192		=CALCSLICE("Might";B231;3,6)				=CALCSLICE("Fate";B231;2)								=CALCSLICE("Finesse";B231;1)																																																			Fingers	BeCaChGuWa
+Elite Soldier's Sturdy Ring (1s):	192		=CALCSLICE("Might";B232;3)		=CALCSLICE("Vitality";B232;3)																				=CALCSLICE("TacMit";B232;0,6)																																									Fingers	BeCaChGuWa
+Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B233;3)	=CALCSLICE("Fate";B233;1,6)							=CALCSLICE("CritHit";B233;1)																																																				Fingers	LoMiRu
+Advisor's Sturdy Ring (1s):	192				=CALCSLICE("Vitality";B234;2)	=CALCSLICE("Will";B234;3)																	=CALCSLICE("Evade";B234;0,6)																																											Fingers	LoMiRu
+Scout's Fateful Ring (1s):	192			=CALCSLICE("Agility";B235;3)			=CALCSLICE("Fate";B235;1,6)								=CALCSLICE("Finesse";B235;1)																																																			Fingers	BuHuWa
+Scout's Sturdy Ring (1s):	192			=CALCSLICE("Agility";B236;3)	=CALCSLICE("Vitality";B236;2)									=CALCSLICE("CritHit";B236;0,6)																																																				Fingers	BuHuWa
+Soldier's Fateful Ring (1s):	192		=CALCSLICE("Might";B237;3)				=CALCSLICE("Fate";B237;1,6)								=CALCSLICE("Finesse";B237;1)																																																			Fingers	BeCaChGuWa
+Soldier's Sturdy Ring (1s):	192		=CALCSLICE("Might";B238;3)		=CALCSLICE("Vitality";B238;2)																				=CALCSLICE("TacMit";B238;0,6)																																									Fingers	BeCaChGuWa
+Skilled Vanguard's Enduring Ring	192		=CALCSLICE("Might";B239;2,4)		=CALCSLICE("Vitality";B239;2,8)			=CALCSLICE("Morale";B239;1)														=CALCSLICE("Parry";B239;0,8)																																													
+Greater Resolute Ring of Fate	192				=CALCSLICE("Vitality";B240;2,4)	=CALCSLICE("Will";B240;2,8)	=CALCSLICE("Fate";B240;0,8)								=CALCSLICE("Finesse";B240;0,6)		=CALCSLICE("TacMas";B240;0,4)																																																		
+Greater Resolute Ring of Penetration	192				=CALCSLICE("Vitality";B241;2,4)	=CALCSLICE("Will";B241;2,8)		=CALCSLICE("Morale";B241;0,8)						=CALCSLICE("CritHit";B241;1)																																																					
+Master Engineer's Persevering Ring	192				=CALCSLICE("Vitality";B242;2,4)	=CALCSLICE("Will";B242;2,8)	=CALCSLICE("Fate";B242;1,2)							=CALCSLICE("CritHit";B242;0,6)																																																					
+Skilled Vanguard's Persevering Ring	192				=CALCSLICE("Vitality";B243;2,4)	=CALCSLICE("Will";B243;2,8)		=CALCSLICE("Morale";B243;0,4)						=CALCSLICE("CritHit";B243;0,8)			=CALCSLICE("TacMas";B243;0,6)																																																		
+Skilled Vanguard's Resolute Ring	192				=CALCSLICE("Vitality";B244;2,4)	=CALCSLICE("Will";B244;2,8)		=CALCSLICE("Morale";B244;0,4)							=CALCSLICE("Finesse";B244;0,6)		=CALCSLICE("TacMas";B244;0,8)																																																		
+Exquisite Ring of Fangorn	182		=CALCSLICE("Might";B245;2,8)		=CALCSLICE("Vitality";B245;2,4)			=CALCSLICE("Morale";B245;0,6)						=CALCSLICE("CritHit";B245;0,6)		=CALCSLICE("PhyMas";B245;0,6)																																																			
+Exquisite Fangorn Ring of Skill	182			=CALCSLICE("Agility";B246;2,8)	=CALCSLICE("Vitality";B246;2,4)			=CALCSLICE("Morale";B246;0,6)						=CALCSLICE("CritHit";B246;0,6)		=CALCSLICE("PhyMas";B246;0,6)																																																			
+Exquisite Fangorn Ring of Tactics	182				=CALCSLICE("Vitality";B247;2,4)	=CALCSLICE("Will";B247;2,8)		=CALCSLICE("Morale";B247;0,6)						=CALCSLICE("CritHit";B247;0,6)			=CALCSLICE("TacMas";B247;0,6)																																																		
+Exquisite Fangorn Ring of Endurance	182				=CALCSLICE("Vitality";B248;2,8)		=CALCSLICE("Fate";B248;2,4)	=CALCSLICE("Morale";B248;0,8)	=CALCSLICE("Power";B248;0,8)										=CALCSLICE("CritDef";B248;0,2)																																																
+Greater Valourous Ring of Penetration	176		=CALCSLICE("Might";B249;2,8)		=CALCSLICE("Vitality";B249;2,4)									=CALCSLICE("CritHit";B249;1)	=CALCSLICE("Finesse";B249;0,8)																																																				
+Battle Ring of the Deep	176		=CALCSLICE("Might";B250;2,8)		=CALCSLICE("Vitality";B250;2,4)			=CALCSLICE("Morale";B250;1)						=CALCSLICE("CritHit";B250;0,6)	=CALCSLICE("Finesse";B250;0,2)																																																				
+Adept Officer's Valourous Ring	176		=CALCSLICE("Might";B251;2,8)		=CALCSLICE("Vitality";B251;2,4)										=CALCSLICE("Finesse";B251;0,8)	=CALCSLICE("PhyMas";B251;1)																																																			
+Master Engineer's Enduring Ring	176		=CALCSLICE("Might";B252;2,4)		=CALCSLICE("Vitality";B252;2,8)		=CALCSLICE("Fate";B252;1,2)												=CALCSLICE("CritDef";B252;0,6)																																																
+Greater Steadfast Ring of Fate	176		=CALCSLICE("Might";B253;2,4)		=CALCSLICE("Vitality";B253;2,8)		=CALCSLICE("Fate";B253;1,2)																=CALCSLICE("Evade";B253;0,6)																																												
+Greater Dextrous Ring of Fate	176			=CALCSLICE("Agility";B254;2,8)	=CALCSLICE("Vitality";B254;2,4)		=CALCSLICE("Fate";B254;0,8)								=CALCSLICE("Finesse";B254;0,6)	=CALCSLICE("PhyMas";B254;0,4)																																																			
+Adept Officer's Resilient Ring	176			=CALCSLICE("Agility";B255;2,4)	=CALCSLICE("Vitality";B255;2,8)		=CALCSLICE("Fate";B255;1)									=CALCSLICE("PhyMas";B255;0,8)																																																			
+Master Engineer's Resilient Ring	176			=CALCSLICE("Agility";B256;2,4)	=CALCSLICE("Vitality";B256;2,8)									=CALCSLICE("CritHit";B256;0,6)		=CALCSLICE("PhyMas";B256;1,2)																																																			
+Exquisite Emerald Ring of Combat	156		=CALCSLICE("Might";B257;2,4)		=CALCSLICE("Vitality";B257;2)			=CALCSLICE("Morale";B257;1)						=CALCSLICE("CritHit";B257;0,6)																																																					
 Pockets																																																																	
-Empowered Crest of Gondor's Strength (3s):	282		391					690																																																										Pocket	BeCaChGuWa
-Empowered Crest of Gondor's Swiftness (3s):	282			391				690																																																										Pocket	BuHuWa
-Empowered Crest of Gondor's Wisdom (3s):	282					391		690																																																										Pocket	LoMiRu
-Master-armourer's Crest of Gondor's Strength (3s):	258		355					623																																																										Pocket	BeCaChGuWa
-Master-armourer's Crest of Gondor's Swiftness (3s):	258			355				623																																																										Pocket	BuHuWa
-Master-armourer's Crest of Gondor's Wisdom (3s):	258					355		623																																																										Pocket	LoMiRu
-Crest of Gondor's Strength (3s):	246		225					589																																																										Pocket	BeCaChGuWa
-Crest of Gondor's Swiftness (3s):	246			225				589																																																										Pocket	BuHuWa
-Crest of Gondor's Wisdom (3s):	246					225		589																																																										Pocket	LoMiRu
-Hilt of Eärnil (3s):	234		255		149																																																												
-Hilt of Eärnil (3s):	234			255	149																																																												
-Hilt of Eärnil (3s):	234				149	255																																																											
-Greater Bauble of the Pelennor Sage (3s):	234					213		555																																																									
-Greater Bauble of the Pelennor Scout (3s):	234			213				555																																																									
-Greater Bauble of the Pelennor Warrior (3s):	234		213					555																																																									
-#Lesser Bauble of the Pelennor Sage (2s):	222					281		913																																																									
-#Lesser Bauble of the Pelennor Scout (2s):	222			281				913																																																									
-#Lesser Bauble of the Pelennor Warrior (2s):	222		281					913																																																									
-Figurine of a Beorning	222		241		201		60	652						888																																																			
-Figurine of a Burglar	222			241	201		60	652						888																																																			
-Figurine of a Captain	222		241		201		60	652						888																																																			
-Figurine of a Champion	222		241		201		60	652						888																																																			
-Figurine of a Guardian	222		241		201		60	652						888																																																			
-Figurine of a Hunter	222			241	201		60	652						888																																																			
-Figurine of a Lore-master	222				201	241	60	652						888																																																			
-Figurine of a Minstrel	222				201	241	60	652						888																																																			
-Figurine of a Rune-keeper	222				201	241	60	652						888																																																			
-Figurine of a Warden	222			241	201		60	652						888																																																			
-Greater Combative Scroll of Anórien	201		270		180			578						804																																																			
-Greater Vigilant Scroll of Anórien	201		180		270			578													1809																																												
-Greater Precise Scroll of Anórien	201			270	180			578						804																																																			
-Greater Defensive Scroll of Anórien	201			180	270			578													1809																																												
-Greater Spirited Scroll of Anórien	201				180	270		578						804																																																			
-Opulent Bauble of Sirith	195		243		174		52	446	385																																																								
-Phial of Bear's Strength (2s):	195		243		121																																																												
-Sturdy Bauble of Sirith	195			243	174		52	446	385																																																								
-Phial of Ground Athelas (2s):	195			243	121																																																												
-Gleaming Bauble of Sirith	195				174	243	52	446	385																																																								
-Phial of The Anduin's Waters (2s):	195				121	243																																																											
-(1879339563) Small Golden Dish	234		255		298				239												1685	1264																																											
-(1879339507) Leather-bound Diary	234		298		255									749		936																																																	
-(1879339519) Fancy Gems in a Shell	234				255	298		278						749	1707																																																		
-Adept Officer's Persevering Token	192				205	239								768			614																																																
-(1879339560) Carved Jewellery Box	234			298	255		127							562																																																			
-Illuminated Fangorn Book of Combat	182		225		193		80	409																																																									
-Illuminated Fangorn Book of Precision	182			225	193		80	409																																																									
-Illuminated Fangorn Book of Spirit	182				193	225	80	409																																																									
-Illuminated Fangorn Book of Vigilance	182				225		193	512											366		983																																												
-Adept Officer's Valourous Token	176		217		186		77								1721																																																		
-Gleaming Brass Bauble of The Grey Company	176		217		186		77								1721																																																		
-Adept Officer's Enduring Token	176		186		217														1416				1584																																										
-Skilled Vanguard's Enduring Token	176		186		217		62		170													950																																											
-Greater Steadfast Bauble of Parrying	176		186		217																	1901	950																																										
-Drakeling's Preserved Claw	176			217	186		93							422																																																			
-Master Engineer's Dextrous Token	176			217	186		93								1291																																																		
-Greater Dextrous Bauble of Prowess	176			217	186				339							704																																																	
-Gleaming Bronze Bauble of The Grey Company	176			186	217			491													1267																																												
-Gleaming Silver Bauble of The Grey Company	176				186	217								563	861		422																																																
-Greater Resolute Bauble of Fate	176				186	217	93							422																																																			
-Spirited Scroll of the Deep	176				186	217		491						422	430																																																		
+Empowered Crest of Gondor's Strength (3s):	282		=CALCSLICE("Might";B259;3)					=CALCSLICE("Morale";B259;0,8)																																																										Pocket	BeCaChGuWa
+Empowered Crest of Gondor's Swiftness (3s):	282			=CALCSLICE("Agility";B260;3)				=CALCSLICE("Morale";B260;0,8)																																																										Pocket	BuHuWa
+Empowered Crest of Gondor's Wisdom (3s):	282					=CALCSLICE("Will";B261;3)		=CALCSLICE("Morale";B261;0,8)																																																										Pocket	LoMiRu
+Master-armourer's Crest of Gondor's Strength (3s):	258		=CALCSLICE("Might";B262;3)					=CALCSLICE("Morale";B262;0,8)																																																										Pocket	BeCaChGuWa
+Master-armourer's Crest of Gondor's Swiftness (3s):	258			=CALCSLICE("Agility";B263;3)				=CALCSLICE("Morale";B263;0,8)																																																										Pocket	BuHuWa
+Master-armourer's Crest of Gondor's Wisdom (3s):	258					=CALCSLICE("Will";B264;3)		=CALCSLICE("Morale";B264;0,8)																																																										Pocket	LoMiRu
+Crest of Gondor's Strength (3s):	246		=CALCSLICE("Might";B265;2)					=CALCSLICE("Morale";B265;0,8)																																																										Pocket	BeCaChGuWa
+Crest of Gondor's Swiftness (3s):	246			=CALCSLICE("Agility";B266;2)				=CALCSLICE("Morale";B266;0,8)																																																										Pocket	BuHuWa
+Crest of Gondor's Wisdom (3s):	246					=CALCSLICE("Will";B267;2)		=CALCSLICE("Morale";B267;0,8)																																																										Pocket	LoMiRu
+Hilt of Eärnil (3s):	234		=CALCSLICE("Might";B268;2,4)		=CALCSLICE("Vitality";B268;1,4)																																																													Pocket	BeCaChGuWa
+Hilt of Eärnil (3s):	234			=CALCSLICE("Agility";B269;2,4)	=CALCSLICE("Vitality";B269;1,4)																																																													Pocket	BuHuWa
+Hilt of Eärnil (3s):	234				=CALCSLICE("Vitality";B270;1,4)	=CALCSLICE("Will";B270;2,4)																																																												Pocket	LoMiRu
+Greater Bauble of the Pelennor Sage (3s):	234					=CALCSLICE("Will";B271;2)		=CALCSLICE("Morale";B271;0,8)																																																										Pocket	LoMiRu
+Greater Bauble of the Pelennor Scout (3s):	234			=CALCSLICE("Agility";B272;2)				=CALCSLICE("Morale";B272;0,8)																																																										Pocket	BuHuWa
+Greater Bauble of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B273;2)					=CALCSLICE("Morale";B273;0,8)																																																										Pocket	BeCaChGuWa
+(1879339560) Carved Jewellery Box	234			=CALCSLICE("Agility";B274;2,8)	=CALCSLICE("Vitality";B274;2,4)		=CALCSLICE("Fate";B274;1,2)							=CALCSLICE("CritHit";B274;0,6)																																																					
+(1879339519) Fancy Gems in a Shell	234				=CALCSLICE("Vitality";B275;2,4)	=CALCSLICE("Will";B275;2,8)		=CALCSLICE("Morale";B275;0,4)						=CALCSLICE("CritHit";B275;0,8)	=CALCSLICE("Finesse";B275;0,6)																																																				
+(1879339507) Leather-bound Diary	234		=CALCSLICE("Might";B276;2,8)		=CALCSLICE("Vitality";B276;2,4)									=CALCSLICE("CritHit";B276;0,8)		=CALCSLICE("PhyMas";B276;1)																																																			
+(1879339563) Small Golden Dish	234		=CALCSLICE("Might";B277;2,4)		=CALCSLICE("Vitality";B277;2,8)				=CALCSLICE("Power";B277;0,4)												=CALCSLICE("Block";B277;0,8)	=CALCSLICE("Parry";B277;0,6)																																													
+#Lesser Bauble of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B278;2,8)		=CALCSLICE("Morale";B278;1,4)																																																										Pocket	LoMiRu
+#Lesser Bauble of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B279;2,8)				=CALCSLICE("Morale";B279;1,4)																																																										Pocket	BuHuWa
+#Lesser Bauble of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B280;2,8)					=CALCSLICE("Morale";B280;1,4)																																																										Pocket	BeCaChGuWa
+Figurine of a Beorning	222		=CALCSLICE("Might";B281;2,4)		=CALCSLICE("Vitality";B281;2)		=CALCSLICE("Fate";B281;0,6)	=CALCSLICE("Morale";B281;1)						=CALCSLICE("CritHit";B281;1)																																																					
+Figurine of a Burglar	222			=CALCSLICE("Agility";B282;2,4)	=CALCSLICE("Vitality";B282;2)		=CALCSLICE("Fate";B282;0,6)	=CALCSLICE("Morale";B282;1)						=CALCSLICE("CritHit";B282;1)																																																					
+Figurine of a Captain	222		=CALCSLICE("Might";B283;2,4)		=CALCSLICE("Vitality";B283;2)		=CALCSLICE("Fate";B283;0,6)	=CALCSLICE("Morale";B283;1)						=CALCSLICE("CritHit";B283;1)																																																					
+Figurine of a Champion	222		=CALCSLICE("Might";B284;2,4)		=CALCSLICE("Vitality";B284;2)		=CALCSLICE("Fate";B284;0,6)	=CALCSLICE("Morale";B284;1)						=CALCSLICE("CritHit";B284;1)																																																					
+Figurine of a Guardian	222		=CALCSLICE("Might";B285;2,4)		=CALCSLICE("Vitality";B285;2)		=CALCSLICE("Fate";B285;0,6)	=CALCSLICE("Morale";B285;1)						=CALCSLICE("CritHit";B285;1)																																																					
+Figurine of a Hunter	222			=CALCSLICE("Agility";B286;2,4)	=CALCSLICE("Vitality";B286;2)		=CALCSLICE("Fate";B286;0,6)	=CALCSLICE("Morale";B286;1)						=CALCSLICE("CritHit";B286;1)																																																					
+Figurine of a Lore-master	222				=CALCSLICE("Vitality";B287;2)	=CALCSLICE("Will";B287;2,4)	=CALCSLICE("Fate";B287;0,6)	=CALCSLICE("Morale";B287;1)						=CALCSLICE("CritHit";B287;1)																																																					
+Figurine of a Minstrel	222				=CALCSLICE("Vitality";B288;2)	=CALCSLICE("Will";B288;2,4)	=CALCSLICE("Fate";B288;0,6)	=CALCSLICE("Morale";B288;1)						=CALCSLICE("CritHit";B288;1)																																																					
+Figurine of a Rune-keeper	222				=CALCSLICE("Vitality";B289;2)	=CALCSLICE("Will";B289;2,4)	=CALCSLICE("Fate";B289;0,6)	=CALCSLICE("Morale";B289;1)						=CALCSLICE("CritHit";B289;1)																																																					
+Figurine of a Warden	222			=CALCSLICE("Agility";B290;2,4)	=CALCSLICE("Vitality";B290;2)		=CALCSLICE("Fate";B290;0,6)	=CALCSLICE("Morale";B290;1)						=CALCSLICE("CritHit";B290;1)																																																					
+Greater Combative Scroll of Anórien	201		=CALCSLICE("Might";B291;3)		=CALCSLICE("Vitality";B291;2)			=CALCSLICE("Morale";B291;1)						=CALCSLICE("CritHit";B291;1)																																																					
+Greater Vigilant Scroll of Anórien	201		=CALCSLICE("Might";B292;2)		=CALCSLICE("Vitality";B292;3)			=CALCSLICE("Morale";B292;1)													=CALCSLICE("Block";B292;1)																																														
+Greater Precise Scroll of Anórien	201			=CALCSLICE("Agility";B293;3)	=CALCSLICE("Vitality";B293;2)			=CALCSLICE("Morale";B293;1)						=CALCSLICE("CritHit";B293;1)																																																					
+Greater Defensive Scroll of Anórien	201			=CALCSLICE("Agility";B294;2)	=CALCSLICE("Vitality";B294;3)			=CALCSLICE("Morale";B294;1)													=CALCSLICE("Block";B294;1)																																														
+Greater Spirited Scroll of Anórien	201				=CALCSLICE("Vitality";B295;2)	=CALCSLICE("Will";B295;3)		=CALCSLICE("Morale";B295;1)						=CALCSLICE("CritHit";B295;1)																																																					
+Opulent Bauble of Sirith	195		=CALCSLICE("Might";B296;2,8)		=CALCSLICE("Vitality";B296;2)		=CALCSLICE("Fate";B296;0,6)	=CALCSLICE("Morale";B296;0,8)	=CALCSLICE("Power";B296;0,8)																																																										
+Phial of Bear's Strength (2s):	195		=CALCSLICE("Might";B297;2,8)		=CALCSLICE("Vitality";B297;1,4)																																																													Pocket	BeCaChGuWa
+Sturdy Bauble of Sirith	195			=CALCSLICE("Agility";B298;2,8)	=CALCSLICE("Vitality";B298;2)		=CALCSLICE("Fate";B298;0,6)	=CALCSLICE("Morale";B298;0,8)	=CALCSLICE("Power";B298;0,8)																																																										
+Phial of Ground Athelas (2s):	195			=CALCSLICE("Agility";B299;2,8)	=CALCSLICE("Vitality";B299;1,4)																																																													Pocket	BuHuWa
+Gleaming Bauble of Sirith	195				=CALCSLICE("Vitality";B300;2)	=CALCSLICE("Will";B300;2,8)	=CALCSLICE("Fate";B300;0,6)	=CALCSLICE("Morale";B300;0,8)	=CALCSLICE("Power";B300;0,8)																																																										
+Phial of The Anduin's Waters (2s):	195				=CALCSLICE("Vitality";B301;1,4)	=CALCSLICE("Will";B301;2,8)																																																												Pocket	LoMiRu
+Adept Officer's Persevering Token	192				=CALCSLICE("Vitality";B302;2,4)	=CALCSLICE("Will";B302;2,8)								=CALCSLICE("CritHit";B302;1)			=CALCSLICE("TacMas";B302;0,8)																																																		
+Illuminated Fangorn Book of Combat	182		=CALCSLICE("Might";B303;2,8)		=CALCSLICE("Vitality";B303;2,4)		=CALCSLICE("Fate";B303;1)	=CALCSLICE("Morale";B303;0,8)																																																											
+Illuminated Fangorn Book of Precision	182			=CALCSLICE("Agility";B304;2,8)	=CALCSLICE("Vitality";B304;2,4)		=CALCSLICE("Fate";B304;1)	=CALCSLICE("Morale";B304;0,8)																																																											
+Illuminated Fangorn Book of Spirit	182				=CALCSLICE("Vitality";B305;2,4)	=CALCSLICE("Will";B305;2,8)	=CALCSLICE("Fate";B305;1)	=CALCSLICE("Morale";B305;0,8)																																																											
+Illuminated Fangorn Book of Vigilance	182				=CALCSLICE("Vitality";B306;2,8)		=CALCSLICE("Fate";B306;2,4)	=CALCSLICE("Morale";B306;1)											=CALCSLICE("CritDef";B306;0,2)		=CALCSLICE("Block";B306;0,6)																																														
+Adept Officer's Valourous Token	176		=CALCSLICE("Might";B307;2,8)		=CALCSLICE("Vitality";B307;2,4)		=CALCSLICE("Fate";B307;1)								=CALCSLICE("Finesse";B307;0,8)																																																				
+Gleaming Brass Bauble of The Grey Company	176		=CALCSLICE("Might";B308;2,8)		=CALCSLICE("Vitality";B308;2,4)		=CALCSLICE("Fate";B308;1)								=CALCSLICE("Finesse";B308;0,8)																																																				
+Adept Officer's Enduring Token	176		=CALCSLICE("Might";B309;2,4)		=CALCSLICE("Vitality";B309;2,8)														=CALCSLICE("CritDef";B309;0,8)				=CALCSLICE("Evade";B309;1)																																												
+Skilled Vanguard's Enduring Token	176		=CALCSLICE("Might";B310;2,4)		=CALCSLICE("Vitality";B310;2,8)		=CALCSLICE("Fate";B310;0,8)		=CALCSLICE("Power";B310;0,4)													=CALCSLICE("Parry";B310;0,6)																																													
+Greater Steadfast Bauble of Parrying	176		=CALCSLICE("Might";B311;2,4)		=CALCSLICE("Vitality";B311;2,8)																	=CALCSLICE("Parry";B311;1,2)	=CALCSLICE("Evade";B311;0,6)																																												
+Drakeling's Preserved Claw	176			=CALCSLICE("Agility";B312;2,8)	=CALCSLICE("Vitality";B312;2,4)		=CALCSLICE("Fate";B312;1,2)							=CALCSLICE("CritHit";B312;0,6)																																																					
+Master Engineer's Dextrous Token	176			=CALCSLICE("Agility";B313;2,8)	=CALCSLICE("Vitality";B313;2,4)		=CALCSLICE("Fate";B313;1,2)								=CALCSLICE("Finesse";B313;0,6)																																																				
+Greater Dextrous Bauble of Prowess	176			=CALCSLICE("Agility";B314;2,8)	=CALCSLICE("Vitality";B314;2,4)				=CALCSLICE("Power";B314;0,8)							=CALCSLICE("PhyMas";B314;1)																																																			
+Gleaming Bronze Bauble of The Grey Company	176			=CALCSLICE("Agility";B315;2,4)	=CALCSLICE("Vitality";B315;2,8)			=CALCSLICE("Morale";B315;1)													=CALCSLICE("Block";B315;0,8)																																														
+Gleaming Silver Bauble of The Grey Company	176				=CALCSLICE("Vitality";B316;2,4)	=CALCSLICE("Will";B316;2,8)								=CALCSLICE("CritHit";B316;0,8)	=CALCSLICE("Finesse";B316;0,4)		=CALCSLICE("TacMas";B316;0,6)																																																		
+Greater Resolute Bauble of Fate	176				=CALCSLICE("Vitality";B317;2,4)	=CALCSLICE("Will";B317;2,8)	=CALCSLICE("Fate";B317;1,2)							=CALCSLICE("CritHit";B317;0,6)																																																					
+Spirited Scroll of the Deep	176				=CALCSLICE("Vitality";B318;2,4)	=CALCSLICE("Will";B318;2,8)		=CALCSLICE("Morale";B318;1)						=CALCSLICE("CritHit";B318;0,6)	=CALCSLICE("Finesse";B318;0,2)																																																				
