@@ -316,9 +316,22 @@ public class LotroPlanItemsDbLoader
     }
     String[] fields=StringSplitter.split(line,'\t');
     Integer armor=null;
-    if (fields[LotroPlanTable.ARMOUR_INDEX].length()>0)
+    String armorStr=fields[LotroPlanTable.ARMOUR_INDEX];
+    if (armorStr.length()>0)
     {
-      armor=NumericTools.parseInteger(fields[LotroPlanTable.ARMOUR_INDEX]);
+      if (armorStr.contains("CALCSLICE"))
+      {
+        int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
+        Double statValue=StatsComputer.getValue(itemLevel,armorStr);
+        if (statValue!=null)
+        {
+          armor=Integer.valueOf(statValue.intValue());
+        }
+      }
+      else
+      {
+        armor=NumericTools.parseInteger(fields[LotroPlanTable.ARMOUR_INDEX]);
+      }
     }
     Item item=null;
     Armour armour=null;
