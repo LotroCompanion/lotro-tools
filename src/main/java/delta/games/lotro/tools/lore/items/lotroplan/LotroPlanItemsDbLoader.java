@@ -3,7 +3,6 @@ package delta.games.lotro.tools.lore.items.lotroplan;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
@@ -13,14 +12,12 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Loads starter stats from a raw data file.
@@ -32,7 +29,7 @@ public class LotroPlanItemsDbLoader
   private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt"};
 
   private String _section;
-  private HashMap<Integer,Item> _failedItems=new HashMap<Integer,Item>();
+  private ItemsMerger _merger;
 
   /**
    * Main method for this tool.
@@ -48,21 +45,22 @@ public class LotroPlanItemsDbLoader
    */
   public void doIt()
   {
+    _merger=new ItemsMerger();
     List<Item> items=loadTable("itemsdb.txt");
-    HashMap<String,List<Item>> map=asMapByName(items);
-    HashMap<Integer,Item> mapById=asMapById(items);
+    _merger.registerItems(items);
     for(String tableName : NAMES)
     {
-      handleAdditionalTable(tableName,items,map,mapById);
+      handleAdditionalTable(tableName);
     }
     ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("data/items/tmp/itemsdb.xml").getAbsoluteFile();
+    items=_merger.getItems();
     mgr.writeItemsFile(toFile,items);
     //List<Integer> ids=new ArrayList<Integer>(_failedItems.keySet());
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);
   }
 
-  private void handleAdditionalTable(String tableName, List<Item> allItems, HashMap<String,List<Item>> map,HashMap<Integer,Item> mapById)
+  private void handleAdditionalTable(String tableName)
   {
     ArmourType armourType=null;
     if ("heavy.txt".equals(tableName)) armourType=ArmourType.HEAVY;
@@ -71,212 +69,8 @@ public class LotroPlanItemsDbLoader
     List<Item> items=loadTable(tableName);
     for(Item item : items)
     {
-      String name=item.getName();
-      name=name.replace(' ',' ');
-      updateArmourType(armourType,item);
-      List<Item> selectedItems=map.get(name);
-      if (selectedItems==null)
-      {
-        List<Item> newList=new ArrayList<Item>();
-        newList.add(item);
-        map.put(name,newList);
-        allItems.add(item);
-      }
-      else
-      {
-        Item selectedItem=findItem(selectedItems,item);
-        if (selectedItem!=null)
-        {
-          BasicStatsSet itemStats=selectedItem.getStats();
-          itemStats.clear();
-          itemStats.setStats(item.getStats());
-          updateArmourType(armourType,selectedItem);
-          selectedItem.setEssenceSlots(item.getEssenceSlots());
-          selectedItem.setEquipmentLocation(item.getEquipmentLocation());
-          selectedItem.setSubCategory(item.getSubCategory());
-          selectedItem.setRequiredClass(item.getRequiredClass());
-        }
-        else
-        {
-          boolean doComplain=true;
-          int id=item.getIdentifier();
-          if (id!=0)
-          {
-            Item itemsdbItem=mapById.get(Integer.valueOf(id));
-            if (itemsdbItem==null)
-            {
-              allItems.add(item);
-              doComplain=false;
-            }
-          }
-          if (doComplain)
-          {
-            Integer itemLevel=item.getItemLevel();
-            System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
-            if (selectedItems!=null)
-            {
-              for(Item currentItem : selectedItems)
-              {
-                _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
-              }
-            }
-          }
-        }
-      }
+      _merger.newItem(item,armourType);
     }
-  }
-
-  private void updateArmourType(ArmourType type, Item item)
-  {
-    if (type!=null)
-    {
-      if (item instanceof Armour)
-      {
-        Armour armour=(Armour)item;
-        if (item.getEquipmentLocation()==EquipmentLocation.OFF_HAND)
-        {
-          if (type==ArmourType.HEAVY) type=ArmourType.HEAVY_SHIELD;
-          else if (type==ArmourType.MEDIUM) type=ArmourType.WARDEN_SHIELD;
-          else if (type==ArmourType.LIGHT) type=ArmourType.SHIELD;
-        }
-        armour.setArmourType(type);
-      }
-    }
-  }
-
-  private Item findItem(List<Item> selectedItems, Item item)
-  {
-    if (selectedItems!=null)
-    {
-      // Use identifier if we can
-      if (item.getIdentifier()!=0)
-      {
-        for(Item currentItem : selectedItems)
-        {
-          if (currentItem.getIdentifier()==item.getIdentifier())
-          {
-            return currentItem;
-          }
-        }
-        return null;
-      }
-      List<Item> goodItems=null;
-      // Use item level
-      for(Item currentItem : selectedItems)
-      {
-        if (areEqual(currentItem.getItemLevel(),item.getItemLevel()))
-        {
-          if (goodItems==null)
-          {
-            goodItems=new ArrayList<Item>();
-          }
-          goodItems.add(currentItem);
-        }
-      }
-      if (goodItems!=null)
-      {
-        if (goodItems.size()==1)
-        {
-          return goodItems.get(0);
-        }
-        // Several items do match...
-        Item usingMight=findItemUsingStat(STAT.MIGHT,selectedItems,item);
-        if (usingMight!=null)
-        {
-          return usingMight;
-        }
-        Item usingAgility=findItemUsingStat(STAT.AGILITY,selectedItems,item);
-        if (usingAgility!=null)
-        {
-          return usingAgility;
-        }
-        Item usingWill=findItemUsingStat(STAT.WILL,selectedItems,item);
-        if (usingWill!=null)
-        {
-          return usingWill;
-        }
-        System.out.println("Several items do match " + item + ": " + goodItems);
-      }
-    }
-    return null;
-  }
-
-  private Item findItemUsingStat(STAT stat, List<Item> selectedItems, Item item)
-  {
-    List<Item> goodItems=null;
-    for(Item currentItem : selectedItems)
-    {
-      if (areEqualUsingStat(stat,currentItem,item))
-      {
-        if (goodItems==null)
-        {
-          goodItems=new ArrayList<Item>();
-        }
-        goodItems.add(currentItem);
-      }
-    }
-    if (goodItems!=null)
-    {
-      if (goodItems.size()==1)
-      {
-        return goodItems.get(0);
-      }
-    }
-    return null;
-  }
-
-  private boolean areEqualUsingStat(STAT stat, Item item1, Item item2)
-  {
-    FixedDecimalsInteger value1=item1.getStats().getStat(stat);
-    FixedDecimalsInteger value2=item2.getStats().getStat(stat);
-    if (value1!=null)
-    {
-      if (value2==null) return false;
-      return value1.getInternalValue()==value2.getInternalValue();
-    }
-    return value2==null;
-  }
-
-  private boolean areEqual(Integer value1, Integer value2)
-  {
-    if (value1!=null)
-    {
-      return value1.equals(value2);
-    }
-    return false;
-  }
-
-  private HashMap<String,List<Item>> asMapByName(List<Item> items)
-  {
-    HashMap<String,List<Item>> map=new HashMap<String,List<Item>>();
-    for(Item item : items)
-    {
-      String name=item.getName();
-      if (name==null) name="";
-      name=name.replace(' ',' ');
-      List<Item> itemsForName=map.get(name);
-      if (itemsForName==null)
-      {
-        itemsForName=new ArrayList<Item>();
-        map.put(name,itemsForName);
-      }
-      itemsForName.add(item);
-    }
-    return map;
-  }
-
-  private HashMap<Integer,Item> asMapById(List<Item> items)
-  {
-    HashMap<Integer,Item> map=new HashMap<Integer,Item>();
-    for(Item item : items)
-    {
-      int id=item.getIdentifier();
-      if (id!=0)
-      {
-        map.put(Integer.valueOf(id),item);
-      }
-    }
-    return map;
   }
 
   private List<Item> loadTable(String filename)
