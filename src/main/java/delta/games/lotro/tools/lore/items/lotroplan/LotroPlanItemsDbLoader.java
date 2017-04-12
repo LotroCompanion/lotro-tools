@@ -12,12 +12,16 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.stats.ItemStatsProvider;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Loads starter stats from a raw data file.
@@ -109,31 +113,22 @@ public class LotroPlanItemsDbLoader
       return null;
     }
     String[] fields=StringSplitter.split(line,'\t');
-    Integer armor=null;
-    String armorStr=fields[LotroPlanTable.ARMOUR_INDEX];
-    if (armorStr.length()>0)
-    {
-      if (armorStr.contains("CALCSLICE"))
-      {
-        int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
-        Double statValue=StatsComputer.getValue(itemLevel,armorStr);
-        if (statValue!=null)
-        {
-          armor=Integer.valueOf(statValue.intValue());
-        }
-      }
-      else
-      {
-        armor=NumericTools.parseInteger(fields[LotroPlanTable.ARMOUR_INDEX]);
-      }
-    }
+
+    // Item level
+    int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
+    // Stats
+    ItemStatsProvider provider=table.loadStats(fields);
+    BasicStatsSet stats=provider.getStats(itemLevel);
+
+    FixedDecimalsInteger armorStat=stats.getStat(STAT.ARMOUR);
     Item item=null;
     Armour armour=null;
-    if (armor!=null)
+    if (armorStat!=null)
     {
       armour=new Armour();
       item=armour;
-      armour.setArmourValue(armor.intValue());
+      armour.setArmourValue(armorStat.intValue());
+      stats.removeStat(STAT.ARMOUR);
     }
     else
     {
@@ -198,15 +193,17 @@ public class LotroPlanItemsDbLoader
     name=name.trim();
     item.setName(name);
     // Item level
-    int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
     if (itemLevel!=-1)
     {
       item.setItemLevel(Integer.valueOf(itemLevel));
     }
     // Stats
-    BasicStatsSet itemStats=table.loadStats(fields);
-    BasicStatsSet stats=item.getStats();
-    stats.setStats(itemStats);
+    item.getStats().setStats(stats);
+    String slices=provider.toPersistableString();
+    if ((slices!=null) && (slices.length()>0))
+    {
+      item.setProperty(ItemPropertyNames.SLICED_STATS,slices);
+    }
     // Slot
     EquipmentLocation slot=null;
     if ("Head".equals(_section)) slot=EquipmentLocation.HEAD;

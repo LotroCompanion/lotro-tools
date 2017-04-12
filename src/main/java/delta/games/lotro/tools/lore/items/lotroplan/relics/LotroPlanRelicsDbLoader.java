@@ -13,6 +13,7 @@ import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
+import delta.games.lotro.lore.items.stats.ItemStatsProvider;
 import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanTable;
 
 /**
@@ -82,9 +83,9 @@ public class LotroPlanRelicsDbLoader
     Integer itemLevel=NumericTools.parseInteger(fields[LotroPlanTable.ITEM_LEVEL_INDEX]);
     Relic relic=new Relic(name,type,itemLevel);
     // Stats
-    BasicStatsSet relicStats=table.loadStats(fields);
+    ItemStatsProvider provider=table.loadStats(fields);
     BasicStatsSet stats=relic.getStats();
-    stats.setStats(relicStats);
+    stats.setStats(provider.getStats(itemLevel.intValue()));
     return relic;
   }
 }

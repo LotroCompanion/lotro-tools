@@ -17,6 +17,7 @@ import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.comparators.ItemIdComparator;
+import delta.games.lotro.lore.items.stats.ItemStatsProvider;
 import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanTable;
 
 /**
@@ -92,9 +93,9 @@ public class EssenceStatsInjector
               // Tier
               item.setSubCategory("Essence:Tier"+tier);
               // Stats
-              BasicStatsSet itemStats=table.loadStats(fields);
+              ItemStatsProvider provider=table.loadStats(fields);
               BasicStatsSet stats=item.getStats();
-              stats.setStats(itemStats);
+              stats.setStats(provider.getStats(itemLevel));
             }
           }
           else

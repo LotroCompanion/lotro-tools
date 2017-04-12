@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import delta.common.utils.NumericTools;
-import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.lore.items.stats.ItemStatSliceData;
+import delta.games.lotro.lore.items.stats.ItemStatsProvider;
+import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 
 /**
  * Lotro plan stats table.
@@ -21,11 +23,7 @@ public class LotroPlanTable
    * Index of the 'item level' column.
    */
   public static final int ITEM_LEVEL_INDEX=1;
-  /**
-   * Index of the 'armour' column.
-   */
-  public static final int ARMOUR_INDEX=2;
-  private static final int FIRST_STAT_INDEX=3; // Might
+  private static final int FIRST_STAT_INDEX=2; // Armor
   /**
    * Index of the 'notes' column.
    */
@@ -37,7 +35,7 @@ public class LotroPlanTable
   // All other stats are unused
   //Name  iLvl  Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
 
-  private static final STAT[] STATS={ STAT.MIGHT, STAT.AGILITY, STAT.VITALITY, STAT.WILL, STAT.FATE, STAT.MORALE, STAT.POWER,
+  private static final STAT[] STATS={ STAT.ARMOUR, STAT.MIGHT, STAT.AGILITY, STAT.VITALITY, STAT.WILL, STAT.FATE, STAT.MORALE, STAT.POWER,
     STAT.ICMR, STAT.OCMR, STAT.ICPR, STAT.OCPR, STAT.CRITICAL_RATING, STAT.FINESSE, STAT.PHYSICAL_MASTERY, STAT.TACTICAL_MASTERY,
     STAT.RESISTANCE, STAT.CRITICAL_DEFENCE, STAT.INCOMING_HEALING, STAT.BLOCK, STAT.PARRY, STAT.EVADE,
     STAT.PHYSICAL_MITIGATION, STAT.TACTICAL_MITIGATION
@@ -51,7 +49,6 @@ public class LotroPlanTable
   public LotroPlanTable()
   {
     _mapIndexToStat=new HashMap<Integer,STAT>();
-    //_map=new HashMap<String,IntegerHolder>();
     for(int i=0;i<STATS.length;i++)
     {
       _mapIndexToStat.put(Integer.valueOf(i+FIRST_STAT_INDEX),STATS[i]);
@@ -65,11 +62,11 @@ public class LotroPlanTable
   /**
    * Load stats from fields.
    * @param fields Fields to read.
-   * @return A set of stats.
+   * @return An item stats provider or <code>null</code>.
    */
-  public BasicStatsSet loadStats(String[] fields)
+  public ItemStatsProvider loadStats(String[] fields)
   {
-    BasicStatsSet stats=new BasicStatsSet();
+    SlicesBasedItemStatsProvider provider=new SlicesBasedItemStatsProvider();
     for(Map.Entry<Integer,STAT> entry : _mapIndexToStat.entrySet())
     {
       int index=entry.getKey().intValue();
@@ -82,20 +79,15 @@ public class LotroPlanTable
         Float statValue=NumericTools.parseFloat(valueStr);
         if (statValue!=null)
         {
-          stats.setStat(entry.getValue(),statValue.floatValue());
+          provider.setStat(entry.getValue(),statValue.floatValue());
         }
       }
       else if (valueStr.contains("CALCSLICE"))
       {
-        int itemLevel=NumericTools.parseInt(fields[ITEM_LEVEL_INDEX],-1);
-        Double statValue=StatsComputer.getValue(itemLevel,valueStr);
-        if (statValue!=null)
+        ItemStatSliceData slice=SliceFormulaParser.parse(valueStr);
+        if (slice!=null)
         {
-          stats.setStat(entry.getValue(),statValue.floatValue());
-        }
-        else
-        {
-          // TODO warning
+          provider.addSlice(slice);
         }
       }
       else
@@ -117,7 +109,7 @@ public class LotroPlanTable
             {
               value*=100;
             }
-            stats.setStat(entry.getValue(),value);
+            provider.setStat(entry.getValue(),value);
           }
         }
         else
@@ -130,11 +122,11 @@ public class LotroPlanTable
             {
               value*=100;
             }
-            stats.setStat(entry.getValue(),value);
+            provider.setStat(entry.getValue(),value);
           }
         }
       }
     }
-    return stats;
+    return provider;
   }
 }

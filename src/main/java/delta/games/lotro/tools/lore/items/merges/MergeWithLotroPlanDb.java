@@ -278,6 +278,8 @@ public class MergeWithLotroPlanDb
       }
       result.setRequiredClass(lpClass);
     }
+    // Properties
+    result.getProperties().putAll(lotroplan.getProperties());
 
     return result;
   }
