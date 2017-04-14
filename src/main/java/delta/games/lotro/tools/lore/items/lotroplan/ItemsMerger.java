@@ -116,6 +116,7 @@ public class ItemsMerger
         selectedItem.setEquipmentLocation(item.getEquipmentLocation());
         selectedItem.setSubCategory(item.getSubCategory());
         selectedItem.setRequiredClass(item.getRequiredClass());
+        selectedItem.getProperties().putAll(item.getProperties());
       }
       else
       {
