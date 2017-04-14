@@ -47,7 +47,10 @@ public class SliceFormulaParser
           {
             additionalParameter=statName;
           }
-          ret=new ItemStatSliceData(stat,sliceCount,additionalParameter);
+          if (stat!=null)
+          {
+            ret=new ItemStatSliceData(stat,sliceCount,additionalParameter);
+          }
         }
       }
     }
