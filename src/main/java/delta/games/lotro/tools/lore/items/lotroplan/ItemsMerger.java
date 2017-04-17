@@ -95,54 +95,56 @@ public class ItemsMerger
     String name=item.getName();
     name=name.replace(' ',' ');
     updateArmourType(armourType,item);
+
+    // Check for known item...
     List<Item> selectedItems=_mapByName.get(name);
     if (selectedItems==null)
     {
+      // Item not known
       List<Item> newList=new ArrayList<Item>();
       newList.add(item);
       _mapByName.put(name,newList);
       _items.add(item);
+      return;
     }
-    else
+
+    // Find item
+    Item selectedItem=findItem(selectedItems,item);
+    if (selectedItem!=null)
     {
-      Item selectedItem=findItem(selectedItems,item);
-      if (selectedItem!=null)
+      // Found...
+      BasicStatsSet itemStats=selectedItem.getStats();
+      itemStats.clear();
+      itemStats.setStats(item.getStats());
+      updateArmourType(armourType,selectedItem);
+      selectedItem.setEssenceSlots(item.getEssenceSlots());
+      selectedItem.setEquipmentLocation(item.getEquipmentLocation());
+      selectedItem.setSubCategory(item.getSubCategory());
+      selectedItem.setRequiredClass(item.getRequiredClass());
+      selectedItem.getProperties().putAll(item.getProperties());
+      return;
+    }
+
+    // Item with ID...
+    int id=item.getIdentifier();
+    if (id!=0)
+    {
+      Item itemsdbItem=_mapById.get(Integer.valueOf(id));
+      if (itemsdbItem==null)
       {
-        BasicStatsSet itemStats=selectedItem.getStats();
-        itemStats.clear();
-        itemStats.setStats(item.getStats());
-        updateArmourType(armourType,selectedItem);
-        selectedItem.setEssenceSlots(item.getEssenceSlots());
-        selectedItem.setEquipmentLocation(item.getEquipmentLocation());
-        selectedItem.setSubCategory(item.getSubCategory());
-        selectedItem.setRequiredClass(item.getRequiredClass());
-        selectedItem.getProperties().putAll(item.getProperties());
+        _items.add(item);
+        return;
       }
-      else
+    }
+
+    // Could not handle item correctly, complain!
+    Integer itemLevel=item.getItemLevel();
+    System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
+    if (selectedItems!=null)
+    {
+      for(Item currentItem : selectedItems)
       {
-        boolean doComplain=true;
-        int id=item.getIdentifier();
-        if (id!=0)
-        {
-          Item itemsdbItem=_mapById.get(Integer.valueOf(id));
-          if (itemsdbItem==null)
-          {
-            _items.add(item);
-            doComplain=false;
-          }
-        }
-        if (doComplain)
-        {
-          Integer itemLevel=item.getItemLevel();
-          System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
-          if (selectedItems!=null)
-          {
-            for(Item currentItem : selectedItems)
-            {
-              _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
-            }
-          }
-        }
+        _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
       }
     }
   }
