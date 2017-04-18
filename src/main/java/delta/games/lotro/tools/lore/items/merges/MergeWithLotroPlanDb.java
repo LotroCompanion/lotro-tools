@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -13,6 +15,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Merges "legacy+tulkas" items database and "lotroplan" database
@@ -224,7 +227,19 @@ public class MergeWithLotroPlanDb
     }
     // Stats
     {
-      result.getStats().setStats(lotroplan.getStats());
+      BasicStatsSet resultStats=result.getStats();
+      FixedDecimalsInteger stealth=resultStats.getStat(STAT.STEALTH_LEVEL);
+      FixedDecimalsInteger tacticalCritMultiplier=resultStats.getStat(STAT.TACTICAL_CRITICAL_MULTIPLIER);
+      resultStats.clear();
+      resultStats.setStats(lotroplan.getStats());
+      if (stealth!=null)
+      {
+        resultStats.setStat(STAT.STEALTH_LEVEL,stealth);
+      }
+      if (tacticalCritMultiplier!=null)
+      {
+        resultStats.setStat(STAT.TACTICAL_CRITICAL_MULTIPLIER,tacticalCritMultiplier);
+      }
     }
     // Essence slots
     result.setEssenceSlots(lotroplan.getEssenceSlots());
