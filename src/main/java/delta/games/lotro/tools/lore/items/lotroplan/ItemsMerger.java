@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.lore.items.lotroplan;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemPropertyNames;
+import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -113,15 +116,8 @@ public class ItemsMerger
     if (selectedItem!=null)
     {
       // Found...
-      BasicStatsSet itemStats=selectedItem.getStats();
-      itemStats.clear();
-      itemStats.setStats(item.getStats());
-      updateArmourType(armourType,selectedItem);
-      selectedItem.setEssenceSlots(item.getEssenceSlots());
-      selectedItem.setEquipmentLocation(item.getEquipmentLocation());
-      selectedItem.setSubCategory(item.getSubCategory());
-      selectedItem.setRequiredClass(item.getRequiredClass());
-      selectedItem.getProperties().putAll(item.getProperties());
+      mergeStats(item,selectedItem);
+      mergeItems(armourType,item,selectedItem);
       return;
     }
 
@@ -137,6 +133,19 @@ public class ItemsMerger
       }
     }
 
+    // Look for different versions of a scalable item
+    boolean same=inspectScalableItems(item,selectedItems);
+    if (same)
+    {
+      selectedItem=selectedItems.get(0);
+      if (compareItemLevels(item,selectedItem))
+      {
+        mergeStats(item,selectedItem);
+      }
+      mergeItems(armourType,item,selectedItem);
+      return;
+    }
+
     // Could not handle item correctly, complain!
     Integer itemLevel=item.getItemLevel();
     System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
@@ -147,6 +156,99 @@ public class ItemsMerger
         _failedItems.put(Integer.valueOf(currentItem.getIdentifier()),item);
       }
     }
+  }
+
+  private boolean inspectScalableItems(Item item, List<Item> selectedItems)
+  {
+    String slices=item.getProperty(ItemPropertyNames.SLICED_STATS);
+    if ((slices!=null) && (selectedItems.size()==1))
+    {
+      Item selectedItem=selectedItems.get(0);
+      Integer selectedItemLevel=selectedItem.getItemLevel();
+      SlicesBasedItemStatsProvider provider=SlicesBasedItemStatsProvider.fromPersistedString(slices);
+      if ((selectedItemLevel!=null) && (provider!=null))
+      {
+        BasicStatsSet scaledStats=provider.getStats(selectedItemLevel.intValue());
+        BasicStatsSet itemStats=selectedItem.getStats();
+        boolean same=compareStats(itemStats,scaledStats);
+        if (same)
+        {
+          //System.out.println("Item " + item + " and " + selectedItem + " are versions of the same scalable item.");
+          List<Integer> itemLevels=new ArrayList<Integer>();
+          if (selectedItemLevel!=null) itemLevels.add(selectedItemLevel);
+          Integer itemLevel=item.getItemLevel();
+          if (itemLevel!=null) itemLevels.add(itemLevel);
+          Collections.sort(itemLevels);
+          selectedItem.setProperty("itemLevels", itemLevels.toString());
+          return true;
+        }
+        System.out.println("Stats are different: " + item + " != " + selectedItem);
+      }
+    }
+    return false;
+  }
+
+  private boolean compareStats(BasicStatsSet expected, BasicStatsSet actual)
+  {
+    int expectedCount=expected.getStatsCount();
+    int actualCount=actual.getStatsCount();
+    if (expectedCount!=actualCount)
+    {
+      return false;
+    }
+    for(STAT stat : expected.getStats())
+    {
+      FixedDecimalsInteger expectedValue=expected.getStat(stat);
+      FixedDecimalsInteger actualValue=actual.getStat(stat);
+      if (actualValue==null)
+      {
+        return false;
+      }
+      int expectedInternalValue=expectedValue.getInternalValue();
+      int actualInternalValue=actualValue.getInternalValue();
+      if (Math.abs(expectedInternalValue-actualInternalValue)>1)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private void mergeItems(ArmourType armourType, Item item, Item selectedItem)
+  {
+    updateArmourType(armourType,selectedItem);
+    selectedItem.setEssenceSlots(item.getEssenceSlots());
+    selectedItem.setEquipmentLocation(item.getEquipmentLocation());
+    selectedItem.setSubCategory(item.getSubCategory());
+    selectedItem.setRequiredClass(item.getRequiredClass());
+    selectedItem.getProperties().putAll(item.getProperties());
+  }
+
+  private void mergeStats(Item item, Item selectedItem)
+  {
+    BasicStatsSet itemStats=selectedItem.getStats();
+    itemStats.clear();
+    itemStats.setStats(item.getStats());
+  }
+
+  /**
+   * Compare item levels of two items.
+   * @param item1 Item 1.
+   * @param item2 Item 2.
+   * @return <code>true</code> if the item level of item 1 is defined and strictly superior
+   * to the one in item2.
+   */
+  private boolean compareItemLevels(Item item1, Item item2)
+  {
+    Integer value1=item1.getItemLevel();
+    Integer value2=item2.getItemLevel();
+    if (value1!=null)
+    {
+      if (value2==null) return true;
+      if (value1.intValue()>value2.intValue()) return true;
+      return false;
+    }
+    return false;
   }
 
   private void updateArmourType(ArmourType type, Item item)
