@@ -21,6 +21,7 @@ import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
@@ -103,6 +104,7 @@ public class ItemNormalization
         totalSize+=size;
       }
       System.out.println(totalSize);
+      new ItemStatistics().showStatistics(items);
     }
 
     /*
