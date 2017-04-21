@@ -183,6 +183,8 @@ public class ItemsMerger
           return true;
         }
         System.out.println("Stats are different: " + item + " != " + selectedItem);
+        System.out.println("Scaled: " + scaledStats);
+        System.out.println("Expected: " + itemStats);
       }
     }
     return false;
@@ -206,7 +208,7 @@ public class ItemsMerger
       }
       int expectedInternalValue=expectedValue.getInternalValue();
       int actualInternalValue=actualValue.getInternalValue();
-      if (Math.abs(expectedInternalValue-actualInternalValue)>1)
+      if (Math.abs(expectedInternalValue-actualInternalValue)>100)
       {
         return false;
       }
@@ -216,9 +218,9 @@ public class ItemsMerger
 
   private void mergeItems(ArmourType armourType, Item item, Item selectedItem)
   {
-    updateArmourType(armourType,selectedItem);
     selectedItem.setEssenceSlots(item.getEssenceSlots());
     selectedItem.setEquipmentLocation(item.getEquipmentLocation());
+    updateArmourType(armourType,selectedItem);
     selectedItem.setSubCategory(item.getSubCategory());
     selectedItem.setRequiredClass(item.getRequiredClass());
     selectedItem.getProperties().putAll(item.getProperties());
