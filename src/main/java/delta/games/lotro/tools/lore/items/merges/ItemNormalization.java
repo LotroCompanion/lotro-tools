@@ -21,6 +21,7 @@ import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
 import delta.games.lotro.utils.FixedDecimalsInteger;
@@ -85,7 +86,7 @@ public class ItemNormalization
     trimData(items);
 
     // Consistency checks
-    consistencyChecks(items);
+    new ConsistencyChecks().consistencyChecks(items);
 
     // Write result file
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
@@ -131,55 +132,6 @@ public class ItemNormalization
       item.removeProperty(ItemPropertyNames.OLD_TULKAS_NAME);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
-    }
-  }
-
-  private void consistencyChecks(List<Item> items)
-  {
-    int nbArmours=0;
-    int nbWeapons=0;
-    for(Item item : items)
-    {
-      int id=item.getIdentifier();
-      String name=item.getName();
-      // Armours
-      if (item instanceof Armour)
-      {
-        Armour armour=(Armour)item;
-        int armourValue=armour.getArmourValue();
-        if (armourValue==0)
-        {
-          nbArmours++;
-          System.out.println("No armour value for: " + name + " (" + id + ')');
-        }
-        /*
-        ArmourType type=armour.getArmourType();
-        if (type==null)
-        {
-          nbArmours++;
-          //System.out.println("No armour type for: " + name + " (" + id + ')');
-        }
-        */
-      }
-      // Weapons
-      if (item instanceof Weapon)
-      {
-        Weapon weapon=(Weapon)item;
-        WeaponType type=weapon.getWeaponType();
-        if (type==null)
-        {
-          nbWeapons++;
-          System.out.println("No weapon type for: " + name + " (" + id + ')');
-        }
-      }
-    }
-    if (nbArmours>0)
-    {
-      System.out.println("Nb failed armours: " + nbArmours);
-    }
-    if (nbWeapons>0)
-    {
-      System.out.println("Nb failed weapons: " + nbWeapons);
     }
   }
 
