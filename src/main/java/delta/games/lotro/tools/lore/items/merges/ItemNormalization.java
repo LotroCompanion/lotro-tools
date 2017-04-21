@@ -1092,6 +1092,7 @@ public class ItemNormalization
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
       item=setWeaponTypeFromCategory(item,null,type);
+      item.setSubCategory(null);
     }
     return item;
   }
