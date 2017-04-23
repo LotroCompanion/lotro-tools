@@ -134,11 +134,12 @@ public class ItemsMerger
     }
 
     // Look for different versions of a scalable item
-    boolean same=inspectScalableItems(item,selectedItems);
-    if (same)
+    selectedItem=inspectScalableItems(item,selectedItems);
+    if (selectedItem!=null)
     {
-      selectedItem=selectedItems.get(0);
-      if (compareItemLevels(item,selectedItem))
+      Integer itemLevel=item.getItemLevel();
+      Integer selectedItemLevel=selectedItem.getItemLevel();
+      if (compareItemLevels(itemLevel,selectedItemLevel)>0)
       {
         mergeStats(item,selectedItem);
       }
@@ -158,36 +159,69 @@ public class ItemsMerger
     }
   }
 
-  private boolean inspectScalableItems(Item item, List<Item> selectedItems)
+  private Item inspectScalableItems(Item item, List<Item> selectedItems)
   {
+    List<Item> matchingItems=new ArrayList<Item>();
     String slices=item.getProperty(ItemPropertyNames.SLICED_STATS);
-    if ((slices!=null) && (selectedItems.size()==1))
+    if (slices!=null)
     {
-      Item selectedItem=selectedItems.get(0);
-      Integer selectedItemLevel=selectedItem.getItemLevel();
       SlicesBasedItemStatsProvider provider=SlicesBasedItemStatsProvider.fromPersistedString(slices);
-      if ((selectedItemLevel!=null) && (provider!=null))
+      if (provider!=null)
       {
-        BasicStatsSet scaledStats=provider.getStats(selectedItemLevel.intValue());
-        BasicStatsSet itemStats=selectedItem.getStats();
-        boolean same=compareStats(itemStats,scaledStats);
-        if (same)
+        for(Item selectedItem : selectedItems)
         {
-          //System.out.println("Item " + item + " and " + selectedItem + " are versions of the same scalable item.");
-          List<Integer> itemLevels=new ArrayList<Integer>();
-          if (selectedItemLevel!=null) itemLevels.add(selectedItemLevel);
-          Integer itemLevel=item.getItemLevel();
-          if (itemLevel!=null) itemLevels.add(itemLevel);
-          Collections.sort(itemLevels);
-          selectedItem.setProperty("itemLevels", itemLevels.toString());
-          return true;
+          Integer selectedItemLevel=selectedItem.getItemLevel();
+          if ((selectedItemLevel!=null) && (provider!=null))
+          {
+            BasicStatsSet scaledStats=provider.getStats(selectedItemLevel.intValue());
+            BasicStatsSet itemStats=selectedItem.getStats();
+            boolean same=compareStats(itemStats,scaledStats);
+            if (same)
+            {
+              //System.out.println("Item " + item + " and " + selectedItem + " are versions of the same scalable item.");
+              String itemLevels=buildItemLevelProperty(selectedItemLevel,item.getItemLevel());
+              selectedItem.setProperty("itemLevels", itemLevels);
+              matchingItems.add(selectedItem);
+            }
+            /*
+            else
+            {
+              System.out.println("Stats are different: " + item + " != " + selectedItem);
+              System.out.println("Scaled: " + scaledStats);
+              System.out.println("Expected: " + itemStats);
+            }
+            */
+          }
         }
-        System.out.println("Stats are different: " + item + " != " + selectedItem);
-        System.out.println("Scaled: " + scaledStats);
-        System.out.println("Expected: " + itemStats);
       }
     }
-    return false;
+    Item matchingItem=null;
+    if (matchingItems.size()>0)
+    {
+      if (matchingItems.size()>1)
+      {
+        System.out.println("Several matches for " + item + ": " + matchingItems);
+      }
+      else
+      {
+        matchingItem=matchingItems.get(0);
+      }
+    }
+    return matchingItem;
+  }
+
+  private String buildItemLevelProperty(Integer... itemLevels)
+  {
+    List<Integer> itemLevelsList=new ArrayList<Integer>();
+    for(Integer itemLevel :  itemLevels)
+    {
+      if (itemLevel!=null)
+      {
+        itemLevelsList.add(itemLevel);
+      }
+    }
+    Collections.sort(itemLevelsList);
+    return itemLevelsList.toString();
   }
 
   private boolean compareStats(BasicStatsSet expected, BasicStatsSet actual)
@@ -229,28 +263,37 @@ public class ItemsMerger
   private void mergeStats(Item item, Item selectedItem)
   {
     BasicStatsSet itemStats=selectedItem.getStats();
+    Integer itemLevel=item.getItemLevel();
+    Integer selectedItemLevel=selectedItem.getItemLevel();
+    int compareLevels=compareItemLevels(itemLevel,selectedItemLevel);
+    if (compareLevels!=0)
+    {
+      String itemLevels=buildItemLevelProperty(itemLevel,selectedItemLevel);
+      selectedItem.setProperty("itemLevels", itemLevels);
+    }
+    selectedItem.setItemLevel(item.getItemLevel());
     itemStats.clear();
     itemStats.setStats(item.getStats());
   }
 
   /**
    * Compare item levels of two items.
-   * @param item1 Item 1.
-   * @param item2 Item 2.
-   * @return <code>true</code> if the item level of item 1 is defined and strictly superior
-   * to the one in item2.
+   * @param value1 Item level 1.
+   * @param value2 Item level 2.
+   * @return <code>1</code> if the item level of item 1 is defined and strictly superior
+   * to the one in item2, <code>0</code> if equal, <code>-1</code> otherwise.
    */
-  private boolean compareItemLevels(Item item1, Item item2)
+  private int compareItemLevels(Integer value1, Integer value2)
   {
-    Integer value1=item1.getItemLevel();
-    Integer value2=item2.getItemLevel();
     if (value1!=null)
     {
-      if (value2==null) return true;
-      if (value1.intValue()>value2.intValue()) return true;
-      return false;
+      if (value2==null) return 1;
+      if (value1.intValue()>value2.intValue()) return 1;
+      if (value1.intValue()==value2.intValue()) return 0;
+      return -1;
     }
-    return false;
+    if (value2==null) return 0;
+    return -1;
   }
 
   private void updateArmourType(ArmourType type, Item item)

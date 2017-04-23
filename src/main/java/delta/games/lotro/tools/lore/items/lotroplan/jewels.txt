@@ -26,7 +26,7 @@ Greater Earring of the Pelennor Warrior (3s):	234		=CALCSLICE("Might";B17;2)				
 Lesser Earring of the Pelennor Sage (2s):	222					=CALCSLICE("Will";B26;2,8)		=CALCSLICE("Morale";B26;1,4)																																																										Ears	LoMiRu
 Lesser Earring of the Pelennor Scout (2s):	222			=CALCSLICE("Agility";B27;2,8)				=CALCSLICE("Morale";B27;1,4)																																																										Ears	BuHuWa
 Lesser Earring of the Pelennor Warrior (2s):	222		=CALCSLICE("Might";B28;2,8)					=CALCSLICE("Morale";B28;1,4)																																																										Ears	BeCaChGuWa
-(1879338212) Earring of Absent Friends (2s):	222		=CALCSLICE("Might";B29;2,2)					=CALCSLICE("Morale";B29;1,2)																=CALCSLICE("PhyMit";B29;0,4)	=CALCSLICE("TacMit";B29;0,4)																																									Ears	BeCaChGuWa
+(1879331940) Earring of Absent Friends (2s):	222		=CALCSLICE("Might";B29;2,2)					=CALCSLICE("Morale";B29;1,2)																=CALCSLICE("PhyMit";B29;0,4)	=CALCSLICE("TacMit";B29;0,4)																																									Ears	BeCaChGuWa
 (1879331937) Earring of Forgotten Spirits (2s):	222					=CALCSLICE("Will";B30;2,2)		=CALCSLICE("Morale";B30;1,2)																=CALCSLICE("PhyMit";B30;0,4)	=CALCSLICE("TacMit";B30;0,4)																																									Ears	LoMiRu
 (1879331935) Earring of Outcast Brethren (2s):	222			=CALCSLICE("Agility";B31;2,2)				=CALCSLICE("Morale";B31;1,2)																=CALCSLICE("PhyMit";B31;0,4)	=CALCSLICE("TacMit";B31;0,4)																																									Ears	BuHuWa
 Exquisite Anórien Earring of Combat (3s):	201		=CALCSLICE("Might";B32;1,4)					=CALCSLICE("Morale";B32;1,4)																																																										Ears	BeCaChGuWa
@@ -164,7 +164,7 @@ Hearty Bracelet of Willful Defiance (3s):	201			=CALCSLICE("Agility";B163;1,4)	=
 Armlet of Ostoher (3s):	201					=CALCSLICE("Will";B164;2,8)																																																												Wrists	LoMiRu
 Armlet of Eldacar (3s):	201				=CALCSLICE("Vitality";B165;1,4)	=CALCSLICE("Will";B165;1,4)																																																												Wrists	LoMiRu
 Bracelet of Skilled Defiance (3s):	201					=CALCSLICE("Will";B166;2,8)																																																												Wrists	LoMiRu
-Hearty Bracelet of Skilled Defiance (3s):	201				=CALCSLICE("Vitality";B167;1,4)	=CALCSLICE("Will";B167;1,4)																																																												Wrists	LoMiRu
+Hearty Bracelet of Skilled Defiance (3s):	201			=CALCSLICE("Agility";B167;1,4)	=CALCSLICE("Vitality";B167;1,4)																																																													Wrists	BuHuWa
 Gleaming Bracelet of the Prince	195		=CALCSLICE("Might";B168;3)		=CALCSLICE("Vitality";B168;2)																			=CALCSLICE("PhyMit";B168;1)	=CALCSLICE("TacMit";B168;1)																																										
 Polished Bracelet of the Prince	195			=CALCSLICE("Agility";B169;3)	=CALCSLICE("Vitality";B169;2)																			=CALCSLICE("PhyMit";B169;1)	=CALCSLICE("TacMit";B169;1)																																										
 Shining Bracelet of the Prince	195				=CALCSLICE("Vitality";B170;2)	=CALCSLICE("Will";B170;3)																		=CALCSLICE("PhyMit";B170;1)	=CALCSLICE("TacMit";B170;1)																																										
