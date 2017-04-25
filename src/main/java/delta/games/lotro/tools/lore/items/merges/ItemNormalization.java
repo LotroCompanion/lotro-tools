@@ -185,6 +185,8 @@ public class ItemNormalization
       }
       items.add(item);
     }
+    ret.removeProperty(ItemPropertyNames.SLICED_STATS);
+    ret.removeProperty("itemLevels");
     return ret;
   }
 

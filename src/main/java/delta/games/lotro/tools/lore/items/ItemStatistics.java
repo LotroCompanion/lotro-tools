@@ -17,6 +17,7 @@ import delta.games.lotro.lore.items.comparators.ItemQualityComparator;
 import delta.games.lotro.lore.items.comparators.WeaponTypeComparator;
 
 /**
+ * Computes and display statistics on a collection of items.
  * @author DAM
  */
 public class ItemStatistics

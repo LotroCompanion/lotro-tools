@@ -134,7 +134,8 @@ public class ItemsMerger
     }
 
     // Look for different versions of a scalable item
-    selectedItem=inspectScalableItems(item,selectedItems);
+    StringBuilder log=new StringBuilder();
+    selectedItem=inspectScalableItems(item,selectedItems,log);
     if (selectedItem!=null)
     {
       Integer itemLevel=item.getItemLevel();
@@ -150,6 +151,7 @@ public class ItemsMerger
     // Could not handle item correctly, complain!
     Integer itemLevel=item.getItemLevel();
     System.out.println("Name: "+name+" ("+itemLevel+") not found. Selection is:"+selectedItems);
+    System.out.println(log);
     if (selectedItems!=null)
     {
       for(Item currentItem : selectedItems)
@@ -159,7 +161,7 @@ public class ItemsMerger
     }
   }
 
-  private Item inspectScalableItems(Item item, List<Item> selectedItems)
+  private Item inspectScalableItems(Item item, List<Item> selectedItems, StringBuilder sb)
   {
     List<Item> matchingItems=new ArrayList<Item>();
     String slices=item.getProperty(ItemPropertyNames.SLICED_STATS);
@@ -183,14 +185,12 @@ public class ItemsMerger
               selectedItem.setProperty("itemLevels", itemLevels);
               matchingItems.add(selectedItem);
             }
-            /*
             else
             {
-              System.out.println("Stats are different: " + item + " != " + selectedItem);
-              System.out.println("Scaled: " + scaledStats);
-              System.out.println("Expected: " + itemStats);
+              sb.append("Stats are different: " + item + " != " + selectedItem + "\n");
+              sb.append("Scaled: " + scaledStats + "\n");
+              sb.append("Expected: " + itemStats + "\n");
             }
-            */
           }
         }
       }
@@ -200,11 +200,12 @@ public class ItemsMerger
     {
       if (matchingItems.size()>1)
       {
-        System.out.println("Several matches for " + item + ": " + matchingItems);
+        sb.append("Several matches for " + item + ": " + matchingItems + "\n");
       }
       else
       {
         matchingItem=matchingItems.get(0);
+        sb.setLength(0);
       }
     }
     return matchingItem;
