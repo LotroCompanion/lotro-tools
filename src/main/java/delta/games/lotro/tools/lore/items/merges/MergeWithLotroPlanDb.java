@@ -42,7 +42,11 @@ public class MergeWithLotroPlanDb
         {
           String name=item.getName();
           name=name.replace(' ',' ');
-          noIdItems.put(name,item);
+          Item old=noIdItems.put(name,item);
+          if (old!=null)
+          {
+            System.err.println("Warning: multiple item with no ID and the same name: " + old);
+          }
         }
       }
     }
