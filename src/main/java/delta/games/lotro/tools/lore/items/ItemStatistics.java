@@ -8,6 +8,7 @@ import java.util.List;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.Weapon;
@@ -26,6 +27,7 @@ public class ItemStatistics
   int _itemsCount;
   private HashMap<ItemQuality,IntegerHolder> _itemsByQuality;
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
+  private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
 
   // Armour
   private int _armoursCount;
@@ -44,6 +46,7 @@ public class ItemStatistics
     _armoursByType=new HashMap<ArmourType,IntegerHolder>();
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
+    _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
   }
 
   /**
@@ -94,6 +97,17 @@ public class ItemStatistics
       }
       counter.increment();
     }
+    // By slot
+    {
+      EquipmentLocation location=item.getEquipmentLocation();
+      IntegerHolder counter=_itemsBySlot.get(location);
+      if (counter==null)
+      {
+        counter=new IntegerHolder();
+        _itemsBySlot.put(location,counter);
+      }
+      counter.increment();
+    }
   }
 
   private void handleArmour(Armour armour) 
@@ -135,7 +149,7 @@ public class ItemStatistics
     // Items
     System.out.println("Items: " + _itemsCount);
     // - qualities
-    System.out.println("\tBy quality:");
+    System.out.println("- by quality:");
     List<ItemQuality> itemQualities=new ArrayList<ItemQuality>(_itemsByQuality.keySet());
     Collections.sort(itemQualities,new ItemQualityComparator());
     for(ItemQuality itemQuality : itemQualities)
@@ -144,13 +158,22 @@ public class ItemStatistics
       System.out.println("\t"+itemQuality+": "+count);
     }
     // - sub-categories
-    System.out.println("\tBy sub-category:");
+    System.out.println("- by sub-category:");
     List<String> itemSubCategories=new ArrayList<String>(_itemsBySubCategory.keySet());
     Collections.sort(itemSubCategories);
     for(String itemSubCategory : itemSubCategories)
     {
       IntegerHolder count=_itemsBySubCategory.get(itemSubCategory);
       System.out.println("\t"+itemSubCategory+": "+count);
+    }
+    // - slot
+    System.out.println("- by slot:");
+    List<EquipmentLocation> locations=new ArrayList<EquipmentLocation>(_itemsBySlot.keySet());
+    //Collections.sort(locations);
+    for(EquipmentLocation location : locations)
+    {
+      IntegerHolder count=_itemsBySlot.get(location);
+      System.out.println("\t"+location+": "+count);
     }
     // Armours
     System.out.println("Armours: " + _armoursCount);
