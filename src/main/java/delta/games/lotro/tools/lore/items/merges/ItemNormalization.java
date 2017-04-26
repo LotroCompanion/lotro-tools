@@ -110,8 +110,8 @@ public class ItemNormalization
         totalSize+=size;
       }
       System.out.println(totalSize);
-      new ItemStatistics().showStatistics(items);
     }
+    new ItemStatistics().showStatistics(items);
 
     /*
     ItemsSorter sorter=new ItemsSorter();
@@ -925,6 +925,7 @@ public class ItemNormalization
     item=setWeaponTypeFromCategory(item,"110",WeaponType.JAVELIN);
     item=setWeaponTypeFromCategory(item,"29",WeaponType.CROSSBOW);
     item=setWeaponTypeFromCategory(item,"46",WeaponType.SPEAR);
+    item=setWeaponTypeFromCategory(item,"34",WeaponType.STAFF);
     //item=setWeaponTypeFromCategory(item,"12",WeaponType.ONE_HANDED_AXE);
     item=setWeaponTypeFromCategory(item,"One-handed Axe",WeaponType.ONE_HANDED_AXE);
     item=setWeaponTypeFromCategory(item,"Two-handed Axe",WeaponType.TWO_HANDED_AXE);
