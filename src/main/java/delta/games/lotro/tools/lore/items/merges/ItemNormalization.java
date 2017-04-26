@@ -19,7 +19,9 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
@@ -84,6 +86,9 @@ public class ItemNormalization
 
     // Trim useless data
     trimData(items);
+
+    // Sort items by ID
+    Collections.sort(items,new ItemIdComparator());
 
     // Consistency checks
     new ConsistencyChecks().consistencyChecks(items);
@@ -1491,16 +1496,28 @@ public class ItemNormalization
         item.setQuality(quality);
         item.setRequiredClass(cClass);
         String category=null;
+        if ((classItemType!=null) || (bridle))
+        {
+          LegendaryItem legendaryItem;
+          if (item instanceof LegendaryItem)
+          {
+            legendaryItem=(LegendaryItem)item;
+          }
+          else
+          {
+            legendaryItem=new LegendaryItem();
+            legendaryItem.copyFrom(item);
+            item=legendaryItem;
+          }
+        }
         if (bridle)
         {
           category="Bridle";
-          item.setCategory(ItemCategory.LEGENDARY_ITEM);
           item.setEquipmentLocation(EquipmentLocation.BRIDLE);
         }
         else if (classItemType!=null)
         {
           category=cClass.getLabel()+":"+classItemType;
-          item.setCategory(ItemCategory.LEGENDARY_ITEM);
           item.setEquipmentLocation(EquipmentLocation.CLASS_SLOT);
         }
         else if (weaponType!=null)
