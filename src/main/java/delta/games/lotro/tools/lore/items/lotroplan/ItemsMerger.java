@@ -263,7 +263,6 @@ public class ItemsMerger
 
   private void mergeStats(Item item, Item selectedItem)
   {
-    BasicStatsSet itemStats=selectedItem.getStats();
     Integer itemLevel=item.getItemLevel();
     Integer selectedItemLevel=selectedItem.getItemLevel();
     int compareLevels=compareItemLevels(itemLevel,selectedItemLevel);
@@ -272,9 +271,13 @@ public class ItemsMerger
       String itemLevels=buildItemLevelProperty(itemLevel,selectedItemLevel);
       selectedItem.setProperty("itemLevels", itemLevels);
     }
-    selectedItem.setItemLevel(item.getItemLevel());
-    itemStats.clear();
-    itemStats.setStats(item.getStats());
+    if (compareLevels>0)
+    {
+      selectedItem.setItemLevel(item.getItemLevel());
+      BasicStatsSet itemStats=selectedItem.getStats();
+      itemStats.clear();
+      itemStats.setStats(item.getStats());
+    }
   }
 
   /**
