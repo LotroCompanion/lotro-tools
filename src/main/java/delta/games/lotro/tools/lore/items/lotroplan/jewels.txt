@@ -255,6 +255,9 @@ Greater Dextrous Ring of Fate	176			=CALCSLICE("Agility";B254;2,8)	=CALCSLICE("V
 Adept Officer's Resilient Ring	176			=CALCSLICE("Agility";B255;2,4)	=CALCSLICE("Vitality";B255;2,8)		=CALCSLICE("Fate";B255;1)									=CALCSLICE("PhyMas";B255;0,8)																																																			
 Master Engineer's Resilient Ring	176			=CALCSLICE("Agility";B256;2,4)	=CALCSLICE("Vitality";B256;2,8)									=CALCSLICE("CritHit";B256;0,6)		=CALCSLICE("PhyMas";B256;1,2)																																																			
 Exquisite Emerald Ring of Combat	156		=CALCSLICE("Might";B257;2,4)		=CALCSLICE("Vitality";B257;2)			=CALCSLICE("Morale";B257;1)						=CALCSLICE("CritHit";B257;0,6)																																																					
+Ring of Dryad Loveliness (3s)	258					237		1401
+Ring of the Outer fence (3s)	258		237					1401
+Ring of the Sunset's Window (3s)	258			237				1401
 Pockets																																																																	
 Empowered Crest of Gondor's Strength (3s):	282		=CALCSLICE("Might";B259;3)					=CALCSLICE("Morale";B259;0,8)																																																										Pocket	BeCaChGuWa
 Empowered Crest of Gondor's Swiftness (3s):	282			=CALCSLICE("Agility";B260;3)				=CALCSLICE("Morale";B260;0,8)																																																										Pocket	BuHuWa
