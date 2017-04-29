@@ -219,6 +219,18 @@ public class LotroPlanItemsDbLoader
     else if ("Fingers".equals(_section)) slot=EquipmentLocation.FINGER;
     else if ("Pockets".equals(_section)) slot=EquipmentLocation.POCKET;
 
+    // Class requirement
+    String classRequirementStr="";
+    if (fields.length>=LotroPlanTable.CLASSES_INDEX)
+    {
+      classRequirementStr=fields[LotroPlanTable.CLASSES_INDEX].trim();
+    }
+    CharacterClass classRequirement=getClassRequirement(classRequirementStr);
+    if (classRequirement!=null)
+    {
+      item.setRequiredClass(classRequirement);
+    }
+
     if ("Burglar Signals".equals(_section))
     {
       item.setSubCategory("Burglar:Signal");
@@ -272,5 +284,20 @@ public class LotroPlanItemsDbLoader
       item.setEquipmentLocation(slot);
     }
     return item;
+  }
+
+  private CharacterClass getClassRequirement(String classRequirement)
+  {
+    if ("Be".equals(classRequirement)) return CharacterClass.BEORNING;
+    if ("Bu".equals(classRequirement)) return CharacterClass.BURGLAR;
+    if ("Ca".equals(classRequirement)) return CharacterClass.CAPTAIN;
+    if ("Ch".equals(classRequirement)) return CharacterClass.CHAMPION;
+    if ("Gu".equals(classRequirement)) return CharacterClass.GUARDIAN;
+    if ("Hu".equals(classRequirement)) return CharacterClass.HUNTER;
+    if ("Lo".equals(classRequirement)) return CharacterClass.LORE_MASTER;
+    if ("Mi".equals(classRequirement)) return CharacterClass.MINSTREL;
+    if ("Ru".equals(classRequirement)) return CharacterClass.RUNE_KEEPER;
+    if ("Wa".equals(classRequirement)) return CharacterClass.WARDEN;
+    return null;
   }
 }

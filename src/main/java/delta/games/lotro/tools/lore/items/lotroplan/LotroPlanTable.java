@@ -32,6 +32,10 @@ public class LotroPlanTable
   private static final int HOPE_INDEX=27;
   private static final int PARRY_PERCENTAGE_INDEX=53;
   private static final int RANGED_DEFENCE_PERCENTAGE_INDEX=62;
+  /**
+   * Index of the 'classes' column.
+   */
+  public static final int CLASSES_INDEX=67;
   // All other stats are unused
   //Name  iLvl  Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
 
