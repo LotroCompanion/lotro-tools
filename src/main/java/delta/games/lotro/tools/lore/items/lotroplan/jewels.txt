@@ -224,13 +224,13 @@ Polished Star-set Ring of the Nobleman	201				=CALCSLICE("Vitality";B223;2)	=CAL
 Gleaming Ring of the Prince	195		=CALCSLICE("Might";B224;2)		=CALCSLICE("Vitality";B224;2)		=CALCSLICE("Fate";B224;1)	=CALCSLICE("Morale";B224;2)																																																											
 Strong Ring of the Prince	195			=CALCSLICE("Agility";B225;2)	=CALCSLICE("Vitality";B225;2)		=CALCSLICE("Fate";B225;1)	=CALCSLICE("Morale";B225;2)																																																											
 Opulent Ring of the Prince	195				=CALCSLICE("Vitality";B226;2)	=CALCSLICE("Will";B226;2)	=CALCSLICE("Fate";B226;1)	=CALCSLICE("Morale";B226;2)																																																											
-Elite Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B227;3,6)	=CALCSLICE("Fate";B227;2)							=CALCSLICE("CritHit";B227;1)																																																				Fingers	LoMiRu
+Elite Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B227;3,6)	=CALCSLICE("Fate";B227;2,4)							=CALCSLICE("CritHit";B227;0,6)																																																				Fingers	LoMiRu
 Elite Advisor's Sturdy Ring (1s):	192				=CALCSLICE("Vitality";B228;3)	=CALCSLICE("Will";B228;3)																	=CALCSLICE("Evade";B228;0,6)																																											Fingers	LoMiRu
 Elite Scout's Fateful Ring (1s):	192			=CALCSLICE("Agility";B229;3,6)			=CALCSLICE("Fate";B229;2)								=CALCSLICE("Finesse";B229;1)																																																			Fingers	BuHuWa
 Elite Scout's Sturdy Ring (1s):	192			=CALCSLICE("Agility";B230;3)	=CALCSLICE("Vitality";B230;3)									=CALCSLICE("CritHit";B230;0,6)																																																				Fingers	BuHuWa
 Elite Soldier's Fateful Ring (1s):	192		=CALCSLICE("Might";B231;3,6)				=CALCSLICE("Fate";B231;2)								=CALCSLICE("Finesse";B231;1)																																																			Fingers	BeCaChGuWa
 Elite Soldier's Sturdy Ring (1s):	192		=CALCSLICE("Might";B232;3)		=CALCSLICE("Vitality";B232;3)																				=CALCSLICE("TacMit";B232;0,6)																																									Fingers	BeCaChGuWa
-Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B233;3)	=CALCSLICE("Fate";B233;1,6)							=CALCSLICE("CritHit";B233;1)																																																				Fingers	LoMiRu
+Advisor's Fateful Ring (1s):	192					=CALCSLICE("Will";B233;3)	=CALCSLICE("Fate";B233;2)							=CALCSLICE("CritHit";B233;0,6)																																																				Fingers	LoMiRu
 Advisor's Sturdy Ring (1s):	192				=CALCSLICE("Vitality";B234;2)	=CALCSLICE("Will";B234;3)																	=CALCSLICE("Evade";B234;0,6)																																											Fingers	LoMiRu
 Scout's Fateful Ring (1s):	192			=CALCSLICE("Agility";B235;3)			=CALCSLICE("Fate";B235;1,6)								=CALCSLICE("Finesse";B235;1)																																																			Fingers	BuHuWa
 Scout's Sturdy Ring (1s):	192			=CALCSLICE("Agility";B236;3)	=CALCSLICE("Vitality";B236;2)									=CALCSLICE("CritHit";B236;0,6)																																																				Fingers	BuHuWa
