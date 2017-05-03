@@ -3,11 +3,12 @@ package delta.games.lotro.tools.lore.items.lotroplan;
 import java.util.HashMap;
 import java.util.Map;
 
-import delta.common.utils.NumericTools;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.stats.ItemStatSliceData;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
 import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
+import delta.games.lotro.tools.lore.items.StatValueParser;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Lotro plan stats table.
@@ -76,17 +77,7 @@ public class LotroPlanTable
       int index=entry.getKey().intValue();
       if (index>=fields.length) continue;
       String valueStr=fields[index];
-      if (valueStr.endsWith("%"))
-      {
-        valueStr=valueStr.substring(0,valueStr.length()-1);
-        valueStr=valueStr.replace(',','.');
-        Float statValue=NumericTools.parseFloat(valueStr);
-        if (statValue!=null)
-        {
-          provider.setStat(entry.getValue(),statValue.floatValue());
-        }
-      }
-      else if (valueStr.contains("CALCSLICE"))
+      if (valueStr.contains("CALCSLICE"))
       {
         ItemStatSliceData slice=SliceFormulaParser.parse(valueStr);
         if (slice!=null)
@@ -96,38 +87,10 @@ public class LotroPlanTable
       }
       else
       {
-        boolean isPercent=false;
-        if (valueStr.startsWith("="))
+        FixedDecimalsInteger value=StatValueParser.parseStatValue(valueStr);
+        if (value!=null)
         {
-          valueStr=valueStr.substring(1);
-          isPercent=true;
-        }
-        valueStr=valueStr.replace(',','.').trim();
-        if (valueStr.contains("."))
-        {
-          Float statValue=NumericTools.parseFloat(valueStr);
-          if (statValue!=null)
-          {
-            float value=statValue.floatValue();
-            if (isPercent)
-            {
-              value*=100;
-            }
-            provider.setStat(entry.getValue(),value);
-          }
-        }
-        else
-        {
-          Integer statValue=NumericTools.parseInteger(valueStr);
-          if (statValue!=null)
-          {
-            int value=statValue.intValue();
-            if (isPercent)
-            {
-              value*=100;
-            }
-            provider.setStat(entry.getValue(),value);
-          }
+          provider.setStat(entry.getValue(),value);
         }
       }
     }
