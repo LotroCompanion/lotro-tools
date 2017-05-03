@@ -21,6 +21,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
+import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -200,7 +201,8 @@ public class LotroPlanItemsDbLoader
     // Stats
     item.getStats().setStats(stats);
     String slices=provider.toPersistableString();
-    if ((slices!=null) && (slices.length()>0))
+    int nbSlices=((SlicesBasedItemStatsProvider)provider).getSlices();
+    if (nbSlices>0)
     {
       item.setProperty(ItemPropertyNames.SLICED_STATS,slices);
     }
