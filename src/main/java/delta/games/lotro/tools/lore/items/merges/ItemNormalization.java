@@ -25,6 +25,8 @@ import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
+import delta.games.lotro.tools.lore.items.scalables.ScalableItemsFinder;
+import delta.games.lotro.tools.lore.items.scalables.ScalingParametersFinder;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -83,6 +85,10 @@ public class ItemNormalization
     // Build final items list
     List<Item> items=new ArrayList<Item>(sourceItems.values());
 
+    // Find/handle scalable items
+    List<Item> scalables=new ScalableItemsFinder().findScalableItems(items);
+    new ScalingParametersFinder().findScalingParameters(scalables);
+
     // Trim useless data
     trimData(items);
 
@@ -136,6 +142,9 @@ public class ItemNormalization
       item.removeProperty(ItemPropertyNames.OLD_TULKAS_NAME);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
+      // Scaling data
+      item.removeProperty(ItemPropertyNames.SLICED_STATS);
+      item.removeProperty("itemLevels");
     }
   }
 
@@ -189,8 +198,6 @@ public class ItemNormalization
       }
       items.add(item);
     }
-    ret.removeProperty(ItemPropertyNames.SLICED_STATS);
-    ret.removeProperty("itemLevels");
     return ret;
   }
 
