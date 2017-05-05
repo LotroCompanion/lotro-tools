@@ -115,7 +115,7 @@ public class ConsistencyChecks
           _nbMissingStats++;
           //if ((location==EquipmentLocation.BACK) || (location==EquipmentLocation.LEGS))
           {
-            System.out.println("No stat for item: " + item + " at " + location);
+            //System.out.println("No stat for item: " + item + " at " + location);
           }
         }
         else
