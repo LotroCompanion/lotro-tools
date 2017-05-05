@@ -37,8 +37,8 @@ public class ScalableItemsFinder
   };
   private static final String[] ARMOURS = {
     "Hat", "Helm", "Helmet",
-    "Shoulderpads", "Shoulderguards",
-    "Robe", "Jacket", "Breastplate",
+    "Shoulderpads", "Shoulders", "Shoulderguards",
+    "Robe", "Jacket", "Chestguard", "Breastplate",
     "Cloak",
     "Gloves", "Gauntlets",
     "Leggings",
@@ -47,8 +47,8 @@ public class ScalableItemsFinder
   
   private static final EquipmentLocation[] ARMOUR_LOCATIONS = {
     EquipmentLocation.HEAD, EquipmentLocation.HEAD, EquipmentLocation.HEAD,
-    EquipmentLocation.SHOULDER, EquipmentLocation.SHOULDER,
-    EquipmentLocation.CHEST, EquipmentLocation.CHEST, EquipmentLocation.CHEST,
+    EquipmentLocation.SHOULDER, EquipmentLocation.SHOULDER, EquipmentLocation.SHOULDER,
+    EquipmentLocation.CHEST, EquipmentLocation.CHEST, EquipmentLocation.CHEST, EquipmentLocation.CHEST,
     EquipmentLocation.BACK,
     EquipmentLocation.HAND, EquipmentLocation.HAND,
     EquipmentLocation.LEGS,
@@ -56,8 +56,8 @@ public class ScalableItemsFinder
   };
   private static final ArmourType[] ARMOUR_TYPES = {
     ArmourType.LIGHT, null, null,
-    null, ArmourType.HEAVY,
-    ArmourType.LIGHT, ArmourType.MEDIUM, ArmourType.HEAVY,
+    null, ArmourType.MEDIUM, ArmourType.HEAVY,
+    ArmourType.LIGHT, ArmourType.MEDIUM, ArmourType.MEDIUM, ArmourType.HEAVY,
     ArmourType.LIGHT,
     null, ArmourType.HEAVY,
     null,
