@@ -7,6 +7,7 @@ import java.util.Map;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
@@ -95,8 +96,13 @@ public class ScalingParametersFinder
         }
         else
         {
-          System.err.println("Armour not found: "+statValue+" for item "+item);
+          ArmourType armourType=((Armour)item).getArmourType();
+          System.err.println("Armour not found: "+statValue+" for item "+item+", quality="+item.getQuality()+", slot="+item.getEquipmentLocation()+", type="+armourType);
         }
+      }
+      else if ((stat==STAT.PARRY_PERCENTAGE) || (stat==STAT.RANGED_DEFENCE_PERCENTAGE))
+      {
+        // Skip... will be put as raw stats
       }
       // Other stats
       else
@@ -108,7 +114,7 @@ public class ScalingParametersFinder
         }
         else
         {
-          System.err.println("Stat not found: "+stat+"="+statValue+" for item "+item);
+          System.err.println("Stat not found: "+stat+"="+statValue+" for item "+item+", quality="+item.getQuality()+", slot="+item.getEquipmentLocation());
         }
       }
       if (slice!=null)
