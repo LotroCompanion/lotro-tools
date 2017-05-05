@@ -84,7 +84,7 @@ public class ScalingParametersFinder
         ArmourDescriptionFinder armourConverter=_armourConverters.get(itemLevel);
         if (armourConverter==null)
         {
-          armourConverter=new ArmourDescriptionFinder(itemLevel.intValue());
+          armourConverter=new ArmourDescriptionFinder(itemLevel.intValue(),false);
           _armourConverters.put(itemLevel,armourConverter);
         }
         EquipmentLocation location=item.getEquipmentLocation();

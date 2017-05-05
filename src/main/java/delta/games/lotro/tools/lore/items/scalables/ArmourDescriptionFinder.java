@@ -32,11 +32,15 @@ public class ArmourDescriptionFinder
   /**
    * Constructor.
    * @param itemLevel Item level to use.
+   * @param verbose Verbose or not.
    */
-  public ArmourDescriptionFinder(int itemLevel)
+  public ArmourDescriptionFinder(int itemLevel, boolean verbose)
   {
+    if (verbose)
+    {
+      System.out.println("Armour level:"+itemLevel);
+    }
     _map=new HashMap<EquipmentLocation,Map<ItemQuality,Map<Integer,String>>>();
-    //HashMap<Integer,String> map=new HashMap<Integer,String>();
     ScaledArmourComputer computer=new ScaledArmourComputer();
     for(EquipmentLocation location : LOCATIONS)
     {
@@ -53,6 +57,10 @@ public class ArmourDescriptionFinder
             if (armourType!=ArmourType.LIGHT) continue;
           }
           double armorValue=computer.getArmour(itemLevel,armourType,location,quality,1);
+          if (verbose)
+          {
+            System.out.println("location="+location+", quality="+quality+",type="+armourType+": "+armorValue);
+          }
           String label=SlicesBasedItemStatsProvider.getArmorLabel(location,quality,armourType);
           Integer intArmourValue=Integer.valueOf(((int)armorValue)*100);
           String old=valuesMap.put(intArmourValue,label);
@@ -85,5 +93,14 @@ public class ArmourDescriptionFinder
       }
     }
     return null;
+  }
+
+  /**
+   * Main method.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    new ArmourDescriptionFinder(95,true);
   }
 }
