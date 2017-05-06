@@ -76,23 +76,28 @@ public class ArmourDescriptionFinder
   /**
    * Get the armor description from armour value, location and quality.
    * @param armorValue Armour value.
+   * @param armourType Armour type.
    * @param location Location.
    * @param quality Quality.
    * @return An armor description or <code>null</code> if not found.
    */
-  public String getArmourDescription(int armorValue, EquipmentLocation location, ItemQuality quality)
+  public String getArmourDescription(int armorValue, ArmourType armourType, EquipmentLocation location, ItemQuality quality)
   {
+    String label=null;
     Map<ItemQuality,Map<Integer,String>> qualityMap=_map.get(location);
     if (quality!=null)
     {
       Map<Integer,String> valuesMap=qualityMap.get(quality);
       if (valuesMap!=null)
       {
-        String label=valuesMap.get(Integer.valueOf(armorValue));
-        return label;
+        label=valuesMap.get(Integer.valueOf(armorValue));
       }
     }
-    return null;
+    if (label==null)
+    {
+      label=SlicesBasedItemStatsProvider.getArmorLabel(location,quality,armourType);
+    }
+    return label;
   }
 
   /**

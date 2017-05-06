@@ -87,16 +87,16 @@ public class ScalingParametersFinder
           armourConverter=new ArmourDescriptionFinder(itemLevel.intValue(),false);
           _armourConverters.put(itemLevel,armourConverter);
         }
+        ArmourType armourType=((Armour)item).getArmourType();
         EquipmentLocation location=item.getEquipmentLocation();
         ItemQuality quality=item.getQuality();
-        String label=armourConverter.getArmourDescription(statValue,location,quality);
+        String label=armourConverter.getArmourDescription(statValue,armourType,location,quality);
         if (label!=null)
         {
           slice=new ItemStatSliceData(stat,null,label);
         }
         else
         {
-          ArmourType armourType=((Armour)item).getArmourType();
           System.err.println("Armour not found: "+statValue+" for item "+item+", quality="+item.getQuality()+", slot="+item.getEquipmentLocation()+", type="+armourType);
         }
       }
