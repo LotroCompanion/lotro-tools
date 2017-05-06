@@ -79,8 +79,8 @@ public class ConsistencyChecks
         }
       }
       // Scalables
-      String itemLevels=item.getProperty("itemLevels");
-      String slicedStats=item.getProperty(ItemPropertyNames.SLICED_STATS);
+      String itemLevels=item.getProperty(ItemPropertyNames.LEVELS);
+      String slicedStats=item.getProperty(ItemPropertyNames.FORMULAS);
       if (slicedStats!=null)
       {
         nbFormulas++;

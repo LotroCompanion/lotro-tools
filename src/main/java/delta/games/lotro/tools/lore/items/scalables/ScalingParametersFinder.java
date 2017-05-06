@@ -129,38 +129,7 @@ public class ScalingParametersFinder
     }
     stats.removeStat(STAT.ARMOUR);
     String slices=provider.toPersistableString();
-    item.setProperty(ItemPropertyNames.SLICED_STATS,slices);
-    item.setProperty("itemLevels","[176-217]");
-    if (item instanceof Armour)
-    {
-      findArmourTypeFromFormulas((Armour)item);
-    }
-  }
-
-  private void findArmourTypeFromFormulas(Armour armour)
-  {
-    String slices=armour.getProperty(ItemPropertyNames.SLICED_STATS);
-    if (slices!=null)
-    {
-      SlicesBasedItemStatsProvider provider=SlicesBasedItemStatsProvider.fromPersistedString(slices);
-      ItemStatSliceData data=provider.getSliceForStat(STAT.ARMOUR);
-      if (data!=null)
-      {
-        String armourDescription=data.getAdditionalParameter();
-        ArmourType sliceType=SlicesBasedItemStatsProvider.getArmorType(armourDescription);
-        if (sliceType!=null)
-        {
-          ArmourType itemType=armour.getArmourType();
-          if (itemType!=sliceType)
-          {
-            if (itemType!=null)
-            {
-              System.out.println("Updated armour type from: "+itemType+" to "+sliceType+" for "+armour);
-            }
-            armour.setArmourType(sliceType);
-          }
-        }
-      }
-    }
+    item.setProperty(ItemPropertyNames.FORMULAS,slices);
+    item.setProperty(ItemPropertyNames.LEVELS,"[176-217]");
   }
 }

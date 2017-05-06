@@ -204,7 +204,7 @@ public class LotroPlanItemsDbLoader
     int nbSlices=((SlicesBasedItemStatsProvider)provider).getSlices();
     if (nbSlices>0)
     {
-      item.setProperty(ItemPropertyNames.SLICED_STATS,slices);
+      item.setProperty(ItemPropertyNames.FORMULAS,slices);
     }
     // Slot
     EquipmentLocation slot=null;

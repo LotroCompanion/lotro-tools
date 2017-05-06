@@ -22,6 +22,8 @@ import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.lore.items.stats.ItemStatSliceData;
+import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
@@ -89,6 +91,9 @@ public class ItemNormalization
     List<Item> scalables=new ScalableItemsFinder().findScalableItems(items);
     new ScalingParametersFinder().findScalingParameters(scalables);
 
+    // Guess armor types from formulas
+    findArmourTypeFromFormulas(items);
+
     // Trim useless data
     trimData(items);
 
@@ -127,6 +132,44 @@ public class ItemNormalization
     */
   }
 
+  private void findArmourTypeFromFormulas(List<Item> items)
+  {
+    for(Item item : items)
+    {
+      if (item instanceof Armour)
+      {
+        findArmourTypeFromFormulas((Armour)item);
+      }
+    }
+  }
+
+  private void findArmourTypeFromFormulas(Armour armour)
+  {
+    String slices=armour.getProperty(ItemPropertyNames.FORMULAS);
+    if (slices!=null)
+    {
+      SlicesBasedItemStatsProvider provider=SlicesBasedItemStatsProvider.fromPersistedString(slices);
+      ItemStatSliceData data=provider.getSliceForStat(STAT.ARMOUR);
+      if (data!=null)
+      {
+        String armourDescription=data.getAdditionalParameter();
+        ArmourType sliceType=SlicesBasedItemStatsProvider.getArmorType(armourDescription);
+        if (sliceType!=null)
+        {
+          ArmourType itemType=armour.getArmourType();
+          if (itemType!=sliceType)
+          {
+            if (itemType!=null)
+            {
+              System.out.println("Updated armour type from: "+itemType+" to "+sliceType+" for "+armour);
+            }
+            armour.setArmourType(sliceType);
+          }
+        }
+      }
+    }
+  }
+
   private void trimData(List<Item> items)
   {
     for(Item item : items)
@@ -143,8 +186,8 @@ public class ItemNormalization
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       // Scaling data
-      item.removeProperty(ItemPropertyNames.SLICED_STATS);
-      item.removeProperty("itemLevels");
+      item.removeProperty(ItemPropertyNames.FORMULAS);
+      item.removeProperty(ItemPropertyNames.LEVELS);
     }
   }
 

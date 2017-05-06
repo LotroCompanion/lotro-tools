@@ -164,7 +164,7 @@ public class ItemsMerger
   private Item inspectScalableItems(Item item, List<Item> selectedItems, StringBuilder sb)
   {
     List<Item> matchingItems=new ArrayList<Item>();
-    String slices=item.getProperty(ItemPropertyNames.SLICED_STATS);
+    String slices=item.getProperty(ItemPropertyNames.FORMULAS);
     if (slices!=null)
     {
       SlicesBasedItemStatsProvider provider=SlicesBasedItemStatsProvider.fromPersistedString(slices);
@@ -183,7 +183,7 @@ public class ItemsMerger
             {
               //System.out.println("Item " + item + " and " + selectedItem + " are versions of the same scalable item.");
               String itemLevels=buildItemLevelProperty(selectedItemLevel,item.getItemLevel());
-              selectedItem.setProperty("itemLevels", itemLevels);
+              selectedItem.setProperty(ItemPropertyNames.LEVELS, itemLevels);
               matchingItems.add(selectedItem);
             }
             else
@@ -270,7 +270,7 @@ public class ItemsMerger
     if (compareLevels!=0)
     {
       String itemLevels=buildItemLevelProperty(itemLevel,selectedItemLevel);
-      selectedItem.setProperty("itemLevels", itemLevels);
+      selectedItem.setProperty(ItemPropertyNames.LEVELS, itemLevels);
     }
     if (compareLevels>0)
     {
