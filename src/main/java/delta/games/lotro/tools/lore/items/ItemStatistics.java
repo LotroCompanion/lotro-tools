@@ -10,6 +10,7 @@ import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -28,6 +29,7 @@ public class ItemStatistics
   private HashMap<ItemQuality,IntegerHolder> _itemsByQuality;
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
   private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
+  private HashMap<String,IntegerHolder> _itemLevels;
 
   // Armour
   private int _armoursCount;
@@ -47,6 +49,7 @@ public class ItemStatistics
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
     _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
+    _itemLevels=new HashMap<String,IntegerHolder>();
   }
 
   /**
@@ -105,6 +108,18 @@ public class ItemStatistics
       {
         counter=new IntegerHolder();
         _itemsBySlot.put(location,counter);
+      }
+      counter.increment();
+    }
+    // Scaling data
+    {
+      String levelsProperty=item.getProperty(ItemPropertyNames.LEVELS);
+      if (levelsProperty==null) levelsProperty="";
+      IntegerHolder counter=_itemLevels.get(levelsProperty);
+      if (counter==null)
+      {
+        counter=new IntegerHolder();
+        _itemLevels.put(levelsProperty,counter);
       }
       counter.increment();
     }
@@ -174,6 +189,15 @@ public class ItemStatistics
     {
       IntegerHolder count=_itemsBySlot.get(location);
       System.out.println("\t"+location+": "+count);
+    }
+    // - levels
+    System.out.println("- by scaling level:");
+    List<String> itemLevels=new ArrayList<String>(_itemLevels.keySet());
+    Collections.sort(itemLevels);
+    for(String itemLevel : itemLevels)
+    {
+      IntegerHolder count=_itemLevels.get(itemLevel);
+      System.out.println("\t"+itemLevel+": "+count);
     }
     // Armours
     System.out.println("Armours: " + _armoursCount);
