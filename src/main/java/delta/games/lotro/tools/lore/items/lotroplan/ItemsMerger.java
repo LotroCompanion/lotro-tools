@@ -176,6 +176,7 @@ public class ItemsMerger
           if ((selectedItemLevel!=null) && (provider!=null))
           {
             BasicStatsSet scaledStats=provider.getStats(selectedItemLevel.intValue());
+            scaledStats.removeStat(STAT.ARMOUR);
             BasicStatsSet itemStats=selectedItem.getStats();
             boolean same=compareStats(itemStats,scaledStats);
             if (same)
