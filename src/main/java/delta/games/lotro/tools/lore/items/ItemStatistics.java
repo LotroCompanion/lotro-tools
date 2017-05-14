@@ -29,7 +29,7 @@ public class ItemStatistics
   private HashMap<ItemQuality,IntegerHolder> _itemsByQuality;
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
   private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
-  private HashMap<String,IntegerHolder> _itemLevels;
+  private HashMap<String,List<String>> _itemLevels;
 
   // Armour
   private int _armoursCount;
@@ -49,7 +49,7 @@ public class ItemStatistics
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
     _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
-    _itemLevels=new HashMap<String,IntegerHolder>();
+    _itemLevels=new HashMap<String,List<String>>();
   }
 
   /**
@@ -115,13 +115,15 @@ public class ItemStatistics
     {
       String levelsProperty=item.getProperty(ItemPropertyNames.LEVELS);
       if (levelsProperty==null) levelsProperty="";
-      IntegerHolder counter=_itemLevels.get(levelsProperty);
-      if (counter==null)
+      List<String> names=_itemLevels.get(levelsProperty);
+      if (names==null)
       {
-        counter=new IntegerHolder();
-        _itemLevels.put(levelsProperty,counter);
+        names=new ArrayList<String>();
+        _itemLevels.put(levelsProperty,names);
       }
-      counter.increment();
+      String name=item.getName();
+      if (name==null) name="";
+      names.add(name);
     }
   }
 
@@ -196,8 +198,16 @@ public class ItemStatistics
     Collections.sort(itemLevels);
     for(String itemLevel : itemLevels)
     {
-      IntegerHolder count=_itemLevels.get(itemLevel);
-      System.out.println("\t"+itemLevel+": "+count);
+      List<String> names=_itemLevels.get(itemLevel);
+      System.out.println("\t"+itemLevel+": "+names.size());
+      if (names.size()<300)
+      {
+        Collections.sort(names);
+        for(String name : names)
+        {
+          System.out.println("\t\t" + name);
+        }
+      }
     }
     // Armours
     System.out.println("Armours: " + _armoursCount);
