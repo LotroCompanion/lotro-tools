@@ -92,11 +92,12 @@ public class ItemNormalization
     List<Item> scalableInstancesRewards=new ScalableItemsFinder().findScalableItems(items);
     System.out.println("Found " + scalableInstancesRewards.size() + " scalable instances rewards");
     List<Item> bbJewels=new BigBattlesJewelsFinder().findScalableItems(items);
-    System.out.println("Found " + bbJewels.size() + " BB jewels");
     List<Item> scalables=new ArrayList<Item>();
     scalables.addAll(scalableInstancesRewards);
     scalables.addAll(bbJewels);
     new ScalingParametersFinder().findScalingParameters(scalables);
+    System.out.println("Found " + bbJewels.size() + " BB jewels:");
+    new ItemStatistics().showStatistics(bbJewels);
 
     // Guess armor types from formulas
     findArmourTypeFromFormulas(items);
