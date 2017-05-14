@@ -27,6 +27,7 @@ import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
+import delta.games.lotro.tools.lore.items.scalables.BigBattlesJewelsFinder;
 import delta.games.lotro.tools.lore.items.scalables.ScalableItemsFinder;
 import delta.games.lotro.tools.lore.items.scalables.ScalingParametersFinder;
 import delta.games.lotro.utils.FixedDecimalsInteger;
@@ -88,7 +89,13 @@ public class ItemNormalization
     List<Item> items=new ArrayList<Item>(sourceItems.values());
 
     // Find/handle scalable items
-    List<Item> scalables=new ScalableItemsFinder().findScalableItems(items);
+    List<Item> scalableInstancesRewards=new ScalableItemsFinder().findScalableItems(items);
+    System.out.println("Found " + scalableInstancesRewards.size() + " scalable instances rewards");
+    List<Item> bbJewels=new BigBattlesJewelsFinder().findScalableItems(items);
+    System.out.println("Found " + bbJewels.size() + " BB jewels");
+    List<Item> scalables=new ArrayList<Item>();
+    scalables.addAll(scalableInstancesRewards);
+    scalables.addAll(bbJewels);
     new ScalingParametersFinder().findScalingParameters(scalables);
 
     // Guess armor types from formulas
