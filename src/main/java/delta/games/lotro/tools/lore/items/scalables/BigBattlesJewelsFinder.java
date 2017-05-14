@@ -20,7 +20,7 @@ public class BigBattlesJewelsFinder
     "Adept Officer's", "Master Engineer's", "Skilled Vanguard's"
   };
   private static final String[] ADJECTIVES = {
-    "Resolute", "Valourous", "Dextrous", "Resilient", "Enduring", "Persevering", "Steadfast"
+    "Resolute", "Valorous", "Valourous", "Dextrous", "Resilient", "Enduring", "Persevering", "Steadfast"
   };
 
   private static final String[] JEWELS = {
