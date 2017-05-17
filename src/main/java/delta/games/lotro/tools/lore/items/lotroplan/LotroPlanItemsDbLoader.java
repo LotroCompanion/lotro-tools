@@ -21,6 +21,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
+import delta.games.lotro.lore.items.stats.ScalingRulesNames;
 import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
@@ -60,9 +61,29 @@ public class LotroPlanItemsDbLoader
     ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("data/items/tmp/itemsdb.xml").getAbsoluteFile();
     items=_merger.getItems();
+    setScalingRules(items);
     mgr.writeItemsFile(toFile,items);
     //List<Integer> ids=new ArrayList<Integer>(_failedItems.keySet());
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);
+  }
+
+  private void setScalingRules(List<Item> items)
+  {
+    for(Item item : items)
+    {
+      String scalingRule=null;
+      String itemLevels=item.getProperty(ItemPropertyNames.LEVELS);
+      if (itemLevels!=null)
+      {
+        if (itemLevels.endsWith("207]")) scalingRule=ScalingRulesNames.TEAL_ARMOR_SETS;
+        if ("[201, 221]".equals(itemLevels)) scalingRule=ScalingRulesNames.OSGILIATH;
+        if (scalingRule!=null)
+        {
+          item.setProperty(ItemPropertyNames.SCALING,scalingRule);
+        }
+        item.removeProperty(ItemPropertyNames.LEVELS);
+      }
+    }
   }
 
   private void handleAdditionalTable(String tableName)

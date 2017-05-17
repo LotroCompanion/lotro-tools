@@ -23,6 +23,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemStatSliceData;
+import delta.games.lotro.lore.items.stats.ScalingRulesNames;
 import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
@@ -89,15 +90,19 @@ public class ItemNormalization
     List<Item> items=new ArrayList<Item>(sourceItems.values());
 
     // Find/handle scalable items
-    List<Item> scalableInstancesRewards=new ScalableItemsFinder().findScalableItems(items);
-    System.out.println("Found " + scalableInstancesRewards.size() + " scalable instances rewards");
-    List<Item> bbJewels=new BigBattlesJewelsFinder().findScalableItems(items);
-    List<Item> scalables=new ArrayList<Item>();
-    scalables.addAll(scalableInstancesRewards);
-    scalables.addAll(bbJewels);
-    new ScalingParametersFinder().findScalingParameters(scalables);
-    System.out.println("Found " + bbJewels.size() + " BB jewels:");
-    new ItemStatistics().showStatistics(bbJewels);
+    // - scalable instances rewards
+    {
+      List<Item> scalableInstancesRewards=new ScalableItemsFinder().findScalableItems(items);
+      System.out.println("Found " + scalableInstancesRewards.size() + " scalable instances rewards");
+      new ScalingParametersFinder(ScalingRulesNames.SCALABLE_REWARDS).findScalingParameters(scalableInstancesRewards);
+    }
+    // - Big Battles rewards
+    {
+      List<Item> bbJewels=new BigBattlesJewelsFinder().findScalableItems(items);
+      System.out.println("Found " + bbJewels.size() + " BB jewels:");
+      new ScalingParametersFinder(ScalingRulesNames.BIG_BATTLES).findScalingParameters(bbJewels);
+      new ItemStatistics().showStatistics(bbJewels);
+    }
 
     // Guess armor types from formulas
     findArmourTypeFromFormulas(items);
@@ -193,9 +198,6 @@ public class ItemNormalization
       item.removeProperty(ItemPropertyNames.OLD_TULKAS_NAME);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
-      // Scaling data
-      item.removeProperty(ItemPropertyNames.FORMULAS);
-      item.removeProperty(ItemPropertyNames.LEVELS);
     }
   }
 

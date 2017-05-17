@@ -22,14 +22,17 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
  */
 public class ScalingParametersFinder
 {
+  private String _scalingId;
   private Map<Integer,SliceCountFinder> _converters;
   private Map<Integer,ArmourDescriptionFinder> _armourConverters;
 
   /**
    * Constructor.
+   * @param scalingId Scaling identifier.
    */
-  public ScalingParametersFinder()
+  public ScalingParametersFinder(String scalingId)
   {
+    _scalingId=scalingId;
     _converters=new HashMap<Integer,SliceCountFinder>();
     _armourConverters=new HashMap<Integer,ArmourDescriptionFinder>();
   }
@@ -130,6 +133,6 @@ public class ScalingParametersFinder
     stats.removeStat(STAT.ARMOUR);
     String slices=provider.toPersistableString();
     item.setProperty(ItemPropertyNames.FORMULAS,slices);
-    item.setProperty(ItemPropertyNames.LEVELS,"[176-217]");
+    item.setProperty(ItemPropertyNames.SCALING,_scalingId);
   }
 }

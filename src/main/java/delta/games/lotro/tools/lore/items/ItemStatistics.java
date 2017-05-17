@@ -29,7 +29,7 @@ public class ItemStatistics
   private HashMap<ItemQuality,IntegerHolder> _itemsByQuality;
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
   private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
-  private HashMap<String,List<String>> _itemLevels;
+  private HashMap<String,List<String>> _scalingRules;
 
   // Armour
   private int _armoursCount;
@@ -49,7 +49,7 @@ public class ItemStatistics
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
     _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
-    _itemLevels=new HashMap<String,List<String>>();
+    _scalingRules=new HashMap<String,List<String>>();
   }
 
   /**
@@ -113,13 +113,13 @@ public class ItemStatistics
     }
     // Scaling data
     {
-      String levelsProperty=item.getProperty(ItemPropertyNames.LEVELS);
-      if (levelsProperty==null) levelsProperty="";
-      List<String> names=_itemLevels.get(levelsProperty);
+      String scalingRule=item.getProperty(ItemPropertyNames.SCALING);
+      if (scalingRule==null) scalingRule="";
+      List<String> names=_scalingRules.get(scalingRule);
       if (names==null)
       {
         names=new ArrayList<String>();
-        _itemLevels.put(levelsProperty,names);
+        _scalingRules.put(scalingRule,names);
       }
       String name=item.getName();
       if (name==null) name="";
@@ -193,12 +193,12 @@ public class ItemStatistics
       System.out.println("\t"+location+": "+count);
     }
     // - levels
-    System.out.println("- by scaling level:");
-    List<String> itemLevels=new ArrayList<String>(_itemLevels.keySet());
+    System.out.println("- by scaling rules:");
+    List<String> itemLevels=new ArrayList<String>(_scalingRules.keySet());
     Collections.sort(itemLevels);
     for(String itemLevel : itemLevels)
     {
-      List<String> names=_itemLevels.get(itemLevel);
+      List<String> names=_scalingRules.get(itemLevel);
       System.out.println("\t"+itemLevel+": "+names.size());
       if (names.size()<300)
       {
