@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.lore.traitPoints;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.stats.traitPoints.TraitPoint;
 import delta.games.lotro.stats.traitPoints.TraitPointCategories;
 import delta.games.lotro.stats.traitPoints.TraitPointsRegistry;
+import delta.games.lotro.stats.traitPoints.comparators.TraitPointLabelComparator;
 import delta.games.lotro.stats.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
 
 /**
@@ -62,7 +64,12 @@ public class TraitPointsRegistryBuilder
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
       List<TraitPoint> points=_registry.getPointsForClass(cClass);
+      Collections.sort(points,new TraitPointLabelComparator());
       System.out.println(cClass+":"+points.size());
+      for(TraitPoint point : points)
+      {
+        System.out.println("\t"+point.getLabel()+" -- "+point.getId());
+      }
     }
     List<TraitPoint> all=_registry.getAll();
     System.out.println("All:"+all.size());
@@ -106,16 +113,34 @@ public class TraitPointsRegistryBuilder
     initPoint("OldAnórienDeeds", category, "Complete Deed 'Deeds of Old Anórien'", null);
   }
 
+  private static String[][] BOOK_NAMES=
+  {
+      {"A Hobbit's Holiday","A Study of the Skin-changer","Geneology of the Beornings"},
+      {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
+      {"The Candle's Flame","Treatise of Valour","The Book of Oaths"},
+      {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
+      {"The Best Defence","A Shield-maiden's Song","The Final Word"},
+      {"A Shot in the Dark","The Way of the Hunter","The Furthest Charge"},
+      {"The Book of Beasts","Lore of the Blade","Of Leaf and Twig"},
+      {"Melodies of the Valar","The Rising Chord","Valour's Marches"},
+      {"Golu o Maeth","Thunder and Flame","Whispers in the Dark"},
+      {"The Watch Against the Night","Chieftains of the Dúnedain","Bullroarer's Boy"}
+  };
+
   private void buildClassPoints()
   {
+    int classIndex=0;
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
       String category=TraitPointCategories.CLASS;
       String key=cClass.getKey();
       // TODO change label according to class
-      initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages 1", cClass);
-      initPoint(key+":LegendaryBook2", category, "Complete Legendary Book Pages 2", cClass);
-      initPoint(key+":LegendaryBook3", category, "Complete Legendary Book Pages 3", cClass);
+      String book1=BOOK_NAMES[classIndex][0];
+      initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages ("+book1+")", cClass);
+      String book2=BOOK_NAMES[classIndex][1];
+      initPoint(key+":LegendaryBook2", category, "Complete Legendary Book Pages ("+book2+")", cClass);
+      String book3=BOOK_NAMES[classIndex][2];
+      initPoint(key+":LegendaryBook3", category, "Complete Legendary Book Pages ("+book3+")", cClass);
       // TODO change label according to class
       initPoint(key+":ClassQuests50", category, "Complete the Level 50 Class Quests", cClass);
       // TODO change label according to class
@@ -125,6 +150,7 @@ public class TraitPointsRegistryBuilder
         // TODO change label according to class
         initPoint(key+":ReadGuardsBook", category, "Obtain Kindred with the Iron Garrison Guards and read their book", cClass);
       }
+      classIndex++;
     }
     // Epic
     TraitPoint epicVol2Book6=initPoint("EpicVol2Book6", TraitPointCategories.EPIC, "Complete Volume II, Book 6 (Moria)", null);
@@ -149,7 +175,7 @@ public class TraitPointsRegistryBuilder
       String key=cClass.getKey();
       for(int i=1;i<=8;i++)
       {
-        initPoint(key+":ClassDeed"+i, category, "Class Deeds ("+key+") - Tier "+i, cClass);
+        initPoint(key+":ClassDeed"+i, category, "Class Deeds - Tier "+i, cClass);
       }
     }
   }
