@@ -115,16 +115,44 @@ public class TraitPointsRegistryBuilder
 
   private static String[][] BOOK_NAMES=
   {
-      {"A Hobbit's Holiday","A Study of the Skin-changer","Geneology of the Beornings"},
-      {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
-      {"The Candle's Flame","Treatise of Valour","The Book of Oaths"},
-      {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
-      {"The Best Defence","A Shield-maiden's Song","The Final Word"},
-      {"A Shot in the Dark","The Way of the Hunter","The Furthest Charge"},
-      {"The Book of Beasts","Lore of the Blade","Of Leaf and Twig"},
-      {"Melodies of the Valar","The Rising Chord","Valour's Marches"},
-      {"Golu o Maeth","Thunder and Flame","Whispers in the Dark"},
-      {"The Watch Against the Night","Chieftains of the Dúnedain","Bullroarer's Boy"}
+    {"A Hobbit's Holiday","A Study of the Skin-changer","Geneology of the Beornings"},
+    {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
+    {"The Candle's Flame","Treatise of Valour","The Book of Oaths"},
+    {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
+    {"The Best Defence","A Shield-maiden's Song","The Final Word"},
+    {"A Shot in the Dark","The Way of the Hunter","The Furthest Charge"},
+    {"The Book of Beasts","Lore of the Blade","Of Leaf and Twig"},
+    {"Melodies of the Valar","The Rising Chord","Valour's Marches"},
+    {"Golu o Maeth","Thunder and Flame","Whispers in the Dark"},
+    {"The Watch Against the Night","Chieftains of the Dúnedain","Bullroarer's Boy"}
+  };
+
+  private static String[][] CLASS_QUESTS_CHAIN_NAMES=
+  {
+    {"Grimbeorn's Challenge", "The Path Homeward" },
+    {"The Truest Course", "The Path of the Mischief-maker"},
+    {"The Noblest Path", "The Path of the Healing Hands"},
+    {"The Boldest Road", "Path of the Martial Champion"},
+    {"The Bravest Deed", "The Path of the Defender of the Free"},
+    {"The Swiftest Arrow", "The Path of the Foe-trapper"},
+    {"The Wisest Way", "The Path of the Ancient Master Quests"},
+    {"The Verses of the North", "The Path of the Resolve-watcher"},
+    {"Learned in Letters", "The Path of the Restoring Rune"},
+    {"A Strong Shield", "The Path of the Masterful Fist"}
+  };
+
+  private static String[] IRON_GARNISON_GUARDS_BOOKS=
+  {
+    "",
+    "A Guide to the Quiet Knife",
+    "The Master of the Charge",
+    "The Boiling Rage",
+    "A Keen Blade", 
+    "The Jolly Hunter",
+    "The Book of Nature",
+    "The Verses of the North",
+    "On the Patterns of Wind and Rain",
+    "The Path Less Trod"
   };
 
   private void buildClassPoints()
@@ -135,19 +163,19 @@ public class TraitPointsRegistryBuilder
       String category=TraitPointCategories.CLASS;
       String key=cClass.getKey();
       String book1=BOOK_NAMES[classIndex][0];
-      initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages ("+book1+")", cClass);
+      initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages '"+book1+"'", cClass);
       String book2=BOOK_NAMES[classIndex][1];
-      initPoint(key+":LegendaryBook2", category, "Complete Legendary Book Pages ("+book2+")", cClass);
+      initPoint(key+":LegendaryBook2", category, "Complete Legendary Book Pages '"+book2+"'", cClass);
       String book3=BOOK_NAMES[classIndex][2];
-      initPoint(key+":LegendaryBook3", category, "Complete Legendary Book Pages ("+book3+")", cClass);
-      // TODO change label according to class
-      initPoint(key+":ClassQuests50", category, "Complete the Level 50 Class Quests", cClass);
-      // TODO change label according to class
-      initPoint(key+":ClassQuests58", category, "Complete the Level 58 Class Quest Chain", cClass);
+      initPoint(key+":LegendaryBook3", category, "Complete Legendary Book Pages '"+book3+"'", cClass);
+      String chain1=CLASS_QUESTS_CHAIN_NAMES[classIndex][0];
+      initPoint(key+":ClassQuests50", category, "Complete the Level 50 Class Quest Chain '" + chain1 + "'", cClass);
+      String chain2=CLASS_QUESTS_CHAIN_NAMES[classIndex][1];
+      initPoint(key+":ClassQuests58", category, "Complete the Level 58 Class Quest Chain '" + chain2 + "'", cClass);
       if (cClass!=CharacterClass.BEORNING)
       {
-        // TODO change label according to class
-        initPoint(key+":ReadGuardsBook", category, "Obtain Kindred with the Iron Garrison Guards and read their book", cClass);
+        String dwarfBook=IRON_GARNISON_GUARDS_BOOKS[classIndex];
+        initPoint(key+":ReadGuardsBook", category, "Read book of Iron Garrison Guards: '" + dwarfBook +"'", cClass);
       }
       classIndex++;
     }
@@ -162,8 +190,8 @@ public class TraitPointsRegistryBuilder
     }
 
     // Add Beorning specifics
-    initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest Chain", CharacterClass.BEORNING);
-    initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest Chain", CharacterClass.BEORNING);
+    initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest Chain 'The Speech of Animals'", CharacterClass.BEORNING);
+    initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest Chain 'Hatred of Bear and Man'", CharacterClass.BEORNING);
   }
 
   private void buildClassDeeds()
