@@ -89,18 +89,18 @@ public class TraitPointsRegistryBuilder
     initPoint("Epic Battles 2", category, "Earn 200 Promotion Points", null);
 
     category=TraitPointCategories.QUESTS;
-    initPoint("West Rohan:Kingstead", category, "Complete Kingstead quest chain", null);
-    initPoint("West Rohan:Eastfold", category, "Complete Eastfold quest chain", null);
-    initPoint("West Rohan:Broadacres", category, "Complete Broadacres quest chain", null);
-    initPoint("West Rohan:Stonedeans", category, "Complete Stonedeans quest chain", null);
-    initPoint("West Rohan:Westfold", category, "Complete Westfold quest chain", null);
+    initPoint("West Rohan:Kingstead", category, "West Rohan: complete Kingstead quest chain", null);
+    initPoint("West Rohan:Eastfold", category, "West Rohan: complete Eastfold quest chain", null);
+    initPoint("West Rohan:Broadacres", category, "West Rohan: complete Broadacres quest chain", null);
+    initPoint("West Rohan:Stonedeans", category, "West Rohan: complete Stonedeans quest chain", null);
+    initPoint("West Rohan:Westfold", category, "West Rohan: complete Westfold quest chain", null);
 
-    initPoint("Central Gondor:Ringló Vale", category, "Complete Ringló Vale quest chain", null);
-    initPoint("Central Gondor:Dor-en-Ernil", category, "Complete Dor-en-Ernil quest chain", null);
-    initPoint("Central Gondor:Lebennin", category, "Complete Lebennin quest chain", null);
-    initPoint("Central Gondor:Pelargir", category, "Complete Pelargir quest chain", null);
+    initPoint("Central Gondor:Ringló Vale", category, "Central Gondor: complete Ringló Vale quest chain", null);
+    initPoint("Central Gondor:Dor-en-Ernil", category, "Central Gondor: complete Dor-en-Ernil quest chain", null);
+    initPoint("Central Gondor:Lebennin", category, "Central Gondor: complete Lebennin quest chain", null);
+    initPoint("Central Gondor:Pelargir", category, "Central Gondor: complete Pelargir quest chain", null);
 
-    initPoint("Eastern Gondor:AshesAndStars", category, "Complete Ashes and Stars, Chapter 4", null);
+    initPoint("Eastern Gondor:AshesAndStars", category, "Osgiliath: complete Ashes and Stars, Chapter 4", null);
 
     category=TraitPointCategories.EPIC;
     initPoint("EpicVol4Book2", category, "Complete Volume IV, Book 2: The Dawnless Day", null);
@@ -109,8 +109,8 @@ public class TraitPointsRegistryBuilder
     initPoint("EpicVol4Book8Chapter7", category, "Complete Volume IV, Book 8, Chapter 7: Mordor Triumphant", null);
 
     category=TraitPointCategories.DEEDS;
-    initPoint("OldAnórienQuests", category, "Complete Deed 'Quests of Old Anórien'", null);
-    initPoint("OldAnórienDeeds", category, "Complete Deed 'Deeds of Old Anórien'", null);
+    initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
+    initPoint("OldAnórienDeeds", category, "Old Anórien: complete Deed 'Deeds of Old Anórien'", null);
   }
 
   private static String[][] BOOK_NAMES=
@@ -134,7 +134,6 @@ public class TraitPointsRegistryBuilder
     {
       String category=TraitPointCategories.CLASS;
       String key=cClass.getKey();
-      // TODO change label according to class
       String book1=BOOK_NAMES[classIndex][0];
       initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages ("+book1+")", cClass);
       String book2=BOOK_NAMES[classIndex][1];
