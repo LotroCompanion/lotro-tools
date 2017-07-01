@@ -17,16 +17,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import delta.games.lotro.gui.utils.GuiFactory;
-import delta.games.lotro.gui.utils.OKCancelPanelController;
+import delta.common.ui.swing.GuiFactory;
+import delta.common.ui.swing.OKCancelPanelController;
+import delta.common.ui.swing.combobox.ComboBoxController;
+import delta.common.ui.swing.windows.DefaultDialogController;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Map;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.ui.MapCanvas;
-import delta.games.lotro.utils.gui.DefaultDialogController;
-import delta.games.lotro.utils.gui.combobox.ComboBoxController;
 
 /**
  * Manages link creation interactions.

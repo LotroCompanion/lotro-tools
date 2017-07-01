@@ -23,6 +23,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/delta-common-ui"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-lotro-companion"/>
 	<classpathentry kind="lib" path="/delta-lotro-item-icons-db/icons.zip"/>
 	<classpathentry kind="output" path="target/classes"/>

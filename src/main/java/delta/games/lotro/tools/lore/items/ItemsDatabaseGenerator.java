@@ -3,12 +3,12 @@ package delta.games.lotro.tools.lore.items;
 import java.io.File;
 
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanItemsDbLoader;
 import delta.games.lotro.tools.lore.items.merges.ItemNormalization;
 import delta.games.lotro.tools.lore.items.merges.MergeItemsLegacyAndTulkasIndex;
 import delta.games.lotro.tools.lore.items.merges.MergeWithLotroPlanDb;
 import delta.games.lotro.tools.lore.items.merges.MergeWithTulkasNew;
 import delta.games.lotro.tools.lore.items.tulkas.TulkasItemsDBParser;
-import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanItemsDbLoader;
 
 /**
  * Whole items database generation process.
