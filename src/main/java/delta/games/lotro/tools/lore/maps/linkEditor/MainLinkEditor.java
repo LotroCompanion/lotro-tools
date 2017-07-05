@@ -9,6 +9,7 @@ import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.ui.MapCanvas;
+import delta.games.lotro.maps.ui.NavigationListener;
 import delta.games.lotro.maps.ui.NavigationManager;
 
 /**
@@ -24,7 +25,7 @@ public class MainLinkEditor
   public static void main(String[] args)
   {
     File rootDir=new File("../lotro-maps-db");
-    MapsManager mapsManager=new MapsManager(rootDir);
+    final MapsManager mapsManager=new MapsManager(rootDir);
     mapsManager.load();
 
     Filter<Marker> filter=new Filter<Marker>()
@@ -37,12 +38,20 @@ public class MainLinkEditor
 
     MapBundle bundle=mapsManager.getMapByKey("breeland");
     MapCanvas canvas=new MapCanvas(mapsManager);
-    NavigationManager navigationManager=new NavigationManager(mapsManager,canvas);
+    final NavigationManager navigationManager=new NavigationManager(canvas);
+    NavigationListener listener=new NavigationListener()
+    {
+      public void mapChangeRequest(String key)
+      {
+        navigationManager.setMap(mapsManager.getMapByKey(key).getMap());
+      }
+    };
+    navigationManager.setNavigationListener(listener);
     /*LinkCreationInterator interactor=*/new LinkCreationInterator(mapsManager,canvas);
     canvas.setFilter(filter);
     String key=bundle.getKey();
     canvas.setMap(key);
-    navigationManager.setMap(key);
+    navigationManager.setMap(bundle.getMap());
     JFrame f=new JFrame();
     String title=bundle.getLabel();
     f.setTitle(title);
