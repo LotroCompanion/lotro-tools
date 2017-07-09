@@ -57,6 +57,7 @@ public class MapPageParser
     Float scale=null;
     Date date=null;
     MarkersManager markers=mapBundle.getData();
+    int markerId=1;
     for(String line : lines)
     {
       if (line.startsWith(STARTX_SEED))
@@ -85,6 +86,8 @@ public class MapPageParser
         Marker marker=parseItemLine(line);
         if (marker!=null)
         {
+          marker.setId(markerId);
+          markerId++;
           markers.addMarker(marker);
         }
       }
