@@ -439,11 +439,33 @@ public class ItemNormalization
     String category=item.getProperty(ItemPropertyNames.TULKAS_CATEGORY);
     if ("54".equals(category))
     {
-      item=setWeaponTypeFromCategory(item,null,WeaponType.THROWN_WEAPON);
+      // Normalize to item (instead of weapon)
+      Item newItem=new Item();
+      newItem.copyFrom(item);
+      item=newItem;
+
+      String name=item.getName();
+      if (name.contains("Knife"))
+      {
+        item.setRequiredClass(CharacterClass.BURGLAR);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Knife");
+      }
+      else if (name.contains("Throwing Hatchet"))
+      {
+        item.setRequiredClass(CharacterClass.BURGLAR);
+        item.setSubCategory(CharacterClass.BURGLAR.getLabel()+":Throwing Hatchet");
+      }
+      else if (name.contains("Throwing Axe"))
+      {
+        item.setSubCategory("Throwing Axe");
+      }
+      else if (name.contains("Throwing Dagger"))
+      {
+        item.setSubCategory("Throwing Dagger");
+      }
       item.setEquipmentLocation(null);
       item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
-      item.setSubCategory(null);
     }
     return item;
   }
