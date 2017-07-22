@@ -4,15 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import delta.games.lotro.character.CharacterData;
+import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.gui.character.ItemSelection;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemCategory;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -116,6 +120,9 @@ public class ItemNormalization
     // Consistency checks
     new ConsistencyChecks().consistencyChecks(items);
 
+    // Filtering items
+    //filterItems(items);
+
     // Write result file
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
     ItemsManager.getInstance().writeItemsFile(toFile,items);
@@ -143,6 +150,40 @@ public class ItemNormalization
     rootDir.mkdirs();
     sorter.writeToFiles(rootDir);
     */
+  }
+
+  /**
+   * Filter items that are accessible within LotroCompanion.
+   * @param items List to filter.
+   */
+  public void filterItems(List<Item> items)
+  {
+    ItemSelection selection=new ItemSelection(items);
+    Set<Integer> selectedIds=new HashSet<Integer>();
+    for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
+    {
+      CharacterData c=new CharacterData();
+      c.setCharacterClass(cClass);
+      c.setLevel(105);
+      for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+      {
+        List<Item> selectedItems=selection.getItems(c,slot);
+        for(Item selectedItem : selectedItems)
+        {
+          selectedIds.add(Integer.valueOf(selectedItem.getIdentifier()));
+        }
+      }
+    }
+    List<Item> selectedItems=new ArrayList<Item>();
+    for(Item item : items)
+    {
+      if (selectedIds.contains(Integer.valueOf(item.getIdentifier())))
+      {
+        selectedItems.add(item);
+      }
+    }
+    items.clear();
+    items.addAll(selectedItems);
   }
 
   private void findArmourTypeFromFormulas(List<Item> items)
@@ -1415,8 +1456,11 @@ public class ItemNormalization
       {
         Armour armour=(Armour)ret;
         int armourValue=armour.getArmourValue();
-        ret.getStats().setStat(STAT.ARMOUR,new FixedDecimalsInteger(armourValue));
-        ret.setCategory(ItemCategory.ITEM);
+        // Transmutate to item so that further filtering works good
+        Item newItem=new Item();
+        newItem.copyFrom(ret);
+        newItem.getStats().setStat(STAT.ARMOUR,new FixedDecimalsInteger(armourValue));
+        ret=newItem;
       }
     }
     return ret;
