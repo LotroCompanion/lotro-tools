@@ -1005,6 +1005,15 @@ public class ItemNormalization
         item.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
         item.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
         item.setSubCategory(null);
+
+        // Fix problem with Captains having Crossbows
+        if (type==WeaponType.CROSSBOW)
+        {
+          if (item.getRequiredClass()==CharacterClass.CAPTAIN)
+          {
+            item.setRequiredClass(null);
+          }
+        }
       }
     }
     
