@@ -160,6 +160,7 @@ public class ItemNormalization
   {
     ItemSelection selection=new ItemSelection(items);
     Set<Integer> selectedIds=new HashSet<Integer>();
+    // Iterate on classes then on slots to find all reachable items
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
       CharacterData c=new CharacterData();
@@ -174,6 +175,14 @@ public class ItemNormalization
         }
       }
     }
+    // Essences
+    List<Item> essences=selection.getEssences();
+    for(Item essence : essences)
+    {
+      selectedIds.add(Integer.valueOf(essence.getIdentifier()));
+    }
+
+    // Build final list
     List<Item> selectedItems=new ArrayList<Item>();
     for(Item item : items)
     {
