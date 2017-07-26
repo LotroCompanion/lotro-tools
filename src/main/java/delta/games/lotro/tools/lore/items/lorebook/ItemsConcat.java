@@ -68,8 +68,7 @@ public class ItemsConcat
         }
       }
       File toFile=new File("itemsLegacy.xml").getAbsoluteFile();
-      ItemsManager mgr=ItemsManager.getInstance();
-      mgr.writeItemsFile(toFile,itemsList);
+      ItemsManager.writeItemsFile(toFile,itemsList);
     }
   }
 }

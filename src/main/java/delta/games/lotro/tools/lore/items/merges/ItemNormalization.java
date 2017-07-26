@@ -12,7 +12,6 @@ import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.gui.character.ItemSelection;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -125,7 +124,7 @@ public class ItemNormalization
 
     // Write result file
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
-    ItemsManager.getInstance().writeItemsFile(toFile,items);
+    ItemsManager.writeItemsFile(toFile,items);
     // Dump unmanaged items
     if (_byCategory.size()>0)
     {
@@ -158,7 +157,7 @@ public class ItemNormalization
    */
   public void filterItems(List<Item> items)
   {
-    ItemSelection selection=new ItemSelection(items);
+    ItemsManager manager=new ItemsManager(items);
     Set<Integer> selectedIds=new HashSet<Integer>();
     // Iterate on classes then on slots to find all reachable items
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
@@ -168,7 +167,7 @@ public class ItemNormalization
       c.setLevel(105);
       for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
       {
-        List<Item> selectedItems=selection.getItems(c,slot);
+        List<Item> selectedItems=manager.getItems(c,slot);
         for(Item selectedItem : selectedItems)
         {
           selectedIds.add(Integer.valueOf(selectedItem.getIdentifier()));
@@ -176,7 +175,7 @@ public class ItemNormalization
       }
     }
     // Essences
-    List<Item> essences=selection.getEssences();
+    List<Item> essences=manager.getEssences();
     for(Item essence : essences)
     {
       selectedIds.add(Integer.valueOf(essence.getIdentifier()));

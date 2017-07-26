@@ -70,7 +70,7 @@ public class MergeWithTulkasNew
     System.out.println(tulkasItems.size() + ": " + tulkasItems);
     File toFile=new File("data/items/tmp/itemsLegacy+Tulkas.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
-    ItemsManager.getInstance().writeItemsFile(toFile,items);
+    ItemsManager.writeItemsFile(toFile,items);
   }
 
   private Item mergeItems(Item source, Item tulkas)

@@ -247,8 +247,7 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
       //System.out.println(item.dump());
       //writeItemToDB(item);
     }
-    ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("data/items/tmp/itemsTulkasIndex.xml").getAbsoluteFile();
-    mgr.writeItemsFile(toFile,itemsList);
+    ItemsManager.writeItemsFile(toFile,itemsList);
   }
 }

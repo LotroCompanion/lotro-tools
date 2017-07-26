@@ -76,7 +76,7 @@ public class MergeItemsLegacyAndTulkasIndex
     System.out.println(legacyItems.size());
     File toFile=new File("data/items/tmp/itemsLegacy+TulkasIndex.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
-    ItemsManager.getInstance().writeItemsFile(toFile,items);
+    ItemsManager.writeItemsFile(toFile,items);
     //dumpCategoriesInfo();
   }
 

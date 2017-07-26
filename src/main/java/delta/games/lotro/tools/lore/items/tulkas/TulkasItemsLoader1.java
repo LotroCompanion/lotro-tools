@@ -98,9 +98,8 @@ public class TulkasItemsLoader1 extends TulkasItemsLoader
       */
       //writeItemToDB(item);
     }
-    ItemsManager mgr=ItemsManager.getInstance();
     File toFile=new File("itemsTulkasOld.xml").getAbsoluteFile();
-    mgr.writeItemsFile(toFile,itemsList);
+    ItemsManager.writeItemsFile(toFile,itemsList);
   }
 
   private Item buildItem(Integer id, HashMap<Object,Object> map)
