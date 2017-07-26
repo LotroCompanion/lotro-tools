@@ -22,7 +22,8 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.comparators.ItemIdComparator;
-import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemStatSliceData;
@@ -45,8 +46,7 @@ public class ItemNormalization
   private HashMap<String,List<Item>> _byCategory;
   private HashMap<Integer,Item> loadItemsFile(File file)
   {
-    ItemXMLParser parser=new ItemXMLParser();
-    List<Item> items=parser.parseItemsFile(file);
+    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {
@@ -124,7 +124,7 @@ public class ItemNormalization
 
     // Write result file
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
-    ItemsManager.writeItemsFile(toFile,items);
+    ItemXMLWriter.writeItemsFile(toFile,items);
     // Dump unmanaged items
     if (_byCategory.size()>0)
     {

@@ -10,8 +10,8 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
-import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 
 /**
  * Merges "legacy" items database and "tulkas index" database
@@ -26,8 +26,7 @@ public class MergeItemsLegacyAndTulkasIndex
 
   private HashMap<Integer,Item> loadItemsFile(File file)
   {
-    ItemXMLParser parser=new ItemXMLParser();
-    List<Item> items=parser.parseItemsFile(file);
+    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {
@@ -76,7 +75,7 @@ public class MergeItemsLegacyAndTulkasIndex
     System.out.println(legacyItems.size());
     File toFile=new File("data/items/tmp/itemsLegacy+TulkasIndex.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
-    ItemsManager.writeItemsFile(toFile,items);
+    ItemXMLWriter.writeItemsFile(toFile,items);
     //dumpCategoriesInfo();
   }
 

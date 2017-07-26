@@ -11,9 +11,9 @@ import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
-import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 
 /**
  * Merges "legacy+tulkas index" items database and "tulkas new" database
@@ -24,8 +24,7 @@ public class MergeWithTulkasNew
 {
   private HashMap<Integer,Item> loadItemsFile(File file)
   {
-    ItemXMLParser parser=new ItemXMLParser();
-    List<Item> items=parser.parseItemsFile(file);
+    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {
@@ -70,7 +69,7 @@ public class MergeWithTulkasNew
     System.out.println(tulkasItems.size() + ": " + tulkasItems);
     File toFile=new File("data/items/tmp/itemsLegacy+Tulkas.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
-    ItemsManager.writeItemsFile(toFile,items);
+    ItemXMLWriter.writeItemsFile(toFile,items);
   }
 
   private Item mergeItems(Item source, Item tulkas)

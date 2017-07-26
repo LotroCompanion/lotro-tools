@@ -13,7 +13,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
-import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
 
 /**
  * Builds a LUA/Tulkas items database with one item associated
@@ -41,8 +41,7 @@ public class BuildItemsDbForIcons
 
   private HashMap<Integer,Item> loadItemsFile(File file)
   {
-    ItemXMLParser parser=new ItemXMLParser();
-    List<Item> items=parser.parseItemsFile(file);
+    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {

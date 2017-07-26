@@ -12,7 +12,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
-import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 
 /**
  * Items/sets loader for Tulkas DB index.
@@ -248,6 +248,6 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
       //writeItemToDB(item);
     }
     File toFile=new File("data/items/tmp/itemsTulkasIndex.xml").getAbsoluteFile();
-    ItemsManager.writeItemsFile(toFile,itemsList);
+    ItemXMLWriter.writeItemsFile(toFile,itemsList);
   }
 }

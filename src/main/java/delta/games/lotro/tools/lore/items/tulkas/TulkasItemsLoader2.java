@@ -17,10 +17,10 @@ import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemQuality;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.ItemsSet;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.LotroLoggers;
 
@@ -87,7 +87,7 @@ public class TulkasItemsLoader2 extends TulkasItemsLoader
       //writeItemToDB(item);
     }
     File toFile=new File("data/items/tmp/itemsTulkas13.1.xml").getAbsoluteFile();
-    ItemsManager.writeItemsFile(toFile,itemsList);
+    ItemXMLWriter.writeItemsFile(toFile,itemsList);
   }
 
   private Item buildItem(Integer id, HashMap<Object,Object> map)

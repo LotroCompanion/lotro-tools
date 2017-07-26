@@ -8,8 +8,8 @@ import java.util.List;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 
 /**
  * Concatenates a series of item files into a single file.
@@ -68,7 +68,7 @@ public class ItemsConcat
         }
       }
       File toFile=new File("itemsLegacy.xml").getAbsoluteFile();
-      ItemsManager.writeItemsFile(toFile,itemsList);
+      ItemXMLWriter.writeItemsFile(toFile,itemsList);
     }
   }
 }

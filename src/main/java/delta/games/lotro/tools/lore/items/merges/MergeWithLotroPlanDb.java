@@ -12,9 +12,9 @@ import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
-import delta.games.lotro.lore.items.io.xml.ItemXMLParser;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
@@ -26,8 +26,7 @@ public class MergeWithLotroPlanDb
 {
   private HashMap<Integer,Item> loadItemsFile(File file, Map<String,Item> noIdItems)
   {
-    ItemXMLParser parser=new ItemXMLParser();
-    List<Item> items=parser.parseItemsFile(file);
+    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
     for(Item item : items)
     {
@@ -114,7 +113,7 @@ public class MergeWithLotroPlanDb
     }
     File toFile=new File("data/items/tmp/items-rc.xml").getAbsoluteFile();
     List<Item> items=new ArrayList<Item>(mergeResult.values());
-    ItemsManager.writeItemsFile(toFile,items);
+    ItemXMLWriter.writeItemsFile(toFile,items);
   }
 
   private Item mergeItems(Item source, Item lotroplan)

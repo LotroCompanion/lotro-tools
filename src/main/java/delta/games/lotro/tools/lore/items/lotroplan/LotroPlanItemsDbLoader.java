@@ -19,7 +19,7 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemPropertyNames;
-import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
 import delta.games.lotro.lore.items.stats.ScalingRulesNames;
 import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
@@ -61,7 +61,7 @@ public class LotroPlanItemsDbLoader
     File toFile=new File("data/items/tmp/itemsdb.xml").getAbsoluteFile();
     items=_merger.getItems();
     setScalingRules(items);
-    ItemsManager.writeItemsFile(toFile,items);
+    ItemXMLWriter.writeItemsFile(toFile,items);
     //List<Integer> ids=new ArrayList<Integer>(_failedItems.keySet());
     //new BuildItemsDbForIcons().buildDb(_failedItems,ids);
   }
