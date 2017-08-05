@@ -1,0 +1,15 @@
+8 items classified as "Jewelry". These should be resolved to regular categories.
+	Line 663739: <item key="1879310125" name="Small Golden Dish" level="192" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="INCOMPARABLE" description="">
+=>POCKET
+	Line 663760: <item key="1879310127" name="Leather-bound Diary" level="192" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="INCOMPARABLE" description="">
+	Line 663843: <item key="1879310136" name="Bangle of Deep Waters" level="192" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="INCOMPARABLE" description="">
+=>POCKET
+	Line 663853: <item key="1879310137" name="Fancy Gems in a Shell" level="192" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="INCOMPARABLE" description="">
+	Line 710915: <item key="1879331303" name="Veteran Pelennor Guardsman's Resolute Trinket" level="213" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="RARE" description="">
+	Line 710935: <item key="1879331305" name="Veteran Pelennor Guardsman's Enduring Trinket" level="213" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="RARE" description="">
+	Line 710955: <item key="1879331307" name="Veteran Pelennor Guardsman's Dextrous Trinket" level="213" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="RARE" description="">
+	Line 727137: <item key="1879343969" name="Erebrandir's Other Horseshoe" category="ITEM" subCategory="Jewelry" unique="false" sturdiness="NORMAL" quality="UNCOMMON" description="Some other people believe such a shoe brings good fortune.">
+=> POCKET, just like:
+	<item key="1879190595" name="Erebrandir's Horseshoe" slot="POCKET" category="ITEM" binding="BIND_ON_ACQUIRE" unique="false" durability="100" sturdiness="NORMAL" quality="UNCOMMON" description="Some people believe such a shoe brings good fortune.">
+
+"Misc:Implement" contains some equipable items (e.g. Pitchfork)
