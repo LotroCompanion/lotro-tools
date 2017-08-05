@@ -120,7 +120,7 @@ public class ItemNormalization
     new ConsistencyChecks().consistencyChecks(items);
 
     // Filtering items
-    //filterItems(items);
+    filterItems(items);
 
     // Write result file
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
@@ -155,7 +155,7 @@ public class ItemNormalization
    * Filter items that are accessible within LotroCompanion.
    * @param items List to filter.
    */
-  public void filterItems(List<Item> items)
+  private void filterItems(List<Item> items)
   {
     ItemsManager manager=new ItemsManager(items);
     Set<Integer> selectedIds=new HashSet<Integer>();
