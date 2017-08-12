@@ -107,6 +107,7 @@ public class TraitPointsRegistryBuilder
     initPoint("EpicVol4Book4Chapter10", category, "Complete Volume IV, Book 4, Chapter 10: The Defence of Minas Tirith", null);
     initPoint("EpicVol4Book4Chapter11", category, "Complete Volume IV, Book 4, Chapter 11: Hammer of the Underworld", null);
     initPoint("EpicVol4Book8Chapter7", category, "Complete Volume IV, Book 8, Chapter 7: Mordor Triumphant", null);
+    initPoint("EpicVol4Book9Chapter5", category, "Complete Volume IV, Book 9, Chapter 5: The Next Adventure", null);
 
     category=TraitPointCategories.DEEDS;
     initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
