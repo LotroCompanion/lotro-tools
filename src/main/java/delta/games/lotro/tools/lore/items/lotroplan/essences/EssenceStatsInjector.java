@@ -42,8 +42,6 @@ public class EssenceStatsInjector
       HashMap<Integer,Item> essencesOfTier=essencesByTier.get(tier);
       handleTier(tier.intValue(),essencesOfTier);
     }
-    System.out.println("Tier: 8");
-    handleTier(8,essencesByTier.get(Integer.valueOf(-1)));
     System.out.println("Nb essences: "+essences.size());
   }
 
@@ -185,7 +183,10 @@ public class EssenceStatsInjector
         }
         else
         {
-          ret.add(Integer.valueOf(tierChar-'0'));
+          int tier=0;
+          if ((tierChar>='0') && (tierChar<='9')) tier=tierChar-'0';
+          else if ((tierChar>='A') && (tierChar<='F')) tier=tierChar-'A'+10;
+          ret.add(Integer.valueOf(tier));
         }
       }
     }
@@ -202,6 +203,13 @@ public class EssenceStatsInjector
       String category=item.getSubCategory();
       if ("Essence".equals(category))
       {
+        String name=item.getName();
+        // Ignore Mordor Essences boxes
+        if (name.contains("Mordor - Essences"))
+        {
+          item.setSubCategory("Box of Essences");
+          continue;
+        }
         ret.add(item);
       }
     }
