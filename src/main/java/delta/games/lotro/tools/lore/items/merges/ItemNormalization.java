@@ -120,11 +120,13 @@ public class ItemNormalization
     new ConsistencyChecks().consistencyChecks(items);
 
     // Filtering items
-    filterItems(items);
+    List<Item> filteredItems=filterItems(items);
 
-    // Write result file
+    // Write result files
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
     ItemXMLWriter.writeItemsFile(toFile,items);
+    File filteredItemsFile=new File("data/items/items_filtered.xml").getAbsoluteFile();
+    ItemXMLWriter.writeItemsFile(filteredItemsFile,filteredItems);
     // Dump unmanaged items
     if (_byCategory.size()>0)
     {
@@ -140,7 +142,7 @@ public class ItemNormalization
       }
       System.out.println(totalSize);
     }
-    new ItemStatistics().showStatistics(items);
+    new ItemStatistics().showStatistics(filteredItems);
 
     /*
     ItemsSorter sorter=new ItemsSorter();
@@ -154,8 +156,9 @@ public class ItemNormalization
   /**
    * Filter items that are accessible within LotroCompanion.
    * @param items List to filter.
+   * @return a list that contains the filtered items.
    */
-  private void filterItems(List<Item> items)
+  private List<Item> filterItems(List<Item> items)
   {
     ItemsManager manager=new ItemsManager(items);
     Set<Integer> selectedIds=new HashSet<Integer>();
@@ -190,8 +193,7 @@ public class ItemNormalization
         selectedItems.add(item);
       }
     }
-    items.clear();
-    items.addAll(selectedItems);
+    return selectedItems;
   }
 
   private void findArmourTypeFromFormulas(List<Item> items)
