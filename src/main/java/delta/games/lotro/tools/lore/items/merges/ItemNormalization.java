@@ -1489,15 +1489,17 @@ public class ItemNormalization
   private static final String[] PROFESSIONS = {"Prospector", "Farmer", "Forester", "Woodworker", "Cook", "Jeweller", "Metalsmith", "Weaponsmith", "Tailor", "Scholar" };
 
   private static int[][] CRAFTING_CATEGORIES = {
-    { 60, 61, 63, 67, 65, 59, 64, 66, 58, 62},
-    { 134, 162, 122, 147, 113, 143, 141, 148, 155, 139},
-    { 135, 121, 127, 152, 114, 146, 144, 153, 160, 140},
-    { 136, 126, 130, 157, 115, 151, 149, 158, 120, 142},
-    { 137, 129, 132, 118, 116, 156, 154, 119, 125, 145},
-    { 138, 131, 133, 123, 117, 161, 159, 124, 128, 150},
-    { 202, 200, 201, 197, 203, 196, 195, 198, 199, 204},
-    { 215, 213, 214, 210, 216, 209, 208, 211, 212, 217},
-    { 228, 226, 227, 223, 229, 222, 221, 224, 225, 220}
+    { 60, 61, 63, 67, 65, 59, 64, 66, 58, 62}, // Apprentice
+    { 134, 162, 122, 147, 113, 143, 141, 148, 155, 139}, // Journeyman
+    { 135, 121, 127, 152, 114, 146, 144, 153, 160, 140}, // Expert
+    { 136, 126, 130, 157, 115, 151, 149, 158, 120, 142}, // Artisan
+    { 137, 129, 132, 118, 116, 156, 154, 119, 125, 145}, // Master
+    { 138, 131, 133, 123, 117, 161, 159, 124, 128, 150}, // Supreme
+    { 202, 200, 201, 197, 203, 196, 195, 198, 199, 204}, // Westfold
+    { 215, 213, 214, 210, 216, 209, 208, 211, 212, 217}, // Eastemnet
+    { 228, 226, 227, 223, 229, 222, 221, 224, 225, 220}, // Westemnet
+    null, // Anorien
+    { -1, -1, -1, 239, 236, 237, 243, 241, 238, 242}, // Doomfold
   };
 
   private Item normalizeRecipes(Item item)
@@ -1505,9 +1507,13 @@ public class ItemNormalization
     boolean found=false;
     for(int i=0;i<CRAFTING_CATEGORIES.length;i++)
     {
-      for(int j=0;j<CRAFTING_CATEGORIES[0].length;j++)
+      int[] categories=CRAFTING_CATEGORIES[i];
+      if (categories==null) continue;
+      for(int j=0;j<categories.length;j++)
       {
-        String craftingCategory=String.valueOf(CRAFTING_CATEGORIES[i][j]);
+        int category=categories[j];
+        if (category<=0) continue;
+        String craftingCategory=String.valueOf(category);
         String subCategory=item.getSubCategory();
         if (craftingCategory.equals(subCategory))
         {
