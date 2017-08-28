@@ -8,7 +8,6 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.Source;
-import net.htmlparser.jericho.StartTag;
 
 import org.apache.log4j.Logger;
 
@@ -43,15 +42,10 @@ public class RelicsIndexPageParser
       List<Element> trs=JerichoHtmlUtils.findElementsByTagName(table,HTMLElementName.TR);
       for(Element tr : trs)
       {
-        StartTag tag=tr.getStartTag();
-        String value=tag.getAttributeValue("class");
-        if (("odd".equals(value)) || ("even".equals(value)))
+        Relic relic=handleTableRow(tr,level,defaultType);
+        if (relic!=null)
         {
-          Relic relic=handTableRow(tr,level,defaultType);
-          if (relic!=null)
-          {
-            category.addRelic(relic);
-          }
+          category.addRelic(relic);
         }
       }
     }
@@ -61,11 +55,37 @@ public class RelicsIndexPageParser
     }
   }
 
-  private Relic handTableRow(Element tr, Integer level, RelicType defaultType)
+  private Relic handleTableRow(Element tr, Integer level, RelicType defaultType)
   {
     Relic relic=null;
     List<Element> tds=JerichoHtmlUtils.findElementsByTagName(tr,HTMLElementName.TD);
-    if (tds.size()==3)
+    if (tds.size()==2)
+    {
+      // Icon & name
+      Element iconAndNameElement=tds.get(0);
+      List<Element> as=JerichoHtmlUtils.findElementsByTagName(iconAndNameElement,HTMLElementName.A);
+      Element iconElement=as.get(0);
+      String iconPath=extractIcon(iconElement);
+      // Name
+      Element nameElement=as.get(1);
+      String name=JerichoHtmlUtils.getTagContents(nameElement,HTMLElementName.SPAN);
+      if (name==null)
+      {
+        name=JerichoHtmlUtils.getTagContents(nameElement,HTMLElementName.A);
+      }
+      // Type
+      RelicType type=getTypeFromName(name);
+
+      relic=new Relic(name,type,level);
+      relic.setIconFilename(iconPath);
+      // Stats
+      Element statsElement=tds.get(1);
+      String statsStr=JerichoHtmlUtils.getTextFromTag(statsElement);
+      statsStr=statsStr.replaceAll(",","\n");
+      BasicStatsSet stats=parseStats(statsStr);
+      relic.getStats().setStats(stats);
+    }
+    else if (tds.size()==3)
     {
       // Icon
       Element iconElement=tds.get(0);
@@ -243,6 +263,20 @@ public class RelicsIndexPageParser
     {
       ret=new STAT[]{STAT.CRITICAL_RATING};
     }
+    else if (statName.contains("Finesse Rating"))
+    {
+      ret=new STAT[]{STAT.FINESSE};
+    }
+    else if (statName.contains("Resistance Rating"))
+    {
+      ret=new STAT[]{STAT.RESISTANCE};
+    }
+    /*
+    else if (statName.contains("Outgoing Healing Rating"))
+    {
+      //ret=new STAT[]{STAT.};
+    }
+    */
     else if (statName.contains("Tactical Offence Rating"))
     {
       ret=new STAT[]{STAT.TACTICAL_MASTERY};
@@ -284,7 +318,8 @@ public class RelicsIndexPageParser
   {
     Element span=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(segment,HTMLElementName.SPAN,"id",id);
     Element h2=span.getParentElement();
-    Element table=getNextSibling(h2);
+    Element tableParent=getNextSibling(h2);
+    Element table=JerichoHtmlUtils.findElementByTagName(tableParent,HTMLElementName.TABLE);
     return table;
   }
 
@@ -296,9 +331,10 @@ public class RelicsIndexPageParser
     int index=allChildren.indexOf(element);
     if (index!=-1)
     {
+      index++;
       if (index<allChildren.size())
       {
-        ret=allChildren.get(index+1);
+        ret=allChildren.get(index);
       }
     }
     return ret;
@@ -344,6 +380,8 @@ public class RelicsIndexPageParser
       handleTable("Wildermore Relics (Level 85)",source,"Wildermore_Relics_.28Level_85.29",Integer.valueOf(85),null);
       // Westemnet Relics (Level 90)
       handleTable("Westemnet Relics (Level 90)",source,"Westemnet_Relics_.28Level_90.29",Integer.valueOf(90),null);
+      // Gorgoroth (Level 100)
+      handleTable("Gorgoroth (Last Alliance) (Level 100)",source,"Gorgoroth_.28Last_Alliance.29_Relics_.28Level_100.29",null,null);
 
       // Ignore bridles
       /*

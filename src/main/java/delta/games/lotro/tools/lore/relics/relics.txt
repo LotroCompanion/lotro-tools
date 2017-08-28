@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html dir="ltr" class="client-js" lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_006.php"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_003.php"></script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script async="" src="Relics%20-%20Lotro-Wiki.com_files/analytics.js"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_004.php"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_006.php"></script>
 <meta charset="UTF-8">
 <title>Relics - Lotro-Wiki.com</title>
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
-<meta name="generator" content="MediaWiki 1.23.15">
+<meta name="generator" content="MediaWiki 1.23.17">
 <link rel="apple-touch-icon" href="http://lotro-wiki.com/apple-touch-icon.png">
 <link rel="shortcut icon" href="http://lotro-wiki.com/favicon.ico">
 <link rel="search" type="application/opensearchdescription+xml" href="http://lotro-wiki.com/opensearch_desc.php" title="Lotro-Wiki.com (en)">
@@ -13,14 +13,14 @@
 <link rel="alternate" type="application/atom+xml" title="Lotro-Wiki.com Atom feed" href="http://lotro-wiki.com/index.php?title=Special:RecentChanges&amp;feed=atom">
 <link rel="stylesheet" href="Relics%20-%20Lotro-Wiki.com_files/load_002.css">
 <style>
+td.diff-context,td.diff-deletedline,td.diff-addedline{font-size:larger !important;font-family:monospace}
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:31c179ce8254e72e59c48f789356bbfa */
 .mw-collapsible-toggle{float:right;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none} caption .mw-collapsible-toggle{float:none} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
 /* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:6c1d24e90626cec584f0869483f983e7 */
 .suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left; overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.highlight{font-weight:bold}
 /* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:9f9511aa4ef920d34591113e825e6a1e */
 .postedit-container{margin:0 auto;position:fixed;top:0;height:0;left:50%;z-index:1000;font-size:13px}.postedit-container:hover{cursor:pointer}.postedit{position:relative;top:0.6em;left:-50%;padding:.6em 3.6em .6em 1.1em;line-height:1.5625em;color:#626465;background-color:#f4f4f4;border:1px solid #dcd9d9;text-shadow:0 0.0625em 0 rgba(255,255,255,0.5);border-radius:5px;-webkit-box-shadow:0 2px 5px 0 #ccc;box-shadow:0 2px 5px 0 #ccc;-webkit-transition:all 0.25s ease-in-out;-moz-transition:all 0.25s ease-in-out;-ms-transition:all 0.25s ease-in-out;-o-transition:all 0.25s ease-in-out;transition:all 0.25s ease-in-out}.skin-monobook .postedit{top:6em !important}.postedit-faded{opacity:0}.postedit-icon{padding-left:41px;  line-height:25px;background-repeat:no-repeat;background-position:8px 50%}.postedit-icon-checkmark{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABblBMVEUAAAD///////9PfTf///80aRdTgjn///9Feij///////////9Rfzf///////////9PfjZRgDh1o1xOfTb///////+bwYqLtnj///////9PfTa82K////9WhT6YxIL///9QgDdTgzr////////j7uDl7eLq8efi693k7OH///////9UhjuBr2rp9uRUhjr///9YljVKgir///9WiTlYjT3////9/v57vFlbkT5PjC9dlD/5/fhuq09stUTs9uhxuElctCpfnT1huDFloEZloUZmpENmvDZpvDxpvTxqvjxrvT5rvT9rwTxsqktswD5uwkBvuUdxw0NztFBztU9ztVBzwkp0tlJ1xkd2t1R3uVR4w1F4xk54x014yE15uVZ5v1R5xVB6v1R7yFJ8wVh9xVl9yFR9yVd9ylN+xVh+yFd/x1l/yFeAylmEx1+Ny2uY0Hqe04Wj1Ymv3Ze33qLD47TJ5L3O6cPU7Mrq9eb2+/Q4j37OAAAAQHRSTlMAAQIEBAUFBQwPFB4fJCUoKiosQEhJS01RUlZZXmdydXaChYuSlJSWmJmoq6uur8LExcvM19fg5ejt8fX2+Pr7SljgewAAAKpJREFUGBkFwQNCAwAAAMDLtl3LtrG4rWXbtvX77gAgZ6grFwC0bhwNVgKgdPZx8b0dgLi+s7Wn0VoAqpfOI9+BNADZI7fLrz2pSEwGHZuH+78lSK8ZLkLezF3ooyUG3VPXq2USei9WngeyoG195yBYWDF3E/2pAhl1e9Gr8bGT+bfOFCC2fnvh4X7rcqIAQNNu+HT6sxkAjceTL/2ZAIhv+PorBwBJxfkA//dFHSCBy/UTAAAAAElFTkSuQmCC);background-image:url(/resources/src/mediawiki.action/images/green-checkmark.png?2014-06-06T02:21:40Z)!ie;background-position:left}.postedit-close{position:absolute;padding:0 .8em;right:0;top:0;font-size:1.25em;font-weight:bold;line-height:2.3em;color:black;text-shadow:0 0.0625em 0 white;text-decoration:none;opacity:0.2;filter:alpha(opacity=20)}.postedit-close:hover{color:black;text-decoration:none;opacity:0.4;filter:alpha(opacity=40)}
-/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:e342dafe83559472d4397ff95e32906e */
-#container{position:relative;min-height:100%}#container,video{width:100%;height:100%}#playerContainer{overflow:hidden;position:relative;height:100%;background:#000}#videoHolder{position:relative;overflow:hidden}.fullscreen #playerContainer{position:absolute !important;width:100% !important;height:100%! important;z-index:9999;min-height:100%;top:0;left:0;margin:0}.mwEmbedPlayer{width:100%;height:100%;overflow:hidden;position:absolute;top:0;left:0}.modal_editor{ left:10px;top:10px;right:10px;bottom:10px;position:fixed;z-index:100}.displayHTML a:visited{color:white}.loadingSpinner{width:32px;height:32px;display:block;padding:0px;background-image:url(//lotro-wiki.com/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/loading_ani.gif?2016-11-15T06:08:20Z)}.mw-imported-resource{border:thin solid black}.kaltura-icon{background-image:url(//lotro-wiki.com/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/kaltura_logo_sm_transparent.png?2016-11-15T06:08:20Z) !important;background-repeat:no-repeat;display:block;height:12px;width:12px;margin-top:2px !important;margin-left:3px !important}.mw-fullscreen-overlay{background:rgb(0,0,0) none repeat scroll 0% 0%;position:fixed;top:0pt;left:0pt;width:100%;height:100%;-moz-background-clip:border;-moz-background-origin:padding;-moz-background-inline-policy:continuous} .play-btn-large{width:70px;height:53px;background :url(//lotro-wiki.com/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button.png?2016-11-15T06:08:20Z);position :absolute;cursor :pointer;border :none !important;z-index :1}.play-btn-large:hover{background :url(//lotro-wiki.com/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button_hover.png?2016-11-15T06:08:20Z)}.carouselContainer{position :absolute;width :100%;z-index :2}.carouselVideoTitle{position :absolute;top :0px;left :0px;width :100%;background :rgba(0,0,0,0.8);color :white;font-size :small;font-weight :bold;z-index :2}.carouselVideoTitleText{display :block;padding :10px 10px 10px 20px}.carouselTitleDuration{position :absolute;top :0px;right :0px;padding :2px;background-color :#5A5A5A;color :#D9D9D9;font-size :smaller;z-index :2}.carouselImgTitle{position :absolute;width :100%;text-align :center;color :white;font-size :small;background :rgba(0,0,0,0.4)}.carouselImgDuration{position :absolute;top :2px;left :2px;background :rgba( 0,0,0,0.7 );color :white;padding :1px 6px;font-size :small}.carouselPrevButton,.carouselNextButton{display :block;position :absolute;bottom:23px}.carouselPrevButton{left :5px}.carouselNextButton{right:6px}.alert-container{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background-image:linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-o-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-moz-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-ms-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.04,rgb(215,215,215)),color-stop(0.55,rgb(230,230,230)),color-stop(1,rgb(255,255,255)));margin:auto;position:absolute;top:0;left:0;right:0;bottom:0;max-width:80%;max-height:30%}.alert-title{background-color :#E6E6E6;padding :5px;border-bottom :1px solid #D1D1D1;font-weight :normal !important;font-size:14px !important;-webkit-border-top-left-radius:3px;-moz-border-radius-topleft:3px;border-top-left-radius:3px;-webkit-border-top-right-radius:3px;-moz-border-radius-topright:3px;border-top-right-radius:3px }.alert-message{padding :5px;font-weight :normal !important;text-align:center;font-size:14px !important}.alert-buttons-container{text-align:center;padding-bottom:5px}.alert-button{background-color:#474747;color:white;-webkit-border-radius:.5em;-moz-border-radius:.5em;border-radius:.5em;padding:2px 10px;background-image:linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-o-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-moz-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-ms-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-gradient( linear,left bottom,left top,color-stop(0.04,rgb(25,25,25)),color-stop(0.55,rgb(47,47,47)),color-stop(0.68,rgb(71,71,71)) )}.alert-text{color :black !important}
-/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:dc018e90b4bbd00a980ab922fb719b04 */</style><style>
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:e342dafe83559472d4397ff95e32906e */</style><style>
 .suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{color:black;text-decoration:none}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}.suggestions a.mw-searchSuggest-link .special-query{ overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}
 /* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:ae3fa4570b5ac0c6cf7b3776c8ae4d6f */</style><style>
 table.jquery-tablesorter th.headerSort{background-image:url(data:image/gif;base64,R0lGODlhFQAJAIABAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjAxODAxMTc0MDcyMDY4MTE4OEM2REYyN0ExMDhBNDJFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjdCNTAyODcwMEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjdCNTAyODZGMEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDE4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDE4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAAFQAJAAACF4yPgMsJ2mJ4VDKKrd4GVz5lYPeMiVUAADs=);background-image:url(/resources/src/jquery/images/sort_both.gif?2014-06-06T02:21:40Z)!ie;cursor:pointer;background-repeat:no-repeat;background-position:center right;padding-right:21px}table.jquery-tablesorter th.headerSortUp{background-image:url(data:image/gif;base64,R0lGODlhFQAEAIABAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjAzODAxMTc0MDcyMDY4MTE4OEM2REYyN0ExMDhBNDJFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjdCNTAyODc0MEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjdCNTAyODczMEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDM4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDM4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAAFQAEAAACDYwfoAvoz9qbZ9FrJC0AOw==);background-image:url(/resources/src/jquery/images/sort_up.gif?2014-06-06T02:21:40Z)!ie}table.jquery-tablesorter th.headerSortDown{background-image:url(data:image/gif;base64,R0lGODlhFQAEAIABAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjAyODAxMTc0MDcyMDY4MTE4OEM2REYyN0ExMDhBNDJFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjhFNzNGQjI3MEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjhFNzNGQjI2MEY4NjExRTBBMzkyQzAyM0E1RDk3RDc3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDI4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDI4MDExNzQwNzIwNjgxMTg4QzZERjI3QTEwOEE0MkUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAAFQAEAAACDYyPAcmtsJyDVDKKWQEAOw==);background-image:url(/resources/src/jquery/images/sort_down.gif?2014-06-06T02:21:40Z)!ie}
@@ -28,18 +28,18 @@ table.jquery-tablesorter th.headerSort{background-image:url(data:image/gif;base6
 <link rel="stylesheet" href="Relics%20-%20Lotro-Wiki.com_files/load.css">
 <style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
 /* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:91e57afcf6f764cd47c46d0433d64486 */</style>
-<script src="Relics%20-%20Lotro-Wiki.com_files/ca-pub-3691143277084659.js"></script><script type="text/javascript" async="" src="Relics%20-%20Lotro-Wiki.com_files/ga.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_004.php"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load.php"></script><style title="spinjs"></style>
+<script src="Relics%20-%20Lotro-Wiki.com_files/ca-pub-3691143277084659.js"></script><script type="text/javascript" async="" src="Relics%20-%20Lotro-Wiki.com_files/ga.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_005.php"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_003.php"></script>
 <script>if(window.mw){
-mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Relics","wgTitle":"Relics","wgCurRevisionId":790077,"wgRevisionId":790077,"wgArticleId":41824,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages with broken file links","Relics"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Relics","wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"previewDialog":false,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":20,\"hideprefix\":10,\"showcount\":true,\"namespaces\":[0,2,6,12,14,100,102,104,106,108]}"});
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Relics","wgTitle":"Relics","wgCurRevisionId":853260,"wgRevisionId":853260,"wgArticleId":41824,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages with broken file links","Relics"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Relics","wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"previewDialog":false,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":20,\"hideprefix\":10,\"showcount\":true,\"namespaces\":[0,2,6,12,14,100,102,104,106,108]}"});
 }</script><script>if(window.mw){
 mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"editfont":"default","editondblclick":0,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":1,"extendwatchlist":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nickname":"","norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"rcdays":7,"rclimit":50,"rows":25,"showhiddencats":0,"shownumberswatching":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":1,"watchdefault":1,"watchdeletion":0,"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,
-"useeditwarning":1,"prefershttps":1,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"wikieditor-preview":1,"language":"en","variant-gan":"gan","variant-iu":"iu","variant-kk":"kk","variant-ku":"ku","variant-shi":"shi","variant-sr":"sr","variant-tg":"tg","variant-uz":"uz","variant-zh":"zh","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":true,"searchNs101":false,"searchNs102":true,"searchNs103":false,"searchNs104":true,"searchNs105":false,"searchNs106":true,"searchNs107":false,"searchNs108":true,"searchNs109":false,"searchNs710":false,"searchNs711":false,"gadget-searchFocus":1,"gadget-listStyles":1,"gadget-Edittools":1,"variant":"en"});},{},{});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\",
-"patrolToken":false,"watchToken":false});},{},{});
-/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-js:7:3e249c1beeaf1ef715189cd3869034a9 */
+"useeditwarning":1,"prefershttps":1,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"wikieditor-preview":1,"language":"en","variant-gan":"gan","variant-iu":"iu","variant-kk":"kk","variant-ku":"ku","variant-shi":"shi","variant-sr":"sr","variant-tg":"tg","variant-uz":"uz","variant-zh":"zh","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":true,"searchNs101":false,"searchNs102":true,"searchNs103":false,"searchNs104":true,"searchNs105":false,"searchNs106":true,"searchNs107":false,"searchNs108":true,"searchNs109":false,"gadget-searchFocus":1,"gadget-listStyles":1,"gadget-Edittools":1,"gadget-MonospacedDiffs":1,"variant":"en"});},{},{});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":false
+,"watchToken":false});},{},{});
+/* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-js:7:674a8b3e56b21c88a81bcc3018bc1090 */
 }</script>
 <script>if(window.mw){
 mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","skins.vector.js"]);
-}</script><script src="Relics%20-%20Lotro-Wiki.com_files/load_005.php"></script>
+}</script><script src="Relics%20-%20Lotro-Wiki.com_files/load.php"></script>
 <!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/vector/csshover.min.htc")}</style><![endif]--><script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-22597294-1']);
@@ -50,8 +50,8 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-</script><script src="Relics%20-%20Lotro-Wiki.com_files/index_005.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_009.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_008.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_007.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_006.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_003.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_004.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_002.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index.php" type="text/javascript"></script></head>
-<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Relics skin-vector action-view vector-animateLayout">
+</script><script src="Relics%20-%20Lotro-Wiki.com_files/index.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_011.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_006.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_003.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_002.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_009.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_010.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_008.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_007.php" type="text/javascript"></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Relics skin-vector action-view vector-animateLayout yfh-flash-plugin-new">
 		<div id="mw-page-base" class="noprint"></div>
 		<div id="mw-head-base" class="noprint"></div>
 		<div id="content" class="mw-body" role="main"><div id="coordstfb"></div><div id="tfb" style="display: none;"></div>
@@ -60,7 +60,7 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
 <div style="text-align:center; padding 10 px;">
 <script async="" src="Relics%20-%20Lotro-Wiki.com_files/adsbygoogle.js"></script>
 <!-- top -->
-<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="0148201732" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" frameborder="0" width="728" height="90"></iframe></ins></ins></ins>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="0148201732" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:728px;height:90px;" width="728" height="90" frameborder="0"></iframe></ins></ins></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
@@ -77,38 +77,42 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
 <tbody><tr>
 <td> <div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2><span class="toctoggle">&nbsp;[<a href="#" class="internal" id="togglelink">hide</a>]&nbsp;</span></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#How_to_Obtain_Relics"><span class="tocnumber">2</span> <span class="toctext">How to Obtain Relics</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Tiers_and_Relic_Forging"><span class="tocnumber">3</span> <span class="toctext">Tiers and Relic Forging</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Refining"><span class="tocnumber">4</span> <span class="toctext">Refining</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Melding"><span class="tocnumber">5</span> <span class="toctext">Melding</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Tier_1_Relics"><span class="tocnumber">6</span> <span class="toctext">Tier 1 Relics</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#Tier_2_Relics"><span class="tocnumber">7</span> <span class="toctext">Tier 2 Relics</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#Tier_3_Relics"><span class="tocnumber">8</span> <span class="toctext">Tier 3 Relics</span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Tier_4_Relics"><span class="tocnumber">9</span> <span class="toctext">Tier 4 Relics</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Tier_5_Relics"><span class="tocnumber">10</span> <span class="toctext">Tier 5 Relics</span></a></li>
-<li class="toclevel-1 tocsection-11"><a href="#Tier_6_Relics"><span class="tocnumber">11</span> <span class="toctext">Tier 6 Relics</span></a></li>
-<li class="toclevel-1 tocsection-12"><a href="#Tier_7_Relics"><span class="tocnumber">12</span> <span class="toctext">Tier 7 Relics</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#Tier_8_Relics"><span class="tocnumber">13</span> <span class="toctext">Tier 8 Relics</span></a></li>
-<li class="toclevel-1 tocsection-14"><a href="#Tier_9_Relics"><span class="tocnumber">14</span> <span class="toctext">Tier 9 Relics</span></a></li>
-<li class="toclevel-1 tocsection-15"><a href="#Tier_10_Relics"><span class="tocnumber">15</span> <span class="toctext">Tier 10 Relics</span></a></li>
-<li class="toclevel-1 tocsection-16"><a href="#Unique_Relics_.28Level_55.29"><span class="tocnumber">16</span> <span class="toctext">Unique Relics (Level 55)</span></a></li>
-<li class="toclevel-1 tocsection-17"><a href="#Singular_Relics_.28Level_60.29"><span class="tocnumber">17</span> <span class="toctext">Singular Relics (Level 60)</span></a></li>
-<li class="toclevel-1 tocsection-18"><a href="#Extraordinary_Relics_.28Level_65.29"><span class="tocnumber">18</span> <span class="toctext">Extraordinary Relics (Level 65)</span></a></li>
-<li class="toclevel-1 tocsection-19"><a href="#Westfold_Relics_.28Level_70.29"><span class="tocnumber">19</span> <span class="toctext">Westfold Relics (Level 70)</span></a></li>
-<li class="toclevel-1 tocsection-20"><a href="#Great_River_Relics_.28Level_75.29"><span class="tocnumber">20</span> <span class="toctext">Great River Relics (Level 75)</span></a></li>
-<li class="toclevel-1 tocsection-21"><a href="#Eastemnet_Relics_.28Level_80.29"><span class="tocnumber">21</span> <span class="toctext">Eastemnet Relics (Level 80)</span></a></li>
-<li class="toclevel-1 tocsection-22"><a href="#Wildermore_Relics_.28Level_85.29"><span class="tocnumber">22</span> <span class="toctext">Wildermore Relics (Level 85)</span></a></li>
-<li class="toclevel-1 tocsection-23"><a href="#Westemnet_Relics_.28Level_90.29"><span class="tocnumber">23</span> <span class="toctext">Westemnet Relics (Level 90)</span></a></li>
-<li class="toclevel-1 tocsection-24"><a href="#Basic_Mounted_.28Level_75.29"><span class="tocnumber">24</span> <span class="toctext">Basic Mounted (Level 75)</span></a></li>
-<li class="toclevel-1 tocsection-25"><a href="#Unique_Mounted_.28Level_75.29"><span class="tocnumber">25</span> <span class="toctext">Unique Mounted (Level 75)</span></a></li>
-<li class="toclevel-1 tocsection-26"><a href="#Eastemnet_Mounted_.28Level_80.29"><span class="tocnumber">26</span> <span class="toctext">Eastemnet Mounted (Level 80)</span></a></li>
-<li class="toclevel-1 tocsection-27"><a href="#Riddermark_Mounted_.28Level_85.29"><span class="tocnumber">27</span> <span class="toctext">Riddermark Mounted (Level 85)</span></a></li>
-<li class="toclevel-1 tocsection-28"><a href="#Westemnet_Mounted_.28Level_90.29"><span class="tocnumber">28</span> <span class="toctext">Westemnet Mounted (Level 90)</span></a></li>
-<li class="toclevel-1 tocsection-29"><a href="#Crafted_Relics_Index"><span class="tocnumber">29</span> <span class="toctext">Crafted Relics Index</span></a></li>
-<li class="toclevel-1 tocsection-30"><a href="#Crafted_Mounted_Index"><span class="tocnumber">30</span> <span class="toctext">Crafted Mounted Index</span></a></li>
-<li class="toclevel-1 tocsection-31"><a href="#Ettenmoors_Index"><span class="tocnumber">31</span> <span class="toctext">Ettenmoors Index</span></a></li>
-<li class="toclevel-1 tocsection-32"><a href="#Retired_Relics_Index"><span class="tocnumber">32</span> <span class="toctext">Retired Relics Index</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#How_to_Obtain_Relics"><span class="tocnumber">1.1</span> <span class="toctext">How to Obtain Relics</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Tiers_and_Relic_Forging"><span class="tocnumber">1.2</span> <span class="toctext">Tiers and Relic Forging</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Refining"><span class="tocnumber">1.3</span> <span class="toctext">Refining</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Melding"><span class="tocnumber">1.4</span> <span class="toctext">Melding</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Tier_1_Relics"><span class="tocnumber">2</span> <span class="toctext">Tier 1 Relics</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Tier_2_Relics"><span class="tocnumber">3</span> <span class="toctext">Tier 2 Relics</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Tier_3_Relics"><span class="tocnumber">4</span> <span class="toctext">Tier 3 Relics</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Tier_4_Relics"><span class="tocnumber">5</span> <span class="toctext">Tier 4 Relics</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Tier_5_Relics"><span class="tocnumber">6</span> <span class="toctext">Tier 5 Relics</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Tier_6_Relics"><span class="tocnumber">7</span> <span class="toctext">Tier 6 Relics</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Tier_7_Relics"><span class="tocnumber">8</span> <span class="toctext">Tier 7 Relics</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Tier_8_Relics"><span class="tocnumber">9</span> <span class="toctext">Tier 8 Relics</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Tier_9_Relics"><span class="tocnumber">10</span> <span class="toctext">Tier 9 Relics</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Tier_10_Relics"><span class="tocnumber">11</span> <span class="toctext">Tier 10 Relics</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Unique_Relics_.28Level_55.29"><span class="tocnumber">12</span> <span class="toctext">Unique Relics (Level 55)</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Singular_Relics_.28Level_60.29"><span class="tocnumber">13</span> <span class="toctext">Singular Relics (Level 60)</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Extraordinary_Relics_.28Level_65.29"><span class="tocnumber">14</span> <span class="toctext">Extraordinary Relics (Level 65)</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Westfold_Relics_.28Level_70.29"><span class="tocnumber">15</span> <span class="toctext">Westfold Relics (Level 70)</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#Great_River_Relics_.28Level_75.29"><span class="tocnumber">16</span> <span class="toctext">Great River Relics (Level 75)</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Eastemnet_Relics_.28Level_80.29"><span class="tocnumber">17</span> <span class="toctext">Eastemnet Relics (Level 80)</span></a></li>
+<li class="toclevel-1 tocsection-22"><a href="#Wildermore_Relics_.28Level_85.29"><span class="tocnumber">18</span> <span class="toctext">Wildermore Relics (Level 85)</span></a></li>
+<li class="toclevel-1 tocsection-23"><a href="#Westemnet_Relics_.28Level_90.29"><span class="tocnumber">19</span> <span class="toctext">Westemnet Relics (Level 90)</span></a></li>
+<li class="toclevel-1 tocsection-24"><a href="#Gorgoroth_.28Last_Alliance.29_Relics_.28Level_100.29"><span class="tocnumber">20</span> <span class="toctext">Gorgoroth (Last Alliance) Relics (Level 100)</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Basic_Mounted_.28Level_75.29"><span class="tocnumber">21</span> <span class="toctext">Basic Mounted (Level 75)</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Unique_Mounted_.28Level_75.29"><span class="tocnumber">22</span> <span class="toctext">Unique Mounted (Level 75)</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#Eastemnet_Mounted_.28Level_80.29"><span class="tocnumber">23</span> <span class="toctext">Eastemnet Mounted (Level 80)</span></a></li>
+<li class="toclevel-1 tocsection-28"><a href="#Riddermark_Mounted_.28Level_85.29"><span class="tocnumber">24</span> <span class="toctext">Riddermark Mounted (Level 85)</span></a></li>
+<li class="toclevel-1 tocsection-29"><a href="#Westemnet_Mounted_.28Level_90.29"><span class="tocnumber">25</span> <span class="toctext">Westemnet Mounted (Level 90)</span></a></li>
+<li class="toclevel-1 tocsection-30"><a href="#Crafted_Relics_Index"><span class="tocnumber">26</span> <span class="toctext">Crafted Relics Index</span></a></li>
+<li class="toclevel-1 tocsection-31"><a href="#Crafted_Mounted_Index"><span class="tocnumber">27</span> <span class="toctext">Crafted Mounted Index</span></a></li>
+<li class="toclevel-1 tocsection-32"><a href="#Ettenmoors_Index"><span class="tocnumber">28</span> <span class="toctext">Ettenmoors Index</span></a></li>
+<li class="toclevel-1 tocsection-33"><a href="#Retired_Relics_Index"><span class="tocnumber">29</span> <span class="toctext">Retired Relics Index</span></a></li>
 </ul>
 </div>
 
@@ -142,17 +146,24 @@ difficult to obtain, and that grant additional or different bonuses.
 <dd> Legendary items have four relic slots (one for each type). Relics 
 can be slotted at any time, but slotting a new relic on top of an 
 already-slotted relic will destroy the already-slotted relic. The only 
-way to unslot relics is to use a <a href="http://lotro-wiki.com/index.php/Item%3ARelic_Removal_Scroll" title="Item:Relic_Removal_Scroll"><span class="ajaxttlink">Relic Removal Scroll</span></a>. Crafted relics can never be removed.
+way to unslot relics is to use a <a href="http://lotro-wiki.com/index.php/Item%3ARelic_Removal_Scroll" title="Item:Relic_Removal_Scroll"><span class="ajaxttlink">Relic Removal Scroll</span></a>. 
 </dd>
 </dl>
 <dl>
 <dd><ul>
 <li> <b>NOTE</b> Item levels for Crafted Relics, in this article, refer to the <i>static</i>, not the <i>experience</i>, level.
 </li>
+<li> <b>IMPORTANT:</b> SSG is constantly tweaking stat values in the 
+process of tuning "game balance." These changes are not normally 
+announced in the release notes. Therefore, keep in mind that the values 
+listed here were correct at the time they were transcribed -- HOWEVER, 
+you should always consult the various in-game tables for the latest and 
+correct values.
+</li>
 </ul>
 </dd>
 </dl>
-<h2><span class="mw-headline" id="How_to_Obtain_Relics">How to Obtain Relics</span></h2>
+<h3><span class="mw-headline" id="How_to_Obtain_Relics">How to Obtain Relics</span></h3>
 <dl>
 <dd> Relics can be obtained by the following means:
 <ul>
@@ -171,6 +182,8 @@ way to unslot relics is to use a <a href="http://lotro-wiki.com/index.php/Item%3
 <li> Barter various regional faction tokens at their respective traders for fused relics.
 </li>
 <li> Barter <a href="http://lotro-wiki.com/index.php/Item%3ACommendation" title="Item:Commendation"><span class="ajaxttlink"><img alt="Commendation-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Commendation-icon.png" width="32" height="32"></span></a> <a href="http://lotro-wiki.com/index.php/Item%3ACommendation" title="Item:Commendation"><span class="ajaxttlink">Commendations</span></a> with various traders in <a href="http://lotro-wiki.com/index.php/Gl%C3%A2n_Vraig" title="Glân Vraig">Glân Vraig</a> in the <a href="http://lotro-wiki.com/index.php/Ettenmoors" title="Ettenmoors">Ettenmoors</a>. (The Relics are NOT class restricted.)
+</li>
+<li> Barter <span style="font-size: 1em;"><a href="http://lotro-wiki.com/index.php/Item%3AKhuzdul_Tablets" title="Item:Khuzdul_Tablets"><span class="ajaxttlink"><img alt="Khuzdul Tablets-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Khuzdul_Tablets-icon.png" width="32" height="32"></span></a></span>&nbsp;<a href="http://lotro-wiki.com/index.php/Item%3AKhuzdul_Tablets" title="Item:Khuzdul Tablets"><span class="ajaxttlink">Khuzdul Tablets</span></a> or <span style="font-size: 1em;"><a href="http://lotro-wiki.com/index.php/Item%3ARusted_Dwarf_Tools" title="Item:Rusted_Dwarf_Tools"><span class="ajaxttlink"><img alt="Rusted Dwarf Tools-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Rusted_Dwarf_Tools-icon.png" width="32" height="32"></span></a></span>&nbsp;<a href="http://lotro-wiki.com/index.php/Item%3ARusted_Dwarf_Tools" title="Item:Rusted Dwarf Tools"><span class="ajaxttlink">Rusted Dwarf Tools</span></a> for <a href="http://lotro-wiki.com/index.php/Relics#Tier_1_Relics" title="Relics">Tier 1 Relics</a> with legendary class traders at <a href="http://lotro-wiki.com/index.php/Imlad_Lalaith" title="Imlad Lalaith">Imlad Lalaith</a>
 </li>
 </ul>
 </dd>
@@ -233,7 +246,7 @@ way to unslot relics is to use a <a href="http://lotro-wiki.com/index.php/Item%3
 <td> 77 </td>
 <td> <span style="font-size: 1em;"><a href="http://lotro-wiki.com/index.php/Item%3AFused_Eorlingas_Relics" title="Item:Fused_Eorlingas_Relics"><span class="ajaxttlink"><img alt="Fused Riddermark Relics-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Fused_Riddermark_Relics-icon.png" width="32" height="32"></span></a></span>&nbsp;<a href="http://lotro-wiki.com/index.php/Item%3AFused_Eorlingas_Relics" title="Item:Fused Eorlingas Relics"><span class="ajaxttlink">Fused Eorlingas Relics</span></a>
 </td></tr></tbody></table></dd></dl></dd></dl>
-<h2><span class="mw-headline" id="Tiers_and_Relic_Forging">Tiers and Relic Forging</span></h2>
+<h3><span class="mw-headline" id="Tiers_and_Relic_Forging">Tiers and Relic Forging</span></h3>
 <dl>
 <dd> Relics are divided into ten tiers, with higher tier relics delivering improved buffs when slotted in your Legendary Item.
 </dd>
@@ -392,7 +405,7 @@ relic shards.
 <td> 648
 </td></tr></tbody></table>
 </blockquote>
-<h2><span class="mw-headline" id="Refining">Refining</span></h2>
+<h3><span class="mw-headline" id="Refining">Refining</span></h3>
 <dl>
 <dd>Relics can be refined into <a href="http://lotro-wiki.com/index.php/Item%3AShard" title="Item:Shard"><span class="ajaxttlink">shards</span></a> which are used for melding or instead of silver to perform legendary services. There's a small chance to receive <a href="http://lotro-wiki.com/index.php/Heritage_Runes" title="Heritage Runes">Heritage Runes</a> upon refining.  Speak to a <a href="http://lotro-wiki.com/index.php/Relic-master" title="Relic-master">Relic-master</a> to refine.
 </dd>
@@ -482,7 +495,7 @@ relic shards.
 <tr class="even" align="center">
 <th style="text-align:left;"> Eastemnet (Level 80)
 </th>
-<td> 358
+<td> 4438
 </td></tr>
 <tr class="odd" align="center">
 <th style="text-align:left;"> Wildermore (Level 85)
@@ -502,7 +515,7 @@ relic shards.
 <tr class="even" align="center">
 <th style="text-align:left;"> Unique Mounted (Level 75)
 </th>
-<td> 96
+<td> 384
 </td></tr>
 <tr class="odd" align="center">
 <th style="text-align:left;"> Eastemnet Mounted (Level 80)
@@ -565,10 +578,10 @@ relic shards.
 <td>
 </td></tr></tbody></table>
 </blockquote>
-<h2><span class="mw-headline" id="Melding">Melding</span></h2>
+<h3><span class="mw-headline" id="Melding">Melding</span></h3>
 <p>Melding combines shards into legendary items, legacies, scrolls, or with relics to create new relics.  Speak to a <a href="http://lotro-wiki.com/index.php/Relic-master" title="Relic-master">Relic-master</a> to meld.
 </p>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="400px"> Item to Receive
 </th>
@@ -1169,9 +1182,9 @@ relic shards.
 </td>
 <td> 11,232 Shards, any 2 Tier 10 Relics (2 Total)
 </td></tr>
-</tbody></table>
+</tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_1_Relics">Tier 1 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1248,9 +1261,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Early_Rune_of_Avoidance" title="Relic:Early Rune of Avoidance">Early Rune of Avoidance</a>
 </td>
 <td> +75 in-Combat Power Regen <br> +404 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_2_Relics">Tier 2 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1327,9 +1340,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Aged_Rune_of_Avoidance" title="Relic:Aged Rune of Avoidance">Aged Rune of Avoidance</a>
 </td>
 <td> +82.2 in-Combat Power Regen <br> +428 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_3_Relics">Tier 3 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1406,9 +1419,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Profound_Rune_of_Avoidance" title="Relic:Profound Rune of Avoidance">Profound Rune of Avoidance</a>
 </td>
 <td> +89.4 in-Combat Power Regen <br> +452 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_4_Relics">Tier 4 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1485,9 +1498,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Deep_Rune_of_Avoidance" title="Relic:Deep Rune of Avoidance">Deep Rune of Avoidance</a>
 </td>
 <td> +96.6 in-Combat Power Regen <br> +477 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_5_Relics">Tier 5 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1564,9 +1577,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Ancient_Rune_of_Avoidance" title="Relic:Ancient Rune of Avoidance">Ancient Rune of Avoidance</a>
 </td>
 <td> +103.8 in-Combat Power Regen <br> +501 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_6_Relics">Tier 6 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1643,9 +1656,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Subtle_Rune_of_Avoidance" title="Relic:Subtle Rune of Avoidance">Subtle Rune of Avoidance</a>
 </td>
 <td> +111 in-Combat Power Regen <br> +525 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_7_Relics">Tier 7 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1722,9 +1735,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Mysterious_Rune_of_Avoidance" title="Relic:Mysterious Rune of Avoidance">Mysterious Rune of Avoidance</a>
 </td>
 <td> +118.2 in-Combat Power Regen <br> +549 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_8_Relics">Tier 8 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1801,9 +1814,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Unusual_Rune_of_Avoidance" title="Relic:Unusual Rune of Avoidance">Unusual Rune of Avoidance</a>
 </td>
 <td> +125.4 in-Combat Power Regen <br> +574 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_9_Relics">Tier 9 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1880,9 +1893,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Elder_Rune_of_Avoidance" title="Relic:Elder Rune of Avoidance">Elder Rune of Avoidance</a>
 </td>
 <td> +132.6 in-Combat Power Regen <br> +598 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Tier_10_Relics">Tier 10 Relics</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -1959,9 +1972,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Insightful_Rune_of_Avoidance" title="Relic:Insightful Rune of Avoidance">Insightful Rune of Avoidance</a>
 </td>
 <td> +140 in-Combat Power Regen <br> +622 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Unique_Relics_.28Level_55.29">Unique Relics (Level 55)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2031,9 +2044,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Unique_Rune_of_Wisdom" title="Relic:Unique Rune of Wisdom">Unique Rune of Wisdom</a>
 </td>
 <td> -2.5% Attack Duration <br> +444 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Singular_Relics_.28Level_60.29">Singular Relics (Level 60)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2103,9 +2116,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Singular_Rune_of_Wisdom" title="Relic:Singular Rune of Wisdom">Singular Rune of Wisdom</a>
 </td>
 <td> -2.5% Attack Duration <br> +485 Evade Rating
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Extraordinary_Relics_.28Level_65.29">Extraordinary Relics (Level 65)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2217,9 +2230,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:True_Rune_of_the_Dark_Watch" title="Relic:True Rune of the Dark Watch">True Rune of the Dark Watch</a>
 </td>
 <td> +17 Might <br> +17 Agility <br> +17 Vitality <br> +17 Will <br> +17 Fate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Westfold_Relics_.28Level_70.29">Westfold Relics (Level 70)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2289,9 +2302,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westfold_Rune_of_Wisdom" title="Relic:Westfold Rune of Wisdom">Westfold Rune of Wisdom</a>
 </td>
 <td> -2.5% Attack Duration <br> +566 Evade Rating <br> +25 Will
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Great_River_Relics_.28Level_75.29">Great River Relics (Level 75)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2403,9 +2416,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:True_Rune_of_the_Swift-light" title="Relic:True Rune of the Swift-light">True Rune of the Swift-light</a>
 </td>
 <td> +296 Maximum Morale <br>+276 Maximum Power <br>-2.5% Attack Duration
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Eastemnet_Relics_.28Level_80.29">Eastemnet Relics (Level 80)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2517,9 +2530,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:True_Rune_of_the_Dark_Wood" title="Relic:True Rune of the Dark Wood">True Rune of the Dark Wood</a>
 </td>
 <td> +330 Maximum Morale <br> +310 Maximum Power <br> +242 Physical Mitigation
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Wildermore_Relics_.28Level_85.29">Wildermore Relics (Level 85)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2589,9 +2602,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Wildermore_Rune_of_Wisdom" title="Relic:Wildermore Rune of Wisdom">Wildermore Rune of Wisdom</a>
 </td>
 <td> -2.5% Attack Duration <br> +687 Evade Rating <br> +32 Will
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Westemnet_Relics_.28Level_90.29">Westemnet Relics (Level 90)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2661,9 +2674,86 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Rune_of_Wisdom" title="Relic:Westemnet Rune of Wisdom">Westemnet Rune of Wisdom</a>
 </td>
 <td> -2.5% Attack Duration <br> +727 Evade Rating <br> +35 Will
+</td></tr></tbody></table></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Gorgoroth_.28Last_Alliance.29_Relics_.28Level_100.29">Gorgoroth (Last Alliance) Relics (Level 100)</span></h2>
+<table class="altRowsMed">
+<tbody><tr>
+<th width="300px"> Relic
+</th>
+<th width="420px"> Stats
+</th></tr>
+<tr class="odd">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Brutality-icon.png" class="image"><img alt="Last Alliance Setting of Brutality-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Brutality-icon.png" width="26" height="26"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Brutality"><span class="ajaxttlink qc-">Last Alliance Setting of Brutality</span></a>
+</p>
+</td>
+<td> +2572 Critical Rating, +3472 Parry Rating, +2315 Evade Rating
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Defense-icon.png" class="image"><img alt="Last Alliance Setting of Defense-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Defense-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Defense"><span class="ajaxttlink qc-">Last Alliance Setting of Defense</span></a>
+</p>
+</td>
+<td> +5787 Block Rating, +5787 Parry Rating
+</td></tr>
+<tr class="odd">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Finesse-icon.png" class="image"><img alt="Last Alliance Setting of Finesse-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Finesse-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Finesse"><span class="ajaxttlink qc-">Last Alliance Setting of Finesse</span></a>
+</p>
+</td>
+<td> +7794 Finesse Rating, +5787 Evade Rating
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Resistance-icon.png" class="image"><img alt="Last Alliance Setting of Resistance-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Resistance-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Resistance"><span class="ajaxttlink qc-">Last Alliance Setting of Resistance</span></a>
+</p>
+</td>
+<td> +5788 Tactical Mitigation, +3899 Resistance Rating
+</td></tr>
+<tr class="odd">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Agility-icon.png" class="image"><img alt="Last Alliance Gem of Agility-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Agility-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Agility"><span class="ajaxttlink qc-">Last Alliance Gem of Agility</span></a>
+</p>
+</td>
+<td> +297 Agility, +6452 Critical Defence
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Might-icon.png" class="image"><img alt="Last Alliance Gem of Might-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Might-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Might"><span class="ajaxttlink qc-">Last Alliance Gem of Might</span></a>
+</p>
+</td>
+<td> +297 Might, +6452 Critical Defence
+</td></tr>
+<tr class="odd">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Will-icon.png" class="image"><img alt="Last Alliance Gem of Will-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Will-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Will"><span class="ajaxttlink qc-">Last Alliance Gem of Will</span></a>
+</p>
+</td>
+<td> +297 Will, +6452 Critical Defence
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Rune_of_Force-icon.png" class="image"><img alt="Last Alliance Rune of Force-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Rune_of_Force-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Rune_of_Force"><span class="ajaxttlink qc-">Last Alliance Rune of Force</span></a>
+</p>
+</td>
+<td> +4264 Physical Mastery Rating, +1542 Critical Rating
+</td></tr>
+<tr class="odd">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Rune_of_Healing-icon.png" class="image"><img alt="Last Alliance Rune of Healing-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Rune_of_Healing-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Rune_of_Healing"><span class="ajaxttlink qc-">Last Alliance Rune of Healing</span></a>
+</p>
+</td>
+<td> +7182 Outgoing Healing Rating, +1543 Critical Rating
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Eastemnet_Rune_of_Power-icon.png" class="image"><img alt="Eastemnet Rune of Power-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Eastemnet_Rune_of_Power-icon.png" width="34" height="34"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Rune_of_Power"><span class="ajaxttlink qc-">Last Alliance Rune of Power</span></a>
+</p>
+</td>
+<td> +4264 Tactical Mastery Rating, +1543 Critical Rating
 </td></tr></tbody></table>
 <h2><span class="mw-headline" id="Basic_Mounted_.28Level_75.29">Basic Mounted (Level 75)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2733,9 +2823,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Bridle_Rune_of_Momentum" title="Relic:Bridle Rune of Momentum">Bridle Rune of Momentum</a>
 </td>
 <td> +1 War-steed Acceleration Rate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Unique_Mounted_.28Level_75.29">Unique Mounted (Level 75)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2805,9 +2895,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Bridle_Rune_of_Protection" title="Relic:Bridle Rune of Protection">Bridle Rune of Protection</a>
 </td>
 <td> +303 Block, Parry, and Evade <br> +200 War-steed Armour <br> +2 War-steed Turn Rate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Eastemnet_Mounted_.28Level_80.29">Eastemnet Mounted (Level 80)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2877,9 +2967,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Bridle_Eastemnet_Rune_of_Protection" title="Relic:Bridle Eastemnet Rune of Protection">Bridle Eastemnet Rune of Protection</a>
 </td>
 <td> +323 Block, Parry, and Evade <br> +300 War-steed Armour <br> +4 War-steed Turn Rate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Riddermark_Mounted_.28Level_85.29">Riddermark Mounted (Level 85)</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -2949,11 +3039,11 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Bridle_Riddermark_Rune_of_Protection" title="Relic:Bridle Riddermark Rune of Protection">Bridle Riddermark Rune of Protection</a>
 </td>
 <td> +343 Block, Parry, and Evade <br> +300 War-steed Armour <br> +6 War-steed Turn Rate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Westemnet_Mounted_.28Level_90.29">Westemnet Mounted (Level 90)</span></h2>
 <p>NB: Some stats on this tier's relics are lower than the previous tier's.
 </p>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -3023,9 +3113,9 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Bridle_Westemnet_Rune_of_Protection" title="Relic:Bridle Westemnet Rune of Protection">Bridle Westemnet Rune of Protection</a>
 </td>
 <td> +364 Block, Parry, and Evade <br> +300 War-steed Armour <br> +4 War-steed Turn Rate
-</td></tr></tbody></table>
+</td></tr></tbody></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Crafted_Relics_Index">Crafted Relics Index</span></h2>
-<table class="altRowsMed topTable sortable jquery-tablesorter">
+<dl><dd><dl><dd><table class="altRowsMed topTable sortable jquery-tablesorter">
 <thead><tr>
 <th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending" width="40px">
 </th>
@@ -3421,9 +3511,9 @@ relic shards.
 <td align="center"> 95 </td>
 <td> +370 Critical Defence <br> +740 Physical Mitigation <br> +740 Tactical Mitigation </td>
 <td> All guilds
-</td></tr></tbody><tfoot></tfoot></table>
+</td></tr></tbody><tfoot></tfoot></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Crafted_Mounted_Index">Crafted Mounted Index</span></h2>
-<table class="altRowsMed topTable sortable jquery-tablesorter">
+<dl><dd><dl><dd><table class="altRowsMed topTable sortable jquery-tablesorter">
 <thead><tr>
 <th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending" width="40px">
 </th>
@@ -4040,9 +4130,9 @@ relic shards.
 <td> +11 War-steed Turn Rate<br> +600 Maximum War-steed Endurance <br> +495 Maximum War-steed Power </td>
 <td> All</td>
 <td> All guilds
-</td></tr></tbody><tfoot></tfoot></table>
+</td></tr></tbody><tfoot></tfoot></table></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Ettenmoors_Index">Ettenmoors Index</span></h2>
-<table class="altRowsMed">
+<dl><dd><dl><dd><table class="altRowsMed">
 <tbody><tr>
 <th width="40px">
 </th>
@@ -4128,7 +4218,7 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Landru" title="Landru">Landru</a> </td>
 <td> Warden
 </td></tr>
-</tbody></table>
+</tbody></table></dd></dl></dd></dl>
 <p>All these barterers are located at <a href="http://lotro-wiki.com/index.php/Gl%C3%A2n_Vraig" title="Glân Vraig">Glân Vraig</a> in the <a href="http://lotro-wiki.com/index.php/Ettenmoors" title="Ettenmoors">Ettenmoors</a>.
 </p>
 <h2><span class="mw-headline" id="Retired_Relics_Index">Retired Relics Index</span></h2>
@@ -4136,32 +4226,32 @@ relic shards.
 </p>
 <!-- 
 NewPP limit report
-CPU time usage: 0.817 seconds
-Real time usage: 1.421 seconds
-Preprocessor visited node count: 2860/1000000
-Preprocessor generated node count: 11600/1000000
-Post‐expand include size: 15006/2097152 bytes
-Template argument size: 3650/2097152 bytes
+CPU time usage: 0.633 seconds
+Real time usage: 0.796 seconds
+Preprocessor visited node count: 3852/1000000
+Preprocessor generated node count: 16266/1000000
+Post‐expand include size: 26478/2097152 bytes
+Template argument size: 6428/2097152 bytes
 Highest expansion depth: 14/40
-Expensive parser function count: 10/500
+Expensive parser function count: 12/500
 ExtLoops count: 0/100
 -->
 
-<!-- Saved in parser cache with key lotrowik_wikidb-lotro:pcache:idhash:41824-0!*!0!!en!2!* and timestamp 20161115071607 and revision id 790077
+<!-- Saved in parser cache with key lotrowik_wikidb-lotro:pcache:idhash:41824-0!*!0!!en!2!* and timestamp 20170826013512 and revision id 853260
  -->
 </div>								<div class="printfooter">
-				Retrieved from "<a href="http://lotro-wiki.com/index.php?title=Relics&amp;oldid=790077">http://lotro-wiki.com/index.php?title=Relics&amp;oldid=790077</a>"				</div>
+				Retrieved from "<a href="http://lotro-wiki.com/index.php?title=Relics&amp;oldid=853260">http://lotro-wiki.com/index.php?title=Relics&amp;oldid=853260</a>"				</div>
 												<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://lotro-wiki.com/index.php/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="http://lotro-wiki.com/index.php/Category:Relics" title="Category:Relics">Relics</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden category: <ul><li><a href="http://lotro-wiki.com/index.php/Category:Pages_with_broken_file_links" title="Category:Pages with broken file links">Pages with broken file links</a></li></ul></div></div>												<div id="mw-data-after-content">
 	<div style="text-align:center; margin: 1em 1em 1em 1em"><script async="" src="Relics%20-%20Lotro-Wiki.com_files/adsbygoogle.js"></script>
 <!-- bottom -->
-<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="4223792731" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" frameborder="0" width="728" height="90"></iframe></ins></ins></ins>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3691143277084659" data-ad-slot="4223792731" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:728px;height:90px;" width="728" height="90" frameborder="0"></iframe></ins></ins></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script></div>
 </div>
 								<div class="visualClear"></div>
-							<div id="tfbx" class="htt"></div><div id="templatetfbx" class="htt"></div></div>
-		</div>
+							<div id="tfbx" class="htt hidden" style="position: fixed; top: 144px; left: 246px; visibility: hidden;"></div><div id="templatetfbx" class="htt"></div></div>
+		</div><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" style="display: none;" frameborder="0"></iframe>
 		<div id="mw-navigation">
 			<h2>Navigation menu</h2>
 			<div id="mw-head">
@@ -4271,7 +4361,7 @@ You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
 			<li id="t-recentchangeslinked"><a href="http://lotro-wiki.com/index.php/Special:RecentChangesLinked/Relics" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li>
 			<li id="t-specialpages"><a href="http://lotro-wiki.com/index.php/Special:SpecialPages" title="A list of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li>
 			<li id="t-print"><a href="http://lotro-wiki.com/index.php?title=Relics&amp;printable=yes" rel="alternate" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li>
-			<li id="t-permalink"><a href="http://lotro-wiki.com/index.php?title=Relics&amp;oldid=790077" title="Permanent link to this revision of the page">Permanent link</a></li>
+			<li id="t-permalink"><a href="http://lotro-wiki.com/index.php?title=Relics&amp;oldid=853260" title="Permanent link to this revision of the page">Permanent link</a></li>
 			<li id="t-info"><a href="http://lotro-wiki.com/index.php?title=Relics&amp;action=info">Page information</a></li>
 		</ul>
 	</div>
@@ -4280,8 +4370,8 @@ You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
 		</div>
 		<div id="footer" role="contentinfo">
 							<ul id="footer-info">
-											<li id="footer-info-lastmod"> This page was last modified on 12 September 2016, at 16:09.</li>
-											<li id="footer-info-viewcount">This page has been accessed 150,820 times.</li>
+											<li id="footer-info-lastmod"> This page was last modified on 26 August 2017, at 01:35.</li>
+											<li id="footer-info-viewcount">This page has been accessed 165,582 times.</li>
 											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://www.gnu.org/copyleft/fdl.html">GNU Free Documentation License 1.3 or later</a> unless otherwise noted.</li>
 									</ul>
 							<ul id="footer-places">
@@ -4303,15 +4393,15 @@ You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
 mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
 }</script>
 <script>if(window.mw){
-mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","ext.gadget.Edittools","mw.MwEmbedSupport.style","skins.vector.collapsibleNav"],null,true);
+mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","ext.gadget.Edittools","ext.gadget.MonospacedDiffs","skins.vector.collapsibleNav"],null,true);
 }</script>
-<script src="Relics%20-%20Lotro-Wiki.com_files/index_010.php"></script><div style="display: none; font-size: 13px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div>
-<script src="Relics%20-%20Lotro-Wiki.com_files/index_011.php"></script>
+<script src="Relics%20-%20Lotro-Wiki.com_files/index_004.php"></script><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" style="display: none;" frameborder="0"></iframe><div style="display: none; font-size: 13px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div>
+<script src="Relics%20-%20Lotro-Wiki.com_files/index_005.php"></script>
 <script src="Relics%20-%20Lotro-Wiki.com_files/load_002.php"></script>
 <script>if(window.mw){
-mw.config.set({"wgBackendResponseTime":1514});
+mw.config.set({"wgBackendResponseTime":50});
 }</script>
 	
 
 
-</body><!-- Cached/compressed 20161115071609 --></html>
+</body><!-- Cached/compressed 20170826015647 --></html>
