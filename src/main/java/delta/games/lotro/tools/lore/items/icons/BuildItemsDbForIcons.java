@@ -39,13 +39,23 @@ public class BuildItemsDbForIcons
     _backgroundIconsIds=new HashSet<String>();
   }
 
-  private HashMap<Integer,Item> loadItemsFile(File file)
+  private HashMap<Integer,Item> loadItemsFile(File oldFile, File newFile)
   {
-    List<Item> items=ItemSaxParser.parseItemsFile(file);
     HashMap<Integer,Item> ret=new HashMap<Integer,Item>();
-    for(Item item : items)
     {
-      ret.put(Integer.valueOf(item.getIdentifier()),item);
+      List<Item> newItems=ItemSaxParser.parseItemsFile(newFile);
+      for(Item item : newItems)
+      {
+        ret.put(Integer.valueOf(item.getIdentifier()),item);
+      }
+    }
+    if (oldFile!=null)
+    {
+      List<Item> oldItems=ItemSaxParser.parseItemsFile(oldFile);
+      for(Item oldItem : oldItems)
+      {
+        ret.remove(Integer.valueOf(oldItem.getIdentifier()));
+      }
     }
     return ret;
   }
@@ -118,10 +128,16 @@ public class BuildItemsDbForIcons
 
   private void doIt()
   {
-    File toFile=new File("data\\items\\items.xml").getAbsoluteFile();
-    HashMap<Integer,Item> items=loadItemsFile(toFile);
+    File oldFile=new File("data\\items\\items.old.xml").getAbsoluteFile();
+    oldFile=null;
+    File newFile=new File("data\\items\\items_filtered.xml").getAbsoluteFile();
+    HashMap<Integer,Item> items=loadItemsFile(oldFile,newFile);
+    doIt(items);
     System.out.println("Total items count: "+items.size());
+  }
 
+  private void doIt(HashMap<Integer,Item> items)
+  {
     for(Integer id : items.keySet())
     {
       Item item=items.get(id);
