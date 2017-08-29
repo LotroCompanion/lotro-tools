@@ -27,7 +27,27 @@ import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanTable;
  */
 public class EssenceStatsInjector
 {
-  // iLvl Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
+  /**
+   * Index of the 'name' column.
+   */
+  public static final int NAME_INDEX=0;
+  /**
+   * Index of the 'item level' column.
+   */
+  public static final int ITEM_LEVEL_INDEX=1;
+  /**
+   * Index of the 'notes' column.
+   */
+  public static final int NOTES_INDEX=28;
+
+  private static final STAT[] STATS={ null, null, // 1
+    STAT.ARMOUR, STAT.MIGHT, STAT.AGILITY, STAT.VITALITY, STAT.WILL, STAT.FATE, STAT.MORALE, STAT.POWER, // 9
+    STAT.ICMR, STAT.OCMR, STAT.ICPR, STAT.OCPR, STAT.CRITICAL_RATING, STAT.FINESSE, STAT.PHYSICAL_MASTERY, STAT.TACTICAL_MASTERY, // 17
+    STAT.RESISTANCE, STAT.CRITICAL_DEFENCE, STAT.INCOMING_HEALING, STAT.BLOCK, STAT.PARRY, STAT.EVADE, // 23
+    STAT.PHYSICAL_MITIGATION, STAT.TACTICAL_MITIGATION, STAT.AUDACITY, STAT.HOPE, null, // 28
+    STAT.LIGHT_OF_EARENDIL
+  };
+
   /**
    * Default cell values.
    */
@@ -62,8 +82,7 @@ public class EssenceStatsInjector
     STAT.AUDACITY.getKey(),
     STAT.HOPE.getKey(),
     "Notes",
-    STAT.EVADE.getKey(),
-    //ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP    
+    STAT.LIGHT_OF_EARENDIL.getKey()
   };
 
   /**
@@ -96,7 +115,7 @@ public class EssenceStatsInjector
       lines.remove(0);
       HashSet<Integer> unmanaged=new HashSet<Integer>();
       unmanaged.addAll(essences.keySet());
-      LotroPlanTable table=new LotroPlanTable();
+      LotroPlanTable table=new LotroPlanTable(STATS);
       for(String line : lines)
       {
         String[] fields=StringSplitter.split(line,'\t');
@@ -120,15 +139,15 @@ public class EssenceStatsInjector
             }
             unmanaged.remove(Integer.valueOf(item.getIdentifier()));
             // Item level
-            int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
+            int itemLevel=NumericTools.parseInt(fields[ITEM_LEVEL_INDEX],-1);
             if (itemLevel!=-1)
             {
               item.setItemLevel(Integer.valueOf(itemLevel));
             }
             // Notes
-            if (fields.length>LotroPlanTable.NOTES)
+            if (fields.length>NOTES_INDEX)
             {
-              String notes=fields[LotroPlanTable.NOTES].trim();
+              String notes=fields[NOTES_INDEX].trim();
               if (notes.length()>0)
               {
                 item.getBonus().add(notes);
@@ -174,7 +193,7 @@ public class EssenceStatsInjector
     {
       id=NumericTools.parseInteger(fields[0]);
     }
-    int nameIndex=LotroPlanTable.NAME_INDEX+(hasId?1:0);
+    int nameIndex=NAME_INDEX+(hasId?1:0);
     String name=fields[nameIndex];
     if (name.startsWith("-"))
     {

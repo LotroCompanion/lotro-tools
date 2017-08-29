@@ -1,8 +1,5 @@
 package delta.games.lotro.tools.lore.items.lotroplan;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.stats.ItemStatSliceData;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
@@ -24,44 +21,54 @@ public class LotroPlanTable
    * Index of the 'item level' column.
    */
   public static final int ITEM_LEVEL_INDEX=1;
-  private static final int FIRST_STAT_INDEX=2; // Armor
   /**
    * Index of the 'notes' column.
    */
-  public static final int NOTES=28;
-  private static final int AUDACITY_INDEX=26;
-  private static final int HOPE_INDEX=27;
-  private static final int PARRY_PERCENTAGE_INDEX=53;
-  private static final int RANGED_DEFENCE_PERCENTAGE_INDEX=62;
+  public static final int NOTES_INDEX=28;
   /**
    * Index of the 'classes' column.
    */
   public static final int CLASSES_INDEX=67;
-  // All other stats are unused
-  //Name  iLvl  Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
+  // Name iLvl
+  // Armour  Might Agility Vitality  Will  Fate  Morale  Power
+  // ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas
+  // Resist  CritDef InHeal  Block Parry Evade
+  // PhyMit  TacMit  Audacity  Hope  Notes
+  // ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP
+  // MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP
+  // BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP
+  // MelRedP RngRedP TacRedP PhyMitP TacMitP
+  // Class requirement
 
-  private static final STAT[] STATS={ STAT.ARMOUR, STAT.MIGHT, STAT.AGILITY, STAT.VITALITY, STAT.WILL, STAT.FATE, STAT.MORALE, STAT.POWER,
-    STAT.ICMR, STAT.OCMR, STAT.ICPR, STAT.OCPR, STAT.CRITICAL_RATING, STAT.FINESSE, STAT.PHYSICAL_MASTERY, STAT.TACTICAL_MASTERY,
-    STAT.RESISTANCE, STAT.CRITICAL_DEFENCE, STAT.INCOMING_HEALING, STAT.BLOCK, STAT.PARRY, STAT.EVADE,
-    STAT.PHYSICAL_MITIGATION, STAT.TACTICAL_MITIGATION
+  private static final STAT[] STATS={ null, null, // 1
+    STAT.ARMOUR, STAT.MIGHT, STAT.AGILITY, STAT.VITALITY, STAT.WILL, STAT.FATE, STAT.MORALE, STAT.POWER, // 9
+    STAT.ICMR, STAT.OCMR, STAT.ICPR, STAT.OCPR, STAT.CRITICAL_RATING, STAT.FINESSE, STAT.PHYSICAL_MASTERY, STAT.TACTICAL_MASTERY, // 17
+    STAT.RESISTANCE, STAT.CRITICAL_DEFENCE, STAT.INCOMING_HEALING, STAT.BLOCK, STAT.PARRY, STAT.EVADE, // 23
+    STAT.PHYSICAL_MITIGATION, STAT.TACTICAL_MITIGATION, STAT.AUDACITY, STAT.HOPE, null, // 28
+    null, null, null, null, null, null, null, null, null, null, null, // 39
+    null, null, null, null, null, null, null, null, null, null, null, null, // 51
+    STAT.BLOCK_PERCENTAGE, STAT.PARRY_PERCENTAGE, STAT.EVADE_PERCENTAGE, null, null, null, null, null, null, // 61
+    null, STAT.RANGED_DEFENCE_PERCENTAGE, null, STAT.PHYSICAL_MITIGATION_PERCENTAGE, STAT.TACTICAL_MITIGATION_PERCENTAGE, // 66
+    null // 67
   };
 
-  private HashMap<Integer,STAT> _mapIndexToStat;
+  private STAT[] _stats;
 
   /**
    * Constructor.
    */
   public LotroPlanTable()
   {
-    _mapIndexToStat=new HashMap<Integer,STAT>();
-    for(int i=0;i<STATS.length;i++)
-    {
-      _mapIndexToStat.put(Integer.valueOf(i+FIRST_STAT_INDEX),STATS[i]);
-    }
-    _mapIndexToStat.put(Integer.valueOf(AUDACITY_INDEX),STAT.AUDACITY);
-    _mapIndexToStat.put(Integer.valueOf(HOPE_INDEX),STAT.HOPE);
-    _mapIndexToStat.put(Integer.valueOf(PARRY_PERCENTAGE_INDEX),STAT.PARRY_PERCENTAGE);
-    _mapIndexToStat.put(Integer.valueOf(RANGED_DEFENCE_PERCENTAGE_INDEX),STAT.RANGED_DEFENCE_PERCENTAGE);
+    this(STATS);
+  }
+
+  /**
+   * Constructor.
+   * @param stats Stats for each column.
+   */
+  public LotroPlanTable(STAT[] stats)
+  {
+    _stats=stats;
   }
 
   /**
@@ -72,9 +79,11 @@ public class LotroPlanTable
   public ItemStatsProvider loadStats(String[] fields)
   {
     SlicesBasedItemStatsProvider provider=new SlicesBasedItemStatsProvider();
-    for(Map.Entry<Integer,STAT> entry : _mapIndexToStat.entrySet())
+    int nbStats=_stats.length;
+    for(int index=0;index<nbStats;index++)
     {
-      int index=entry.getKey().intValue();
+      STAT stat=_stats[index];
+      if (stat==null) continue;
       if (index>=fields.length) continue;
       String valueStr=fields[index];
       if (valueStr.contains("CALCSLICE"))
@@ -90,7 +99,7 @@ public class LotroPlanTable
         FixedDecimalsInteger value=StatValueParser.parseStatValue(valueStr);
         if (value!=null)
         {
-          provider.setStat(entry.getValue(),value);
+          provider.setStat(stat,value);
         }
       }
     }

@@ -157,9 +157,9 @@ public class LotroPlanItemsDbLoader
     }
     // ID
     String idStr="";
-    if (fields.length>=LotroPlanTable.NOTES)
+    if (fields.length>=LotroPlanTable.NOTES_INDEX)
     {
-      idStr=fields[LotroPlanTable.NOTES].trim();
+      idStr=fields[LotroPlanTable.NOTES_INDEX].trim();
     }
     int id=0;
     if (idStr.startsWith("ID:"))
