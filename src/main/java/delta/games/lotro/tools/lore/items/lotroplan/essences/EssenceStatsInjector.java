@@ -15,6 +15,7 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.stats.ItemStatsProvider;
@@ -26,6 +27,45 @@ import delta.games.lotro.tools.lore.items.lotroplan.LotroPlanTable;
  */
 public class EssenceStatsInjector
 {
+  // iLvl Armour  Might Agility Vitality  Will  Fate  Morale  Power ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas  Resist  CritDef InHeal  Block Parry Evade PhyMit  TacMit  Audacity  Hope  Notes ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP
+  /**
+   * Default cell values.
+   */
+  public static final String[] CELLS={
+    "ID",
+    "Name",
+    "ItemLevel",
+    STAT.ARMOUR.getKey(),
+    STAT.MIGHT.getKey(),
+    STAT.AGILITY.getKey(),
+    STAT.VITALITY.getKey(),
+    STAT.WILL.getKey(),
+    STAT.FATE.getKey(),
+    STAT.MORALE.getKey(),
+    STAT.POWER.getKey(),
+    STAT.ICMR.getKey(),
+    STAT.OCMR.getKey(),
+    STAT.ICPR.getKey(),
+    STAT.OCPR.getKey(),
+    STAT.CRITICAL_RATING.getKey(),
+    STAT.FINESSE.getKey(),
+    STAT.PHYSICAL_MASTERY.getKey(),
+    STAT.TACTICAL_MASTERY.getKey(),
+    STAT.RESISTANCE.getKey(),
+    STAT.CRITICAL_DEFENCE.getKey(),
+    STAT.INCOMING_HEALING.getKey(),
+    STAT.BLOCK.getKey(),
+    STAT.PARRY.getKey(),
+    STAT.EVADE.getKey(),
+    STAT.PHYSICAL_MITIGATION.getKey(),
+    STAT.TACTICAL_MITIGATION.getKey(),
+    STAT.AUDACITY.getKey(),
+    STAT.HOPE.getKey(),
+    "Notes",
+    STAT.EVADE.getKey(),
+    //ArmourP MoraleP PowerP  MelCritP  RngCritP  TacCritP  HealCritP MelMagnP  RngMagnP  TacMagnP  HealMagnP MelDmgP RngDmgP TacDmgP OutHealP  MelIndP RngIndP TacIndP HealIndP  AttDurP RunSpdP CritDefP  InHealP BlockP  ParryP  EvadeP  PblkP PparP PevaP PblkMitP  PparMitP  PevaMitP  MelRedP RngRedP TacRedP PhyMitP TacMitP    
+  };
+
   /**
    * Perform stats injection for essence items.
    * @param items Items.
@@ -52,6 +92,7 @@ public class EssenceStatsInjector
     {
       TextFileReader reader=new TextFileReader(url, EncodingNames.UTF_8);
       List<String> lines=TextUtils.readAsLines(reader);
+      boolean hasId=lines.get(0).startsWith("ID");
       lines.remove(0);
       HashSet<Integer> unmanaged=new HashSet<Integer>();
       unmanaged.addAll(essences.keySet());
@@ -61,44 +102,55 @@ public class EssenceStatsInjector
         String[] fields=StringSplitter.split(line,'\t');
         if (fields.length>2)
         {
-          // Name
-          String name=fields[LotroPlanTable.NAME_INDEX];
-          if (name.startsWith("-"))
+          List<Item> items=findEssences(fields,hasId,essences);
+          for(Item item : items)
           {
-            name=name.substring(1).trim();
-          }
-          List<Item> items=findEssencesByName(essences,name);
-          if (items!=null)
-          {
-            for(Item item : items)
+            if (hasId)
             {
-              unmanaged.remove(Integer.valueOf(item.getIdentifier()));
-              // Item level
-              int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
-              if (itemLevel!=-1)
+              String[] newFields=new String[fields.length-1];
+              for(int i=1;i<fields.length;i++)
               {
-                item.setItemLevel(Integer.valueOf(itemLevel));
-              }
-              // Notes
-              if (fields.length>LotroPlanTable.NOTES)
-              {
-                String notes=fields[LotroPlanTable.NOTES].trim();
-                if (notes.length()>0)
+                newFields[i-1]=fields[i];
+                if (newFields[i-1].equals(CELLS[i]))
                 {
-                  item.getBonus().add(notes);
+                  newFields[i-1]="";
                 }
               }
-              // Tier
-              item.setSubCategory("Essence:Tier"+tier);
-              // Stats
-              ItemStatsProvider provider=table.loadStats(fields);
-              BasicStatsSet stats=item.getStats();
-              stats.setStats(provider.getStats(itemLevel));
+              fields=newFields;
             }
+            unmanaged.remove(Integer.valueOf(item.getIdentifier()));
+            // Item level
+            int itemLevel=NumericTools.parseInt(fields[LotroPlanTable.ITEM_LEVEL_INDEX],-1);
+            if (itemLevel!=-1)
+            {
+              item.setItemLevel(Integer.valueOf(itemLevel));
+            }
+            // Notes
+            if (fields.length>LotroPlanTable.NOTES)
+            {
+              String notes=fields[LotroPlanTable.NOTES].trim();
+              if (notes.length()>0)
+              {
+                item.getBonus().add(notes);
+              }
+            }
+            // Tier
+            item.setSubCategory("Essence:Tier"+tier);
+            // Stats
+            ItemStatsProvider provider=table.loadStats(fields);
+            BasicStatsSet stats=item.getStats();
+            stats.setStats(provider.getStats(itemLevel));
           }
-          else
+          if (items.size()==0)
           {
-            System.out.println("Essence not found: "+name);
+            System.out.println("Essence not found: "+fields[0]);
+          }
+        }
+        else
+        {
+          if (!line.startsWith("#"))
+          {
+            System.err.println("Bad fields count: "+line);
           }
         }
       }
@@ -114,17 +166,32 @@ public class EssenceStatsInjector
     }
   }
 
-  private List<Item> findEssencesByName(HashMap<Integer,Item> essences, String name)
+  private List<Item> findEssences(String[] fields, boolean hasId, HashMap<Integer,Item> essences)
   {
-    List<Item> ret=null;
+    List<Item> ret=new ArrayList<Item>();
+    Integer id=null;
+    if (hasId)
+    {
+      id=NumericTools.parseInteger(fields[0]);
+    }
+    int nameIndex=LotroPlanTable.NAME_INDEX+(hasId?1:0);
+    String name=fields[nameIndex];
+    if (name.startsWith("-"))
+    {
+      name=name.substring(1).trim();
+    }
     for(Item essence : essences.values())
     {
+      if (id!=null)
+      {
+        if (id.intValue()==essence.getIdentifier())
+        {
+          ret.add(essence);
+          return ret;
+        }
+      }
       if (name.equals(essence.getName()))
       {
-        if (ret==null)
-        {
-          ret=new ArrayList<Item>();
-        }
         ret.add(essence);
       }
     }
