@@ -1164,6 +1164,7 @@ public class ItemNormalization
           else if (name.indexOf("blade")!=-1) type=WeaponType.ONE_HANDED_SWORD;
           else if (name.indexOf("great axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
           else if (name.indexOf("oathbreaker's bane")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+          else if (name.indexOf("falchion")!=-1) type=WeaponType.ONE_HANDED_SWORD;
         }
       }
       if (type==null)
