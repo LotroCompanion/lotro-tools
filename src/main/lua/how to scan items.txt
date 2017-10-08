@@ -1,0 +1,25 @@
+Items scanning:
+1) Install the plugin into the directory:
+C:\Users\XXX\Documents\The Lord of the Rings Online\Plugins\GaluhadPlugins\ItemTreasury
+
+2) Start & configure game
+Unload all plugins
+Configure a new tab for console and use select only "Standard" in the filters
+
+3) Scan session:
+- Start logging in the new tab
+- load plugin "Item Treasury"
+- type /ItemDump N
+Where N is the ID of the first item to scan.
+The plugin will scan items N to N+100000. It will finish gracefully or it will crash the game client.
+The log file is available in:
+C:\Users\XXX\Documents\The Lord of the Rings Online\<TabName>_<Date>_<Index>.txt
+
+Repeat scan sessions until all items are scanned.
+
+4) Build the LUA file:
+Merge all console logs into one file.
+Add a line with "{" at the beginning of file.
+Add a line with "};" at the end of file.
+
+5) Use this file as input for the TulkasItemsDBParser (INDEX version).
