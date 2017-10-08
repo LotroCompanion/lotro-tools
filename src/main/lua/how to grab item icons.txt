@@ -1,0 +1,29 @@
+0) Clear all screenshot files ScreenShotNNNNN.jpg from directory ...\Documents\The Lord of the Rings Online.
+
+1) Build the LUA file with the desired items.
+Use main class: delta.games.lotro.tools.lore.items.icons.BuildItemsDbForIcons.
+This will build:
+- a LUA file to use into a modified version of ItemTreasury designed to grab icons with no decoration.
+- a "iconsIds.txt" that will registered the icon IDs for each generated item.
+
+2) Update file 17_1_Items.lua with the items you want to get icons for.
+Restart the plugin.
+
+Type /item to get the ItemTreasury UI.
+
+Select database "Full".
+Push button "Go".
+
+Icons will appear. Screenshot the first screen.
+Navigate page after page using button ">". Screenshot each window.
+
+3) Use main class: delta.games.lotro.tools.lore.items.icons.IconsExtractor to generate icon files.
+Look into the source code:
+- update the directory path for the input screenshot files.
+- update directory path for the result icons.
+- Modify START_X and START_Y so that it points to the higher left corner of the first top left icon.
+One can use Gimp to find out these values.
+
+Start the program.
+You shall get icons in the result directory.
+Icon file names are: iconID-backgroundId.png
