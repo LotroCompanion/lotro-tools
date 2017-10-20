@@ -271,12 +271,10 @@ public class RelicsIndexPageParser
     {
       ret=new STAT[]{STAT.RESISTANCE};
     }
-    /*
     else if (statName.contains("Outgoing Healing Rating"))
     {
-      //ret=new STAT[]{STAT.};
+      ret=new STAT[]{STAT.OUTGOING_HEALING};
     }
-    */
     else if (statName.contains("Tactical Offence Rating"))
     {
       ret=new STAT[]{STAT.TACTICAL_MASTERY};
