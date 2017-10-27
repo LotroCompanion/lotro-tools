@@ -25,7 +25,42 @@ public class QuestsDatabaseGenerator
   {
     _workDir=FileSystem.getTmpDir();
     _questsDir=new File(_workDir,"quests");
-    //_questsDir=Config.getInstance().getQuestsDir();
+  }
+
+  /**
+   * Get the managed quests directory.
+   * @return A directory.
+   */
+  public File getQuestsDir()
+  {
+    return _questsDir;
+  }
+
+  /**
+   * Write a quests database from the files in the managed quests directory.
+   * @return <code>true</code> if it was successful, <code>false</code> otherwise.
+   */
+  public boolean writeDatabase()
+  {
+    // 3 - build quest index
+    File questsIndexFile=new File(_workDir,"questsIndex.xml");
+    QuestsIndexBuilder questsIndexBuilder=new QuestsIndexBuilder(_questsDir,questsIndexFile);
+    boolean indexOK=questsIndexBuilder.doIt();
+    if (!indexOK)
+    {
+      _logger.error("Cannot build quests index! Stopping.");
+      return false;
+    }
+    // 4 - archive quests
+    File archiveFile=new File(_workDir,"quests.zip");
+    QuestsArchiveBuilder archiveBuilder=new QuestsArchiveBuilder(_questsDir,archiveFile);
+    boolean archiveOK=archiveBuilder.doIt();
+    if (!archiveOK)
+    {
+      _logger.error("Cannot build quests archive! Stopping.");
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -50,24 +85,7 @@ public class QuestsDatabaseGenerator
       _logger.error("Cannot load quests! Stopping.");
       return;
     }
-    // 3 - build quest index
-    File questsIndexFile=new File(_workDir,"questsIndex.xml");
-    QuestsIndexBuilder questsIndexBuilder=new QuestsIndexBuilder(_questsDir,questsIndexFile);
-    boolean indexOK=questsIndexBuilder.doIt();
-    if (!indexOK)
-    {
-      _logger.error("Cannot build quests index! Stopping.");
-      return;
-    }
-    // 4 - archive quests
-    File archiveFile=new File(_workDir,"quests.zip");
-    QuestsArchiveBuilder archiveBuilder=new QuestsArchiveBuilder(_questsDir,archiveFile);
-    boolean archiveOK=archiveBuilder.doIt();
-    if (!archiveOK)
-    {
-      _logger.error("Cannot build quests archive! Stopping.");
-      return;
-    }
+    writeDatabase();
   }
 
   /**

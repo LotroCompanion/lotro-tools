@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,14 +13,13 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.recipes.CraftingResult;
 import delta.games.lotro.lore.recipes.Ingredient;
 import delta.games.lotro.lore.recipes.ItemReference;
 import delta.games.lotro.lore.recipes.Recipe;
 import delta.games.lotro.lore.recipes.RecipeVersion;
 import delta.games.lotro.lore.recipes.RecipesManager;
+import delta.games.lotro.tools.lore.items.ItemsResolver;
 
 /**
  * Resolve items referenced in recipe files.
@@ -40,65 +38,11 @@ public class ResolveItemLinksInRecipes
 
   private void doIt()
   {
-    HashMap<String,List<Integer>> ids=loadFileIds();
-    handleRecipes(ids);
+    ItemsResolver resolver=new ItemsResolver();
+    handleRecipes(resolver);
   }
 
-  /**
-   * Load map (keys/names)->list of item ids
-   * @return a map.
-   */
-  private HashMap<String,List<Integer>> loadFileIds()
-  {
-    HashMap<String,List<Integer>> idStr2Id=new HashMap<String,List<Integer>>(); 
-    ItemsManager mgr=ItemsManager.getInstance();
-    List<Item> items=mgr.getAllItems();
-    for(Item item : items)
-    {
-      int id=item.getIdentifier();
-      String key=item.getKey();
-      registerMapping(idStr2Id,key,id);
-      String name=item.getName();
-      registerMapping(idStr2Id,name,id);
-      String legacyName=item.getProperty(ItemPropertyNames.LEGACY_NAME);
-      registerMapping(idStr2Id,legacyName,id);
-      String oldTulkasName=item.getProperty(ItemPropertyNames.OLD_TULKAS_NAME);
-      registerMapping(idStr2Id,oldTulkasName,id);
-    }
-    // Dump keys
-    List<String> keys=new ArrayList<String>(idStr2Id.keySet());
-    Collections.sort(keys);
-    for(String key : keys)
-    {
-      List<Integer> ids=idStr2Id.get(key);
-      //if (ids.size()>1)
-      {
-        System.out.println("*************** "+key+" ******************");
-        Collections.sort(ids);
-        for(Integer id : ids)
-        {
-          System.out.println("\t"+id);
-        }
-      }
-    }
-    return idStr2Id;
-  }
-
-  private void registerMapping(HashMap<String,List<Integer>> idStr2Id, String key, int id)
-  {
-    if (key!=null)
-    {
-      List<Integer> ids=idStr2Id.get(key);
-      if (ids==null)
-      {
-        ids=new ArrayList<Integer>();
-        idStr2Id.put(key,ids);
-      }
-      ids.add(Integer.valueOf(id));
-    }
-  }
-
-  private void handleRecipes(HashMap<String,List<Integer>> ids)
+  private void handleRecipes(ItemsResolver resolver)
   {
     // Load recipes
     RecipesManager rMgr=RecipesManager.getInstance();
@@ -120,7 +64,7 @@ public class ResolveItemLinksInRecipes
           for(Ingredient ingredient : ingredients)
           {
             ItemReference itemRef=ingredient.getItem();
-            handleItemRef(ids,missingKeys,itemRef);
+            handleItemRef(resolver,missingKeys,itemRef);
           }
           /*
           ItemReference scroll=recipe.getRecipeScroll();
@@ -136,13 +80,13 @@ public class ResolveItemLinksInRecipes
             if (regular!=null)
             {
               ItemReference ref=regular.getItem();
-              handleItemRef(ids,missingKeys,ref);
+              handleItemRef(resolver,missingKeys,ref);
             }
             CraftingResult critical=version.getCritical();
             if (critical!=null)
             {
               ItemReference ref=critical.getItem();
-              handleItemRef(ids,missingKeys,ref);
+              handleItemRef(resolver,missingKeys,ref);
             }
           }
         }
@@ -158,43 +102,16 @@ public class ResolveItemLinksInRecipes
     }
   }
 
-  private void handleItemRef(HashMap<String,List<Integer>> ids, Set<String> missingKeys, ItemReference itemRef)
+  private void handleItemRef(ItemsResolver resolver, Set<String> missingKeys, ItemReference itemRef)
   {
-    String key=itemRef.getItemKey();
-    /*
-    key=key.replace("'","%27");
-    key=key.replace("â","%C3%A2");
-    key=key.replace("ú","%C3%BA");
-    key=key.replace("ó","%C3%B3");
-    key=key.replace("û","%C3%BB");
-    */
-
-    List<Integer> intIds=ids.get(key);
-    if (intIds!=null)
+    Item item=resolver.resolveLorebookKey(itemRef.getItemKey());
+    if (item!=null)
     {
-      if (intIds.size()>1)
-      {
-        System.out.println("Warn: "+key+" : "+intIds.size()+" : "+intIds);
-      }
-      else
-      {
-        int id=intIds.get(0).intValue();
-        itemRef.setItemId(id);
-      }
+      itemRef.setItemId(item.getIdentifier());
     }
     else
     {
-      if (key.startsWith("Item:"))
-      {
-        key=key.substring(5);
-        key=key.replace("_"," ");
-        intIds=ids.get(key);
-        if (intIds==null)
-        {
-          missingKeys.add(key);
-        }
-      }
-      //System.out.println("No item for key : "+key);
+      missingKeys.add(itemRef.getItemKey());
     }
   }
 }
