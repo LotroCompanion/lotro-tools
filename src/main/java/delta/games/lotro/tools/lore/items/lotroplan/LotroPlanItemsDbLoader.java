@@ -32,7 +32,7 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
 public class LotroPlanItemsDbLoader
 {
   //private static final String[] NAMES={};
-  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt"};
+  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt", "mordor.txt"};
 
   private String _section;
   private ItemsMerger _merger;
@@ -107,7 +107,8 @@ public class LotroPlanItemsDbLoader
     List<Item> items=new ArrayList<Item>();
     //_fields=StringSplitter.split(lines.get(0),'\t');
     lines.remove(0);
-    LotroPlanTable table=new LotroPlanTable();
+    boolean mordor=filename.contains("mordor");
+    LotroPlanTable table=new LotroPlanTable(mordor);
     for(String line : lines)
     {
       Item item=buildItemFromLine(table, line);
@@ -157,17 +158,21 @@ public class LotroPlanItemsDbLoader
     }
     // ID
     String idStr="";
-    if (fields.length>=LotroPlanTable.NOTES_INDEX)
+    int notesIndex=table.getNotesIndex();
+    if (fields.length>=notesIndex)
     {
-      idStr=fields[LotroPlanTable.NOTES_INDEX].trim();
+      idStr=fields[notesIndex].trim();
     }
     int id=0;
     if (idStr.startsWith("ID:"))
     {
       idStr=idStr.substring(3).trim();
-      id=NumericTools.parseInt(idStr,-1);
     }
-    item.setIdentifier(id);
+    id=NumericTools.parseInt(idStr,-1);
+    if (id!=-1)
+    {
+      item.setIdentifier(id);
+    }
     // Name
     String name=fields[LotroPlanTable.NAME_INDEX];
     if (name.startsWith("("))
@@ -243,9 +248,10 @@ public class LotroPlanItemsDbLoader
 
     // Class requirement
     String classRequirementStr="";
-    if (fields.length>=LotroPlanTable.CLASSES_INDEX)
+    int classesIndex=table.getClassesIndex();
+    if (fields.length>=classesIndex)
     {
-      classRequirementStr=fields[LotroPlanTable.CLASSES_INDEX].trim();
+      classRequirementStr=fields[classesIndex].trim();
     }
     CharacterClass classRequirement=getClassRequirement(classRequirementStr);
     if (classRequirement!=null)

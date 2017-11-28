@@ -55,7 +55,7 @@ public class LotroPlanRelicsDbLoader
     List<String> lines=TextUtils.readAsLines(reader);
     List<Relic> items=new ArrayList<Relic>();
     lines.remove(0);
-    LotroPlanTable table=new LotroPlanTable();
+    LotroPlanTable table=new LotroPlanTable(false);
     for(String line : lines)
     {
       Relic relic=buildRelicFromLine(table, line, type);
