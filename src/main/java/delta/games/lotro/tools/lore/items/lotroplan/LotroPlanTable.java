@@ -82,6 +82,7 @@ public class LotroPlanTable
 
   /**
    * Constructor.
+   * @param mordor Use mordor columns or previous ones.
    */
   public LotroPlanTable(boolean mordor)
   {
@@ -104,11 +105,19 @@ public class LotroPlanTable
     _notesIndex=NOTES_INDEX;
   }
 
+  /**
+   * Get the field index for class requirement.
+   * @return A field index.
+   */
   public int getClassesIndex()
   {
     return _classesIndex;
   }
 
+  /**
+   * Get the field index for notes.
+   * @return A field index.
+   */
   public int getNotesIndex()
   {
     return _notesIndex;
