@@ -7,10 +7,10 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.lore.recipes.Recipe;
-import delta.games.lotro.lore.recipes.index.RecipesIndex;
-import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexXMLParser;
-import delta.games.lotro.lore.recipes.io.xml.RecipeXMLWriter;
+import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.index.RecipesIndex;
+import delta.games.lotro.lore.crafting.recipes.index.io.xml.RecipesIndexXMLParser;
+import delta.games.lotro.lore.crafting.recipes.io.xml.RecipeXMLWriter;
 import delta.games.lotro.utils.Escapes;
 import delta.games.lotro.utils.LotroLoggers;
 

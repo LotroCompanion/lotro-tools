@@ -2,8 +2,8 @@ package delta.games.lotro.tools.lore.region;
 
 import java.util.Arrays;
 
-import delta.games.lotro.region.Area;
-import delta.games.lotro.region.Region;
+import delta.games.lotro.lore.region.Area;
+import delta.games.lotro.lore.region.Region;
 
 /**
  * Test for region description parsing.

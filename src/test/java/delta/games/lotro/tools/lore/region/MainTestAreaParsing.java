@@ -1,6 +1,6 @@
 package delta.games.lotro.tools.lore.region;
 
-import delta.games.lotro.region.Area;
+import delta.games.lotro.lore.region.Area;
 
 /**
  * Test for area description parsing.

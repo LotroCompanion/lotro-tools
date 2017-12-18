@@ -9,7 +9,7 @@ import net.htmlparser.jericho.Source;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.region.Area;
+import delta.games.lotro.lore.region.Area;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.DownloadService;
 import delta.games.lotro.utils.LotroLoggers;

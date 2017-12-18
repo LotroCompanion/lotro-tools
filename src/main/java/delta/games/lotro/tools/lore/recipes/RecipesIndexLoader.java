@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.lore.recipes.index.RecipeSummary;
-import delta.games.lotro.lore.recipes.index.RecipesIndex;
-import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexXMLWriter;
+import delta.games.lotro.lore.crafting.recipes.index.RecipeSummary;
+import delta.games.lotro.lore.crafting.recipes.index.RecipesIndex;
+import delta.games.lotro.lore.crafting.recipes.index.io.xml.RecipesIndexXMLWriter;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**

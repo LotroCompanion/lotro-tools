@@ -4,10 +4,10 @@ import java.io.File;
 
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.lore.recipes.Recipe;
-import delta.games.lotro.lore.recipes.index.RecipesIndex;
-import delta.games.lotro.lore.recipes.index.io.xml.RecipesIndexXMLWriter;
-import delta.games.lotro.lore.recipes.io.xml.RecipeXMLParser;
+import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.index.RecipesIndex;
+import delta.games.lotro.lore.crafting.recipes.index.io.xml.RecipesIndexXMLWriter;
+import delta.games.lotro.lore.crafting.recipes.io.xml.RecipeXMLParser;
 
 /**
  * Builds a recipes index for a series of recipe definition files. 

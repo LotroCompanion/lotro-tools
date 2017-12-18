@@ -10,7 +10,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.environment.FileSystem;
 import delta.common.utils.text.TextTools;
 import delta.downloads.Downloader;
-import delta.games.lotro.lore.recipes.index.RecipesIndex;
+import delta.games.lotro.lore.crafting.recipes.index.RecipesIndex;
 import delta.games.lotro.utils.LotroLoggers;
 
 /**

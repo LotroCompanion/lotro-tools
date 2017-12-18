@@ -12,13 +12,13 @@ import java.util.Set;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.games.lotro.LotroCoreConfig;
+import delta.games.lotro.lore.crafting.recipes.CraftingResult;
+import delta.games.lotro.lore.crafting.recipes.Ingredient;
+import delta.games.lotro.lore.crafting.recipes.ItemReference;
+import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
+import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.recipes.CraftingResult;
-import delta.games.lotro.lore.recipes.Ingredient;
-import delta.games.lotro.lore.recipes.ItemReference;
-import delta.games.lotro.lore.recipes.Recipe;
-import delta.games.lotro.lore.recipes.RecipeVersion;
-import delta.games.lotro.lore.recipes.RecipesManager;
 import delta.games.lotro.tools.lore.items.ItemsResolver;
 
 /**
