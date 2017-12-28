@@ -1,0 +1,70 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	OutHeal	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	LoE	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP	Category	Classes	MinLvl	MaxLvl	CategoryId	QualityId	SlotId	ClassId	EssSlots	SliceTot	SliceChk
+- Abyssal Gem of Agility	337			340																7386										1879351147																																						Relics	*	115		109	2	63			2	
+- Abyssal Gem of Fate	337						340													7386										1879351106																																						Relics	*	115		109	2	63			2	
+- Abyssal Gem of Might	337		340																	7386										1879351119																																						Relics	*	115		109	2	63			2	
+- Abyssal Gem of Vitality	337				567															7386										1879351118																																						Relics	*	115		109	2	63			2	
+- Abyssal Gem of Will	337					340														7386										1879351141																																						Relics	*	115		109	2	63			2	
+- Abyssal Rune of Force	337													1766		4636														1879351133																																						Relics	*	115		109	2	63			1,6	-0,4
+- Abyssal Rune of Healing	337													1766				2944												1879351125																																						Relics	*	115		109	2	63			0,6	-1,4
+- Abyssal Rune of Power	337													1766			4636													1879351112																																						Relics	*	115		109	2	63			1,6	-0,4
+- Abyssal Setting of Brutality	337													2944									3975	2650						1879351115																																						Relics	*	115		109	2	63			2	
+- Abyssal Setting of Defence	337																					6624	6624							1879351142																																						Relics	*	115		109	2	63			2	
+- Abyssal Setting of Finesse	337														8922									6624						1879351154																																						Relics	*	115		109	2	63			2	
+- Abyssal Setting of Resistance	337																		4463							6625				1879351145																																						Relics	*	115		109	2	63			2	
+- Expedition Gem of Agility	300			195																4245										1879351151																																						Relics	*			109	2	63			2	
+- Expedition Gem of Fate	300						195													4245										1879351146																																						Relics	*			109	2	63			2	
+- Expedition Gem of Might	300		195																	4245										1879351126																																						Relics	*			109	2	63			2	
+- Expedition Gem of Vitality	300				326															4245										1879351158																																						Relics	*			109	2	63			2	
+- Expedition Gem of Will	300					195														4245										1879351128																																						Relics	*			109	2	63			2	
+- Expedition Rune of Force	300													1015		3384														1879351149																																						Relics	*			109	2	63			1,6	-0,4
+- Expedition Rune of Healing	300													1015				5700												1879351156																																						Relics	*			109	2	63			1,6	-0,4
+- Expedition Rune of Power	300													1015			3384													1879351110																																						Relics	*			109	2	63			1,6	-0,4
+- Expedition Setting of Brutality	300													1692									2284	1523						1879351086																																						Relics	*			109	2	63			2	
+- Expedition Setting of Defence	300																					3807	3807							1879351132																																						Relics	*			109	2	63			2	
+- Expedition Setting of Finesse	300														5128									3807						1879351116																																						Relics	*			109	2	63			2	
+- Expedition Setting of Resistance	300																		2565							3808				1879351123																																						Relics	*			109	2	63			2	
+- Grand Abyssal Gem of Agility	345			371																8066										1879351143																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Gem of Fate	345						371													8066										1879351103																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Gem of Might	345		371																	8066										1879351114																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Gem of Vitality	345				619															8066										1879351113																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Gem of Will	345					371														8066										1879351131																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Rune of Binding	345													2572																1879364550																																						Relics	*	115		109	3	63			0,8	-1,2
+- Grand Abyssal Rune of Enchantment	345													2572																1879364549																																						Relics	*	115		109	3	63			0,8	-1,2
+- Grand Abyssal Rune of Striking	345													2572																1879364548																																						Relics	*	115		109	3	63			0,8	-1,2
+- Grand Abyssal Setting of Brutality	345													3215									4340	2893						1879351121																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Setting of Defence	345																					7233	7233							1879351148																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Setting of Finesse	345														9743									7233						1879351157																																						Relics	*	115		109	2	63			2	
+- Grand Abyssal Setting of Resistance	345																		4874							7235				1879351150																																						Relics	*	115		109	2	63			2	
+- Incomparable Vanguard Rune of Binding	330													1624																1879361270																																						Relics	*	115		109	3	63			2	
+- Incomparable Vanguard Rune of Enchantment	330													1624																1879361272																																						Relics	*	115		109	3	63			2	
+- Incomparable Vanguard Rune of Striking	330													1624																1879361273																																						Relics	*	115		109	3	63			2	
+- Last Alliance Gem of Agility	326			297																6452										1879351130																																						Relics	*			109	2	63			2	
+- Last Alliance Gem of Fate	326						297													6452										1879351144																																						Relics	*			109	2	63			2	
+- Last Alliance Gem of Might	326		297																	6452										1879351137																																						Relics	*			109	2	63			2	
+- Last Alliance Gem of Vitality	326				495															6452										1879351138																																						Relics	*			109	2	63			2	
+- Last Alliance Gem of Will	326					297														6452										1879351139																																						Relics	*			109	2	63			2	
+- Last Alliance Rune of Force	326													1543		4264														1879351129																																						Relics	*			109	2	63			1,6	-0,4
+- Last Alliance Rune of Healing	326													1543				7182												1879351105																																						Relics	*			109	2	63			1,6	-0,4
+- Last Alliance Rune of Power	326													1543			4264													1879351152																																						Relics	*			109	2	63			1,6	-0,4
+- Last Alliance Setting of Brutality	326													2572									3472	2315						1879351160																																						Relics	*			109	2	63			2	
+- Last Alliance Setting of Defence	326																					5787	5787							1879351155																																						Relics	*			109	2	63			2	
+- Last Alliance Setting of Finesse	326														7794									5787						1879351122																																						Relics	*			109	2	63			2	
+- Last Alliance Setting of Resistance	326																		3899							5788				1879351104																																						Relics	*			109	2	63			2	
+- TBD T3 Rune of Power	345													1929			4907													1879351102																																						Relics	*	115		109	2	63			1,6	-0,4
+- TBD T3 Rune of Healing	345													1929				8265												1879351127																																						Relics	*	115		109	2	63			1,6	-0,4
+- TBD T3 Rune of Force	345													1929		4907														1879351136																																						Relics	*	115		109	2	63			1,6	-0,4
+- Rare Vanguard Rune of Binding	330													1624																1879361268																																						Relics	*	115		109	2	63			0,6	-1,4
+- Rare Vanguard Rune of Enchantment	330													1624																1879361269																																						Relics	*	115		109	2	63			0,6	-1,4
+- Rare Vanguard Rune of Striking	330													1624																1879361271																																						Relics	*	115		109	2	63			0,6	-1,4
+- Vanguard Gem of Agility	330			313																6792										1879351107																																						Relics	*	115		109	2	63			2	
+- Vanguard Gem of Fate	330						313													6792										1879351124																																						Relics	*	115		109	2	63			2	
+- Vanguard Gem of Might	330		313																	6792										1879351135																																						Relics	*	115		109	2	63			2	
+- Vanguard Gem of Vitality	330				522															6792										1879351134																																						Relics	*	115		109	2	63			2	
+- Vanguard Gem of Will	330					313														6792										1879351159																																						Relics	*	115		109	2	63			2	
+- Vanguard Rune of Force	330													1624		4399														1879351117																																						Relics	*	115		109	2	63			1,6	-0,4
+- Vanguard Rune of Healing	330													1624				7410												1879351108																																						Relics	*	115		109	2	63			1,6	-0,4
+- Vanguard Rune of Power	330													1624			4399													1879351153																																						Relics	*	115		109	2	63			1,6	-0,4
+- Vanguard Setting of Brutality	330													2707									3655	2436						1879351140																																						Relics	*	115		109	2	63			2	
+- Vanguard Setting of Defence	330																					6091	6091							1879351109																																						Relics	*	115		109	2	63			2	
+- Vanguard Setting of Finesse	330														8204									6091						1879351120																																						Relics	*	115		109	2	63			2	
+- Vanguard Setting of Resistance	330																		4104							6092				1879351111																																						Relics	*	115		109	2	63			2	

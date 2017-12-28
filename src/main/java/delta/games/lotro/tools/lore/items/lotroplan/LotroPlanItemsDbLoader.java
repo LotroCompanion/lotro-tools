@@ -98,7 +98,12 @@ public class LotroPlanItemsDbLoader
     }
   }
 
-  private List<Item> loadTable(String filename)
+  /**
+   * Load the items in a table.
+   * @param filename Table name.
+   * @return A list of items.
+   */
+  public List<Item> loadTable(String filename)
   {
     _section=null;
     URL url=URLTools.getFromClassPath(filename,LotroPlanItemsDbLoader.class.getPackage());

@@ -19,6 +19,7 @@ import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
+import delta.games.lotro.tools.lore.items.lotroplan.relics.LotroPlanMordorRelicsLoader;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.LotroLoggers;
@@ -378,8 +379,8 @@ public class RelicsIndexPageParser
       handleTable("Wildermore Relics (Level 85)",source,"Wildermore_Relics_.28Level_85.29",Integer.valueOf(85),null);
       // Westemnet Relics (Level 90)
       handleTable("Westemnet Relics (Level 90)",source,"Westemnet_Relics_.28Level_90.29",Integer.valueOf(90),null);
-      // Gorgoroth (Level 100)
-      handleTable("Gorgoroth (Last Alliance) (Level 100)",source,"Gorgoroth_.28Last_Alliance.29_Relics_.28Level_100.29",null,null);
+      // Gorgoroth Relics
+      handleTable("Gorgoroth Relics",source,"Gorgoroth_.28Last_Alliance.29_Relics_.28Level_100.29",null,null);
 
       // Ignore bridles
       /*
@@ -415,16 +416,65 @@ public class RelicsIndexPageParser
     return _relicsMgr;
   }
 
+  private RelicsCategory findGorgorothCategory(RelicsManager relicsMgr)
+  {
+    List<String> categories=relicsMgr.getCategories();
+    for(String category : categories)
+    {
+      if (category.startsWith("Gorgoroth"))
+      {
+        return relicsMgr.getRelicCategory(category,false);
+      }
+    }
+    return null;
+  }
+
+  private void addGorgorothRelics(RelicsManager relicsMgr)
+  {
+    RelicsCategory category=findGorgorothCategory(relicsMgr);
+    if (category!=null)
+    {
+      LotroPlanMordorRelicsLoader relicsLoader=new LotroPlanMordorRelicsLoader();
+      List<Relic> relics=relicsLoader.loadGorgorothRelics();
+      for(Relic relic : relics)
+      {
+        String name=relic.getName();
+        Relic oldOne=category.getByName(name);
+        if (oldOne!=null)
+        {
+          mergeRelics(oldOne,relic);
+        }
+        else
+        {
+          category.addRelic(relic);
+        }
+      }
+    }
+  }
+
+  private void mergeRelics(Relic oldOne, Relic newOne)
+  {
+    System.out.println("mergind: "+oldOne+" with "+newOne);
+    Integer newRequiredLevel=newOne.getRequiredLevel();
+    oldOne.setRequiredLevel(newRequiredLevel);
+  }
+
+  private void doIt()
+  {
+    RelicsIndexPageParser parser=new RelicsIndexPageParser();
+    RelicsManager relicsMgr=parser.parseRelicsIndex();
+    addGorgorothRelics(relicsMgr);
+    File toFile=new File("relics.xml").getAbsoluteFile();
+    relicsMgr.writeRelicsFile(toFile);
+    System.out.println("Wrote file: "+toFile);
+  }
+
   /**
    * Main method for this tool.
    * @param args Not used.
    */
   public static void main(String[] args)
   {
-    RelicsIndexPageParser parser=new RelicsIndexPageParser();
-    RelicsManager relicsMgr=parser.parseRelicsIndex();
-    File toFile=new File("relics.xml").getAbsoluteFile();
-    relicsMgr.writeRelicsFile(toFile);
-    System.out.println("Wrote file: "+toFile);
+    new RelicsIndexPageParser().doIt();
   }
 }

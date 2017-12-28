@@ -2691,7 +2691,7 @@ relic shards.
 </td></tr>
 <tr class="even">
 <td>
-<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Defense-icon.png" class="image"><img alt="Last Alliance Setting of Defense-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Defense-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Defense"><span class="ajaxttlink qc-">Last Alliance Setting of Defense</span></a>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Defense-icon.png" class="image"><img alt="Last Alliance Setting of Defense-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Defense-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Defense"><span class="ajaxttlink qc-">Last Alliance Setting of Defence</span></a>
 </p>
 </td>
 <td> +5787 Block Rating, +5787 Parry Rating
