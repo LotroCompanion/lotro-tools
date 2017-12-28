@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html dir="ltr" class="client-js" lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script async="" src="Relics%20-%20Lotro-Wiki.com_files/analytics.js"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_004.php"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_006.php"></script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script src="Relics%20-%20Lotro-Wiki.com_files/rum.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/ca-pub-3691143277084659.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/show_ads_impl_single_load.js"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/analytics.js"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_005.php"></script><script async="" src="Relics%20-%20Lotro-Wiki.com_files/load_006.php"></script>
 <meta charset="UTF-8">
 <title>Relics - Lotro-Wiki.com</title>
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
@@ -28,7 +28,7 @@ table.jquery-tablesorter th.headerSort{background-image:url(data:image/gif;base6
 <link rel="stylesheet" href="Relics%20-%20Lotro-Wiki.com_files/load.css">
 <style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
 /* cache key: lotrowik_wikidb-lotro:resourceloader:filter:minify-css:7:91e57afcf6f764cd47c46d0433d64486 */</style>
-<script src="Relics%20-%20Lotro-Wiki.com_files/ca-pub-3691143277084659.js"></script><script type="text/javascript" async="" src="Relics%20-%20Lotro-Wiki.com_files/ga.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_005.php"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_003.php"></script>
+<script type="text/javascript" async="" src="Relics%20-%20Lotro-Wiki.com_files/ga.js"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_003.php"></script><script src="Relics%20-%20Lotro-Wiki.com_files/load_004.php"></script>
 <script>if(window.mw){
 mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Relics","wgTitle":"Relics","wgCurRevisionId":853260,"wgRevisionId":853260,"wgArticleId":41824,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages with broken file links","Relics"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Relics","wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"previewDialog":false,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":20,\"hideprefix\":10,\"showcount\":true,\"namespaces\":[0,2,6,12,14,100,102,104,106,108]}"});
 }</script><script>if(window.mw){
@@ -50,7 +50,7 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-</script><script src="Relics%20-%20Lotro-Wiki.com_files/index.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_011.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_006.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_003.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_002.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_009.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_010.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_008.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_007.php" type="text/javascript"></script></head>
+</script><script src="Relics%20-%20Lotro-Wiki.com_files/index.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_010.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_004.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_008.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_002.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_007.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_009.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_006.php" type="text/javascript"></script><script src="Relics%20-%20Lotro-Wiki.com_files/index_005.php" type="text/javascript"></script><link rel="preload" href="Relics%20-%20Lotro-Wiki.com_files/show_ads_impl_single_load.js" as="script"><link rel="preload" href="Relics%20-%20Lotro-Wiki.com_files/integrator_002.js" as="script"><script type="text/javascript" src="Relics%20-%20Lotro-Wiki.com_files/integrator_002.js"></script><link rel="preload" href="Relics%20-%20Lotro-Wiki.com_files/integrator.js" as="script"><script type="text/javascript" src="Relics%20-%20Lotro-Wiki.com_files/integrator.js"></script></head>
 <body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Relics skin-vector action-view vector-animateLayout yfh-flash-plugin-new">
 		<div id="mw-page-base" class="noprint"></div>
 		<div id="mw-head-base" class="noprint"></div>
@@ -2684,7 +2684,7 @@ relic shards.
 </th></tr>
 <tr class="odd">
 <td>
-<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Brutality-icon.png" class="image"><img alt="Last Alliance Setting of Brutality-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Brutality-icon.png" width="26" height="26"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Brutality"><span class="ajaxttlink qc-">Last Alliance Setting of Brutality</span></a>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Brutality-icon.png" class="image"><img alt="Last Alliance Setting of Brutality-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Brutality-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Brutality" title="Relic:Last Alliance Setting of Brutality"><span class="ajaxttlink qc-">Last Alliance Setting of Brutality</span></a>
 </p>
 </td>
 <td> +2572 Critical Rating, +3472 Parry Rating, +2315 Evade Rating
@@ -2705,7 +2705,7 @@ relic shards.
 </td></tr>
 <tr class="even">
 <td>
-<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Resistance-icon.png" class="image"><img alt="Last Alliance Setting of Resistance-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Resistance-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Resistance"><span class="ajaxttlink qc-">Last Alliance Setting of Resistance</span></a>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Setting_of_Resistance-icon.png" class="image"><img alt="Last Alliance Setting of Resistance-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Setting_of_Resistance-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Setting_of_Resistance" title="Relic:Last Alliance Setting of Resistance"><span class="ajaxttlink qc-">Last Alliance Setting of Resistance</span></a>
 </p>
 </td>
 <td> +5788 Tactical Mitigation, +3899 Resistance Rating
@@ -2719,10 +2719,24 @@ relic shards.
 </td></tr>
 <tr class="even">
 <td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Fate-icon.png" class="image"><img alt="Last Alliance Gem of Fate-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Fate-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Fate"><span class="ajaxttlink qc-">Last Alliance Gem of Fate</span></a>
+</p>
+</td>
+<td> +297 Fate, +6452 Critical Defence
+</td></tr>
+<tr class="odd">
+<td>
 <p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Might-icon.png" class="image"><img alt="Last Alliance Gem of Might-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Might-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Might"><span class="ajaxttlink qc-">Last Alliance Gem of Might</span></a>
 </p>
 </td>
 <td> +297 Might, +6452 Critical Defence
+</td></tr>
+<tr class="even">
+<td>
+<p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Gem_of_Vitality-icon.png" class="image"><img alt="Last Alliance Gem of Vitality-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Gem_of_Vitality-icon.png" width="32" height="32"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Gem_of_Vitality"><span class="ajaxttlink qc-">Last Alliance Gem of Vitality</span></a>
+</p>
+</td>
+<td> +495 Vitality, +6452 Critical Defence
 </td></tr>
 <tr class="odd">
 <td>
@@ -2736,7 +2750,7 @@ relic shards.
 <p><a href="http://lotro-wiki.com/index.php/File:Last_Alliance_Rune_of_Force-icon.png" class="image"><img alt="Last Alliance Rune of Force-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Last_Alliance_Rune_of_Force-icon.png" width="27" height="27"></a>&nbsp;<a href="http://lotro-wiki.com/index.php/Relic%3ALast_Alliance_Rune_of_Force"><span class="ajaxttlink qc-">Last Alliance Rune of Force</span></a>
 </p>
 </td>
-<td> +4264 Physical Mastery Rating, +1542 Critical Rating
+<td> +4264 Physical Mastery Rating, +1543 Critical Rating
 </td></tr>
 <tr class="odd">
 <td>
@@ -3532,7 +3546,7 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_the_Stinging_Swarm" title="Relic:Eastemnet Bridle Insignia of the Stinging Swarm">Eastemnet Bridle Insignia of the Stinging Swarm</a> </td>
 <td align="center"> 80 </td>
 <td>
-<p>+5% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Bee_Swarm_%28Beorning_Skill%29" title="Bee Swarm (Beorning Skill)">Bee Swarm</a>
+<p>+5% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Bee_Swarm_(Beorning_Skill)" title="Bee Swarm (Beorning Skill)">Bee Swarm</a>
 </p>
 </td>
 <td> Beorning </td>
@@ -3543,7 +3557,7 @@ relic shards.
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_the_Stinging_Swarm" title="Relic:Westemnet Bridle Insignia of the Stinging Swarm">Westemnet Bridle Insignia of the Stinging Swarm</a> </td>
 <td align="center"> 80 </td>
 <td>
-<p>+7% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Bee_Swarm_%28Beorning_Skill%29" title="Bee Swarm (Beorning Skill)">Bee Swarm</a>
+<p>+7% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Bee_Swarm_(Beorning_Skill)" title="Bee Swarm (Beorning Skill)">Bee Swarm</a>
 </p>
 </td>
 <td> Beorning </td>
@@ -3571,7 +3585,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php?title=Special:Upload&amp;wpDestFile=Beorning_Relic-icon.png" class="new" title="File:Beorning Relic-icon.png">File:Beorning Relic-icon.png</a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_the_Claw" title="Relic:Eastemnet Bridle Insignia of the Claw">Eastemnet Bridle Insignia of the Stinging Claw</a> </td>
 <td align="center"> 80 </td>
-<td> +3 Slash and <a href="http://lotro-wiki.com/index.php/Bee_Swarm_%28Beorning_Skill%29" title="Bee Swarm (Beorning Skill)">Bee Swarm</a> Wrath generation </td>
+<td> +3 Slash and <a href="http://lotro-wiki.com/index.php/Bee_Swarm_(Beorning_Skill)" title="Bee Swarm (Beorning Skill)">Bee Swarm</a> Wrath generation </td>
 <td> Beorning </td>
 <td> All guilds
 </td></tr>
@@ -3579,7 +3593,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php?title=Special:Upload&amp;wpDestFile=Beorning_Relic-icon.png" class="new" title="File:Beorning Relic-icon.png">File:Beorning Relic-icon.png</a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_the_Claw" title="Relic:Westemnet Bridle Insignia of the Claw">Westemnet Bridle Insignia of the Stinging Claw</a> </td>
 <td align="center"> 80 </td>
-<td> +5 Slash and <a href="http://lotro-wiki.com/index.php/Bee_Swarm_%28Beorning_Skill%29" title="Bee Swarm (Beorning Skill)">Bee Swarm</a> Wrath generation </td>
+<td> +5 Slash and <a href="http://lotro-wiki.com/index.php/Bee_Swarm_(Beorning_Skill)" title="Bee Swarm (Beorning Skill)">Bee Swarm</a> Wrath generation </td>
 <td> Beorning </td>
 <td> All guilds
 <p><br>
@@ -3589,7 +3603,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Burglar_Relic-icon.png" class="image"><img alt="Burglar Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Burglar_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_the_Quick_Wrist" title="Relic:Eastemnet Bridle Insignia of the Quick Wrist">Eastemnet Bridle Insignia of the Quick Wrist</a> </td>
 <td align="center"> 80 </td>
-<td> 25% chance that using the <a href="http://lotro-wiki.com/index.php/Ride_By_%28Red_Dawn%29" title="Ride By (Red Dawn)">Ride By</a> skill will reset <a href="http://lotro-wiki.com/index.php/All_in_the_Wrist_%28Red_Dawn%29" title="All in the Wrist (Red Dawn)">All in the Wrist</a> </td>
+<td> 25% chance that using the <a href="http://lotro-wiki.com/index.php/Ride_By_(Red_Dawn)" title="Ride By (Red Dawn)">Ride By</a> skill will reset <a href="http://lotro-wiki.com/index.php/All_in_the_Wrist_(Red_Dawn)" title="All in the Wrist (Red Dawn)">All in the Wrist</a> </td>
 <td> Burglar</td>
 <td> All guilds
 </td></tr>
@@ -3597,7 +3611,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Burglar_Relic-icon.png" class="image"><img alt="Burglar Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Burglar_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_the_Quick_Wrist" title="Relic:Westemnet Bridle Insignia of the Quick Wrist">Westemnet Bridle Insignia of the Quick Wrist</a> </td>
 <td align="center"> 90 </td>
-<td> 27% chance that using the <a href="http://lotro-wiki.com/index.php/Ride_By_%28Red_Dawn%29" title="Ride By (Red Dawn)">Ride By</a> skill will reset <a href="http://lotro-wiki.com/index.php/All_in_the_Wrist_%28Red_Dawn%29" title="All in the Wrist (Red Dawn)">All in the Wrist</a> </td>
+<td> 27% chance that using the <a href="http://lotro-wiki.com/index.php/Ride_By_(Red_Dawn)" title="Ride By (Red Dawn)">Ride By</a> skill will reset <a href="http://lotro-wiki.com/index.php/All_in_the_Wrist_(Red_Dawn)" title="All in the Wrist (Red Dawn)">All in the Wrist</a> </td>
 <td> Burglar</td>
 <td> All guilds
 </td></tr>
@@ -3655,7 +3669,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Captain_Relic-icon.png" class="image"><img alt="Captain Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Captain_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_Resurgence" title="Relic:Eastemnet Bridle Insignia of Resurgence">Eastemnet Bridle Insignia of Resurgence</a> </td>
 <td align="center"> 80 </td>
-<td> +25% <a href="http://lotro-wiki.com/index.php/Rally_the_Riders_%28Red_Dawn%29" title="Rally the Riders (Red Dawn)">Rally the Riders</a> Healing </td>
+<td> +25% <a href="http://lotro-wiki.com/index.php/Rally_the_Riders_(Red_Dawn)" title="Rally the Riders (Red Dawn)">Rally the Riders</a> Healing </td>
 <td> Captain</td>
 <td> All guilds
 </td></tr>
@@ -3663,7 +3677,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Captain_Relic-icon.png" class="image"><img alt="Captain Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Captain_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_Resurgence" title="Relic:Westemnet Bridle Insignia of Resurgence">Westemnet Bridle Insignia of Resurgence</a> </td>
 <td align="center"> 90 </td>
-<td> +27% <a href="http://lotro-wiki.com/index.php/Rally_the_Riders_%28Red_Dawn%29" title="Rally the Riders (Red Dawn)">Rally the Riders</a> Healing </td>
+<td> +27% <a href="http://lotro-wiki.com/index.php/Rally_the_Riders_(Red_Dawn)" title="Rally the Riders (Red Dawn)">Rally the Riders</a> Healing </td>
 <td> Captain</td>
 <td> All guilds
 </td></tr>
@@ -3671,7 +3685,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Captain_Relic-icon.png" class="image"><img alt="Captain Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Captain_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_Wrath" title="Relic:Eastemnet Bridle Insignia of Wrath">Eastemnet Bridle Insignia of Wrath</a> </td>
 <td align="center"> 80 </td>
-<td> +5% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Cry_Wrath_%28Red_Dawn%29" title="Cry Wrath (Red Dawn)">Cry Wrath</a> </td>
+<td> +5% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Cry_Wrath_(Red_Dawn)" title="Cry Wrath (Red Dawn)">Cry Wrath</a> </td>
 <td> Captain</td>
 <td> All guilds
 </td></tr>
@@ -3679,7 +3693,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Captain_Relic-icon.png" class="image"><img alt="Captain Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Captain_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_Wrath" title="Relic:Westemnet Bridle Insignia of Wrath">Westemnet Bridle Insignia of Wrath</a> </td>
 <td align="center"> 90 </td>
-<td> +7% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Cry_Wrath_%28Red_Dawn%29" title="Cry Wrath (Red Dawn)">Cry Wrath</a> </td>
+<td> +7% Critical Hit Chance for <a href="http://lotro-wiki.com/index.php/Cry_Wrath_(Red_Dawn)" title="Cry Wrath (Red Dawn)">Cry Wrath</a> </td>
 <td> Captain</td>
 <td> All guilds
 <p><br>
@@ -3739,7 +3753,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Guardian_Relic-icon.png" class="image"><img alt="Guardian Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Guardian_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_Driven_Recovery" title="Relic:Eastemnet Bridle Insignia of Driven Recovery">Eastemnet Bridle Insignia of Driven Recovery</a> </td>
 <td align="center"> 80 </td>
-<td> 25% chance that using the <a href="http://lotro-wiki.com/index.php/Driving_Slash" title="Driving Slash">Driving Slash</a> skill will reset <a href="http://lotro-wiki.com/index.php/Clash_of_Arms_%28Guardian%29" title="Clash of Arms (Guardian)">Clash of Arms</a> </td>
+<td> 25% chance that using the <a href="http://lotro-wiki.com/index.php/Driving_Slash" title="Driving Slash">Driving Slash</a> skill will reset <a href="http://lotro-wiki.com/index.php/Clash_of_Arms_(Guardian)" title="Clash of Arms (Guardian)">Clash of Arms</a> </td>
 <td> Guardian </td>
 <td> All guilds
 </td></tr>
@@ -3747,7 +3761,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Guardian_Relic-icon.png" class="image"><img alt="Guardian Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Guardian_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_Driven_Recovery" title="Relic:Westemnet Bridle Insignia of Driven Recovery">Westemnet Bridle Insignia of Driven Recovery</a> </td>
 <td align="center"> 90 </td>
-<td> 27% chance that using the <a href="http://lotro-wiki.com/index.php/Driving_Slash" title="Driving Slash">Driving Slash</a> skill will reset <a href="http://lotro-wiki.com/index.php/Clash_of_Arms_%28Guardian%29" title="Clash of Arms (Guardian)">Clash of Arms</a> </td>
+<td> 27% chance that using the <a href="http://lotro-wiki.com/index.php/Driving_Slash" title="Driving Slash">Driving Slash</a> skill will reset <a href="http://lotro-wiki.com/index.php/Clash_of_Arms_(Guardian)" title="Clash of Arms (Guardian)">Clash of Arms</a> </td>
 <td> Guardian </td>
 <td> All guilds
 </td></tr>
@@ -3821,7 +3835,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Hunter_Relic-icon.png" class="image"><img alt="Hunter Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Hunter_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_Marksmanship" title="Relic:Eastemnet Bridle Insignia of Marksmanship">Eastemnet Bridle Insignia of Marksmanship</a> </td>
 <td align="center"> 80 </td>
-<td> 25% chance that the bonuses provided by <a href="http://lotro-wiki.com/index.php/Establishing_Shot_%28Red_Dawn%29" title="Establishing Shot (Red Dawn)">Establishing Shot</a> will not be removed on a critical hit </td>
+<td> 25% chance that the bonuses provided by <a href="http://lotro-wiki.com/index.php/Establishing_Shot_(Red_Dawn)" title="Establishing Shot (Red Dawn)">Establishing Shot</a> will not be removed on a critical hit </td>
 <td> Hunter</td>
 <td> All guilds
 </td></tr>
@@ -3829,7 +3843,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Hunter_Relic-icon.png" class="image"><img alt="Hunter Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Hunter_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_Marksmanship" title="Relic:Westemnet Bridle Insignia of Marksmanship">Westemnet Bridle Insignia of Marksmanship</a> </td>
 <td align="center"> 90 </td>
-<td> 27% chance that the bonuses provided by <a href="http://lotro-wiki.com/index.php/Establishing_Shot_%28Red_Dawn%29" title="Establishing Shot (Red Dawn)">Establishing Shot</a> will not be removed on a critical hit </td>
+<td> 27% chance that the bonuses provided by <a href="http://lotro-wiki.com/index.php/Establishing_Shot_(Red_Dawn)" title="Establishing Shot (Red Dawn)">Establishing Shot</a> will not be removed on a critical hit </td>
 <td> Hunter</td>
 <td> All guilds
 <p><br>
@@ -3905,7 +3919,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Minstrel_Relic-icon.png" class="image"><img alt="Minstrel Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Minstrel_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_Melodic_Strikes" title="Relic:Eastemnet Bridle Insignia of Melodic Strikes">Eastemnet Bridle Insignia of Melodic Strikes</a> </td>
 <td align="center"> 80 </td>
-<td> 25% chance for <a href="http://lotro-wiki.com/index.php/Hammer_of_Rohan_%28Red_Dawn%29" title="Hammer of Rohan (Red Dawn)">Hammer of Rohan</a> to open access to Anthems and Codas </td>
+<td> 25% chance for <a href="http://lotro-wiki.com/index.php/Hammer_of_Rohan_(Red_Dawn)" title="Hammer of Rohan (Red Dawn)">Hammer of Rohan</a> to open access to Anthems and Codas </td>
 <td> Minstrel </td>
 <td> All guilds
 </td></tr>
@@ -3913,7 +3927,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Minstrel_Relic-icon.png" class="image"><img alt="Minstrel Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Minstrel_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_Melodic_Strikes" title="Relic:Westemnet Bridle Insignia of Melodic Strikes">Westemnet Bridle Insignia of Melodic Strikes</a> </td>
 <td align="center"> 90 </td>
-<td> 27% chance for <a href="http://lotro-wiki.com/index.php/Hammer_of_Rohan_%28Red_Dawn%29" title="Hammer of Rohan (Red Dawn)">Hammer of Rohan</a> to open access to Anthems and Codas </td>
+<td> 27% chance for <a href="http://lotro-wiki.com/index.php/Hammer_of_Rohan_(Red_Dawn)" title="Hammer of Rohan (Red Dawn)">Hammer of Rohan</a> to open access to Anthems and Codas </td>
 <td> Minstrel </td>
 <td> All guilds
 </td></tr>
@@ -3989,7 +4003,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Warden_Relic-icon.png" class="image"><img alt="Warden Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Warden_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Eastemnet_Bridle_Insignia_of_the_Eorlingas" title="Relic:Eastemnet Bridle Insignia of the Eorlingas">Eastemnet Bridle Insignia of the Eorlingas</a> </td>
 <td align="center"> 80 </td>
-<td> +10% Player buff magnitude when using <a href="http://lotro-wiki.com/index.php?title=Assault_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Assault of the Eorlingas (page does not exist)">Assault of the Eorlingas</a>, <a href="http://lotro-wiki.com/index.php?title=Roar_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Roar of the Eorlingas (page does not exist)">Roar of the Eorlingas</a>, or <a href="http://lotro-wiki.com/index.php/Defence_of_the_Eorlingas_%28Red_Dawn%29" title="Defence of the Eorlingas (Red Dawn)">Defence of the Eorlingas</a> </td>
+<td> +10% Player buff magnitude when using <a href="http://lotro-wiki.com/index.php?title=Assault_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Assault of the Eorlingas (page does not exist)">Assault of the Eorlingas</a>, <a href="http://lotro-wiki.com/index.php?title=Roar_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Roar of the Eorlingas (page does not exist)">Roar of the Eorlingas</a>, or <a href="http://lotro-wiki.com/index.php/Defence_of_the_Eorlingas_(Red_Dawn)" title="Defence of the Eorlingas (Red Dawn)">Defence of the Eorlingas</a> </td>
 <td> Warden </td>
 <td> All guilds
 </td></tr>
@@ -3997,7 +4011,7 @@ relic shards.
 <td align="center"> <a href="http://lotro-wiki.com/index.php/File:Warden_Relic-icon.png" class="image"><img alt="Warden Relic-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Warden_Relic-icon.png" width="32" height="32"></a> </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Westemnet_Bridle_Insignia_of_the_Eorlingas" title="Relic:Westemnet Bridle Insignia of the Eorlingas">Westemnet Bridle Insignia of the Eorlingas</a> </td>
 <td align="center"> 90 </td>
-<td> +12% Player buff magnitude when using <a href="http://lotro-wiki.com/index.php?title=Assault_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Assault of the Eorlingas (page does not exist)">Assault of the Eorlingas</a>, <a href="http://lotro-wiki.com/index.php?title=Roar_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Roar of the Eorlingas (page does not exist)">Roar of the Eorlingas</a>, or <a href="http://lotro-wiki.com/index.php/Defence_of_the_Eorlingas_%28Red_Dawn%29" title="Defence of the Eorlingas (Red Dawn)">Defence of the Eorlingas</a> </td>
+<td> +12% Player buff magnitude when using <a href="http://lotro-wiki.com/index.php?title=Assault_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Assault of the Eorlingas (page does not exist)">Assault of the Eorlingas</a>, <a href="http://lotro-wiki.com/index.php?title=Roar_of_the_Eorlingas&amp;action=edit&amp;redlink=1" class="new" title="Roar of the Eorlingas (page does not exist)">Roar of the Eorlingas</a>, or <a href="http://lotro-wiki.com/index.php/Defence_of_the_Eorlingas_(Red_Dawn)" title="Defence of the Eorlingas (Red Dawn)">Defence of the Eorlingas</a> </td>
 <td> Warden </td>
 <td> All guilds
 </td></tr>
@@ -4226,18 +4240,18 @@ relic shards.
 </p>
 <!-- 
 NewPP limit report
-CPU time usage: 0.633 seconds
-Real time usage: 0.796 seconds
-Preprocessor visited node count: 3852/1000000
-Preprocessor generated node count: 16266/1000000
-Post‐expand include size: 26478/2097152 bytes
-Template argument size: 6428/2097152 bytes
+CPU time usage: 0.900 seconds
+Real time usage: 1.822 seconds
+Preprocessor visited node count: 3984/1000000
+Preprocessor generated node count: 16556/1000000
+Post‐expand include size: 28101/2097152 bytes
+Template argument size: 6808/2097152 bytes
 Highest expansion depth: 14/40
 Expensive parser function count: 12/500
 ExtLoops count: 0/100
 -->
 
-<!-- Saved in parser cache with key lotrowik_wikidb-lotro:pcache:idhash:41824-0!*!0!!en!2!* and timestamp 20170826013512 and revision id 853260
+<!-- Saved in parser cache with key lotrowik_wikidb-lotro:pcache:idhash:41824-0!*!0!!en!2!* and timestamp 20171211212048 and revision id 853260
  -->
 </div>								<div class="printfooter">
 				Retrieved from "<a href="http://lotro-wiki.com/index.php?title=Relics&amp;oldid=853260">http://lotro-wiki.com/index.php?title=Relics&amp;oldid=853260</a>"				</div>
@@ -4250,8 +4264,8 @@ ExtLoops count: 0/100
 </script></div>
 </div>
 								<div class="visualClear"></div>
-							<div id="tfbx" class="htt hidden" style="position: fixed; top: 144px; left: 246px; visibility: hidden;"></div><div id="templatetfbx" class="htt"></div></div>
-		</div><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" style="display: none;" frameborder="0"></iframe>
+							<div id="tfbx" class="htt hidden" style="position: fixed; top: 616px; left: 280px; visibility: hidden;"></div><div id="templatetfbx" class="htt"></div></div>
+		</div>
 		<div id="mw-navigation">
 			<h2>Navigation menu</h2>
 			<div id="mw-head">
@@ -4371,7 +4385,7 @@ You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
 		<div id="footer" role="contentinfo">
 							<ul id="footer-info">
 											<li id="footer-info-lastmod"> This page was last modified on 26 August 2017, at 01:35.</li>
-											<li id="footer-info-viewcount">This page has been accessed 165,582 times.</li>
+											<li id="footer-info-viewcount">This page has been accessed 170,853 times.</li>
 											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://www.gnu.org/copyleft/fdl.html">GNU Free Documentation License 1.3 or later</a> unless otherwise noted.</li>
 									</ul>
 							<ul id="footer-places">
@@ -4395,13 +4409,13 @@ mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
 <script>if(window.mw){
 mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","ext.gadget.Edittools","ext.gadget.MonospacedDiffs","skins.vector.collapsibleNav"],null,true);
 }</script>
-<script src="Relics%20-%20Lotro-Wiki.com_files/index_004.php"></script><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" style="display: none;" frameborder="0"></iframe><div style="display: none; font-size: 13px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div>
-<script src="Relics%20-%20Lotro-Wiki.com_files/index_005.php"></script>
+<script src="Relics%20-%20Lotro-Wiki.com_files/index_003.php"></script><div style="display: none; font-size: 13px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div>
+<script src="Relics%20-%20Lotro-Wiki.com_files/index_011.php"></script>
 <script src="Relics%20-%20Lotro-Wiki.com_files/load_002.php"></script>
 <script>if(window.mw){
-mw.config.set({"wgBackendResponseTime":50});
+mw.config.set({"wgBackendResponseTime":38});
 }</script>
 	
 
 
-</body><!-- Cached/compressed 20170826015647 --></html>
+<iframe id="google_osd_static_frame_4087152474587" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;"></iframe></body><!-- Cached/compressed 20171211223308 --></html>
