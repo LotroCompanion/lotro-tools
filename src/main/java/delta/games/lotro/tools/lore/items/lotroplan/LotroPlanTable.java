@@ -77,6 +77,7 @@ public class LotroPlanTable
   };
 
   private STAT[] _stats;
+  private int _categoryIndex;
   private int _classesIndex;
   private int _notesIndex;
 
@@ -91,6 +92,7 @@ public class LotroPlanTable
     {
       _classesIndex+=3;
       _notesIndex+=2;
+      _categoryIndex=_classesIndex-1;
     }
   }
 
@@ -103,6 +105,16 @@ public class LotroPlanTable
     _stats=stats;
     _classesIndex=CLASSES_INDEX;
     _notesIndex=NOTES_INDEX;
+    _categoryIndex=-1;
+  }
+
+  /**
+   * Get the field index for category.
+   * @return A field index.
+   */
+  public int getCategoryIndex()
+  {
+    return _categoryIndex;
   }
 
   /**
