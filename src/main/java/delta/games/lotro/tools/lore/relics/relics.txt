@@ -1462,7 +1462,7 @@ relic shards.
 </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:Sapphire_Gem_of_Endurance" title="Relic:Sapphire Gem of Endurance">Sapphire Gem of Endurance</a>
 </td>
-<td> +19 Vitality <br> +477 <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>
+<td> +19 Vitality <br> +953 <a href="http://lotro-wiki.com/index.php/Critical_Rating" title="Critical Rating">Critical Rating</a>
 </td></tr>
 <tr class="even">
 <td> <a href="http://lotro-wiki.com/index.php/File:Sapphire_Gem_of_Dexterity-icon.png" class="image"><img alt="Sapphire Gem of Dexterity-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/Sapphire_Gem_of_Dexterity-icon.png" width="32" height="32"></a>
@@ -2452,7 +2452,7 @@ relic shards.
 </td>
 <td> <a href="http://lotro-wiki.com/index.php/Relic:True_Setting_of_the_Three_Hunters" title="Relic:True Setting of the Three Hunters">True Setting of the Three Hunters</a>
 </td>
-<td> +7.5% Devastate Magnitude <br> +646 Physical Mastery Rating <br> +646 Tactical Mastery Rating <br> +147 in-Combat Power Regen
+<td> +7.5% Devastate Magnitude <br> +646 Physical Mastery Rating <br> +646 Tactical Mastery Rating <br> +35 Fate
 </td></tr>
 <tr class="odd">
 <td> <a href="http://lotro-wiki.com/index.php/File:True_Setting_of_the_North-icon.png" class="image"><img alt="True Setting of the North-icon.png" src="Relics%20-%20Lotro-Wiki.com_files/True_Setting_of_the_North-icon.png" width="32" height="32"></a>
