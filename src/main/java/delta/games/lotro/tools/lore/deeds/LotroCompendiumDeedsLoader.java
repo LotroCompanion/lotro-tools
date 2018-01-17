@@ -1,19 +1,30 @@
 package delta.games.lotro.tools.lore.deeds;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import delta.common.utils.NumericTools;
+import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Emote;
+import delta.games.lotro.common.Reputation;
+import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
+import delta.games.lotro.common.Virtue;
+import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.plugins.LuaParser;
 
 /**
@@ -29,6 +40,7 @@ public class LotroCompendiumDeedsLoader
   {
     File root=new File(new File("data"),"deeds");
     File luaDb=new File(root,"deeds.lua");
+    List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     //File luaDb=new File("indexes.lua");
     LuaParser parser=new LuaParser();
     Object map=parser.readObject(luaDb);
@@ -44,10 +56,14 @@ public class LotroCompendiumDeedsLoader
       for(Object data : datas)
       {
         DeedDescription deed=buildDeedFromRawData(data);
-        System.out.println(deed);
+        deeds.add(deed);
       }
       System.out.println(_keys);
     }
+    File loreDir=LotroCoreConfig.getInstance().getLoreDir();
+    File out=new File(loreDir,"deeds_lc.xml");
+    DeedXMLWriter writer=new DeedXMLWriter();
+    writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
   }
 
   @SuppressWarnings("unchecked")
@@ -60,7 +76,7 @@ public class LotroCompendiumDeedsLoader
     Map<String,Object> map=(Map<String,Object>)data;
     DeedDescription deed=new DeedDescription();
     //[d, c, next, pois, o, virtues, prev, id, mobs, t, level, emotes, name, reputation, titles, traits, receive, zone]
-    //[virtues, mobs, reputation, zone]
+    //[mobs, zone]
     // ID
     Double id=(Double)map.get("id");
     deed.setIdentifier(id.intValue());
@@ -87,9 +103,6 @@ public class LotroCompendiumDeedsLoader
     // Zone
     String zone=(String)map.get("zone");
     _keys.add(zone);
-    // [Moria, null, Forochel, Mirkwood, Trollshaws, Bree-land, Eregion,
-    // Evendim, Lone-lands, Angmar, The Shire, Enedwaith, The Lone-lands(duplicate), The Misty Mountains(duplicate),
-    // Misty Mountains, The North Downs, Ettenmoors, Ered Luin, Lothlórien, The Trollshaws(duplicate)]
     // Objectives
     String objectives=(String)map.get("o");
     deed.setObjectives(objectives);
@@ -160,6 +173,12 @@ public class LotroCompendiumDeedsLoader
         }
       }
     }
+    // - virtues
+    List<Object> virtueItems=(List<Object>)map.get("virtues");
+    handleVirtues(rewards,virtueItems);
+    // - reputation
+    List<Object> reputationItems=(List<Object>)map.get("reputation");
+    handleReputation(rewards,reputationItems);
     //_keys.addAll(map.keySet());
     return deed;
   }
@@ -191,15 +210,15 @@ public class LotroCompendiumDeedsLoader
   {
     CharacterClass characterClass=null;
     DeedType deedType=null;
-    if ("Minstrel".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.MINSTREL; } 
-    if ("Hunter".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.HUNTER; } 
-    if ("Lore-master".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.LORE_MASTER; } 
-    if ("Captain".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.CAPTAIN; } 
-    if ("Warden".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.WARDEN; } 
-    if ("Champion".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.CHAMPION; } 
-    if ("Rune-keeper".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.RUNE_KEEPER; } 
-    if ("Burglar".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.BURGLAR; } 
-    if ("Guardian".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.GUARDIAN; } 
+    if ("Minstrel".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.MINSTREL; }
+    if ("Hunter".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.HUNTER; }
+    if ("Lore-master".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.LORE_MASTER; }
+    if ("Captain".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.CAPTAIN; }
+    if ("Warden".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.WARDEN; }
+    if ("Champion".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.CHAMPION; }
+    if ("Rune-keeper".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.RUNE_KEEPER; }
+    if ("Burglar".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.BURGLAR; }
+    if ("Guardian".equals(type)) { deedType=DeedType.CLASS; characterClass=CharacterClass.GUARDIAN; }
     if ("Event".equals(type)) deedType=DeedType.EVENT;
     if ("Explorer".equals(type)) deedType=DeedType.EXPLORER;
     if ("Lore".equals(type)) deedType=DeedType.LORE;
@@ -217,7 +236,89 @@ public class LotroCompendiumDeedsLoader
       }
     }
     deed.setType(deedType);
+    if (characterClass!=null)
+    {
+      deed.setClassName(characterClass.getLabel());
+    }
   }
+
+  @SuppressWarnings("unchecked")
+  private void handleReputation(Rewards rewards, List<Object> reputationItems)
+  {
+    //reputation={{val="+700 with Iron Garrison Guards"}}
+    if (reputationItems==null)
+    {
+      return;
+    }
+    FactionsRegistry registry=FactionsRegistry.getInstance();
+    Reputation reputation=rewards.getReputation();
+    for(Object reputationItem : reputationItems)
+    {
+      Map<String,Object> reputationMap=(Map<String,Object>)reputationItem;
+      String reputationStr=(String)reputationMap.get("val");
+      int spaceIndex=reputationStr.indexOf(" ");
+      Integer value=NumericTools.parseInteger(reputationStr.substring(0,spaceIndex));
+      String factionStr=reputationStr.substring(spaceIndex+1).trim();
+      if (factionStr.startsWith("with ")) factionStr=factionStr.substring(5);
+      Faction faction=registry.getByName(factionStr);
+      if ((faction!=null) && (value!=null))
+      {
+        ReputationItem repItem=new ReputationItem(faction);
+        repItem.setAmount(value.intValue());
+        reputation.add(repItem);
+      }
+      else
+      {
+        System.out.println("Not handled ["+reputationStr+"]");
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void handleVirtues(Rewards rewards, List<Object> virtueItems)
+  {
+    //virtues={{val="Discipline"}}
+    if (virtueItems==null)
+    {
+      return;
+    }
+    for(Object virtueItem : virtueItems)
+    {
+      Map<String,Object> virtueMap=(Map<String,Object>)virtueItem;
+      String virtueName=(String)virtueMap.get("val");
+      VirtueId virtueId=VirtueId.valueOf(virtueName.toUpperCase());
+      if (virtueId!=null)
+      {
+        Virtue virtue=new Virtue(virtueId.name(),virtueId.getLabel());
+        rewards.addVirtue(virtue);
+      }
+      else
+      {
+        System.out.println("Not handled ["+virtueName+"]");
+      }
+    }
+  }
+
+  private void handleMobs()
+  {
+    //mobs={
+    // {locations={"33.84S, 55.81W"},name="Barrow-hound",zone="Bree-land"},
+    // {locations={"33.04S, 55.36W"},name="Brishzel",zone="Bree-land"},
+    // {locations={"33.04S, 55.36W","34.10S, 54.95W","34.60S, 54.36W","35.10S, 55.28W","35.13S, 55.13W"},name="Howling Barrow-hound",zone="Bree-land"}
+    //}
+  }
+
+  private String normalizeZone(String zone)
+  {
+    if ("The Lone-lands".equals(zone)) zone="Lone-lands";
+    if ("The Misty Mountains".equals(zone)) zone="Misty Mountains";
+    if ("The Trollshaws".equals(zone)) zone="Trollshaws";
+    return zone;
+    // [Moria, null, Forochel, Mirkwood, Trollshaws, Bree-land, Eregion,
+    // Evendim, Lone-lands, Angmar, The Shire, Enedwaith,
+    // Misty Mountains, The North Downs, Ettenmoors, Ered Luin, Lothlórien]
+  }
+
   /**
    * Main method for this loader.
    * @param args Not used.
