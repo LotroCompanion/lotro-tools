@@ -2,12 +2,14 @@ package delta.games.lotro.tools.lore.deeds;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import delta.common.utils.NumericTools;
+import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.CharacterClass;
@@ -22,6 +24,8 @@ import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
+import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -56,6 +60,7 @@ public class LotroCompendiumDeedsLoader
       for(Object data : datas)
       {
         DeedDescription deed=buildDeedFromRawData(data);
+        normalizeDeed(deed);
         deeds.add(deed);
       }
       System.out.println(_keys);
@@ -63,6 +68,8 @@ public class LotroCompendiumDeedsLoader
     File loreDir=LotroCoreConfig.getInstance().getLoreDir();
     File out=new File(loreDir,"deeds_lc.xml");
     DeedXMLWriter writer=new DeedXMLWriter();
+    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(new DeedNameComparator(),new DeedDescriptionComparator());
+    Collections.sort(deeds,comparator);
     writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
   }
 
@@ -76,7 +83,7 @@ public class LotroCompendiumDeedsLoader
     Map<String,Object> map=(Map<String,Object>)data;
     DeedDescription deed=new DeedDescription();
     //[d, c, next, pois, o, virtues, prev, id, mobs, t, level, emotes, name, reputation, titles, traits, receive, zone]
-    //[mobs, zone]
+    //[mobs]
     // ID
     Double id=(Double)map.get("id");
     deed.setIdentifier(id.intValue());
@@ -102,7 +109,8 @@ public class LotroCompendiumDeedsLoader
     handleType(deed,type);
     // Zone
     String zone=(String)map.get("zone");
-    _keys.add(zone);
+    zone=normalizeZone(zone);
+    deed.setCategory(zone);
     // Objectives
     String objectives=(String)map.get("o");
     deed.setObjectives(objectives);
@@ -313,10 +321,63 @@ public class LotroCompendiumDeedsLoader
     if ("The Lone-lands".equals(zone)) zone="Lone-lands";
     if ("The Misty Mountains".equals(zone)) zone="Misty Mountains";
     if ("The Trollshaws".equals(zone)) zone="Trollshaws";
+    if ("The North Downs".equals(zone)) zone="North Downs";
+    if ("The Shire".equals(zone)) zone="Shire";
     return zone;
     // [Moria, null, Forochel, Mirkwood, Trollshaws, Bree-land, Eregion,
     // Evendim, Lone-lands, Angmar, The Shire, Enedwaith,
     // Misty Mountains, The North Downs, Ettenmoors, Ered Luin, Lothlórien]
+  }
+
+  private void normalizeDeed(DeedDescription deed)
+  {
+    String name=deed.getName();
+    name=name.replace("  "," ");
+    if (name.endsWith(" (Class)")) name=name.substring(0,name.length()-" (Class)".length());
+    if (name.startsWith("The Mines of Moria (Epic)")) name="The Mines of Moria";
+    deed.setName(name);
+    // Zones (sorted by ~level)
+    cleanupNameAndCategory(deed," (Shire)","Shire");
+    cleanupNameAndCategory(deed," (Ered Luin)","Ered Luin");
+    cleanupNameAndCategory(deed," (Bree-land)","Bree-land");
+    cleanupNameAndCategory(deed," (Lone-lands)","Lone-lands");
+    cleanupNameAndCategory(deed," (North Downs)","North Downs");
+    cleanupNameAndCategory(deed," (Trollshaws)","Trollshaws");
+    cleanupNameAndCategory(deed," (Evendim)","Evendim");
+    cleanupNameAndCategory(deed," (Misty Mountains)","Misty Mountains");
+    cleanupNameAndCategory(deed," (Angmar)","Angmar");
+    cleanupNameAndCategory(deed," (Forochel)","Forochel");
+    cleanupNameAndCategory(deed," (Eregion)","Eregion");
+    cleanupNameAndCategory(deed," (Moria)","Moria");
+    cleanupNameAndCategory(deed," (Lothlórien)","Lothlórien");
+    cleanupNameAndCategory(deed," (Ettenmoors)","Ettenmoors");
+    cleanupNameAndCategory(deed," (Enedwaith)","Enedwaith");
+    cleanupNameAndCategory(deed," (Southern Mirkwood)","Mirkwood");
+    // Race & social
+    cleanupNameAndCategory(deed," (Race & Social)","Race & Social");
+    // Instance clusters
+    cleanupNameAndCategory(deed," (Mines of Moria)","Mines of Moria");
+    cleanupNameAndCategory(deed," (Shadows of Angmar)","Shadows of Angmar");
+    cleanupNameAndCategory(deed," (Scourge of Khazad-dûm)","Scourge of Khazad-dûm");
+    cleanupNameAndCategory(deed," (Tower of Dol Guldur)","Tower of Dol Guldur");
+    // Skirmish
+    cleanupNameAndCategory(deed," (Skirmish Lieutenant)","Skirmish::Lieutenant");
+  }
+
+  private void cleanupNameAndCategory(DeedDescription deed, String nameSuffix, String categoryToUse)
+  {
+    String name=deed.getName();
+    String category=deed.getCategory();
+    if (name.endsWith(nameSuffix))
+    {
+      name=name.substring(0,name.length()-nameSuffix.length());
+      deed.setName(name);
+      if ((category!=null) && (category.length()>0) && (!categoryToUse.equals(category)))
+      {
+        System.out.println("Deed ID="+deed.getIdentifier()+": overriding category ["+category+"] with ["+categoryToUse+"]");
+      }
+      deed.setCategory(categoryToUse);
+    }
   }
 
   /**

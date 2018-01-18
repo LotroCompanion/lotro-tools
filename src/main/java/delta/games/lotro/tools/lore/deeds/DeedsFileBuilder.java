@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
 import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
@@ -56,7 +58,8 @@ public class DeedsFileBuilder
     {
       normalizeDeed(deed);
     }
-    Collections.sort(deeds,new DeedNameComparator());
+    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(new DeedNameComparator(),new DeedDescriptionComparator());
+    Collections.sort(deeds,comparator);
     File out=new File(loreDir,"deeds_by_name.xml");
     DeedXMLWriter writer=new DeedXMLWriter();
     writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
