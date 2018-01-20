@@ -3,10 +3,9 @@ package delta.games.lotro.tools.lore.deeds;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.CompoundComparator;
@@ -37,8 +36,6 @@ import delta.games.lotro.plugins.LuaParser;
  */
 public class LotroCompendiumDeedsLoader
 {
-  private Set<String> _keys=new HashSet<String>();
-
   @SuppressWarnings({"rawtypes","unchecked"})
   private void doIt() throws Exception
   {
@@ -63,12 +60,14 @@ public class LotroCompendiumDeedsLoader
         normalizeDeed(deed);
         deeds.add(deed);
       }
-      System.out.println(_keys);
     }
     File loreDir=LotroCoreConfig.getInstance().getLoreDir();
     File out=new File(loreDir,"deeds_lc.xml");
     DeedXMLWriter writer=new DeedXMLWriter();
-    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(new DeedNameComparator(),new DeedDescriptionComparator());
+    List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
+    comparators.add(new DeedNameComparator());
+    comparators.add(new DeedDescriptionComparator());
+    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
     Collections.sort(deeds,comparator);
     writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
   }
@@ -93,6 +92,7 @@ public class LotroCompendiumDeedsLoader
     // Description
     String description=(String)map.get("d");
     deed.setDescription(description);
+    /*
     // c=Comments?
     List<String> comments=(List<String>)map.get("c");
     // TODO
@@ -104,6 +104,10 @@ public class LotroCompendiumDeedsLoader
     // TODO
     // pois
     // TODO
+    // mobs
+    // TODO
+    List<Object> mobs=(List<Object>)map.get("mobs");
+    */
     // Type
     String type=(String)map.get("t");
     handleType(deed,type);
@@ -187,7 +191,6 @@ public class LotroCompendiumDeedsLoader
     // - reputation
     List<Object> reputationItems=(List<Object>)map.get("reputation");
     handleReputation(rewards,reputationItems);
-    //_keys.addAll(map.keySet());
     return deed;
   }
 
@@ -307,6 +310,7 @@ public class LotroCompendiumDeedsLoader
     }
   }
 
+  /*
   private void handleMobs()
   {
     //mobs={
@@ -315,6 +319,7 @@ public class LotroCompendiumDeedsLoader
     // {locations={"33.04S, 55.36W","34.10S, 54.95W","34.60S, 54.36W","35.10S, 55.28W","35.13S, 55.13W"},name="Howling Barrow-hound",zone="Bree-land"}
     //}
   }
+  */
 
   private String normalizeZone(String zone)
   {
@@ -324,9 +329,6 @@ public class LotroCompendiumDeedsLoader
     if ("The North Downs".equals(zone)) zone="North Downs";
     if ("The Shire".equals(zone)) zone="Shire";
     return zone;
-    // [Moria, null, Forochel, Mirkwood, Trollshaws, Bree-land, Eregion,
-    // Evendim, Lone-lands, Angmar, The Shire, Enedwaith,
-    // Misty Mountains, The North Downs, Ettenmoors, Ered Luin, Lothlórien]
   }
 
   private void normalizeDeed(DeedDescription deed)
@@ -362,6 +364,7 @@ public class LotroCompendiumDeedsLoader
     cleanupNameAndCategory(deed," (Tower of Dol Guldur)","Tower of Dol Guldur");
     // Skirmish
     cleanupNameAndCategory(deed," (Skirmish Lieutenant)","Skirmish::Lieutenant");
+    cleanupNameAndCategory(deed," (Skirmish Instances)","Skirmish::Instances");
   }
 
   private void cleanupNameAndCategory(DeedDescription deed, String nameSuffix, String categoryToUse)
