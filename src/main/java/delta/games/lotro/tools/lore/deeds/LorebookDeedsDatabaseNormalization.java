@@ -57,6 +57,21 @@ public class LorebookDeedsDatabaseNormalization
   {
     // Remove key
     deed.setKey(null);
+    // Normalize EOL/LF
+    // - description
+    String description=deed.getDescription();
+    if (description!=null)
+    {
+      deed.setDescription(description.replace("\r\n","\n"));
+      deed.setDescription(deed.getDescription().replace("<br />",""));
+    }
+    // - objectives
+    String objectives=deed.getObjectives();
+    if (objectives!=null)
+    {
+      deed.setObjectives(objectives.replace("\r\n","\n"));
+      deed.setObjectives(deed.getObjectives().replace("<br />",""));
+    }
     // Find item IDs
     Rewards rewards=deed.getRewards();
     ObjectsSet objects=rewards.getObjects();

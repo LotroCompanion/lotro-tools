@@ -2,15 +2,17 @@ package delta.games.lotro.tools.lore.deeds;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 
 /**
- * @author dm
+ * Tool to merge deeds databases (lorebook+lotro compendium databases).
+ * @author DAM
  */
 public class MergeDeedsDatabases
 {
@@ -37,7 +39,20 @@ public class MergeDeedsDatabases
 
   private void merge()
   {
-    findMatchingDeeds();
+    mergeMatchingDeeds();
+    // Write results
+    writeMergeResult();
+  }
+
+  private void writeMergeResult()
+  {
+    // Lorebook
+    DeedXMLWriter writer=new DeedXMLWriter();
+    File toLorebook=new File(_lorebook.getFile().getParentFile(),"merged_lorebook.xml");
+    writer.writeDeeds(toLorebook,_lorebook.getAll(),EncodingNames.UTF_8);
+    // Lotro Compendium
+    File toLotroCompendium=new File(_lotroCompendium.getFile().getParentFile(),"merged_lotrocompendium.xml");
+    writer.writeDeeds(toLotroCompendium,_lotroCompendium.getAll(),EncodingNames.UTF_8);
   }
 
   private DeedDescription findMatchingDeedInContainer(DeedsContainer container, DeedDescription deed)
@@ -101,26 +116,54 @@ public class MergeDeedsDatabases
     return null;
   }
 
-  private void findMatchingDeeds()
+  private void mergeMatchingDeeds()
   {
-    List<String> matches=new ArrayList<String>();
-    int nbMatches=0;
-    List<DeedDescription> lotroCompendiumDeeds=_lorebook.getAll();
-    for(DeedDescription lotroCompendiumDeed : lotroCompendiumDeeds)
+    List<DeedDescription> matchingLotroCompendiumDeeds=findMatchingDeeds(_lorebook,_lotroCompendium);
+    List<DeedDescription> lorebookDeeds=_lorebook.getAll();
+    int nbDeeds=lorebookDeeds.size();
+    for(int i=0;i<nbDeeds;i++)
     {
-      DeedDescription lorebookDeed=findMatchingDeedInContainer(_lotroCompendium,lotroCompendiumDeed);
-      if (lorebookDeed!=null)
+      DeedDescription lorebookDeed=lorebookDeeds.get(i);
+      DeedDescription lotroCompendiumDeed=matchingLotroCompendiumDeeds.get(i);
+      if (lotroCompendiumDeed!=null)
       {
-        matches.add(lotroCompendiumDeed.getIdentifier()+"=>"+lorebookDeed.getIdentifier());
-        nbMatches++;
+        // Categories
+        String category=lotroCompendiumDeed.getCategory();
+        lorebookDeed.setCategory(category);
+        // IDs
+        lotroCompendiumDeed.setIdentifier(lorebookDeed.getIdentifier());
+        // Objectives
+        String lorebookObjectives=lorebookDeed.getObjectives();
+        if ((lorebookObjectives==null) || (lorebookObjectives.isEmpty()))
+        {
+          lorebookDeed.setObjectives(lotroCompendiumDeed.getObjectives());
+        }
+        // Item XP
+        lotroCompendiumDeed.getRewards().setHasItemXP(lorebookDeed.getRewards().hasItemXP());
       }
     }
-    System.out.println("Nb matches="+nbMatches+" / "+lotroCompendiumDeeds.size());
-    Collections.sort(matches);
-    for(String match : matches)
+  }
+
+  private List<DeedDescription> findMatchingDeeds(DeedsContainer toMatch, DeedsContainer matchCandidates)
+  {
+    List<DeedDescription> matchingDeeds=new ArrayList<DeedDescription>();
+    int nbMatches=0;
+    List<DeedDescription> sourceDeeds=toMatch.getAll();
+    for(DeedDescription sourceDeed : sourceDeeds)
     {
-      System.out.println(match);
+      DeedDescription matchingDeed=findMatchingDeedInContainer(matchCandidates,sourceDeed);
+      if (matchingDeed!=null)
+      {
+        matchingDeeds.add(matchingDeed);
+        nbMatches++;
+      }
+      else
+      {
+        matchingDeeds.add(null);
+      }
     }
+    System.out.println("Nb matches="+nbMatches+" / "+sourceDeeds.size());
+    return matchingDeeds;
   }
 
   /**

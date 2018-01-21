@@ -33,6 +33,15 @@ public class DeedsContainer
   }
 
   /**
+   * Get the managed deeds file.
+   * @return the managed deeds file.
+   */
+  public File getFile()
+  {
+    return _deedsFile;
+  }
+
+  /**
    * Get the number of deeds in this container.
    * @return A count.
    */

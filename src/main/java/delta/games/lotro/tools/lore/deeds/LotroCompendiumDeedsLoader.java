@@ -117,6 +117,10 @@ public class LotroCompendiumDeedsLoader
     deed.setCategory(zone);
     // Objectives
     String objectives=(String)map.get("o");
+    if (objectives!=null)
+    {
+      objectives=objectives.replace("  "," ");
+    }
     deed.setObjectives(objectives);
     // Level
     Double level=(Double)map.get("level");
@@ -212,6 +216,17 @@ public class LotroCompendiumDeedsLoader
       quantity=Integer.parseInt(quantityStr);
     }
     String itemName=(String)itemMap.get("val");
+    if ("Skirmish Mark".equals(itemName))
+    {
+      itemName="Mark";
+      id=1879224343;
+    }
+    if ("Annúminas Mark".equals(itemName))
+    {
+      itemName="Mark";
+      id=1879224343;
+      quantity=quantity*100;
+    }
     ObjectItem item=new ObjectItem(itemName);
     item.setItemId(id);
     rewards.getObjects().addObject(item,quantity);
