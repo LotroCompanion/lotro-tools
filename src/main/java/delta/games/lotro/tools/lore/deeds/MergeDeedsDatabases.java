@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 
 /**
  * Tool to merge deeds databases (lorebook+lotro compendium databases).
@@ -47,6 +48,8 @@ public class MergeDeedsDatabases
     // Lorebook
     File toLorebook=new File(_lorebook.getFile().getParentFile(),"merged_lorebook.xml");
     DeedsContainer.writeSortedDeeds(_lorebook.getAll(),toLorebook);
+    File toLorebookById=new File(_lorebook.getFile().getParentFile(),"deeds2.xml");
+    DeedXMLWriter.writeDeedsFile(toLorebookById,_lorebook.getAll());
     // Lotro Compendium
     File toLotroCompendium=new File(_lotroCompendium.getFile().getParentFile(),"merged_lotrocompendium.xml");
     DeedsContainer.writeSortedDeeds(_lotroCompendium.getAll(),toLotroCompendium);
