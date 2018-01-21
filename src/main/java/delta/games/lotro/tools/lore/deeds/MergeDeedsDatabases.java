@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 
 /**
  * Tool to merge deeds databases (lorebook+lotro compendium databases).
@@ -47,12 +45,11 @@ public class MergeDeedsDatabases
   private void writeMergeResult()
   {
     // Lorebook
-    DeedXMLWriter writer=new DeedXMLWriter();
     File toLorebook=new File(_lorebook.getFile().getParentFile(),"merged_lorebook.xml");
-    writer.writeDeeds(toLorebook,_lorebook.getAll(),EncodingNames.UTF_8);
+    DeedsContainer.writeSortedDeeds(_lorebook.getAll(),toLorebook);
     // Lotro Compendium
     File toLotroCompendium=new File(_lotroCompendium.getFile().getParentFile(),"merged_lotrocompendium.xml");
-    writer.writeDeeds(toLotroCompendium,_lotroCompendium.getAll(),EncodingNames.UTF_8);
+    DeedsContainer.writeSortedDeeds(_lotroCompendium.getAll(),toLotroCompendium);
   }
 
   private DeedDescription findMatchingDeedInContainer(DeedsContainer container, DeedDescription deed)
@@ -118,6 +115,12 @@ public class MergeDeedsDatabases
 
   private void mergeMatchingDeeds()
   {
+    mergeLorebook2LotroCompendium();
+    mergeLotroCompendium2Lorebook();
+  }
+
+  private void mergeLorebook2LotroCompendium()
+  {
     List<DeedDescription> matchingLotroCompendiumDeeds=findMatchingDeeds(_lorebook,_lotroCompendium);
     List<DeedDescription> lorebookDeeds=_lorebook.getAll();
     int nbDeeds=lorebookDeeds.size();
@@ -140,6 +143,24 @@ public class MergeDeedsDatabases
         }
         // Item XP
         lotroCompendiumDeed.getRewards().setHasItemXP(lorebookDeed.getRewards().hasItemXP());
+      }
+      else
+      {
+        _lotroCompendium.addDeed(lorebookDeed);
+      }
+    }
+  }
+
+  private void mergeLotroCompendium2Lorebook()
+  {
+    List<DeedDescription> lotroCompendiumDeeds=_lotroCompendium.getAll();
+    int nbDeeds=lotroCompendiumDeeds.size();
+    for(int i=0;i<nbDeeds;i++)
+    {
+      DeedDescription lotroCompendiumDeed=lotroCompendiumDeeds.get(i);
+      if (lotroCompendiumDeed.getIdentifier()<10000)
+      {
+        _lorebook.addDeed(lotroCompendiumDeed);
       }
     }
   }

@@ -1,22 +1,14 @@
 package delta.games.lotro.tools.lore.deeds;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import delta.common.utils.collections.CompoundComparator;
-import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
-import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 
@@ -43,14 +35,8 @@ public class LorebookDeedsDatabaseNormalization
     {
       normalizeDeed(deed);
     }
-    List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
-    comparators.add(new DeedNameComparator());
-    comparators.add(new DeedDescriptionComparator());
-    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
-    Collections.sort(deeds,comparator);
     File out=new File(loreDir,"deeds_by_name.xml");
-    DeedXMLWriter writer=new DeedXMLWriter();
-    writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
+    DeedsContainer.writeSortedDeeds(deeds,out);
   }
 
   private void normalizeDeed(DeedDescription deed)
@@ -59,19 +45,9 @@ public class LorebookDeedsDatabaseNormalization
     deed.setKey(null);
     // Normalize EOL/LF
     // - description
-    String description=deed.getDescription();
-    if (description!=null)
-    {
-      deed.setDescription(description.replace("\r\n","\n"));
-      deed.setDescription(deed.getDescription().replace("<br />",""));
-    }
+    deed.setDescription(normalizeText(deed.getDescription()));
     // - objectives
-    String objectives=deed.getObjectives();
-    if (objectives!=null)
-    {
-      deed.setObjectives(objectives.replace("\r\n","\n"));
-      deed.setObjectives(deed.getObjectives().replace("<br />",""));
-    }
+    deed.setObjectives(normalizeText(deed.getObjectives()));
     // Find item IDs
     Rewards rewards=deed.getRewards();
     ObjectsSet objects=rewards.getObjects();
@@ -92,6 +68,25 @@ public class LorebookDeedsDatabaseNormalization
         System.out.println("Item not found [" + name + "]");
       }
     }
+  }
+
+  private String normalizeText(String text)
+  {
+    if (text!=null)
+    {
+      text=text.replace("\r\n","\n");
+      text=text.replace("<br />","");
+      while(true)
+      {
+        int index=text.indexOf("<");
+        if (index==-1) break;
+        int index2=text.indexOf(">",index);
+        if (index2==-1) break;
+        text=text.substring(0,index)+text.substring(index2+1);
+      }
+      text=text.replace("</span>","");
+    }
+    return text;
   }
 
   private Item getItemByName(String name)

@@ -2,14 +2,10 @@ package delta.games.lotro.tools.lore.deeds;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.collections.CompoundComparator;
-import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Emote;
@@ -23,9 +19,6 @@ import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
-import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
-import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.plugins.LuaParser;
@@ -63,13 +56,7 @@ public class LotroCompendiumDeedsLoader
     }
     File loreDir=LotroCoreConfig.getInstance().getLoreDir();
     File out=new File(loreDir,"deeds_lc.xml");
-    DeedXMLWriter writer=new DeedXMLWriter();
-    List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
-    comparators.add(new DeedNameComparator());
-    comparators.add(new DeedDescriptionComparator());
-    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
-    Collections.sort(deeds,comparator);
-    writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
+    DeedsContainer.writeSortedDeeds(deeds,out);
   }
 
   @SuppressWarnings("unchecked")
@@ -91,6 +78,10 @@ public class LotroCompendiumDeedsLoader
     deed.setName(name);
     // Description
     String description=(String)map.get("d");
+    if (description!=null)
+    {
+      description=description.replace("  "," ");
+    }
     deed.setDescription(description);
     /*
     // c=Comments?
@@ -120,6 +111,8 @@ public class LotroCompendiumDeedsLoader
     if (objectives!=null)
     {
       objectives=objectives.replace("  "," ");
+      objectives=objectives.replace("Find\n","");
+      objectives=objectives.replace("Find ","");
     }
     deed.setObjectives(objectives);
     // Level
@@ -221,11 +214,16 @@ public class LotroCompendiumDeedsLoader
       itemName="Mark";
       id=1879224343;
     }
-    if ("Annúminas Mark".equals(itemName))
+    if (("Annúminas Mark".equals(itemName)) || ("Helegrod Mark".equals(itemName))
+        || ("Great Barrow Mark".equals(itemName))|| ("Eregion Mark".equals(itemName)))
     {
       itemName="Mark";
       id=1879224343;
       quantity=quantity*100;
+    }
+    if ("Yule Festival Token".equals(itemName))
+    {
+      id=1879256449;
     }
     ObjectItem item=new ObjectItem(itemName);
     item.setItemId(id);
