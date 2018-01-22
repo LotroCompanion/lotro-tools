@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -10,6 +11,7 @@ import net.htmlparser.jericho.Source;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 
 /**
@@ -22,12 +24,37 @@ public class LotroWikiDeedCategoryPageParser
 
   private static final String INDEX="/index.php/";
 
+  private LotroWikiSiteInterface _lotroWiki;
+
+  /**
+   * Constructor.
+   * @param lotroWiki Lotro-wiki interface.
+   */
+  public LotroWikiDeedCategoryPageParser(LotroWikiSiteInterface lotroWiki)
+  {
+    _lotroWiki=lotroWiki;
+  }
+
+  /**
+   * Handle a deed category.
+   * @param categoryId Category identifier.
+   */
+  public void doCategory(String categoryId)
+  {
+    String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+categoryId;
+    File deedsCategoryFile=_lotroWiki.download(url,categoryId+".html");
+    List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
+    loadDeeds(categoryId,deedIds);
+  }
+
   /**
    * Parse a lotro-wiki deed category page.
-   * @param from Page date.
+   * @param from Source page.
+   * @return loaded deed IDs.
    */
-  public void parseDeedCategoryPage(File from)
+  public List<String> parseDeedCategoryPage(File from)
   {
+    List<String> deedIds=new ArrayList<String>();
     try
     {
       FileInputStream inputStream=new FileInputStream(from);
@@ -45,13 +72,33 @@ public class LotroWikiDeedCategoryPageParser
         rows.remove(0);
         for(Element row : rows)
         {
-          handleRow(row);
+          String deedId=handleRow(row);
+          if (deedId!=null)
+          {
+            deedIds.add(deedId);
+          }
         }
       }
     }
     catch(Exception e)
     {
       _logger.error("Cannot parse deed category page ["+from+"]",e);
+    }
+    return deedIds;
+  }
+
+  private void loadDeeds(String categoryId, List<String> deedIds)
+  {
+    LotroWikiDeedPageParser parser=new LotroWikiDeedPageParser();
+    int index=0;
+    for(String deedId : deedIds)
+    {
+      String url=LotroWikiConstants.BASE_URL+"/index.php?title="+deedId+"&action=edit";
+      String name=categoryId+"-deed"+index+".html";
+      File deedFile=_lotroWiki.download(url,name);
+      DeedDescription deed=parser.parseDeed(deedFile);
+      System.out.println(deed);
+      index++;
     }
   }
 
@@ -71,8 +118,9 @@ public class LotroWikiDeedCategoryPageParser
     return false;
   }
 
-  private void handleRow(Element row)
+  private String handleRow(Element row)
   {
+    String deedId=null;
     List<Element> cells=JerichoHtmlUtils.findElementsByTagName(row,HTMLElementName.TD);
     if (cells.size()>=1)
     {
@@ -83,10 +131,9 @@ public class LotroWikiDeedCategoryPageParser
       System.out.println(href + "  ==>  "+title);
       if (href.startsWith(INDEX))
       {
-        String deedId=href.substring(INDEX.length());
-        LotroWikiDeedPageParser parser=new LotroWikiDeedPageParser();
-        parser.parseDeed(deedId);
+        deedId=href.substring(INDEX.length());
       }
     }
+    return deedId;
   }
 }

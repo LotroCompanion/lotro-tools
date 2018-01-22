@@ -1,7 +1,5 @@
 package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
-import java.io.File;
-
 /**
  * Download deeds data from the site lotro-wiki.
  * @author DAM
@@ -22,10 +20,9 @@ public class MainLotroWikiDeedsLoader
   {
     LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface();
     // Load a sample "deed category" URL
-    String url=LotroWikiConstants.BASE_URL+"index.php/Category:Western_Gondor_Deeds";
-    File westernGondorDeeds=lotroWiki.download(url,"western_gondor_deeds");
-    LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser();
-    parser.parseDeedCategoryPage(westernGondorDeeds);
+    LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser(lotroWiki);
+    parser.doCategory("Western_Gondor_Deeds");
+    parser.doCategory("Central_Gondor_Deeds");
   }
 
   /**
