@@ -15,6 +15,8 @@ import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
+import delta.games.lotro.common.objects.ObjectItem;
+import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -65,6 +67,8 @@ public class LotroWikiDeedPageParser
     Title title=null;
     VirtueId virtueId=null;
     //Integer virtueCount=null;
+    String[] itemRewards=null;
+    Integer[] itemRewardCounts=null;
     for(String line : lines)
     {
       //System.out.println(line);
@@ -84,7 +88,8 @@ public class LotroWikiDeedPageParser
       }
       else if (line.startsWith("| Reputation"))
       {
-        reputation=NumericTools.parseInteger(getLineValue(line));
+        String repValue=getLineValue(line).replace(",","");
+        reputation=NumericTools.parseInteger(repValue);
       }
       else if (line.startsWith("| Title "))
       {
@@ -94,17 +99,46 @@ public class LotroWikiDeedPageParser
       {
         virtueId=extractVirtue(line);
       }
+      else if (line.startsWith("| TP-reward "))
+      {
+        String tpStr=getLineValue(line);
+        if (!tpStr.isEmpty())
+        {
+          Integer tp=NumericTools.parseInteger(tpStr);
+        }
+      }
+      for(int i=1;i<=3;i++)
+      {
+        String suffix=(i!=1)?String.valueOf(i):" ";
+        if (line.startsWith("| Item-reward"+suffix))
+        {
+          String itemName=getLineValue(line);
+          if (!itemName.isEmpty())
+          {
+            if (itemRewards==null)
+            {
+              itemRewards=new String[3];
+            }
+            itemRewards[i-1]=itemName;
+          }
+        }
+        if (line.startsWith("| Item-amount"+suffix))
+        {
+          String itemCountStr=getLineValue(line);
+          if (!itemCountStr.isEmpty())
+          {
+            if (itemRewardCounts==null)
+            {
+              itemRewardCounts=new Integer[3];
+            }
+            itemRewardCounts[i-1]=NumericTools.parseInteger(itemCountStr);
+          }
+        }
+      }
+
 /*
-| Virtue       = Determination
-| Virtue-value = 1
 | DP-reward    = 
 | SM-reward    = 
-| Item-reward  = Mark
-| Item-amount  = 60
-| Item-reward2 = Amroth Silver Piece
-| Item-amount2 = 18
-| Item-reward3 = 
-| Item-amount3 = 
 | Skill-reward = 
 | Trait-reward = 
 | Emote-reward = 
@@ -138,7 +172,34 @@ public class LotroWikiDeedPageParser
       Virtue virtue=new Virtue(virtueId.name(),virtueId.getLabel());
       deed.getRewards().addVirtue(virtue);
     }
+    if (itemRewards!=null)
+    {
+      handleItemRewards(deed,itemRewards,itemRewardCounts);
+    }
     return deed;
+  }
+
+  private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
+  {
+    ObjectsSet objects=deed.getRewards().getObjects();
+    for(int i=0;i<itemRewards.length;i++)
+    {
+      String itemName=itemRewards[i];
+      Integer count=null;
+      if (itemRewardCounts!=null)
+      {
+        count=itemRewardCounts[i];
+      }
+      if (itemName!=null)
+      {
+        if (count==null)
+        {
+          count=Integer.valueOf(1);
+        }
+        ObjectItem item=new ObjectItem(itemName);
+        objects.addObject(item,count.intValue());
+      }
+    }
   }
 
   private static final String FACTION_SUFFIX=" (Faction)";
