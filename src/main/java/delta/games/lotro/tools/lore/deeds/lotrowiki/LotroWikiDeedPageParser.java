@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.games.lotro.common.ReputationItem;
+import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
@@ -61,10 +62,10 @@ public class LotroWikiDeedPageParser
   private DeedDescription buildDeed(String rawData)
   {
     DeedDescription deed=new DeedDescription();
+    Rewards rewards=deed.getRewards();
     String[] lines=rawData.split("\n");
     Faction faction=null;
     Integer reputation=null;
-    Title title=null;
     VirtueId virtueId=null;
     Integer virtueCount=null;
     String[] itemRewards=null;
@@ -93,7 +94,11 @@ public class LotroWikiDeedPageParser
       }
       else if (line.startsWith("| Title "))
       {
-        title=extractTitle(line);
+        Title title=extractTitle(line);
+        if (title!=null)
+        {
+          rewards.addTitle(title);
+        }
       }
       else if (line.startsWith("| Virtue "))
       {
@@ -109,6 +114,10 @@ public class LotroWikiDeedPageParser
         if (!tpStr.isEmpty())
         {
           Integer tp=NumericTools.parseInteger(tpStr);
+          if (tp!=null)
+          {
+            rewards.setLotroPoints(tp.intValue());
+          }
         }
       }
       for(int i=1;i<=3;i++)
@@ -146,7 +155,6 @@ public class LotroWikiDeedPageParser
 | Skill-reward = 
 | Trait-reward = 
 | Emote-reward = 
-| TP-reward    = 10
 | Deed-type    = Regional
 | Deed-subtype = Western Gondor
 | Regional-sub = Explorer
@@ -165,17 +173,13 @@ public class LotroWikiDeedPageParser
     {
       ReputationItem item=new ReputationItem(faction);
       item.setAmount(reputation.intValue());
-      deed.getRewards().getReputation().add(item);
-    }
-    if (title!=null)
-    {
-      deed.getRewards().addTitle(title);
+      rewards.getReputation().add(item);
     }
     if (virtueId!=null)
     {
       int count=(virtueCount!=null)?virtueCount.intValue():1;
       Virtue virtue=new Virtue(virtueId,count);
-      deed.getRewards().addVirtue(virtue);
+      rewards.addVirtue(virtue);
     }
     if (itemRewards!=null)
     {
