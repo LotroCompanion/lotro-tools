@@ -66,7 +66,7 @@ public class LotroWikiDeedPageParser
     Integer reputation=null;
     Title title=null;
     VirtueId virtueId=null;
-    //Integer virtueCount=null;
+    Integer virtueCount=null;
     String[] itemRewards=null;
     Integer[] itemRewardCounts=null;
     for(String line : lines)
@@ -98,6 +98,10 @@ public class LotroWikiDeedPageParser
       else if (line.startsWith("| Virtue "))
       {
         virtueId=extractVirtue(line);
+      }
+      else if (line.startsWith("| Virtue-value"))
+      {
+        virtueCount=NumericTools.parseInteger(getLineValue(line));
       }
       else if (line.startsWith("| TP-reward "))
       {
@@ -169,7 +173,8 @@ public class LotroWikiDeedPageParser
     }
     if (virtueId!=null)
     {
-      Virtue virtue=new Virtue(virtueId.name(),virtueId.getLabel());
+      int count=(virtueCount!=null)?virtueCount.intValue():1;
+      Virtue virtue=new Virtue(virtueId,count);
       deed.getRewards().addVirtue(virtue);
     }
     if (itemRewards!=null)

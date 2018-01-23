@@ -22,6 +22,7 @@ import delta.games.lotro.common.Skill.SkillType;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
+import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.reputation.Faction;
@@ -314,7 +315,8 @@ public class RewardsHTMLParser
         name=CharacterReference.decodeCollapseWhiteSpace(firstA.getContent());
         if ((name!=null) && (virtueIdentifier!=null))
         {
-          Virtue virtue=new Virtue(virtueIdentifier,name);
+          VirtueId virtueId=VirtueId.valueOf(virtueIdentifier.toUpperCase());
+          Virtue virtue=new Virtue(virtueId,1);
           rewards.addVirtue(virtue);
         }
       }

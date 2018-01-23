@@ -313,7 +313,7 @@ public class LotroCompendiumDeedsLoader
       VirtueId virtueId=VirtueId.valueOf(virtueName.toUpperCase());
       if (virtueId!=null)
       {
-        Virtue virtue=new Virtue(virtueId.name(),virtueId.getLabel());
+        Virtue virtue=new Virtue(virtueId,1);
         rewards.addVirtue(virtue);
       }
       else
