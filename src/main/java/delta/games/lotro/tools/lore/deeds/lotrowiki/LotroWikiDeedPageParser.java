@@ -70,8 +70,9 @@ public class LotroWikiDeedPageParser
     Integer virtueCount=null;
     String[] itemRewards=null;
     Integer[] itemRewardCounts=null;
-    for(String line : lines)
+    for(int index=0;index<lines.length;index++)
     {
+      String line=lines[index];
       //System.out.println(line);
       if (line.startsWith("| name"))
       {
@@ -82,6 +83,26 @@ public class LotroWikiDeedPageParser
       {
         String description=getLineValue(line);
         deed.setDescription(description);
+      }
+      else if (line.startsWith("| Objective"))
+      {
+        StringBuilder sb=new StringBuilder();
+        String firstLine=getLineValue(line);
+        sb.append(firstLine);
+        while(true)
+        {
+          String nextLine=lines[index+1];
+          if (nextLine.startsWith(":"))
+          {
+            sb.append('\n').append(nextLine.substring(1));
+            index++;
+          }
+          else
+          {
+            break;
+          }
+        }
+        deed.setObjectives(sb.toString());
       }
       else if (line.startsWith("| Faction"))
       {
@@ -120,6 +141,26 @@ public class LotroWikiDeedPageParser
           }
         }
       }
+      else if (line.startsWith("| SM-reward "))
+      {
+        String smStr=getLineValue(line);
+        if (!smStr.isEmpty())
+        {
+          Integer marks=NumericTools.parseInteger(smStr);
+          if (marks!=null)
+          {
+            ObjectsSet objects=deed.getRewards().getObjects();
+            ObjectItem item=new ObjectItem("Mark");
+            item.setItemId(1879224343);
+            objects.addObject(item,marks.intValue());
+          }
+        }
+      }
+      else if (line.startsWith("| Parent-deed "))
+      {
+        //String parentDeed=getLineValue(line);
+      }
+
       for(int i=1;i<=3;i++)
       {
         String suffix=(i!=1)?String.valueOf(i):" ";
@@ -151,7 +192,6 @@ public class LotroWikiDeedPageParser
 
 /*
 | DP-reward    = 
-| SM-reward    = 
 | Skill-reward = 
 | Trait-reward = 
 | Emote-reward = 
@@ -165,7 +205,6 @@ public class LotroWikiDeedPageParser
 | Deed-chain-4 = 
 | Deed-chain-5 = 
 | Meta-deed     = 
-| Parent-deed   = Explorer of West Gondor
 | Extra         = 
        */
     }
