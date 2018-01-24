@@ -62,32 +62,57 @@ public class LotroWikiDeedCategoryPageParser
     {
       FileInputStream inputStream=new FileInputStream(from);
       Source source=new Source(inputStream);
-
-      List<Element> tables=JerichoHtmlUtils.findElementsByTagName(source,HTMLElementName.TABLE);
-      for(Element table : tables)
-      {
-        boolean ok=checkTable(table);
-        if (!ok)
-        {
-          continue;
-        }
-        List<Element> rows=JerichoHtmlUtils.findElementsByTagName(table,HTMLElementName.TR);
-        rows.remove(0);
-        for(Element row : rows)
-        {
-          String deedId=handleRow(row);
-          if (deedId!=null)
-          {
-            deedIds.add(deedId);
-          }
-        }
-      }
+      parseTables(source,deedIds);
+      parseIndex(source,deedIds);
     }
     catch(Exception e)
     {
       _logger.error("Cannot parse deed category page ["+from+"]",e);
     }
     return deedIds;
+  }
+
+  private void parseTables(Source source, List<String> deedIds)
+  {
+    List<Element> tables=JerichoHtmlUtils.findElementsByTagName(source,HTMLElementName.TABLE);
+    for(Element table : tables)
+    {
+      boolean ok=checkTable(table);
+      if (!ok)
+      {
+        continue;
+      }
+      List<Element> rows=JerichoHtmlUtils.findElementsByTagName(table,HTMLElementName.TR);
+      rows.remove(0);
+      for(Element row : rows)
+      {
+        String deedId=handleRow(row);
+        if (deedId!=null)
+        {
+          deedIds.add(deedId);
+        }
+      }
+    }
+  }
+
+  private void parseIndex(Source source, List<String> deedIds)
+  {
+    Element indexSection=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.DIV,"id","mw-pages");
+    if (indexSection!=null)
+    {
+      List<Element> anchors=JerichoHtmlUtils.findElementsByTagName(indexSection,HTMLElementName.A);
+      for(Element anchor : anchors)
+      {
+        String title=anchor.getAttributeValue("title");
+        String href=anchor.getAttributeValue("href");
+        System.out.println(href + "  ==>  "+title);
+        if (href.startsWith(INDEX))
+        {
+          String deedId=href.substring(INDEX.length());
+          deedIds.add(deedId);
+        }
+      }
+    }
   }
 
   private List<DeedDescription> loadDeeds(String categoryId, List<String> deedIds)
