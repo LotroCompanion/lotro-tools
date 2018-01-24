@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import delta.games.lotro.LotroCoreConfig;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 
 /**
@@ -150,6 +151,47 @@ public class MergeDeedsDatabases
       else
       {
         _lotroCompendium.addDeed(lorebookDeed);
+      }
+    }
+    // Afterwards, merge proxy info (previous/next)
+    for(int i=0;i<nbDeeds;i++)
+    {
+      DeedDescription lorebookDeed=lorebookDeeds.get(i);
+      DeedDescription lotroCompendiumDeed=matchingLotroCompendiumDeeds.get(i);
+      if (lotroCompendiumDeed!=null)
+      {
+        // Previous
+        DeedProxy previousProxy=lotroCompendiumDeed.getPreviousDeedProxy();
+        if (previousProxy!=null)
+        {
+          int previousId=previousProxy.getId();
+          if (previousId > 10000)
+          {
+            DeedProxy lorebookPreviousProxy=new DeedProxy();
+            lorebookPreviousProxy.setId(previousId);
+            lorebookDeed.setPreviousDeedProxy(lorebookPreviousProxy);
+          }
+          else
+          {
+            System.out.println("Warn: unresolved previous id="+previousId);
+          }
+        }
+        // Next
+        DeedProxy nextProxy=lotroCompendiumDeed.getNextDeedProxy();
+        if (nextProxy!=null)
+        {
+          int nextId=nextProxy.getId();
+          if (nextId > 10000)
+          {
+            DeedProxy lorebookNextProxy=new DeedProxy();
+            lorebookNextProxy.setId(nextId);
+            lorebookDeed.setNextDeedProxy(lorebookNextProxy);
+          }
+          else
+          {
+            System.out.println("Warn: unresolved next id="+nextId);
+          }
+        }
       }
     }
   }

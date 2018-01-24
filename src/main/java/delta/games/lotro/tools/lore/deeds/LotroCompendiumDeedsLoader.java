@@ -18,6 +18,7 @@ import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -29,6 +30,16 @@ import delta.games.lotro.plugins.LuaParser;
  */
 public class LotroCompendiumDeedsLoader
 {
+  private List<DeedProxy> _proxies;
+
+  /**
+   * Constructor.
+   */
+  public LotroCompendiumDeedsLoader()
+  {
+    _proxies=new ArrayList<DeedProxy>();
+  }
+
   @SuppressWarnings({"rawtypes","unchecked"})
   private void doIt() throws Exception
   {
@@ -54,6 +65,7 @@ public class LotroCompendiumDeedsLoader
         deeds.add(deed);
       }
     }
+    resolveProxies(deeds);
     File loreDir=LotroCoreConfig.getInstance().getLoreDir();
     File out=new File(loreDir,"deeds_lc.xml");
     DeedsContainer.writeSortedDeeds(deeds,out);
@@ -87,12 +99,40 @@ public class LotroCompendiumDeedsLoader
     // c=Comments?
     List<String> comments=(List<String>)map.get("c");
     // TODO
+     */
     // Previous
-    List<Double> nextIds=(List<Double>)map.get("next");
-    // TODO
-    // Next
     List<Double> prevIds=(List<Double>)map.get("prev");
-    // TODO
+    if (prevIds!=null)
+    {
+      if (prevIds.size()>1)
+      {
+        System.out.println("Multiple previous deeds for id="+deed.getIdentifier()+": "+prevIds);
+      }
+      for(Double prevId : prevIds)
+      {
+        DeedProxy previousDeedProxy=new DeedProxy();
+        previousDeedProxy.setId(prevId.intValue());
+        deed.setPreviousDeedProxy(previousDeedProxy);
+        _proxies.add(previousDeedProxy);
+      }
+    }
+    // Next
+    List<Double> nextIds=(List<Double>)map.get("next");
+    if (nextIds!=null)
+    {
+      if (nextIds.size()>1)
+      {
+        System.out.println("Multiple next deeds for id="+deed.getIdentifier()+": "+nextIds);
+      }
+      for(Double nextId : nextIds)
+      {
+        DeedProxy nextDeedProxy=new DeedProxy();
+        nextDeedProxy.setId(nextId.intValue());
+        deed.setNextDeedProxy(nextDeedProxy);
+        _proxies.add(nextDeedProxy);
+      }
+    }
+    /*
     // pois
     // TODO
     // mobs
@@ -393,6 +433,28 @@ public class LotroCompendiumDeedsLoader
         System.out.println("Deed ID="+deed.getIdentifier()+": overriding category ["+category+"] with ["+categoryToUse+"]");
       }
       deed.setCategory(categoryToUse);
+    }
+  }
+
+  private void resolveProxies(List<DeedDescription> deeds)
+  {
+    for(DeedProxy proxy : _proxies)
+    {
+      int idToSearch=proxy.getId();
+      for(DeedDescription deed : deeds)
+      {
+        if (deed.getIdentifier()==idToSearch)
+        {
+          proxy.setDeed(deed);
+          proxy.setKey(deed.getKey());
+          proxy.setName(deed.getName());
+          break;
+        }
+      }
+      if (proxy.getDeed()==null)
+      {
+        System.out.println("Unresolved deed: id="+idToSearch);
+      }
     }
   }
 

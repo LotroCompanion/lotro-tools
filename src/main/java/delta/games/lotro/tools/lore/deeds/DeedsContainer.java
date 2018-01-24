@@ -9,6 +9,7 @@ import java.util.List;
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
 import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
@@ -37,6 +38,43 @@ public class DeedsContainer
   {
     DeedXMLParser parser=new DeedXMLParser();
     _deeds=parser.parseXML(_deedsFile);
+    resolveProxies();
+  }
+
+  private void resolveProxies()
+  {
+    for(DeedDescription deed : _deeds)
+    {
+      DeedProxy previousProxy=deed.getPreviousDeedProxy();
+      if (previousProxy!=null)
+      {
+        resolveProxy(previousProxy);
+      }
+      DeedProxy nextProxy=deed.getNextDeedProxy();
+      if (nextProxy!=null)
+      {
+        resolveProxy(nextProxy);
+      }
+    }
+  }
+
+  private void resolveProxy(DeedProxy proxy)
+  {
+    int idToSearch=proxy.getId();
+    for(DeedDescription deed : _deeds)
+    {
+      if (deed.getIdentifier()==idToSearch)
+      {
+        proxy.setDeed(deed);
+        proxy.setKey(deed.getKey());
+        proxy.setName(deed.getName());
+        break;
+      }
+    }
+    if (proxy.getDeed()==null)
+    {
+      System.out.println("Unresolved deed: id="+idToSearch);
+    }
   }
 
   /**
