@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashSet;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -38,6 +39,7 @@ public class LotroWikiDeedPageParser
    */
   public DeedDescription parseDeed(File from)
   {
+    System.out.println("File: "+from);
     DeedDescription deed=null;
     try
     {
@@ -51,6 +53,16 @@ public class LotroWikiDeedPageParser
         String text=content.toString();
         deed=buildDeed(text);
       }
+      Element backElement=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.DIV,"id","contentSub");
+      if (backElement!=null)
+      {
+        Element a=JerichoHtmlUtils.findElementByTagName(backElement,HTMLElementName.A);
+        if (a!=null)
+        {
+          String title=a.getAttributeValue("title");
+          deed.setName(title);
+        }
+      }
     }
     catch(Exception e)
     {
@@ -58,6 +70,11 @@ public class LotroWikiDeedPageParser
     }
     return deed;
   }
+
+  public static HashSet<String> _levels=new HashSet<String>();
+  public static HashSet<String> _deedTypes=new HashSet<String>();
+  public static HashSet<String> _deedSubTypes=new HashSet<String>();
+  public static HashSet<String> _regionalSub=new HashSet<String>();
 
   private DeedDescription buildDeed(String rawData)
   {
@@ -72,48 +89,46 @@ public class LotroWikiDeedPageParser
     Integer[] itemRewardCounts=null;
     for(int index=0;index<lines.length;index++)
     {
-      String line=lines[index];
+      String line=lines[index].trim();
+      String lineKey=fetchLineKey(line);
       //System.out.println(line);
-      if (line.startsWith("| name"))
+      if ("name".equals(lineKey))
       {
         String name=getLineValue(line);
         deed.setName(name);
       }
-      else if (line.startsWith("| Lore-text"))
+      else if ("Lore-text".equals(lineKey))
       {
         String description=getLineValue(line);
         deed.setDescription(description);
       }
-      else if (line.startsWith("| Objective"))
+      else if ("Objective".equals(lineKey))
       {
         StringBuilder sb=new StringBuilder();
         String firstLine=getLineValue(line);
         sb.append(firstLine);
         while(true)
         {
-          String nextLine=lines[index+1];
-          if (nextLine.startsWith(":"))
-          {
-            sb.append('\n').append(nextLine.substring(1));
-            index++;
-          }
-          else
+          String nextLine=lines[index+1].trim();
+          if (nextLine.startsWith("|"))
           {
             break;
           }
+          sb.append('\n').append(nextLine);
+          index++;
         }
-        deed.setObjectives(sb.toString());
+        deed.setObjectives(sb.toString().trim());
       }
-      else if (line.startsWith("| Faction"))
+      else if ("Faction".equals(lineKey))
       {
         faction=extractFaction(line);
       }
-      else if (line.startsWith("| Reputation"))
+      else if ("Reputation".equals(lineKey))
       {
         String repValue=getLineValue(line).replace(",","");
         reputation=NumericTools.parseInteger(repValue);
       }
-      else if (line.startsWith("| Title "))
+      else if ("Title".equals(lineKey))
       {
         Title title=extractTitle(line);
         if (title!=null)
@@ -121,15 +136,15 @@ public class LotroWikiDeedPageParser
           rewards.addTitle(title);
         }
       }
-      else if (line.startsWith("| Virtue "))
+      else if ("Virtue".equals(lineKey))
       {
         virtueId=extractVirtue(line);
       }
-      else if (line.startsWith("| Virtue-value"))
+      else if ("Virtue-value".equals(lineKey))
       {
         virtueCount=NumericTools.parseInteger(getLineValue(line));
       }
-      else if (line.startsWith("| TP-reward "))
+      else if ("TP-reward".equals(lineKey))
       {
         String tpStr=getLineValue(line);
         if (!tpStr.isEmpty())
@@ -141,7 +156,7 @@ public class LotroWikiDeedPageParser
           }
         }
       }
-      else if (line.startsWith("| SM-reward "))
+      else if ("SM-reward".equals(lineKey))
       {
         String smStr=getLineValue(line);
         if (!smStr.isEmpty())
@@ -156,7 +171,31 @@ public class LotroWikiDeedPageParser
           }
         }
       }
-      else if (line.startsWith("| Parent-deed "))
+      else if ("CTP-reward".equals(lineKey))
+      {
+        String value=getLineValue(line);
+        if ("Y".equals(value))
+        {
+          // TODO Class Trait Point
+        }
+      }
+      else if ("Level".equals(lineKey))
+      {
+        _levels.add(getLineValue(line));
+      }
+      else if ("Deed-type".equals(lineKey))
+      {
+        _deedTypes.add(getLineValue(line));
+      }
+      else if ("Deed-subtype".equals(lineKey))
+      {
+        _deedSubTypes.add(getLineValue(line));
+      }
+      else if ("Regional-sub".equals(lineKey))
+      {
+        _regionalSub.add(getLineValue(line));
+      }
+      else if ("Parent-deed".equals(lineKey))
       {
         //String parentDeed=getLineValue(line);
       }
@@ -164,7 +203,7 @@ public class LotroWikiDeedPageParser
       for(int i=1;i<=3;i++)
       {
         String suffix=(i!=1)?String.valueOf(i):" ";
-        if (line.startsWith("| Item-reward"+suffix))
+        if (("Item-reward"+suffix).equals(lineKey))
         {
           String itemName=getLineValue(line);
           if (!itemName.isEmpty())
@@ -176,7 +215,7 @@ public class LotroWikiDeedPageParser
             itemRewards[i-1]=itemName;
           }
         }
-        if (line.startsWith("| Item-amount"+suffix))
+        if (("Item-amount"+suffix).equals(lineKey))
         {
           String itemCountStr=getLineValue(line);
           if (!itemCountStr.isEmpty())
@@ -225,6 +264,21 @@ public class LotroWikiDeedPageParser
       handleItemRewards(deed,itemRewards,itemRewardCounts);
     }
     return deed;
+  }
+
+  private String fetchLineKey(String line)
+  {
+    if (line.startsWith("|"))
+    {
+      line=line.substring(1).trim();
+      int index=line.indexOf("=");
+      if (index!=-1)
+      {
+        String key=line.substring(0,index).trim();
+        return key;
+      }
+    }
+    return null;
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)

@@ -126,8 +126,11 @@ public class LotroWikiDeedCategoryPageParser
       String name=categoryId+"/deed"+index+".html";
       File deedFile=_lotroWiki.download(url,name);
       DeedDescription deed=parser.parseDeed(deedFile);
-      deeds.add(deed);
-      System.out.println(deed);
+      if (deed!=null)
+      {
+        deeds.add(deed);
+        System.out.println(deed);
+      }
       index++;
     }
     return deeds;
