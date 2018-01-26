@@ -81,7 +81,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("The_Library_at_Tham_M%EDrdain_Deeds");
     parser.doCategory("Tham_M%EDrdain_Deeds");
     parser.doCategory("The_Great_Barrow_Deeds");
-    // Saviour_of_Eriador
+    parser.doCategory("Shadows_of_Angmar_Instance_Meta_Deeds");
 
     parser.doCategory("Moria_Instance_Deeds");
     //parser.doCategory("Mines_of_Moria_Instance_Deeds");
@@ -97,14 +97,15 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("The_Foundry_Deeds");
     parser.doCategory("The_Tower_of_Orthanc_Deeds");
     parser.doCategory("Draigoch's_Lair_Deeds");
-    // The_Armies_of_Isengard
-    // Discovery:_Instances_of_Isengard
+    parser.doCategory("Rise_of_Isengard_Deeds");
 
     parser.doCategory("The_Road_to_Erebor_Deeds");
     parser.doCategory("Ashes_of_Osgiliath_Deeds");
 
+    // Hobby
     parser.doCategory("Hobby_Deeds");
 
+    // Reputation
     parser.doCategory("Reputation_Deeds");
 
     // Events
@@ -115,10 +116,22 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Bree-land_Event_Deeds");
     parser.doCategory("Event_Deeds");
 
-    //Skirmish_Instances_Deeds
-    //Skirmish_Lieutenants_Deeds
-    //Fishing_Deeds
-    //Social_Deeds
+    // Racial deeds
+    parser.doCategory("Beorning_(Race)_Deeds");
+    parser.doCategory("Dwarf_Deeds");
+    parser.doCategory("Elf_Deeds");
+    parser.doCategory("High_Elf_Deeds");
+    parser.doCategory("Hobbit_Deeds");
+    parser.doCategory("Race_of_Man_Deeds");
+
+    // Skirmish
+    parser.doCategory("Skirmish_Deeds");
+    parser.doCategory("Skirmish_Instances_Deeds");
+    parser.doCategory("Skirmish_Lieutenants_Deeds");
+
+    // Misc
+    parser.doCategory("Social_Deeds");
+    parser.doCategory("Epic_Deeds");
   }
 
   /**

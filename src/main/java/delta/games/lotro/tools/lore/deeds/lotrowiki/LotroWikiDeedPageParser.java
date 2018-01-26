@@ -2,7 +2,6 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.HashSet;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
