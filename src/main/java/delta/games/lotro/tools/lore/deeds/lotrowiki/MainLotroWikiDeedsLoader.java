@@ -105,14 +105,20 @@ public class MainLotroWikiDeedsLoader
 
     parser.doCategory("Hobby_Deeds");
 
+    parser.doCategory("Reputation_Deeds");
+
+    // Events
+    parser.doCategory("Frostbluff_Event_Deeds");
+    parser.doCategory("Yuletide_Festival_Deeds");
+    parser.doCategory("Summer_Festival_Deeds");
+    parser.doCategory("Harvest_Festival_Deeds");
+    parser.doCategory("Bree-land_Event_Deeds");
+    parser.doCategory("Event_Deeds");
+
     //Skirmish_Instances_Deeds
     //Skirmish_Lieutenants_Deeds
     //Fishing_Deeds
     //Social_Deeds
-    System.out.println("Levels: "+LotroWikiDeedPageParser._levels);
-    System.out.println("Types: "+LotroWikiDeedPageParser._deedTypes);
-    System.out.println("Sub-types: "+LotroWikiDeedPageParser._deedSubTypes);
-    System.out.println("Regional Sub: "+LotroWikiDeedPageParser._regionalSub);
   }
 
   /**

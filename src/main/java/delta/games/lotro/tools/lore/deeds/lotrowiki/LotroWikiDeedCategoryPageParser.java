@@ -3,7 +3,9 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -12,7 +14,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
+import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 
 /**
@@ -47,7 +49,8 @@ public class LotroWikiDeedCategoryPageParser
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
     File to=new File("deeds-"+categoryId+".xml").getAbsoluteFile();
-    DeedXMLWriter.writeDeedsFile(to,deeds);
+    DeedsContainer.writeSortedDeeds(deeds,to);
+    //DeedXMLWriter.writeDeedsFile(to,deeds);
   }
 
   /**
@@ -103,9 +106,9 @@ public class LotroWikiDeedCategoryPageParser
       List<Element> anchors=JerichoHtmlUtils.findElementsByTagName(indexSection,HTMLElementName.A);
       for(Element anchor : anchors)
       {
-        String title=anchor.getAttributeValue("title");
+        //String title=anchor.getAttributeValue("title");
         String href=anchor.getAttributeValue("href");
-        System.out.println(href + "  ==>  "+title);
+        //System.out.println(href + "  ==>  "+title);
         if (href.startsWith(INDEX))
         {
           String deedId=href.substring(INDEX.length());
@@ -118,6 +121,7 @@ public class LotroWikiDeedCategoryPageParser
   private List<DeedDescription> loadDeeds(String categoryId, List<String> deedIds)
   {
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
+    Set<String> deedKeys=new HashSet<String>();
     LotroWikiDeedPageParser parser=new LotroWikiDeedPageParser();
     int index=0;
     for(String deedId : deedIds)
@@ -128,7 +132,12 @@ public class LotroWikiDeedCategoryPageParser
       DeedDescription deed=parser.parseDeed(deedFile);
       if (deed!=null)
       {
-        deeds.add(deed);
+        deed.setKey(deedId);
+        if (!deedKeys.contains(deedId))
+        {
+          deeds.add(deed);
+          deedKeys.add(deedId);
+        }
         System.out.println(deed);
       }
       index++;
@@ -162,9 +171,9 @@ public class LotroWikiDeedCategoryPageParser
       Element anchor=JerichoHtmlUtils.findElementByTagName(deedCell,HTMLElementName.A);
       if (anchor!=null)
       {
-        String title=anchor.getAttributeValue("title");
+        //String title=anchor.getAttributeValue("title");
         String href=anchor.getAttributeValue("href");
-        System.out.println(href + "  ==>  "+title);
+        //System.out.println(href + "  ==>  "+title);
         if (href.startsWith(INDEX))
         {
           deedId=href.substring(INDEX.length());

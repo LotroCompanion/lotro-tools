@@ -20,6 +20,7 @@ import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
@@ -60,7 +61,10 @@ public class LotroWikiDeedPageParser
         if (a!=null)
         {
           String title=a.getAttributeValue("title");
-          deed.setName(title);
+          if (deed!=null)
+          {
+            deed.setName(title);
+          }
         }
       }
     }
@@ -71,22 +75,40 @@ public class LotroWikiDeedPageParser
     return deed;
   }
 
-  public static HashSet<String> _levels=new HashSet<String>();
-  public static HashSet<String> _deedTypes=new HashSet<String>();
-  public static HashSet<String> _deedSubTypes=new HashSet<String>();
-  public static HashSet<String> _regionalSub=new HashSet<String>();
+  //public static HashSet<String> _levels=new HashSet<String>();
+  //public static HashSet<String> _deedTypes=new HashSet<String>();
+  //public static HashSet<String> _deedSubTypes=new HashSet<String>();
+  //public static HashSet<String> _regionalSub=new HashSet<String>();
 
   private DeedDescription buildDeed(String rawData)
   {
-    DeedDescription deed=new DeedDescription();
-    Rewards rewards=deed.getRewards();
     String[] lines=rawData.split("\n");
+
+    // Checks
+    if (lines==null) return null;
+    if (lines.length<3) return null;
+    if ((!lines[0].contains("{{Deed")) && (!lines[1].contains("{{Deed")) && (!lines[2].contains("{{Deed")))
+    {
+      return null;
+    }
+
+    DeedDescription deed=new DeedDescription();
+    deed.setType(null);
+    Rewards rewards=deed.getRewards();
+    // Reputation
     Faction faction=null;
     Integer reputation=null;
+    // Virtues
     VirtueId virtueId=null;
     Integer virtueCount=null;
+    // Item rewards
     String[] itemRewards=null;
     Integer[] itemRewardCounts=null;
+    // Categories
+    String deedType=null;
+    String deedSubtype=null;
+    String regionalSub=null;
+
     for(int index=0;index<lines.length;index++)
     {
       String line=lines[index].trim();
@@ -181,19 +203,22 @@ public class LotroWikiDeedPageParser
       }
       else if ("Level".equals(lineKey))
       {
-        _levels.add(getLineValue(line));
+        //_levels.add(getLineValue(line));
       }
       else if ("Deed-type".equals(lineKey))
       {
-        _deedTypes.add(getLineValue(line));
+        deedType=getLineValue(line);
+        //_deedTypes.add(deedType);
       }
       else if ("Deed-subtype".equals(lineKey))
       {
-        _deedSubTypes.add(getLineValue(line));
+        deedSubtype=getLineValue(line);
+        //_deedSubTypes.add(deedSubtype);
       }
       else if ("Regional-sub".equals(lineKey))
       {
-        _regionalSub.add(getLineValue(line));
+        regionalSub=getLineValue(line);
+        //_regionalSub.add(regionalSub);
       }
       else if ("Parent-deed".equals(lineKey))
       {
@@ -202,7 +227,7 @@ public class LotroWikiDeedPageParser
 
       for(int i=1;i<=3;i++)
       {
-        String suffix=(i!=1)?String.valueOf(i):" ";
+        String suffix=(i!=1)?String.valueOf(i):"";
         if (("Item-reward"+suffix).equals(lineKey))
         {
           String itemName=getLineValue(line);
@@ -263,6 +288,8 @@ public class LotroWikiDeedPageParser
     {
       handleItemRewards(deed,itemRewards,itemRewardCounts);
     }
+    // Categories
+    handleCategories(deed,deedType,deedSubtype,regionalSub);
     return deed;
   }
 
@@ -342,6 +369,123 @@ public class LotroWikiDeedPageParser
       virtue=VirtueId.valueOf(virtueName.toUpperCase());
     }
     return virtue;
+  }
+
+  private void handleCategories(DeedDescription deed, String deedType, String deedSubType, String regionalSub)
+  {
+    DeedType type=null;
+    String category=null;
+    // Fixes
+    if ("Halls of Crafting".equals(deedSubType)) deedType="Instances";
+    if ("Instance".equals(deedType)) deedType="Instances";
+    if ("the Wastes".equals(deedSubType)) deedSubType="The Wastes";
+    if ("meta".equals(deedType)) deedType="Meta";
+    // Class deeds
+    if ("Class".equals(deedType))
+    {
+      type=DeedType.CLASS;
+      category=deedSubType;
+    }
+    // Type
+    if ("Slayer".equals(regionalSub)) type=DeedType.SLAYER;
+    else if ("Explorer".equals(regionalSub)) type=DeedType.EXPLORER;
+    else if ("Lore".equals(regionalSub)) type=DeedType.LORE;
+    else if ("Quest".equals(regionalSub)) type=DeedType.QUEST;
+    else if ("Meta".equals(regionalSub)) type=DeedType.META;
+
+    if ("Regional".equals(deedType))
+    {
+      if ("".equals(deedSubType)) deedSubType="Gorgoroth";
+      if ((deedSubType!=null) && (deedSubType.length()>0))
+      {
+        category="Region:"+deedSubType;
+      }
+    }
+    else if (("Meta".equals(deedType)) || ("Slayer".equals(deedType)))
+    {
+      // Special
+      if ("Host of the West (Faction)".equals(deedSubType)) deedSubType="The Wastes";
+      if ("".equals(deedSubType)) deedSubType="Evendim";
+      category=getPrefixForZone(deedSubType);
+      if (category!=null)
+      {
+        category=category+":"+deedSubType;
+      }
+    }
+    else if ("Quest".equals(deedType))
+    {
+      if ("Western Gondor City Watch".equals(deedSubType))
+      {
+        type=DeedType.QUEST;
+        category="Dol Amroth:City Watch";
+      }
+    }
+    else if ("Instances".equals(deedType))
+    {
+      category="Instance:"+deedSubType;
+    }
+    else if ("Lore".equals(deedType))
+    {
+      type=DeedType.LORE;
+    }
+    else if ("Hobby".equals(deedType))
+    {
+      type=DeedType.HOBBY;
+      category=regionalSub;
+    }
+    else if ("Gorgoroth Meta".equals(deedType))
+    {
+      type=DeedType.META;
+      category="Region:Gorgoroth";
+    }
+    if ((("".equals(deedType)) && ("Reputation".equals(regionalSub))) || ("Reputation".equals(deedType)))
+    {
+      type=DeedType.REPUTATION;
+    }
+
+    if ((type!=null) || (category!=null))
+    {
+      deed.setType(type);
+      deed.setCategory(category);
+    }
+    else
+    {
+      if (((deedType==null) || (deedType.isEmpty())) && ((deedSubType==null) || (deedSubType.isEmpty())) && ((regionalSub==null) || (regionalSub.isEmpty())))
+      {
+        // Ignore
+      }
+      else
+      {
+        System.out.println("Unidentified: type="+deedType+", subType="+deedSubType+", regionalSub="+regionalSub);
+      }
+    }
+  }
+
+  private String getPrefixForZone(String zone)
+  {
+    String ret=null;
+    // Instances
+    if ("Dargnákh Unleashed".equals(zone)) ret="Instances";
+    else if ("Dark Delvings".equals(zone)) ret="Instances";
+    else if ("Fil Gashan".equals(zone)) ret="Instances";
+    else if ("Forges of Khazad-dûm".equals(zone)) ret="Instances";
+    else if ("Forgotten Treasury".equals(zone)) ret="Instances";
+    else if ("Skûmfil".equals(zone)) ret="Instances";
+    else if ("The Grand Stair".equals(zone)) ret="Instances";
+    else if ("The Sixteenth Hall".equals(zone)) ret="Instances";
+    else if ("The Vile Maw".equals(zone)) ret="Instances";
+    else if ("The Tower of Orthanc".equals(zone)) ret="Instances";
+
+    // Regions
+    else if ("Evendim".equals(zone)) ret="Region";
+    else if ("Central Gondor".equals(zone)) ret="Region";
+    else if ("Eastern Gondor".equals(zone)) ret="Region";
+    else if ("Far Anórien".equals(zone)) ret="Region";
+    else if ("Old Anórien".equals(zone)) ret="Region";
+    else if ("The Wastes".equals(zone)) ret="Region";
+    else if ("West Rohan".equals(zone)) ret="Region";
+    else if ("Western Gondor".equals(zone)) ret="Region";
+    return ret;
   }
 
   private String getLineValue(String line)
