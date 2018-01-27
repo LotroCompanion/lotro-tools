@@ -379,6 +379,15 @@ public class LotroWikiDeedPageParser
     if ("Instance".equals(deedType)) deedType="Instances";
     if ("the Wastes".equals(deedSubType)) deedSubType="The Wastes";
     if ("meta".equals(deedType)) deedType="Meta";
+    if ("quest".equals(deedType)) deedType="Quest";
+    if ("Racial".equals(deedType)) deedType="Race";
+    if ("Tower of Orthanc".equals(regionalSub)) regionalSub="The Tower of Orthanc";
+    if ("The Tower of Orthanc".equals(regionalSub)) deedType="Instances";
+    if ("Skirmish".equals(deedSubType))
+    {
+      deedType="Skirmish";
+      deedSubType="";
+    }
     // Class deeds
     if ("Class".equals(deedType))
     {
@@ -390,7 +399,23 @@ public class LotroWikiDeedPageParser
     else if ("Explorer".equals(regionalSub)) type=DeedType.EXPLORER;
     else if ("Lore".equals(regionalSub)) type=DeedType.LORE;
     else if ("Quest".equals(regionalSub)) type=DeedType.QUEST;
+    else if ("Event".equals(regionalSub)) type=DeedType.EVENT;
+    else if ("Reputation".equals(regionalSub)) type=DeedType.REPUTATION;
     else if ("Meta".equals(regionalSub)) type=null;
+
+    if ("Exploration".equals(deedType)) type=DeedType.EXPLORER;
+    else if ("Slayer".equals(deedType)) type=DeedType.SLAYER;
+    else if ("Race".equals(deedType)) category="Racial";
+    else if ("Social".equals(deedType)) type=DeedType.EVENT;
+    else if ("Lore".equals(deedType)) type=DeedType.LORE;
+    else if ("Epic".equals(deedType)) category="Epic";
+    else if ("Skirmish".equals(deedType)) category="Skirmish";
+    else if ("Skirmish Instances".equals(deedType)) category="Skirmish";
+    else if ("Summer Festival".equals(deedType)) category="Event:Summer Festival";
+    else if ("Hidden".equals(deedType)) category="Hidden";
+
+    if ("Epic".equals(deedSubType)) category="Epic";
+    else if ("Event".equals(deedSubType)) type=DeedType.EVENT;
 
     if ("Regional".equals(deedType))
     {
@@ -400,7 +425,9 @@ public class LotroWikiDeedPageParser
         category="Region:"+deedSubType;
       }
     }
-    else if (("Meta".equals(deedType)) || ("Slayer".equals(deedType)))
+    else if (("Meta".equals(deedType)) || ("Slayer".equals(deedType)) ||
+             ("Social".equals(deedType)) || ("Quest".equals(deedType)) ||
+             ("Quest".equals(deedType)))
     {
       // Special
       if ("Host of the West (Faction)".equals(deedSubType)) deedSubType="The Wastes";
@@ -410,22 +437,15 @@ public class LotroWikiDeedPageParser
       {
         category=category+":"+deedSubType;
       }
-    }
-    else if ("Quest".equals(deedType))
-    {
       if ("Western Gondor City Watch".equals(deedSubType))
       {
         type=DeedType.QUEST;
-        category="Dol Amroth:City Watch";
+        category="Region:Dol Amroth:City Watch";
       }
     }
     else if ("Instances".equals(deedType))
     {
-      category="Instance:"+deedSubType;
-    }
-    else if ("Lore".equals(deedType))
-    {
-      type=DeedType.LORE;
+      category="Instances:"+deedSubType;
     }
     else if ("Hobby".equals(deedType))
     {
@@ -474,6 +494,9 @@ public class LotroWikiDeedPageParser
     else if ("The Sixteenth Hall".equals(zone)) ret="Instances";
     else if ("The Vile Maw".equals(zone)) ret="Instances";
     else if ("The Tower of Orthanc".equals(zone)) ret="Instances";
+    else if ("The Court of Seregost".equals(zone)) ret="Instances";
+    else if ("Dungeons of Naerband".equals(zone)) ret="Instances";
+    else if ("Shadows of Angmar".equals(zone)) ret="Cluster";
 
     // Regions
     else if ("Evendim".equals(zone)) ret="Region";
