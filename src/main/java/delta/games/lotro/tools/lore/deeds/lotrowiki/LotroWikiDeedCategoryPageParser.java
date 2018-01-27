@@ -30,6 +30,8 @@ public class LotroWikiDeedCategoryPageParser
 
   private LotroWikiSiteInterface _lotroWiki;
 
+  private HashSet<String> _deedIds;
+
   /**
    * Constructor.
    * @param lotroWiki Lotro-wiki interface.
@@ -37,22 +39,25 @@ public class LotroWikiDeedCategoryPageParser
   public LotroWikiDeedCategoryPageParser(LotroWikiSiteInterface lotroWiki)
   {
     _lotroWiki=lotroWiki;
+    _deedIds=new HashSet<String>();
   }
 
   /**
    * Handle a deed category.
    * @param categoryId Category identifier.
+   * @return a list of loaded deeds.
    */
-  public void doCategory(String categoryId)
+  public List<DeedDescription> doCategory(String categoryId)
   {
     String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+Escapes.escapeUrl(categoryId);
     String file=categoryId+"/main.html";
     File deedsCategoryFile=_lotroWiki.download(url,Escapes.escapeFile(file));
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
-    File to=new File("deeds-"+categoryId+".xml").getAbsoluteFile();
+    File to=new File("deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
     DeedsContainer.writeSortedDeeds(deeds,to);
     //DeedXMLWriter.writeDeedsFile(to,deeds);
+    return deeds;
   }
 
   /**
@@ -134,13 +139,18 @@ public class LotroWikiDeedCategoryPageParser
       DeedDescription deed=parser.parseDeed(deedFile);
       if (deed!=null)
       {
-        deed.setKey(deedId);
-        if (!deedKeys.contains(deedId))
+        boolean alreadyKnown=_deedIds.contains(deedId);
+        if (!alreadyKnown)
         {
-          deeds.add(deed);
-          deedKeys.add(deedId);
+          deed.setKey(deedId);
+          if (!deedKeys.contains(deedId))
+          {
+            deeds.add(deed);
+            deedKeys.add(deedId);
+          }
+          _deedIds.add(deedId);
+          System.out.println(deed);
         }
-        System.out.println(deed);
       }
       index++;
     }
