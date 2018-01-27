@@ -44,7 +44,7 @@ public class LotroWikiDeedCategoryPageParser
    */
   public void doCategory(String categoryId)
   {
-    String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+categoryId;
+    String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+escape(categoryId);
     File deedsCategoryFile=_lotroWiki.download(url,categoryId+"/main.html");
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
@@ -181,5 +181,17 @@ public class LotroWikiDeedCategoryPageParser
       }
     }
     return deedId;
+  }
+
+  private String escape(String input)
+  {
+    String ret=input;
+    ret=ret.replace("ó","%F3");
+    ret=ret.replace("ú","%FA");
+    ret=ret.replace("û","%FB");
+    ret=ret.replace("í","%ED");
+    ret=ret.replace("á","%E1");
+    ret=ret.replace("â","%E2");
+    return ret;
   }
 }
