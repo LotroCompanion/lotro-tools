@@ -13,7 +13,10 @@ import net.htmlparser.jericho.Source;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.Escapes;
@@ -45,6 +48,66 @@ public class LotroWikiDeedCategoryPageParser
   /**
    * Handle a deed category.
    * @param categoryId Category identifier.
+   * @param type Deed type to set, if not <code>null</code>.
+   * @param category Category to set, if not <code>null</code>.
+   * @return a list of loaded deeds.
+   */
+  public List<DeedDescription> doCategory(String categoryId, DeedType type, String category)
+  {
+    List<DeedDescription> deeds=doCategory(categoryId);
+    if (category!=null)
+    {
+      if (category.endsWith(":")) category=category.substring(0,category.length()-1);
+    }
+    for(DeedDescription deed : deeds)
+    {
+      if (type!=null) deed.setType(type);
+      if (category!=null) deed.setCategory(category);
+    }
+    writeFile(categoryId,deeds);
+    return deeds;
+  }
+
+  /**
+   * Handle a deed category.
+   * @param categoryId Category identifier.
+   * @param type Deed type to set, if not <code>null</code>.
+   * @param characterClass Character class to set, if not <code>null</code>.
+   * @return a list of loaded deeds.
+   */
+  public List<DeedDescription> doCategory(String categoryId, DeedType type, CharacterClass characterClass)
+  {
+    List<DeedDescription> deeds=doCategory(categoryId);
+    for(DeedDescription deed : deeds)
+    {
+      if (type!=null) deed.setType(type);
+      if (characterClass!=null) deed.setCategory("Class:"+characterClass.getKey());
+    }
+    writeFile(categoryId,deeds);
+    return deeds;
+  }
+
+  /**
+   * Handle a deed category.
+   * @param categoryId Category identifier.
+   * @param type Deed type to set, if not <code>null</code>.
+   * @param race Race to set, if not <code>null</code>.
+   * @return a list of loaded deeds.
+   */
+  public List<DeedDescription> doCategory(String categoryId, DeedType type, Race race)
+  {
+    List<DeedDescription> deeds=doCategory(categoryId);
+    for(DeedDescription deed : deeds)
+    {
+      if (race!=null) deed.setCategory("Race:"+race.getLabel());
+    }
+    writeFile(categoryId,deeds);
+    return deeds;
+  }
+
+  /**
+   * Handle a deed category.
+   * @param categoryId Category identifier.
    * @return a list of loaded deeds.
    */
   public List<DeedDescription> doCategory(String categoryId)
@@ -54,10 +117,15 @@ public class LotroWikiDeedCategoryPageParser
     File deedsCategoryFile=_lotroWiki.download(url,Escapes.escapeFile(file));
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
+    writeFile(categoryId,deeds);
+    return deeds;
+  }
+
+  private void writeFile(String categoryId,List<DeedDescription> deeds)
+  {
     File to=new File("deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
     DeedsContainer.writeSortedDeeds(deeds,to);
     //DeedXMLWriter.writeDeedsFile(to,deeds);
-    return deeds;
   }
 
   /**

@@ -1,5 +1,16 @@
 package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
+import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
+import delta.games.lotro.tools.lore.deeds.DeedsContainer;
+
 /**
  * Download deeds data from the site lotro-wiki.
  * @author DAM
@@ -16,6 +27,18 @@ public class MainLotroWikiDeedsLoader
     //_outDir=new File("data/lore/deeds").getAbsoluteFile();
   }
 
+  private static final String INSTANCES_SEED="Instances:";
+  private static final String SHADOWS_OF_ANGMAR_SEED=INSTANCES_SEED+"Shadows of Angmar:";
+  private static final String MINES_OF_MORIA_SEED=INSTANCES_SEED+"Mines of Moria:";
+  private static final String SCOURGE_OF_KHAZAD_DUM_SEED=INSTANCES_SEED+"Scourge of Khazad-dûm:";
+  private static final String TOWER_OF_DOL_GULDUR_SEED=INSTANCES_SEED+"Tower of Dol Guldur:";
+  private static final String IN_THEIR_ABSENCE=INSTANCES_SEED+"In Their Absence:";
+  private static final String RISE_OF_ISENGARD=INSTANCES_SEED+"Rise of Isengard:";
+  private static final String ROAD_TO_EREBOR_SEED=INSTANCES_SEED+"Road to Erebor:";
+  private static final String ASHES_OF_OSGILIATH_SEED=INSTANCES_SEED+"Ashes of Osgiliath:";
+  private static final String BATTLE_OF_PELENNOR_SEED=INSTANCES_SEED+"Battle of Pelennor:";
+  private static final String PLATEAU_OF_GORGOROTH_SEED=INSTANCES_SEED+"Plateau of Gorgoroth:";
+
   private void doIt()
   {
     LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface();
@@ -23,199 +46,223 @@ public class MainLotroWikiDeedsLoader
     LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser(lotroWiki);
 
     // Class deeds
-    parser.doCategory("Beorning_Deeds");
-    parser.doCategory("Burglar_Deeds");
-    parser.doCategory("Captain_Deeds");
-    parser.doCategory("Champion_Deeds");
-    parser.doCategory("Guardian_Deeds");
-    parser.doCategory("Hunter_Deeds");
-    parser.doCategory("Lore-master_Deeds");
-    parser.doCategory("Minstrel_Deeds");
-    parser.doCategory("Rune-keeper_Deeds");
-    parser.doCategory("Warden_Deeds");
+    parser.doCategory("Beorning_Deeds",DeedType.CLASS,CharacterClass.BEORNING);
+    parser.doCategory("Burglar_Deeds",DeedType.CLASS,CharacterClass.BURGLAR);
+    parser.doCategory("Captain_Deeds",DeedType.CLASS,CharacterClass.CAPTAIN);
+    parser.doCategory("Champion_Deeds",DeedType.CLASS,CharacterClass.CHAMPION);
+    parser.doCategory("Guardian_Deeds",DeedType.CLASS,CharacterClass.GUARDIAN);
+    parser.doCategory("Hunter_Deeds",DeedType.CLASS,CharacterClass.HUNTER);
+    parser.doCategory("Lore-master_Deeds",DeedType.CLASS,CharacterClass.LORE_MASTER);
+    parser.doCategory("Minstrel_Deeds",DeedType.CLASS,CharacterClass.MINSTREL);
+    parser.doCategory("Rune-keeper_Deeds",DeedType.CLASS,CharacterClass.RUNE_KEEPER);
+    parser.doCategory("Warden_Deeds",DeedType.CLASS,CharacterClass.WARDEN);
 
     // Regions:
     // - Eriador
-    parser.doCategory("Angmar_Deeds");
-    parser.doCategory("The_Shire_Deeds");
-    parser.doCategory("The_North_Downs_Deeds");
-    parser.doCategory("The_Misty_Mountains_Deeds");
-    parser.doCategory("The_Lone-lands_Deeds");
-    parser.doCategory("Forochel_Deeds");
-    parser.doCategory("Evendim_Deeds");
-    parser.doCategory("Eregion_Deeds");
-    parser.doCategory("Ered_Luin_Deeds");
-    parser.doCategory("Enedwaith_Deeds");
-    parser.doCategory("Dunland_Deeds");
-    parser.doCategory("Bree-land_Deeds");
+    parser.doCategory("Angmar_Deeds",null,"Region:Angmar");
+    parser.doCategory("The_Shire_Deeds",null,"Region:Shire");
+    parser.doCategory("The_North_Downs_Deeds",null,"Region:North Downs");
+    parser.doCategory("The_Misty_Mountains_Deeds",null,"Region:Misty Mountains");
+    parser.doCategory("The_Lone-lands_Deeds",null,"Region:Lone-lands");
+    parser.doCategory("Forochel_Deeds",null,"Region:Forochel");
+    parser.doCategory("Evendim_Deeds",null,"Region:Evendim");
+    parser.doCategory("Eregion_Deeds",null,"Region:Eregion");
+    parser.doCategory("Ered_Luin_Deeds",null,"Region:Ered Luin");
+    parser.doCategory("Enedwaith_Deeds",null,"Region:Enedwaith");
+    parser.doCategory("Dunland_Deeds",null,"Region:Dunland");
+    parser.doCategory("Bree-land_Deeds",null,"Region:Bree-land");
+    parser.doCategory("The_Trollshaws_Deeds",null,"Region:Trollshaws");
     // - Rhovanion
-    parser.doCategory("Moria_Deeds");
-    parser.doCategory("Lothlórien_Deeds");
-    parser.doCategory("Mirkwood_Deeds");
-    parser.doCategory("The_Great_River_Deeds");
-    parser.doCategory("East_Rohan_Deeds");
-    parser.doCategory("Wildermore_Deeds");
-    parser.doCategory("West_Rohan_Deeds");
+    parser.doCategory("Moria_Deeds",null,"Region:Moria");
+    parser.doCategory("Lothlórien_Deeds",null,"Region:Lothlórien");
+    parser.doCategory("Mirkwood_Deeds",null,"Region:Mirkwood");
+    parser.doCategory("The_Great_River_Deeds",null,"Region:Great River");
+    parser.doCategory("East_Rohan_Deeds",null,"Region:East Rohan");
+    parser.doCategory("Wildermore_Deeds",null,"Region:Wildermore");
+    parser.doCategory("West_Rohan_Deeds",null,"Region:West Rohan");
     // - Gondor
-    parser.doCategory("Western_Gondor_Deeds");
-    parser.doCategory("Central_Gondor_Deeds");
-    parser.doCategory("Eastern_Gondor_Deeds");
-    parser.doCategory("Old_Anórien_Deeds");
-    parser.doCategory("Far_Anórien_Deeds");
-    parser.doCategory("March_of_the_King_Deeds");
-    parser.doCategory("The_Wastes_Deeds");
+    parser.doCategory("Western_Gondor_Deeds",null,"Region:Western Gondor");
+    parser.doCategory("Central_Gondor_Deeds",null,"Region:Central Gondor");
+    parser.doCategory("Eastern_Gondor_Deeds",null,"Region:Eastern Gondor");
+    parser.doCategory("Old_Anórien_Deeds",null,"Region:Old Anórien");
+    parser.doCategory("Far_Anórien_Deeds",null,"Region:Far Anórien");
+    parser.doCategory("March_of_the_King_Deeds",null,"Region:March of the King");
+    parser.doCategory("The_Wastes_Deeds",null,"Region:The Wastes");
     // - Mordor
-    parser.doCategory("Gorgoroth_Deeds");
+    parser.doCategory("Gorgoroth_Deeds",null,"Region:Gorgoroth");
 
     // PVP
-    parser.doCategory("Freep_Deeds");
-    parser.doCategory("Creep_Quest_Deeds");
-    parser.doCategory("Creep_Slayer_Deeds");
+    parser.doCategory("Freep_Deeds",null,"PVP:Freep deeds");
+    parser.doCategory("Creep_Quest_Deeds",DeedType.QUEST,"PVP:Creep deeds");
+    parser.doCategory("Creep_Slayer_Deeds",DeedType.SLAYER,"PVP:Creep deeds");
 
     // Instances:
     // - Shadows of Angmar
-    parser.doCategory("Barad_Gúlaran_Deeds");
-    parser.doCategory("Carn_Dûm_Deeds");
-    parser.doCategory("The_Halls_of_Night_Deeds");
-    parser.doCategory("Urugarth_Deeds");
-    parser.doCategory("Annúminas_Instance_Deeds");
-    parser.doCategory("Fornost_Slayer_Deeds");
-    parser.doCategory("Fornost_Deeds");
-    parser.doCategory("Inn_of_the_Forsaken_Deeds");
-    parser.doCategory("The_School_at_Tham_Mírdain_Deeds");
-    parser.doCategory("The_Library_at_Tham_Mírdain_Deeds");
-    parser.doCategory("Tham_Mírdain_Deeds");
-    parser.doCategory("The_Great_Barrow_Deeds");
-    parser.doCategory("Shadows_of_Angmar_Instance_Meta_Deeds");
+    parser.doCategory("Barad_Gúlaran_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Barad Gúlaran");
+    parser.doCategory("Carn_Dûm_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Carn Dûm");
+    parser.doCategory("The_Halls_of_Night_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"The Halls of Night");
+    parser.doCategory("Urugarth_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Urugarth");
+    parser.doCategory("Annúminas_Instance_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Annúminas");
+    parser.doCategory("Fornost_Slayer_Deeds",DeedType.SLAYER,SHADOWS_OF_ANGMAR_SEED+"Fornost");
+    parser.doCategory("Fornost_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Fornost");
+    parser.doCategory("Inn_of_the_Forsaken_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Inn of the Forsaken");
+    parser.doCategory("The_School_at_Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain:School");
+    parser.doCategory("The_Library_at_Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain:Library");
+    parser.doCategory("Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain");
+    parser.doCategory("The_Great_Barrow_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Great Barrows");
+    parser.doCategory("Shadows_of_Angmar_Instance_Meta_Deeds",null,SHADOWS_OF_ANGMAR_SEED);
     // - Moria
     // -- Mines of Moria
-    parser.doCategory("Dark_Delvings_Slayer_Deeds");
-    parser.doCategory("Dark_Delvings_Deeds");
-    parser.doCategory("Forgotten_Treasury_Slayer_Deeds");
-    parser.doCategory("Forgotten_Treasury_Deeds");
-    parser.doCategory("The_Sixteenth_Hall_Slayer_Deeds");
-    parser.doCategory("The_Sixteenth_Hall_Deeds");
-    parser.doCategory("The_Vile_Maw_Slayer_Deeds");
-    parser.doCategory("The_Vile_Maw_Deeds");
-    parser.doCategory("Skûmfil_Slayer_Deeds");
-    parser.doCategory("Skûmfil_Deeds");
-    parser.doCategory("Fil_Gashan_Slayer_Deeds");
-    parser.doCategory("Fil_Gashan_Deeds");
-    parser.doCategory("Forges_of_Khazad-dûm_Slayer_Deeds");
-    parser.doCategory("Forges_of_Khazad-dûm_Deeds");
-    parser.doCategory("The_Grand_Stair_Slayer_Deeds");
-    parser.doCategory("The_Grand_Stair_Deeds");
-    parser.doCategory("Mines_of_Moria_Instance_Deeds");
+    parser.doCategory("Dark_Delvings_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Dark Delvings");
+    parser.doCategory("Dark_Delvings_Deeds",null,MINES_OF_MORIA_SEED+"Dark Delvings");
+    parser.doCategory("Forgotten_Treasury_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Forgotten Treasury");
+    parser.doCategory("Forgotten_Treasury_Deeds",null,MINES_OF_MORIA_SEED+"Forgotten Treasury");
+    parser.doCategory("The_Sixteenth_Hall_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"The Sixteenth Hall");
+    parser.doCategory("The_Sixteenth_Hall_Deeds",null,MINES_OF_MORIA_SEED+"The Sixteenth Hall");
+    parser.doCategory("The_Vile_Maw_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"The Vile Maw");
+    parser.doCategory("The_Vile_Maw_Deeds",null,MINES_OF_MORIA_SEED+"The Vile Maw");
+    parser.doCategory("Skûmfil_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Skûmfil");
+    parser.doCategory("Skûmfil_Deeds",null,MINES_OF_MORIA_SEED+"Skûmfil");
+    parser.doCategory("Fil_Gashan_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Fil Gashan");
+    parser.doCategory("Fil_Gashan_Deeds",null,MINES_OF_MORIA_SEED+"Fil Gashan");
+    parser.doCategory("Forges_of_Khazad-dûm_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Forges of Khazad-dûm");
+    parser.doCategory("Forges_of_Khazad-dûm_Deeds",null,MINES_OF_MORIA_SEED+"Forges of Khazad-dûm");
+    parser.doCategory("The_Grand_Stair_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"The Grand Stair");
+    parser.doCategory("The_Grand_Stair_Deeds",null,MINES_OF_MORIA_SEED+"The Grand Stair");
+    parser.doCategory("Mines_of_Moria_Instance_Deeds",null,MINES_OF_MORIA_SEED);
     // -- Scourge of Khazad-dûm
-    parser.doCategory("Dâr_Narbugud_Slayer_Deeds");
-    parser.doCategory("Dâr_Narbugud_Deeds");
-    parser.doCategory("Halls_of_Crafting_Slayer_Deeds");
-    parser.doCategory("Halls_of_Crafting_Deeds");
-    parser.doCategory("The_Mirror-halls_of_Lumul-nar_Slayer_Deeds");
-    parser.doCategory("The_Mirror-halls_of_Lumul-nar_Deeds");
-    parser.doCategory("The_Water_Wheels:_Nalâ-dûm_Slayer_Deeds");
-    parser.doCategory("The_Water_Wheels:_Nalâ-dûm_Deeds");
-    parser.doCategory("Scourge_of_Khazad-dûm_Instance_Deeds");
+    parser.doCategory("Dâr_Narbugud_Slayer_Deeds",DeedType.SLAYER,SCOURGE_OF_KHAZAD_DUM_SEED+"Dâr Narbugud");
+    parser.doCategory("Dâr_Narbugud_Deeds",null,SCOURGE_OF_KHAZAD_DUM_SEED+"Dâr Narbugud");
+    parser.doCategory("Halls_of_Crafting_Slayer_Deeds",DeedType.SLAYER,SCOURGE_OF_KHAZAD_DUM_SEED+"Halls of Crafting");
+    parser.doCategory("Halls_of_Crafting_Deeds",null,SCOURGE_OF_KHAZAD_DUM_SEED+"Halls of Crafting");
+    parser.doCategory("The_Mirror-halls_of_Lumul-nar_Slayer_Deeds",DeedType.SLAYER,SCOURGE_OF_KHAZAD_DUM_SEED+"The Mirror-halls of Lumul-nar");
+    parser.doCategory("The_Mirror-halls_of_Lumul-nar_Deeds",null,SCOURGE_OF_KHAZAD_DUM_SEED+"The Mirror-halls of Lumul-nar");
+    parser.doCategory("The_Water_Wheels:_Nalâ-dûm_Slayer_Deeds",DeedType.SLAYER,SCOURGE_OF_KHAZAD_DUM_SEED+"The Water Wheels of Nalâ-dûm");
+    parser.doCategory("The_Water_Wheels:_Nalâ-dûm_Deeds",null,SCOURGE_OF_KHAZAD_DUM_SEED+"The Water Wheels of Nalâ-dûm");
+    parser.doCategory("Scourge_of_Khazad-dûm_Instance_Deeds",null,SCOURGE_OF_KHAZAD_DUM_SEED);
     parser.doCategory("Moria_Instance_Deeds");
     // - Tower of Dol Guldur
-    parser.doCategory("Barad_Guldur_Lore_Deeds");
-    parser.doCategory("Barad_Guldur_Slayer_Deeds");
-    parser.doCategory("Barad_Guldur_Deeds");
-    parser.doCategory("Dungeons_of_Dol_Guldur_Explorer_Deeds");
-    parser.doCategory("Dungeons_of_Dol_Guldur_Lore_Deeds");
-    parser.doCategory("Dungeons_of_Dol_Guldur_Slayer_Deeds");
-    parser.doCategory("Dungeons_of_Dol_Guldur_Deeds");
-    parser.doCategory("Sammath_Gûl_Lore_Deeds");
-    parser.doCategory("Sammath_Gûl_Slayer_Deeds");
-    parser.doCategory("Sammath_Gûl_Deeds");
-    parser.doCategory("Sword-hall_of_Dol_Guldur_Slayer_Deeds");
-    parser.doCategory("Sword-hall_of_Dol_Guldur_Deeds");
-    parser.doCategory("Warg-pens_of_Dol_Guldur_Slayer_Deeds");
-    parser.doCategory("Warg-pens_of_Dol_Guldur_Deeds");
-    parser.doCategory("Tower_of_Dol_Guldur_Deeds");
+    parser.doCategory("Barad_Guldur_Lore_Deeds",DeedType.LORE,TOWER_OF_DOL_GULDUR_SEED+"Barad Guldur");
+    parser.doCategory("Barad_Guldur_Slayer_Deeds",DeedType.SLAYER,TOWER_OF_DOL_GULDUR_SEED+"Barad Guldur");
+    parser.doCategory("Barad_Guldur_Deeds",null,TOWER_OF_DOL_GULDUR_SEED+"Barad Guldur");
+    parser.doCategory("Dungeons_of_Dol_Guldur_Explorer_Deeds",DeedType.EXPLORER,TOWER_OF_DOL_GULDUR_SEED+"Dungeons of Dol Guldur");
+    parser.doCategory("Dungeons_of_Dol_Guldur_Lore_Deeds",DeedType.LORE,TOWER_OF_DOL_GULDUR_SEED+"Dungeons of Dol Guldur");
+    parser.doCategory("Dungeons_of_Dol_Guldur_Slayer_Deeds",DeedType.SLAYER,TOWER_OF_DOL_GULDUR_SEED+"Dungeons of Dol Guldur");
+    parser.doCategory("Dungeons_of_Dol_Guldur_Deeds",null,TOWER_OF_DOL_GULDUR_SEED);
+    parser.doCategory("Sammath_Gûl_Lore_Deeds",DeedType.LORE,TOWER_OF_DOL_GULDUR_SEED+"Sammath Gûl");
+    parser.doCategory("Sammath_Gûl_Slayer_Deeds",DeedType.SLAYER,TOWER_OF_DOL_GULDUR_SEED+"Sammath Gûl");
+    parser.doCategory("Sammath_Gûl_Deeds",null,TOWER_OF_DOL_GULDUR_SEED+"Sammath Gûl");
+    parser.doCategory("Sword-hall_of_Dol_Guldur_Slayer_Deeds",DeedType.SLAYER,TOWER_OF_DOL_GULDUR_SEED+"Sword-hall of Dol Guldur");
+    parser.doCategory("Sword-hall_of_Dol_Guldur_Deeds",null,TOWER_OF_DOL_GULDUR_SEED+"Sword-hall of Dol Guldur");
+    parser.doCategory("Warg-pens_of_Dol_Guldur_Slayer_Deeds",DeedType.SLAYER,TOWER_OF_DOL_GULDUR_SEED+"Warg-pens of Dol Guldur");
+    parser.doCategory("Warg-pens_of_Dol_Guldur_Deeds",null,TOWER_OF_DOL_GULDUR_SEED+"Warg-pens of Dol Guldur");
+    parser.doCategory("Tower_of_Dol_Guldur_Deeds",null,TOWER_OF_DOL_GULDUR_SEED);
     // - In Their Absence
-    parser.doCategory("Lost_Temple_Explorer_Deeds");
-    parser.doCategory("Lost_Temple_Slayer_Deeds");
-    parser.doCategory("Lost_Temple_Deeds");
-    parser.doCategory("Northcotton_Farm_Deeds");
-    parser.doCategory("Ost_Dunhoth_Lore_Deeds");
-    parser.doCategory("Ost_Dunhoth_Meta_Deeds");
-    parser.doCategory("Ost_Dunhoth_Slayer_Deeds");
-    parser.doCategory("Ost_Dunhoth_Deeds");
-    parser.doCategory("Stoneheight_Deeds");
-    parser.doCategory("Sâri-surma_Slayer_Deeds");
-    parser.doCategory("Sâri-surma_Deeds");
-    parser.doCategory("In_Their_Absence_Deeds");
+    parser.doCategory("Lost_Temple_Explorer_Deeds",DeedType.EXPLORER,IN_THEIR_ABSENCE+"Lost Temple");
+    parser.doCategory("Lost_Temple_Slayer_Deeds",DeedType.SLAYER,IN_THEIR_ABSENCE+"Lost Temple");
+    parser.doCategory("Lost_Temple_Deeds",null,IN_THEIR_ABSENCE+"Lost Temple");
+    parser.doCategory("Northcotton_Farm_Deeds",null,IN_THEIR_ABSENCE+"Northcotton Farm");
+    parser.doCategory("Ost_Dunhoth_Lore_Deeds",DeedType.LORE,IN_THEIR_ABSENCE+"Ost Dunhoth");
+    parser.doCategory("Ost_Dunhoth_Meta_Deeds",null,IN_THEIR_ABSENCE+"Ost Dunhoth");
+    parser.doCategory("Ost_Dunhoth_Slayer_Deeds",DeedType.SLAYER,IN_THEIR_ABSENCE+"Ost Dunhoth");
+    parser.doCategory("Ost_Dunhoth_Deeds",null,IN_THEIR_ABSENCE+"Ost Dunhoth");
+    parser.doCategory("Stoneheight_Deeds",null,IN_THEIR_ABSENCE+"Stoneheight");
+    parser.doCategory("Sâri-surma_Slayer_Deeds",DeedType.SLAYER,IN_THEIR_ABSENCE+"Sâri-surma");
+    parser.doCategory("Sâri-surma_Deeds",null,IN_THEIR_ABSENCE+"Sâri-surma");
+    parser.doCategory("In_Their_Absence_Deeds",null,IN_THEIR_ABSENCE);
     // - Rise of Isengard
-    parser.doCategory("Dargnákh_Unleashed_Deeds");
-    parser.doCategory("Fangorn's_Edge_Deeds");
-    parser.doCategory("Pits_of_Isengard_Slayer_Deeds");
-    parser.doCategory("Pits_of_Isengard_Deeds");
-    parser.doCategory("The_Foundry_Deeds");
-    parser.doCategory("The_Tower_of_Orthanc_Deeds");
-    parser.doCategory("Draigoch's_Lair_Deeds");
-    parser.doCategory("Rise_of_Isengard_Deeds");
+    parser.doCategory("Dargnákh_Unleashed_Deeds",null,RISE_OF_ISENGARD+"Dargnákh Unleashed");
+    parser.doCategory("Fangorn's_Edge_Deeds",null,RISE_OF_ISENGARD+"Fangorn's Edge");
+    parser.doCategory("Pits_of_Isengard_Slayer_Deeds",DeedType.SLAYER,RISE_OF_ISENGARD+"Pits of Isengard");
+    parser.doCategory("Pits_of_Isengard_Deeds",null,RISE_OF_ISENGARD+"Pits of Isengard");
+    parser.doCategory("The_Foundry_Deeds",null,RISE_OF_ISENGARD+"The Foundry");
+    parser.doCategory("The_Tower_of_Orthanc_Deeds",null,RISE_OF_ISENGARD+"The Tower of Orthanc");
+    parser.doCategory("Draigoch's_Lair_Deeds",null,RISE_OF_ISENGARD+"Draigoch's Lair");
+    parser.doCategory("Rise_of_Isengard_Deeds",null,RISE_OF_ISENGARD);
     // - Road to Erebor
-    parser.doCategory("Flight_to_the_Lonely_Mountain_Deeds");
-    parser.doCategory("Iorbar's_Peak_Deeds");
-    parser.doCategory("Seat_of_the_Great_Goblin_Deeds");
-    parser.doCategory("The_Fires_of_Smaug_Deeds");
-    parser.doCategory("The_Bells_of_Dale_Deeds");
-    parser.doCategory("The_Battle_for_Erebor_Deeds");
-    parser.doCategory("Webs_of_the_Scuttledells_Deeds");
-    parser.doCategory("The_Road_to_Erebor_Deeds");
+    parser.doCategory("Flight_to_the_Lonely_Mountain_Deeds",null,ROAD_TO_EREBOR_SEED+"Flight to the Lonely Mountain");
+    parser.doCategory("Iorbar's_Peak_Deeds",null,ROAD_TO_EREBOR_SEED+"Iorbar's Peak");
+    parser.doCategory("Seat_of_the_Great_Goblin_Deeds",null,ROAD_TO_EREBOR_SEED+"Seat of the Great Goblin");
+    parser.doCategory("The_Fires_of_Smaug_Deeds",null,ROAD_TO_EREBOR_SEED+"The Fires of Smaug");
+    parser.doCategory("The_Bells_of_Dale_Deeds",null,ROAD_TO_EREBOR_SEED+"The Bells of Dale");
+    parser.doCategory("The_Battle_for_Erebor_Deeds",null,ROAD_TO_EREBOR_SEED+"The Battle for Erebor");
+    parser.doCategory("Webs_of_the_Scuttledells_Deeds",null,ROAD_TO_EREBOR_SEED+"Webs of the Scuttledells");
+    parser.doCategory("The_Road_to_Erebor_Deeds",null,ROAD_TO_EREBOR_SEED);
     // - Ashes of Osgiliath
-    parser.doCategory("Sunken_Labyrinth_Deeds");
-    parser.doCategory("The_Dome_of_Stars_Deeds");
-    parser.doCategory("The_Ruined_City_Deeds");
-    parser.doCategory("Ashes_of_Osgiliath_Deeds");
+    parser.doCategory("Sunken_Labyrinth_Deeds",null,ASHES_OF_OSGILIATH_SEED+"Sunken Labyrinth");
+    parser.doCategory("The_Dome_of_Stars_Deeds",null,ASHES_OF_OSGILIATH_SEED+"The Dome of Stars");
+    parser.doCategory("The_Ruined_City_Deeds",null,ASHES_OF_OSGILIATH_SEED+"The Ruined City");
+    parser.doCategory("Ashes_of_Osgiliath_Deeds",null,ASHES_OF_OSGILIATH_SEED);
     // - Battle of Pelennor
-    parser.doCategory("Blood_of_the_Black_Serpent_Deeds");
-    parser.doCategory("The_Quays_of_the_Harlond_Deeds");
-    parser.doCategory("The_Silent_Street_Deeds");
-    parser.doCategory("Throne_of_the_Dread_Terror_Deeds");
+    parser.doCategory("Blood_of_the_Black_Serpent_Deeds",null,BATTLE_OF_PELENNOR_SEED+"Blood of the Black Serpent");
+    parser.doCategory("The_Quays_of_the_Harlond_Deeds",null,BATTLE_OF_PELENNOR_SEED+"The Quays of the Harlond");
+    parser.doCategory("The_Silent_Street_Deeds",null,BATTLE_OF_PELENNOR_SEED+"The Silent Street");
+    parser.doCategory("Throne_of_the_Dread_Terror_Deeds",null,BATTLE_OF_PELENNOR_SEED+"Throne of the Dread Terror");
     // - Plateau of Gorgoroth
-    parser.doCategory("The_Court_of_Seregost_Deeds");
-    parser.doCategory("Dungeons_of_Naerband_Deeds");
+    parser.doCategory("The_Court_of_Seregost_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"The Court of Seregost");
+    parser.doCategory("Dungeons_of_Naerband_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"Dungeons of Naerband");
 
     // Hobby
-    parser.doCategory("Hobby_Deeds");
+    parser.doCategory("Hobby_Deeds",DeedType.HOBBY,"Fishing");
 
     // Reputation
-    parser.doCategory("Reputation_Deeds");
+    parser.doCategory("Reputation_Deeds",DeedType.REPUTATION,(String)null);
 
     // Events
-    parser.doCategory("Frostbluff_Event_Deeds");
-    parser.doCategory("Yuletide_Festival_Deeds");
-    parser.doCategory("Summer_Festival_Deeds");
-    parser.doCategory("Harvest_Festival_Deeds");
-    parser.doCategory("Bree-land_Event_Deeds");
-    parser.doCategory("Event_Deeds");
-    parser.doCategory("Hobnanigans_Deeds");
+    parser.doCategory("Frostbluff_Event_Deeds",DeedType.EVENT,"Event:Yule Festival");
+    parser.doCategory("Yuletide_Festival_Deeds",DeedType.EVENT,"Event:Yule Festival");
+    parser.doCategory("Summer_Festival_Deeds",DeedType.EVENT,"Event:Summer Festival");
+    parser.doCategory("Harvest_Festival_Deeds",DeedType.EVENT,"Event:Harvest Festival");
+    parser.doCategory("Bree-land_Event_Deeds",DeedType.EVENT,"Event:Spring Festival");
+    parser.doCategory("Event_Deeds",DeedType.EVENT,"Event:Festival");
+    parser.doCategory("Hobnanigans_Deeds",DeedType.EVENT,"Event:Hobnanigans");
 
     // Racial deeds
-    parser.doCategory("Beorning_(Race)_Deeds");
-    parser.doCategory("Dwarf_Deeds");
-    parser.doCategory("Elf_Deeds");
-    parser.doCategory("High_Elf_Deeds");
-    parser.doCategory("Hobbit_Deeds");
-    parser.doCategory("Race_of_Man_Deeds");
+    parser.doCategory("Beorning_(Race)_Deeds",null,Race.BEORNING);
+    parser.doCategory("Dwarf_Deeds",null,Race.DWARF);
+    parser.doCategory("Elf_Deeds",null,Race.ELF);
+    parser.doCategory("High_Elf_Deeds",null,Race.HIGH_ELF);
+    parser.doCategory("Hobbit_Deeds",null,Race.HOBBIT);
+    parser.doCategory("Race_of_Man_Deeds",null,Race.MAN);
 
     // Skirmish
-    parser.doCategory("Skirmish_Deeds");
-    parser.doCategory("Skirmish_Instances_Deeds");
-    parser.doCategory("Skirmish_Lieutenants_Deeds");
+    parser.doCategory("Skirmish_Deeds",null,"Skirmish");
+    parser.doCategory("Skirmish_Instances_Deeds",null,"Skirmish:Instances");
+    parser.doCategory("Skirmish_Lieutenants_Deeds",DeedType.SLAYER,"Skirmish:Lieutenants");
 
     // Misc
-    parser.doCategory("Social_Deeds");
-    parser.doCategory("Epic_Deeds");
-    parser.doCategory("Obsolete_Deeds");
-    parser.doCategory("Chicken_Play_Deeds");
+    parser.doCategory("Roving_Threat_Deeds",DeedType.SLAYER,"Roving Threats deeds");
+    parser.doCategory("Undefeated_Deeds",null,"Undefeated deeds");
+    parser.doCategory("Social_Deeds",null,"Social");
+    parser.doCategory("Epic_Deeds",null,"Epic");
+    parser.doCategory("Obsolete_Deeds",null,"Obsolete");
+    parser.doCategory("Chicken_Play_Deeds",null,"Event:Chicken Play");
     parser.doCategory("Treasure_Caches");
 
     // Caution: these may bring already existing deeds:
     parser.doCategory("Hidden_Deeds");
     parser.doCategory("Meta_Deeds");
+ 
+    writeResultFile();
+  }
+
+  private void writeResultFile()
+  {
+    List<DeedDescription> deeds=new ArrayList<DeedDescription>();
+    DeedXMLParser parser=new DeedXMLParser();
+    File currentDir=new File(".");
+    for(File deedFile : currentDir.listFiles())
+    {
+      if (deedFile.getName().endsWith(".xml"))
+      {
+        List<DeedDescription> newDeeds=parser.parseXML(deedFile);
+        deeds.addAll(newDeeds);
+      }
+    }
+    int nbDeeds=deeds.size();
+    System.out.println("Found "+nbDeeds+" deeds.");
+    File out=new File("../lotro-companion/data/lore/deeds.xml");
+    DeedsContainer.writeSortedDeeds(deeds,out);
   }
 
   /**

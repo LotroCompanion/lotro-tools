@@ -66,12 +66,30 @@ public class LotroWikiDeedPageParser
           }
         }
       }
+      if (deed!=null)
+      {
+        // Fixes
+        handleFixes(deed);
+      }
     }
     catch(Exception e)
     {
       _logger.error("Cannot parse deed page ["+from+"]",e);
     }
     return deed;
+  }
+
+  private void handleFixes(DeedDescription deed)
+  {
+    String name=deed.getName();
+    if ("Deeds of Eriador".equals(name))
+    {
+      deed.setCategory("Region:Eriador");
+    }
+    if ("The Unwise (Deed)".equals(name))
+    {
+      deed.setCategory("Social:Food");
+    }
   }
 
   //public static HashSet<String> _levels=new HashSet<String>();
@@ -406,7 +424,6 @@ public class LotroWikiDeedPageParser
     if ("Exploration".equals(deedType)) type=DeedType.EXPLORER;
     else if ("Slayer".equals(deedType)) type=DeedType.SLAYER;
     else if ("Race".equals(deedType)) category="Racial";
-    else if ("Social".equals(deedType)) type=DeedType.EVENT;
     else if ("Lore".equals(deedType)) type=DeedType.LORE;
     else if ("Epic".equals(deedType)) category="Epic";
     else if ("Skirmish".equals(deedType)) category="Skirmish";
@@ -416,10 +433,14 @@ public class LotroWikiDeedPageParser
 
     if ("Epic".equals(deedSubType)) category="Epic";
     else if ("Event".equals(deedSubType)) type=DeedType.EVENT;
+    else if ("LOTRO Anniversary".equals(deedSubType))
+    {
+      category="Event:LOTRO Anniversary";
+      deedType="";
+    }
 
     if ("Regional".equals(deedType))
     {
-      if ("".equals(deedSubType)) deedSubType="Gorgoroth";
       if ((deedSubType!=null) && (deedSubType.length()>0))
       {
         category="Region:"+deedSubType;
@@ -431,7 +452,6 @@ public class LotroWikiDeedPageParser
     {
       // Special
       if ("Host of the West (Faction)".equals(deedSubType)) deedSubType="The Wastes";
-      if ("".equals(deedSubType)) deedSubType="Evendim";
       category=getPrefixForZone(deedSubType);
       if (category!=null)
       {
