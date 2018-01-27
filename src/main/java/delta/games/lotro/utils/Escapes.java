@@ -39,4 +39,33 @@ public class Escapes
     
     return id;
   }
+
+  /**
+   * Escape an URL.
+   * @param input Input string.
+   * @return Result string.
+   */
+  public static String escapeUrl(String input)
+  {
+    String ret=input;
+    ret=ret.replace("ó","%F3");
+    ret=ret.replace("ú","%FA");
+    ret=ret.replace("û","%FB");
+    ret=ret.replace("í","%ED");
+    ret=ret.replace("á","%E1");
+    ret=ret.replace("â","%E2");
+    return ret;
+  }
+
+  /**
+   * Escape a file.
+   * @param input Input string.
+   * @return Result string.
+   */
+  public static String escapeFile(String input)
+  {
+    String ret=input;
+    ret=ret.replace(":","_");
+    return ret;
+  }
 }

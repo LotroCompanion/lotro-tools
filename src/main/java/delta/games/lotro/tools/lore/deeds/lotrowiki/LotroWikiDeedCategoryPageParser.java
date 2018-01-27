@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
+import delta.games.lotro.utils.Escapes;
 
 /**
  * Parse for lotro-wiki deed category pages.
@@ -44,8 +45,9 @@ public class LotroWikiDeedCategoryPageParser
    */
   public void doCategory(String categoryId)
   {
-    String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+escape(categoryId);
-    File deedsCategoryFile=_lotroWiki.download(url,categoryId+"/main.html");
+    String url=LotroWikiConstants.BASE_URL+"/index.php/Category:"+Escapes.escapeUrl(categoryId);
+    String file=categoryId+"/main.html";
+    File deedsCategoryFile=_lotroWiki.download(url,Escapes.escapeFile(file));
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
     File to=new File("deeds-"+categoryId+".xml").getAbsoluteFile();
@@ -127,7 +129,7 @@ public class LotroWikiDeedCategoryPageParser
     for(String deedId : deedIds)
     {
       String url=LotroWikiConstants.BASE_URL+"/index.php?title="+deedId+"&action=edit";
-      String name=categoryId+"/deed"+index+".html";
+      String name=Escapes.escapeFile(categoryId)+"/deed"+index+".html";
       File deedFile=_lotroWiki.download(url,name);
       DeedDescription deed=parser.parseDeed(deedFile);
       if (deed!=null)
@@ -181,17 +183,5 @@ public class LotroWikiDeedCategoryPageParser
       }
     }
     return deedId;
-  }
-
-  private String escape(String input)
-  {
-    String ret=input;
-    ret=ret.replace("ó","%F3");
-    ret=ret.replace("ú","%FA");
-    ret=ret.replace("û","%FB");
-    ret=ret.replace("í","%ED");
-    ret=ret.replace("á","%E1");
-    ret=ret.replace("â","%E2");
-    return ret;
   }
 }
