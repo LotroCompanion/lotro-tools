@@ -390,7 +390,7 @@ public class LotroWikiDeedPageParser
     else if ("Explorer".equals(regionalSub)) type=DeedType.EXPLORER;
     else if ("Lore".equals(regionalSub)) type=DeedType.LORE;
     else if ("Quest".equals(regionalSub)) type=DeedType.QUEST;
-    else if ("Meta".equals(regionalSub)) type=DeedType.META;
+    else if ("Meta".equals(regionalSub)) type=null;
 
     if ("Regional".equals(deedType))
     {
@@ -434,7 +434,7 @@ public class LotroWikiDeedPageParser
     }
     else if ("Gorgoroth Meta".equals(deedType))
     {
-      type=DeedType.META;
+      type=null;
       category="Region:Gorgoroth";
     }
     if ((("".equals(deedType)) && ("Reputation".equals(regionalSub))) || ("Reputation".equals(deedType)))
