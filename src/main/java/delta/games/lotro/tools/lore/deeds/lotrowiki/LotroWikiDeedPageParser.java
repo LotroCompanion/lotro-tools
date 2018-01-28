@@ -11,6 +11,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
+import delta.games.lotro.common.Emote;
 import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Title;
@@ -232,6 +233,14 @@ public class LotroWikiDeedPageParser
           handleTraitReward(rewards,traitStr);
         }
       }
+      else if ("Emote-reward".equals(lineKey))
+      {
+        String emoteStr=getLineValue(line);
+        if (!emoteStr.isEmpty())
+        {
+          handleEmoteReward(rewards,emoteStr);
+        }
+      }
       else if ("Level".equals(lineKey))
       {
         String levelStr=getLineValue(line);
@@ -300,8 +309,6 @@ public class LotroWikiDeedPageParser
 /*
 | DP-reward    = 
 | Skill-reward = 
-| Trait-reward = 
-| Emote-reward = 
 | Hidden       = 
 | Deed-chain-1 = 
 | Deed-chain-2 = 
@@ -350,7 +357,6 @@ public class LotroWikiDeedPageParser
 
   private void handleTraitReward(Rewards rewards, String traitStr)
   {
-    System.out.println("Trait: "+traitStr);
     // Sometimes, a trait is in fact... a virtue!
     VirtueId virtueId=null;
     try
@@ -373,6 +379,12 @@ public class LotroWikiDeedPageParser
       Trait trait=new Trait(null,traitStr);
       rewards.addTrait(trait);
     }
+  }
+
+  private void handleEmoteReward(Rewards rewards, String emoteStr)
+  {
+    Emote emote=new Emote(emoteStr,emoteStr);
+    rewards.addEmote(emote);
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
