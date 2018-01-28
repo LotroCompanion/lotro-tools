@@ -224,7 +224,7 @@ public class LotroWikiDeedCategoryPageParser
             deedKeys.add(deedId);
           }
           _deedIds.add(deedId);
-          System.out.println(deed);
+          //System.out.println(deed);
           resolveItemRewards(deed);
         }
       }

@@ -32,6 +32,8 @@ public class LotroWikiDeedPageParser
 {
   private static final Logger _logger=Logger.getLogger(LotroWikiDeedPageParser.class);
 
+  private File _currentFile;
+
   /**
    * Parse the lotro wiki deed page for the given deed ID.
    * @param from Source page.
@@ -39,7 +41,7 @@ public class LotroWikiDeedPageParser
    */
   public DeedDescription parseDeed(File from)
   {
-    System.out.println("File: "+from);
+    _currentFile=from;
     DeedDescription deed=null;
     try
     {
@@ -91,11 +93,6 @@ public class LotroWikiDeedPageParser
       deed.setCategory("Social:Food");
     }
   }
-
-  //public static HashSet<String> _levels=new HashSet<String>();
-  //public static HashSet<String> _deedTypes=new HashSet<String>();
-  //public static HashSet<String> _deedSubTypes=new HashSet<String>();
-  //public static HashSet<String> _regionalSub=new HashSet<String>();
 
   private DeedDescription buildDeed(String rawData)
   {
@@ -188,10 +185,14 @@ public class LotroWikiDeedPageParser
         String tpStr=getLineValue(line);
         if (!tpStr.isEmpty())
         {
-          Integer tp=NumericTools.parseInteger(tpStr);
+          Integer tp=NumericTools.parseInteger(tpStr,false);
           if (tp!=null)
           {
             rewards.setLotroPoints(tp.intValue());
+          }
+          else
+          {
+            _logger.warn("Bad LOTRO points value in file "+_currentFile+": ["+tpStr+"]");
           }
         }
       }
@@ -200,13 +201,17 @@ public class LotroWikiDeedPageParser
         String smStr=getLineValue(line);
         if (!smStr.isEmpty())
         {
-          Integer marks=NumericTools.parseInteger(smStr);
+          Integer marks=NumericTools.parseInteger(smStr,false);
           if (marks!=null)
           {
             ObjectsSet objects=deed.getRewards().getObjects();
             ObjectItem item=new ObjectItem("Mark");
             item.setItemId(1879224343);
             objects.addObject(item,marks.intValue());
+          }
+          else
+          {
+            _logger.warn("Bad SM value in file "+_currentFile+": ["+smStr+"]");
           }
         }
       }
@@ -220,22 +225,34 @@ public class LotroWikiDeedPageParser
       }
       else if ("Level".equals(lineKey))
       {
-        //_levels.add(getLineValue(line));
+        String levelStr=getLineValue(line);
+        if ("?".equals(levelStr)) levelStr="";
+        if ("???".equals(levelStr)) levelStr="";
+        if (!levelStr.isEmpty())
+        {
+          if (levelStr.startsWith("&lt;=")) levelStr=levelStr.substring(5);
+          Integer level=NumericTools.parseInteger(levelStr,false);
+          if (level!=null)
+          {
+            deed.setMinLevel(level);
+          }
+          else
+          {
+            _logger.warn("Bad level value in file "+_currentFile+": ["+levelStr+"]");
+          }
+        }
       }
       else if ("Deed-type".equals(lineKey))
       {
         deedType=getLineValue(line);
-        //_deedTypes.add(deedType);
       }
       else if ("Deed-subtype".equals(lineKey))
       {
         deedSubtype=getLineValue(line);
-        //_deedSubTypes.add(deedSubtype);
       }
       else if ("Regional-sub".equals(lineKey))
       {
         regionalSub=getLineValue(line);
-        //_regionalSub.add(regionalSub);
       }
       else if ("Parent-deed".equals(lineKey))
       {
@@ -276,9 +293,6 @@ public class LotroWikiDeedPageParser
 | Skill-reward = 
 | Trait-reward = 
 | Emote-reward = 
-| Deed-type    = Regional
-| Deed-subtype = Western Gondor
-| Regional-sub = Explorer
 | Hidden       = 
 | Deed-chain-1 = 
 | Deed-chain-2 = 
@@ -486,17 +500,6 @@ public class LotroWikiDeedPageParser
     {
       deed.setType(type);
       deed.setCategory(category);
-    }
-    else
-    {
-      if (((deedType==null) || (deedType.isEmpty())) && ((deedSubType==null) || (deedSubType.isEmpty())) && ((regionalSub==null) || (regionalSub.isEmpty())))
-      {
-        // Ignore
-      }
-      else
-      {
-        System.out.println("Unidentified: type="+deedType+", subType="+deedSubType+", regionalSub="+regionalSub);
-      }
     }
   }
 
