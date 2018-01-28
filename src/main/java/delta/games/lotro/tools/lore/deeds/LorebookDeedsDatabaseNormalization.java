@@ -49,6 +49,7 @@ public class LorebookDeedsDatabaseNormalization
     // - objectives
     deed.setObjectives(normalizeText(deed.getObjectives()));
     // Find item IDs
+    // TODO Use ItemsResolver
     Rewards rewards=deed.getRewards();
     ObjectsSet objects=rewards.getObjects();
     int nbItems=objects.getNbObjectItems();

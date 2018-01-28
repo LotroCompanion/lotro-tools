@@ -15,9 +15,14 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.Rewards;
+import delta.games.lotro.common.objects.ObjectItem;
+import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
+import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.Escapes;
 
@@ -33,6 +38,7 @@ public class LotroWikiDeedCategoryPageParser
 
   private LotroWikiSiteInterface _lotroWiki;
 
+  private ItemsResolver _resolver;
   private HashSet<String> _deedIds;
 
   /**
@@ -43,6 +49,7 @@ public class LotroWikiDeedCategoryPageParser
   {
     _lotroWiki=lotroWiki;
     _deedIds=new HashSet<String>();
+    _resolver=new ItemsResolver();
   }
 
   /**
@@ -218,11 +225,78 @@ public class LotroWikiDeedCategoryPageParser
           }
           _deedIds.add(deedId);
           System.out.println(deed);
+          resolveItemRewards(deed);
         }
       }
       index++;
     }
     return deeds;
+  }
+
+  private void resolveItemRewards(DeedDescription deed)
+  {
+    Rewards rewards=deed.getRewards();
+    ObjectsSet objects=rewards.getObjects();
+    int nbItems=objects.getNbObjectItems();
+    for(int i=0;i<nbItems;i++)
+    {
+      ObjectItem objectItem=objects.getItem(i);
+      resolveItem(objectItem);
+    }
+  }
+
+  private void resolveItem(ObjectItem objectItem)
+  {
+    String name=objectItem.getName();
+    int itemId=resolveByName(name);
+    if (itemId==0)
+    {
+      Item item=_resolver.getItem(name);
+      if (item!=null)
+      {
+        itemId=item.getIdentifier();
+      }
+    }
+    if (itemId!=0)
+    {
+      objectItem.setItemId(itemId);
+      objectItem.setObjectURL(null);
+      objectItem.setIconURL(null);
+    }
+    else
+    {
+      System.out.println("Item not found [" + name + "]");
+    }
+  }
+
+  private int resolveByName(String name)
+  {
+    int itemId=0;
+    if ("Armour (Wastes)".equals(name)) itemId=1879341924;
+    else if ("Bag of Flower Petals".equals(name)) itemId=1879199971;
+    else if ("Black Steel Key".equals(name)) itemId=1879356039;
+    else if ("Broken Blade (Wastes)".equals(name)) itemId=1879342063;
+    else if ("Flower Petals (Multi-use)".equals(name)) itemId=1879200102;
+    else if ("Gold-bound_Lootbox".equals(name)) itemId=1879225083;
+    else if ("Golden Token of the Riddermark".equals(name)) itemId=1879237278;
+    else if ("Grant Golf Chip Emote".equals(name)) itemId=1879187356;
+    else if ("Ivar's Helm".equals(name)) itemId=1879197561; //(Cosmetic)
+    else if ("Letter (Rohan Awaits)".equals(name)) itemId=1879249134; //("Letter")
+    else if ("Major Essence of Critical Rating".equals(name)) itemId=1879313417; // (assuming Tier7)
+    else if ("Major Essence of Physical Mitigation".equals(name)) itemId=1879313525; // (assuming Tier7)
+    else if ("Map of Eriador".equals(name)) itemId=1879205541;
+    else if ("Metal Scrap (Wastes)".equals(name)) itemId=1879342064;
+    else if ("Prized Ost Dunhoth War-steed".equals(name)) itemId=1879206179;
+    else if ("Provisions (Wastes)".equals(name)) itemId=1879341934;
+    else if ("Rotten Fruit (Multi-use)".equals(name)) itemId=1879200100;
+    else if ("Rotten Fruit".equals(name)) itemId=1879199969;
+    else if ("Salt (Wastes)".equals(name)) itemId=1879342065;
+    else if ("Steed of Elessar's Host".equals(name)) itemId=1879345100;
+    else if ("Sturdy Steel Key".equals(name)) itemId=1879227487; //1879223825 (fond bleu) or 1879227487 (fond jaune)(different icons)
+    else if ("Universal Healing Potion".equals(name)) itemId=1879248609; //(Rejuvenation Potion)
+    else if ("Upgrade Task Limit (+1)".equals(name)) itemId=1879201943; // or 1879201944, 1879201945, 1879201946
+    else if ("Weapons (Wastes)".equals(name)) itemId=1879341942;
+    return itemId;
   }
 
   private boolean checkTable(Element table)
