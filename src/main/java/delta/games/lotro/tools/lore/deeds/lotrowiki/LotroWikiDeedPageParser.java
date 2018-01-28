@@ -14,10 +14,12 @@ import delta.common.utils.NumericTools;
 import delta.games.lotro.common.Emote;
 import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
+import delta.games.lotro.common.Skill;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
+import delta.games.lotro.common.Skill.SkillType;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -241,6 +243,14 @@ public class LotroWikiDeedPageParser
           handleEmoteReward(rewards,emoteStr);
         }
       }
+      else if ("Skill-reward".equals(lineKey))
+      {
+        String skillStr=getLineValue(line);
+        if (!skillStr.isEmpty())
+        {
+          handleSkillReward(rewards,skillStr);
+        }
+      }
       else if ("Level".equals(lineKey))
       {
         String levelStr=getLineValue(line);
@@ -308,7 +318,6 @@ public class LotroWikiDeedPageParser
 
 /*
 | DP-reward    = 
-| Skill-reward = 
 | Hidden       = 
 | Deed-chain-1 = 
 | Deed-chain-2 = 
@@ -385,6 +394,12 @@ public class LotroWikiDeedPageParser
   {
     Emote emote=new Emote(emoteStr,emoteStr);
     rewards.addEmote(emote);
+  }
+
+  private void handleSkillReward(Rewards rewards, String skillStr)
+  {
+    Skill skill=new Skill(SkillType.PASSIVE,skillStr,skillStr);
+    rewards.addSkill(skill);
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
