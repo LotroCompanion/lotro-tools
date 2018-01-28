@@ -14,6 +14,7 @@ import delta.common.utils.NumericTools;
 import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Title;
+import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
@@ -223,6 +224,14 @@ public class LotroWikiDeedPageParser
           // TODO Class Trait Point
         }
       }
+      else if ("Trait-reward".equals(lineKey))
+      {
+        String traitStr=getLineValue(line);
+        if (!traitStr.isEmpty())
+        {
+          handleTraitReward(rewards,traitStr);
+        }
+      }
       else if ("Level".equals(lineKey))
       {
         String levelStr=getLineValue(line);
@@ -337,6 +346,33 @@ public class LotroWikiDeedPageParser
       }
     }
     return null;
+  }
+
+  private void handleTraitReward(Rewards rewards, String traitStr)
+  {
+    System.out.println("Trait: "+traitStr);
+    // Sometimes, a trait is in fact... a virtue!
+    VirtueId virtueId=null;
+    try
+    {
+      virtueId=VirtueId.valueOf(traitStr.toUpperCase());
+    }
+    catch(Exception e)
+    {
+      // Ignored
+    }
+    if (virtueId!=null)
+    {
+      Virtue virtue=new Virtue(virtueId,1);
+      rewards.addVirtue(virtue);
+    }
+    else
+    {
+      if (traitStr.toLowerCase().endsWith(" (trait)")) traitStr=traitStr.substring(0,traitStr.length()-8);
+      if (traitStr.toLowerCase().endsWith(" (beorning trait)")) traitStr=traitStr.substring(0,traitStr.length()-17);
+      Trait trait=new Trait(null,traitStr);
+      rewards.addTrait(trait);
+    }
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
