@@ -19,7 +19,6 @@ import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
-import delta.games.lotro.common.Skill.SkillType;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -385,20 +384,20 @@ public class LotroWikiDeedPageParser
     {
       if (traitStr.toLowerCase().endsWith(" (trait)")) traitStr=traitStr.substring(0,traitStr.length()-8);
       if (traitStr.toLowerCase().endsWith(" (beorning trait)")) traitStr=traitStr.substring(0,traitStr.length()-17);
-      Trait trait=new Trait(null,traitStr);
+      Trait trait=new Trait(traitStr);
       rewards.addTrait(trait);
     }
   }
 
   private void handleEmoteReward(Rewards rewards, String emoteStr)
   {
-    Emote emote=new Emote(emoteStr,emoteStr);
+    Emote emote=new Emote(emoteStr);
     rewards.addEmote(emote);
   }
 
   private void handleSkillReward(Rewards rewards, String skillStr)
   {
-    Skill skill=new Skill(SkillType.PASSIVE,skillStr,skillStr);
+    Skill skill=new Skill(skillStr);
     rewards.addSkill(skill);
   }
 

@@ -18,7 +18,6 @@ import delta.games.lotro.common.Reputation;
 import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Skill;
-import delta.games.lotro.common.Skill.SkillType;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
@@ -158,23 +157,23 @@ public class RewardsHTMLParser
           String identifier=qualifiedIdentifier.substring(TRAIT_URL_SEED.length()).trim();
           if ((identifier.startsWith(EMOTE_SEED)) && (name.startsWith(EMOTE_SEED)))
           {
-            identifier=identifier.substring(EMOTE_SEED.length()).trim();
+            //identifier=identifier.substring(EMOTE_SEED.length()).trim();
             name=name.substring(EMOTE_SEED.length()).trim();
-            Emote emote=new Emote(identifier,name);
+            Emote emote=new Emote(/*identifier,*/name);
             rewards.addEmote(emote);
             //System.out.println(emote.dump());
           }
           else
           {
-            Trait trait=new Trait(identifier,name);
+            Trait trait=new Trait(/*identifier,*/name);
             rewards.addTrait(trait);
             //System.out.println(trait.dump());
           }
         }
         else if (qualifiedIdentifier.startsWith(PASSIVE_SKILL_URL_SEED))
         {
-          String identifier=qualifiedIdentifier.substring(PASSIVE_SKILL_URL_SEED.length()).trim();
-          Skill skill=new Skill(SkillType.PASSIVE,identifier,name);
+          //String identifier=qualifiedIdentifier.substring(PASSIVE_SKILL_URL_SEED.length()).trim();
+          Skill skill=new Skill(/*SkillType.PASSIVE,identifier,*/name);
           rewards.addSkill(skill);
           //System.out.println(skill.dump());
         }

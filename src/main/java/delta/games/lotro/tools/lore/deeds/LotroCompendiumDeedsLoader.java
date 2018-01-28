@@ -186,7 +186,7 @@ public class LotroCompendiumDeedsLoader
         {
           Map<String,Object> traitMap=(Map<String,Object>)trait;
           String traitLabel=(String)traitMap.get("val");
-          Trait traitRewards=new Trait(traitLabel,traitLabel);
+          Trait traitRewards=new Trait(traitLabel);
           rewards.addTrait(traitRewards);
         }
       }
@@ -204,7 +204,7 @@ public class LotroCompendiumDeedsLoader
           {
             emoteCommand=emoteCommand.substring(1);
           }
-          Emote emoteRewards=new Emote(emoteCommand,emoteCommand);
+          Emote emoteRewards=new Emote(emoteCommand);
           rewards.addEmote(emoteRewards);
         }
       }
