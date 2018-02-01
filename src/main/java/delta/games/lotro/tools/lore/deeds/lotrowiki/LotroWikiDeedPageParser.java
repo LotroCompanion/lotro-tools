@@ -2,6 +2,8 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -22,6 +24,7 @@ import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -34,6 +37,8 @@ import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 public class LotroWikiDeedPageParser
 {
   private static final Logger _logger=Logger.getLogger(LotroWikiDeedPageParser.class);
+
+  private static final String DEED_CHAIN_SEED="Deed-chain-";
 
   private File _currentFile;
 
@@ -51,25 +56,23 @@ public class LotroWikiDeedPageParser
       FileInputStream inputStream=new FileInputStream(from);
       Source source=new Source(inputStream);
 
-      Element deedSource=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.TEXTAREA,"id","wpTextbox1");
-      if (deedSource!=null)
-      {
-        Segment content=deedSource.getContent();
-        String text=content.toString();
-        deed=buildDeed(text);
-      }
+      String name=null;
       Element backElement=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.DIV,"id","contentSub");
       if (backElement!=null)
       {
         Element a=JerichoHtmlUtils.findElementByTagName(backElement,HTMLElementName.A);
         if (a!=null)
         {
-          String title=a.getAttributeValue("title");
-          if (deed!=null)
-          {
-            deed.setName(title);
-          }
+          name=a.getAttributeValue("title");
         }
+      }
+
+      Element deedSource=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.TEXTAREA,"id","wpTextbox1");
+      if (deedSource!=null)
+      {
+        Segment content=deedSource.getContent();
+        String text=content.toString();
+        deed=buildDeed(text,name);
       }
       if (deed!=null)
       {
@@ -97,7 +100,7 @@ public class LotroWikiDeedPageParser
     }
   }
 
-  private DeedDescription buildDeed(String rawData)
+  private DeedDescription buildDeed(String rawData, String deedName)
   {
     String[] lines=rawData.split("\n");
 
@@ -110,6 +113,7 @@ public class LotroWikiDeedPageParser
     }
 
     DeedDescription deed=new DeedDescription();
+    deed.setName(deedName);
     deed.setType(null);
     Rewards rewards=deed.getRewards();
     // Reputation
@@ -125,6 +129,8 @@ public class LotroWikiDeedPageParser
     String deedType=null;
     String deedSubtype=null;
     String regionalSub=null;
+    // Deeds chain
+    List<String> deedsChain=new ArrayList<String>();
 
     for(int index=0;index<lines.length;index++)
     {
@@ -133,8 +139,8 @@ public class LotroWikiDeedPageParser
       //System.out.println(line);
       if ("name".equals(lineKey))
       {
-        String name=getLineValue(line);
-        deed.setName(name);
+        //String name=getLineValue(line);
+        //deed.setName(name);
       }
       else if ("Lore-text".equals(lineKey))
       {
@@ -281,9 +287,29 @@ public class LotroWikiDeedPageParser
       {
         regionalSub=getLineValue(line);
       }
+      else if ((lineKey!=null) && (lineKey.startsWith(DEED_CHAIN_SEED)))
+      {
+        Integer deedIndex=NumericTools.parseInteger(lineKey.substring(DEED_CHAIN_SEED.length()));
+        if (deedIndex!=null)
+        {
+          // Add missing entries
+          int nbMissingEntries=deedIndex.intValue()-deedsChain.size();
+          for(int i=0;i<nbMissingEntries;i++)
+          {
+            deedsChain.add(null);
+          }
+          // Set deed name in chain
+          String deedNameInChain=getLineValue(line);
+          deedsChain.set(deedIndex.intValue()-1,deedNameInChain);
+        }
+      }
       else if ("Parent-deed".equals(lineKey))
       {
-        //String parentDeed=getLineValue(line);
+        String parentDeed=getLineValue(line);
+        if (!parentDeed.isEmpty())
+        {
+          //System.out.println(parentDeed);
+        }
       }
 
       for(int i=1;i<=3;i++)
@@ -318,11 +344,6 @@ public class LotroWikiDeedPageParser
 /*
 | DP-reward    = 
 | Hidden       = 
-| Deed-chain-1 = 
-| Deed-chain-2 = 
-| Deed-chain-3 = 
-| Deed-chain-4 = 
-| Deed-chain-5 = 
 | Meta-deed     = 
 | Extra         = 
        */
@@ -345,6 +366,8 @@ public class LotroWikiDeedPageParser
     }
     // Categories
     handleCategories(deed,deedType,deedSubtype,regionalSub);
+    // Deeds chain
+    handleDeedsChain(deed,deedsChain);
     return deed;
   }
 
@@ -592,6 +615,59 @@ public class LotroWikiDeedPageParser
     else if ("The Wastes".equals(zone)) ret="Region";
     else if ("West Rohan".equals(zone)) ret="Region";
     else if ("Western Gondor".equals(zone)) ret="Region";
+    return ret;
+  }
+
+  private void handleDeedsChain(DeedDescription deed, List<String> deedsChain)
+  {
+    deedsChain=normalizeDeedsChain(deedsChain);
+    if (deedsChain.size()==0) return;
+    String name=deed.getName();
+    int index=deedsChain.indexOf(name);
+    if (index!=-1)
+    {
+      if (index>0)
+      {
+        DeedProxy previous=new DeedProxy();
+        previous.setName(deedsChain.get(index-1));
+        deed.setPreviousDeedProxy(previous);
+      }
+      if (index<deedsChain.size()-1)
+      {
+        DeedProxy next=new DeedProxy();
+        next.setName(deedsChain.get(index+1));
+        deed.setNextDeedProxy(next);
+      }
+    }
+    else
+    {
+      // Try to solve Hybold links
+      if ("Hytbold (Deed)".equals(deedsChain.get(0)))
+      {
+        String parent=deedsChain.get(deedsChain.size()-1);
+        String child=name;
+        System.out.println("["+child+"] had parent: ["+parent+"]");
+      }
+      else
+      {
+        System.out.println("Name ["+name+"] not found in ["+deedsChain);
+      }
+    }
+  }
+
+  private List<String> normalizeDeedsChain(List<String> deedsChain)
+  {
+    List<String> ret=new ArrayList<String>();
+    for(String deed : deedsChain)
+    {
+      if ((deed!=null) && (deed.trim().length()>0))
+      {
+        int index=deed.indexOf("{{!}}");
+        if (index!=-1) deed=deed.substring(0,index).trim();
+        deed=deed.replace("Silent Slayer Slayer","Silent Slayer Stalker");
+        ret.add(deed);
+      }
+    }
     return ret;
   }
 
