@@ -645,8 +645,9 @@ public class LotroWikiDeedPageParser
       if ("Hytbold (Deed)".equals(deedsChain.get(0)))
       {
         String parent=deedsChain.get(deedsChain.size()-1);
-        String child=name;
-        System.out.println("["+child+"] had parent: ["+parent+"]");
+        DeedProxy parentProxy=new DeedProxy();
+        parentProxy.setName(parent);
+        deed.setParentDeedProxy(parentProxy);
       }
       else
       {
