@@ -48,14 +48,17 @@ public class MainLotroWikiDeedsLoader
     // Class deeds
     parser.doCategory("Beorning_Deeds",DeedType.CLASS,CharacterClass.BEORNING);
     parser.doCategory("Burglar_Deeds",DeedType.CLASS,CharacterClass.BURGLAR);
+    parser.doCategory("Burglar_Meta_Deeds",DeedType.CLASS,CharacterClass.BURGLAR);
     parser.doCategory("Captain_Deeds",DeedType.CLASS,CharacterClass.CAPTAIN);
     parser.doCategory("Champion_Deeds",DeedType.CLASS,CharacterClass.CHAMPION);
     parser.doCategory("Guardian_Deeds",DeedType.CLASS,CharacterClass.GUARDIAN);
     parser.doCategory("Hunter_Deeds",DeedType.CLASS,CharacterClass.HUNTER);
     parser.doCategory("Lore-master_Deeds",DeedType.CLASS,CharacterClass.LORE_MASTER);
+    parser.doCategory("Lore-master_Meta_Deeds",DeedType.CLASS,CharacterClass.LORE_MASTER);
     parser.doCategory("Minstrel_Deeds",DeedType.CLASS,CharacterClass.MINSTREL);
     parser.doCategory("Rune-keeper_Deeds",DeedType.CLASS,CharacterClass.RUNE_KEEPER);
     parser.doCategory("Warden_Deeds",DeedType.CLASS,CharacterClass.WARDEN);
+    parser.doCategory("Warden_Meta_Deeds",DeedType.CLASS,CharacterClass.WARDEN);
 
     // Regions:
     // - Eriador
@@ -259,6 +262,8 @@ public class MainLotroWikiDeedsLoader
         deeds.addAll(newDeeds);
       }
     }
+    // Resolve deed links
+    new DeedLinksResolver(deeds).doIt();
     int nbDeeds=deeds.size();
     System.out.println("Found "+nbDeeds+" deeds.");
     File out=new File("../lotro-companion/data/lore/deeds.xml");

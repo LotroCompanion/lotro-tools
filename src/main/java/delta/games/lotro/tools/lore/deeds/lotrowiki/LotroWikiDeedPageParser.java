@@ -676,7 +676,14 @@ public class LotroWikiDeedPageParser
         int index=deed.indexOf("{{!}}");
         if (index!=-1) deed=deed.substring(0,index).trim();
         deed=deed.replace("Silent Slayer Slayer","Silent Slayer Stalker");
-        ret.add(deed);
+        if (deed.startsWith("Quest:"))
+        {
+          // Ignore
+        }
+        else
+        {
+          ret.add(deed);
+        }
       }
     }
     return ret;
