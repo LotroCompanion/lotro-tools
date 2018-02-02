@@ -192,7 +192,7 @@ public class LotroWikiDeedPageParser
       else if ("TP-reward".equals(lineKey))
       {
         String tpStr=getLineValue(line);
-        if (!tpStr.isEmpty())
+        if ((!tpStr.isEmpty()) && (!"???".equals(tpStr)))
         {
           Integer tp=NumericTools.parseInteger(tpStr,false);
           if (tp!=null)
@@ -263,7 +263,11 @@ public class LotroWikiDeedPageParser
         if ("???".equals(levelStr)) levelStr="";
         if (!levelStr.isEmpty())
         {
-          if (levelStr.startsWith("&lt;=")) levelStr=levelStr.substring(5);
+          levelStr=levelStr.replace("&lt;","<");
+          if (levelStr.startsWith("<=")) levelStr=levelStr.substring(2);
+          if (levelStr.equals("{{Level Cap}}")) levelStr="1000";
+          if (levelStr.endsWith("+")) levelStr=levelStr.substring(0,levelStr.length()-1);
+          levelStr=removeXmlComments(levelStr);
           Integer level=NumericTools.parseInteger(levelStr,false);
           if (level!=null)
           {
@@ -697,5 +701,18 @@ public class LotroWikiDeedPageParser
       return line.substring(index+1).trim();
     }
     return null;
+  }
+
+  private String removeXmlComments(String input)
+  {
+    while(true)
+    {
+      int index=input.indexOf("<!--");
+      if (index==-1) break;
+      int index2=input.indexOf("-->",index+4);
+      if (index2==-1) break;
+      input=input.substring(0,index)+input.substring(index2+3).trim();
+    }
+    return input;
   }
 }
