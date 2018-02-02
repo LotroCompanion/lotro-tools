@@ -18,6 +18,7 @@ public class DeedLinksResolver
   private List<DeedDescription> _deeds;
   private List<DeedDescription> _toAdd;
   private HashMap<String,DeedDescription> _mapByName;
+  private HashMap<String,DeedDescription> _mapByKey;
 
   /**
    * Constructor.
@@ -27,10 +28,10 @@ public class DeedLinksResolver
   {
     _deeds=deeds;
     _toAdd=new ArrayList<DeedDescription>();
-    loadMap();
+    loadMapByName();
   }
 
-  private void loadMap()
+  private void loadMapByName()
   {
     _mapByName=new HashMap<String,DeedDescription>();
     for(DeedDescription deed : _deeds)
@@ -49,11 +50,19 @@ public class DeedLinksResolver
    */
   public void doIt()
   {
+    // Resolve deed links
     for(DeedDescription deed : _deeds)
     {
       resolveDeed(deed);
     }
+    // Add all missing deeds
     _deeds.addAll(_toAdd);
+    // Check link symetry
+    loadMapByKey();
+    for(DeedDescription deed : _deeds)
+    {
+      checkDeedSymetry(deed);
+    }
   }
 
   private void resolveDeed(DeedDescription deed)
@@ -70,6 +79,7 @@ public class DeedLinksResolver
   private void resolveDeedProxy(DeedProxy proxy)
   {
     if (proxy==null) return;
+    if (proxy.getKey()!=null) return; // Already resolved
     String deedName=proxy.getName();
     deedName=deedName.replace("  "," ");
     DeedDescription proxiedDeed=_mapByName.get(deedName);
@@ -135,5 +145,101 @@ public class DeedLinksResolver
     item.setItemId(1879224343);
     deed.getRewards().getObjects().addObject(item,500);
     return deed;
+  }
+
+  private void loadMapByKey()
+  {
+    _mapByKey=new HashMap<String,DeedDescription>();
+    for(DeedDescription deed : _deeds)
+    {
+      String deedKey=deed.getKey();
+      DeedDescription old=_mapByKey.put(deedKey,deed);
+      if (old!=null)
+      {
+        System.out.println("Multiple instances of deed key: "+deedKey);
+      }
+    }
+  }
+
+  private void checkDeedSymetry(DeedDescription deed)
+  {
+    checkNext2PreviousSymetry(deed);
+    checkPrevious2NextSymetry(deed);
+    checkParent2ChildSymetry(deed);
+  }
+
+  private void checkNext2PreviousSymetry(DeedDescription deed) 
+  {
+    DeedProxy nextProxy=deed.getNextDeedProxy();
+    if (nextProxy!=null)
+    {
+      String nextKey=nextProxy.getKey();
+      DeedDescription nextDeed=_mapByKey.get(nextKey);
+      if (nextDeed!=null)
+      {
+        DeedProxy previousProxy=nextDeed.getPreviousDeedProxy();
+        if (previousProxy==null)
+        {
+          previousProxy=new DeedProxy();
+          previousProxy.setDeed(deed);
+          previousProxy.setKey(deed.getKey());
+          previousProxy.setName(deed.getName());
+          nextDeed.setPreviousDeedProxy(previousProxy);
+        }
+      }
+    }
+  }
+
+  private void checkPrevious2NextSymetry(DeedDescription deed) 
+  {
+    DeedProxy previousProxy=deed.getPreviousDeedProxy();
+    if (previousProxy!=null)
+    {
+      String previousKey=previousProxy.getKey();
+      DeedDescription previousDeed=_mapByKey.get(previousKey);
+      if (previousDeed!=null)
+      {
+        DeedProxy nextProxy=previousDeed.getPreviousDeedProxy();
+        if (nextProxy==null)
+        {
+          nextProxy=new DeedProxy();
+          nextProxy.setDeed(deed);
+          nextProxy.setKey(deed.getKey());
+          nextProxy.setName(deed.getName());
+          previousDeed.setNextDeedProxy(nextProxy);
+        }
+      }
+    }
+  }
+
+  private void checkParent2ChildSymetry(DeedDescription deed)
+  {
+    DeedProxy parentProxy=deed.getParentDeedProxy();
+    if (parentProxy!=null)
+    {
+      String parentKey=parentProxy.getKey();
+      DeedDescription parentDeed=_mapByKey.get(parentKey);
+      if (parentDeed!=null)
+      {
+        // Find child
+        boolean found=false;
+        for(DeedProxy childDeed : parentDeed.getChildDeeds())
+        {
+          if (childDeed.getKey().equals(deed.getKey()))
+          {
+            found=true;
+            break;
+          }
+        }
+        if (!found)
+        {
+          DeedProxy childProxy=new DeedProxy();
+          childProxy.setDeed(deed);
+          childProxy.setKey(deed.getKey());
+          childProxy.setName(deed.getName());
+          parentDeed.getChildDeeds().add(childProxy);
+        }
+      }
+    }
   }
 }
