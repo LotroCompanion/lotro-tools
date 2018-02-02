@@ -245,6 +245,7 @@ public class MainLotroWikiDeedsLoader
     // Caution: these may bring already existing deeds:
     parser.doCategory("Hidden_Deeds");
     parser.doCategory("Meta_Deeds");
+    parser.doCategory("Elves_of_Rivendell_Reputation_Quests");
  
     writeResultFile();
   }
