@@ -96,6 +96,10 @@ public class DeedLinksResolver
     if (proxy.getKey()!=null) return; // Already resolved
     String deedName=proxy.getName();
     deedName=deedName.replace("  "," ");
+    if (deedName.endsWith("\u200e"))
+    {
+      deedName=deedName.substring(0,deedName.length()-1);
+    }
     DeedDescription proxiedDeed=_mapByName.get(deedName);
     if (proxiedDeed!=null)
     {
@@ -106,7 +110,7 @@ public class DeedLinksResolver
     else
     {
       boolean ok=false;
-      if (deedName.endsWith(" Slayer (Advanced)"))
+      if (deedName.endsWith(" (Advanced)"))
       {
         String baseDeedName=deedName.substring(0, deedName.length() - 10).trim();
         DeedDescription baseDeed=_mapByName.get(baseDeedName);
