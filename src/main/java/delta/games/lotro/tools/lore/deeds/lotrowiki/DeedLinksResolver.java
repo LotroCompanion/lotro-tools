@@ -103,7 +103,7 @@ public class DeedLinksResolver
       {
         String baseDeedName=deedName.substring(0, deedName.length() - 10).trim();
         DeedDescription baseDeed=_mapByName.get(baseDeedName);
-        if (baseDeed != null)
+        if (baseDeed!=null)
         {
           DeedDescription advancedDeed=buildAdvancedSkirmishLieutenantDeed(baseDeed);
           _toAdd.add(advancedDeed);
@@ -240,6 +240,11 @@ public class DeedLinksResolver
    */
   public static void addChildDeed(DeedDescription parentDeed, DeedDescription childDeed)
   {
+    // Ignore links to self!
+    if (parentDeed.getName().equals(childDeed.getName()))
+    {
+      return;
+    }
     // Find child
     boolean found=false;
     for(DeedProxy currentChildDeed : parentDeed.getChildDeeds())
