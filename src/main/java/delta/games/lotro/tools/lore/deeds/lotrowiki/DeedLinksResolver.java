@@ -19,7 +19,6 @@ public class DeedLinksResolver
   private List<DeedDescription> _toAdd;
   private HashMap<String,DeedDescription> _mapByName;
   private HashMap<String,DeedDescription> _mapByKey;
-  private DeedObjectivesParser _objectivesParser;
 
   /**
    * Constructor.
@@ -30,7 +29,6 @@ public class DeedLinksResolver
     _deeds=deeds;
     _toAdd=new ArrayList<DeedDescription>();
     loadMapByName();
-    _objectivesParser=new DeedObjectivesParser(_mapByName);
   }
 
   private void loadMapByName()
@@ -59,13 +57,15 @@ public class DeedLinksResolver
     }
     // Add all missing deeds
     _deeds.addAll(_toAdd);
+    // Load a map by key
+    loadMapByKey();
+    DeedObjectivesParser objectivesParser=new DeedObjectivesParser(_mapByName,_mapByKey);
     // Find additional links in objectives
     for(DeedDescription deed : _deeds)
     {
-      _objectivesParser.doIt(deed);
+      objectivesParser.doIt(deed);
     }
     // Check link symetry
-    loadMapByKey();
     for(DeedDescription deed : _deeds)
     {
       checkDeedSymetry(deed);

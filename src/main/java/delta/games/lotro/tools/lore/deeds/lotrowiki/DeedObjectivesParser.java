@@ -13,14 +13,17 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 public class DeedObjectivesParser
 {
   private HashMap<String,DeedDescription> _mapByName;
+  private HashMap<String,DeedDescription> _mapByKey;
 
   /**
    * Constructor.
    * @param mapByName Map of known deeds (name to deed).
+   * @param mapByKey Map of known deeds (key to deed).
    */
-  public DeedObjectivesParser(HashMap<String,DeedDescription> mapByName)
+  public DeedObjectivesParser(HashMap<String,DeedDescription> mapByName,HashMap<String,DeedDescription> mapByKey)
   {
     _mapByName=mapByName;
+    _mapByKey=mapByKey;
   }
 
   /**
@@ -126,13 +129,15 @@ public class DeedObjectivesParser
   {
     if (text==null) return null;
     if ("the Ruins of Bree-land".equals(text)) text="The Ruins of Breeland";
-    if ("Poison%3F_What_Poison%3F_(Deed)".equals(text)) text="Poison? What Poison? (Deed)";
-    if ("Stealthy Shot".equals(text)) text="Stealthy Shot (Deed)";
 
     if (text.startsWith("the ")) text="The "+text.substring(4);
     //if ("Dargnákh Unleashed".equals(text)) text="Isengard: Dargnákh Unleashed";
     //if ("The Foundry".equals(text)) text="Isengard: The Foundry";
     DeedDescription deed=_mapByName.get(text);
+    if (deed==null)
+    {
+      deed=_mapByKey.get(text);
+    }
     return deed;
   }
 }
