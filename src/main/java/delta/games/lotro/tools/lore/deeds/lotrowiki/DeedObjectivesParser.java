@@ -125,6 +125,10 @@ public class DeedObjectivesParser
   private DeedDescription resolveDeed(String text)
   {
     if (text==null) return null;
+    if ("the Ruins of Bree-land".equals(text)) text="The Ruins of Breeland";
+    if ("Poison%3F_What_Poison%3F_(Deed)".equals(text)) text="Poison? What Poison? (Deed)";
+    if ("Stealthy Shot".equals(text)) text="Stealthy Shot (Deed)";
+
     if (text.startsWith("the ")) text="The "+text.substring(4);
     //if ("Dargnákh Unleashed".equals(text)) text="Isengard: Dargnákh Unleashed";
     //if ("The Foundry".equals(text)) text="Isengard: The Foundry";
