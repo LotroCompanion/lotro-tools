@@ -33,8 +33,8 @@ public class DeedObjectivesParser
     String[] lines=objectives.split("\n");
     for(String line : lines)
     {
-      int index=line.indexOf("Complete ");
-      if (index!=-1)
+      //int index=line.indexOf("Complete ");
+      //if (index!=-1)
       {
         DeedDescription linkedDeed=findDeedInObjectivesLine(deed,line);
         if (linkedDeed!=null)
@@ -49,43 +49,53 @@ public class DeedObjectivesParser
   {
     DeedDescription ret=null;
     List<String> links=TextTools.findAllBetween(line,"[[","]]");
-    boolean foundLinkToBeIgnored=false;
-    for(String link : links)
+    if (links.size()>0)
     {
-      int index=link.indexOf('|');
-      String linkId;
-      String linkText;
-      if (index!=-1)
+      boolean ignore=false;
+      for(String link : links)
       {
-        linkId=link.substring(0,index).trim();
-        linkText=link.substring(index+1).trim();
-      }
-      else
-      {
-        linkId=null;
-        linkText=link.trim();
-      }
-      if (linkId!=null)
-      {
-        ret=resolveDeed(linkId);
+        int index=link.indexOf('|');
+        String linkId;
+        String linkText;
+        if (index!=-1)
+        {
+          linkId=link.substring(0,index).trim();
+          linkText=link.substring(index+1).trim();
+        }
+        else
+        {
+          linkId=null;
+          linkText=link.trim();
+        }
+        if (linkId!=null)
+        {
+          boolean ignoreLink=ignoreLink(linkId);
+          if (ignoreLink)
+          {
+            ignore=true;
+            continue;
+          }
+          ret=resolveDeed(linkId);
+        }
         if (ret==null)
         {
-          if (ignoreLink(linkId)) foundLinkToBeIgnored=true;
+          boolean ignoreLink=ignoreLink(linkText);
+          if (ignoreLink)
+          {
+            ignore=true;
+            continue;
+          }
+          ret=resolveDeed(linkText);
         }
       }
-      if (ret==null)
+      if ((ret==null) && (!ignore))
       {
-        ret=resolveDeed(linkText);
-        if (ret==null)
+        boolean ignoreLine=ignoreLine(line);
+        if (!ignoreLine)
         {
-          if (ignoreLink(linkText)) foundLinkToBeIgnored=true;
+          System.out.println(parentDeed.getName()+" => "+line);
         }
       }
-    }
-    boolean ignoreLine=ignoreLine(line);
-    if ((ret==null) && (!foundLinkToBeIgnored) && (!ignoreLine))
-    {
-      System.out.println(parentDeed.getName()+"\t"+line);
     }
     return ret;
   }
@@ -93,7 +103,8 @@ public class DeedObjectivesParser
   private boolean ignoreLink(String link)
   {
     if (link.startsWith("Quest:")) return true;
-    if (link.toLowerCase().contains("complete quests")) return true;
+    if (link.startsWith("Item:")) return true;
+    //if (link.toLowerCase().contains("complete quests")) return true;
     return false;
   }
 
@@ -101,12 +112,20 @@ public class DeedObjectivesParser
   {
     if (line.toLowerCase().contains("complete quests")) return true;
     if (line.toLowerCase().contains("complete tasks")) return true;
+    if (line.toLowerCase().contains("discover")) return true;
+    if (line.toLowerCase().contains("you have aided")) return true;
+    if (line.toLowerCase().contains("find ")) return true;
+    if (line.toLowerCase().contains("defeat ")) return true;
+    if (line.toLowerCase().contains("meet ")) return true;
+    if (line.toLowerCase().contains("use ")) return true;
+    if (line.toLowerCase().contains("journey to the ")) return true;
     return false;
   }
 
   private DeedDescription resolveDeed(String text)
   {
     if (text==null) return null;
+    if (text.startsWith("the ")) text="The "+text.substring(4);
     //if ("Dargnákh Unleashed".equals(text)) text="Isengard: Dargnákh Unleashed";
     //if ("The Foundry".equals(text)) text="Isengard: The Foundry";
     DeedDescription deed=_mapByName.get(text);
