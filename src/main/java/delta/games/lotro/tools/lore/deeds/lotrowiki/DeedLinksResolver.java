@@ -3,6 +3,7 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -64,6 +65,12 @@ public class DeedLinksResolver
     for(DeedDescription deed : _deeds)
     {
       objectivesParser.doIt(deed);
+    }
+    // Remove useless children
+    for(DeedDescription deed : _deeds)
+    {
+      removeUnwantedChildren(deed);
+      checkForUnwantedChildren(deed);
     }
     // Check link symetry
     for(DeedDescription deed : _deeds)
@@ -263,6 +270,65 @@ public class DeedLinksResolver
       childProxy.setKey(childDeed.getKey());
       childProxy.setName(childDeed.getName());
       parentDeed.getChildDeeds().add(childProxy);
+    }
+  }
+
+  private void checkForUnwantedChildren(DeedDescription deed)
+  {
+    List<DeedProxy> children=deed.getChildDeeds();
+    // Grab child deed names
+    Map<String,DeedProxy> childNames=new HashMap<String,DeedProxy>();
+    for(DeedProxy child : children)
+    {
+      childNames.put(child.getName(),child);
+    }
+    // For each child, check if one of its previous is the children list
+    List<DeedProxy> toRemove=new ArrayList<DeedProxy>();
+    for(DeedProxy child : children)
+    {
+      DeedDescription childDeed=child.getDeed();
+      DeedProxy previous=childDeed.getPreviousDeedProxy();
+      while(previous!=null)
+      {
+        DeedProxy previousInChildren=childNames.get(previous.getName());
+        if (previousInChildren!=null)
+        {
+          toRemove.add(previousInChildren);
+          break;
+        }
+        DeedDescription previousDeed=previous.getDeed();
+        previous=(previousDeed!=null)?previousDeed.getPreviousDeedProxy():null;
+      }
+    }
+    children.removeAll(toRemove);
+  }
+
+  private void removeUnwantedChildren(DeedDescription deed)
+  {
+    // Enemies Beneath the Hills
+    if ("Enemies Beneath the Hills".equals(deed.getName()))
+    {
+      removeChildByName(deed,"Leaders Beneath the Hills");
+      removeChildByName(deed,"Skoironk: Enemies Beneath");
+      removeChildByName(deed,"Towers of the Teeth: Enemies Beneath");
+    }
+  }
+
+  private void removeChildByName(DeedDescription deed, String name)
+  {
+    DeedProxy toRemove=null;
+    for(DeedProxy child : deed.getChildDeeds())
+    {
+      if (name.equals(child.getName()))
+      {
+        toRemove=child;
+        break;
+      }
+    }
+    if (toRemove!=null)
+    {
+      deed.getChildDeeds().remove(toRemove);
+      toRemove.getDeed().setParentDeedProxy(null);
     }
   }
 }

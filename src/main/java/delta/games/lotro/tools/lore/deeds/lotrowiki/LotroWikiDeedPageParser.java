@@ -626,8 +626,34 @@ public class LotroWikiDeedPageParser
     return ret;
   }
 
+  private boolean useDeedsChain(DeedDescription deed)
+  {
+    String name=deed.getName();
+    // List deed pages where the deed chain is wrong
+    if ("Aiding the Wold".equals(name)) return false;
+    if ("Aiding the Norcrofts".equals(name)) return false;
+    if ("Aiding the Sutcrofts".equals(name)) return false;
+    if ("Aiding the Entwash Vale".equals(name)) return false;
+    if ("Aiding the Eastemnet".equals(name)) return false;
+    if ("Commanders of Isengard -- Tier 1".equals(name)) return false;
+    if ("Commanders of Isengard -- Tier 2".equals(name)) return false;
+    if ("Draigoch's Lair -- Tier 1".equals(name)) return false;
+    if ("Draigoch's Lair -- Tier 2".equals(name)) return false;
+    if ("Draigoch's Lair -- Challenge".equals(name)) return false;
+    if ("Draigoch the Red".equals(name)) return false;
+    if ("Commanders of the Foundry -- Tier 1".equals(name)) return false;
+    if ("Commanders of the Foundry -- Tier 2".equals(name)) return false;
+    if ("Saviour of the Roots of Fangorn".equals(name)) return false;
+    if ("Roots of Fangorn: Defeat Gurthúl".equals(name)) return false;
+    if ("Roots of Fangorn: Slaves of the Spider Queen".equals(name)) return false;
+    if ("Discovery: Roots of Fangorn".equals(name)) return false;
+
+    return true;
+  }
+
   private void handleDeedsChain(DeedDescription deed, List<String> deedsChain)
   {
+    if (!useDeedsChain(deed)) return;
     deedsChain=normalizeDeedsChain(deedsChain);
     if (deedsChain.size()==0) return;
     String name=deed.getName();
