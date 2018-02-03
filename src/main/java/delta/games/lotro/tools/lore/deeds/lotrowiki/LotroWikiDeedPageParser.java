@@ -162,7 +162,9 @@ public class LotroWikiDeedPageParser
           sb.append('\n').append(nextLine);
           index++;
         }
-        deed.setObjectives(sb.toString().trim());
+        String objectives=sb.toString().trim();
+        objectives=normalizeObjectives(objectives);
+        deed.setObjectives(objectives);
       }
       else if ("Faction".equals(lineKey))
       {
@@ -714,5 +716,13 @@ public class LotroWikiDeedPageParser
       input=input.substring(0,index)+input.substring(index2+3).trim();
     }
     return input;
+  }
+
+  private String normalizeObjectives(String objectives)
+  {
+    objectives=objectives.replace("&lt;","<");
+    objectives=objectives.replace("<br />","\n");
+    objectives=objectives.replace("<br>","\n");
+    return objectives;
   }
 }
