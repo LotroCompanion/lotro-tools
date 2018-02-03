@@ -219,6 +219,8 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Bree-land_Event_Deeds",DeedType.EVENT,"Event:Spring Festival");
     parser.doCategory("Event_Deeds",DeedType.EVENT,"Event:Festival");
     parser.doCategory("Hobnanigans_Deeds",DeedType.EVENT,"Event:Hobnanigans");
+    parser.doCategory("Seasonal_Content");
+    parser.doCategory("LOTRO_Anniversary_Social_Deeds");
 
     // Racial deeds
     parser.doCategory("Beorning_(Race)_Deeds",null,Race.BEORNING);
