@@ -19,6 +19,7 @@ public class DeedLinksResolver
   private List<DeedDescription> _toAdd;
   private HashMap<String,DeedDescription> _mapByName;
   private HashMap<String,DeedDescription> _mapByKey;
+  private DeedObjectivesParser _objectivesParser;
 
   /**
    * Constructor.
@@ -29,6 +30,7 @@ public class DeedLinksResolver
     _deeds=deeds;
     _toAdd=new ArrayList<DeedDescription>();
     loadMapByName();
+    _objectivesParser=new DeedObjectivesParser(_mapByName);
   }
 
   private void loadMapByName()
@@ -57,6 +59,11 @@ public class DeedLinksResolver
     }
     // Add all missing deeds
     _deeds.addAll(_toAdd);
+    // Find additional links in objectives
+    for(DeedDescription deed : _deeds)
+    {
+      _objectivesParser.doIt(deed);
+    }
     // Check link symetry
     loadMapByKey();
     for(DeedDescription deed : _deeds)
@@ -221,25 +228,36 @@ public class DeedLinksResolver
       DeedDescription parentDeed=_mapByKey.get(parentKey);
       if (parentDeed!=null)
       {
-        // Find child
-        boolean found=false;
-        for(DeedProxy childDeed : parentDeed.getChildDeeds())
-        {
-          if (childDeed.getKey().equals(deed.getKey()))
-          {
-            found=true;
-            break;
-          }
-        }
-        if (!found)
-        {
-          DeedProxy childProxy=new DeedProxy();
-          childProxy.setDeed(deed);
-          childProxy.setKey(deed.getKey());
-          childProxy.setName(deed.getName());
-          parentDeed.getChildDeeds().add(childProxy);
-        }
+        addChildDeed(parentDeed,deed);
       }
+    }
+  }
+
+  /**
+   * Add child deed, if it does not exist.
+   * @param parentDeed Parent deed.
+   * @param childDeed Child deed.
+   */
+  public static void addChildDeed(DeedDescription parentDeed, DeedDescription childDeed)
+  {
+    // Find child
+    boolean found=false;
+    for(DeedProxy currentChildDeed : parentDeed.getChildDeeds())
+    {
+      if (currentChildDeed.getKey().equals(childDeed.getKey()))
+      {
+        found=true;
+        break;
+      }
+    }
+    // Add it if it is not found!
+    if (!found)
+    {
+      DeedProxy childProxy=new DeedProxy();
+      childProxy.setDeed(childDeed);
+      childProxy.setKey(childDeed.getKey());
+      childProxy.setName(childDeed.getName());
+      parentDeed.getChildDeeds().add(childProxy);
     }
   }
 }
