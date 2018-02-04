@@ -121,6 +121,10 @@ public class DeedObjectivesParser
     if (line.toLowerCase().contains("defeat ")) return true;
     if (line.toLowerCase().contains("meet ")) return true;
     if (line.toLowerCase().contains("use ")) return true;
+    if (line.toLowerCase().contains("explore ")) return true;
+    if (line.toLowerCase().contains("mount ")) return true;
+    if (line.toLowerCase().contains("must earn ")) return true;
+    if (line.toLowerCase().contains("speak with ")) return true;
     if (line.toLowerCase().contains("journey to the ")) return true;
     return false;
   }

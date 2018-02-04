@@ -72,6 +72,11 @@ public class DeedLinksResolver
       removeUnwantedChildren(deed);
       checkForUnwantedChildren(deed);
     }
+    // Remove duplicates
+    {
+      _deeds.remove(_mapByKey.get("Ten_Years_of_Trifles_(Deed)"));
+      _deeds.remove(_mapByKey.get("Threat_of_the_Wastes"));
+    }
     // Check link symetry
     for(DeedDescription deed : _deeds)
     {
