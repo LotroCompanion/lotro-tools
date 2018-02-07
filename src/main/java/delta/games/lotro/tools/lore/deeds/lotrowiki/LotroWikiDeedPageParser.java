@@ -145,6 +145,7 @@ public class LotroWikiDeedPageParser
       else if ("Lore-text".equals(lineKey))
       {
         String description=getLineValue(line);
+        description=normalize(description);
         deed.setDescription(description);
       }
       else if ("Objective".equals(lineKey))
@@ -163,7 +164,7 @@ public class LotroWikiDeedPageParser
           index++;
         }
         String objectives=sb.toString().trim();
-        objectives=normalizeObjectives(objectives);
+        objectives=normalize(objectives);
         deed.setObjectives(objectives);
       }
       else if ("Faction".equals(lineKey))
@@ -731,6 +732,34 @@ public class LotroWikiDeedPageParser
     return null;
   }
 
+  private String normalize(String input)
+  {
+    input=normalizeHtml(input);
+    input=removeXmlComments(input);
+    input=cleanupLines(input);
+    return input;
+  }
+
+  private String cleanupLines(String input)
+  {
+    input=input.replace("\r\n","\n");
+    input="\n"+input;
+    String oldInput=input;
+    while(true)
+    {
+      input=input.replace(" \n","\n");
+      input=input.replace("\n ","\n");
+      input=input.replace("\n:","\n");
+      input=input.replace("''\n","\n");
+      input=input.replace("\n''","\n");
+      input=input.replace("\n*","\n");
+      if (oldInput.equals(input)) break;
+      oldInput=input;
+    }
+    input=input.trim();
+    return input;
+  }
+
   private String removeXmlComments(String input)
   {
     while(true)
@@ -744,11 +773,12 @@ public class LotroWikiDeedPageParser
     return input;
   }
 
-  private String normalizeObjectives(String objectives)
+  private String normalizeHtml(String input)
   {
-    objectives=objectives.replace("&lt;","<");
-    objectives=objectives.replace("<br />","\n");
-    objectives=objectives.replace("<br>","\n");
-    return objectives;
+    input=input.replace("&lt;","<");
+    input=input.replace("<br />","\n");
+    input=input.replace("<br>","\n");
+    input=input.replace("&amp;","&");
+    return input;
   }
 }
