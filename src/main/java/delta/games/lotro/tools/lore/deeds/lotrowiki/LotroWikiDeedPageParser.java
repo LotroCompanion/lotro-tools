@@ -480,6 +480,23 @@ public class LotroWikiDeedPageParser
       {
         titleName=titleName.substring(0,titleName.length()-TITLE_SUFFIX.length());
       }
+      int index=titleName.indexOf("{{!}}");
+      if (index!=-1)
+      {
+        titleName=titleName.substring(index+5);
+      }
+      index=titleName.indexOf("| display=");
+      if (index!=-1)
+      {
+        titleName=titleName.substring(index+10);
+      }
+      
+      index=titleName.indexOf('|');
+      if (index!=-1)
+      {
+        titleName=titleName.substring(0,index);
+      }
+      titleName=titleName.trim();
       title=new Title(null,titleName);
     }
     return title;
