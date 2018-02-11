@@ -743,7 +743,7 @@ public class LotroWikiDeedPageParser
   private String cleanupLines(String input)
   {
     input=input.replace("\r\n","\n");
-    input="\n"+input;
+    input="\n"+input+"\n";
     String oldInput=input;
     while(true)
     {
