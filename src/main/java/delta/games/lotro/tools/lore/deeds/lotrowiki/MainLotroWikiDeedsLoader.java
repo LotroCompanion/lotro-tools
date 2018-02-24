@@ -92,7 +92,15 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("March_of_the_King_Deeds",null,"Region:March of the King");
     parser.doCategory("The_Wastes_Deeds",null,"Region:The Wastes");
     // - Mordor
-    parser.doCategory("Gorgoroth_Deeds",null,"Region:Gorgoroth");
+    parser.doCategory("Udûn_Deeds",null,"Region:Gorgoroth:Udûn");
+    parser.doCategory("Dor_Amarth_Deeds",null,"Region:Gorgoroth:Dor Amarth");
+    parser.doCategory("Lhingris_Deeds",null,"Region:Gorgoroth:Lhingris");
+    parser.doCategory("Talath_Úrui_Deeds",null,"Region:Gorgoroth:Talath Úrui");
+    parser.doCategory("Agarnaith_Deeds",null,"Region:Gorgoroth:Agarnaith");
+    parser.doCategory("Plateau_of_Gorgoroth_Quest_Deeds",DeedType.QUEST,"Region:Gorgoroth");
+    parser.doCategory("Plateau_of_Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
+    parser.doCategory("Plateau_of_Gorgoroth_Lore_Deeds",DeedType.LORE,"Region:Gorgoroth");
+    parser.doCategory("Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
 
     // PVP
     parser.doCategory("Freep_Deeds",null,"PVP:Freep deeds");
@@ -204,6 +212,7 @@ public class MainLotroWikiDeedsLoader
     // - Plateau of Gorgoroth
     parser.doCategory("The_Court_of_Seregost_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"The Court of Seregost");
     parser.doCategory("Dungeons_of_Naerband_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"Dungeons of Naerband");
+    parser.doCategory("The_Abyss_of_Mordath_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"The Abyss of Mordath");
 
     // Hobby
     parser.doCategory("Hobby_Deeds",DeedType.HOBBY,"Fishing");

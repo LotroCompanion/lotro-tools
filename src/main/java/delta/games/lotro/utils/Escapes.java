@@ -54,6 +54,7 @@ public class Escapes
     ret=ret.replace("í","%ED");
     ret=ret.replace("á","%E1");
     ret=ret.replace("â","%E2");
+    ret=ret.replace("Ú","%DA");
     return ret;
   }
 
