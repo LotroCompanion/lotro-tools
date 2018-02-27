@@ -1444,6 +1444,7 @@ public class ItemNormalization
           normalizeJewelByName(ret,"Scroll",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Phial",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Pocket-square",EquipmentLocation.POCKET);
+          normalizeJewelByName(ret,"Locket",EquipmentLocation.POCKET);
           // Specific names for pocket items
           normalizeJewelByName(ret,"Carved Jewellery Box",EquipmentLocation.POCKET);
           String name=ret.getName();
