@@ -1433,6 +1433,7 @@ public class ItemNormalization
           normalizeJewelByName(ret,"Ring",EquipmentLocation.FINGER);
           normalizeJewelByName(ret,"Bracelet",EquipmentLocation.WRIST);
           normalizeJewelByName(ret,"Cuff",EquipmentLocation.WRIST);
+          normalizeJewelByName(ret,"Ear Cuff",EquipmentLocation.EAR);
           normalizeJewelByName(ret,"Barrow-brie",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Stone",EquipmentLocation.POCKET);
           normalizeJewelByName(ret,"Pendant",EquipmentLocation.NECK);
@@ -1461,6 +1462,12 @@ public class ItemNormalization
             ret.setSubCategory(CharacterClass.LORE_MASTER.getLabel()+":Talisman");
           }
         }
+      }
+      EquipmentLocation slot=ret.getEquipmentLocation();
+      if (slot==null)
+      {
+        String name=ret.getName();
+        System.out.println("Slot not found for jewel: "+name);
       }
       ret.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       ret.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
