@@ -102,7 +102,7 @@ public class MergeDeedsDatabases
       List<DeedDescription> matches3=new ArrayList<DeedDescription>();
       for(DeedDescription match : matches2)
       {
-        if (Objects.equals(match.getClassName(),deed.getClassName()))
+        if (Objects.equals(match.getRequiredClass(),deed.getRequiredClass()))
         {
           matches3.add(match);
         }

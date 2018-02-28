@@ -300,10 +300,7 @@ public class LotroCompendiumDeedsLoader
       }
     }
     deed.setType(deedType);
-    if (characterClass!=null)
-    {
-      deed.setClassName(characterClass.getLabel());
-    }
+    deed.setRequiredClass(characterClass);
   }
 
   @SuppressWarnings("unchecked")

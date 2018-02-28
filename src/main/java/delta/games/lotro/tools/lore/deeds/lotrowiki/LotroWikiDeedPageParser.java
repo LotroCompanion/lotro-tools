@@ -13,6 +13,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Emote;
 import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
@@ -532,10 +533,12 @@ public class LotroWikiDeedPageParser
       deedSubType="";
     }
     // Class deeds
+    CharacterClass requiredClass=null;
     if ("Class".equals(deedType))
     {
       type=DeedType.CLASS;
       category=deedSubType;
+      requiredClass=extractClass(category);
     }
     // Type
     if ("Slayer".equals(regionalSub)) type=DeedType.SLAYER;
@@ -612,6 +615,21 @@ public class LotroWikiDeedPageParser
       deed.setType(type);
       deed.setCategory(category);
     }
+    deed.setRequiredClass(requiredClass);
+  }
+
+  private CharacterClass extractClass(String category)
+  {
+    CharacterClass ret=null;
+    if (category!=null)
+    {
+      ret=CharacterClass.getByName(category);
+      if (ret==null)
+      {
+        System.out.println("Warn: not found: '"+category+"'");
+      }
+    }
+    return ret;
   }
 
   private String getPrefixForZone(String zone)

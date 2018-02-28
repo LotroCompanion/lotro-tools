@@ -87,8 +87,15 @@ public class LotroWikiDeedCategoryPageParser
     List<DeedDescription> deeds=doCategory(categoryId);
     for(DeedDescription deed : deeds)
     {
-      if (type!=null) deed.setType(type);
-      if (characterClass!=null) deed.setCategory("Class:"+characterClass.getKey());
+      if (type!=null)
+      {
+        deed.setType(type);
+      }
+      if (characterClass!=null)
+      {
+        deed.setRequiredClass(characterClass);
+        deed.setCategory(null);
+      }
     }
     writeFile(categoryId,deeds);
     return deeds;
