@@ -29,6 +29,14 @@ public class LotroPlanTable
    * Index of the 'classes' column.
    */
   private static final int CLASSES_INDEX=67;
+  /**
+   * Index of the 'classes' column for Mordor.
+   */
+  //private static final int MORDOR_CLASSES_INDEX=69;
+  /**
+   * Index of the 'category' column for Mordor.
+   */
+  private static final int MORDOR_CATEGORY_INDEX=68;
   // Name iLvl
   // Armour  Might Agility Vitality  Will  Fate  Morale  Power
   // ICMR  NCMR  ICPR  NCPR  CritHit Finesse PhyMas  TacMas
@@ -90,9 +98,9 @@ public class LotroPlanTable
     this(mordor?STATS_MORDOR:STATS);
     if (mordor)
     {
-      _classesIndex+=3;
+      _classesIndex=-1; // MORDOR_CLASSES_INDEX
       _notesIndex+=2;
-      _categoryIndex=_classesIndex-1;
+      _categoryIndex=MORDOR_CATEGORY_INDEX;
     }
   }
 

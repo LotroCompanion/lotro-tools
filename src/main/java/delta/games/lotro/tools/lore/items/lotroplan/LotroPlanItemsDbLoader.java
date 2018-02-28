@@ -250,11 +250,20 @@ public class LotroPlanItemsDbLoader
     else if ("Wrists".equals(_section)) slot=EquipmentLocation.WRIST;
     else if ("Fingers".equals(_section)) slot=EquipmentLocation.FINGER;
     else if ("Pockets".equals(_section)) slot=EquipmentLocation.POCKET;
+    if (slot==null)
+    {
+      int categoryIndex=table.getCategoryIndex();
+      if ((categoryIndex>0) && (fields.length>=categoryIndex))
+      {
+        String category=fields[categoryIndex];
+        slot=getSlotFromCategory(category);
+      }
+    }
 
     // Class requirement
     String classRequirementStr="";
     int classesIndex=table.getClassesIndex();
-    if (fields.length>=classesIndex)
+    if ((classesIndex!=-1) && (fields.length>=classesIndex))
     {
       classRequirementStr=fields[classesIndex].trim();
     }
@@ -332,5 +341,31 @@ public class LotroPlanItemsDbLoader
     if ("Ru".equals(classRequirement)) return CharacterClass.RUNE_KEEPER;
     if ("Wa".equals(classRequirement)) return CharacterClass.WARDEN;
     return null;
+  }
+
+  private EquipmentLocation getSlotFromCategory(String category)
+  {
+    EquipmentLocation slot=null;
+    // Armor
+    if ("Head".equals(category)) slot=EquipmentLocation.HEAD;
+    else if ("Shoulders".equals(category)) slot=EquipmentLocation.SHOULDER;
+    else if ("Chest".equals(category)) slot=EquipmentLocation.CHEST;
+    else if ("Hands".equals(category)) slot=EquipmentLocation.HAND;
+    else if ("Back".equals(category)) slot=EquipmentLocation.BACK;
+    else if ("Legs".equals(category)) slot=EquipmentLocation.LEGS;
+    else if ("Feet".equals(category)) slot=EquipmentLocation.FEET;
+    // Jewels
+    else if ("Ears".equals(category)) slot=EquipmentLocation.EAR;
+    else if ("Neck".equals(category)) slot=EquipmentLocation.NECK;
+    else if ("Wrists".equals(category)) slot=EquipmentLocation.WRIST;
+    else if ("Fingers".equals(category)) slot=EquipmentLocation.FINGER;
+    else if ("Pocket".equals(category)) slot=EquipmentLocation.POCKET;
+    // Others
+    else if ("Melee".equals(category)) slot=EquipmentLocation.MAIN_HAND;
+    else if ("Ranged".equals(category)) slot=EquipmentLocation.RANGED_ITEM;
+    else if ("Shield".equals(category)) slot=EquipmentLocation.OFF_HAND;
+    else if ("Class".equals(category)) slot=EquipmentLocation.CLASS_SLOT;
+    else if ("Instrument".equals(category)) slot=EquipmentLocation.RANGED_ITEM;
+    return slot;
   }
 }
