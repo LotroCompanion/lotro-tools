@@ -113,7 +113,11 @@ public class LotroWikiDeedCategoryPageParser
     List<DeedDescription> deeds=doCategory(categoryId);
     for(DeedDescription deed : deeds)
     {
-      if (race!=null) deed.setCategory("Race:"+race.getLabel());
+      if (race!=null)
+      {
+        deed.setRequiredRace(race);
+        deed.setCategory("Racial");
+      }
     }
     writeFile(categoryId,deeds);
     return deeds;
