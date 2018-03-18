@@ -1,0 +1,284 @@
+	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NCPR	CritHit	Finesse	PhyMas	TacMas	OutHeal	Resist	CritDef	InHeal	Block	Parry	Evade	PhyMit	TacMit	LoE	Audacity	Hope	Notes	ArmourP	MoraleP	PowerP	MelCritP	RngCritP	TacCritP	HealCritP	MelMagnP	RngMagnP	TacMagnP	HealMagnP	MelDmgP	RngDmgP	TacDmgP	OutHealP	MelIndP	RngIndP	TacIndP	HealIndP	AttDurP	RunSpdP	CritDefP	InHealP	BlockP	ParryP	EvadeP	PblkP	PparP	PevaP	PblkMitP	PparMitP	PevaMitP	MelRedP	RngRedP	TacRedP	PhyMitP	TacMitP	Category	Classes	MinLvl	MaxLvl	CategoryId	QualityId	SlotId	ClassId	EssSlots	SliceTot	SliceChk
+- Northern Stronghold Essence of Agility	345			446																										1879365776																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Block	345																					8680								1879365789																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Critical Defence	345																			9679										1879365780																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Critical Rating	345													3858																1879365784																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Evasion	345																							8680						1879365790																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Fate	345						446																							1879365791																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Finesse	345														11691															1879365788																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Healing	345																	9918												1879365775																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Might	345		446																											1879365779																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Parry	345																						8680							1879365792																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Physical Mastery	345															5888														1879365785																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Physical Mitigation	345																								8682					1879365777																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Resistance	345																		5848											1879365782																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Restoration	345																				7715,5									1879365783																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Tactical Mastery	345																5888													1879365774																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Tactical Mitigation	345																									8682				1879365786																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Vitality	345				743																									1879365778																																						Essence	*	115		235	1	-1			1,2
+- Northern Stronghold Essence of Will	345					446																								1879365781																																						Essence	*	115		235	1	-1			1,2
+Agile Leggings of Thranduil's Cunning (1s):	340	11518		634	939															7641				6853			20			1879365545																																						Legs	BuHuWa	115		15	3	3		1	7
+Agile Leggings of Thranduil's Power (1s):	340	11518		704	822		422							2436													20			1879365575																																						Legs	BuHuWa	115		15	3	3		1	7
+Agile Silver Bracelet of Thranduil's Cunning	345			743	991														4874					7233			18			1879347709																																						Wrists	BuHuWa	115		49	2	2			6,2
+Agile Silver Bracelet of Thranduil's Power	345			743	867		520									3925											18			1879347689																																						Wrists	BuHuWa	115		49	2	2			6,2
+Alloyed Gold Bracer of Thorin's Memory	345		669		1363																		8680	8680			20			1879347646																																						Wrists	BeCaChGu	115		49	3	2			7
+Alloyed Gold Bracer of Thorin's Strength	345		818		991									3215	15588												20			1879347638																																						Wrists	BeCaChGu	115		49	3	2			7
+Amethyst Iron Earring of Thranduil's Cunning	345		743		1363		371													9679							20			1879347690																																						Ears	BeCaChGu	115		49	3	5			7
+Amethyst Iron Earring of Thranduil's Power	345		818		991									3215		7851											20			1879347743																																						Ears	BeCaChGu	115		49	3	5			7
+Amethyst Mithril Ring of Thorin's Memory	345		669		1363															9679						8682	20			1879347746																																						Fingers	BeCaChGu	115		49	3	11			7
+Amethyst Mithril Ring of Thorin's Strength	345		818		991		371									7851											20			1879347647																																						Fingers	BeCaChGu	115		49	3	11			7
+Amethyst Silver Ear Cuff of Bard's Honour	345				991	818	595											8265									20			1879347700																																						Ears	LoMiRu	115		49	3	5			7
+Amethyst Silver Ear Cuff of Bard's Will	345				991	818											7851									7235	20			1879347643																																						Ears	LoMiRu	115		49	3	5			7
+Amethyst Silver Ring of Thranduil's Cunning	345			743	1239		446													9679							20			1879347649																																						Fingers	BuHuWa	115		49	3	11			7
+Amethyst Silver Ring of Thranduil's Power	345			818	991		371									7851											20			1879347677																																						Fingers	BuHuWa	115		49	3	11			7
+Antique Brooch of Thranduil's Cunning (1s):	345		743		991																		7233				28			1879347633																																						Pocket	BeCaChGu	115		49	2	12		1	6,2
+Antique Brooch of Thranduil's Power (1s):	345		743		867										11691												28			1879347726																																						Pocket	BeCaChGu	115		49	2	12		1	6,2
+Articulated Gauntlets of Thorin's Memory (1s):	340	7695	563		1057		352													7641							20			1879365592																																						Hands	CaChGu	115		5	3	13		1	7
+Articulated Gauntlets of Thorin's Strength (1s):	340	7695	704		822		352								9230												20			1879365590																																						Hands	CaChGu	115		5	3	13		1	7
+Belted Trousers of Bard's Honour (1s):	340	10238			822	704								2436	11076												20			1879365578																																						Legs	LoMiRu	115		15	3	0		1	7
+Belted Trousers of Bard's Will (1s):	340	10238			822	704								2436	11076												20			1879365542																																						Legs	LoMiRu	115		15	3	0		1	7
+Black Granite Ring of Thranduil's Cunning	345		743		1115		297													8066							18			1879347697																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Black Granite Ring of Thranduil's Power	345		743		867										7794	6870											18			1879347656																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Bolstered Pauldrons of Thorin's Memory (1s):	340	4455	634		1057																	6853					16			1879365471																																						Shoulders	CaChGu	115		6	2	13		1	6,2
+Bolstered Pauldrons of Thorin's Strength (1s):	340	4455	704		822											5685											16			1879365476																																						Shoulders	CaChGu	115		6	2	13		1	6,2
+Burnished Greaves of Thorin's Memory (1s):	340	12798	563		1057																		6853			6854	20			1879365574																																						Legs	CaChGu	115		15	3	13		1	7
+Burnished Greaves of Thorin's Strength (1s):	340	12798	704		822		352							3046													20			1879365544																																						Legs	CaChGu	115		15	3	13		1	7
+Burnished Silver Bracer of Thorin's Memory	345		669		1115														4874	8066							18			1879347706																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Burnished Silver Bracer of Thorin's Strength	345		743		867		446									4907											18			1879347662																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Buttressed Chestplate of Thorin's Memory (2s):	340	15390	563		1057															7641							20			1879365539																																						Chest	CaChGu	115		3	3	13		2	7
+Buttressed Chestplate of Thorin's Strength (2s):	340	15390	704		822										9230												20			1879365594																																						Chest	CaChGu	115		3	3	13		2	7
+Carved Jade Ring of Bard's Honour	345				867	743	297											11571									18			1879347732																																						Fingers	LoMiRu	115		49	2	11			6,2
+Carved Jade Ring of Bard's Will	345				867	743	297							4501													18			1879347652																																						Fingers	LoMiRu	115		49	2	11			6,2
+Chrysolite Oak Ring of Thranduil's Cunning	345		743		1115														3899					7233			18			1879347660																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Chrysolite Oak Ring of Thranduil's Power	345		743		867		297							4501													18			1879347735																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Corded Trousers of Bard's Honour	340	9720			822	704								2436	12922												16			1879365495																																						Legs	LoMiRu	115		15	2	0			6,2
+Corded Trousers of Bard's Will	340	9720			822	704								2436	12922												16			1879365502																																						Legs	LoMiRu	115		15	2	0			6,2
+Curious Onyx Ring of Bard's Honour	345				867	743									13640			6612									18			1879347711																																						Fingers	LoMiRu	115		49	2	11			6,2
+Curious Onyx Ring of Bard's Will	345				867	743											6870									5788	18			1879347681																																						Fingers	LoMiRu	115		49	2	11			6,2
+Delicate Gold Armlet of Bard's Honour	345				867	743	297							4501													18			1879347676																																						Wrists	LoMiRu	115		49	2	2			6,2
+Delicate Gold Armlet of Bard's Will	345				867	743	297								13640												18			1879347670																																						Wrists	LoMiRu	115		49	2	2			6,2
+Dextrous Gages of Thranduil's Cunning	340	6561		704	939		352																	6853			16			1879365461																																						Hands	BuHuWa	115		5	2	3			6,2
+Dextrous Gages of Thranduil's Power	340	6561		704	822		493								7384												16			1879365491																																						Hands	BuHuWa	115		5	2	3			6,2
+Dextrous Gold Bracelet of Thranduil's Cunning	345			743	991														4874				7233				18			1879347744																																						Wrists	BuHuWa	115		49	2	2			6,2
+Dextrous Gold Bracelet of Thranduil's Power	345			743	867									2572	13640												18			1879347739																																						Wrists	BuHuWa	115		49	2	2			6,2
+Double-mail Hauberk of Thranduil's Cunning (2s):	340	13851	634		939																		6853				20			1879365564																																						Chest	Be	115		3	3	3		2	7
+Double-mail Hauberk of Thranduil's Power (2s):	340	13851	704		822										9230												20			1879365541																																						Chest	Be	115		3	3	3		2	7
+Earring of Spring's Arrival	340		775		939									3046		7580											18			1879365756																																						Ears	BeCaChGu	115		49	3	5			7
+Earring of Spring's Promise	340			775	939									3046		7580											18			1879365757																																						Ears	BuHuWa	115		49	3	5			7
+Earring of Spring's Rite	340				939	775								3046			7580										18			1879365755																																						Ears	LoMiRu	115		49	3	5			7
+Embossed Mantle of Bard's Honour (2s):	340	3693			822	704	352																				20			1879365555																																						Shoulders	LoMiRu	115		6	3	0		2	7
+Embossed Mantle of Bard's Will (2s):	340	3693			822	704											4738										20			1879365562																																						Shoulders	LoMiRu	115		6	3	0		2	7
+Embroidered Mantle of Bard's Honour (1s):	340	3564			822	704	422																				16			1879365508																																						Shoulders	LoMiRu	115		6	2	0		1	6,2
+Embroidered Mantle of Bard's Will (1s):	340	3564			822	704											5685										16			1879365505																																						Shoulders	LoMiRu	115		6	2	0		1	6,2
+Enduring Iron Bracelet of Thranduil's Cunning	345		743		1363														5848					7233			20			1879347640																																						Wrists	BeCaChGu	115		49	3	2			7
+Enduring Iron Bracelet of Thranduil's Power	345		818		991		595								9743												20			1879347675																																						Wrists	BeCaChGu	115		49	3	2			7
+Enduring Leggings of Thranduil's Cunning	340	10935	704		1057															6113				6853			16			1879365507																																						Legs	Be	115		15	2	3			6,2
+Enduring Leggings of Thranduil's Power	340	10935	704		822									2436						10697							16			1879365483																																						Legs	Be	115		15	2	3			6,2
+Engraved Pauldrons of Thorin's Memory (2s):	340	4617	563		1057																	6853					20			1879365546																																						Shoulders	CaChGu	115		6	3	13		2	7
+Engraved Pauldrons of Thorin's Strength (2s):	340	4617	704		822											4738											20			1879365558																																						Shoulders	CaChGu	115		6	3	13		2	7
+Expedition Fiddle	323							1889	1621																					1879366531																																						Instrument	Mi	115		11	2	29	1024		2
+Expedition Fiddle of Conservation	323							1889	1621																					1879366528																																						Instrument	Mi	115		11	2	29	1024		2
+Expedition Fiddle of Harmony	323							1889	1621																					1879366527																																						Instrument	Mi	115		11	2	29	1024		2
+Expedition Fiddle of Resolve	323							1889	1621																					1879366533																																						Instrument	Mi	115		11	2	29	1024		2
+Expedition Fiddle of the Battle-singer	323							1889	1621																					1879366525																																						Instrument	Mi	115		11	2	29	1024		2
+Expedition Fiddle of the Wary Watcher	323							1889	1621																					1879366530																																						Instrument	Mi	115		11	2	29	1024		2
+Exquisite Expedition Fiddle	336							4450	3820																					1879366524																																						Instrument	Mi	115		11	3	29	1024		4
+Exquisite Expedition Fiddle of Conservation	336							4450	3820																					1879366529																																						Instrument	Mi	115		11	3	29	1024		4
+Exquisite Expedition Fiddle of Harmony	336							4450	3820																					1879366532																																						Instrument	Mi	115		11	3	29	1024		4
+Exquisite Expedition Fiddle of Resolve	336							4450	3820																					1879366522																																						Instrument	Mi	115		11	3	29	1024		4
+Exquisite Expedition Fiddle of the Battle-singer	336							4450	3820																					1879366526																																						Instrument	Mi	115		11	3	29	1024		4
+Exquisite Expedition Fiddle of the Wary Watcher	336							4450	3820																					1879366523																																						Instrument	Mi	115		11	3	29	1024		4
+Fancy Cap of Bard's Honour (1s):	340	3499			822	704												9576									16			1879365488																																						Head	LoMiRu	115		7	2	0		1	6,2
+Fancy Cap of Bard's Will (1s):	340	3499			822	704											5685										16			1879365469																																						Head	LoMiRu	115		7	2	0		1	6,2
+Fancy Necklace of Bard's Honour (1s):	345				867	743												9918									18			1879347699																																						Neck	LoMiRu	115		49	2	8		1	6,2
+Fancy Necklace of Bard's Will (1s):	345				867	743	446																				18			1879347634																																						Neck	LoMiRu	115		49	2	8		1	6,2
+Fantastic Heavy Cloak of Thorin's Memory (1s):	340	6156	563		1057														4617	7641							20			1879365582																																						Back	BeCaChGu	115		45	3	0		1	7
+Fantastic Heavy Cloak of Thorin's Strength (1s):	340	6156	704		822									3046		4738											20			1879365572																																						Back	BeCaChGu	115		45	3	0		1	7
+Fantastic Light Cloak of Bard's Honour (1s):	340	6156			822	704								3655												5483	20			1879365587																																						Back	LoMiRu	115		45	3	0		1	7
+Fantastic Light Cloak of Bard's Will (1s):	340	6156			822	704								3655			3790										20			1879365569																																						Back	LoMiRu	115		45	3	0		1	7
+Fantastic Silk Cloak of Thranduil's Cunning (1s):	340	6156		634	939															7641				6853			20			1879365593																																						Back	BuHuWa	115		45	3	0		1	7
+Fantastic Silk Cloak of Thranduil's Power (1s):	340	6156		704	822									3655		3790											20			1879365552																																						Back	BuHuWa	115		45	3	0		1	7
+Fantastic Wool Cloak of Thranduil's Cunning (1s):	340	6156	634		1057															7641				5482			20			1879365568																																						Back	BeCaChGu	115		45	3	0		1	7
+Fantastic Wool Cloak of Thranduil's Power (1s):	340	6156	704		822									3655		3790											20			1879365570																																						Back	BeCaChGu	115		45	3	0		1	7
+Filigree Necklace of Bard's Honour (2s):	345				867	743												8265									20			1879366100																																						Neck	LoMiRu	115		49	3	8		2	7
+Filigree Necklace of Bard's Will (2s):	345				867	743	371																				20			1879366106																																						Neck	LoMiRu	115		49	3	8		2	7
+Fine Camail of Thranduil's Cunning (1s):	340	4009	704		939																		6853				16			1879365474																																						Shoulders	Be	115		6	2	3		1	6,2
+Fine Camail of Thranduil's Cunning (1s):	340	4009		704	939																		6853				16			1879365492																																						Shoulders	BuHuWa	115		6	2	3		1	6,2
+Fine Camail of Thranduil's Power (1s):	340	4009	704		822											5685											16			1879365462																																						Shoulders	Be	115		6	2	3		1	6,2
+Fine Camail of Thranduil's Power (1s):	340	4009		704	822											5685											16			1879365506																																						Shoulders	BuHuWa	115		6	2	3		1	6,2
+Fire Opal Gold Ear Cuff of Bard's Honour	345				991	818									15588											7235	20			1879347674																																						Ears	LoMiRu	115		49	3	5			7
+Fire Opal Gold Ear Cuff of Bard's Will	345				991	818								5144			4907										20			1879347728																																						Ears	LoMiRu	115		49	3	5			7
+Fire Opal Gold Ring of Thranduil's Cunning	345			743	1239														5848					8680			20			1879347632																																						Fingers	BuHuWa	115		49	3	11			7
+Fire Opal Gold Ring of Thranduil's Power	345			818	991									5144	9743												20			1879347664																																						Fingers	BuHuWa	115		49	3	11			7
+Fire Opal Steel Earring of Thranduil's Cunning	345		743		1363															8066				8680			20			1879347740																																						Ears	BeCaChGu	115		49	3	5			7
+Fire Opal Steel Earring of Thranduil's Power	345		818		991									5144		4907											20			1879347710																																						Ears	BeCaChGu	115		49	3	5			7
+Fire Opal Steel Ring of Thorin's Memory	345		669		1363		446															8680					20			1879347712																																						Fingers	BeCaChGu	115		49	3	11			7
+Fire Opal Steel Ring of Thorin's Strength	345		818		991									5144	9743												20			1879347631																																						Fingers	BeCaChGu	115		49	3	11			7
+Flexible Leggings of Thranduil's Cunning	340	10935		704	939															7641				6853			16			1879365454																																						Legs	BuHuWa	115		15	2	3			6,2
+Flexible Leggings of Thranduil's Power	340	10935		704	822									2436						10697							16			1879365482																																						Legs	BuHuWa	115		15	2	3			6,2
+Forceful Boots of Thranduil's Cunning (1s):	340	5540	634		1057														3694	7641							20			1879365566																																						Feet	Be	115		23	3	3		1	7
+Forceful Boots of Thranduil's Power (1s):	340	5540	704		822		281							3655													20			1879365567																																						Feet	Be	115		23	3	3		1	7
+Glimmering Phial of Bard's Honour (1s):	345				867	743	446																				28			1879347636																																						Pocket	LoMiRu	115		49	2	12		1	6,2
+Glimmering Phial of Bard's Will (1s):	345				867	743									11691												28			1879347708																																						Pocket	LoMiRu	115		49	2	12		1	6,2
+Glowing Phial of Bard's Honour (2s):	345				867	743									9743												30			1879347701																																						Pocket	LoMiRu	115		49	3	12		2	7
+Glowing Phial of Bard's Honour (2s):	345				867	743												8265									30			1879366109																																						Pocket	LoMiRu	115		49	3	12		2	7
+Glowing Phial of Bard's Will (2s):	345				743	743									11691												30			1879347624																																						Pocket	LoMiRu	115		49	3	12		2	7
+Glowing Phial of Bard's Will (2s):	345				743	743								3858													30			1879366099																																						Pocket	LoMiRu	115		49	3	12		2	7
+Graceful Pendant of Thranduil's Cunning (2s):	345			669	991														4874								20			1879347695																																						Neck	BuHuWa	115		49	3	8		2	7
+Graceful Pendant of Thranduil's Cunning (2s):	345			669	991															8066							20			1879366113																																						Neck	BuHuWa	115		49	3	8		2	7
+Graceful Pendant of Thranduil's Power (2s):	345			743	867										9743												20			1879347657																																						Neck	BuHuWa	115		49	3	8		2	7
+Graceful Pendant of Thranduil's Power (2s):	345			743	867									3215													20			1879366107																																						Neck	BuHuWa	115		49	3	8		2	7
+Hardened Helm of Thorin's Memory (1s):	340	4374	634		1057		352																				16			1879365470																																						Head	CaChGu	115		7	2	13		1	6,2
+Hardened Helm of Thorin's Strength (1s):	340	4374	704		822											5685											16			1879365457																																						Head	CaChGu	115		7	2	13		1	6,2
+Hardened Leggings of Thranduil's Cunning (1s):	340	11518	634		1057															6113				6853			20			1879365549																																						Legs	Be	115		15	3	3		1	7
+Hardened Leggings of Thranduil's Power (1s):	340	11518	704		822		422							2436													20			1879365557																																						Legs	Be	115		15	3	3		1	7
+Hardened Sabatons of Thorin's Memory (1s):	340	6156	563		1057																		6853	6853			20			1879365595																																						Feet	CaChGu	115		23	3	13		1	7
+Hardened Sabatons of Thorin's Strength (1s):	340	6156	704		822		352							3046													20			1879365563																																						Feet	CaChGu	115		23	3	13		1	7
+Heavy Choker of Thranduil's Cunning (1s):	345		743		991														4874								18			1879347626																																						Neck	BeCaChGu	115		49	2	8		1	6,2
+Heavy Choker of Thranduil's Power (1s):	345		743		867											5888											18			1879347750																																						Neck	BeCaChGu	115		49	2	8		1	6,2
+Heavy Hauberk of Thranduil's Cunning (1s):	340	13122		704	939																		6853				16			1879365455																																						Chest	BuHuWa	115		3	2	3		1	6,2
+Heavy Hauberk of Thranduil's Cunning (1s):	340	13122	704		939																		6853				16			1879365468																																						Chest	Be	115		3	2	3		1	6,2
+Heavy Hauberk of Thranduil's Power (1s):	340	13122		704	822										11076												16			1879365485																																						Chest	BuHuWa	115		3	2	3		1	6,2
+Heavy Hauberk of Thranduil's Power (1s):	340	13122	704		822										11076												16			1879365499																																						Chest	Be	115		3	2	3		1	6,2
+Heavy Torc of Thorin's Memory (1s):	345		669		1115														4874								18			1879347716																																						Neck	BeCaChGu	115		49	2	8		1	6,2
+Heavy Torc of Thorin's Strength (1s):	345		743		867										11691												18			1879347748																																						Neck	BeCaChGu	115		49	2	8		1	6,2
+Intricate Gold Armlet of Bard's Honour	345				991	818								5144				8265									20			1879347725																																						Wrists	LoMiRu	115		49	3	2			7
+Intricate Gold Armlet of Bard's Will	345				991	818	371								15588												20			1879347715																																						Wrists	LoMiRu	115		49	3	2			7
+Jet Granite Ring of Thranduil's Cunning	345		743		1363		371													9679							20			1879347686																																						Fingers	BeCaChGu	115		49	3	11			7
+Jet Granite Ring of Thranduil's Power	345		818		991										9743	7851											20			1879347679																																						Fingers	BeCaChGu	115		49	3	11			7
+Lapis Iron Earring of Thranduil's Cunning	345		743		1115		297													8066							18			1879347724																																						Ears	BeCaChGu	115		49	2	5			6,2
+Lapis Iron Earring of Thranduil's Power	345		743		867									2572		6870											18			1879347672																																						Ears	BeCaChGu	115		49	2	5			6,2
+Lapis Mithril Ring of Thorin's Memory	345		669		1115															8066						7235	18			1879347658																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Lapis Mithril Ring of Thorin's Strength	345		743		867		371									5888											18			1879347722																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Lapis Silver Ear Cuff of Bard's Honour	345				867	743								4501				6612									18			1879347705																																						Ears	LoMiRu	115		49	2	5			6,2
+Lapis Silver Ear Cuff of Bard's Will	345				867	743											6870									5788	18			1879347720																																						Ears	LoMiRu	115		49	2	5			6,2
+Lapis Silver Ring of Thranduil's Cunning	345			743	991		371													8066							18			1879347627																																						Fingers	BuHuWa	115		49	2	11			6,2
+Lapis Silver Ring of Thranduil's Power	345			743	867		297									6870											18			1879347654																																						Fingers	BuHuWa	115		49	2	11			6,2
+Lithe Boots of Thranduil's Cunning	340	5248		704	939														4617	7641							16			1879365509																																						Feet	BuHuWa	115		23	2	3			6,2
+Lithe Boots of Thranduil's Power	340	5248		704	822		281							4264													16			1879365486																																						Feet	BuHuWa	115		23	2	3			6,2
+Master-crafted Cap of Bard's Honour (2s):	345	3898			867	743												8265									20			1879366080																																						Head	LoMiRu	115		7	3	0		2	7
+Master-crafted Cap of Bard's Will (2s):	345	3898			867	743											4907										20			1879366084																																						Head	LoMiRu	115		7	3	0		2	7
+Master-crafted Coif of Thranduil's Cunning (2s):	345	4386	669		991														4874								20			1879366085																																						Head	Be	115		7	3	3		2	7
+Master-crafted Coif of Thranduil's Power (2s):	345	4386	743		867											4907											20			1879366087																																						Head	Be	115		7	3	3		2	7
+Master-crafted Helm of Thorin's Memory (2s):	345	4873	595		1115		371																				20			1879366081																																						Head	CaChGu	115		7	3	13		2	7
+Master-crafted Helm of Thorin's Strength (2s):	345	4873	743		867											4907											20			1879366082																																						Head	CaChGu	115		7	3	13		2	7
+Master-crafted Nimble Coif of Thranduil's Cunning (2s):	345	4386		669	991														4874								20			1879366086																																						Head	BuHuWa	115		7	3	3		2	7
+Master-crafted Nimble Coif of Thranduil's Power (2s):	345	4386		743	867											4907											20			1879366083																																						Head	BuHuWa	115		7	3	3		2	7
+Meaningful Locket of Thranduil's Cunning (1s):	345			743	991																		7233				28			1879347698																																						Pocket	BuHuWa	115		49	2	12		1	6,2
+Meaningful Locket of Thranduil's Power (1s):	345			743	867										11691												28			1879347738																																						Pocket	BuHuWa	115		49	2	12		1	6,2
+Mighty Gages of Thranduil's Cunning (1s):	340	6925	634		1057		281																	6853			20			1879365577																																						Hands	Be	115		5	3	3		1	7
+Mighty Gages of Thranduil's Power (1s):	340	6925	704		822		422								7384												20			1879365547																																						Hands	Be	115		5	3	3		1	7
+Mighty Steel Bracelet of Thranduil's Cunning	345		743		1363														4874				8680				20			1879347692																																						Wrists	BeCaChGu	115		49	3	2			7
+Mighty Steel Bracelet of Thranduil's Power	345		818		991		371								15588												20			1879347719																																						Wrists	BeCaChGu	115		49	3	2			7
+Momentous Locket of Thranduil's Cunning (2s):	345			669	991																		7233				30			1879347685																																						Pocket	BuHuWa	115		49	3	12		2	7
+Momentous Locket of Thranduil's Cunning (2s):	345			669	991																			7233			30			1879366103																																						Pocket	BuHuWa	115		49	3	12		2	7
+Momentous Locket of Thranduil's Power (2s):	345			743	867										9743												30			1879347714																																						Pocket	BuHuWa	115		49	3	12		2	7
+Momentous Locket of Thranduil's Power (2s):	345			743	867									3215													30			1879366112																																						Pocket	BuHuWa	115		49	3	12		2	7
+Moonstone Gold Earring of Thranduil's Cunning	345			743	991															8066				7233			18			1879347663																																						Ears	BuHuWa	115		49	2	5			6,2
+Moonstone Gold Earring of Thranduil's Power	345			743	867									4501	7794												18			1879347673																																						Ears	BuHuWa	115		49	2	5			6,2
+Moonstone Gold Stud of Thorin's Memory	345		669		1115		371													8066							18			1879347665																																						Ears	BeCaChGu	115		49	2	5			6,2
+Moonstone Gold Stud of Thorin's Strength	345		743		867									3858	9743												18			1879347684																																						Ears	BeCaChGu	115		49	2	5			6,2
+Mysterious Onyx Ring of Bard's Honour	345				991	818	595							3215													20			1879347637																																						Fingers	LoMiRu	115		49	3	11			7
+Mysterious Onyx Ring of Bard's Will	345				991	818											7851									7235	20			1879347696																																						Fingers	LoMiRu	115		49	3	11			7
+Nimble Boots of Thranduil's Cunning (1s):	340	5540		634	939														4617	7641							20			1879365540																																						Feet	BuHuWa	115		23	3	3		1	7
+Nimble Boots of Thranduil's Power (1s):	340	5540		704	822		281							3655													20			1879365586																																						Feet	BuHuWa	115		23	3	3		1	7
+Noble Emblem of Thorin's Memory (2s):	345		595		1115																		7233				30			1879347668																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Noble Emblem of Thorin's Memory (2s):	345		595		1115																			7233			30			1879366101																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Noble Emblem of Thorin's Strength (2s):	345		743		867										9743												30			1879347737																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Noble Emblem of Thorin's Strength (2s):	345		743		867									3215													30			1879366104																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Opal Gold Earring of Thranduil's Cunning	345			743	1239															9679				8680			20			1879347651																																						Ears	BuHuWa	115		49	3	5			7
+Opal Gold Earring of Thranduil's Power	345			818	991									5144	9743												20			1879347747																																						Ears	BuHuWa	115		49	3	5			7
+Opal Gold Stud of Thorin's Memory	345		669		1363		446													9679							20			1879347742																																						Ears	BeCaChGu	115		49	3	5			7
+Opal Gold Stud of Thorin's Strength	345		818		991									5144	9743												20			1879347682																																						Ears	BeCaChGu	115		49	3	5			7
+Padded Coif of Thranduil's Cunning (1s):	340	3936	704		939														4617								16			1879365467																																						Head	Be	115		7	2	3		1	6,2
+Padded Coif of Thranduil's Cunning (1s):	340	3936		704	939														4617								16			1879365481																																						Head	BuHuWa	115		7	2	3		1	6,2
+Padded Coif of Thranduil's Power (1s):	340	3936		704	822											5685											16			1879365463																																						Head	BuHuWa	115		7	2	3		1	6,2
+Padded Coif of Thranduil's Power (1s):	340	3936	704		822											5685											16			1879365465																																						Head	Be	115		7	2	3		1	6,2
+Padded Vest of Bard's Honour (1s):	340	11664			822	704	422																				16			1879365480																																						Chest	LoMiRu	115		3	2	0		1	6,2
+Padded Vest of Bard's Will (1s):	340	11664			822	704	422																				16			1879365490																																						Chest	LoMiRu	115		3	2	0		1	6,2
+Peridot Oak Ring of Thranduil's Cunning	345		743		1363														4874					8680			20			1879347659																																						Fingers	BeCaChGu	115		49	3	11			7
+Peridot Oak Ring of Thranduil's Power	345		818		991		371							5144													20			1879347666																																						Fingers	BeCaChGu	115		49	3	11			7
+Polished Choker of Thranduil's Cunning (2s):	345		669		991														4874								20			1879347629																																						Neck	BeCaChGu	115		49	3	8		2	7
+Polished Choker of Thranduil's Power (2s):	345		743		867											4907											20			1879347671																																						Neck	BeCaChGu	115		49	3	8		2	7
+Polished Silver Bracer of Thorin's Memory	345		669		1363														5848	9679							20			1879347718																																						Wrists	BeCaChGu	115		49	3	2			7
+Polished Silver Bracer of Thorin's Strength	345		818		991		595									4907											20			1879347723																																						Wrists	BeCaChGu	115		49	3	2			7
+Polished Torc of Thorin's Memory (2s):	345		595		1115														4874								20			1879347736																																						Neck	BeCaChGu	115		49	3	8		2	7
+Polished Torc of Thorin's Memory (2s):	345		595		1115															8066							20			1879366105																																						Neck	BeCaChGu	115		49	3	8		2	7
+Polished Torc of Thorin's Strength (2s):	345		743		867										9743												20			1879347749																																						Neck	BeCaChGu	115		49	3	8		2	7
+Polished Torc of Thorin's Strength (2s):	345		743		867									3215													20			1879366110																																						Neck	BeCaChGu	115		49	3	8		2	7
+Proud Emblem of Thorin's Memory (1s):	345		669		1115																		7233				28			1879347727																																						Pocket	BeCaChGu	115		49	2	12		1	6,2
+Proud Emblem of Thorin's Strength (1s):	345		743		867										11691												28			1879347680																																						Pocket	BeCaChGu	115		49	2	12		1	6,2
+Quick Gages of Thranduil's Cunning (1s):	340	6925		634	939		352																	6853			20			1879365560																																						Hands	BuHuWa	115		5	3	3		1	7
+Quick Gages of Thranduil's Power (1s):	340	6925		704	822		422								7384												20			1879365551																																						Hands	BuHuWa	115		5	3	3		1	7
+Quick Gold Bracelet of Thranduil's Cunning	345			743	1239														5848				8680				20			1879347653																																						Wrists	BuHuWa	115		49	3	2			7
+Quick Gold Bracelet of Thranduil's Power	345			818	991									3215	15588												20			1879347721																																						Wrists	BuHuWa	115		49	3	2			7
+Reinforced Chestplate of Thorin's Memory (1s):	340	14580	634		1057															7641							16			1879365456																																						Chest	CaChGu	115		3	2	13		1	6,2
+Reinforced Chestplate of Thorin's Strength (1s):	340	14580	704		822										11076												16			1879365472																																						Chest	CaChGu	115		3	2	13		1	6,2
+Reinforced Hauberk of Thranduil's Cunning (2s):	340	13851		634	939																		6853				20			1879365597																																						Chest	BuHuWa	115		3	3	3		2	7
+Reinforced Hauberk of Thranduil's Power (2s):	340	13851		704	822										9230												20			1879365543																																						Chest	BuHuWa	115		3	3	3		2	7
+Rhodalite Silver Earring of Thranduil's Cunning	345			743	1239		446													9679							20			1879347741																																						Ears	BuHuWa	115		49	3	5			7
+Rhodalite Silver Earring of Thranduil's Power	345			818	991		371									7851											20			1879347644																																						Ears	BuHuWa	115		49	3	5			7
+Rhodalite Silver Stud of Thorin's Memory	345		669		1363		446																			8682	20			1879347694																																						Ears	BeCaChGu	115		49	3	5			7
+Rhodalite Silver Stud of Thorin's Strength	345		818		991		371									7851											20			1879347729																																						Ears	BeCaChGu	115		49	3	5			7
+Rivetted Camail of Thranduil's Cunning (2s):	340	4155	634		939																		6853				20			1879365553																																						Shoulders	Be	115		6	3	3		2	7
+Rivetted Camail of Thranduil's Cunning (2s):	340	4155		634	939																		6853				20			1879365556																																						Shoulders	BuHuWa	115		6	3	3		2	7
+Rivetted Camail of Thranduil's Power (2s):	340	4155	704		822											4738											20			1879365581																																						Shoulders	Be	115		6	3	3		2	7
+Rivetted Camail of Thranduil's Power (2s):	340	4155		704	822											4738											20			1879365598																																						Shoulders	BuHuWa	115		6	3	3		2	7
+Rugged Shoes of Bard's Honour (1s):	340	4924			822	704								3655				6384									20			1879365554																																						Feet	LoMiRu	115		23	3	0		1	7
+Rugged Shoes of Bard's Will (1s):	340	4924			822	704	281							3655													20			1879365596																																						Feet	LoMiRu	115		23	3	0		1	7
+Runed Gloves of Bard's Honour (1s):	340	6156			822	704												9576								5483	20			1879365573																																						Hands	LoMiRu	115		5	3	0		1	7
+Runed Gloves of Bard's Will (1s):	340	6156			822	704	422								7384												20			1879365565																																						Hands	LoMiRu	115		5	3	0		1	7
+Runed Jade Ring of Bard's Honour	345				991	818	371											13224									20			1879347650																																						Fingers	LoMiRu	115		49	3	11			7
+Runed Jade Ring of Bard's Will	345				991	818	371							5144													20			1879347683																																						Fingers	LoMiRu	115		49	3	11			7
+Strong Gages of Thranduil's Cunning	340	6561	704		1057		281																	6853			16			1879365498																																						Hands	Be	115		5	2	3			6,2
+Strong Gages of Thranduil's Power	340	6561	704		822		493								7384												16			1879365504																																						Hands	Be	115		5	2	3			6,2
+Strong Gauntlets of Thorin's Memory	340	7290	634		1057		352													7641							16			1879365459																																						Hands	CaChGu	115		5	2	13			6,2
+Strong Gauntlets of Thorin's Strength	340	7290	704		822		422								9230												16			1879365503																																						Hands	CaChGu	115		5	2	13			6,2
+Strong Steel Bracelet of Thranduil's Cunning	345		743		1115														3899				7233				18			1879347669																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Strong Steel Bracelet of Thranduil's Power	345		743		867		297								13640												18			1879347667																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Studded Gold Bracer of Thorin's Memory	345		669		1115																		7233	7233			18			1879347641																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Studded Gold Bracer of Thorin's Strength	345		743		867									3215	11691												18			1879347702																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Stylish Pendant of Thranduil's Cunning (1s):	345			743	991														4874								18			1879347751																																						Neck	BuHuWa	115		49	2	8		1	6,2
+Stylish Pendant of Thranduil's Power (1s):	345			743	867										11691												18			1879347655																																						Neck	BuHuWa	115		49	2	8		1	6,2
+Superior Shoes of Bard's Honour	340	4665			822	704								4264				6384									16			1879365475																																						Feet	LoMiRu	115		23	2	0			6,2
+Superior Shoes of Bard's Will	340	4665			822	704	281							4264													16			1879365487																																						Feet	LoMiRu	115		23	2	0			6,2
+Supple Gloves of Bard's Honour	340	5832			822	704												11172								5483	16			1879365497																																						Hands	LoMiRu	115		5	2	0			6,2
+Supple Gloves of Bard's Will	340	5832			822	704									7384					10697							16			1879365501																																						Hands	LoMiRu	115		5	2	0			6,2
+Swift Silver Bracelet of Thranduil's Cunning	345			743	1239														5848					8680			20			1879347707																																						Wrists	BuHuWa	115		49	3	2			7
+Swift Silver Bracelet of Thranduil's Power	345			818	991		595									4907											20			1879347703																																						Wrists	BuHuWa	115		49	3	2			7
+Thick Sabatons of Thorin's Memory	340	5832	634		1057																		6853	6853			16			1879365496																																						Feet	CaChGu	115		23	2	13			6,2
+Thick Sabatons of Thorin's Strength	340	5832	704		822		352							3655													16			1879365500																																						Feet	CaChGu	115		23	2	13			6,2
+Timeworn Brooch of Thranduil's Cunning (2s):	345		669		991																		7233				30			1879347645																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Timeworn Brooch of Thranduil's Power (2s):	345		743		867										9743												30			1879347693																																						Pocket	BeCaChGu	115		49	3	12		2	7
+Topaz Gold Ear Cuff of Bard's Honour	345				867	743	520																			5788	18			1879347639																																						Ears	LoMiRu	115		49	2	5			6,2
+Topaz Gold Ear Cuff of Bard's Will	345				867	743								4501			3925										18			1879347687																																						Ears	LoMiRu	115		49	2	5			6,2
+Topaz Gold Ring of Thranduil's Cunning	345			743	991														4874					7233			18			1879347733																																						Fingers	BuHuWa	115		49	2	11			6,2
+Topaz Gold Ring of Thranduil's Power	345			743	867									4501	7794												18			1879347731																																						Fingers	BuHuWa	115		49	2	11			6,2
+Topaz Steel Earring of Thranduil's Cunning	345		743		1115															6452				7233			18			1879347625																																						Ears	BeCaChGu	115		49	2	5			6,2
+Topaz Steel Earring of Thranduil's Power	345		743		867									4501		3925											18			1879347630																																						Ears	BeCaChGu	115		49	2	5			6,2
+Topaz Steel Ring of Thorin's Memory	345		669		1115		371															7233					18			1879347628																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Topaz Steel Ring of Thorin's Strength	345		743		867									3858	9743												18			1879347688																																						Fingers	BeCaChGu	115		49	2	11			6,2
+Tough Boots of Thranduil's Cunning	340	5248	704		1057														3694	7641							16			1879365484																																						Feet	Be	115		23	2	3			6,2
+Tough Boots of Thranduil's Power	340	5248	704		822		281							4264													16			1879365489																																						Feet	Be	115		23	2	3			6,2
+Tough Greaves of Thorin's Memory	340	12150	634		1057																		6853			6854	16			1879365466																																						Legs	CaChGu	115		15	2	13			6,2
+Tough Greaves of Thorin's Strength	340	12150	704		822									3046						9169							16			1879365477																																						Legs	CaChGu	115		15	2	13			6,2
+Tough Iron Bracelet of Thranduil's Cunning	345		743		1115														4874					5787			18			1879347734																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Tough Iron Bracelet of Thranduil's Power	345		743		867		520								7794												18			1879347730																																						Wrists	BeCaChGu	115		49	2	2			6,2
+Tourmaline Silver Earring of Thranduil's Cunning	345			743	991		371													8066							18			1879347635																																						Ears	BuHuWa	115		49	2	5			6,2
+Tourmaline Silver Earring of Thranduil's Power	345			743	867		297									6870											18			1879347717																																						Ears	BuHuWa	115		49	2	5			6,2
+Tourmaline Silver Stud of Thorin's Memory	345		669		1115		371																			7235	18			1879347678																																						Ears	BeCaChGu	115		49	2	5			6,2
+Tourmaline Silver Stud of Thorin's Strength	345		743		867		371									5888											18			1879347713																																						Ears	BeCaChGu	115		49	2	5			6,2
+Twined Silver Armlet of Bard's Honour	345				991	818	371							5144													20			1879347691																																						Wrists	LoMiRu	115		49	3	2			7
+Twined Silver Armlet of Bard's Will	345				991	818	595							3215													20			1879347661																																						Wrists	LoMiRu	115		49	3	2			7
+Woven Heavy Cloak of Thorin's Memory	340	5832	634		1057														4617	7641							16			1879365458																																						Back	BeCaChGu	115		45	2	0			6,2
+Woven Heavy Cloak of Thorin's Strength	340	5832	704		822									3655		4738											16			1879365460																																						Back	BeCaChGu	115		45	2	0			6,2
+Woven Light Cloak of Bard's Honour	340	5832			822	704								4264												5483	16			1879365494																																						Back	LoMiRu	115		45	2	0			6,2
+Woven Light Cloak of Bard's Will	340	5832			822	704								4264			3790										16			1879365464																																						Back	LoMiRu	115		45	2	0			6,2
+Woven Silk Cloak of Thranduil's Cunning	340	5832		704	939															7641				6853			16			1879365479																																						Back	BuHuWa	115		45	2	0			6,2
+Woven Silk Cloak of Thranduil's Power	340	5832		704	822									4264		3790											16			1879365478																																						Back	BuHuWa	115		45	2	0			6,2
+Woven Silver Armlet of Bard's Honour	345				867	743								2572	13640												18			1879347648																																						Wrists	LoMiRu	115		49	2	2			6,2
+Woven Silver Armlet of Bard's Will	345				867	743	520							2572													18			1879347745																																						Wrists	LoMiRu	115		49	2	2			6,2
+Woven Vest of Bard's Honour (2s):	340	12312			822	704	352																				20			1879365548																																						Chest	LoMiRu	115		3	3	0		2	7
+Woven Vest of Bard's Will (2s):	340	12312			822	704	352																				20			1879365591																																						Chest	LoMiRu	115		3	3	0		2	7
+Woven Wool Cloak of Thranduil's Cunning	340	5832	704		1057															7641				5482			16			1879365493																																						Back	BeCaChGu	115		45	2	0			6,2
+Woven Wool Cloak of Thranduil's Power	340	5832	704		822									4264		3790											16			1879365473																																						Back	BeCaChGu	115		45	2	0			6,2

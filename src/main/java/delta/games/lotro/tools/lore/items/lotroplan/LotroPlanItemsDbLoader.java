@@ -32,7 +32,7 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
 public class LotroPlanItemsDbLoader
 {
   //private static final String[] NAMES={};
-  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt", "mordor.txt"};
+  private static final String[] NAMES={"jewels.txt", "hd_jewels.txt", "heavy.txt", "medium.txt", "light.txt", "weapons.txt", "misc.txt", "mordor.txt", "northern_mirkwood.txt"};
 
   private String _section;
   private ItemsMerger _merger;
@@ -112,7 +112,7 @@ public class LotroPlanItemsDbLoader
     List<Item> items=new ArrayList<Item>();
     //_fields=StringSplitter.split(lines.get(0),'\t');
     lines.remove(0);
-    boolean mordor=filename.contains("mordor");
+    boolean mordor=useMordorFormat(filename);
     LotroPlanTable table=new LotroPlanTable(mordor);
     for(String line : lines)
     {
@@ -123,6 +123,13 @@ public class LotroPlanItemsDbLoader
       }
     }
     return items;
+  }
+
+  private boolean useMordorFormat(String filename)
+  {
+    if (filename.contains("mordor")) return true;
+    if (filename.contains("northern_mirkwood")) return true;
+    return false;
   }
 
   private Item buildItemFromLine(LotroPlanTable table, String line)
