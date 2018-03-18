@@ -27,3 +27,9 @@ One can use Gimp to find out these values.
 Start the program.
 You shall get icons in the result directory.
 Icon file names are: iconID-backgroundId.png
+
+Merge with existing icons:
+Use delta.games.lotro.tools.lore.items.icons.IconsDiffTool:
+- check paths in the source code
+- run
+- use the updated "old" icons to update the icons.zip archive.
