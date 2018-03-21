@@ -28,6 +28,8 @@ public class MainMapsCleaner
     mapsManager.load();
     // Clean unused categories
     cleanEmptyCategories(mapsManager);
+    MarkersMerge merge=new MarkersMerge();
+    merge.doIt(mapsManager);
     // Write map files (for XML data migration, for instance extraction of links to separate files)
     mapsManager.saveMaps();
   }
@@ -59,12 +61,15 @@ public class MainMapsCleaner
     CategoriesManager categoriesManager=mapsManager.getCategories();
     List<Integer> sortedCodes=new ArrayList<Integer>(markersByCategory.keySet());
     Collections.sort(sortedCodes);
+    int total=0;
     for(Integer code : sortedCodes)
     {
       IntegerHolder counter=markersByCategory.get(code);
       Category category=categoriesManager.getByCode(code.intValue());
       System.out.println(category.getLabel()+": "+counter);
+      total+=counter.getInt();
     }
+    System.out.println("Total: "+total);
     // Prepare cleanup
     HashSet<Integer> codes2Remove=new HashSet<Integer>();
     List<Category> categories=categoriesManager.getAllSortedByCode();
