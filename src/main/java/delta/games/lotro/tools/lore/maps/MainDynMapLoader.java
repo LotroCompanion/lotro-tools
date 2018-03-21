@@ -74,7 +74,7 @@ public class MainDynMapLoader
       // Write file
       MapXMLWriter writer=new MapXMLWriter();
       File toFile=new File(mapDir,"markers.xml");
-      writer.write(toFile,map,EncodingNames.UTF_8);
+      writer.writeMarkersFile(toFile,map,EncodingNames.UTF_8);
     }
 
     // Write categories file
