@@ -26,7 +26,10 @@ public class MainMapsCleaner
     File rootDir=new File("../lotro-maps-db");
     MapsManager mapsManager=new MapsManager(rootDir);
     mapsManager.load();
+    // Clean unused categories
     cleanEmptyCategories(mapsManager);
+    // Write map files (for XML data migration, for instance extraction of links to separate files)
+    mapsManager.saveMaps();
   }
 
   private void cleanEmptyCategories(MapsManager mapsManager)
