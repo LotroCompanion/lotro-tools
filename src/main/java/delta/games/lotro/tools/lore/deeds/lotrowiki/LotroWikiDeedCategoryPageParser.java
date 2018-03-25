@@ -222,21 +222,37 @@ public class LotroWikiDeedCategoryPageParser
       String url=LotroWikiConstants.BASE_URL+"/index.php?title="+deedId+"&action=edit";
       String name=Escapes.escapeFile(categoryId)+"/deed"+index+".html";
       File deedFile=_lotroWiki.download(url,name);
-      DeedDescription deed=parser.parseDeed(deedFile);
-      if (deed!=null)
+      List<DeedDescription> deedsForPage=parser.parseDeeds(deedFile,deedId);
+      if ((deedsForPage!=null) && (deedsForPage.size()>0))
       {
         boolean alreadyKnown=_deedIds.contains(deedId);
         if (!alreadyKnown)
         {
-          deed.setKey(deedId);
+          if (deedsForPage.size()>1)
+          {
+            int deedIndex=1;
+            for(DeedDescription deed : deedsForPage)
+            {
+              deed.setKey(deedId+deedIndex);
+              deed.setName(deed.getName()+" - Tier "+deedIndex);
+              deedIndex++;
+            }
+          }
+          else
+          {
+            deedsForPage.get(0).setKey(deedId);
+          }
           if (!deedKeys.contains(deedId))
           {
-            deeds.add(deed);
+            deeds.addAll(deedsForPage);
             deedKeys.add(deedId);
           }
           _deedIds.add(deedId);
           //System.out.println(deed);
-          resolveItemRewards(deed);
+          for(DeedDescription deed : deedsForPage)
+          {
+            resolveItemRewards(deed);
+          }
         }
       }
       index++;

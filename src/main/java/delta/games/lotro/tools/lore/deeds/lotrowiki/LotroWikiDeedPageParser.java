@@ -46,12 +46,13 @@ public class LotroWikiDeedPageParser
   /**
    * Parse the lotro wiki deed page for the given deed ID.
    * @param from Source page.
+   * @param deedId Deed ID.
    * @return A deed or <code>null</code> if an error occurred.
    */
-  public DeedDescription parseDeed(File from)
+  public List<DeedDescription> parseDeeds(File from, String deedId)
   {
     _currentFile=from;
-    DeedDescription deed=null;
+    List<DeedDescription> deeds=null;
     try
     {
       FileInputStream inputStream=new FileInputStream(from);
@@ -73,19 +74,22 @@ public class LotroWikiDeedPageParser
       {
         Segment content=deedSource.getContent();
         String text=content.toString();
-        deed=buildDeed(text,name);
+        deeds=buildDeeds(text,name);
       }
-      if (deed!=null)
+      if (deeds!=null)
       {
         // Fixes
-        handleFixes(deed);
+        for(DeedDescription deed : deeds)
+        {
+          handleFixes(deed);
+        }
       }
     }
     catch(Exception e)
     {
       _logger.error("Cannot parse deed page ["+from+"]",e);
     }
-    return deed;
+    return deeds;
   }
 
   private void handleFixes(DeedDescription deed)
@@ -101,18 +105,50 @@ public class LotroWikiDeedPageParser
     }
   }
 
-  private DeedDescription buildDeed(String rawData, String deedName)
+  private Integer findDeedStartLine(String[] lines, int startIndex)
+  {
+    int endIndex=lines.length;
+    if (endIndex<3) return null;
+    int index=startIndex;
+    while (index<endIndex)
+    {
+      if ((lines[index].contains("{{Deed")) && (!lines[index].contains("Deed Stub")) && (!lines[index].contains("{{Deeds-infobox}}")))
+      {
+        return Integer.valueOf(index);
+      }
+      index++;
+    }
+    return null;
+  }
+
+  private List<DeedDescription> buildDeeds(String rawData, String deedName)
   {
     String[] lines=rawData.split("\n");
 
     // Checks
     if (lines==null) return null;
-    if (lines.length<3) return null;
-    if ((!lines[0].contains("{{Deed")) && (!lines[1].contains("{{Deed")) && (!lines[2].contains("{{Deed")))
-    {
-      return null;
-    }
 
+    List<DeedDescription> ret=new ArrayList<DeedDescription>();
+    int startIndex=0;
+    while (true)
+    {
+      Integer deedLineIndex=findDeedStartLine(lines,startIndex);
+      if (deedLineIndex==null)
+      {
+        break;
+      }
+      startIndex=deedLineIndex.intValue()+1;
+      DeedDescription deed=parseDeed(deedLineIndex.intValue(),lines,deedName);
+      if (deed!=null)
+      {
+        ret.add(deed);
+      }
+    }
+    return ret;
+  }
+
+  private DeedDescription parseDeed(int startIndex, String[] lines, String deedName)
+  {
     DeedDescription deed=new DeedDescription();
     deed.setName(deedName);
     deed.setType(null);
@@ -133,9 +169,10 @@ public class LotroWikiDeedPageParser
     // Deeds chain
     List<String> deedsChain=new ArrayList<String>();
 
-    for(int index=0;index<lines.length;index++)
+    for(int index=startIndex+1;index<lines.length;index++)
     {
       String line=lines[index].trim();
+      if (line.contains("{{Deed")) break;
       String lineKey=fetchLineKey(line);
       //System.out.println(line);
       if ("name".equals(lineKey))
