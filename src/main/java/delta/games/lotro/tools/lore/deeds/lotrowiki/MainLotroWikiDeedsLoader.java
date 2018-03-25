@@ -106,6 +106,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Freep_Deeds",null,"PVP:Freep deeds");
     parser.doCategory("Creep_Quest_Deeds",DeedType.QUEST,"PVP:Creep deeds");
     parser.doCategory("Creep_Slayer_Deeds",DeedType.SLAYER,"PVP:Creep deeds");
+    parser.doCategory("Freep_Slayer_Deeds",DeedType.SLAYER,"PVP:Freep deeds");
 
     // Instances:
     // - Shadows of Angmar
