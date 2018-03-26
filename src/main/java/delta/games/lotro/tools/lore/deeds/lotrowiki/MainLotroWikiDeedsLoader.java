@@ -10,6 +10,7 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
+import delta.games.lotro.tools.lore.deeds.checks.CheckItemRewardsInDeeds;
 
 /**
  * Download deeds data from the site lotro-wiki.
@@ -279,6 +280,7 @@ public class MainLotroWikiDeedsLoader
     new DeedLinksResolver(deeds).doIt();
     int nbDeeds=deeds.size();
     System.out.println("Found "+nbDeeds+" deeds.");
+    new CheckItemRewardsInDeeds().doIt(deeds);
     File out=new File("../lotro-companion/data/lore/deeds.xml");
     DeedsContainer.writeSortedDeeds(deeds,out);
   }
