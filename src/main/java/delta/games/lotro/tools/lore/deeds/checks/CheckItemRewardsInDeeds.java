@@ -11,7 +11,8 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 
 /**
- * @author dm
+ * Check consistency of item rewards in deeds.
+ * @author DAM
  */
 public class CheckItemRewardsInDeeds
 {
