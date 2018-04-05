@@ -38,6 +38,7 @@ public class NormalizeDeedsText
   {
     String ret=normalizeBrackets(input);
     ret=normalizeBraces(ret);
+    ret=normalizeCounts(ret);
     ret=cleanBlanks(ret);
     return ret;
   }
@@ -100,6 +101,10 @@ public class NormalizeDeedsText
               innerText=innerText.substring(pipeIndex+1);
             }
             if (innerText.startsWith(":")) innerText=innerText.substring(1);
+            if (innerText.startsWith("arg="))
+            {
+              innerText=innerText.substring(4);
+            }
             innerText=innerText.trim();
           }
           if (innerText.toLowerCase().startsWith("tooltip coords|"))
@@ -116,17 +121,35 @@ public class NormalizeDeedsText
             int pipeIndex=innerText.indexOf('|');
             innerText=innerText.substring(pipeIndex+1);
           }
-          if (innerText.startsWith("Questbox|"))
+          if (innerText.startsWith("Questbox"))
           {
             innerText=extractQuestbox(innerText);
           }
-          System.out.println(innerText);
+          //System.out.println(innerText);
           ret=ret.substring(0,index)+innerText+ret.substring(index2+2);
         }
         else
         {
           break;
         }
+      }
+      else
+      {
+        break;
+      }
+    }
+    return ret;
+  }
+
+  private String normalizeCounts(String input)
+  {
+    String ret=input;
+    while(true)
+    {
+      int index=ret.indexOf("(0/");
+      if (index!=-1)
+      {
+        ret=ret.substring(0,index)+"(x"+ret.substring(index+3);
       }
       else
       {
@@ -172,23 +195,33 @@ public class NormalizeDeedsText
 
   private String extractQuestbox(String input)
   {
+    String message=null;
+    String contents=null;
+    String[] parts=input.split("\\|");
+    if (parts.length==4)
+    {
+      message=parts[1];
+      contents=parts[3];
+    }
+    String ret=null;
+    if ((message!=null) && (contents!=null))
+    {
+      ret=message.trim()+":\n"+contents.trim();
+    }
+    else
+    {
+      System.out.println("Unmanaged: ["+input+"]");
+    }
+    return ret;
     /*
 {{Questbox|Creatures that count toward this deed|collapsed|
 Donakh
-Fotath
-Górdan
-Iron Crown Crossbowman
-Iron Crown Fighter (Angmar West)
-Iron Crown Fighter (Ram Dúath)
-Iron Crown Priest
-Iron Crown Marksman
-Iron Crown Sentinel
+...
 Iron Crown Warrior
 }}
      */
-    System.out.println(input);
-    return input;
   }
+
   private String cleanBlanks(String input)
   {
     String oldInput=input;
