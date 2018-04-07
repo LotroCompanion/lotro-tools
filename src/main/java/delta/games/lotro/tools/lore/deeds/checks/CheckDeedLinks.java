@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxies;
 import delta.games.lotro.lore.deeds.DeedProxy;
 
 /**
@@ -32,27 +33,20 @@ public class CheckDeedLinks
 
   private void checkParentDeed(DeedDescription deed)
   {
-    List<DeedProxy> childProxies=deed.getChildDeeds();
+    List<DeedProxy> childProxies=deed.getChildDeedProxies().getDeedProxies();
     for(DeedProxy childProxy : childProxies)
     {
       DeedDescription childDeed=childProxy.getDeed();
-      DeedProxy parentProxy=childDeed.getParentDeedProxy();
+      DeedProxies parentProxies=childDeed.getParentDeedProxies();
+      DeedProxy parentProxy=parentProxies.getByKey(deed.getKey());
       if (parentProxy==null)
       {
         parentProxy=new DeedProxy();
         parentProxy.setDeed(deed);
         parentProxy.setKey(deed.getKey());
         parentProxy.setName(deed.getName());
-        childDeed.setParentDeedProxy(parentProxy);
+        parentProxies.add(parentProxy);
         //System.out.println("Added link from "+childDeed.getKey()+" to "+deed.getKey());
-      }
-      else
-      {
-        String parentKey=parentProxy.getKey();
-        if (!deed.getKey().equals(parentKey))
-        {
-          System.out.println("Parent mismatch for deed: "+childProxy.getKey()+" => "+parentKey+", "+deed.getKey());
-        }
       }
     }
   }
@@ -61,7 +55,7 @@ public class CheckDeedLinks
   {
     Set<String> previousDeedsOfChildren=loadPreviousDeedsOfChildren(deed);
     List<DeedProxy> childrenToRemove=new ArrayList<DeedProxy>();
-    List<DeedProxy> childProxies=deed.getChildDeeds();
+    List<DeedProxy> childProxies=deed.getChildDeedProxies().getDeedProxies();
     for(DeedProxy childProxy : childProxies)
     {
       String childKey=childProxy.getKey();
@@ -79,8 +73,8 @@ public class CheckDeedLinks
   private Set<String> loadPreviousDeedsOfChildren(DeedDescription deed)
   {
     Set<String> previousDeeds=new HashSet<String>();
-    List<DeedProxy> children=deed.getChildDeeds();
-    for(DeedProxy childProxy : children)
+    List<DeedProxy> childProxies=deed.getChildDeedProxies().getDeedProxies();
+    for(DeedProxy childProxy : childProxies)
     {
       DeedDescription childDeed=childProxy.getDeed();
       previousDeeds.addAll(loadPreviousDeeds(childDeed));

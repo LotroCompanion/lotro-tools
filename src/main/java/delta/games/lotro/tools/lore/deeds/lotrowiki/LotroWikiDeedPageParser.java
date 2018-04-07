@@ -358,7 +358,7 @@ public class LotroWikiDeedPageParser
             parentDeed=fixParentDeedInfo(parentDeed,deedName);
             DeedProxy parentProxy=new DeedProxy();
             parentProxy.setName(parentDeed);
-            deed.setParentDeedProxy(parentProxy);
+            deed.getParentDeedProxies().add(parentProxy);
           }
         }
       }
@@ -776,7 +776,7 @@ public class LotroWikiDeedPageParser
         String parent=deedsChain.get(deedsChain.size()-1);
         DeedProxy parentProxy=new DeedProxy();
         parentProxy.setName(parent);
-        DeedProxy oldParentProxy=deed.getParentDeedProxy();
+        DeedProxy oldParentProxy=deed.getParentDeedProxies().getFirst();
         if (oldParentProxy!=null)
         {
           if (!oldParentProxy.getName().equals(parent))
@@ -784,7 +784,7 @@ public class LotroWikiDeedPageParser
             System.out.println("Mismatch!");
           }
         }
-        deed.setParentDeedProxy(parentProxy);
+        deed.getParentDeedProxies().add(parentProxy);
       }
       else
       {

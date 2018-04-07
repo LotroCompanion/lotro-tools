@@ -7,6 +7,7 @@ import java.util.Map;
 
 import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxies;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 
@@ -86,10 +87,13 @@ public class DeedLinksResolver
 
   private void resolveDeed(DeedDescription deed)
   {
-    resolveDeedProxy(deed.getParentDeedProxy());
+    for(DeedProxy parentProxy : deed.getParentDeedProxies().getDeedProxies())
+    {
+      resolveDeedProxy(parentProxy);
+    }
     resolveDeedProxy(deed.getNextDeedProxy());
     resolveDeedProxy(deed.getPreviousDeedProxy());
-    for(DeedProxy childProxy : deed.getChildDeeds())
+    for(DeedProxy childProxy : deed.getChildDeedProxies().getDeedProxies())
     {
       resolveDeedProxy(childProxy);
     }
@@ -237,8 +241,7 @@ public class DeedLinksResolver
 
   private void checkParent2ChildSymetry(DeedDescription deed)
   {
-    DeedProxy parentProxy=deed.getParentDeedProxy();
-    if (parentProxy!=null)
+    for(DeedProxy parentProxy : deed.getParentDeedProxies().getDeedProxies())
     {
       String parentKey=parentProxy.getKey();
       DeedDescription parentDeed=_mapByKey.get(parentKey);
@@ -262,15 +265,8 @@ public class DeedLinksResolver
       return;
     }
     // Find child
-    boolean found=false;
-    for(DeedProxy currentChildDeed : parentDeed.getChildDeeds())
-    {
-      if (currentChildDeed.getKey().equals(childDeed.getKey()))
-      {
-        found=true;
-        break;
-      }
-    }
+    DeedProxy foundDeed=parentDeed.getChildDeedProxies().getByKey(childDeed.getKey());
+    boolean found=(foundDeed!=null);
     // Add it if it is not found!
     if (!found)
     {
@@ -278,13 +274,13 @@ public class DeedLinksResolver
       childProxy.setDeed(childDeed);
       childProxy.setKey(childDeed.getKey());
       childProxy.setName(childDeed.getName());
-      parentDeed.getChildDeeds().add(childProxy);
+      parentDeed.getChildDeedProxies().add(childProxy);
     }
   }
 
   private void checkForUnwantedChildren(DeedDescription deed)
   {
-    List<DeedProxy> children=deed.getChildDeeds();
+    List<DeedProxy> children=deed.getChildDeedProxies().getDeedProxies();
     // Grab child deed names
     Map<String,DeedProxy> childNames=new HashMap<String,DeedProxy>();
     for(DeedProxy child : children)
@@ -325,19 +321,12 @@ public class DeedLinksResolver
 
   private void removeChildByName(DeedDescription deed, String name)
   {
-    DeedProxy toRemove=null;
-    for(DeedProxy child : deed.getChildDeeds())
-    {
-      if (name.equals(child.getName()))
-      {
-        toRemove=child;
-        break;
-      }
-    }
+    DeedProxies children=deed.getChildDeedProxies();
+    DeedProxy toRemove=children.getByName(name);
     if (toRemove!=null)
     {
-      deed.getChildDeeds().remove(toRemove);
-      toRemove.getDeed().setParentDeedProxy(null);
+      children.remove(toRemove);
+      toRemove.getDeed().getParentDeedProxies().remove(toRemove.getKey());
     }
   }
 }
