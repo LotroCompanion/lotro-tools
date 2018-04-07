@@ -86,6 +86,22 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("East_Rohan_Deeds",null,"Region:East Rohan");
     parser.doCategory("Wildermore_Deeds",null,"Region:Wildermore");
     parser.doCategory("West_Rohan_Deeds",null,"Region:West Rohan");
+    parser.doCategory("Dale-lands_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Dale-lands_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Dale-lands_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Erebor_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Erebor");
+    parser.doCategory("Erebor_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Erebor");
+    parser.doCategory("Dwarves_of_Erebor_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Eryn_Lasgalen_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Eryn Lasgalen");
+    parser.doCategory("Eryn_Lasgalen_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Eryn Lasgalen");
+    parser.doCategory("Eryn_Lasgalen_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Eryn Lasgalen");
+    parser.doCategory("Elves_of_Felegoth_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Meta_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Deeds",null,"Region:Strongholds of the North");
+
     // - Gondor
     parser.doCategory("Western_Gondor_Deeds",null,"Region:Western Gondor");
     parser.doCategory("Central_Gondor_Deeds",null,"Region:Central Gondor");
