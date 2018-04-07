@@ -22,11 +22,42 @@ public class CheckDeedLinks
   {
     for(DeedDescription deed : deeds)
     {
-      handleDeed(deed);
+      cleanChildDeeds(deed);
+    }
+    for(DeedDescription deed : deeds)
+    {
+      checkParentDeed(deed);
     }
   }
 
-  private void handleDeed(DeedDescription deed)
+  private void checkParentDeed(DeedDescription deed)
+  {
+    List<DeedProxy> childProxies=deed.getChildDeeds();
+    for(DeedProxy childProxy : childProxies)
+    {
+      DeedDescription childDeed=childProxy.getDeed();
+      DeedProxy parentProxy=childDeed.getParentDeedProxy();
+      if (parentProxy==null)
+      {
+        parentProxy=new DeedProxy();
+        parentProxy.setDeed(deed);
+        parentProxy.setKey(deed.getKey());
+        parentProxy.setName(deed.getName());
+        childDeed.setParentDeedProxy(parentProxy);
+        //System.out.println("Added link from "+childDeed.getKey()+" to "+deed.getKey());
+      }
+      else
+      {
+        String parentKey=parentProxy.getKey();
+        if (!deed.getKey().equals(parentKey))
+        {
+          System.out.println("Parent mismatch for deed: "+childProxy.getKey()+" => "+parentKey+", "+deed.getKey());
+        }
+      }
+    }
+  }
+
+  private void cleanChildDeeds(DeedDescription deed)
   {
     Set<String> previousDeedsOfChildren=loadPreviousDeedsOfChildren(deed);
     List<DeedProxy> childrenToRemove=new ArrayList<DeedProxy>();
