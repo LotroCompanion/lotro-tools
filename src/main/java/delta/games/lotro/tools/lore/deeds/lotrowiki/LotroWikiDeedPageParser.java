@@ -355,6 +355,7 @@ public class LotroWikiDeedPageParser
         {
           if (useParentDeedInfo(parentDeed,deedName))
           {
+            parentDeed=fixParentDeedInfo(parentDeed,deedName);
             DeedProxy parentProxy=new DeedProxy();
             parentProxy.setName(parentDeed);
             deed.setParentDeedProxy(parentProxy);
@@ -443,6 +444,15 @@ public class LotroWikiDeedPageParser
       return false;
     }
     return true;
+  }
+
+  private String fixParentDeedInfo(String parentDeed, String deedName)
+  {
+    if ("Foe-slayer of Lang Rhuven (Advanced)".equals(deedName))
+    {
+      return "Threats of the Wastes";
+    }
+    return parentDeed;
   }
 
   private void handleTraitReward(Rewards rewards, String traitStr)
