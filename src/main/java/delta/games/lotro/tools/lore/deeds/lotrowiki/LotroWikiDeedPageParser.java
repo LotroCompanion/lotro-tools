@@ -353,9 +353,12 @@ public class LotroWikiDeedPageParser
         String parentDeed=getLineValue(line);
         if (!parentDeed.isEmpty())
         {
-          DeedProxy parentProxy=new DeedProxy();
-          parentProxy.setName(parentDeed);
-          deed.setParentDeedProxy(parentProxy);
+          if (useParentDeedInfo(parentDeed,deedName))
+          {
+            DeedProxy parentProxy=new DeedProxy();
+            parentProxy.setName(parentDeed);
+            deed.setParentDeedProxy(parentProxy);
+          }
         }
       }
 
@@ -431,6 +434,15 @@ public class LotroWikiDeedPageParser
       }
     }
     return null;
+  }
+
+  private boolean useParentDeedInfo(String parentDeed, String deedName)
+  {
+    if (("Slayer of Dunland".equals(parentDeed)) && (deedName.contains("Advanced")))
+    {
+      return false;
+    }
+    return true;
   }
 
   private void handleTraitReward(Rewards rewards, String traitStr)
