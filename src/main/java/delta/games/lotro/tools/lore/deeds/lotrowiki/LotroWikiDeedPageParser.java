@@ -248,6 +248,7 @@ public class LotroWikiDeedPageParser
       }
       else if ("SM-reward".equals(lineKey))
       {
+        // Skirmish Mark
         String smStr=getLineValue(line);
         if (!smStr.isEmpty())
         {
@@ -267,10 +268,11 @@ public class LotroWikiDeedPageParser
       }
       else if ("CTP-reward".equals(lineKey))
       {
+        // Class point
         String value=getLineValue(line);
-        if ("Y".equals(value))
+        if (value.trim().length()>0)
         {
-          // TODO Class Trait Point
+          deed.getRewards().setClassPoints(1);
         }
       }
       else if ("Trait-reward".equals(lineKey))
