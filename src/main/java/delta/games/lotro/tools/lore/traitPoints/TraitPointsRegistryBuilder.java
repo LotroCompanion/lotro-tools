@@ -109,6 +109,7 @@ public class TraitPointsRegistryBuilder
     initPoint("EpicVol4Book8Chapter7", category, "Complete Volume IV, Book 8, Chapter 7: Mordor Triumphant", null);
     initPoint("EpicVol4Book9Chapter5", category, "Complete Volume IV, Book 9, Chapter 5: The Next Adventure", null);
     initPoint("BlackBookMordor4.4", category, "Complete The Black Book of Mordor, Chapter 4.4: Union of Evil", null);
+    initPoint("BlackBookMordor5.5", category, "Complete The Black Book of Mordor, Chapter 5.5: The Walls Brought Down", null);
 
     category=TraitPointCategories.DEEDS;
     initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
