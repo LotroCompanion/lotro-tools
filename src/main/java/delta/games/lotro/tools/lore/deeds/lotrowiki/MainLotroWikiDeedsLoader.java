@@ -12,6 +12,7 @@ import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 import delta.games.lotro.tools.lore.deeds.checks.CheckDeedLinks;
 import delta.games.lotro.tools.lore.deeds.checks.CheckItemRewardsInDeeds;
+import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedNames;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedsText;
 
 /**
@@ -300,6 +301,7 @@ public class MainLotroWikiDeedsLoader
     System.out.println("Found "+nbDeeds+" deeds.");
     new CheckItemRewardsInDeeds().doIt(deeds);
     new NormalizeDeedsText().doIt(deeds);
+    new NormalizeDeedNames().doIt(deeds);
     new CheckDeedLinks().doIt(deeds);
     File out=new File("../lotro-companion/data/lore/deeds.xml");
     DeedsContainer.writeSortedDeeds(deeds,out);

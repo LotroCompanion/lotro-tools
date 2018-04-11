@@ -96,7 +96,7 @@ public class DeedObjectivesParser
         boolean ignoreLine=ignoreLine(line);
         if (!ignoreLine)
         {
-          System.out.println(parentDeed.getName()+" => "+line);
+          //System.out.println(parentDeed.getName()+" => "+line);
         }
       }
     }
