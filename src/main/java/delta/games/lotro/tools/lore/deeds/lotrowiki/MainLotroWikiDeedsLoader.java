@@ -137,12 +137,14 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Annúminas_Instance_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Annúminas");
     parser.doCategory("Fornost_Slayer_Deeds",DeedType.SLAYER,SHADOWS_OF_ANGMAR_SEED+"Fornost");
     parser.doCategory("Fornost_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Fornost");
+    parser.doCategory("Helegrod_Slayer_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Helegrod");
     parser.doCategory("Inn_of_the_Forsaken_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Inn of the Forsaken");
     parser.doCategory("The_School_at_Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain:School");
     parser.doCategory("The_Library_at_Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain:Library");
     parser.doCategory("Tham_Mírdain_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Tham Mírdain");
     parser.doCategory("The_Great_Barrow_Deeds",null,SHADOWS_OF_ANGMAR_SEED+"Great Barrows");
     parser.doCategory("Shadows_of_Angmar_Instance_Meta_Deeds",null,SHADOWS_OF_ANGMAR_SEED);
+
     // - Moria
     // -- Mines of Moria
     parser.doCategory("Dark_Delvings_Slayer_Deeds",DeedType.SLAYER,MINES_OF_MORIA_SEED+"Dark Delvings");
@@ -273,6 +275,8 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Obsolete_Deeds",null,"Obsolete");
     parser.doCategory("Chicken_Play_Deeds",null,"Event:Chicken Play");
     parser.doCategory("Treasure_Caches");
+    parser.doCategory("The_Ale_Association_Deeds");
+    parser.doCategory("The_Inn_League_Deeds");
 
     // Caution: these may bring already existing deeds:
     parser.doCategory("Hidden_Deeds");
