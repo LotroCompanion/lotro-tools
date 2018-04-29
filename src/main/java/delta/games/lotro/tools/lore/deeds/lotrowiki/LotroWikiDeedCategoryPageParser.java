@@ -61,6 +61,7 @@ public class LotroWikiDeedCategoryPageParser
    */
   public List<DeedDescription> doCategory(String categoryId, DeedType type, String category)
   {
+    System.out.println("Handling category: "+categoryId);
     List<DeedDescription> deeds=doCategory(categoryId);
     if (category!=null)
     {
@@ -71,7 +72,7 @@ public class LotroWikiDeedCategoryPageParser
       if (type!=null) deed.setType(type);
       if (category!=null) deed.setCategory(category);
     }
-    writeFile(categoryId,deeds);
+    writeFiles(categoryId,deeds);
     return deeds;
   }
 
@@ -97,7 +98,7 @@ public class LotroWikiDeedCategoryPageParser
         deed.setCategory(null);
       }
     }
-    writeFile(categoryId,deeds);
+    writeFiles(categoryId,deeds);
     return deeds;
   }
 
@@ -119,7 +120,7 @@ public class LotroWikiDeedCategoryPageParser
         deed.setCategory("Racial");
       }
     }
-    writeFile(categoryId,deeds);
+    writeFiles(categoryId,deeds);
     return deeds;
   }
 
@@ -134,12 +135,23 @@ public class LotroWikiDeedCategoryPageParser
     String file=categoryId+"/main.html";
     File deedsCategoryFile=_lotroWiki.download(url,Escapes.escapeFile(file));
     List<String> deedIds=parseDeedCategoryPage(deedsCategoryFile);
+    return handleDeeds(categoryId,deedIds);
+  }
+
+  /**
+   * Handle some deeds.
+   * @param categoryId Category ID.
+   * @param deedIds Deed IDs.
+   * @return A list of loaded deeds.
+   */
+  public List<DeedDescription> handleDeeds(String categoryId, List<String> deedIds)
+  {
     List<DeedDescription> deeds=loadDeeds(categoryId,deedIds);
-    writeFile(categoryId,deeds);
+    writeFiles(categoryId,deeds);
     return deeds;
   }
 
-  private void writeFile(String categoryId,List<DeedDescription> deeds)
+  private void writeFiles(String categoryId,List<DeedDescription> deeds)
   {
     File to=new File("deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
     DeedsContainer.writeSortedDeeds(deeds,to);

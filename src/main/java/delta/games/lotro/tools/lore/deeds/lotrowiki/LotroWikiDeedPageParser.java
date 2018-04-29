@@ -372,12 +372,21 @@ public class LotroWikiDeedPageParser
         String parentDeed=getLineValue(line);
         if (!parentDeed.isEmpty())
         {
-          if (useParentDeedInfo(parentDeed,deedName))
+          if ("Scourge-slayer of Mordor (Advanced)".equals(parentDeed))
           {
-            parentDeed=fixParentDeedInfo(parentDeed,deedName);
-            DeedProxy parentProxy=new DeedProxy();
-            parentProxy.setName(parentDeed);
-            deed.getParentDeedProxies().add(parentProxy);
+            DeedProxy nextProxy=new DeedProxy();
+            nextProxy.setName(parentDeed);
+            deed.setNextDeedProxy(nextProxy);
+          }
+          else
+          {
+            if (useParentDeedInfo(parentDeed,deedName))
+            {
+              parentDeed=fixParentDeedInfo(parentDeed,deedName);
+              DeedProxy parentProxy=new DeedProxy();
+              parentProxy.setName(parentDeed);
+              deed.getParentDeedProxies().add(parentProxy);
+            }
           }
         }
       }
@@ -535,6 +544,8 @@ public class LotroWikiDeedPageParser
   }
 
   private static final String FACTION_SUFFIX=" (Faction)";
+  private static final String REPUTATION_SUFFIX=" (Reputation)";
+
   private static final String TITLE_SUFFIX=" (Title)";
 
   private Faction extractFaction(String line)
@@ -544,7 +555,19 @@ public class LotroWikiDeedPageParser
     {
       factionName=factionName.substring(0,factionName.length()-FACTION_SUFFIX.length());
     }
-    Faction faction=FactionsRegistry.getInstance().getByName(factionName);
+    if (factionName.endsWith(REPUTATION_SUFFIX))
+    {
+      factionName=factionName.substring(0,factionName.length()-REPUTATION_SUFFIX.length());
+    }
+    Faction faction=null;
+    if (factionName.length()>0)
+    {
+      faction=FactionsRegistry.getInstance().getByName(factionName);
+      if (faction==null)
+      {
+        System.err.println("Bad faction ["+factionName+"]");
+      }
+    }
     return faction;
   }
 

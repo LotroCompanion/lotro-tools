@@ -7,6 +7,8 @@ import java.util.List;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedProxies;
+import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
@@ -56,6 +58,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Captain_Deeds",DeedType.CLASS,CharacterClass.CAPTAIN);
     parser.doCategory("Champion_Deeds",DeedType.CLASS,CharacterClass.CHAMPION);
     parser.doCategory("Guardian_Deeds",DeedType.CLASS,CharacterClass.GUARDIAN);
+    parser.doCategory("Guardian_Meta_Deeds",DeedType.CLASS,CharacterClass.GUARDIAN);
     parser.doCategory("Hunter_Deeds",DeedType.CLASS,CharacterClass.HUNTER);
     parser.doCategory("Lore-master_Deeds",DeedType.CLASS,CharacterClass.LORE_MASTER);
     parser.doCategory("Lore-master_Meta_Deeds",DeedType.CLASS,CharacterClass.LORE_MASTER);
@@ -87,21 +90,22 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("East_Rohan_Deeds",null,"Region:East Rohan");
     parser.doCategory("Wildermore_Deeds",null,"Region:Wildermore");
     parser.doCategory("West_Rohan_Deeds",null,"Region:West Rohan");
-    parser.doCategory("Dale-lands_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Dale-lands");
-    parser.doCategory("Dale-lands_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Dale-lands");
-    parser.doCategory("Dale-lands_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Dale-lands");
-    parser.doCategory("Erebor_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Erebor");
-    parser.doCategory("Erebor_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Erebor");
-    parser.doCategory("Dwarves_of_Erebor_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Meta_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Strongholds_of_the_North_Deeds",null,"Region:Strongholds of the North");
     parser.doCategory("Eryn_Lasgalen_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Eryn Lasgalen");
     parser.doCategory("Eryn_Lasgalen_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Eryn Lasgalen");
     parser.doCategory("Eryn_Lasgalen_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Eryn Lasgalen");
-    parser.doCategory("Elves_of_Felegoth_Deeds",null,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Meta_Deeds",null,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Elves_of_Felegoth_Deeds",null,"Region:Strongholds of the North:Eryn Lasgalen");
+    parser.doCategory("Dale-lands_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Dale-lands_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Dale-lands_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Men_of_Dale_Deeds",null,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("Erebor_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Erebor");
+    parser.doCategory("Erebor_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Erebor");
+    parser.doCategory("Dwarves_of_Erebor_Deeds",null,"Region:Strongholds of the North:Erebor");
 
     // - Gondor
     parser.doCategory("Western_Gondor_Deeds",null,"Region:Western Gondor");
@@ -234,7 +238,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Throne_of_the_Dread_Terror_Deeds",null,BATTLE_OF_PELENNOR_SEED+"Throne of the Dread Terror");
     // - Plateau of Gorgoroth
     parser.doCategory("The_Court_of_Seregost_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"The Court of Seregost");
-    parser.doCategory("Dungeons_of_Naerband_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"Dungeons of Naerband");
+    parser.doCategory("The_Dungeons_of_Naerband_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"Dungeons of Naerband");
     parser.doCategory("The_Abyss_of_Mordath_Deeds",null,PLATEAU_OF_GORGOROTH_SEED+"The Abyss of Mordath");
 
     // Hobby
@@ -283,6 +287,10 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Meta_Deeds");
     parser.doCategory("Elves_of_Rivendell_Reputation_Quests");
  
+    // Singles
+    List<String> singleDeedIds=new ArrayList<String>();
+    singleDeedIds.add("Seeker_of_Truth");
+    parser.handleDeeds("Singles",singleDeedIds);
     writeResultFile();
   }
 
@@ -299,6 +307,11 @@ public class MainLotroWikiDeedsLoader
         deeds.addAll(newDeeds);
       }
     }
+    // Additional fixes
+    for(DeedDescription deed : deeds)
+    {
+      additionalFixes(deed);
+    }
     // Resolve deed links
     new DeedLinksResolver(deeds).doIt();
     int nbDeeds=deeds.size();
@@ -309,6 +322,22 @@ public class MainLotroWikiDeedsLoader
     new CheckDeedLinks().doIt(deeds);
     File out=new File("../lotro-companion/data/lore/deeds.xml");
     DeedsContainer.writeSortedDeeds(deeds,out);
+  }
+
+  private void additionalFixes(DeedDescription deed)
+  {
+    String key=deed.getKey();
+    if ("Shot_through_the_Heart".equals(key))
+    {
+      DeedProxies parents=deed.getParentDeedProxies();
+      DeedProxy parentProxy=parents.getByKey("Class_Deeds_(Hunter)_-_Tier_8");
+      if (parentProxy==null)
+      {
+        parentProxy=new DeedProxy();
+        parentProxy.setKey("Class_Deeds_(Hunter)_-_Tier_8");
+        parents.add(parentProxy);
+      }
+    }
   }
 
   /**

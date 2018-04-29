@@ -40,6 +40,7 @@ public class NormalizeDeedsText
     ret=normalizeBraces(ret);
     ret=normalizeCounts(ret);
     ret=cleanBlanks(ret);
+    ret=normalizeClassPoints(ret);
     return ret;
   }
 
@@ -156,6 +157,12 @@ public class NormalizeDeedsText
         break;
       }
     }
+    return ret;
+  }
+
+  private String normalizeClassPoints(String input)
+  {
+    String ret=input.replace("CTP|1","one Class Trait Point");
     return ret;
   }
 

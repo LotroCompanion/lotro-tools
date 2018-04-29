@@ -9,5 +9,5 @@ public class LotroWikiConstants
   /**
    * Base URL for the lotro-wiki site.
    */
-  public static String BASE_URL="http://lotro-wiki.com";
+  public static String BASE_URL="https://lotro-wiki.com";
 }
