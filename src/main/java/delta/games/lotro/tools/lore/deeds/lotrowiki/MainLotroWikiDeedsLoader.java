@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.deeds.lotrowiki;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import delta.games.lotro.common.CharacterClass;
@@ -307,6 +308,8 @@ public class MainLotroWikiDeedsLoader
         deeds.addAll(newDeeds);
       }
     }
+    // Filter deeds
+    filterDeeds(deeds);
     // Additional fixes
     for(DeedDescription deed : deeds)
     {
@@ -322,6 +325,18 @@ public class MainLotroWikiDeedsLoader
     new CheckDeedLinks().doIt(deeds);
     File out=new File("../lotro-companion/data/lore/deeds.xml");
     DeedsContainer.writeSortedDeeds(deeds,out);
+  }
+
+  private void filterDeeds(List<DeedDescription> deeds)
+  {
+    for(Iterator<DeedDescription> it=deeds.iterator();it.hasNext();)
+    {
+      DeedDescription deed=it.next();
+      if ("Enemies_in_Durthang".equals(deed.getKey()))
+      {
+        it.remove();
+      }
+    }
   }
 
   private void additionalFixes(DeedDescription deed)
