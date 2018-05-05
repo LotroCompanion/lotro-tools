@@ -336,6 +336,10 @@ public class MainLotroWikiDeedsLoader
       {
         it.remove();
       }
+      if ("Gorgoroth_Continued_Foothold".equals(deed.getKey()))
+      {
+        it.remove();
+      }
     }
   }
 
