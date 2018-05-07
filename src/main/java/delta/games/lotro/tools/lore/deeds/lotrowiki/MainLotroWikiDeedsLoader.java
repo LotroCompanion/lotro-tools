@@ -13,6 +13,7 @@ import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
+import delta.games.lotro.tools.lore.deeds.DeedsInjector;
 import delta.games.lotro.tools.lore.deeds.checks.CheckDeedLinks;
 import delta.games.lotro.tools.lore.deeds.checks.CheckItemRewardsInDeeds;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedNames;
@@ -315,6 +316,8 @@ public class MainLotroWikiDeedsLoader
     {
       additionalFixes(deed);
     }
+    // Additional deeds
+    new DeedsInjector().addDeeds(deeds);
     // Resolve deed links
     new DeedLinksResolver(deeds).doIt();
     int nbDeeds=deeds.size();
