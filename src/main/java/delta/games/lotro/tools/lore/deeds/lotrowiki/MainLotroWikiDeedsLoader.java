@@ -92,6 +92,8 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("East_Rohan_Deeds",null,"Region:East Rohan");
     parser.doCategory("Wildermore_Deeds",null,"Region:Wildermore");
     parser.doCategory("West_Rohan_Deeds",null,"Region:West Rohan");
+    parser.doCategory("The_Helmingas_Deeds",DeedType.REPUTATION,"Region:West Rohan");
+    parser.doCategory("West_Rohan_Reputation_Deeds",DeedType.REPUTATION,"Region:West Rohan");
     parser.doCategory("Strongholds_of_the_North_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North");
     parser.doCategory("Strongholds_of_the_North_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
     parser.doCategory("Strongholds_of_the_North_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
@@ -117,6 +119,12 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Far_Anórien_Deeds",null,"Region:Far Anórien");
     parser.doCategory("March_of_the_King_Deeds",null,"Region:March of the King");
     parser.doCategory("The_Wastes_Deeds",null,"Region:The Wastes");
+    parser.doCategory("Dol_Amroth_(Faction)_Deeds",DeedType.REPUTATION,"Region:Western Gondor");
+    parser.doCategory("Pelargir_(Faction)_Deeds",DeedType.REPUTATION,"Region:Central Gondor");
+    parser.doCategory("Rangers_of_Ithilien_Deeds",DeedType.REPUTATION,"Region:Eastern Gondor");
+    parser.doCategory("Defenders_of_Minas_Tirith_Deeds",DeedType.REPUTATION,"Region:Old Anórien");
+    parser.doCategory("Riders_of_Rohan_(Faction)_Deeds",DeedType.REPUTATION,"Region:Far Anórien");
+
     // - Mordor
     parser.doCategory("Udûn_Deeds",null,"Region:Gorgoroth:Udûn");
     parser.doCategory("Dor_Amarth_Deeds",null,"Region:Gorgoroth:Dor Amarth");
@@ -127,6 +135,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Plateau_of_Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
     parser.doCategory("Plateau_of_Gorgoroth_Lore_Deeds",DeedType.LORE,"Region:Gorgoroth");
     parser.doCategory("Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
+    parser.doCategory("Plateau_of_Gorgoroth_Reputation_Deeds",DeedType.REPUTATION,"Region:Gorgoroth");
 
     // PVP
     parser.doCategory("Freep_Deeds",null,"PVP:Freep deeds");
