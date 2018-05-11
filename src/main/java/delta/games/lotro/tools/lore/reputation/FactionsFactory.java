@@ -80,7 +80,7 @@ public class FactionsFactory
   private Faction buildFaction(String category, String key, String name, String[] aliases, String template)
   {
     FactionLevelsTemplate factionTemplate=_templates.getByKey(template);
-    List<FactionLevel> levels=factionTemplate.getLevels();
+    List<FactionLevel> levels=factionTemplate.buildLevels();
     Faction faction=new Faction(key,name,category,levels);
     if (aliases!=null)
     {

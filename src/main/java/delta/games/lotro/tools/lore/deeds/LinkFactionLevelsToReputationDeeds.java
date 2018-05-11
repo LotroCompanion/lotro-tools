@@ -11,10 +11,10 @@ import delta.games.lotro.lore.reputation.FactionLevel;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 
 /**
- * Attempt to link reputation levels to repuation deeds (if possible).
+ * Attempt to link faction levels and reputation deeds (if possible).
  * @author DAM
  */
-public class MainLinkReputationDeeds
+public class LinkFactionLevelsToReputationDeeds
 {
   private HashMap<String,DeedDescription> _deedsByKey;
 
@@ -29,9 +29,8 @@ public class MainLinkReputationDeeds
     }
   }
 
-  private void findReputationDeeds()
+  private void findReputationDeeds(FactionsRegistry registry)
   {
-    FactionsRegistry registry=FactionsRegistry.getInstance();
     List<Faction> factions=registry.getAll();
     for(Faction faction : factions)
     {
@@ -63,6 +62,8 @@ public class MainLinkReputationDeeds
       FactionLevel level=levels[index];
       String deedName=currentDeed.getName();
       System.out.println("\t"+level.getName()+" => "+deedName);
+      String deedKey=currentDeed.getKey();
+      level.setDeedKey(deedKey);
       DeedProxy nextDeedProxy=currentDeed.getNextDeedProxy();
       currentDeed=null;
       if (nextDeedProxy!=null)
@@ -134,18 +135,13 @@ public class MainLinkReputationDeeds
     return deed;
   }
 
-  private void doIt()
+  /**
+   * Update the given registry with deed keys.
+   * @param registry Registry to update.
+   */
+  public void doIt(FactionsRegistry registry)
   {
     loadDeeds();
-    findReputationDeeds();
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    new MainLinkReputationDeeds().doIt();
+    findReputationDeeds(registry);
   }
 }

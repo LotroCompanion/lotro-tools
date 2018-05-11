@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.reputation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.lore.reputation.FactionLevel;
@@ -34,11 +35,17 @@ public class FactionLevelsTemplate
   }
 
   /**
-   * Get the faction levels for this template.
-   * @return A list of faction levels.
+   * Build the faction levels using this template.
+   * @return A list of new faction levels.
    */
-  public List<FactionLevel> getLevels()
+  public List<FactionLevel> buildLevels()
   {
-    return _levels;
+    List<FactionLevel> ret=new ArrayList<FactionLevel>();
+    for(FactionLevel level : _levels)
+    {
+      FactionLevel newLevel=new FactionLevel(level.getKey(),level.getName(),level.getValue(),level.getLotroPoints(),level.getRequiredXp());
+      ret.add(newLevel);
+    }
+    return ret;
   }
 }

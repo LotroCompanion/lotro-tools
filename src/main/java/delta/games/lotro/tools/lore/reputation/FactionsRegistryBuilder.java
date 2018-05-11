@@ -10,6 +10,7 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.reputation.ReputationDeed;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
+import delta.games.lotro.tools.lore.deeds.LinkFactionLevelsToReputationDeeds;
 
 /**
  * Builder for the factions registry.
@@ -33,6 +34,8 @@ public class FactionsRegistryBuilder
   {
     // Build
     initFactions();
+    // Setup deed keys
+    new LinkFactionLevelsToReputationDeeds().doIt(_registry);
     // Write
     File toFile=new File("factions.xml").getAbsoluteFile();
     boolean ok=FactionsXMLWriter.writeFactionsFile(toFile,_registry);
