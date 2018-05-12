@@ -1466,8 +1466,9 @@ public class ItemNormalization
       EquipmentLocation slot=ret.getEquipmentLocation();
       if (slot==null)
       {
+        int id=item.getIdentifier();
         String name=ret.getName();
-        System.out.println("Slot not found for jewel: "+name);
+        System.out.println("Slot not found for jewel: ID="+id+", name="+name);
       }
       ret.removeProperty(ItemPropertyNames.TULKAS_CATEGORY);
       ret.removeProperty(ItemPropertyNames.LEGACY_CATEGORY);
