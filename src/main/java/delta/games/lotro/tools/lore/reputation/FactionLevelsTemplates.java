@@ -246,7 +246,7 @@ public class FactionLevelsTemplates
     List<FactionLevel> levels=new ArrayList<FactionLevel>();
     levels.add(new FactionLevel("NONE","-",0,0,0));
     levels.add(new FactionLevel("ROOKIE","Rookie",1,0,10000));
-    levels.add(new FactionLevel("LEAGUER","Leaguer",2,0,20000));
+    levels.add(new FactionLevel("LEAGUER","Minor Leaguer",2,0,20000));
     levels.add(new FactionLevel("MAJOR_LEAGUER","Major Leaguer",3,0,25000));
     levels.add(new FactionLevel("ALL_STAR","All-star",4,0,30000));
     levels.add(new FactionLevel("HALL_OF_FAMER","Hall of Famer",5,0,45000));
