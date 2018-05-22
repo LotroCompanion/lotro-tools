@@ -30,6 +30,7 @@ import delta.games.lotro.lore.items.stats.ItemStatSliceData;
 import delta.games.lotro.lore.items.stats.ScalingRulesNames;
 import delta.games.lotro.lore.items.stats.SlicesBasedItemStatsProvider;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
+import delta.games.lotro.tools.lore.items.FactoryCommentsInjector;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.lotroplan.essences.EssenceStatsInjector;
 import delta.games.lotro.tools.lore.items.scalables.BigBattlesJewelsFinder;
@@ -88,6 +89,9 @@ public class ItemNormalization
     }
     // Essences stats injection
     new EssenceStatsInjector().doIt(sourceItems.values());
+
+    // Factory comments injection
+    new FactoryCommentsInjector(sourceItems).doIt();
 
     // Build final items list
     List<Item> items=new ArrayList<Item>(sourceItems.values());
