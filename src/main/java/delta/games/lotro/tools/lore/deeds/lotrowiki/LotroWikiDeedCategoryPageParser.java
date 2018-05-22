@@ -153,7 +153,7 @@ public class LotroWikiDeedCategoryPageParser
 
   private void writeFiles(String categoryId,List<DeedDescription> deeds)
   {
-    File to=new File("deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
+    File to=new File("tmp/deeds/deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
     DeedsContainer.writeSortedDeeds(deeds,to);
     //DeedXMLWriter.writeDeedsFile(to,deeds);
   }

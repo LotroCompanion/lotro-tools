@@ -309,8 +309,8 @@ public class MainLotroWikiDeedsLoader
   {
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     DeedXMLParser parser=new DeedXMLParser();
-    File currentDir=new File(".");
-    for(File deedFile : currentDir.listFiles())
+    File tmpDeedsFiles=new File("tmp/deeds");
+    for(File deedFile : tmpDeedsFiles.listFiles())
     {
       if (deedFile.getName().endsWith(".xml"))
       {
