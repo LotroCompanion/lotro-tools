@@ -66,10 +66,11 @@ public class FactoryCommentsInjector
   {
     //String comment="Recipe Kindred Erebor: single use, 40 tokens of lake and river";
     doDale();
-    doFelegoth();
+    doFelegothJewels();
+    doFelegothArmor();
   }
 
-  private void doFelegoth()
+  private void doFelegothJewels()
   {
     String comment=null;
     // Barter Felegoth
@@ -158,16 +159,102 @@ public class FactoryCommentsInjector
     // - Acquaintance
     {
       comment="Barter Acquaintance Felegoth: 55 tokens of lake and river";
-      // - ring
-      /*
-      // 1879347732 Carved Jade Ring of Bard's Honour
-      // 1879347711 Curious Onyx Ring of Bard's Honour
-      // 1879347652 Carved Jade Ring of Bard's Will
-      // 1879347681 Curious Onyx Ring of Bard's Will
-      int[] acquaintanceRing=new int[]{ 1879347732, 1879347711, 1879347652, 1879347681 };
-      injectComment(comment,acquaintanceRing);
-      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
-      */
+      // Agility
+      {
+        // - ring
+        // 1879347627 Lapis Silver Ring of Thranduil's Cunning
+        // 1879347654 Lapis Silver Ring of Thranduil's Power
+        // 1879347731 Topaz Gold Ring of Thranduil's Power
+        // 1879347733 Topaz Gold Ring of Thranduil's Cunning
+        int[] acquaintanceRing=new int[]{ 1879347627, 1879347654, 1879347731, 1879347733 };
+        injectComment(comment,acquaintanceRing);
+        injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+      }
+      // Might
+      {
+        // - ring
+        // 1879347656 Black Granite Ring of Thranduil's Power
+        // 1879347660 Chrysolite Oak Ring of Thranduil's Cunning
+        // 1879347697 Black Granite Ring of Thranduil's Cunning
+        // 1879347735 Chrysolite Oak Ring of Thranduil's Power
+        int[] acquaintanceRing=new int[]{ 1879347656, 1879347660, 1879347697, 1879347735 };
+        injectComment(comment,acquaintanceRing);
+        injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+      }
+    }
+  }
+
+  private void doFelegothArmor()
+  {
+    String comment=null;
+    // Barter Felegoth
+    // - Kindred (shoulders)
+    {
+      comment="Barter Kindred Felegoth: 45 tokens of lake and river";
+      // - head
+      // 1879365553 Rivetted Camail of Thranduil's Cunning
+      // 1879365556 Rivetted Camail of Thranduil's Cunning
+      // 1879365581 Rivetted Camail of Thranduil's Power
+      // 1879365598 Rivetted Camail of Thranduil's Power
+      int[] kindred=new int[]{ 1879365553, 1879365556, 1879365581, 1879365598 };
+      injectComment(comment,kindred);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+    }
+    // - Ally
+    {
+      comment="Barter Ally Felegoth: 45 tokens of lake and river";
+      // - Hands
+      // 1879365547 Mighty Gages of Thranduil's Power
+      // 1879365551 Quick Gages of Thranduil's Power
+      // 1879365560 Quick Gages of Thranduil's Cunning
+      // 1879365577 Mighty Gages of Thranduil's Cunning
+      int[] allyHands=new int[]{ 1879365547, 1879365551, 1879365560, 1879365577 };
+      injectComment(comment,allyHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
+      // - Boots
+      // 1879365540 Nimble Boots of Thranduil's Cunning
+      // 1879365566 Forceful Boots of Thranduil's Cunning
+      // 1879365567 Forceful Boots of Thranduil's Power
+      // 1879365586 Nimble Boots of Thranduil's Power
+      int[] allyBoots=new int[]{ 1879365540, 1879365566, 1879365567, 1879365586 };
+      injectComment(comment,allyBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
+    }
+    // - Friend
+    {
+      comment="Barter Friend Felegoth: 20 tokens of lake and river";
+      // - Head
+      // 1879365463 Padded Coif of Thranduil's Power
+      // 1879365465 Padded Coif of Thranduil's Power
+      // 1879365467 Padded Coif of Thranduil's Cunning
+      // 1879365481 Padded Coif of Thranduil's Cunning
+      int[] friendHead=new int[]{ 1879365463, 1879365465, 1879365467, 1879365481 };
+      injectComment(comment,friendHead);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
+      // - Shoulder
+      // 1879365462 Fine Camail of Thranduil's Power
+      // 1879365474 Fine Camail of Thranduil's Cunning
+      // 1879365492 Fine Camail of Thranduil's Cunning
+      // 1879365506 Fine Camail of Thranduil's Power
+      int[] friendShoulder=new int[]{ 1879365462, 1879365474, 1879365492, 1879365506 };
+      injectComment(comment,friendShoulder);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
+      // - Chest
+      // 1879365455 Heavy Hauberk of Thranduil's Cunning
+      // 1879365468 Heavy Hauberk of Thranduil's Cunning
+      // 1879365485 Heavy Hauberk of Thranduil's Power
+      // 1879365499 Heavy Hauberk of Thranduil's Power
+      int[] friendChest=new int[]{ 1879365455, 1879365468, 1879365485, 1879365499 };
+      injectComment(comment,friendChest);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
+      // - Cloak
+      // 1879365473 Woven Wool Cloak of Thranduil's Power
+      // 1879365478 Woven Silk Cloak of Thranduil's Power
+      // 1879365479 Woven Silk Cloak of Thranduil's Cunning
+      // 1879365493 Woven Wool Cloak of Thranduil's Cunning
+      int[] friendCloak=new int[]{ 1879365473, 1879365478, 1879365479, 1879365493 };
+      injectComment(comment,friendCloak);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
     }
   }
 
