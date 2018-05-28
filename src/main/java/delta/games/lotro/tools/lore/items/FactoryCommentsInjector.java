@@ -64,8 +64,14 @@ public class FactoryCommentsInjector
    */
   public void doIt()
   {
-    //String comment="Recipe Kindred Erebor: single use, 40 tokens of lake and river";
     doDale();
+    doFelegoth();
+    doErebor();
+    doNorthernMirkwoodCrafting();
+  }
+
+  private void doFelegoth()
+  {
     doFelegothJewels();
     doFelegothArmor();
   }
@@ -73,7 +79,7 @@ public class FactoryCommentsInjector
   private void doFelegothJewels()
   {
     String comment=null;
-    // Barter Felegoth
+    // Barter Felegoth (Jewels)
     // - Kindred
     {
       comment="Barter Kindred Felegoth: 90 tokens of lake and river";
@@ -187,7 +193,7 @@ public class FactoryCommentsInjector
   private void doFelegothArmor()
   {
     String comment=null;
-    // Barter Felegoth
+    // Barter Felegoth (Armor)
     // - Kindred (shoulders)
     {
       comment="Barter Kindred Felegoth: 45 tokens of lake and river";
@@ -256,9 +262,102 @@ public class FactoryCommentsInjector
       injectComment(comment,friendCloak);
       injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
     }
+    // - Acquaintance
+    {
+      comment="Barter Acquaintance Felegoth: 20 tokens of lake and river";
+      // - Hands
+      // 1879365461 Dextrous Gages of Thranduil's Cunning
+      // 1879365491 Dextrous Gages of Thranduil's Power
+      // 1879365498 Strong Gages of Thranduil's Cunning
+      // 1879365504 Strong Gages of Thranduil's Power
+      int[] acquaintanceHands=new int[]{ 1879365461, 1879365491, 1879365498, 1879365504 };
+      injectComment(comment,acquaintanceHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
+      // - Legs
+      // 1879365454 Flexible Leggings of Thranduil's Cunning
+      // 1879365482 Flexible Leggings of Thranduil's Power
+      // 1879365483 Enduring Leggings of Thranduil's Power
+      // 1879365507 Enduring Leggings of Thranduil's Cunning
+      int[] acquaintanceLegs=new int[]{ 1879365454, 1879365482, 1879365483, 1879365507 };
+      injectComment(comment,acquaintanceLegs);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
+      // - Boots
+      // 1879365484 Tough Boots of Thranduil's Cunning
+      // 1879365486 Lithe Boots of Thranduil's Power
+      // 1879365489 Tough Boots of Thranduil's Power
+      // 1879365509 Lithe Boots of Thranduil's Cunning
+      int[] acquaintanceBoots=new int[]{ 1879365484, 1879365486, 1879365489, 1879365509 };
+      injectComment(comment,acquaintanceBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
+    }
+  }
+
+  private void doNorthernMirkwoodCrafting()
+  {
+    // Crafting Felegoth/Dale/Erebor
+    // - Kindred
+    String comment="Recipe Kindred Felegoth or Dale or Erebor: single use, 40 tokens of lake and river";
+    // - Head
+    {
+      // 1879366087 Master-crafted Coif of Thranduil's Power
+      // 1879366083 Master-crafted Nimble Coif of Thranduil's Power
+      // 1879366085 Master-crafted Coif of Thranduil's Cunning
+      // 1879366086 Master-crafted Nimble Coif of Thranduil's Cunning
+      // 1879366081 Master-crafted Helm of Thorin's Memory
+      // 1879366082 Master-crafted Helm of Thorin's Strength
+      // 1879366084 Master-crafted Cap of Bard's Will
+      // 1879366080 Master-crafted Cap of Bard's Honour
+      int[] head=new int[]{ 1879366087, 1879366083, 1879366085, 1879366086, 1879366081, 1879366082, 1879366084, 1879366080 };
+      injectComment(comment,head);
+      injectBinding(ItemBinding.BIND_ON_EQUIP,head);
+    }
+    // - Pocket
+    {
+      // 1879347668 Noble Emblem of Thorin's Memory (parry)
+      // 1879366101 Noble Emblem of Thorin's Memory (evade)
+      // 1879347737 Noble Emblem of Thorin's Strength (finesse)
+      // 1879366104 Noble Emblem of Thorin's Strength (critical rating)
+      // 1879347714 Momentous Locket of Thranduil's Power (finesse)
+      // 1879366112 Momentous Locket of Thranduil's Power (critical rating)
+      // 1879347685 Momentous Locket of Thranduil's Cunning (parry)
+      // 1879366103 Momentous Locket of Thranduil's Cunning (evade)
+      // 1879347624 Glowing Phial of Bard's Will (finesse)
+      // 1879366099 Glowing Phial of Bard's Will (critical rating)
+      // 1879347701 Glowing Phial of Bard's Honour (finesse)
+      // 1879366109 Glowing Phial of Bard's Honour (outgoing healing)
+      int[] pocket=new int[]{ 1879347668, 1879366101, 1879347737, 1879366104, 1879347714, 1879366112,
+          1879347685, 1879366103, 1879347624, 1879366099, 1879347701, 1879366109};
+      injectComment(comment,pocket);
+      injectBinding(ItemBinding.BIND_ON_EQUIP,pocket);
+    }
+    // - Neck
+    {
+      // 1879347749 Polished Torc of Thorin's Strength
+      // 1879366110 Polished Torc of Thorin's Strength
+      // 1879347736 Polished Torc of Thorin's Memory
+      // 1879366105 Polished Torc of Thorin's Memory
+      // 1879347657 Graceful Pendant of Thranduil's Power
+      // 1879366107 Graceful Pendant of Thranduil's Power
+      // 1879347695 Graceful Pendant of Thranduil's Cunning
+      // 1879366113 Graceful Pendant of Thranduil's Cunning
+      // 1879347642 Filigree Necklace of Bard's Will
+      // 1879366106 Filigree Necklace of Bard's Will
+      // 1879347704 Filigree Necklace of Bard's Honour
+      // 1879366100 Filigree Necklace of Bard's Honour
+      int[] neck=new int[]{ 1879347749, 1879366110, 1879347736, 1879366105, 1879347657, 1879366107,
+          1879347695, 1879366113, 1879347642, 1879366106, 1879347704, 1879366100};
+      injectComment(comment,neck);
+      injectBinding(ItemBinding.BIND_ON_EQUIP,neck);
+    }
   }
 
   private void doDale()
+  {
+    doDaleJewels();
+    doDaleArmor();
+  }
+
+  private void doDaleJewels()
   {
     String comment=null;
     // Barter Dale
@@ -318,6 +417,239 @@ public class FactoryCommentsInjector
       int[] acquaintanceRing=new int[]{ 1879347732, 1879347711, 1879347652, 1879347681 };
       injectComment(comment,acquaintanceRing);
       injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+    }
+  }
+
+  private void doDaleArmor()
+  {
+    String comment=null;
+    // Barter Dale (Armor)
+    // - Kindred (shoulders)
+    {
+      comment="Barter Kindred Dale: 45 tokens of lake and river";
+      // - head
+      // 1879365555 Embossed Mantle of Bard's Honour
+      // 1879365562 Embossed Mantle of Bard's Will
+      int[] kindred=new int[]{ 1879365555, 1879365562 };
+      injectComment(comment,kindred);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+    }
+    // - Ally
+    {
+      comment="Barter Ally Dale: 45 tokens of lake and river";
+      // - Hands
+      // 1879365565 Runed Gloves of Bard's Will
+      // 1879365573 Runed Gloves of Bard's Honour
+      int[] allyHands=new int[]{ 1879365565, 1879365573 };
+      injectComment(comment,allyHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
+      // - Boots
+      // 1879365554 Rugged Shoes of Bard's Honour
+      // 1879365596 Rugged Shoes of Bard's Will
+      int[] allyBoots=new int[]{ 1879365554, 1879365596 };
+      injectComment(comment,allyBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
+    }
+    // - Friend
+    {
+      comment="Barter Friend Dale: 20 tokens of lake and river";
+      // - Head
+      // 1879365469 Fancy Cap of Bard's Will
+      // 1879365488 Fancy Cap of Bard's Honour
+      int[] friendHead=new int[]{ 1879365469, 1879365488 };
+      injectComment(comment,friendHead);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
+      // - Shoulder
+      // 1879365505 Embroidered Mantle of Bard's Will
+      // 1879365508 Embroidered Mantle of Bard's Honour
+      int[] friendShoulder=new int[]{ 1879365505, 1879365508 };
+      injectComment(comment,friendShoulder);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
+      // - Chest
+      // 1879365480 Padded Vest of Bard's Honour
+      // 1879365490 Padded Vest of Bard's Will
+      int[] friendChest=new int[]{ 1879365480, 1879365490 };
+      injectComment(comment,friendChest);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
+      // - Cloak
+      // 1879365464 Woven Light Cloak of Bard's Will
+      // 1879365494 Woven Light Cloak of Bard's Honour
+      int[] friendCloak=new int[]{ 1879365464, 1879365494 };
+      injectComment(comment,friendCloak);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
+    }
+    // - Acquaintance
+    {
+      comment="Barter Acquaintance Dale: 20 tokens of lake and river";
+      // - Hands
+      // 1879365497 Supple Gloves of Bard's Honour
+      // 1879365501 Supple Gloves of Bard's Will
+      int[] acquaintanceHands=new int[]{ 1879365497, 1879365501 };
+      injectComment(comment,acquaintanceHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
+      // - Legs
+      // 1879365495 Corded Trousers of Bard's Honour
+      // 1879365502 Corded Trousers of Bard's Will
+      int[] acquaintanceLegs=new int[]{ 1879365495, 1879365502 };
+      injectComment(comment,acquaintanceLegs);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
+      // - Boots
+      // 1879365475 Superior Shoes of Bard's Honour
+      // 1879365487 Superior Shoes of Bard's Will
+      int[] acquaintanceBoots=new int[]{ 1879365475, 1879365487 };
+      injectComment(comment,acquaintanceBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
+    }
+  }
+
+  private void doErebor()
+  {
+    doEreborJewels();
+    doEreborArmor();
+  }
+
+  private void doEreborJewels()
+  {
+    String comment=null;
+    // Barter Erebor (Jewels)
+    // - Kindred
+    {
+      comment="Barter Kindred Erebor: 90 tokens of lake and river";
+      // - ears
+      // 1879347682 Opal Gold Stud of Thorin's Strength
+      // 1879347742 Opal Gold Stud of Thorin's Memory
+      // 1879347694 Rhodalite Silver Stud of Thorin's Memory
+      // 1879347729 Rhodalite Silver Stud of Thorin's Strength
+      int[] kindred=new int[]{ 1879347682, 1879347742, 1879347694, 1879347729 };
+      injectComment(comment,kindred);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+    }
+    // - Ally
+    {
+      comment="Barter Ally Erebor: 60 tokens of lake and river";
+      // - neck
+      // 1879347748 Heavy Torc of Thorin's Strength
+      // 1879347716 Heavy Torc of Thorin's Memory
+      // - pocket
+      // 1879347680 Proud Emblem of Thorin's Strength
+      // 1879347727 Proud Emblem of Thorin's Memory
+      int[] ally=new int[]{ 1879347748, 1879347716, 1879347680, 1879347727 };
+      injectComment(comment,ally);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,ally);
+    }
+    // - Friend
+    {
+      comment="Barter Friend Erebor: 55 tokens of lake and river";
+      // - wrist
+      // 1879347702 Studded Gold Bracer of Thorin's Strength
+      // 1879347641 Studded Gold Bracer of Thorin's Memory
+      // 1879347662 Burnished Silver Bracer of Thorin's Strength
+      // 1879347706 Burnished Silver Bracer of Thorin's Memory
+      int[] friendWrist=new int[]{ 1879347702, 1879347641, 1879347662, 1879347706 };
+      injectComment(comment,friendWrist);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendWrist);
+      // - ear
+      // 1879347665 Moonstone Gold Stud of Thorin's Memory
+      // 1879347684 Moonstone Gold Stud of Thorin's Strength
+      // 1879347678 Tourmaline Silver Stud of Thorin's Memory
+      // 1879347713 Tourmaline Silver Stud of Thorin's Strength
+      int[] friendEar=new int[]{ 1879347665, 1879347684, 1879347678, 1879347713 };
+      injectComment(comment,friendEar);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendEar);
+    }
+    // - Acquaintance
+    {
+      comment="Barter Acquaintance Erebor: 55 tokens of lake and river";
+      // - ring
+      // 1879347628 Topaz Steel Ring of Thorin's Memory
+      // 1879347688 Topaz Steel Ring of Thorin's Strength
+      // 1879347658 Lapis Mithril Ring of Thorin's Memory
+      // 1879347722 Lapis Mithril Ring of Thorin's Strength
+      int[] acquaintanceRing=new int[]{ 1879347628, 1879347688, 1879347658, 1879347722 };
+      injectComment(comment,acquaintanceRing);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+    }
+  }
+
+  private void doEreborArmor()
+  {
+    String comment=null;
+    // Barter Erebor (Armor)
+    // - Kindred (shoulders)
+    {
+      comment="Barter Kindred Erebor: 45 tokens of lake and river";
+      // - head
+      // 1879365546 Engraved Pauldrons of Thorin's Memory
+      // 1879365558 Engraved Pauldrons of Thorin's Strength
+      int[] kindred=new int[]{ 1879365546, 1879365558 };
+      injectComment(comment,kindred);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+    }
+    // - Ally
+    {
+      comment="Barter Ally Erebor: 45 tokens of lake and river";
+      // - Hands
+      // 1879365590 Articulated Gauntlets of Thorin's Strength
+      // 1879365592 Articulated Gauntlets of Thorin's Memory
+      int[] allyHands=new int[]{ 1879365590, 1879365592 };
+      injectComment(comment,allyHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
+      // - Boots
+      // 1879365563 Hardened Sabatons of Thorin's Strength
+      // 1879365595 Hardened Sabatons of Thorin's Memory
+      int[] allyBoots=new int[]{ 1879365563, 1879365595 };
+      injectComment(comment,allyBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
+    }
+    // - Friend
+    {
+      comment="Barter Friend Erebor: 20 tokens of lake and river";
+      // - Head
+      // 1879365457 Hardened Helm of Thorin's Strength
+      // 1879365470 Hardened Helm of Thorin's Memory
+      int[] friendHead=new int[]{ 1879365457, 1879365470 };
+      injectComment(comment,friendHead);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
+      // - Shoulder
+      // 1879365471 Bolstered Pauldrons of Thorin's Memory
+      // 1879365476 Bolstered Pauldrons of Thorin's Strength
+      int[] friendShoulder=new int[]{ 1879365471, 1879365476 };
+      injectComment(comment,friendShoulder);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
+      // - Chest
+      // 1879365456 Reinforced Chestplate of Thorin's Memory
+      // 1879365472 Reinforced Chestplate of Thorin's Strength
+      int[] friendChest=new int[]{ 1879365456, 1879365472 };
+      injectComment(comment,friendChest);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
+      // - Cloak
+      // 1879365458 Woven Heavy Cloak of Thorin's Memory
+      // 1879365460 Woven Heavy Cloak of Thorin's Strength
+      int[] friendCloak=new int[]{ 1879365458, 1879365460 };
+      injectComment(comment,friendCloak);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
+    }
+    // - Acquaintance
+    {
+      comment="Barter Acquaintance Erebor: 20 tokens of lake and river";
+      // - Hands
+      // 1879365459 Strong Gauntlets of Thorin's Memory
+      // 1879365503 Strong Gauntlets of Thorin's Strength
+      int[] acquaintanceHands=new int[]{ 1879365459, 1879365503 };
+      injectComment(comment,acquaintanceHands);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
+      // - Legs
+      // 1879365466 Tough Greaves of Thorin's Memory
+      // 1879365477 Tough Greaves of Thorin's Strength
+      int[] acquaintanceLegs=new int[]{ 1879365466, 1879365477 };
+      injectComment(comment,acquaintanceLegs);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
+      // - Boots
+      // 1879365496 Thick Sabatons of Thorin's Memory
+      // 1879365500 Thick Sabatons of Thorin's Strength
+      int[] acquaintanceBoots=new int[]{ 1879365496, 1879365500 };
+      injectComment(comment,acquaintanceBoots);
+      injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
     }
   }
 }
