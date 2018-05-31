@@ -48,7 +48,7 @@ public class MainLinkEditor
     };
     navigationManager.setNavigationListener(listener);
     /*LinkCreationInterator interactor=*/new LinkCreationInterator(mapsManager,canvas);
-    canvas.setFilter(filter);
+    canvas.getMarkersLayer().setFilter(filter);
     String key=bundle.getKey();
     canvas.setMap(key);
     navigationManager.setMap(bundle.getMap());
