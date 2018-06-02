@@ -26,7 +26,10 @@ public class MainDynMapLoader
    */
   public MainDynMapLoader()
   {
-    _outDir=new File("data/maps").getAbsoluteFile();
+    File tmpDir=new File("tmp");
+    File mapsDir=new File(tmpDir,"maps");
+    File outputDir=new File(mapsDir,"output");
+    _outDir=outputDir.getAbsoluteFile();
   }
 
   private void doIt()
@@ -68,7 +71,10 @@ public class MainDynMapLoader
       {
         String mapUrl=DynMapConstants.BASE_URL+"/images/maps/"+locale+'/'+key+".jpg";
         File mapImageFile=new File(mapDir,"map_"+locale+".jpg");
-        dynMap.download(mapUrl,mapImageFile);
+        if (!mapImageFile.exists())
+        {
+          dynMap.download(mapUrl,mapImageFile);
+        }
       }
       System.out.println(map.getMap());
       // Write file

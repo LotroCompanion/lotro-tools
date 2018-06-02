@@ -33,7 +33,9 @@ public class DynMapSiteInterface
     RequestConfig globalConfig=RequestConfig.custom().setCookieSpec(CookieSpecs.DEFAULT).build();
     _client=HttpClients.custom().setDefaultRequestConfig(globalConfig).build();
     File tmpDir=new File("tmp");
-    _tmpFiles=new TmpFiles(tmpDir);
+    File mapsDir=new File(tmpDir,"maps");
+    File inputDir=new File(mapsDir,"input");
+    _tmpFiles=new TmpFiles(inputDir);
     download(DynMapConstants.BASE_URL,"root.html");
   }
 
