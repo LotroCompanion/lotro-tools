@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemPropertyNames;
@@ -33,6 +35,7 @@ public class FactoryCommentsInjector
   public void doIt()
   {
     new NorthernMirkwoodItems(this).doIt();
+    new MordorKeeperOfMysteriesItems(this).doIt();
   }
 
   /**
@@ -69,6 +72,30 @@ public class FactoryCommentsInjector
       if (item!=null)
       {
         item.setBinding(binding);
+      }
+      else
+      {
+        _logger.warn("Item not found: ID="+id);
+      }
+    }
+  }
+
+  /**
+   * Inject an armour type into the items with the given ids.
+   * @param armourType Armour type to set.
+   * @param ids IDs of targeted items.
+   */
+  public void injectArmourType(ArmourType armourType, int[] ids)
+  {
+    for(int id : ids)
+    {
+      Item item=_items.get(Integer.valueOf(id));
+      if (item!=null)
+      {
+        if (item instanceof Armour)
+        {
+          ((Armour)item).setArmourType(armourType);
+        }
       }
       else
       {
