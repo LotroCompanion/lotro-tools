@@ -36,6 +36,7 @@ public class FactoryCommentsInjector
   {
     new NorthernMirkwoodItems(this).doIt();
     new MordorKeeperOfMysteriesItems(this).doIt();
+    new MordorHighEnchanter(this).doIt();
   }
 
   /**
