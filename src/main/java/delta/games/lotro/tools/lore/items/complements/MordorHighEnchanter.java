@@ -58,6 +58,13 @@ public class MordorHighEnchanter
       int[] vanguardBAonA=new int[]{ 1879361025, 1879361042, 1879361064, 1879361073 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,vanguardBAonA);
       _injector.injectArmourType(ArmourType.HEAVY,vanguardBAonA);
+
+      // Share stats
+      for(int i=0;i<vanguard1.length;i++)
+      {
+        int[] ids=new int[]{vanguard1[i],vanguard2[i],vanguardBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Barter Incomparable Armor (Mordor's Bane)
     {
@@ -85,6 +92,13 @@ public class MordorHighEnchanter
       int[] baneBAonA=new int[]{ 1879361121, 1879361098, 1879361095, 1879361041 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,baneBAonA);
       _injector.injectArmourType(ArmourType.HEAVY,baneBAonA);
+
+      // Share stats
+      for(int i=0;i<bane1.length;i++)
+      {
+        int[] ids=new int[]{bane1[i],bane2[i],baneBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Cloaks
     {
@@ -106,6 +120,13 @@ public class MordorHighEnchanter
       int[] cloaksBAonA=new int[]{ 1879361127, 1879361067 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaksBAonA);
       _injector.injectArmourType(ArmourType.LIGHT,cloaksBAonA);
+
+      // Share stats
+      for(int i=0;i<cloaks1.length;i++)
+      {
+        int[] ids=new int[]{cloaks1[i],cloaks2[i],cloaksBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
   }
 
@@ -144,6 +165,13 @@ public class MordorHighEnchanter
       int[] vanguardBAonA=new int[]{ 1879361074, 1879361016, 1879361054, 1879361065 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,vanguardBAonA);
       _injector.injectArmourType(ArmourType.MEDIUM,vanguardBAonA);
+
+      // Share stats
+      for(int i=0;i<vanguard1.length;i++)
+      {
+        int[] ids=new int[]{vanguard1[i],vanguard2[i],vanguardBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Barter Incomparable Armor (Mordor's Bane)
     {
@@ -171,6 +199,13 @@ public class MordorHighEnchanter
       int[] baneBAonA=new int[]{ 1879361060, 1879361077, 1879361104, 1879361117 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,baneBAonA);
       _injector.injectArmourType(ArmourType.MEDIUM,baneBAonA);
+
+      // Share stats
+      for(int i=0;i<bane1.length;i++)
+      {
+        int[] ids=new int[]{bane1[i],bane2[i],baneBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Cloaks
     {
@@ -192,6 +227,13 @@ public class MordorHighEnchanter
       int[] cloaksBAonA=new int[]{ 1879361092, 1879361027 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaksBAonA);
       _injector.injectArmourType(ArmourType.LIGHT,cloaksBAonA);
+
+      // Share stats
+      for(int i=0;i<cloaks1.length;i++)
+      {
+        int[] ids=new int[]{cloaks1[i],cloaks2[i],cloaksBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
   }
 
@@ -223,6 +265,13 @@ public class MordorHighEnchanter
       int[] vanguardBAonA=new int[]{ 1879361119, 1879361061, 1879361055, 1879361122 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,vanguardBAonA);
       _injector.injectArmourType(ArmourType.MEDIUM,vanguardBAonA);
+
+      // Share stats
+      for(int i=0;i<vanguard1.length;i++)
+      {
+        int[] ids=new int[]{vanguard1[i],vanguard2[i],vanguardBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Barter Incomparable Armor (Mordor's Bane)
     {
@@ -250,6 +299,13 @@ public class MordorHighEnchanter
       int[] baneBAonA=new int[]{ 1879361036, 1879361058, 1879361105, 1879361118 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,baneBAonA);
       _injector.injectArmourType(ArmourType.MEDIUM,baneBAonA);
+
+      // Share stats
+      for(int i=0;i<bane1.length;i++)
+      {
+        int[] ids=new int[]{bane1[i],bane2[i],baneBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
     // Cloaks
     {
@@ -271,6 +327,13 @@ public class MordorHighEnchanter
       int[] cloaksBAonA=new int[]{ 1879361019, 1879361051 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaksBAonA);
       _injector.injectArmourType(ArmourType.LIGHT,cloaksBAonA);
+
+      // Share stats
+      for(int i=0;i<cloaks1.length;i++)
+      {
+        int[] ids=new int[]{cloaks1[i],cloaks2[i],cloaksBAonA[i]};
+        _injector.shareStats(ids);
+      }
     }
   }
 }
