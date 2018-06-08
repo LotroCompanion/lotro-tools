@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
-import delta.games.lotro.maps.data.CategoriesManager;
-import delta.games.lotro.maps.data.Category;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.Map;
@@ -32,17 +30,6 @@ public class MapPageParser
   private static final String STARTY_SEED="map.StartY = ";
   private static final String SCALE2MAP_SEED="map.ScaleToMap = ";
   private static final String MODIFIED_SEED="map.Modified = ";
-
-  private CategoriesManager _categories;
-
-  /**
-   * Constructor.
-   * @param categories
-   */
-  public MapPageParser(CategoriesManager categories)
-  {
-    _categories=categories;
-  }
 
   /**
    * Parse map data.
@@ -169,12 +156,7 @@ public class MapPageParser
     {
       GeoPoint position=new GeoPoint(longitude.floatValue(),latitude.floatValue());
       marker.setPosition(position);
-      Category category=_categories.getByCode(categoryCode.intValue());
-      if (category==null)
-      {
-        _logger.warn("Category not found: "+categoryCode);
-      }
-      marker.setCategory(category);
+      marker.setCategoryCode(categoryCode.intValue());
     }
     else
     {

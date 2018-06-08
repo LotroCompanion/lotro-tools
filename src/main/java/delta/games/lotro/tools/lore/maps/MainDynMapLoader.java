@@ -43,16 +43,17 @@ public class MainDynMapLoader
     // Maps
     File mapsFile=dynMap.download(DynMapConstants.MAP_PAGE,"map.js");
     List<String> mapsPage=TextUtils.readAsLines(mapsFile);
-    MapsPageParser mapsParser=new MapsPageParser();
+    File mapsDir=new File(_outDir,"maps");
+    MapsPageParser mapsParser=new MapsPageParser(mapsDir);
     List<MapBundle> maps=mapsParser.parse(mapsPage,categories);
     // Load all map data
     for(MapBundle map: maps)
     {
       String key=map.getKey();
-      File mapDir=new File(new File(_outDir,"maps"),key);
       // JS
       String jsUrl=DynMapConstants.BASE_URL+"/data/"+key+".js";
       File js=dynMap.download(jsUrl,key+".js");
+      map.getData().clear();
       loadMapData(map,js,categories);
       // Inspect
       MarkersManager markers=map.getData();
@@ -70,7 +71,8 @@ public class MainDynMapLoader
       for(String locale : locales)
       {
         String mapUrl=DynMapConstants.BASE_URL+"/images/maps/"+locale+'/'+key+".jpg";
-        File mapImageFile=new File(mapDir,"map_"+locale+".jpg");
+        File mapRootDir=map.getRootDir();
+        File mapImageFile=new File(mapRootDir,"map_"+locale+".jpg");
         if (!mapImageFile.exists())
         {
           dynMap.download(mapUrl,mapImageFile);
@@ -79,8 +81,7 @@ public class MainDynMapLoader
       System.out.println(map.getMap());
       // Write file
       MapXMLWriter writer=new MapXMLWriter();
-      File toFile=new File(mapDir,"markers.xml");
-      writer.writeMarkersFile(toFile,map,EncodingNames.UTF_8);
+      writer.writeMapFiles(map,EncodingNames.UTF_8);
     }
 
     // Write categories file
@@ -102,7 +103,7 @@ public class MainDynMapLoader
 
   private void loadMapData(MapBundle map, File js, CategoriesManager categories)
   {
-    MapPageParser parser=new MapPageParser(categories);
+    MapPageParser parser=new MapPageParser();
     parser.parse(map,js);
   }
 

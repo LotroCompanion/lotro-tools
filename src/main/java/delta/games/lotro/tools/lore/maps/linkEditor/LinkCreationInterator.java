@@ -56,7 +56,7 @@ public class LinkCreationInterator
     String target=bundle.getKey();
     GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
     MapLink link=new MapLink(target,hotPoint);
-    map.addLink(link);
+    currentMap.getLinks().add(link);
     _manager.saveMap(map.getKey());
     _canvas.repaint();
   }

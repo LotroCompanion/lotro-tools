@@ -31,7 +31,7 @@ public class MainMapsChecker
     {
       Map map=mapBundle.getMap();
       String mapKey=map.getKey();
-      List<MapLink> links=map.getAllLinks();
+      List<MapLink> links=mapBundle.getLinks();
       int nbErrorsInMap=0;
       for(MapLink link : links)
       {

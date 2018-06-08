@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.maps;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,17 @@ public class MapsPageParser
 
   private static final String MAP_MARKER="obj.push(new Map(";
   private static final String CATEGORY_LINE=": type =";
+
+  private File _rootDir;
+
+  /**
+   * Constructor.
+   * @param rootDir Root directory.
+   */
+  public MapsPageParser(File rootDir)
+  {
+    _rootDir=rootDir;
+  }
 
   /**
    * Parse maps index data.
@@ -82,7 +94,8 @@ public class MapsPageParser
         String mapKey=data.substring(0,commaIndex);
         if (mapKey.startsWith("\"")) mapKey=mapKey.substring(1);
         if (mapKey.endsWith("\"")) mapKey=mapKey.substring(0,mapKey.length()-1);
-        map=new MapBundle(mapKey);
+        File mapDir=new File(_rootDir,mapKey);
+        map=new MapBundle(mapKey,mapDir);
         String labels=data.substring(commaIndex+1).trim();
         if (labels.endsWith("));"))
         {

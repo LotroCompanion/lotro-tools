@@ -44,10 +44,10 @@ public class MainMapsCleaner
       List<Marker> markers=markersManager.getAllMarkers();
       for(Marker marker : markers)
       {
-        Category category=marker.getCategory();
-        if (category!=null)
+        int categoryCode=marker.getCategoryCode();
+        if (categoryCode!=0)
         {
-          Integer code=Integer.valueOf(category.getCode());
+          Integer code=Integer.valueOf(categoryCode);
           IntegerHolder counter=markersByCategory.get(code);
           if (counter==null)
           {

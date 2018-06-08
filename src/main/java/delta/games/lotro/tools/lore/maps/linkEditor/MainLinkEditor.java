@@ -43,7 +43,7 @@ public class MainLinkEditor
     {
       public void mapChangeRequest(String key)
       {
-        navigationManager.setMap(mapsManager.getMapByKey(key).getMap());
+        navigationManager.setMap(mapsManager.getMapByKey(key));
       }
     };
     navigationManager.setNavigationListener(listener);
@@ -51,7 +51,7 @@ public class MainLinkEditor
     canvas.getMarkersLayer().setFilter(filter);
     String key=bundle.getKey();
     canvas.setMap(key);
-    navigationManager.setMap(bundle.getMap());
+    navigationManager.setMap(bundle);
     JFrame f=new JFrame();
     String title=bundle.getLabel();
     f.setTitle(title);
