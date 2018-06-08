@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
-import delta.games.lotro.tools.lore.maps.TmpFiles;
+import delta.games.lotro.tools.utils.TmpFiles;
 
 /**
  * Interface with the lotro-wiki site.

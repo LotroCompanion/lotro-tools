@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.maps;
+package delta.games.lotro.tools.lore.maps.dynmap;
 
 import java.io.File;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FileCopy;
+import delta.games.lotro.tools.utils.TmpFiles;
 
 /**
  * Interface with the dynmap site.

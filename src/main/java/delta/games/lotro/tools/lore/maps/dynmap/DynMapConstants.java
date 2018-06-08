@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.maps;
+package delta.games.lotro.tools.lore.maps.dynmap;
 
 /**
  * Constants in the dynmap data loader.
