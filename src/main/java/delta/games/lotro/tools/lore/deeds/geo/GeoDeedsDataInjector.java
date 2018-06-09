@@ -20,6 +20,10 @@ public class GeoDeedsDataInjector
 {
   private HashMap<String,DeedDescription> _deeds;
 
+  /**
+   * Constructor.
+   * @param deeds Deeds to update.
+   */
   public GeoDeedsDataInjector(List<DeedDescription> deeds)
   {
     _deeds=new HashMap<String,DeedDescription>();
@@ -29,13 +33,15 @@ public class GeoDeedsDataInjector
     }
   }
 
+  /**
+   * Perform data injection.
+   */
   public void doIt()
   {
     doTreasureCaches();
+    // TODO:
+    // Erebor: dwarf markers
   }
-
-  // Erebor: dwarf markers
-  // Treasure Cache: NMW
 
   private void doTreasureCaches()
   {
