@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds;
+package delta.games.lotro.tools.lore.deeds.lotrocompendium;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.plugins.LuaParser;
+import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 
 /**
  * Deeds loader from LotroCompendium data.

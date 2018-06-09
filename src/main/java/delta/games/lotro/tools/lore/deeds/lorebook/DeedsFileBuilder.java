@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds;
+package delta.games.lotro.tools.lore.deeds.lorebook;
 
 import java.io.File;
 import java.util.ArrayList;

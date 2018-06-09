@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds;
+package delta.games.lotro.tools.lore.deeds.lorebook;
 
 import java.io.File;
 import java.util.List;
@@ -11,6 +11,7 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 
 /**
  * Builds a single deeds file from a collection of deed files.
