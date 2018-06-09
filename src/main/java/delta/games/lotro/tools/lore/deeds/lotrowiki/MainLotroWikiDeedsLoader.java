@@ -18,6 +18,7 @@ import delta.games.lotro.tools.lore.deeds.checks.CheckDeedLinks;
 import delta.games.lotro.tools.lore.deeds.checks.CheckItemRewardsInDeeds;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedNames;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedsText;
+import delta.games.lotro.tools.lore.deeds.geo.GeoDeedsDataInjector;
 
 /**
  * Download deeds data from the site lotro-wiki.
@@ -327,6 +328,8 @@ public class MainLotroWikiDeedsLoader
     }
     // Additional deeds
     new DeedsInjector().addDeeds(deeds);
+    // Geographic data injection
+    new GeoDeedsDataInjector(deeds).doIt();
     // Resolve deed links
     new DeedLinksResolver(deeds).doIt();
     int nbDeeds=deeds.size();
