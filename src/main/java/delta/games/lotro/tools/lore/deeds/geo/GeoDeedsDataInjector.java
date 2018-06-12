@@ -14,6 +14,7 @@ import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.MarkersManager;
 
 /**
+ * Injector for geographic data in deeds.
  * @author DAM
  */
 public class GeoDeedsDataInjector
@@ -39,6 +40,11 @@ public class GeoDeedsDataInjector
   public void doIt()
   {
     doTreasureCaches();
+    // The Wastes
+    doRangerCaches();
+    doAncientWeapons();
+    // Mordor: rare chests
+    doMordorRareChests();
     // TODO:
     // Erebor: dwarf markers
   }
@@ -66,6 +72,41 @@ public class GeoDeedsDataInjector
 
   private void doTreasureCaches(String deedKey,String mapKey,int expectedPointsCount)
   {
+    List<Marker> markers=findMarkersInMap(mapKey,"Treasure cache");
+    registerPoints(deedKey,mapKey,markers,expectedPointsCount);
+  }
+
+  private void doRangerCaches()
+  {
+    String mapKey="post_pelennor_the_wastes";
+    List<Marker> markers=findMarkersInMap(mapKey,"Ranger cache");
+    registerPoints("Forgotten_Caches",mapKey,markers,8);
+  }
+
+  private void doAncientWeapons()
+  {
+    String mapKey="post_pelennor_the_wastes";
+    List<Marker> markers=findMarkersInMap(mapKey,"Ancient weapon");
+    registerPoints("Relics_of_the_Last_Alliance",mapKey,markers,8);
+  }
+
+  private void doMordorRareChests()
+  {
+    doMordorRareChestsForMap("mordor_udun","Rare_Gorgoroth_Chests_of_Ud%C3%BBn");
+    doMordorRareChestsForMap("mordor_dor_amarth","Rare_Gorgoroth_Chests_of_Dor_Amarth");
+    doMordorRareChestsForMap("mordor_lhingris","Rare_Gorgoroth_Chests_of_Lhingris");
+    doMordorRareChestsForMap("mordor_talath_urui","Rare_Gorgoroth_Chests_of_Talath_%C3%9Arui");
+    doMordorRareChestsForMap("mordor_agarnaith","Rare_Gorgoroth_Chests_of_Agarnaith");
+  }
+
+  private void doMordorRareChestsForMap(String mapKey, String deedKey)
+  {
+    List<Marker> markers=findMarkersInMap(mapKey,"Rare Mordor chest");
+    registerPoints(deedKey,mapKey,markers,5);
+  }
+
+  private void registerPoints(String deedKey, String mapKey, List<Marker> markers,int expectedPointsCount)
+  {
     System.out.println("Geographic data injection for: "+deedKey);
     DeedDescription deed=_deeds.get(deedKey);
     if (deed==null)
@@ -73,7 +114,6 @@ public class GeoDeedsDataInjector
       System.out.println("Deed not found!");
       return;
     }
-    List<Marker> markers=findMarkersInMap(mapKey,"Treasure cache");
     int nbPoints=markers.size();
     if (nbPoints>0)
     {
