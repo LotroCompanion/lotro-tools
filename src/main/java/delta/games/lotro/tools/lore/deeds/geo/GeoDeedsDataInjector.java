@@ -45,8 +45,12 @@ public class GeoDeedsDataInjector
     doAncientWeapons();
     // Mordor: rare chests
     doMordorRareChests();
+    doNorthernMirkwoodDwarfMarkers();
+    doPelennorHaradrimSupplies();
+    doUdunForges();
     // TODO:
-    // Erebor: dwarf markers
+    // Erebor: Old papers => not possible
+    // NMW: path of the company
   }
 
   private void doTreasureCaches()
@@ -105,7 +109,33 @@ public class GeoDeedsDataInjector
     registerPoints(deedKey,mapKey,markers,5);
   }
 
-  private void registerPoints(String deedKey, String mapKey, List<Marker> markers,int expectedPointsCount)
+  private void doNorthernMirkwoodDwarfMarkers()
+  {
+    List<Marker> markers=findMarkersInMap("northern_mirkwood","Dwarf marker");
+    registerPoints("Surveyor_of_the_Dwarvish_Markers","northern_mirkwood",markers,16);
+  }
+
+  private void doPelennorHaradrimSupplies()
+  {
+    List<Marker> markers=findMarkersInMap("post_pelennor_march_of_the_king","Haradrim Supplies");
+    registerPoints("Haradrim_Remnants","post_pelennor_march_of_the_king",markers,6);
+  }
+
+  private void doUdunForges()
+  {
+    String mapKey="mordor_udun";
+    List<Marker> markersForgework=findMarkersInMap(mapKey,"Great forge-work");
+    registerPoints("Forgeworks_of_Ud%C3%BBn",mapKey,markersForgework,17,16);
+    List<Marker> markersForgefires=findMarkersInMap(mapKey,"Forging furnage");
+    registerPoints("Forge-fires_of_Ud%C3%BBn",mapKey,markersForgefires,18,15);
+  }
+
+  private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount)
+  {
+    registerPoints(deedKey,mapKey,markers,expectedPointsCount,expectedPointsCount);
+  }
+
+  private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
   {
     System.out.println("Geographic data injection for: "+deedKey);
     DeedDescription deed=_deeds.get(deedKey);
@@ -117,7 +147,7 @@ public class GeoDeedsDataInjector
     int nbPoints=markers.size();
     if (nbPoints>0)
     {
-      DeedGeoData data=new DeedGeoData(nbPoints);
+      DeedGeoData data=new DeedGeoData(requiredPointsCount);
       for(Marker marker : markers)
       {
         DeedGeoPoint point=new DeedGeoPoint(mapKey,marker.getId());
