@@ -9,7 +9,8 @@ import delta.common.utils.io.FileIO;
 import delta.tools.images.ImageTools;
 
 /**
- * @author dm
+ * Compare 2 PNG files.
+ * @author DAM
  */
 public class ComparePngFiles
 {
@@ -158,14 +159,4 @@ public class ComparePngFiles
     }
     return false;
   }
-
-  /**
-   * @param args
-   */
-  public static void main(String[] args)
-  {
-    // ToDo Auto-generated method stub
-
-  }
-
 }
