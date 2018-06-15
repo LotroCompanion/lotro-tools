@@ -4,10 +4,10 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ItemBinding;
 
 /**
- * Adds complements on items from the 'High Enchanter' of Mordor.
+ * Adds complements on armors from the 'High Enchanter' of Mordor.
  * @author DAM
  */
-public class MordorHighEnchanter
+public class MordorHighEnchanterArmors
 {
   private FactoryCommentsInjector _injector;
 
@@ -15,7 +15,7 @@ public class MordorHighEnchanter
    * Constructor.
    * @param injector Injector.
    */
-  public MordorHighEnchanter(FactoryCommentsInjector injector)
+  public MordorHighEnchanterArmors(FactoryCommentsInjector injector)
   {
     _injector=injector;
   }

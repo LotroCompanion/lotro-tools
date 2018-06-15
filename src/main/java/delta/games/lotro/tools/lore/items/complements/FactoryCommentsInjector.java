@@ -38,7 +38,8 @@ public class FactoryCommentsInjector
   {
     new NorthernMirkwoodItems(this).doIt();
     new MordorKeeperOfMysteriesItems(this).doIt();
-    new MordorHighEnchanter(this).doIt();
+    new MordorHighEnchanterArmors(this).doIt();
+    new MordorHighEnchanterJewels(this).doIt();
   }
 
   /**
@@ -142,6 +143,7 @@ public class FactoryCommentsInjector
         {
           ((Armour)item).setArmourValue(((Armour)source).getArmourValue());
         }
+        item.setEquipmentLocation(source.getEquipmentLocation());
       }
     }
   }
