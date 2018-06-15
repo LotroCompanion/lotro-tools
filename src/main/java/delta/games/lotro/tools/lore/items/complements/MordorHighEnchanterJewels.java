@@ -9,6 +9,7 @@ import delta.games.lotro.lore.items.ItemBinding;
 public class MordorHighEnchanterJewels
 {
   private static final String JEWELS_COMMENT="Barter Mordor High Enchanter: 330 Ash";
+  private static final String YELLOW_RING_COMMENT="Barter Mordor High Enchanter: 2000 Ash or 800 in upgrade";
   private FactoryCommentsInjector _injector;
 
   /**
@@ -25,10 +26,24 @@ public class MordorHighEnchanterJewels
    */
   public void doIt()
   {
-    doMightVanguard();
-    doMightMordorBane();
+    doMight();
     doAgility();
     doWill();
+  }
+
+  private void doMight()
+  {
+    doMightYellowRing();
+    doMightVanguard();
+    doMightMordorBane();
+  }
+
+  private void doMightYellowRing()
+  {
+    // 1879361965 Turca (330) BonAonA
+    int[] turca=new int[]{ 1879361965 };
+    _injector.injectComment(YELLOW_RING_COMMENT,turca);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,turca);
   }
 
   private void doMightVanguard()
@@ -85,9 +100,6 @@ public class MordorHighEnchanterJewels
     _injector.shareStats(ear2);
     int[] pocket=new int[]{ 1879361385, 1879361834, 1879362182 };
     _injector.shareStats(pocket);
-
-    // TODO Turca
-    // 1879361965 Turca (330) BonAonA
   }
 
   private void doMightMordorBane()
