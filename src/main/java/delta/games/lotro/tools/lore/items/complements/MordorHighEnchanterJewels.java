@@ -131,7 +131,6 @@ public class MordorHighEnchanterJewels
       _injector.injectComment(JEWELS_COMMENT,mordorBane);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,mordorBane);
     }
-
     // Bind on Acquire 2
     {
       // 1879362195 Polished Torc of Mordor's Bane BonA
@@ -258,7 +257,6 @@ public class MordorHighEnchanterJewels
       _injector.injectComment(JEWELS_COMMENT,mordorBane);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,mordorBane);
     }
-
     // Bind on Acquire 2
     {
       // 1879362177 Graceful Pendant of Mordor's Bane BonA
@@ -287,5 +285,126 @@ public class MordorHighEnchanterJewels
 
   private void doWill()
   {
+    doWillYellowRing();
+    doWillVanguard();
+    doWillMordorBane();
+  }
+
+  private void doWillYellowRing()
+  {
+    // 1879361964 Iswa (330) BonAonA
+    int[] iswa=new int[]{ 1879361964 };
+    _injector.injectComment(YELLOW_RING_COMMENT,iswa);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,iswa);
+  }
+
+  private void doWillVanguard()
+  {
+    // Barter Incomparable Jewels (Vanguard)
+    // Bind to Account on Acquire
+    {
+      // 1879361245 Filigree Necklace of the Expedition's Vanguard BonAonA
+      // 1879361308 Runed Jade Ring of the Expedition's Vanguard BonAonA
+      // 1879361388 Mysterious Onyx Ring of the Expedition's Vanguard BonAonA
+      // 1879361409 Twined Silver Armlet of the Expedition's Vanguard BonAonA
+      // 1879361307 Amethyst Silver Ear Cuff of the Expedition's Vanguard BonAonA
+      // 1879361252 Glowing Phial of the Expedition's Vanguard BonAonA
+      int[] vanguardBAonA=new int[]{ 1879361245, 1879361308, 1879361388, 1879361409, 1879361307, 1879361252 };
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE, vanguardBAonA);
+    }
+    // Bind on Acquire 1
+    {
+      // 1879361804 Filigree Necklace of the Expedition's Vanguard BonA
+      // 1879361814 Runed Jade Ring of the Expedition's Vanguard BonA
+      // 1879361867 Mysterious Onyx Ring of the Expedition's Vanguard BonA
+      // 1879362211 Intricate Gold Armlet of the Expedition's Vanguard
+      // 1879361798 Twined Silver Armlet of the Expedition's Vanguard BonA
+      // 1879362222 Fire Opal Gold Ear Cuff of the Expedition's Vanguard BonA
+      // 1879361817 Amethyst Silver Ear Cuff of the Expedition's Vanguard BonA
+      // 1879361774 Glowing Phial of the Expedition's Vanguard BonA
+      int[] vanguard=new int[]{ 1879361804, 1879361814, 1879361867, 1879362211,
+          1879361798, 1879362222, 1879361817, 1879361774 };
+      _injector.injectComment(JEWELS_COMMENT,vanguard);
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard);
+    }
+    // Bind on Acquire 2
+    {
+      // 1879362192 Filigree Necklace of the Expedition's Vanguard BonA
+      // 1879362179 Runed Jade Ring of the Expedition's Vanguard BonA
+      // 1879362191 Mysterious Onyx Ring of the Expedition's Vanguard BonA
+      // 1879362223 Twined Silver Armlet of the Expedition's Vanguard BonA
+      // 1879362235 Amethyst Silver Ear Cuff of the Expedition's Vanguard BonA
+      // 1879362219 Glowing Phial of the Expedition's Vanguard BonA
+      int[] vanguard=new int[]{ 1879362192, 1879362179, 1879362191, 1879362223, 1879362235, 1879362219 };
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard);
+    }
+
+    int[] neck=new int[]{ 1879361245, 1879361804, 1879362192 };
+    _injector.shareStats(neck);
+    int[] finger1=new int[]{ 1879361308, 1879361814, 1879362179 };
+    _injector.shareStats(finger1);
+    int[] finger2=new int[]{ 1879361388, 1879361867, 1879362191 };
+    _injector.shareStats(finger2);
+    int[] wrist2=new int[]{ 1879361409, 1879361798, 1879362223 };
+    _injector.shareStats(wrist2);
+    int[] ear2=new int[]{ 1879361307, 1879361817, 1879362235 };
+    _injector.shareStats(ear2);
+    int[] pocket=new int[]{ 1879361252, 1879361774, 1879362219 };
+    _injector.shareStats(pocket);
+  }
+
+  private void doWillMordorBane()
+  {
+    // Barter Incomparable Jewels (Mordor Bane)
+    // Bind to Account on Acquire
+    {
+      // 1879361355 Filigree Necklace of Mordor's Bane BonAonA
+      // 1879361411 Runed Jade Ring of Mordor's Bane BonAonA
+      // 1879361331 Mysterious Onyx Ring of Mordor's Bane BonAonA
+      // 1879361389 Twined Silver Armlet of Mordor's Bane BonAonA
+      // 1879361410 Amethyst Silver Ear Cuff of Mordor's Bane BonAonA
+      // 1879361247 Glowing Phial of Mordor's Bane BonAonA
+      int[] mordorBaneBAonA=new int[]{ 1879361355, 1879361411, 1879361331, 1879361389, 1879361410, 1879361247 };
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE, mordorBaneBAonA);
+    }
+    // Bind on Acquire 1
+    {
+      // 1879361882 Filigree Necklace of Mordor's Bane BonA
+      // 1879361761 Runed Jade Ring of Mordor's Bane BonA
+      // 1879361823 Mysterious Onyx Ring of Mordor's Bane BonA
+      // 1879362215 Intricate Gold Armlet of Mordor's Bane BonA
+      // 1879361770 Twined Silver Armlet of Mordor's Bane BonA
+      // 1879362181 Fire Opal Gold Ear Cuff of Mordor's Bane BonA
+      // 1879361822 Amethyst Silver Ear Cuff of Mordor's Bane BonA
+      // 1879361856 Glowing Phial of Mordor's Bane BonA
+      int[] mordorBane=new int[]{ 1879361882, 1879361761, 1879361823, 1879362215,
+          1879361770, 1879362181, 1879361822, 1879361856 };
+      _injector.injectComment(JEWELS_COMMENT,mordorBane);
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,mordorBane);
+    }
+    // Bind on Acquire 2
+    {
+      // 1879362187 Filigree Necklace of Mordor's Bane BonA
+      // 1879362198 Runed Jade Ring of Mordor's Bane BonA
+      // 1879362190 Mysterious Onyx Ring of Mordor's Bane BonA
+      // 1879362228 Twined Silver Armlet of Mordor's Bane BonA
+      // 1879362232 Amethyst Silver Ear Cuff of Mordor's Bane BonA
+      // 1879362201 Glowing Phial of Mordor's Bane BonA
+      int[] mordorBane=new int[]{ 1879362187, 1879362198, 1879362190, 1879362228, 1879362232, 1879362201 };
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,mordorBane);
+    }
+
+    int[] neck=new int[]{ 1879361355, 1879361882, 1879362187 };
+    _injector.shareStats(neck);
+    int[] finger1=new int[]{ 1879361411, 1879361761, 1879362198 };
+    _injector.shareStats(finger1);
+    int[] finger2=new int[]{ 1879361331, 1879361823, 1879362190 };
+    _injector.shareStats(finger2);
+    int[] wrist2=new int[]{ 1879361389, 1879361770, 1879362228 };
+    _injector.shareStats(wrist2);
+    int[] ear2=new int[]{ 1879361410, 1879361822, 1879362232 };
+    _injector.shareStats(ear2);
+    int[] pocket=new int[]{ 1879361247, 1879361856, 1879362201 };
+    _injector.shareStats(pocket);
   }
 }
