@@ -9,6 +9,8 @@ import delta.games.lotro.lore.items.ItemBinding;
  */
 public class MordorHighEnchanterArmors
 {
+  private static final String COMMENT="Barter Mordor High Enchanter: 420 Ash";
+
   private FactoryCommentsInjector _injector;
 
   /**
@@ -27,11 +29,11 @@ public class MordorHighEnchanterArmors
   {
     doHeavyArmor();
     doMediumArmor();
+    doLightArmor();
   }
 
   private void doHeavyArmor()
   {
-    String comment="Barter Mordor High Enchanter: 420 Ash";
     // Barter Incomparable Armor (Vanguard)
     {
       // 1879361726 Polished Helm of the Expedition's Vanguard - BonA
@@ -39,7 +41,7 @@ public class MordorHighEnchanterArmors
       // 1879361723 Articulated Gauntlets of the Expedition's Vanguard - BonA
       // 1879361653 Hardened Sabatons of the Expedition's Vanguard - BonA
       int[] vanguard1=new int[]{ 1879361726, 1879361647, 1879361723, 1879361653 };
-      _injector.injectComment(comment,vanguard1);
+      _injector.injectComment(COMMENT,vanguard1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard1);
       _injector.injectArmourType(ArmourType.HEAVY,vanguard1);
 
@@ -73,7 +75,7 @@ public class MordorHighEnchanterArmors
       // 1879361703 Hardened Sabatons of Mordor's Bane - BonA
       // 1879361660 Articulated Gauntlets of Mordor's Bane - BonA
       int[] bane1=new int[]{ 1879361672, 1879361745, 1879361703, 1879361660 };
-      _injector.injectComment(comment,bane1);
+      _injector.injectComment(COMMENT,bane1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,bane1);
       _injector.injectArmourType(ArmourType.HEAVY,bane1);
 
@@ -105,7 +107,7 @@ public class MordorHighEnchanterArmors
       // 1879361648 Embroidered Heavy Cloak of the Expedition's Vanguard - BonA
       // 1879361708 Embroidered Heavy Cloak of Mordor's Bane - BonA
       int[] cloaks1=new int[]{ 1879361648, 1879361708 };
-      _injector.injectComment(comment,cloaks1);
+      _injector.injectComment(COMMENT,cloaks1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,cloaks1);
       _injector.injectArmourType(ArmourType.LIGHT,cloaks1);
 
@@ -132,12 +134,11 @@ public class MordorHighEnchanterArmors
 
   private void doMediumArmor()
   {
-    String comment="Barter Mordor High Enchanter: 420 Ash";
-    doMediumMightArmor(comment);
-    doMediumAgilityArmor(comment);
+    doMediumMightArmor();
+    doMediumAgilityArmor();
   }
 
-  private void doMediumMightArmor(String comment)
+  private void doMediumMightArmor()
   {
     // Barter Incomparable Armor (Vanguard)
     {
@@ -146,7 +147,7 @@ public class MordorHighEnchanterArmors
       // 1879361732 Mighty Gages of the Expedition's Vanguard - BonA
       // 1879361680 Forceful Boots of the Expedition's Vanguard - BonA
       int[] vanguard1=new int[]{ 1879361750, 1879361674, 1879361732, 1879361680 };
-      _injector.injectComment(comment,vanguard1);
+      _injector.injectComment(COMMENT,vanguard1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard1);
       _injector.injectArmourType(ArmourType.MEDIUM,vanguard1);
 
@@ -180,7 +181,7 @@ public class MordorHighEnchanterArmors
       // 1879361686 Mighty Gages of Mordor's Bane - BonA
       // 1879361704 Forceful Boots of Mordor's Bane - BonA
       int[] bane1=new int[]{ 1879361749, 1879361665, 1879361686, 1879361704 };
-      _injector.injectComment(comment,bane1);
+      _injector.injectComment(COMMENT,bane1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,bane1);
       _injector.injectArmourType(ArmourType.MEDIUM,bane1);
 
@@ -212,7 +213,7 @@ public class MordorHighEnchanterArmors
       // 1879361685 Embroidered Wool Cloak of the Expedition's Vanguard - BonA
       // 1879361737 Embroidered Wool Cloak of Mordor's Bane - BonA
       int[] cloaks1=new int[]{ 1879361685, 1879361737 };
-      _injector.injectComment(comment,cloaks1);
+      _injector.injectComment(COMMENT,cloaks1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,cloaks1);
       _injector.injectArmourType(ArmourType.LIGHT,cloaks1);
 
@@ -237,7 +238,7 @@ public class MordorHighEnchanterArmors
     }
   }
 
-  private void doMediumAgilityArmor(String comment)
+  private void doMediumAgilityArmor()
   {
     // Barter Incomparable Armor (Vanguard)
     {
@@ -246,7 +247,7 @@ public class MordorHighEnchanterArmors
       // 1879361690 Quick Gages of the Expedition's Vanguard - BonA
       // 1879361661 Nimble Boots of the Expedition's Vanguard - BonA
       int[] vanguard1=new int[]{ 1879361649, 1879361709, 1879361690, 1879361661 };
-      _injector.injectComment(comment,vanguard1);
+      _injector.injectComment(COMMENT,vanguard1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard1);
       _injector.injectArmourType(ArmourType.MEDIUM,vanguard1);
 
@@ -280,7 +281,7 @@ public class MordorHighEnchanterArmors
       // 1879361657 Quick Gages of Mordor's Bane - BonA
       // 1879361755 Nimble Boots of Mordor's Bane - BonA
       int[] bane1=new int[]{ 1879361691, 1879361734, 1879361657, 1879361755 };
-      _injector.injectComment(comment,bane1);
+      _injector.injectComment(COMMENT,bane1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,bane1);
       _injector.injectArmourType(ArmourType.MEDIUM,bane1);
 
@@ -312,7 +313,7 @@ public class MordorHighEnchanterArmors
       // 1879361700 Embroidered Silk Cloak of the Expedition's Vanguard - BonA
       // 1879361677 Embroidered Silk Cloak of Mordor's Bane - BonA
       int[] cloaks1=new int[]{ 1879361700, 1879361677 };
-      _injector.injectComment(comment,cloaks1);
+      _injector.injectComment(COMMENT,cloaks1);
       _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,cloaks1);
       _injector.injectArmourType(ArmourType.LIGHT,cloaks1);
 
@@ -325,6 +326,106 @@ public class MordorHighEnchanterArmors
       // 1879361019 Embroidered Silk Cloak of the Expedition's Vanguard - BAonA
       // 1879361051 Embroidered Silk Cloak of Mordor's Bane - BAonA
       int[] cloaksBAonA=new int[]{ 1879361019, 1879361051 };
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaksBAonA);
+      _injector.injectArmourType(ArmourType.LIGHT,cloaksBAonA);
+
+      // Share stats
+      for(int i=0;i<cloaks1.length;i++)
+      {
+        int[] ids=new int[]{cloaks1[i],cloaks2[i],cloaksBAonA[i]};
+        _injector.shareStats(ids);
+      }
+    }
+  }
+
+  private void doLightArmor()
+  {
+    // Barter Incomparable Armor (Vanguard)
+    {
+      // 1879361668 Gilded Cap of the Expedition's Vanguard - BonA
+      // 1879361646 Embossed Mantle of the Expedition's Vanguard - BonA
+      // 1879361662 Runed Gloves of the Expedition's Vanguard - BonA
+      // 1879361733 Rugged Shoes of the Expedition's Vanguard - BonA
+      int[] vanguard1=new int[]{ 1879361668, 1879361646, 1879361662, 1879361733 };
+      _injector.injectComment(COMMENT,vanguard1);
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard1);
+      _injector.injectArmourType(ArmourType.LIGHT,vanguard1);
+
+      // 1879362148 Gilded Cap of the Expedition's Vanguard - BonA
+      // 1879362159 Embossed Mantle of the Expedition's Vanguard - BonA
+      // 1879362157 Runed Gloves of the Expedition's Vanguard - BonA
+      // 1879362146 Rugged Shoes of the Expedition's Vanguard - BonA
+      int[] vanguard2=new int[]{ 1879362148, 1879362159, 1879362157, 1879362146 };
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,vanguard2);
+      _injector.injectArmourType(ArmourType.LIGHT,vanguard2);
+
+      // 1879361063 Gilded Cap of the Expedition's Vanguard - BAonA
+      // 1879361029 Embossed Mantle of the Expedition's Vanguard - BAonA
+      // 1879361038 Runed Gloves of the Expedition's Vanguard - BAonA
+      // 1879361082 Rugged Shoes of the Expedition's Vanguard - BAonA
+      int[] vanguardBAonA=new int[]{ 1879361063, 1879361029, 1879361038, 1879361082 };
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,vanguardBAonA);
+      _injector.injectArmourType(ArmourType.LIGHT,vanguardBAonA);
+
+      // Share stats
+      for(int i=0;i<vanguard1.length;i++)
+      {
+        int[] ids=new int[]{vanguard1[i],vanguard2[i],vanguardBAonA[i]};
+        _injector.shareStats(ids);
+      }
+    }
+    // Barter Incomparable Armor (Mordor's Bane)
+    {
+      // 1879361675 Gilded Cap of Mordor's Bane - BonA
+      // 1879361714 Embossed Mantle of Mordor's Bane - BonA
+      // 1879361710 Runed Gloves of Mordor's Bane - BonA
+      // 1879361650 Rugged Shoes of Mordor's Bane - BonA
+      int[] bane1=new int[]{ 1879361675, 1879361714, 1879361710, 1879361650 };
+      _injector.injectComment(COMMENT,bane1);
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,bane1);
+      _injector.injectArmourType(ArmourType.LIGHT,bane1);
+
+      // 1879362145 Gilded Cap of Mordor's Bane - BonA
+      // 1879362166 Embossed Mantle of Mordor's Bane - BonA
+      // 1879362128 Runed Gloves of Mordor's Bane - BonA
+      // 1879362154 Rugged Shoes of Mordor's Bane - BonA
+      int[] bane2=new int[]{ 1879362145, 1879362166, 1879362128, 1879362154 };
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,bane2);
+      _injector.injectArmourType(ArmourType.LIGHT,bane2);
+
+      // 1879361032 Gilded Cap of Mordor's Bane - BAonA
+      // 1879361048 Embossed Mantle of Mordor's Bane - BAonA
+      // 1879361109 Runed Gloves of Mordor's Bane - BAonA
+      // 1879361050 Rugged Shoes of Mordor's Bane - BAonA
+      int[] baneBAonA=new int[]{ 1879361032, 1879361048, 1879361109, 1879361050 };
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,baneBAonA);
+      _injector.injectArmourType(ArmourType.LIGHT,baneBAonA);
+
+      // Share stats
+      for(int i=0;i<bane1.length;i++)
+      {
+        int[] ids=new int[]{bane1[i],bane2[i],baneBAonA[i]};
+        _injector.shareStats(ids);
+      }
+    }
+    // Cloaks
+    {
+      // 1879361738 Embroidered Light Cloak of the Expedition's Vanguard - BonA
+      // 1879361689 Embroidered Light Cloak of Mordor's Bane - BonA
+      int[] cloaks1=new int[]{ 1879361738, 1879361689 };
+      _injector.injectComment(COMMENT,cloaks1);
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,cloaks1);
+      _injector.injectArmourType(ArmourType.LIGHT,cloaks1);
+
+      // 1879362134 Embroidered Light Cloak of the Expedition's Vanguard - BonA
+      // 1879362158 Embroidered Light Cloak of Mordor's Bane - BonA
+      int[] cloaks2=new int[]{ 1879362134, 1879362158 };
+      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,cloaks2);
+      _injector.injectArmourType(ArmourType.LIGHT,cloaks2);
+
+      // 1879361114 Embroidered Light Cloak of the Expedition's Vanguard - BAonA
+      // 1879361090 Embroidered Light Cloak of Mordor's Bane - BAonA
+      int[] cloaksBAonA=new int[]{ 1879361114, 1879361090 };
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaksBAonA);
       _injector.injectArmourType(ArmourType.LIGHT,cloaksBAonA);
 
