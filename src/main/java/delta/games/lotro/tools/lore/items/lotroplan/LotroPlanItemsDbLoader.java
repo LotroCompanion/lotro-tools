@@ -274,10 +274,19 @@ public class LotroPlanItemsDbLoader
     {
       classRequirementStr=fields[classesIndex].trim();
     }
-    CharacterClass classRequirement=getClassRequirement(classRequirementStr);
+    boolean mordor=table.isMordor();
+    CharacterClass classRequirement=getClassRequirement(classRequirementStr,mordor);
     if (classRequirement!=null)
     {
-      item.setRequiredClass(classRequirement);
+      boolean useIt=true;
+      if ((slot==EquipmentLocation.OFF_HAND) || (slot==EquipmentLocation.RANGED_ITEM))
+      {
+        useIt=false;
+      }
+      if (useIt)
+      {
+        item.setRequiredClass(classRequirement);
+      }
     }
 
     if ("Burglar Signals".equals(_section))
@@ -335,9 +344,12 @@ public class LotroPlanItemsDbLoader
     return item;
   }
 
-  private CharacterClass getClassRequirement(String classRequirement)
+  private CharacterClass getClassRequirement(String classRequirement, boolean mordor)
   {
-    if ("Be".equals(classRequirement)) return CharacterClass.BEORNING;
+    if (!mordor)
+    {
+      if ("Be".equals(classRequirement)) return CharacterClass.BEORNING;
+    }
     if ("Bu".equals(classRequirement)) return CharacterClass.BURGLAR;
     if ("Ca".equals(classRequirement)) return CharacterClass.CAPTAIN;
     if ("Ch".equals(classRequirement)) return CharacterClass.CHAMPION;

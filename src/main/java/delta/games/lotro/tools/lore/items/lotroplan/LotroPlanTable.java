@@ -32,7 +32,7 @@ public class LotroPlanTable
   /**
    * Index of the 'classes' column for Mordor.
    */
-  //private static final int MORDOR_CLASSES_INDEX=69;
+  private static final int MORDOR_CLASSES_INDEX=69;
   /**
    * Index of the 'category' column for Mordor.
    */
@@ -98,7 +98,7 @@ public class LotroPlanTable
     this(mordor?STATS_MORDOR:STATS);
     if (mordor)
     {
-      _classesIndex=-1; // MORDOR_CLASSES_INDEX
+      _classesIndex=MORDOR_CLASSES_INDEX;
       _notesIndex+=2;
       _categoryIndex=MORDOR_CATEGORY_INDEX;
     }
@@ -114,6 +114,15 @@ public class LotroPlanTable
     _classesIndex=CLASSES_INDEX;
     _notesIndex=NOTES_INDEX;
     _categoryIndex=-1;
+  }
+
+  /**
+   * Indicates if this is a Mordor table or not.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public boolean isMordor()
+  {
+    return _classesIndex==MORDOR_CLASSES_INDEX;
   }
 
   /**
