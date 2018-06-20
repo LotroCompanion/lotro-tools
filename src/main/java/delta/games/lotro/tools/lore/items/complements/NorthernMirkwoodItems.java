@@ -29,6 +29,7 @@ public class NorthernMirkwoodItems
     doFelegoth();
     doErebor();
     doNorthernMirkwoodCrafting();
+    doQuestItems();
   }
 
   private void doFelegoth()
@@ -649,5 +650,72 @@ public class NorthernMirkwoodItems
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
       _injector.injectArmourType(ArmourType.HEAVY,acquaintanceBoots);
     }
+  }
+
+  private void doQuestItems()
+  {
+    doChests();
+    doCloaks();
+    doLeggings();
+  }
+
+  private void doChests()
+  {
+    // Heavy
+    // 1879365594 Buttressed Chestplate of Thorin's Strength
+    // 1879365539 Buttressed Chestplate of Thorin's Memory
+    // Medium (agility)
+    // 1879365543 Reinforced Hauberk of Thranduil's Power
+    // 1879365597 Reinforced Hauberk of Thranduil's Cunning
+    // Medium (might)
+    // 1879365541 Double-mail Hauberk of Thranduil's Power
+    // 1879365564 Double-mail Hauberk of Thranduil's Cunning
+    // Light
+    // 1879365591 Woven Vest of Bard's Will" level="340
+    // 1879365548 Woven Vest of Bard's Honour" level="340
+    int[] chests=new int[]{ 1879365594, 1879365539, 1879365543, 1879365597, 1879365541, 1879365564, 1879365591, 1879365548 };
+    _injector.injectComment("Black Book of Mordor, Volume 1, 5.5: The Walls Brought Down",chests);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,chests);
+    _injector.injectArmourType(ArmourType.HEAVY,new int[]{ 1879365594, 1879365539 });
+    _injector.injectArmourType(ArmourType.MEDIUM,new int[]{ 1879365543, 1879365597, 1879365541, 1879365564 });
+    _injector.injectArmourType(ArmourType.LIGHT,new int[]{ 1879365591, 1879365548 });
+  }
+
+  private void doCloaks()
+  {
+    // 1879365572 Fantastic Heavy Cloak of Thorin's Strength
+    // 1879365582 Fantastic Heavy Cloak of Thorin's Memory
+    // 1879365552 Fantastic Silk Cloak of Thranduil's Power
+    // 1879365593 Fantastic Silk Cloak of Thranduil's Cunning
+    // 1879365570 Fantastic Wool Cloak of Thranduil's Power
+    // 1879365568 Fantastic Wool Cloak of Thranduil's Cunning
+    // 1879365569 Fantastic Light Cloak of Bard's Will
+    // 1879365587 Fantastic Light Cloak of Bard's Honour
+    int[] cloaks=new int[]{ 1879365572, 1879365582, 1879365552, 1879365593, 1879365570, 1879365568, 1879365569, 1879365587 };
+    _injector.injectComment("Black Book of Mordor, Volume 1, Chapter 6.7: Wood, Lake, Mountain, and Stone",cloaks);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
+    _injector.injectArmourType(ArmourType.LIGHT,cloaks);
+  }
+
+  private void doLeggings()
+  {
+    // Heavy
+    // 1879365544 Burnished Greaves of Thorin's Strength
+    // 1879365574 Burnished Greaves of Thorin's Memory
+    // Medium (agility)
+    // 1879365575 Agile Leggings of Thranduil's Power
+    // 1879365545 Agile Leggings of Thranduil's Cunning
+    // Medium (might)
+    // 1879365557 Hardened Leggings of Thranduil's Power
+    // 1879365549 Hardened Leggings of Thranduil's Cunning
+    // Light
+    // 1879365542 Belted Trousers of Bard's Will
+    // 1879365578 Belted Trousers of Bard's Honour
+    int[] chests=new int[]{ 1879365544, 1879365574, 1879365575, 1879365545, 1879365557, 1879365549, 1879365542, 1879365578 };
+    _injector.injectComment("Northern Mirkwood Epilogue: Trail of Rust",chests);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,chests);
+    _injector.injectArmourType(ArmourType.HEAVY,new int[]{ 1879365544, 1879365574 });
+    _injector.injectArmourType(ArmourType.MEDIUM,new int[]{ 1879365575, 1879365545, 1879365557, 1879365549 });
+    _injector.injectArmourType(ArmourType.LIGHT,new int[]{ 1879365542, 1879365578 });
   }
 }
