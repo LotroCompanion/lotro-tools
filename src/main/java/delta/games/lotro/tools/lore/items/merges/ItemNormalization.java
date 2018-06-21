@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
@@ -167,18 +166,12 @@ public class ItemNormalization
     ItemsManager manager=new ItemsManager(items);
     Set<Integer> selectedIds=new HashSet<Integer>();
     // Iterate on classes then on slots to find all reachable items
-    for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
+    for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
     {
-      CharacterData c=new CharacterData();
-      c.setCharacterClass(cClass);
-      c.setLevel(105);
-      for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+      List<Item> selectedItems=manager.getItems(slot);
+      for(Item selectedItem : selectedItems)
       {
-        List<Item> selectedItems=manager.getItems(c,slot);
-        for(Item selectedItem : selectedItems)
-        {
-          selectedIds.add(Integer.valueOf(selectedItem.getIdentifier()));
-        }
+        selectedIds.add(Integer.valueOf(selectedItem.getIdentifier()));
       }
     }
     // Essences
