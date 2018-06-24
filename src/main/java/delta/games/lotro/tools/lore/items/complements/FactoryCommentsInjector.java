@@ -109,6 +109,27 @@ public class FactoryCommentsInjector
   }
 
   /**
+   * Inject a minimum level into the items with the given ids.
+   * @param minLevel Minimum level to set.
+   * @param ids IDs of targeted items.
+   */
+  public void injectMinLevel(Integer minLevel, int[] ids)
+  {
+    for(int id : ids)
+    {
+      Item item=_items.get(Integer.valueOf(id));
+      if (item!=null)
+      {
+        item.setMinLevel(minLevel);
+      }
+      else
+      {
+        _logger.warn("Item not found: ID="+id);
+      }
+    }
+  }
+
+  /**
    * Share the stats between all the items designed by the given identifiers.
    * @param ids Identifiers to use.
    */

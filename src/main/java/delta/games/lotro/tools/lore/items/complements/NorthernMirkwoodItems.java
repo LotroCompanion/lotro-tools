@@ -9,6 +9,8 @@ import delta.games.lotro.lore.items.ItemBinding;
  */
 public class NorthernMirkwoodItems
 {
+  private static final Integer MIN_LEVEL=Integer.valueOf(115);
+
   private FactoryCommentsInjector _injector;
 
   /**
@@ -53,6 +55,7 @@ public class NorthernMirkwoodItems
       int[] kindredAgility=new int[]{ 1879347747, 1879347644, 1879347651, 1879347741 };
       _injector.injectComment(comment,kindredAgility);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindredAgility);
+      _injector.injectMinLevel(MIN_LEVEL,kindredAgility);
       // - ears (might)
       // 1879347690 Amethyst Iron Earring of Thranduil's Cunning
       // 1879347710 Fire Opal Steel Earring of Thranduil's Power
@@ -61,6 +64,7 @@ public class NorthernMirkwoodItems
       int[] kindredMight=new int[]{ 1879347690, 1879347710, 1879347740, 1879347743 };
       _injector.injectComment(comment,kindredMight);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindredMight);
+      _injector.injectMinLevel(MIN_LEVEL,kindredMight);
     }
     // - Ally
     {
@@ -73,6 +77,7 @@ public class NorthernMirkwoodItems
       int[] allyAgility=new int[]{ 1879347655, 1879347751, 1879347698, 1879347738 };
       _injector.injectComment(comment,allyAgility);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyAgility);
+      _injector.injectMinLevel(MIN_LEVEL,allyAgility);
       // - neck/pocket might
       // 1879347626 Heavy Choker of Thranduil's Cunning
       // 1879347750 Heavy Choker of Thranduil's Power
@@ -81,6 +86,7 @@ public class NorthernMirkwoodItems
       int[] allyMight=new int[]{ 1879347626, 1879347750, 1879347633, 1879347726 };
       _injector.injectComment(comment,allyMight);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyMight);
+      _injector.injectMinLevel(MIN_LEVEL,allyMight);
     }
     // - Friend
     {
@@ -95,6 +101,7 @@ public class NorthernMirkwoodItems
         int[] friendWrist=new int[]{ 1879347689, 1879347709, 1879347739, 1879347744 };
         _injector.injectComment(comment,friendWrist);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendWrist);
+        _injector.injectMinLevel(MIN_LEVEL,friendWrist);
         // - ear
         // 1879347635 Tourmaline Silver Earring of Thranduil's Cunning
         // 1879347663 Moonstone Gold Earring of Thranduil's Cunning
@@ -103,6 +110,7 @@ public class NorthernMirkwoodItems
         int[] friendEar=new int[]{ 1879347635, 1879347663, 1879347673, 1879347717 };
         _injector.injectComment(comment,friendEar);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendEar);
+        _injector.injectMinLevel(MIN_LEVEL,friendEar);
       }
       // Might
       {
@@ -114,6 +122,7 @@ public class NorthernMirkwoodItems
         int[] friendWrist=new int[]{ 1879347667, 1879347669, 1879347730, 1879347734 };
         _injector.injectComment(comment,friendWrist);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendWrist);
+        _injector.injectMinLevel(MIN_LEVEL,friendWrist);
         // -ear
         // 1879347625 Topaz Steel Earring of Thranduil's Cunning
         // 1879347630 Topaz Steel Earring of Thranduil's Power
@@ -122,6 +131,7 @@ public class NorthernMirkwoodItems
         int[] friendEar=new int[]{ 1879347625, 1879347630, 1879347672, 1879347724 };
         _injector.injectComment(comment,friendEar);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendEar);
+        _injector.injectMinLevel(MIN_LEVEL,friendEar);
       }
     }
     // - Acquaintance
@@ -137,6 +147,7 @@ public class NorthernMirkwoodItems
         int[] acquaintanceRing=new int[]{ 1879347627, 1879347654, 1879347731, 1879347733 };
         _injector.injectComment(comment,acquaintanceRing);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+        _injector.injectMinLevel(MIN_LEVEL,acquaintanceRing);
       }
       // Might
       {
@@ -148,6 +159,7 @@ public class NorthernMirkwoodItems
         int[] acquaintanceRing=new int[]{ 1879347656, 1879347660, 1879347697, 1879347735 };
         _injector.injectComment(comment,acquaintanceRing);
         _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+        _injector.injectMinLevel(MIN_LEVEL,acquaintanceRing);
       }
     }
   }
@@ -168,6 +180,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,kindred);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
       _injector.injectArmourType(ArmourType.MEDIUM,kindred);
+      _injector.injectMinLevel(MIN_LEVEL,kindred);
     }
     // - Ally
     {
@@ -181,6 +194,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
       _injector.injectArmourType(ArmourType.MEDIUM,allyHands);
+      _injector.injectMinLevel(MIN_LEVEL,allyHands);
       // - Boots
       // 1879365540 Nimble Boots of Thranduil's Cunning
       // 1879365566 Forceful Boots of Thranduil's Cunning
@@ -190,6 +204,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
       _injector.injectArmourType(ArmourType.MEDIUM,allyBoots);
+      _injector.injectMinLevel(MIN_LEVEL,allyBoots);
     }
     // - Friend
     {
@@ -203,6 +218,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendHead);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
       _injector.injectArmourType(ArmourType.MEDIUM,friendHead);
+      _injector.injectMinLevel(MIN_LEVEL,friendHead);
       // - Shoulder
       // 1879365462 Fine Camail of Thranduil's Power
       // 1879365474 Fine Camail of Thranduil's Cunning
@@ -212,6 +228,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendShoulder);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
       _injector.injectArmourType(ArmourType.MEDIUM,friendShoulder);
+      _injector.injectMinLevel(MIN_LEVEL,friendShoulder);
       // - Chest
       // 1879365455 Heavy Hauberk of Thranduil's Cunning
       // 1879365468 Heavy Hauberk of Thranduil's Cunning
@@ -221,6 +238,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendChest);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
       _injector.injectArmourType(ArmourType.MEDIUM,friendChest);
+      _injector.injectMinLevel(MIN_LEVEL,friendChest);
       // - Cloak
       // 1879365473 Woven Wool Cloak of Thranduil's Power
       // 1879365478 Woven Silk Cloak of Thranduil's Power
@@ -230,6 +248,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendCloak);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
       _injector.injectArmourType(ArmourType.LIGHT,friendCloak);
+      _injector.injectMinLevel(MIN_LEVEL,friendCloak);
     }
     // - Acquaintance
     {
@@ -243,6 +262,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
       _injector.injectArmourType(ArmourType.MEDIUM,acquaintanceHands);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceHands);
       // - Legs
       // 1879365454 Flexible Leggings of Thranduil's Cunning
       // 1879365482 Flexible Leggings of Thranduil's Power
@@ -252,6 +272,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceLegs);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
       _injector.injectArmourType(ArmourType.MEDIUM,acquaintanceLegs);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceLegs);
       // - Boots
       // 1879365484 Tough Boots of Thranduil's Cunning
       // 1879365486 Lithe Boots of Thranduil's Power
@@ -261,6 +282,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
       _injector.injectArmourType(ArmourType.MEDIUM,acquaintanceBoots);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceBoots);
     }
   }
 
@@ -282,6 +304,7 @@ public class NorthernMirkwoodItems
       int[] head=new int[]{ 1879366087, 1879366083, 1879366085, 1879366086, 1879366081, 1879366082, 1879366084, 1879366080 };
       _injector.injectComment(comment,head);
       _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,head);
+      _injector.injectMinLevel(MIN_LEVEL,head);
 
       int[] medium=new int[]{ 1879366087, 1879366083, 1879366085, 1879366086 };
       _injector.injectArmourType(ArmourType.MEDIUM,medium);
@@ -308,6 +331,7 @@ public class NorthernMirkwoodItems
           1879347685, 1879366103, 1879347624, 1879366099, 1879347701, 1879366109};
       _injector.injectComment(comment,pocket);
       _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,pocket);
+      _injector.injectMinLevel(MIN_LEVEL,pocket);
     }
     // - Neck
     {
@@ -327,6 +351,7 @@ public class NorthernMirkwoodItems
           1879347695, 1879366113, 1879347642, 1879366106, 1879347704, 1879366100};
       _injector.injectComment(comment,neck);
       _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,neck);
+      _injector.injectMinLevel(MIN_LEVEL,neck);
     }
   }
 
@@ -351,6 +376,7 @@ public class NorthernMirkwoodItems
       int[] kindred=new int[]{ 1879347674, 1879347728, 1879347643, 1879347700 };
       _injector.injectComment(comment,kindred);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+      _injector.injectMinLevel(MIN_LEVEL,kindred);
     }
     // - Ally
     {
@@ -364,6 +390,7 @@ public class NorthernMirkwoodItems
       int[] ally=new int[]{ 1879347634, 1879347699, 1879347708, 1879347636 };
       _injector.injectComment(comment,ally);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,ally);
+      _injector.injectMinLevel(MIN_LEVEL,ally);
     }
     // - Friend
     {
@@ -376,6 +403,7 @@ public class NorthernMirkwoodItems
       int[] friendWrist=new int[]{ 1879347670, 1879347745, 1879347676, 1879347648 };
       _injector.injectComment(comment,friendWrist);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendWrist);
+      _injector.injectMinLevel(MIN_LEVEL,friendWrist);
       // - ear
       // 1879347687 Topaz Gold Ear Cuff of Bard's Will
       // 1879347720 Lapis Silver Ear Cuff of Bard's Will
@@ -384,6 +412,7 @@ public class NorthernMirkwoodItems
       int[] friendEar=new int[]{ 1879347687, 1879347720, 1879347639, 1879347705 };
       _injector.injectComment(comment,friendEar);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendEar);
+      _injector.injectMinLevel(MIN_LEVEL,friendEar);
     }
     // - Acquaintance
     {
@@ -396,6 +425,7 @@ public class NorthernMirkwoodItems
       int[] acquaintanceRing=new int[]{ 1879347732, 1879347711, 1879347652, 1879347681 };
       _injector.injectComment(comment,acquaintanceRing);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceRing);
     }
   }
 
@@ -413,6 +443,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,kindred);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
       _injector.injectArmourType(ArmourType.LIGHT,kindred);
+      _injector.injectMinLevel(MIN_LEVEL,kindred);
     }
     // - Ally
     {
@@ -424,6 +455,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
       _injector.injectArmourType(ArmourType.LIGHT,allyHands);
+      _injector.injectMinLevel(MIN_LEVEL,allyHands);
       // - Boots
       // 1879365554 Rugged Shoes of Bard's Honour
       // 1879365596 Rugged Shoes of Bard's Will
@@ -431,6 +463,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
       _injector.injectArmourType(ArmourType.LIGHT,allyBoots);
+      _injector.injectMinLevel(MIN_LEVEL,allyBoots);
     }
     // - Friend
     {
@@ -442,6 +475,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendHead);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
       _injector.injectArmourType(ArmourType.LIGHT,friendHead);
+      _injector.injectMinLevel(MIN_LEVEL,friendHead);
       // - Shoulder
       // 1879365505 Embroidered Mantle of Bard's Will
       // 1879365508 Embroidered Mantle of Bard's Honour
@@ -449,6 +483,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendShoulder);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
       _injector.injectArmourType(ArmourType.LIGHT,friendShoulder);
+      _injector.injectMinLevel(MIN_LEVEL,friendShoulder);
       // - Chest
       // 1879365480 Padded Vest of Bard's Honour
       // 1879365490 Padded Vest of Bard's Will
@@ -456,6 +491,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendChest);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
       _injector.injectArmourType(ArmourType.LIGHT,friendChest);
+      _injector.injectMinLevel(MIN_LEVEL,friendChest);
       // - Cloak
       // 1879365464 Woven Light Cloak of Bard's Will
       // 1879365494 Woven Light Cloak of Bard's Honour
@@ -463,6 +499,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendCloak);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
       _injector.injectArmourType(ArmourType.LIGHT,friendCloak);
+      _injector.injectMinLevel(MIN_LEVEL,friendCloak);
     }
     // - Acquaintance
     {
@@ -474,6 +511,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
       _injector.injectArmourType(ArmourType.LIGHT,acquaintanceHands);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceHands);
       // - Legs
       // 1879365495 Corded Trousers of Bard's Honour
       // 1879365502 Corded Trousers of Bard's Will
@@ -481,6 +519,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceLegs);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
       _injector.injectArmourType(ArmourType.LIGHT,acquaintanceLegs);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceLegs);
       // - Boots
       // 1879365475 Superior Shoes of Bard's Honour
       // 1879365487 Superior Shoes of Bard's Will
@@ -488,6 +527,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
       _injector.injectArmourType(ArmourType.LIGHT,acquaintanceBoots);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceBoots);
     }
   }
 
@@ -512,6 +552,7 @@ public class NorthernMirkwoodItems
       int[] kindred=new int[]{ 1879347682, 1879347742, 1879347694, 1879347729 };
       _injector.injectComment(comment,kindred);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
+      _injector.injectMinLevel(MIN_LEVEL,kindred);
     }
     // - Ally
     {
@@ -525,6 +566,7 @@ public class NorthernMirkwoodItems
       int[] ally=new int[]{ 1879347748, 1879347716, 1879347680, 1879347727 };
       _injector.injectComment(comment,ally);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,ally);
+      _injector.injectMinLevel(MIN_LEVEL,ally);
     }
     // - Friend
     {
@@ -537,6 +579,7 @@ public class NorthernMirkwoodItems
       int[] friendWrist=new int[]{ 1879347702, 1879347641, 1879347662, 1879347706 };
       _injector.injectComment(comment,friendWrist);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendWrist);
+      _injector.injectMinLevel(MIN_LEVEL,friendWrist);
       // - ear
       // 1879347665 Moonstone Gold Stud of Thorin's Memory
       // 1879347684 Moonstone Gold Stud of Thorin's Strength
@@ -545,6 +588,7 @@ public class NorthernMirkwoodItems
       int[] friendEar=new int[]{ 1879347665, 1879347684, 1879347678, 1879347713 };
       _injector.injectComment(comment,friendEar);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendEar);
+      _injector.injectMinLevel(MIN_LEVEL,friendEar);
     }
     // - Acquaintance
     {
@@ -557,6 +601,7 @@ public class NorthernMirkwoodItems
       int[] acquaintanceRing=new int[]{ 1879347628, 1879347688, 1879347658, 1879347722 };
       _injector.injectComment(comment,acquaintanceRing);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceRing);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceRing);
     }
   }
 
@@ -574,6 +619,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,kindred);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,kindred);
       _injector.injectArmourType(ArmourType.HEAVY,kindred);
+      _injector.injectMinLevel(MIN_LEVEL,kindred);
     }
     // - Ally
     {
@@ -585,6 +631,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyHands);
       _injector.injectArmourType(ArmourType.HEAVY,allyHands);
+      _injector.injectMinLevel(MIN_LEVEL,allyHands);
       // - Boots
       // 1879365563 Hardened Sabatons of Thorin's Strength
       // 1879365595 Hardened Sabatons of Thorin's Memory
@@ -592,6 +639,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,allyBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,allyBoots);
       _injector.injectArmourType(ArmourType.HEAVY,allyBoots);
+      _injector.injectMinLevel(MIN_LEVEL,allyBoots);
     }
     // - Friend
     {
@@ -603,6 +651,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendHead);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendHead);
       _injector.injectArmourType(ArmourType.HEAVY,friendHead);
+      _injector.injectMinLevel(MIN_LEVEL,friendHead);
       // - Shoulder
       // 1879365471 Bolstered Pauldrons of Thorin's Memory
       // 1879365476 Bolstered Pauldrons of Thorin's Strength
@@ -610,6 +659,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendShoulder);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendShoulder);
       _injector.injectArmourType(ArmourType.HEAVY,friendShoulder);
+      _injector.injectMinLevel(MIN_LEVEL,friendShoulder);
       // - Chest
       // 1879365456 Reinforced Chestplate of Thorin's Memory
       // 1879365472 Reinforced Chestplate of Thorin's Strength
@@ -617,6 +667,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendChest);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendChest);
       _injector.injectArmourType(ArmourType.HEAVY,friendChest);
+      _injector.injectMinLevel(MIN_LEVEL,friendChest);
       // - Cloak
       // 1879365458 Woven Heavy Cloak of Thorin's Memory
       // 1879365460 Woven Heavy Cloak of Thorin's Strength
@@ -624,6 +675,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,friendCloak);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,friendCloak);
       _injector.injectArmourType(ArmourType.LIGHT,friendCloak);
+      _injector.injectMinLevel(MIN_LEVEL,friendCloak);
     }
     // - Acquaintance
     {
@@ -635,6 +687,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceHands);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceHands);
       _injector.injectArmourType(ArmourType.HEAVY,acquaintanceHands);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceHands);
       // - Legs
       // 1879365466 Tough Greaves of Thorin's Memory
       // 1879365477 Tough Greaves of Thorin's Strength
@@ -642,6 +695,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceLegs);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceLegs);
       _injector.injectArmourType(ArmourType.HEAVY,acquaintanceLegs);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceLegs);
       // - Boots
       // 1879365496 Thick Sabatons of Thorin's Memory
       // 1879365500 Thick Sabatons of Thorin's Strength
@@ -649,6 +703,7 @@ public class NorthernMirkwoodItems
       _injector.injectComment(comment,acquaintanceBoots);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,acquaintanceBoots);
       _injector.injectArmourType(ArmourType.HEAVY,acquaintanceBoots);
+      _injector.injectMinLevel(MIN_LEVEL,acquaintanceBoots);
     }
   }
 
@@ -679,6 +734,7 @@ public class NorthernMirkwoodItems
     _injector.injectArmourType(ArmourType.HEAVY,new int[]{ 1879365594, 1879365539 });
     _injector.injectArmourType(ArmourType.MEDIUM,new int[]{ 1879365543, 1879365597, 1879365541, 1879365564 });
     _injector.injectArmourType(ArmourType.LIGHT,new int[]{ 1879365591, 1879365548 });
+    _injector.injectMinLevel(MIN_LEVEL,chests);
   }
 
   private void doCloaks()
@@ -695,6 +751,7 @@ public class NorthernMirkwoodItems
     _injector.injectComment("Black Book of Mordor, Volume 1, Chapter 6.7: Wood, Lake, Mountain, and Stone",cloaks);
     _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
     _injector.injectArmourType(ArmourType.LIGHT,cloaks);
+    _injector.injectMinLevel(MIN_LEVEL,cloaks);
   }
 
   private void doLeggings()
@@ -717,5 +774,6 @@ public class NorthernMirkwoodItems
     _injector.injectArmourType(ArmourType.HEAVY,new int[]{ 1879365544, 1879365574 });
     _injector.injectArmourType(ArmourType.MEDIUM,new int[]{ 1879365575, 1879365545, 1879365557, 1879365549 });
     _injector.injectArmourType(ArmourType.LIGHT,new int[]{ 1879365542, 1879365578 });
+    _injector.injectMinLevel(MIN_LEVEL,chests);
   }
 }

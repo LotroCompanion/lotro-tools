@@ -9,6 +9,8 @@ import delta.games.lotro.lore.items.ItemBinding;
  */
 public class MordorKeeperOfMysteriesItems
 {
+  private static final Integer MIN_LEVEL=Integer.valueOf(115);
+
   private FactoryCommentsInjector _injector;
 
   /**
@@ -45,6 +47,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,abyss);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,abyss);
       _injector.injectArmourType(ArmourType.HEAVY,abyss);
+      _injector.injectMinLevel(MIN_LEVEL,abyss);
     }
     // Barter Incomparable Armor (Wyrm)
     {
@@ -57,6 +60,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,wyrm);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,wyrm);
       _injector.injectArmourType(ArmourType.HEAVY,wyrm);
+      _injector.injectMinLevel(MIN_LEVEL,wyrm);
     }
   }
 
@@ -74,6 +78,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,abyss);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,abyss);
       _injector.injectArmourType(ArmourType.MEDIUM,abyss);
+      _injector.injectMinLevel(MIN_LEVEL,abyss);
     }
     // Barter Incomparable Armor (Wyrm)
     {
@@ -86,6 +91,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,wyrm);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,wyrm);
       _injector.injectArmourType(ArmourType.MEDIUM,wyrm);
+      _injector.injectMinLevel(MIN_LEVEL,wyrm);
     }
   }
 
@@ -103,6 +109,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,abyss);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,abyss);
       _injector.injectArmourType(ArmourType.MEDIUM,abyss);
+      _injector.injectMinLevel(MIN_LEVEL,abyss);
     }
     // Barter Incomparable Armor (Wyrm)
     {
@@ -115,6 +122,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,wyrm);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,wyrm);
       _injector.injectArmourType(ArmourType.MEDIUM,wyrm);
+      _injector.injectMinLevel(MIN_LEVEL,wyrm);
     }
   }
 
@@ -132,6 +140,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,abyss);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,abyss);
       _injector.injectArmourType(ArmourType.LIGHT,abyss);
+      _injector.injectMinLevel(MIN_LEVEL,abyss);
     }
     // Barter Incomparable Armor (Wyrm)
     {
@@ -144,6 +153,7 @@ public class MordorKeeperOfMysteriesItems
       _injector.injectComment(comment,wyrm);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,wyrm);
       _injector.injectArmourType(ArmourType.LIGHT,wyrm);
+      _injector.injectMinLevel(MIN_LEVEL,wyrm);
     }
   }
 }
