@@ -94,7 +94,7 @@ Name	iLvl	Armour	Might	Agility	Vitality	Will	Fate	Morale	Power	ICMR	NCMR	ICPR	NC
 - Essence of the Storm	192																											Lightning skills have a 5% chance to trigger an additional lightning strike. 466 - 666 Lightning Damage.
 #Rare Warden (unique)
 - Essence of Physicality	192																											Critical hits have a 25% chance of reducing your target's physical mitigation by 20% for 10s. -20% Physical Mitigation. Duration: 10s.
-- Essence of the Determined Defender	192																											Dodging an attack has a 10% chance to restore 10% of your morale.
+- Essence of the Stalwart Defender	192																											Dodging an attack has a 10% chance to restore 10% of your morale.
 - Essence of the Reckless Defender	192																											After every kill, 10% chance to apply to the target: Restores 25% of maximum Morale.
 - Minor Essence of Agility	188			116.00																					
 - Minor Essence of Blocking	188																				2368.80				
