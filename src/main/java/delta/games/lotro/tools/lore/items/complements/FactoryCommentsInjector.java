@@ -40,6 +40,7 @@ public class FactoryCommentsInjector
     new MordorKeeperOfMysteriesItems(this).doIt();
     new MordorHighEnchanterArmors(this).doIt();
     new MordorHighEnchanterJewels(this).doIt();
+    new MordorAllegianceRewards(this).doIt();
   }
 
   /**
