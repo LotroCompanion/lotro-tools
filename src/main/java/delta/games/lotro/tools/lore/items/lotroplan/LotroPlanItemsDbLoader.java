@@ -288,6 +288,29 @@ public class LotroPlanItemsDbLoader
         item.setRequiredClass(classRequirement);
       }
     }
+    // Find out armour type
+    if (armour!=null)
+    {
+      ArmourType armourType=findArmourType(classRequirementStr);
+      if (armourType!=null)
+      {
+        if (slot==EquipmentLocation.OFF_HAND)
+        {
+          if (armourType==ArmourType.HEAVY) armourType=ArmourType.HEAVY_SHIELD;
+          if (armourType==ArmourType.MEDIUM) armourType=ArmourType.WARDEN_SHIELD;
+        }
+        ArmourType old=armour.getArmourType();
+        if ((old!=null) && (old!=armourType))
+        {
+          System.out.println("Armour type mismatch: "+name+", old="+old+", new="+armourType);
+        }
+        armour.setArmourType(armourType);
+      }
+      if (slot==EquipmentLocation.BACK)
+      {
+        armour.setArmourType(ArmourType.LIGHT);
+      }
+    }
 
     if ("Burglar Signals".equals(_section))
     {
@@ -359,6 +382,21 @@ public class LotroPlanItemsDbLoader
     if ("Mi".equals(classRequirement)) return CharacterClass.MINSTREL;
     if ("Ru".equals(classRequirement)) return CharacterClass.RUNE_KEEPER;
     if ("Wa".equals(classRequirement)) return CharacterClass.WARDEN;
+    return null;
+  }
+
+  private ArmourType findArmourType(String classRequirement)
+  {
+    if (classRequirement.contains("Be")) return ArmourType.MEDIUM;
+    if (classRequirement.contains("Bu")) return ArmourType.MEDIUM;
+    if (classRequirement.contains("Ca")) return ArmourType.HEAVY;
+    if (classRequirement.contains("Ch")) return ArmourType.HEAVY;
+    if (classRequirement.contains("Gu")) return ArmourType.HEAVY;
+    if (classRequirement.contains("Hu")) return ArmourType.MEDIUM;
+    if (classRequirement.contains("Lo")) return ArmourType.LIGHT;
+    if (classRequirement.contains("Mi")) return ArmourType.LIGHT;
+    if (classRequirement.contains("Ru")) return ArmourType.LIGHT;
+    if (classRequirement.contains("Wa")) return ArmourType.MEDIUM;
     return null;
   }
 
