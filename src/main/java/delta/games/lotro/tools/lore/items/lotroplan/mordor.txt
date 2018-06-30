@@ -4422,3 +4422,7 @@ Woven Wool Cloak of the Pathfinder's Artifice	333	5378	649		758									3932		36
 Woven Wool Cloak of the Towers	326	4924	595		694									3601		3411											10			1879347854																																						Back	BeCaChGu	112		45	2	0			6,2	
 Woven Wool Cloak of the Vanguard's Bearing	333	5378	649		974															7047				5056			16			1879360147																																						Back	BeCaChGu	115		45	2	0			6,2	
 Woven Wool Cloak of the Wyrm	337	5637	681		794									4122		3709											16			1879364241																																						Back	BeCaChGu	115		45	2	0			6,2	
+Replica of Elor	1																													1879359581																									2,0%													Melee	*
+Replica of Lorcathol	1																													1879359582																																						Melee	*
+Replica of Ornadar	1																													1879359583																																						Melee	*
+Replica of Baingrist	1																													1879359580																									1,0%													Melee	*

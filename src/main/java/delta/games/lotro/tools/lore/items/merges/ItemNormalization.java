@@ -1128,6 +1128,7 @@ public class ItemNormalization
         if ("12".equals(category))
         {
           if (name.indexOf("great axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
+          else if (name.indexOf("lorcathol")!=-1) type=WeaponType.TWO_HANDED_AXE;
           else type=WeaponType.ONE_HANDED_AXE;
         }
         else if ("1".equals(category))
@@ -1162,6 +1163,8 @@ public class ItemNormalization
           else if (name.indexOf("great axe")!=-1) type=WeaponType.TWO_HANDED_AXE;
           else if (name.indexOf("oathbreaker's bane")!=-1) type=WeaponType.ONE_HANDED_SWORD;
           else if (name.indexOf("falchion")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+          else if (name.indexOf("baingrist")!=-1) type=WeaponType.ONE_HANDED_SWORD;
+          else if (name.indexOf("elor")!=-1) type=WeaponType.TWO_HANDED_SWORD;
         }
       }
       if (type==null)
