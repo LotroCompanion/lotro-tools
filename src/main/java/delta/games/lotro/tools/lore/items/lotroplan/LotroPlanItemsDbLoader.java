@@ -291,14 +291,17 @@ public class LotroPlanItemsDbLoader
     // Find out armour type
     if (armour!=null)
     {
-      ArmourType armourType=findArmourType(classRequirementStr);
+      ArmourType armourType=null;
+      if (slot==EquipmentLocation.OFF_HAND)
+      {
+        armourType=findShieldType(classRequirementStr);
+      }
+      else
+      {
+        armourType=findArmourType(classRequirementStr);
+      }
       if (armourType!=null)
       {
-        if (slot==EquipmentLocation.OFF_HAND)
-        {
-          if (armourType==ArmourType.HEAVY) armourType=ArmourType.HEAVY_SHIELD;
-          if (armourType==ArmourType.MEDIUM) armourType=ArmourType.WARDEN_SHIELD;
-        }
         ArmourType old=armour.getArmourType();
         if ((old!=null) && (old!=armourType))
         {
@@ -397,6 +400,15 @@ public class LotroPlanItemsDbLoader
     if (classRequirement.contains("Mi")) return ArmourType.LIGHT;
     if (classRequirement.contains("Ru")) return ArmourType.LIGHT;
     if (classRequirement.contains("Wa")) return ArmourType.MEDIUM;
+    return null;
+  }
+
+  private ArmourType findShieldType(String classRequirement)
+  {
+    if (classRequirement.contains("Ca")) return ArmourType.SHIELD;
+    if (classRequirement.contains("Gu")) return ArmourType.HEAVY_SHIELD;
+    if (classRequirement.contains("Mi")) return ArmourType.SHIELD;
+    if (classRequirement.contains("Wa")) return ArmourType.WARDEN_SHIELD;
     return null;
   }
 
