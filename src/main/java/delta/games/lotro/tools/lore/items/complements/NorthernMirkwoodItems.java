@@ -315,40 +315,26 @@ public class NorthernMirkwoodItems
     }
     // - Pocket
     {
-      // 1879347668 Noble Emblem of Thorin's Memory (parry)
       // 1879366101 Noble Emblem of Thorin's Memory (evade)
-      // 1879347737 Noble Emblem of Thorin's Strength (finesse)
       // 1879366104 Noble Emblem of Thorin's Strength (critical rating)
-      // 1879347714 Momentous Locket of Thranduil's Power (finesse)
       // 1879366112 Momentous Locket of Thranduil's Power (critical rating)
-      // 1879347685 Momentous Locket of Thranduil's Cunning (parry)
       // 1879366103 Momentous Locket of Thranduil's Cunning (evade)
-      // 1879347624 Glowing Phial of Bard's Will (finesse)
       // 1879366099 Glowing Phial of Bard's Will (critical rating)
-      // 1879347701 Glowing Phial of Bard's Honour (finesse)
       // 1879366109 Glowing Phial of Bard's Honour (outgoing healing)
-      int[] pocket=new int[]{ 1879347668, 1879366101, 1879347737, 1879366104, 1879347714, 1879366112,
-          1879347685, 1879366103, 1879347624, 1879366099, 1879347701, 1879366109};
+      int[] pocket=new int[]{ 1879366101, 1879366104, 1879366112, 1879366103, 1879366099, 1879366109};
       _injector.injectComment(comment,pocket);
       _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,pocket);
       _injector.injectMinLevel(MIN_LEVEL,pocket);
     }
     // - Neck
     {
-      // 1879347749 Polished Torc of Thorin's Strength
       // 1879366110 Polished Torc of Thorin's Strength
-      // 1879347736 Polished Torc of Thorin's Memory
       // 1879366105 Polished Torc of Thorin's Memory
-      // 1879347657 Graceful Pendant of Thranduil's Power
       // 1879366107 Graceful Pendant of Thranduil's Power
-      // 1879347695 Graceful Pendant of Thranduil's Cunning
       // 1879366113 Graceful Pendant of Thranduil's Cunning
-      // 1879347642 Filigree Necklace of Bard's Will
       // 1879366106 Filigree Necklace of Bard's Will
-      // 1879347704 Filigree Necklace of Bard's Honour
       // 1879366100 Filigree Necklace of Bard's Honour
-      int[] neck=new int[]{ 1879347749, 1879366110, 1879347736, 1879366105, 1879347657, 1879366107,
-          1879347695, 1879366113, 1879347642, 1879366106, 1879347704, 1879366100};
+      int[] neck=new int[]{ 1879366110, 1879366105, 1879366107, 1879366113, 1879366106, 1879366100};
       _injector.injectComment(comment,neck);
       _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,neck);
       _injector.injectMinLevel(MIN_LEVEL,neck);
