@@ -22,7 +22,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.xml.DOMParsingTools;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Money;
+import delta.games.lotro.common.money.Money;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
