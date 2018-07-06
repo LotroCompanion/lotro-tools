@@ -16,6 +16,8 @@ import delta.games.lotro.maps.ui.NavigationManager;
  */
 public class MainLinkEditor
 {
+  private static JFrame _frame;
+
   /**
    * Main method for this test.
    * @param args Not used.
@@ -33,15 +35,19 @@ public class MainLinkEditor
     {
       public void mapChangeRequest(String key)
       {
-        navigationManager.setMap(mapsManager.getMapByKey(key));
+        MapBundle map=mapsManager.getMapByKey(key);
+        navigationManager.setMap(map);
+        String title=map.getLabel();
+        _frame.setTitle(title);
       }
     };
-    navigationManager.setNavigationListener(listener);
+    navigationManager.getNavigationListeners().addListener(listener);
     /*LinkCreationInterator interactor=*/new LinkCreationInterator(mapsManager,canvas);
     String key=bundle.getKey();
     canvas.setMap(key);
     navigationManager.setMap(bundle);
     JFrame f=new JFrame();
+    _frame=f;
     String title=bundle.getLabel();
     f.setTitle(title);
     f.getContentPane().add(canvas);
