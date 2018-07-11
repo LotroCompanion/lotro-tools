@@ -41,6 +41,7 @@ public class FactoryCommentsInjector
     new MordorHighEnchanterArmors(this).doIt();
     new MordorHighEnchanterJewels(this).doIt();
     new MordorAllegianceRewards(this).doIt();
+    new MasterOfMordorLore(this).doIt();
   }
 
   /**
