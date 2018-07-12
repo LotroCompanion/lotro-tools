@@ -42,8 +42,7 @@ public class MasterOfMordorLore
       // 1879362720 Beast-master's Mantle of the Abyss
       // 1879362722 Beast-master's Shoes of the Abyss
       // 1879362725 Beast-master's Waistcoat of the Abyss
-      // 1879364638 Beast-master's Cap of the Abyss
-      int[] items=new int[]{ 1879362633, 1879362640, 1879362720, 1879362722, 1879362725, 1879364638 };
+      int[] items=new int[]{ 1879362633, 1879362640, 1879362720, 1879362722, 1879362725 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -57,8 +56,7 @@ public class MasterOfMordorLore
       // 1879362647 Storm-caller's Mantle of the Abyss
       // 1879362653 Storm-caller's Gloves of the Abyss
       // 1879362743 Storm-caller's Waistcoat of the Abyss
-      // 1879364662 Storm-caller's Cap of the Abyss
-      int[] items=new int[]{ 1879362593, 1879362634, 1879362647, 1879362653, 1879362743, 1879364662 };
+      int[] items=new int[]{ 1879362593, 1879362634, 1879362647, 1879362653, 1879362743 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -72,8 +70,7 @@ public class MasterOfMordorLore
       // 1879362682 Librarian's Trousers of the Abyss
       // 1879362703 Librarian's Gloves of the Abyss
       // 1879362746 Librarian's Mantle of the Abyss
-      // 1879364652 Librarian's Cap of the Abyss
-      int[] items=new int[]{ 1879362600, 1879362622, 1879362682, 1879362703, 1879362746, 1879364652 };
+      int[] items=new int[]{ 1879362600, 1879362622, 1879362682, 1879362703, 1879362746 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -91,8 +88,7 @@ public class MasterOfMordorLore
       // 1879362672 Troubador's Gloves of the Abyss
       // 1879362714 Troubador's Trousers of the Abyss
       // 1879362751 Troubador's Mantle of the Abyss
-      // 1879364650 Troubador's Cap of the Abyss
-      int[] items=new int[]{ 1879362599, 1879362619, 1879362672, 1879362714, 1879362751, 1879364650 };
+      int[] items=new int[]{ 1879362599, 1879362619, 1879362672, 1879362714, 1879362751 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -106,8 +102,7 @@ public class MasterOfMordorLore
       // 1879362626 Chanter's Shoes of the Abyss
       // 1879362691 Chanter's Gloves of the Abyss
       // 1879362719 Chanter's Mantle of the Abyss
-      // 1879364642 Chanter's Cap of the Abyss
-      int[] items=new int[]{ 1879362595, 1879362620, 1879362626, 1879362691, 1879362719, 1879364642 };
+      int[] items=new int[]{ 1879362595, 1879362620, 1879362626, 1879362691, 1879362719 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -122,8 +117,7 @@ public class MasterOfMordorLore
       // 1879362686 Storyteller's Gloves of the Abyss
       // 1879362690 Storyteller's Waistcoat of the Abyss
       // 1879362732 Storyteller's Mantle of the Abyss
-      // 1879364631 Storyteller's Cap of the Abyss
-      int[] items=new int[]{ 1879362659, 1879362669, 1879362686, 1879362690, 1879362732, 1879364631 };
+      int[] items=new int[]{ 1879362659, 1879362669, 1879362686, 1879362690, 1879362732 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -141,8 +135,7 @@ public class MasterOfMordorLore
       // 1879362656 Enlightened Mantle of the Abyss
       // 1879362662 Enlightened Shoes of the Abyss
       // 1879362692 Enlightened Gloves of the Abyss
-      // 1879364649 Enlightened Cap of the Abyss
-      int[] items=new int[]{ 1879362642, 1879362648, 1879362656, 1879362662, 1879362692, 1879364649 };
+      int[] items=new int[]{ 1879362642, 1879362648, 1879362656, 1879362662, 1879362692 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -156,8 +149,7 @@ public class MasterOfMordorLore
       // 1879362678 Infernal Mantle of the Abyss
       // 1879362693 Infernal Waistcoat of the Abyss
       // 1879362716 Infernal Shoes of the Abyss
-      // 1879364648 Infernal Cap of the Abyss
-      int[] items=new int[]{ 1879362590, 1879362673, 1879362678, 1879362693, 1879362716, 1879364648 };
+      int[] items=new int[]{ 1879362590, 1879362673, 1879362678, 1879362693, 1879362716 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
@@ -172,8 +164,7 @@ public class MasterOfMordorLore
       // 1879362726 Striking Shoes of the Abyss
       // 1879362740 Striking Gloves of the Abyss
       // 1879362750 Striking Waistcoat of the Abyss
-      // 1879364660 Striking Cap of the Abyss
-      int[] items=new int[]{ 1879362637, 1879362702, 1879362726, 1879362740, 1879362750, 1879364660 };
+      int[] items=new int[]{ 1879362637, 1879362702, 1879362726, 1879362740, 1879362750 };
       _injector.injectComment(ARMOR_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
