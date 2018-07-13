@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.Item;
@@ -41,7 +42,8 @@ public class FactoryCommentsInjector
     new MordorHighEnchanterArmors(this).doIt();
     new MordorHighEnchanterJewels(this).doIt();
     new MordorAllegianceRewards(this).doIt();
-    new MasterOfMordorLore(this).doIt();
+    new GorgorothSageGearRewardsVendor(this).doIt();
+    new GorgorothScoutGearRewardsVendor(this).doIt();
     new ConquestOfGorgorthCrafting(this).doIt();
   }
 
@@ -103,6 +105,27 @@ public class FactoryCommentsInjector
         {
           ((Armour)item).setArmourType(armourType);
         }
+      }
+      else
+      {
+        _logger.warn("Item not found: ID="+id);
+      }
+    }
+  }
+
+  /**
+   * Inject a character class requirement into the items with the given ids.
+   * @param characterClass Character class to set.
+   * @param ids IDs of targeted items.
+   */
+  public void injectCharacterClass(CharacterClass characterClass, int[] ids)
+  {
+    for(int id : ids)
+    {
+      Item item=_items.get(Integer.valueOf(id));
+      if (item!=null)
+      {
+        item.setRequiredClass(characterClass);
       }
       else
       {

@@ -7,9 +7,9 @@ import delta.games.lotro.lore.items.ItemBinding;
  * Adds complements on armour sets from the 'Master of Mordor Lore'.
  * @author DAM
  */
-public class MasterOfMordorLore
+public class GorgorothSageGearRewardsVendor
 {
-  private static final String ARMOR_COMMENT="Master of Mordor Lore ; Abyss of Mordath Tier 2 ; 2500 ash";
+  private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -18,7 +18,7 @@ public class MasterOfMordorLore
    * Constructor.
    * @param injector Injector.
    */
-  public MasterOfMordorLore(FactoryCommentsInjector injector)
+  public GorgorothSageGearRewardsVendor(FactoryCommentsInjector injector)
   {
     _injector=injector;
   }

@@ -29,44 +29,65 @@ public class ConquestOfGorgorthCrafting
    */
   public void doIt()
   {
-    doLoreMaster();
-    doMinstrel();
-    doRuneKeeper();
+    doTailor();
   }
 
-  private void doLoreMaster()
+  private void doTailor()
   {
-    // 1879364638 Beast-master's Cap of the Abyss
-    // 1879364662 Storm-caller's Cap of the Abyss
-    // 1879364652 Librarian's Cap of the Abyss
-    int[] items=new int[]{ 1879364638, 1879364662, 1879364652 };
-    _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Lore-master Set Helms Recipe"),items);
-    _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
-    _injector.injectMinLevel(MIN_LEVEL,items);
-    _injector.injectArmourType(ArmourType.LIGHT,items);
-  }
+    // Lore-master
+    {
+      // 1879364638 Beast-master's Cap of the Abyss
+      // 1879364662 Storm-caller's Cap of the Abyss
+      // 1879364652 Librarian's Cap of the Abyss
+      int[] items=new int[]{ 1879364638, 1879364662, 1879364652 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Lore-master Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.LIGHT,items);
+      // TODO scaling data (standard/crit)
+    }
+    // Minstrel
+    {
+      // 1879364650 Troubador's Cap of the Abyss
+      // 1879364642 Chanter's Cap of the Abyss
+      // 1879364631 Storyteller's Cap of the Abyss
+      int[] items=new int[]{ 1879364650, 1879364642, 1879364631 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Minstrel Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.LIGHT,items);
+      // TODO scaling data (standard/crit)
+    }
+    // Rune-keeper
+    {
+      // 1879364649 Enlightened Cap of the Abyss
+      // 1879364648 Infernal Cap of the Abyss
+      // 1879364660 Striking Cap of the Abyss
+      int[] items=new int[]{ 1879364649, 1879364648, 1879364660 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Rune-keeper Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.LIGHT,items);
+      // TODO scaling data (standard/crit)
+    }
+    // Beorning
+    // 1879364661 Changeling's Coif of the Abyss
+    // 1879364639 Berserker's Coif of the Abyss
+    // 1879364632 Weald-guard's Coif of the Abyss
 
-  private void doMinstrel()
-  {
-    // 1879364650 Troubador's Cap of the Abyss
-    // 1879364642 Chanter's Cap of the Abyss
-    // 1879364631 Storyteller's Cap of the Abyss
-    int[] items=new int[]{ 1879364650, 1879364642, 1879364631 };
-    _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Minstrel Set Helms Recipe"),items);
-    _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
-    _injector.injectMinLevel(MIN_LEVEL,items);
-    _injector.injectArmourType(ArmourType.LIGHT,items);
-  }
+    // Burglar
+    // 1879364635 Gambler's Coif of the Abyss
+    // 1879364645 Blade's Coif of the Abyss
+    // 1879364653 Troublemaker's Coif of the Abyss
 
-  private void doRuneKeeper()
-  {
-    // 1879364649 Enlightened Cap of the Abyss
-    // 1879364648 Infernal Cap of the Abyss
-    // 1879364660 Striking Cap of the Abyss
-    int[] items=new int[]{ 1879364649, 1879364648, 1879364660 };
-    _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Rune-keeper Set Helms Recipe"),items);
-    _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
-    _injector.injectMinLevel(MIN_LEVEL,items);
-    _injector.injectArmourType(ArmourType.LIGHT,items);
+    // Hunter
+    // 1879364637 Stalker's Coif of the Abyss
+    // 1879364629 Archer's Coif of the Abyss
+    // 1879364655 Trapper's Coif of the Abyss
+
+    // Warden
+    // 1879364651 Stalwart Coif of the Abyss
+    // 1879364634 Strident Coif of the Abyss
+    // 1879364636 Lancer's Coif of the Abyss
   }
 }
