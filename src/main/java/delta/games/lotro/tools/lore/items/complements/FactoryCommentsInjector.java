@@ -44,6 +44,7 @@ public class FactoryCommentsInjector
     new MordorAllegianceRewards(this).doIt();
     new GorgorothSageGearRewardsVendor(this).doIt();
     new GorgorothScoutGearRewardsVendor(this).doIt();
+    new GorgorothWarriorGearRewardsVendor(this).doIt();
     new ConquestOfGorgorthCrafting(this).doIt();
   }
 

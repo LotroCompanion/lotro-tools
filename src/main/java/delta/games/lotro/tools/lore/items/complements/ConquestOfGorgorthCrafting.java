@@ -89,5 +89,20 @@ public class ConquestOfGorgorthCrafting
     // 1879364651 Stalwart Coif of the Abyss
     // 1879364634 Strident Coif of the Abyss
     // 1879364636 Lancer's Coif of the Abyss
+
+    // Captain
+    // 1879364643 Surgeon's Helm of the Abyss
+    // 1879364646 Charger's Helm of the Abyss
+    // 1879364656 Leader's Helm of the Abyss
+
+    // Champion
+    // 1879364633 Swordsman's Helm of the Abyss
+    // 1879364657 Rampaging Helm of the Abyss
+    // 1879364659 Scything Helm of the Abyss
+
+    // Guardian
+    // 1879364640 Defender's Helm of the Abyss
+    // 1879364644 Savage Helm of the Abyss
+    // 1879364641 Shining Helm of the Abyss
   }
 }

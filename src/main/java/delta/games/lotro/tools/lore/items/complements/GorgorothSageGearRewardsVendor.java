@@ -4,7 +4,7 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ItemBinding;
 
 /**
- * Adds complements on armour sets from the 'Master of Mordor Lore'.
+ * Adds complements on armour sets from the 'Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor)'.
  * @author DAM
  */
 public class GorgorothSageGearRewardsVendor
@@ -109,7 +109,6 @@ public class GorgorothSageGearRewardsVendor
       _injector.injectArmourType(ArmourType.LIGHT,items);
       //_injector.injectClass(CharacterClass.MINSTREL,items);
     }
-
     // Storyteller's armour
     {
       // 1879362659 Storyteller's Trousers of the Abyss
@@ -156,7 +155,6 @@ public class GorgorothSageGearRewardsVendor
       _injector.injectArmourType(ArmourType.LIGHT,items);
       //_injector.injectClass(CharacterClass.RUNE_KEEPER,items);
     }
-
     // Striking armour
     {
       // 1879362637 Striking Mantle of the Abyss

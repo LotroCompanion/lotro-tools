@@ -5,7 +5,7 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ItemBinding;
 
 /**
- * Adds complements on armour sets from the 'Master of Mordor Lore'.
+ * Adds complements on armour sets from the 'Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor)'.
  * @author DAM
  */
 public class GorgorothScoutGearRewardsVendor
@@ -111,7 +111,6 @@ public class GorgorothScoutGearRewardsVendor
       _injector.injectArmourType(ArmourType.MEDIUM,items);
       _injector.injectCharacterClass(CharacterClass.BURGLAR,items);
     }
-
     // Troublemaker's armour
     {
       // 1879362614 Troublemaker's Gages of the Abyss
@@ -158,7 +157,6 @@ public class GorgorothScoutGearRewardsVendor
       _injector.injectArmourType(ArmourType.MEDIUM,items);
       _injector.injectCharacterClass(CharacterClass.HUNTER,items);
     }
-
     // Trapper's armour
     {
       // 1879362592 Trapper's Boots of the Abyss
@@ -205,7 +203,6 @@ public class GorgorothScoutGearRewardsVendor
       _injector.injectArmourType(ArmourType.MEDIUM,items);
       _injector.injectCharacterClass(CharacterClass.WARDEN,items);
     }
-
     // Lancer's armour
     {
       // 1879362603 Lancer's Camail of the Abyss
