@@ -11,6 +11,8 @@ import delta.games.lotro.lore.items.ItemBinding;
 public class GorgorothScoutGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
+  private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
+  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Scout's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -29,13 +31,19 @@ public class GorgorothScoutGearRewardsVendor
    */
   public void doIt()
   {
-    doBeorning();
-    doBurglar();
-    doHunter();
-    doWarden();
+    doArmours();
+    doWeapons();
   }
 
-  private void doBeorning()
+  private void doArmours()
+  {
+    doBeorningArmour();
+    doBurglarArmour();
+    doHunterArmour();
+    doWardenArmour();
+  }
+
+  private void doBeorningArmour()
   {
     // Changeling's armour
     {
@@ -81,7 +89,7 @@ public class GorgorothScoutGearRewardsVendor
     }
   }
 
-  private void doBurglar()
+  private void doBurglarArmour()
   {
     // Gambler's armour
     {
@@ -127,7 +135,7 @@ public class GorgorothScoutGearRewardsVendor
     }
   }
 
-  private void doHunter()
+  private void doHunterArmour()
   {
     // Stalker's armour
     {
@@ -173,7 +181,7 @@ public class GorgorothScoutGearRewardsVendor
     }
   }
 
-  private void doWarden()
+  private void doWardenArmour()
   {
     // Stalwart armour
     {
@@ -216,6 +224,86 @@ public class GorgorothScoutGearRewardsVendor
       _injector.injectMinLevel(MIN_LEVEL,items);
       _injector.injectArmourType(ArmourType.MEDIUM,items);
       _injector.injectCharacterClass(CharacterClass.WARDEN,items);
+    }
+  }
+
+  private void doWeapons()
+  {
+    doIncomparableWeapons();
+    doRareWeapons();
+  }
+
+  private void doIncomparableWeapons()
+  {
+    // Abyss
+    {
+      // 1879360475 Swift Bow of the Abyss
+      // 1879360428 Sharp Stilleto of the Abyss
+      // 1879360515 Formidable Axe of the Abyss
+      // 1879360422 Lively Club of the Abyss
+      // 1879360420 Alloyed Hammer of the Abyss
+      // 1879360410 Formidable Mace of the Abyss
+      // 1879360441 Sharp Sword of the Abyss
+      // 1879360508 Nimble Spear of the Abyss
+      int[] items=new int[]{ 1879360475, 1879360428, 1879360515, 1879360422,
+          1879360420, 1879360410, 1879360441, 1879360508 };
+      _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+
+    // Wyrm
+    {
+      // 1879360451 Swift Bow of the Wyrm
+      // 1879360478 Sharp Stilleto of the Wyrm
+      // 1879360486 Formidable Axe of the Wyrm
+      // 1879360414 Lively Club of the Wyrm
+      // 1879360459 Alloyed Hammer of the Wyrm
+      // 1879360453 Formidable Mace of the Wyrm
+      // 1879360443 Sharp Sword of the Wyrm
+      // 1879360403 Nimble Spear of the Wyrm
+      int[] items=new int[]{ 1879360451, 1879360478, 1879360486, 1879360414,
+          1879360459, 1879360453, 1879360443, 1879360403 };
+      _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+  }
+
+  private void doRareWeapons()
+  {
+    // Abyss
+    {
+      // 1879360418 Keen Sword of the Abyss
+      // 1879360433 Menacing Axe of the Abyss
+      // 1879360498 Menacing Mace of the Abyss
+      // 1879360468 Quick Spear of the Abyss
+      // 1879360454 Keen Stilleto of the Abyss
+      // 1879360471 Stout Hammer of the Abyss
+      // 1879360500 Nimble Bow of the Abyss
+      // 1879360448 Agile Club of the Abyss
+      int[] items=new int[]{ 1879360418, 1879360433, 1879360498, 1879360468,
+          1879360454, 1879360471, 1879360500, 1879360448 };
+      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+
+    // Wyrm
+    {
+      // 1879360489 Keen Sword of the Wyrm
+      // 1879360511 Menacing Axe of the Wyrm
+      // 1879360458 Menacing Mace of the Wyrm
+      // 1879360406 Quick Spear of the Wyrm
+      // 1879360488 Keen Stilleto of the Wyrm
+      // 1879360457 Stout Hammer of the Wyrm
+      // 1879360446 Nimble Bow of the Wyrm
+      // 1879360496 Agile Club of the Wyrm
+      int[] items=new int[]{ 1879360489, 1879360511, 1879360458, 1879360406,
+          1879360488, 1879360457, 1879360446, 1879360496 };
+      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
     }
   }
 }

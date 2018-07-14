@@ -10,6 +10,8 @@ import delta.games.lotro.lore.items.ItemBinding;
 public class GorgorothSageGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
+  private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
+  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Sage's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -28,12 +30,19 @@ public class GorgorothSageGearRewardsVendor
    */
   public void doIt()
   {
-    doLoreMaster();
-    doMinstrel();
-    doRuneKeeper();
+    doArmours();
+    doWeapons();
   }
 
-  private void doLoreMaster()
+  private void doArmours()
+  {
+    doLoreMasterArmour();
+    doMinstrelArmour();
+    doRuneKeeperArmour();
+  }
+
+
+  private void doLoreMasterArmour()
   {
     // Beast-master's armour
     {
@@ -79,7 +88,7 @@ public class GorgorothSageGearRewardsVendor
     }
   }
 
-  private void doMinstrel()
+  private void doMinstrelArmour()
   {
     // Troubador's armour
     {
@@ -125,7 +134,7 @@ public class GorgorothSageGearRewardsVendor
     }
   }
 
-  private void doRuneKeeper()
+  private void doRuneKeeperArmour()
   {
     // Enlightened armour
     {
@@ -169,5 +178,31 @@ public class GorgorothSageGearRewardsVendor
       _injector.injectArmourType(ArmourType.LIGHT,items);
       //_injector.injectClass(CharacterClass.RUNE_KEEPER,items);
     }
+  }
+
+  private void doWeapons()
+  {
+    doIncomparableWeapons();
+    doRareWeapons();
+  }
+
+  private void doIncomparableWeapons()
+  {
+    // 1879360504 Elegant Blade of the Abyss
+    // 1879360521 Elegant Blade of the Wyrm
+    int[] items=new int[]{ 1879360504, 1879360521 };
+    _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+    _injector.injectMinLevel(MIN_LEVEL,items);
+  }
+
+  private void doRareWeapons()
+  {
+    // 1879360438 Fine Blade of the Wyrm
+    // 1879360439 Fine Blade of the Abyss
+    int[] items=new int[]{ 1879360438, 1879360439 };
+    _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+    _injector.injectMinLevel(MIN_LEVEL,items);
   }
 }
