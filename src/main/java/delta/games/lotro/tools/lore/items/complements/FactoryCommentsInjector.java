@@ -157,6 +157,34 @@ public class FactoryCommentsInjector
   }
 
   /**
+   * Share the stats between all the items whose name is the same
+   * as the item designated by id.
+   * @param id Identifier to use.
+   */
+  public void shareStats(int id)
+  {
+    Item sourceItem=_items.get(Integer.valueOf(id));
+    if (sourceItem!=null)
+    {
+      String name=sourceItem.getName();
+      List<Integer> idsList=new ArrayList<Integer>();
+      for(Item item : _items.values())
+      {
+        if (name.equals(item.getName()))
+        {
+          idsList.add(Integer.valueOf(item.getIdentifier()));
+        }
+      }
+      int[] ids=new int[idsList.size()];
+      for(int i=0;i<ids.length;i++)
+      {
+        ids[i]=idsList.get(i).intValue();
+      }
+      shareStats(ids);
+    }
+  }
+
+  /**
    * Share the stats between all the items designed by the given identifiers.
    * @param ids Identifiers to use.
    */
@@ -189,7 +217,10 @@ public class FactoryCommentsInjector
         item.getStats().setStats(source.getStats());
         if ((item instanceof Armour) && (source instanceof Armour))
         {
-          ((Armour)item).setArmourValue(((Armour)source).getArmourValue());
+          Armour armour=(Armour)item;
+          Armour sourceArmour=(Armour)source;
+          armour.setArmourValue(sourceArmour.getArmourValue());
+          armour.setArmourType(sourceArmour.getArmourType());
         }
         item.setEquipmentLocation(source.getEquipmentLocation());
       }

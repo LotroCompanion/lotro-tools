@@ -12,7 +12,7 @@ public class GorgorothScoutGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
   private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
-  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Scout's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
+  private static final String RARE_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Scout's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -41,6 +41,7 @@ public class GorgorothScoutGearRewardsVendor
     doBurglarArmour();
     doHunterArmour();
     doWardenArmour();
+    doRareArmour();
   }
 
   private void doBeorningArmour()
@@ -227,6 +228,60 @@ public class GorgorothScoutGearRewardsVendor
     }
   }
 
+  private void doRareArmour()
+  {
+    // Might
+    {
+      // 1879350197 Heavy Hauberk of the Wyrm 
+      // 1879364276 Fine Camail of the Wyrm
+      // 1879364220 Padded Coif of the Wyrm
+      // 1879364222 Strong Gages of the Wyrm
+      // 1879364201 Enduring Leggings of the Wyrm
+      // 1879364185 Tough Boots of the Wyrm
+      // 1879364274 Heavy Hauberk of the Abyss
+      // 1879364188 Fine Camail of the Abyss
+      // 1879349992 Padded Coif of the Abyss
+      // 1879364295 Strong Gages of the Abyss
+      // 1879364227 Enduring Leggings of the Abyss
+      // 1879364288 Tough Boots of the Abyss
+      int[] items=new int[]{ 1879350197, 1879364276, 1879364220, 1879364222, 1879364201, 1879364185,
+          1879364274, 1879364188, 1879349992, 1879364295, 1879364227, 1879364288 };
+      _injector.injectComment(RARE_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      for(int i=0;i<items.length;i++)
+      {
+        _injector.shareStats(items[i]);
+      }
+    }
+    // Agility
+    {
+      // 1879364263 Heavy Hauberk of the Wyrm
+      // 1879350030 Fine Camail of the Wyrm
+      // 1879364193 Padded Coif of the Wyrm
+      // 1879364281 Dextrous Gages of the Wyrm
+      // 1879364279 Flexible Leggings of the Wyrm
+      // 1879364267 Lithe Boots of the Wyrm
+      // 1879350138 Heavy Hauberk of the Abyss
+      // 1879350282 Fine Camail of the Abyss
+      // 1879364245 Padded Coif of the Abyss
+      // 1879364199 Dextrous Gages of the Abyss
+      // 1879364206 Flexible Leggings of the Abyss
+      // 1879364248 Lithe Boots of the Abyss
+      int[] items=new int[]{ 1879364263, 1879350030, 1879364193, 1879364281, 1879364279, 1879364267,
+          1879350138, 1879350282, 1879364245, 1879364199, 1879364206, 1879364248 };
+      _injector.injectComment(RARE_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      for(int i=0;i<items.length;i++)
+      {
+        _injector.shareStats(items[i]);
+      }
+    }
+  }
+
   private void doWeapons()
   {
     doIncomparableWeapons();
@@ -284,7 +339,7 @@ public class GorgorothScoutGearRewardsVendor
       // 1879360448 Agile Club of the Abyss
       int[] items=new int[]{ 1879360418, 1879360433, 1879360498, 1879360468,
           1879360454, 1879360471, 1879360500, 1879360448 };
-      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectComment(RARE_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
     }
@@ -301,7 +356,7 @@ public class GorgorothScoutGearRewardsVendor
       // 1879360496 Agile Club of the Wyrm
       int[] items=new int[]{ 1879360489, 1879360511, 1879360458, 1879360406,
           1879360488, 1879360457, 1879360446, 1879360496 };
-      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectComment(RARE_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
     }

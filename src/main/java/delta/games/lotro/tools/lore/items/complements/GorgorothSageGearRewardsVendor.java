@@ -11,7 +11,7 @@ public class GorgorothSageGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
   private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
-  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Sage's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
+  private static final String RARE_COMMENT="Master of Mordor Lore (Gorgoroth Sage's Gear Sage's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -39,8 +39,8 @@ public class GorgorothSageGearRewardsVendor
     doLoreMasterArmour();
     doMinstrelArmour();
     doRuneKeeperArmour();
+    doRareArmour();
   }
-
 
   private void doLoreMasterArmour()
   {
@@ -180,6 +180,32 @@ public class GorgorothSageGearRewardsVendor
     }
   }
 
+  private void doRareArmour()
+  {
+    // 1879364215 Padded Vest of the Wyrm
+    // 1879364280 Embroidered Mantle of the Wyrm
+    // 1879364244 Fancy Cap of the Wyrm
+    // 1879364190 Supple Gloves of the Wyrm
+    // 1879364205 Corded Trousers of the Wyrm
+    // 1879364230 Superior Shoes of the Wyrm
+    // 1879364217 Padded Vest of the Abyss
+    // 1879364261 Embroidered Mantle of the Abyss
+    // 1879364225 Fancy Cap of the Abyss
+    // 1879364272 Supple Gloves of the Abyss
+    // 1879364229 Corded Trousers of the Abyss
+    // 1879364210 Superior Shoes of the Abyss
+    int[] items=new int[]{ 1879364215, 1879364280, 1879364244, 1879364190, 1879364205, 1879364230,
+        1879364217, 1879364261, 1879364225, 1879364272, 1879364229, 1879364210 };
+    _injector.injectComment(RARE_COMMENT,items);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+    _injector.injectMinLevel(MIN_LEVEL,items);
+    _injector.injectArmourType(ArmourType.LIGHT,items);
+    for(int i=0;i<items.length;i++)
+    {
+      _injector.shareStats(items[i]);
+    }
+  }
+
   private void doWeapons()
   {
     doIncomparableWeapons();
@@ -201,7 +227,7 @@ public class GorgorothSageGearRewardsVendor
     // 1879360438 Fine Blade of the Wyrm
     // 1879360439 Fine Blade of the Abyss
     int[] items=new int[]{ 1879360438, 1879360439 };
-    _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+    _injector.injectComment(RARE_COMMENT,items);
     _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
     _injector.injectMinLevel(MIN_LEVEL,items);
   }

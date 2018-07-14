@@ -12,7 +12,8 @@ public class GorgorothWarriorGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
   private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
-  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
+  private static final String RARE_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
+  private static final String JEWELS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's/Scout's/Sage's Gear Rewards Vendor) ; Abyss of Mordath Tier 1 ; 2500 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -31,8 +32,20 @@ public class GorgorothWarriorGearRewardsVendor
    */
   public void doIt()
   {
+    doJewels();
     doArmours();
     doWeapons();
+  }
+
+  private void doJewels()
+  {
+    // 1879365756 Earring of Spring's Arrival
+    // 1879365757 Earring of Spring's Promise
+    // 1879365755 Earring of Spring's Rite
+    int[] items=new int[]{ 1879365756, 1879365757, 1879365755 };
+    _injector.injectComment(JEWELS_COMMENT,items);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+    _injector.injectMinLevel(MIN_LEVEL,items);
   }
 
   private void doArmours()
@@ -40,6 +53,7 @@ public class GorgorothWarriorGearRewardsVendor
     doCaptainArmour();
     doChampionArmour();
     doGuardianArmour();
+    doRareArmour();
   }
 
   private void doCaptainArmour()
@@ -180,6 +194,32 @@ public class GorgorothWarriorGearRewardsVendor
     }
   }
 
+  private void doRareArmour()
+  {
+    // 1879364269 Reinforced Chestplate of the Wyrm
+    // 1879364258 Bolstered Pauldrons of the Wyrm
+    // 1879364189 Hardened Helm of the Wyrm
+    // 1879364255 Strong Gauntlets of the Wyrm
+    // 1879364254 Tough Greaves of the Wyrm
+    // 1879364292 Thick Sabatons of the Wyrm
+    // 1879364268 Reinforced Chestplate of the Abyss
+    // 1879364218 Bolstered Pauldrons of the Abyss
+    // 1879364264 Hardened Helm of the Abyss
+    // 1879364213 Strong Gauntlets of the Abyss
+    // 1879364238 Tough Greaves of the Abyss
+    // 1879364243 Thick Sabatons of the Abyss
+    int[] items=new int[]{ 1879364269, 1879364258, 1879364189, 1879364255, 1879364254, 1879364292,
+        1879364268, 1879364218, 1879364264, 1879364213, 1879364238, 1879364243 };
+    _injector.injectComment(RARE_COMMENT,items);
+    _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+    _injector.injectMinLevel(MIN_LEVEL,items);
+    _injector.injectArmourType(ArmourType.HEAVY,items);
+    for(int i=0;i<items.length;i++)
+    {
+      _injector.shareStats(items[i]);
+    }
+  }
+
   private void doWeapons()
   {
     doIncomparableWeapons();
@@ -261,7 +301,7 @@ public class GorgorothWarriorGearRewardsVendor
       // 1879360445 Weighted Club of the Abyss
       int[] items=new int[]{ 1879360485, 1879360436, 1879360497, 1879360449, 1879360522, 1879360450, 1879360407, 1879360474,
           1879360490, 1879360463, 1879360416, 1879360444, 1879360491, 1879360435, 1879360408, 1879360445 };
-      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectComment(RARE_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
     }
@@ -286,7 +326,7 @@ public class GorgorothWarriorGearRewardsVendor
       // 1879360455 Weighted Club of the Wyrm
       int[] items=new int[]{ 1879360506, 1879360440, 1879360513, 1879360437, 1879360510, 1879360419, 1879360505, 1879360482,
           1879360483, 1879360518, 1879360466, 1879360415, 1879360528, 1879360411, 1879360467, 1879360455 };
-      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectComment(RARE_COMMENT,items);
       _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
       _injector.injectMinLevel(MIN_LEVEL,items);
     }
