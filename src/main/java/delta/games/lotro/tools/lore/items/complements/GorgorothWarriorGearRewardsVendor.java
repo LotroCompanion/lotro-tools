@@ -11,6 +11,8 @@ import delta.games.lotro.lore.items.ItemBinding;
 public class GorgorothWarriorGearRewardsVendor
 {
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
+  private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
+  private static final String RARE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Warrior's Gear Rewards Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
   private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
@@ -29,12 +31,18 @@ public class GorgorothWarriorGearRewardsVendor
    */
   public void doIt()
   {
-    doCaptain();
-    doChampion();
-    doGuardian();
+    doArmours();
+    doWeapons();
   }
 
-  private void doCaptain()
+  private void doArmours()
+  {
+    doCaptainArmour();
+    doChampionArmour();
+    doGuardianArmour();
+  }
+
+  private void doCaptainArmour()
   {
     // Surgeon's armour
     {
@@ -80,7 +88,7 @@ public class GorgorothWarriorGearRewardsVendor
     }
   }
 
-  private void doChampion()
+  private void doChampionArmour()
   {
     // Swordsman's armour
     {
@@ -126,7 +134,7 @@ public class GorgorothWarriorGearRewardsVendor
     }
   }
 
-  private void doGuardian()
+  private void doGuardianArmour()
   {
     // Defender's armour
     {
@@ -169,6 +177,118 @@ public class GorgorothWarriorGearRewardsVendor
       _injector.injectMinLevel(MIN_LEVEL,items);
       _injector.injectArmourType(ArmourType.HEAVY,items);
       _injector.injectCharacterClass(CharacterClass.GUARDIAN,items);
+    }
+  }
+
+  private void doWeapons()
+  {
+    doIncomparableWeapons();
+    doRareWeapons();
+  }
+
+  private void doIncomparableWeapons()
+  {
+    // Abyss
+    {
+      // 1879360481 Powerful Greatbow of the Abyss
+      // 1879360434 Powerful Bow of the Abyss
+      // 1879360421 Sharp Dagger of the Abyss
+      // 1879360519 Sharp Skean of the Abyss
+      // 1879360499 Brutal Axe of the Abyss
+      // 1879360417 Brutal Double Axe of the Abyss
+      // 1879360477 Forceful Bludgeon of the Abyss
+      // 1879360412 Forceful Club of the Abyss
+      // 1879360452 Alloyed War Hammer of the Abyss
+      // 1879360465 Alloyed Mallet of the Abyss
+      // 1879360432 Steel Heavy Mace of the Abyss
+      // 1879360400 Steel Mace of the Abyss
+      // 1879360526 Sharp Falchion of the Abyss
+      // 1879360524 Serrated Sword of the Abyss
+      // 1879360472 Powerful Lance of the Abyss
+      // 1879360487 Powerful Spear of the Abyss
+      int[] items=new int[]{ 1879360481, 1879360434, 1879360421, 1879360519, 1879360499, 1879360417, 1879360477, 1879360412,
+          1879360452, 1879360465, 1879360432, 1879360400, 1879360526, 1879360524, 1879360472, 1879360487 };
+      _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+
+    // Wyrm
+    {
+      // 1879360461 Powerful Greatbow of the Wyrm
+      // 1879360484 Powerful Bow of the Wyrm
+      // 1879360431 Sharp Dagger of the Wyrm
+      // 1879360429 Sharp Skean of the Wyrm
+      // 1879360413 Brutal Axe of the Wyrm
+      // 1879360425 Brutal Double Axe of the Wyrm
+      // 1879360405 Forceful Bludgeon of the Wyrm
+      // 1879360423 Forceful Club of the Wyrm
+      // 1879360464 Alloyed War Hammer of the Wyrm
+      // 1879360527 Alloyed Mallet of the Wyrm
+      // 1879360470 Steel Heavy Mace of the Wyrm
+      // 1879360509 Steel Mace of the Wyrm
+      // 1879360494 Sharp Falchion of the Wyrm
+      // 1879360512 Serrated Sword of the Wyrm
+      // 1879360523 Powerful Lance of the Wyrm
+      // 1879360426 Powerful Spear of the Wyrm
+      int[] items=new int[]{ 1879360461, 1879360484, 1879360431, 1879360429, 1879360413, 1879360425, 1879360405, 1879360423,
+          1879360464, 1879360527, 1879360470, 1879360509, 1879360494, 1879360512, 1879360523, 1879360426 };
+      _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+  }
+
+  private void doRareWeapons()
+  {
+    // Abyss
+    {
+      // 1879360485 Keen Falchion of the Abyss
+      // 1879360436 Cruel Double Axe of the Abyss
+      // 1879360497 Iron Heavy Mace of the Abyss
+      // 1879360449 Stout Lance of the Abyss
+      // 1879360522 Keen Skean of the Abyss
+      // 1879360450 Stout War Hammer of the Abyss
+      // 1879360407 Taut Greatbow of the Abyss
+      // 1879360474 Weighted Bludgeon of the Abyss
+      // 1879360490 Heavy Sword of the Abyss
+      // 1879360463 Cruel Axe of the Abyss
+      // 1879360416 Iron Mace of the Abyss
+      // 1879360444 Stout Spear of the Abyss
+      // 1879360491 Keen Dagger of the Abyss
+      // 1879360435 Stout Mallet of the Abyss
+      // 1879360408 Taut Bow of the Abyss
+      // 1879360445 Weighted Club of the Abyss
+      int[] items=new int[]{ 1879360485, 1879360436, 1879360497, 1879360449, 1879360522, 1879360450, 1879360407, 1879360474,
+          1879360490, 1879360463, 1879360416, 1879360444, 1879360491, 1879360435, 1879360408, 1879360445 };
+      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+    }
+
+    // Wyrm
+    {
+      // 1879360506 Keen Falchion of the Wyrm
+      // 1879360440 Cruel Double Axe of the Wyrm
+      // 1879360513 Iron Heavy Mace of the Wyrm
+      // 1879360437 Stout Lance of the Wyrm
+      // 1879360510 Keen Skean of the Wyrm
+      // 1879360419 Stout War Hammer of the Wyrm
+      // 1879360505 Taut Greatbow of the Wyrm
+      // 1879360482 Weighted Bludgeon of the Wyrm
+      // 1879360483 Heavy Sword of the Wyrm
+      // 1879360518 Cruel Axe of the Wyrm
+      // 1879360466 Iron Mace of the Wyrm
+      // 1879360415 Stout Spear of the Wyrm
+      // 1879360528 Keen Dagger of the Wyrm
+      // 1879360411 Stout Mallet of the Wyrm
+      // 1879360467 Taut Bow of the Wyrm
+      // 1879360455 Weighted Club of the Wyrm
+      int[] items=new int[]{ 1879360506, 1879360440, 1879360513, 1879360437, 1879360510, 1879360419, 1879360505, 1879360482,
+          1879360483, 1879360518, 1879360466, 1879360415, 1879360528, 1879360411, 1879360467, 1879360455 };
+      _injector.injectComment(RARE_WEAPONS_COMMENT,items);
+      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
     }
   }
 }
