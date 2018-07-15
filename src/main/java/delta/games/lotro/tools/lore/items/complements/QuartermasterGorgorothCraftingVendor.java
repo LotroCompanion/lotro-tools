@@ -5,10 +5,10 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ItemBinding;
 
 /**
- * Adds complements on crafted items from recipes of the 'Conquest Of Gorgoroth Crafting' quartermaster.
+ * Adds complements on crafted items from recipes of the 'Quartermaster (Gorgoroth Crafting Vendor)'.
  * @author DAM
  */
-public class ConquestOfGorgorthCrafting
+public class QuartermasterGorgorothCraftingVendor
 {
   private static final String RECIPE_NAME = "RECIPE_NAME";
   private static final String ARMOR_COMMENT="Single use recipe \"" + RECIPE_NAME +"\" at Quartermaster (Gorgoroth Crafting Vendor) (100 Signets of Thandrim + 1 Fragment of the Abyss)"; 
@@ -20,7 +20,7 @@ public class ConquestOfGorgorthCrafting
    * Constructor.
    * @param injector Injector.
    */
-  public ConquestOfGorgorthCrafting(FactoryCommentsInjector injector)
+  public QuartermasterGorgorothCraftingVendor(FactoryCommentsInjector injector)
   {
     _injector=injector;
   }

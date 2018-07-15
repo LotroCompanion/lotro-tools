@@ -45,7 +45,7 @@ public class FactoryCommentsInjector
     new GorgorothSageGearRewardsVendor(this).doIt();
     new GorgorothScoutGearRewardsVendor(this).doIt();
     new GorgorothWarriorGearRewardsVendor(this).doIt();
-    new ConquestOfGorgorthCrafting(this).doIt();
+    new QuartermasterGorgorothCraftingVendor(this).doIt();
   }
 
   /**
