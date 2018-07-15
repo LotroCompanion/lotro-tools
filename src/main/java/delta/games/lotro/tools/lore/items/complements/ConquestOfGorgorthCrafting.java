@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.items.complements;
 
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ItemBinding;
 
@@ -71,38 +72,89 @@ public class ConquestOfGorgorthCrafting
       // TODO scaling data (standard/crit)
     }
     // Beorning
-    // 1879364661 Changeling's Coif of the Abyss
-    // 1879364639 Berserker's Coif of the Abyss
-    // 1879364632 Weald-guard's Coif of the Abyss
-
+    {
+      // 1879364661 Changeling's Coif of the Abyss
+      // 1879364639 Berserker's Coif of the Abyss
+      // 1879364632 Weald-guard's Coif of the Abyss
+      int[] items=new int[]{ 1879364661, 1879364639, 1879364632 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Beorning Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      _injector.injectCharacterClass(CharacterClass.BEORNING,items);
+      // TODO scaling data (standard/crit)
+    }
     // Burglar
-    // 1879364635 Gambler's Coif of the Abyss
-    // 1879364645 Blade's Coif of the Abyss
-    // 1879364653 Troublemaker's Coif of the Abyss
-
+    {
+      // 1879364635 Gambler's Coif of the Abyss
+      // 1879364645 Blade's Coif of the Abyss
+      // 1879364653 Troublemaker's Coif of the Abyss
+      int[] items=new int[]{ 1879364635, 1879364645, 1879364653 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Burglar Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      // TODO scaling data (standard/crit)
+    }
     // Hunter
-    // 1879364637 Stalker's Coif of the Abyss
-    // 1879364629 Archer's Coif of the Abyss
-    // 1879364655 Trapper's Coif of the Abyss
-
+    {
+      // 1879364637 Stalker's Coif of the Abyss
+      // 1879364629 Archer's Coif of the Abyss
+      // 1879364655 Trapper's Coif of the Abyss
+      int[] items=new int[]{ 1879364637, 1879364629, 1879364655 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Hunter Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      // TODO scaling data (standard/crit)
+    }
     // Warden
-    // 1879364651 Stalwart Coif of the Abyss
-    // 1879364634 Strident Coif of the Abyss
-    // 1879364636 Lancer's Coif of the Abyss
-
+    {
+      // 1879364651 Stalwart Coif of the Abyss
+      // 1879364634 Strident Coif of the Abyss
+      // 1879364636 Lancer's Coif of the Abyss
+      int[] items=new int[]{ 1879364651, 1879364634, 1879364636 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Warden Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.MEDIUM,items);
+      // TODO scaling data (standard/crit)
+    }
     // Captain
-    // 1879364643 Surgeon's Helm of the Abyss
-    // 1879364646 Charger's Helm of the Abyss
-    // 1879364656 Leader's Helm of the Abyss
-
+    {
+      // 1879364643 Surgeon's Helm of the Abyss
+      // 1879364646 Charger's Helm of the Abyss
+      // 1879364656 Leader's Helm of the Abyss
+      int[] items=new int[]{ 1879364643, 1879364646, 1879364656 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Captain Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.HEAVY,items);
+      // TODO scaling data (standard/crit)
+    }
     // Champion
-    // 1879364633 Swordsman's Helm of the Abyss
-    // 1879364657 Rampaging Helm of the Abyss
-    // 1879364659 Scything Helm of the Abyss
-
+    {
+      // 1879364633 Swordsman's Helm of the Abyss
+      // 1879364657 Rampaging Helm of the Abyss
+      // 1879364659 Scything Helm of the Abyss
+      int[] items=new int[]{ 1879364633, 1879364657, 1879364659 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Champion Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.HEAVY,items);
+      // TODO scaling data (standard/crit)
+    }
     // Guardian
-    // 1879364640 Defender's Helm of the Abyss
-    // 1879364644 Savage Helm of the Abyss
-    // 1879364641 Shining Helm of the Abyss
+    {
+      // 1879364640 Defender's Helm of the Abyss
+      // 1879364644 Savage Helm of the Abyss
+      // 1879364641 Shining Helm of the Abyss
+      int[] items=new int[]{ 1879364640, 1879364644, 1879364641 };
+      _injector.injectComment(ARMOR_COMMENT.replace(RECIPE_NAME,"Guardian Set Helms Recipe"),items);
+      _injector.injectBinding(ItemBinding.BIND_ON_EQUIP,items);
+      _injector.injectMinLevel(MIN_LEVEL,items);
+      _injector.injectArmourType(ArmourType.HEAVY,items);
+      // TODO scaling data (standard/crit)
+    }
   }
 }
