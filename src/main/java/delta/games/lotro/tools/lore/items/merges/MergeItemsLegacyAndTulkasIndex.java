@@ -220,6 +220,8 @@ public class MergeItemsLegacyAndTulkasIndex
       */
       legacy.setDescription(tulkasDescription);
     }
+    // Icon
+    legacy.setIcon(tulkas.getIcon());
     // Properties
     {
       Map<String,String> props=tulkas.getProperties();

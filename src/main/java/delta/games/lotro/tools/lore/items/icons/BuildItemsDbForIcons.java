@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileWriter;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
 
 /**
@@ -26,8 +24,8 @@ public class BuildItemsDbForIcons
   private static final File LUA_FILE=new File("items.lua");
   private static final File ICON_IDS_FILE=new File("iconIds.txt");
   private HashMap<String,List<Integer>> _iconIds2Ids;
-  private Set<String> _iconsIds;
-  private Set<String> _backgroundIconsIds;
+  private Set<Integer> _iconsIds;
+  private Set<Integer> _backgroundIconsIds;
 
   /**
    * Constructor.
@@ -35,8 +33,8 @@ public class BuildItemsDbForIcons
   public BuildItemsDbForIcons()
   {
     _iconIds2Ids=new HashMap<String,List<Integer>>();
-    _iconsIds=new HashSet<String>();
-    _backgroundIconsIds=new HashSet<String>();
+    _iconsIds=new HashSet<Integer>();
+    _backgroundIconsIds=new HashSet<Integer>();
   }
 
   private HashMap<Integer,Item> loadItemsFile(File oldFile, File newFile)
@@ -93,13 +91,13 @@ public class BuildItemsDbForIcons
     for(Integer id : ids)
     {
       Item item=items.get(id);
-      int iconId=NumericTools.parseInt(item.getProperty(ItemPropertyNames.ICON_ID),0);
+      int iconId=item.getIconId();
       String name=item.getName();
       if (name==null) name="";
       name=name.replace("\n","");
       name=name.replace("\r","");
       String hexIconId=Integer.toHexString(iconId).toUpperCase();
-      int backgroundIconId=NumericTools.parseInt(item.getProperty(ItemPropertyNames.BACKGROUND_ICON_ID),0);
+      int backgroundIconId=item.getBackgroundIconId();
       String hexBackgroundIconId=Integer.toHexString(backgroundIconId).toUpperCase();
       sb.append("[").append(id).append("]={[1]=\"");
       sb.append(name).append("\";[2]=\"\";[3]=5;[4]=4;[5]=3;[6]=false;[7]=false;[8]=0x");
@@ -151,11 +149,11 @@ public class BuildItemsDbForIcons
       //if ((idValue==1879097298) || (idValue==1879109623)
       //    || (idValue==1879109618) || (idValue==1879083770) || (idValue==1879115686))
       //{
-      String iconId=item.getProperty(ItemPropertyNames.ICON_ID);
-      _iconsIds.add(iconId);
-      String backgroundIconId=item.getProperty(ItemPropertyNames.BACKGROUND_ICON_ID);
-      _backgroundIconsIds.add(backgroundIconId);
-      String key=iconId+"-"+backgroundIconId;
+      int iconId=item.getIconId();
+      _iconsIds.add(Integer.valueOf(iconId));
+      int backgroundIconId=item.getBackgroundIconId();
+      _backgroundIconsIds.add(Integer.valueOf(backgroundIconId));
+      String key=item.getIcon();
       //ImageIcon icon=IconsManager.getItemIcon(iconId,backgroundIconId);
       //if (icon!=null) continue;
       List<Integer> list=_iconIds2Ids.get(key);

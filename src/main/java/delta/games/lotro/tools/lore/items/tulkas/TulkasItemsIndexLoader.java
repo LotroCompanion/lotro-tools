@@ -194,13 +194,9 @@ public class TulkasItemsIndexLoader extends TulkasItemsLoader
       item.setIdentifier(id.intValue());
       item.setName(name);
       item.setDescription(description);
-      if (iconID!=null)
+      if ((iconID!=null) && (backgroundIconId!=null))
       {
-        item.setProperty(ItemPropertyNames.ICON_ID,iconID.toString());
-      }
-      if (backgroundIconId!=null)
-      {
-        item.setProperty(ItemPropertyNames.BACKGROUND_ICON_ID,backgroundIconId.toString());
+        item.setIcon(iconID.toString()+"-"+backgroundIconId.toString());
       }
       if (isUnique!=null)
       {
