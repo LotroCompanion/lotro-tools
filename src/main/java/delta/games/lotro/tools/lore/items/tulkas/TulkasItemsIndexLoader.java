@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
