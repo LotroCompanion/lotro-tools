@@ -39,18 +39,20 @@ public class GeoDeedsDataInjector
    */
   public void doIt()
   {
+    // Treasure caches
     doTreasureCaches();
+    // Pelennor
+    doPelennorHaradrimSupplies();
     // The Wastes
     doRangerCaches();
     doAncientWeapons();
-    // Mordor: rare chests
-    doMordorRareChests();
-    doNorthernMirkwoodDwarfMarkers();
-    doPelennorHaradrimSupplies();
+    // Mordor
     doUdunForges();
-    // TODO:
+    doMordorRareChests();
+    // Northern Mirwood
+    doNorthernMirkwoodDwarfMarkers();
+    // TODO: path of the company
     // Erebor: Old papers => not possible
-    // NMW: path of the company
   }
 
   private void doTreasureCaches()
