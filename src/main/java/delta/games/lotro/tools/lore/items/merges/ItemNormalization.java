@@ -128,8 +128,8 @@ public class ItemNormalization
     // Write result files
     File toFile=new File("data/items/items.xml").getAbsoluteFile();
     ItemXMLWriter.writeItemsFile(toFile,items);
-    File filteredItemsFile=new File("data/items/items_filtered.xml").getAbsoluteFile();
-    ItemXMLWriter.writeItemsFile(filteredItemsFile,filteredItems);
+    //File filteredItemsFile=new File("data/items/items_filtered.xml").getAbsoluteFile();
+    //ItemXMLWriter.writeItemsFile(filteredItemsFile,filteredItems);
     // Dump unmanaged items
     if (_byCategory.size()>0)
     {
