@@ -15,3 +15,5 @@
 /data/items/items_filtered.xml
 /data/items/log*.txt
 /factions.xml
+/data/recipes/resolvedLegacyRecipes.xml
+/data/recipes/resolvedLuaRecipes.xml

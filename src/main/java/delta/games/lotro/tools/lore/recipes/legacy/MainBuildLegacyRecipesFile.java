@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.recipes;
+package delta.games.lotro.tools.lore.recipes.legacy;
 
 import java.io.File;
 import java.io.FileFilter;
