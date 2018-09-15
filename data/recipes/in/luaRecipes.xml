@@ -9422,6 +9422,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Brushed Magnificent Leather" profession="Forester" tier="6" category="Leather" xp="6">
+<ingredient quantity="2">
+<ingredientItem name="Aged Extraordinary Hide" icon="1091474225-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Brushed Magnificent Leather" icon="1091474222-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Brushed Magnificent Leather" icon="1091474222-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Finished Magnificent Leather" profession="Forester" tier="6" category="Leather" xp="6">
 <ingredient quantity="2">
 <ingredientItem name="Glazed Magnificent Leather" icon="1091474222-1090640816"/>
@@ -9441,6 +9454,22 @@
 <recipe name="Glazed Magnificent Leather" profession="Forester" tier="6" category="Leather" xp="6">
 <ingredient quantity="2">
 <ingredientItem name="Brushed Magnificent Leather" icon="1091474222-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Wax" icon="1090522693-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Glazed Magnificent Leather" icon="1091474222-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Glazed Magnificent Leather" icon="1091474222-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Glazed Magnificent Leather" profession="Forester" tier="6" category="Leather" xp="6">
+<ingredient quantity="2">
+<ingredientItem name="Aged Extraordinary Leather" icon="1091474223-1090640816"/>
 </ingredient>
 <ingredient>
 <ingredientItem name="Lump of Wax" icon="1090522693-1090640816"/>
@@ -9524,9 +9553,38 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Solid Ilex Board" profession="Forester" tier="6" category="Wood" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Thin Ilex Board" icon="1091444181-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Wax" icon="1090522693-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Solid Ilex Board" icon="1091444181-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Solid Ilex Board" icon="1091444181-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Thin Ilex Board" profession="Forester" tier="6" category="Wood" xp="8">
 <ingredient quantity="2">
 <ingredientItem name="Gnarled Ilex Branch" icon="1091444263-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Ilex Board" icon="1091444181-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Thin Ilex Board" icon="1091444181-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Thin Ilex Board" profession="Forester" tier="6" category="Wood" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Log of Ilex Wood" icon="1091444259-1090640816"/>
 </ingredient>
 <recipeResult>
 <result>
@@ -9964,6 +10022,22 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Brushed Anórien Leather" profession="Forester" tier="10" category="Leather" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Anórien Hide" icon="1091991131-1090640816"/>
+</ingredient>
+<ingredient optional="true">
+<ingredientItem name="Piece of Poplar Bark" icon="1091991112-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Brushed Anórien Leather" icon="1091991138-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Brushed Anórien Leather" icon="1091991138-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Bulk Brushed Anórien Leather (x25)" profession="Forester" tier="10" category="Leather" xp="37">
 <ingredient quantity="50">
 <ingredientItem name="Anórien Hide" icon="1091991131-1090640816"/>
@@ -10042,6 +10116,22 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Poplar Board" profession="Forester" tier="10" category="Wood" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Log of Poplar Wood" icon="1091991124-1090640816"/>
+</ingredient>
+<ingredient optional="true">
+<ingredientItem name="Piece of Poplar Bark" icon="1091991112-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Poplar Board" icon="1091991115-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Poplar Board" icon="1091991115-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Piece of Doomfold Bark" profession="Forester" tier="11" category="Extract" xp="8">
 <ingredient>
 <ingredientItem name="Strong Gorgoroth Branch" icon="1092323465-1090640816"/>
@@ -10094,6 +10184,32 @@
 </result>
 <result quantity="75" critical="true">
 <resultItem name="Brushed Doomfold Leather" icon="1092323487-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Brushed Doomfold Leather" profession="Forester" tier="11" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Doomfold Leather Shaving" icon="1092323478-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Brushed Doomfold Leather" icon="1092323487-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Brushed Doomfold Leather" icon="1092323487-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Doomfold Board" profession="Forester" tier="11" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Doomfold Wood Shaving" icon="1092323499-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Doomfold Board" icon="1092323476-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Doomfold Board" icon="1092323476-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -14671,6 +14787,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bronze Ingot" profession="Metalsmith" tier="1" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Bronze Chain Link" icon="1091513621-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Bronze Ingot" icon="1090536858-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Bronze Ingot" icon="1090536858-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Bronze Ingot" profession="Metalsmith" tier="1" category="Processing" xp="8">
 <ingredient quantity="4">
 <ingredientItem name="Bronze Shaving" icon="1091738265-1090640816"/>
@@ -15174,6 +15303,19 @@
 </result>
 <result critical="true">
 <resultItem name="Temper-Crafted Shoulder Guards" icon="1090524994-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Barrow-iron Ingot" profession="Metalsmith" tier="2" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Iron Band" icon="1090641797-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -16039,6 +16181,19 @@
 </result>
 <result quantity="4" critical="true">
 <resultItem name="High-grade Steel Ingot" icon="1091513625-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Rich Iron Ingot" profession="Metalsmith" tier="3" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Steel Chain Link" icon="1090524205-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -16972,6 +17127,19 @@
 <recipeResult>
 <result>
 <resultItem name="Small Artisan Crest" icon="1091473998-1091685927"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Dwarf-iron Ingot" profession="Metalsmith" tier="4" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Dwarf-iron Chain Link" icon="1091513627-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -18330,6 +18498,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Ancient Iron Ingot" profession="Metalsmith" tier="5" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Ancient Steel Chain Link" icon="1091513631-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Ancient Steel Ingot" profession="Metalsmith" tier="5" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Elf-craft Brace" icon="1091480121-1090640816"/>
@@ -19278,6 +19459,19 @@
 <recipeResult>
 <result>
 <resultItem name="Small Supreme Crest" icon="1091474010-1091685927"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Khazâd-bronze Ingot" profession="Metalsmith" tier="6" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Blackened Bronze Chain Link" icon="1091474377-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Khazâd-bronze Ingot" icon="1091474369-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Khazâd-bronze Ingot" icon="1091474369-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -21570,6 +21764,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Copper Ingot" profession="Prospector" tier="1" category="Smelting" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Chunk of Copper Ore" icon="1090530632-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Copper Ingot" icon="1090537031-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Copper Ingot" icon="1090537031-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Low-grade Steel Ingot" profession="Prospector" tier="2" category="Refining" xp="6">
 <ingredient>
 <ingredientItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
@@ -21882,6 +22089,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Khazâd-copper Ingot" profession="Prospector" tier="6" category="Smelting" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Piece of Khazâd Metal" icon="1091469414-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Khazâd-copper Ingot" icon="1091474227-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Khazâd-copper Ingot" icon="1091474227-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Khazâd-gold Ingot" profession="Prospector" tier="6" category="Smelting" xp="8">
 <ingredient quantity="2">
 <ingredientItem name="Chunk of Khazâd Skarn" icon="1091469414-1090640816"/>
@@ -22183,6 +22403,22 @@
 <recipeResult>
 <result quantity="4">
 <resultItem name="Anórien Metal Shaving" icon="1091809968-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Anórien Ingot" profession="Prospector" tier="10" category="Smelting" xp="8">
+<ingredient quantity="2">
+<ingredientItem name="Chunk of Anórien Skarn" icon="1091991137-1090640816"/>
+</ingredient>
+<ingredient optional="true">
+<ingredientItem name="Bit of Pure Anórien Ore" icon="1091991105-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Anórien Ingot" icon="1091991152-1090640816"/>
+</result>
+<result quantity="3" critical="true">
+<resultItem name="Anórien Ingot" icon="1091991152-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -32273,6 +32509,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Brushed Light Leather" profession="Tailor" tier="1" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Leather Pad" icon="1091513639-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Light Leather" icon="1091387709-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Light Leather" icon="1091387709-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Brushed Light Leather" profession="Tailor" tier="1" category="Processing" xp="8">
 <ingredient quantity="4">
 <ingredientItem name="Light Leather Shaving" icon="1091738233-1090640816"/>
@@ -33630,6 +33879,19 @@
 </result>
 <result critical="true">
 <resultItem name="Exquisite Leather Shoulder Guards" icon="1090523839-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Brushed Medium Leather" profession="Tailor" tier="2" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Leather Brace" icon="1091479557-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Medium Leather" icon="1091387710-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Medium Leather" icon="1091387710-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -35151,6 +35413,19 @@
 </result>
 <result critical="true">
 <resultItem name="Exquisite Outrider's Shoulder Guards" icon="1090523839-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Brushed Sturdy Leather" profession="Tailor" tier="3" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Sturdy Leather Binding" icon="1091513641-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Sturdy Leather" icon="1091387711-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Sturdy Leather" icon="1091387711-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -36776,6 +37051,19 @@
 </result>
 <result critical="true">
 <resultItem name="Exquisite Hunter's Shoulder Guards" icon="1090523839-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Brushed Pristine Leather" profession="Tailor" tier="4" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Pristine Leather Brace" icon="1091577139-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Pristine Leather" icon="1091387712-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Pristine Leather" icon="1091387712-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -38451,6 +38739,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Brushed Exceptional Leather" profession="Tailor" tier="5" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Exceptional Leather Pad" icon="1091513643-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Exceptional Leather" icon="1091387713-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Exceptional Leather" icon="1091387713-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Glazed Exceptional Leather" profession="Tailor" tier="5" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Galadhrim Guard" icon="1091480104-1090640816"/>
@@ -40089,6 +40390,19 @@
 </result>
 <result critical="true">
 <resultItem name="Majestic Marchwarden's Potent Shoulder Guards" icon="1090523839-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Brushed Magnificent Leather" profession="Tailor" tier="6" category="Obsolete Item Conversion" xp="4">
+<ingredient>
+<ingredientItem name="Magnificent Leather Pad" icon="1091474353-1090640816"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Brushed Magnificent Leather" icon="1091474222-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Brushed Magnificent Leather" icon="1091474222-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -42454,6 +42768,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bronze Ingot" profession="Weaponsmith" tier="1" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Bronze Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Bronze Ingot" icon="1090536858-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Bronze Ingot" icon="1090536858-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Bronze Shavings" profession="Weaponsmith" tier="1" category="Processing" xp="8">
 <ingredient quantity="2">
 <ingredientItem name="Bronze Ingot" icon="1090536858-1090640816"/>
@@ -42979,6 +43306,32 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Barrow-iron Ingot" profession="Weaponsmith" tier="2" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Barrow-iron Stun Dust" icon="1090524206-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Barrow-iron Ingot" profession="Weaponsmith" tier="2" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Barrow-iron Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Low-grade Steel Ingot" profession="Weaponsmith" tier="2" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Steel Blade" icon="1091513649-1090640816"/>
@@ -42989,6 +43342,19 @@
 </result>
 <result quantity="4" critical="true">
 <resultItem name="Low-grade Steel Ingot" icon="1091513623-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Barrow-iron Ingot" profession="Weaponsmith" tier="2" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Barrow-iron Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Barrow-iron Ingot" icon="1091513622-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -43586,6 +43952,45 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Rich Iron Ingot" profession="Weaponsmith" tier="3" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Rich-iron Stun Dust" icon="1090524206-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Rich Iron Ingot" profession="Weaponsmith" tier="3" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Rich-iron Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Rich Iron Ingot" profession="Weaponsmith" tier="3" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Rich Iron Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Rich Iron Shavings" profession="Weaponsmith" tier="3" category="Processing" xp="8">
 <ingredient quantity="2">
 <ingredientItem name="Rich Iron Ingot" icon="1091513624-1090640816"/>
@@ -44034,6 +44439,32 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Dwarf-iron Ingot" profession="Weaponsmith" tier="4" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Dwarf-iron Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Dwarf-iron Ingot" profession="Weaponsmith" tier="4" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Dwarf-iron Stun Dust" icon="1090538244-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Dwarf-steel Ingot" profession="Weaponsmith" tier="4" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Strong Steel Hilt" icon="1091568664-1090640816"/>
@@ -44057,6 +44488,19 @@
 </result>
 <result quantity="4" critical="true">
 <resultItem name="Westernesse Steel Ingot" icon="1091513630-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Dwarf-iron Ingot" profession="Weaponsmith" tier="4" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Dwarf-iron Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Dwarf-iron Ingot" icon="1091513629-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -44489,6 +44933,32 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Ancient Iron Ingot" profession="Weaponsmith" tier="5" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Ancient-iron Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Ancient Iron Ingot" profession="Weaponsmith" tier="5" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Ancient-iron Stun Dust" icon="1090538244-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Ancient Steel Ingot" profession="Weaponsmith" tier="5" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Intricately Engraved Pommel" icon="1091513646-1090640816"/>
@@ -44512,6 +44982,19 @@
 </result>
 <result quantity="4" critical="true">
 <resultItem name="Elf-steel Ingot" icon="1091513632-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Ancient Iron Ingot" profession="Weaponsmith" tier="5" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Ancient Iron Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Ancient Iron Ingot" icon="1091401297-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -45312,6 +45795,32 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Khazâd-iron Ingot" profession="Weaponsmith" tier="6" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Khazâd-iron Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Khazâd-iron Ingot" icon="1091474228-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Khazâd-iron Ingot" icon="1091474228-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Khazâd-iron Ingot" profession="Weaponsmith" tier="6" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Khazâd-iron Stun Dust" icon="1090538244-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Khazâd-iron Ingot" icon="1091474228-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Khazâd-iron Ingot" icon="1091474228-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Khazâd-steel Ingot" profession="Weaponsmith" tier="6" category="Obsolete Item Conversion" xp="4">
 <ingredient>
 <ingredientItem name="Dark Steel Guard" icon="1091474388-1090640816"/>
@@ -45322,6 +45831,32 @@
 </result>
 <result quantity="4" critical="true">
 <resultItem name="Khazâd-steel Ingot" icon="1091474230-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Khazâd-steel Ingot" profession="Weaponsmith" tier="6" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Khazâd-steel Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Khazâd-steel Ingot" icon="1091474230-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Khazâd-steel Ingot" icon="1091474230-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Khazâd-bronze Ingot" profession="Weaponsmith" tier="6" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Khazâd-bronze Shaving" icon="1091738265-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Khazâd-bronze Ingot" icon="1091474369-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Khazâd-bronze Ingot" icon="1091474369-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -45614,6 +46149,32 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Low-grade Calenard Ingot" profession="Weaponsmith" tier="7" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Westfold Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Low-grade Calenard Ingot" icon="1091656967-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Low-grade Calenard Ingot" icon="1091656967-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Low-grade Calenard Ingot" profession="Weaponsmith" tier="7" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Westfold Stun Dust" icon="1090538244-1090519042"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Low-grade Calenard Ingot" icon="1091656967-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Low-grade Calenard Ingot" icon="1091656967-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Medium-grade Calenard Ingot" profession="Weaponsmith" tier="7" category="Obsolete Item Conversion" xp="4">
 <ingredient quantity="2">
 <ingredientItem name="Calenard Bear Trap" icon="1090532010-1090519042"/>
@@ -45875,6 +46436,32 @@
 </result>
 <result critical="true">
 <resultItem name="Strong Eastemnet Assault Sword" icon="1091771194-1090519044"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Low-grade Riddermark Ingot" profession="Weaponsmith" tier="8" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Eastemnet Stun Dust" icon="1090524206-1090519042"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Low-grade Riddermark Ingot" icon="1091738258-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Low-grade Riddermark Ingot" icon="1091738258-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Low-grade Riddermark Ingot" profession="Weaponsmith" tier="8" category="Obsolete Item Conversion" xp="4">
+<ingredient quantity="2">
+<ingredientItem name="Eastemnet Bear Trap" icon="1090532010-1090519042"/>
+</ingredient>
+<recipeResult>
+<result quantity="2">
+<resultItem name="Low-grade Riddermark Ingot" icon="1091738258-1090640816"/>
+</result>
+<result quantity="4" critical="true">
+<resultItem name="Low-grade Riddermark Ingot" icon="1091738258-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -47313,6 +47900,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Thin Rowan Board" profession="Woodworker" tier="1" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Rowan Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Rowan Board" icon="1091388133-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Thin Rowan Board" icon="1091388133-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Heavy Rowan Bow" profession="Woodworker" tier="1" category="Ranged Weapons (Level 10)" xp="10">
 <ingredient quantity="4">
 <ingredientItem name="Thin Rowan Board" icon="1091388133-1090640816"/>
@@ -47983,6 +48583,19 @@
 <recipeResult>
 <result quantity="4">
 <resultItem name="Ash Wood Shaving" icon="1091738251-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Thin Ash Board" profession="Woodworker" tier="2" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Ash Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Ash Board" icon="1091388136-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Thin Ash Board" icon="1091388136-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -49075,6 +49688,19 @@
 <resultItem name="Thin Yew Board" icon="1091388142-1090640816"/>
 </result>
 <result quantity="4" critical="true">
+<resultItem name="Thin Yew Board" icon="1091388142-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Thin Yew Board" profession="Woodworker" tier="3" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Yew Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Yew Board" icon="1091388142-1090640816"/>
+</result>
+<result quantity="2" critical="true">
 <resultItem name="Thin Yew Board" icon="1091388142-1090640816"/>
 </result>
 </recipeResult>
@@ -50275,6 +50901,19 @@
 <recipeResult>
 <result quantity="4">
 <resultItem name="Lebethron Wood Shaving" icon="1091738251-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Thin Lebethron Board" profession="Woodworker" tier="4" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Lebethron Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Lebethron Board" icon="1091388145-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Thin Lebethron Board" icon="1091388145-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -51671,6 +52310,19 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Thin Black Ash Board" profession="Woodworker" tier="5" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Black Ash Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Black Ash Board" icon="1091513655-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Thin Black Ash Board" icon="1091513655-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Ornate Black Ash Bow" profession="Woodworker" tier="5" category="Ranged Weapons (Guild)" xp="12" cooldown="583200">
 <ingredient quantity="4">
 <ingredientItem name="Solid Black Ash Board" icon="1091513655-1090640816"/>
@@ -52248,6 +52900,28 @@
 <recipeResult>
 <result>
 <resultItem name="Reshaped Beorning's Carving of the First Age" icon="1091942892-1091472984"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Reforged Hunter's Crossbow of the Second Age" profession="Woodworker" tier="6" category="Legendary Hunter Weapons" xp="10" cooldown="237600">
+<ingredient quantity="4">
+<ingredientItem name="Solid Ilex Board" icon="1091444181-1090640816"/>
+</ingredient>
+<ingredient quantity="2">
+<ingredientItem name="Reinforced Ilex Board" icon="1091444181-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Extraordinary Leather Wrapping" icon="1090536818-1090640816"/>
+</ingredient>
+<ingredient quantity="2">
+<ingredientItem name="Mithril-inlaid Treated Ilex Board" icon="1091479555-1090640816"/>
+</ingredient>
+<ingredient quantity="5">
+<ingredientItem name="Legendary Shard" icon="1091480078-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Reforged Hunter's Crossbow of the Second Age" icon="1090524669-1091472985"/>
 </result>
 </recipeResult>
 </recipe>
@@ -52892,6 +53566,19 @@
 <recipeResult>
 <result quantity="4">
 <resultItem name="Ilex Wood Shaving" icon="1091738251-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Thin Ilex Board" profession="Woodworker" tier="6" category="Processing" xp="8">
+<ingredient quantity="4">
+<ingredientItem name="Ilex Wood Shaving" icon="1091738251-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Thin Ilex Board" icon="1091444181-1090640816"/>
+</result>
+<result quantity="2" critical="true">
+<resultItem name="Thin Ilex Board" icon="1091444181-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
