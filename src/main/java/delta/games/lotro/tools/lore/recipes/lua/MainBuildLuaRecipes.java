@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.RecipeUtils;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.plugins.PluginConstants;
 import delta.games.lotro.plugins.lotrocompanion.RecipesParser;
@@ -21,8 +22,11 @@ public class MainBuildLuaRecipes
   private void doIt()
   {
     RecipesManager manager=loadRecipes();
+    int nbRecipes=manager.getRecipesCount();
+    System.out.println("Got "+nbRecipes+" recipes.");
     File toFile=new File("data/recipes/in/luaRecipes.xml");
     manager.writeToFile(toFile);
+    System.out.println("Wrote recipes to: "+toFile);
   }
 
   private RecipesManager loadRecipes()
@@ -40,12 +44,16 @@ public class MainBuildLuaRecipes
       {
         try
         {
-          System.out.println("Doing: " + character);
+          int nbRecipesBefore=manager.getRecipesCount();
           List<Recipe> toonRecipes=parser.doIt(dataFile);
           for(Recipe recipe : toonRecipes)
           {
-            manager.registerRecipe(recipe);
+            addRecipe(manager,recipe);
           }
+          int nbRecipes=manager.getRecipesCount();
+          int nbRecipesForTooon=toonRecipes.size();
+          int nbNewRecipes=nbRecipes-nbRecipesBefore;
+          System.out.println(character + ": got " + nbRecipesForTooon + " recipes (" + nbNewRecipes + " new recipes).");
         }
         catch(Exception e)
         {
@@ -54,10 +62,28 @@ public class MainBuildLuaRecipes
       }
       else
       {
-        System.out.println("No recipes for: " + character);
+        System.out.println(character + ": No recipes!");
       }
     }
     return manager;
+  }
+
+  private void addRecipe(RecipesManager manager, Recipe recipe)
+  {
+    List<Recipe> currentRecipes=manager.getRecipes(recipe.getProfession(),recipe.getTier());
+    boolean found=false;
+    for(Recipe currentRecipe : currentRecipes)
+    {
+      if (RecipeUtils.equals(currentRecipe,recipe))
+      {
+        found=true;
+        break;
+      }
+    }
+    if (!found)
+    {
+      manager.registerRecipe(recipe);
+    }
   }
 
   /**
