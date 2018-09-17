@@ -1182,6 +1182,60 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Beef Stew (x25)" profession="Cook" tier="3" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="10">
+<ingredientItem name="Bowl of Hearty Stock" icon="1091513659-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Cut of Beef" icon="1090640824-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Expert Repast" icon="1091473970-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Beef Stew" icon="1090541648-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Hard Tack Rations (x25)" profession="Cook" tier="3" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="20">
+<ingredientItem name="Cup of Spring Barley Flour" icon="1091584552-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Expert Repast" icon="1091473970-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Hard Tack Ration" icon="1090535655-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Steak and Kidney Pie (x25)" profession="Cook" tier="3" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="10">
+<ingredientItem name="Pie Crust" icon="1090541652-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Cut of Marinated Beef" icon="1091513660-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Lamb Kidney" icon="1090541714-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Expert Repast" icon="1091473970-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Steak and Kidney Pie" icon="1090541626-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Small Feasting Table" profession="Cook" tier="3" category="Decorations" xp="10">
 <ingredient>
 <ingredientItem name="Coney Pie" icon="1090541626-1090522692"/>
@@ -1367,6 +1421,60 @@
 <resultItem name="Strawberry Pie Filling" icon="1091584817-1090640816"/>
 </result>
 <result quantity="3" critical="true">
+<resultItem name="Strawberry Pie Filling" icon="1091584817-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Hearty Stock (x5)" profession="Cook" tier="3" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lamb Kidney" icon="1090541714-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Expert Repast" icon="1091474032-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Hearty Stock" icon="1091513659-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Marinated Beef (x5)" profession="Cook" tier="3" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cut of Beef" icon="1090640824-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Expert Repast" icon="1091474032-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cut of Marinated Beef" icon="1091513660-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Strawberry Filling (x5)" profession="Cook" tier="3" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Strawberries" icon="1090541695-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Honey" icon="1090519719-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Expert Repast" icon="1091474032-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
 <resultItem name="Strawberry Pie Filling" icon="1091584817-1090640816"/>
 </result>
 </recipeResult>
@@ -1805,6 +1913,60 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Shire Rations (x25)" profession="Cook" tier="4" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="10">
+<ingredientItem name="Marinated Chicken Cutlet" icon="1091513661-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Shire Apple" icon="1090541667-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Sharp Cheese Wheel" icon="1090541681-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Artisan Repast" icon="1091474078-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Shire Rations" icon="1090535655-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Spiced Apple Pie (x25)" profession="Cook" tier="4" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="10">
+<ingredientItem name="Pie Crust" icon="1090541652-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Apple Pie Filling" icon="1091478184-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Artisan Repast" icon="1091474078-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Spiced Apple Pie" icon="1090541626-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Stew of Kings (x25)" profession="Cook" tier="4" category="Cooked Food (Guild)" xp="12" cooldown="237600">
+<ingredient quantity="10">
+<ingredientItem name="Bowl of Chicken Stock" icon="1091535608-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Tater" icon="1091513663-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Uncooked Chicken" icon="1091513668-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Artisan Repast" icon="1091474078-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Stew of Kings" icon="1090541648-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Large Feasting Table" profession="Cook" tier="4" category="Decorations" xp="10">
 <ingredient>
 <ingredientItem name="Coney Pie" icon="1090541626-1090522692"/>
@@ -2067,6 +2229,70 @@
 </result>
 <result quantity="3" critical="true">
 <resultItem name="Raspberry Pie Filling" icon="1091584819-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Apple Pie Filling (x5)" profession="Cook" tier="4" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Shire Apple" icon="1090541667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Cinnamon" icon="1090541683-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Artisan Repast" icon="1091474084-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Apple Pie Filling" icon="1091478184-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Marinated Chicken Cutlets (x5)" profession="Cook" tier="4" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Uncooked Chicken" icon="1091513668-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pouch of Fine Seasonings" icon="1091509638-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Artisan Repast" icon="1091474084-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Marinated Chicken Cutlet" icon="1091513661-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Raspberry Filling (x5)" profession="Cook" tier="4" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Raspberries" icon="1090519724-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Artisan Repast" icon="1091474084-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Raspberry Pie Filling" icon="1091584819-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Winter Barley Flour (x5)" profession="Cook" tier="4" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bundle of Winter Barley" icon="1091479563-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Artisan Repast" icon="1091474084-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Winter Barley Flour" icon="1091584554-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -2554,6 +2780,60 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Lembas (x25)" profession="Cook" tier="5" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Cup of Winter Barley Flour" icon="1091584554-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Cup of Fresh Cream" icon="1090541685-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Master Repast" icon="1091473950-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Lembas" icon="1091552347-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Perfect Pie (x25)" profession="Cook" tier="5" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Pie Crust" icon="1090541652-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Blackberry Pie Filling" icon="1091584821-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Master Repast" icon="1091473950-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Perfect Pie" icon="1090541626-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Ultimate Carrot Cake (x25)" profession="Cook" tier="5" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Cup of Tasty Frosting" icon="1090541671-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Cup of Winter Barley Flour" icon="1091584554-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Fresh Carrot" icon="1090522705-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Master Repast" icon="1091473950-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Ultimate Carrot Cake" icon="1090541669-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Cream of Barley Soup" profession="Cook" tier="5" category="Fortifying Food" xp="6">
 <ingredient>
 <ingredientItem name="Bowl of Beef Stock" icon="1091535613-1090640816"/>
@@ -2718,6 +2998,38 @@
 </result>
 <result quantity="3" critical="true">
 <resultItem name="Prepared Umbel Hops" icon="1091388638-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Blackberry Pie Filling (x5)" profession="Cook" tier="5" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Blackberries" icon="1090541699-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Fresh Cream" icon="1090541685-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Master Repast" icon="1091474036-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Blackberry Pie Filling" icon="1091584821-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Tasty Frosting (x5)" profession="Cook" tier="5" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Cup of Winter Barley Flour" icon="1091584554-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Fresh Cream" icon="1090541685-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Master Repast" icon="1091474036-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Tasty Frosting" icon="1090541671-1090640816"/>
 </result>
 </recipeResult>
 </recipe>
@@ -3133,6 +3445,63 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Bread and Jam (x25)" profession="Cook" tier="6" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Jar of Blackberry Jam" icon="1091474348-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Ball of Dough" icon="1091474349-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Supreme Repast" icon="1091474050-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Bread and Jam" icon="1091471141-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Rack of Lamb with Mint Sauce (x25)" profession="Cook" tier="6" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Jar of Mint Sauce" icon="1091474346-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Rack of Lamb" icon="1091471149-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Pinch of Mixed Herbs" icon="1091471150-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Supreme Repast" icon="1091474050-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Rack of Lamb with Mint Sauce" icon="1091471151-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Shepherd's Pie (x25)" profession="Cook" tier="6" category="Cooked Food (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Pie Crust" icon="1090541652-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Bowl of Mashed Royal Taters" icon="1091474347-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Rack of Lamb" icon="1091471149-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Sharp Cheese Wheel" icon="1090541681-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Supreme Repast" icon="1091474050-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Shepherd's Pie" icon="1091471156-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Feast of Ethuilwereth" profession="Cook" tier="6" category="Crafted Relics" xp="10" cooldown="64800">
 <ingredient>
 <ingredientItem name="Jar of Blackberry Jam" icon="1091474348-1090640816"/>
@@ -3202,6 +3571,54 @@
 <recipeResult>
 <result>
 <resultItem name="Feast of Lithe" icon="1091573370-1091388958"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Black Tea" profession="Cook" tier="6" category="Fine Drinks (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Bundle of Tea Leaves" icon="1091474351-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Perfect Tea Leaf" icon="1091514835-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Black Tea" icon="1091512803-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Green Tea" profession="Cook" tier="6" category="Fine Drinks (Guild)" xp="10" cooldown="237600">
+<ingredient quantity="6">
+<ingredientItem name="Bundle of Tea Leaves" icon="1091474351-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Fine Tea Leaf" icon="1091514837-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Green Tea" icon="1091512807-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of White Tea" profession="Cook" tier="6" category="Fine Drinks (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="3">
+<ingredientItem name="Bundle of Tea Leaves" icon="1091474351-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Young Tea Leaf" icon="1091514834-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of White Tea" icon="1091512808-1090522692"/>
 </result>
 </recipeResult>
 </recipe>
@@ -3418,6 +3835,98 @@
 <resultItem name="Strawberry-rhubarb Filling" icon="1091810046-1090640816"/>
 </result>
 <result quantity="3" critical="true">
+<resultItem name="Strawberry-rhubarb Filling" icon="1091810046-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Ball of Dough (x5)" profession="Cook" tier="6" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Cup of Winter Barley Flour" icon="1091584554-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Supreme Repast" icon="1091473992-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Ball of Dough" icon="1091474349-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Blackberry Jam (x5)" profession="Cook" tier="6" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Blackberries" icon="1090541699-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Spice" icon="1091471152-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Supreme Repast" icon="1091473992-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Jar of Blackberry Jam" icon="1091474348-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Mashed Royal Taters (x5)" profession="Cook" tier="6" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Royal Tater" icon="1091474352-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Herbs" icon="1091471150-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Supreme Repast" icon="1091473992-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Mashed Royal Taters" icon="1091474347-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Mint Sauce (x5)" profession="Cook" tier="6" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bundle of Mint Leaves" icon="1091474350-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Vinegar" icon="1091471140-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Spice" icon="1091471152-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Supreme Repast" icon="1091473992-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Jar of Mint Sauce" icon="1091474346-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Strawberry-rhubarb Filling (x5)" profession="Cook" tier="6" category="Ingredients (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Bunch of Strawberries" icon="1090541695-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Stalk of Rhubarb" icon="1090541697-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Supreme Repast" icon="1091473992-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
 <resultItem name="Strawberry-rhubarb Filling" icon="1091810046-1090640816"/>
 </result>
 </recipeResult>
@@ -3746,6 +4255,25 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Cup of Superior Second Breakfast Blend Coffee" profession="Cook" tier="7" category="Beverages (Guild)" xp="8" cooldown="237600">
+<ingredient quantity="3">
+<ingredientItem name="Bag of Roasted Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westfold Repast" icon="1091658275-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Cup of Superior Second Breakfast Blend Coffee" icon="1091686691-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Birch Campfire Kit" profession="Cook" tier="7" category="Campfire" xp="4">
 <ingredient quantity="2">
 <ingredientItem name="Log of Birch Wood" icon="1091656947-1090640816"/>
@@ -3881,6 +4409,72 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Apple and Cheese Pies (x25)" profession="Cook" tier="7" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Cup of Black Barley Flour" icon="1091656943-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Shire Apple" icon="1090541667-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Piece of Goat Cheese" icon="1091656965-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Westfold Repast" icon="1091658273-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Apple and Cheese Pie" icon="1091657505-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Rohan Pasty (x25)" profession="Cook" tier="7" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Cup of Black Barley Flour" icon="1091656943-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Golden Shire Tater" icon="1091513669-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Flank of Beef" icon="1091584556-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Westfold Repast" icon="1091658273-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Rohan Pasty" icon="1091657509-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Toad in the Hole (x25)" profession="Cook" tier="7" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="20">
+<ingredientItem name="Cup of Black Barley Flour" icon="1091656943-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Raw Pork Sausage" icon="1090541658-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Large Bottle of Milk" icon="1091464430-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Westfold Repast" icon="1091658273-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Toad-in-the-Hole" icon="1091657507-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Grand Feast of Ethuilwereth" profession="Cook" tier="7" category="Crafted Relics" xp="10" cooldown="237600">
 <ingredient>
 <ingredientItem name="Bowl of Leek Stock" icon="1091513659-1090640816"/>
@@ -3919,6 +4513,63 @@
 <recipeResult>
 <result>
 <resultItem name="Grand Feast of Lithe" icon="1091573403-1091388958"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Westfold Bold Coffee" profession="Cook" tier="7" category="Fine Drinks (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="3">
+<ingredientItem name="Peaberry Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Roasted Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Westfold Bold Coffee" icon="1091686700-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Westfold Medium Coffee" profession="Cook" tier="7" category="Fine Drinks (Guild)" xp="10" cooldown="237600">
+<ingredient quantity="2">
+<ingredientItem name="Peaberry Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Roasted Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Westfold Medium Coffee" icon="1091686697-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Westfold Mild Coffee" profession="Cook" tier="7" category="Fine Drinks (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Peaberry Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Roasted Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Westfold Mild Coffee" icon="1091686694-1090522692"/>
 </result>
 </recipeResult>
 </recipe>
@@ -4137,6 +4788,102 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bilberry Filling (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Bilberries" icon="1091656941-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bilberry Filling" icon="1091810048-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Leek Stock (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Leeks" icon="1091656970-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Golden Shire Tater" icon="1091513669-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Leek Stock" icon="1091513659-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Black Barley Flour (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bundle of Black Barley" icon="1091656942-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Black Barley Flour" icon="1091656943-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Bread-crumbs (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient>
+<ingredientItem name="Loaf of Barley Bread" icon="1091656949-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Bread-crumbs" icon="1091656950-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Oatmeal (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bundle of Black Barley" icon="1091656942-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Oatmeal" icon="1091656975-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Loaf of Barley Bread (x5)" profession="Cook" tier="7" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Cup of Black Barley Flour" icon="1091656943-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Bottle of Milk" icon="1091464430-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westfold Repast" icon="1091658277-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Loaf of Barley Bread" icon="1091656949-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Bag of Crispy Crumbs" profession="Cook" tier="7" category="Lore-master Pet Food" xp="8">
 <ingredient>
 <ingredientItem name="Cup of Bread-crumbs" icon="1091656950-1090640816"/>
@@ -4344,6 +5091,25 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Cup of Superior Eastemnet Coffee" profession="Cook" tier="8" category="Beverages (Guild)" xp="8" cooldown="237600">
+<ingredient quantity="3">
+<ingredientItem name="Bag of Eastemnet Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Eastemnet Repast" icon="1091756834-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Cup of Superior Eastemnet Coffee" icon="1091748481-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Oak Campfire Kit" profession="Cook" tier="8" category="Campfire" xp="4">
 <ingredient quantity="2">
 <ingredientItem name="Log of Oak Wood" icon="1091738254-1090640816"/>
@@ -4479,6 +5245,53 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Roast Wild Duck with Cherry Sauce (x25)" profession="Cook" tier="8" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Jar of Cherry Jam" icon="1091757578-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Uncooked Duck Breast" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Pinch of Pepper" icon="1091757792-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Eastemnet Repast" icon="1091756838-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Roast Wild Duck with Cherry Sauce" icon="1091758678-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Vegetable Pasty (x25)" profession="Cook" tier="8" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Bunch of Turnips" icon="1091738240-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Fresh Carrot" icon="1090522705-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Piece of Goat Cheese" icon="1091656965-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Eastemnet Repast" icon="1091756838-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Vegetable Pasty" icon="1091758686-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Feast of Cormarë" profession="Cook" tier="8" category="Crafted Relics" xp="10" cooldown="237600">
 <ingredient>
 <ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
@@ -4523,6 +5336,63 @@
 <recipeResult>
 <result>
 <resultItem name="Grand Feast of Cormarë" icon="1091756776-1091388958"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Bold Riddermark Coffee" profession="Cook" tier="8" category="Fine Drinks (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="3">
+<ingredientItem name="Riddermark Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Eastemnet Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Bold Riddermark Coffee" icon="1091748490-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Medium Riddermark Coffee" profession="Cook" tier="8" category="Fine Drinks (Guild)" xp="10" cooldown="237600">
+<ingredient quantity="2">
+<ingredientItem name="Riddermark Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Eastemnet Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Medium Riddermark Coffee" icon="1091748485-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Mild Riddermark Coffee" profession="Cook" tier="8" category="Fine Drinks (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Riddermark Coffee Bean" icon="1091686762-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Eastemnet Coffee Grounds" icon="1091686704-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Mild Riddermark Coffee" icon="1091748489-1090522692"/>
 </result>
 </recipeResult>
 </recipe>
@@ -4768,6 +5638,124 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bag of Eastemnet Coffee Grounds (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bag of Eastemnet Coffee Beans" icon="1091686708-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bag of Eastemnet Coffee Grounds" icon="1091686704-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Duck Stock (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Uncooked Duck Breast" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bunch of Turnips" icon="1091738240-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Duck Stock" icon="1091757802-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Mashed Turnips (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bowl of Stewed Turnips" icon="1091758718-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Bottle of Milk" icon="1091464430-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Mashed Turnips" icon="1091758719-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Stewed Turnips (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Turnips" icon="1091738240-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Stewed Turnips" icon="1091758718-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cherry Filling (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Cherries" icon="1091738232-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cherry Filling" icon="1091810049-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Rye Flour (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Rye Berries" icon="1091738252-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Jar of Cherry Jam (x5)" profession="Cook" tier="8" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Cherries" icon="1091738232-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Apple Juice" icon="1091758724-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Eastemnet Repast" icon="1091756836-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Jar of Cherry Jam" icon="1091757578-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Bag of Eastemnet Crumbs" profession="Cook" tier="8" category="Lore-master Pet Food" xp="8">
 <ingredient>
 <ingredientItem name="Bunch of Rye Berries" icon="1091738252-1090640816"/>
@@ -4981,6 +5969,53 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Cherry Rye Muffin (x10)" profession="Cook" tier="8" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bunch of Cherries" icon="1091738232-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Eastemnet Repast" icon="1091756834-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Cherry Rye Muffin" icon="1091657511-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Crisp Roast Duck and Potato (x10)" profession="Cook" tier="8" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Uncooked Duck Breast" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Royal Tater" icon="1091474352-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pouch of Fine Seasonings" icon="1091509638-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Eastemnet Repast" icon="1091756834-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Crisp Roast Duck and Potato" icon="1090541665-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Ploughman's Loaf (x10)" profession="Cook" tier="8" category="Trailfood (Guild)" xp="8" cooldown="237600">
 <ingredient>
 <ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
@@ -5006,6 +6041,56 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Rye Flour Oatcake (x10)" profession="Cook" tier="8" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Fine Clover Honey" icon="1091509637-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bunch of Oats" icon="1091388633-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Bottle of Milk" icon="1091464430-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Eastemnet Repast" icon="1091756834-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Rye Flour Oatcake" icon="1091459928-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Turnip and Bacon Casserole (x10)" profession="Cook" tier="8" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Bowl of Stewed Turnips" icon="1091758718-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Piece of Uncooked Bacon" icon="1090640820-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Green Onion" icon="1091388628-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Herbs" icon="1091471150-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Eastemnet Repast" icon="1091756834-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Turnip and Bacon Casserole" icon="1091590725-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Cup of Westemnet Coffee" profession="Cook" tier="9" category="Beverages" xp="8">
 <ingredient>
 <ingredientItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
@@ -5024,6 +6109,25 @@
 <resultItem name="Cup of Westemnet Coffee" icon="1091825809-1090522692"/>
 </result>
 <result critical="true">
+<resultItem name="Cup of Superior Westemnet Coffee" icon="1091825809-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Superior Westemnet Coffee" profession="Cook" tier="9" category="Beverages (Guild)" xp="8" cooldown="237600">
+<ingredient quantity="3">
+<ingredientItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient quantity="3">
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westemnet Repast" icon="1091804674-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
 <resultItem name="Cup of Superior Westemnet Coffee" icon="1091825809-1090522692"/>
 </result>
 </recipeResult>
@@ -5138,6 +6242,53 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Superior Goat Cheese and Pear Pasty (x25)" profession="Cook" tier="9" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Jar of Pear Preserves" icon="1091825818-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Piece of Goat Cheese" icon="1091656965-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Chicken Egg" icon="1090522701-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Westemnet Repast" icon="1091804671-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Goat Cheese and Pear Pasty" icon="1091825972-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Superior Pear Glazed Roast Venison (x25)" profession="Cook" tier="9" category="Cooked Food (Guild)" xp="10" cooldown="583200">
+<ingredient quantity="10">
+<ingredientItem name="Jar of Pear Preserves" icon="1091825818-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Bowl of Poached Pears" icon="1091825975-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Haunch of Venison" icon="1091825758-1090640816"/>
+</ingredient>
+<ingredient quantity="10">
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Westemnet Repast" icon="1091804671-1091685925"/>
+</ingredient>
+<recipeResult>
+<result quantity="25">
+<resultItem name="Superior Pear Glazed Roast Venison" icon="1091825949-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Feast of Yáviérë" profession="Cook" tier="9" category="Crafted Relics" xp="10" cooldown="237600">
 <ingredient>
 <ingredientItem name="Venison Sausage" icon="1091825756-1090640816"/>
@@ -5179,6 +6330,63 @@
 <recipeResult>
 <result>
 <resultItem name="Grand Feast of Yáviérë" icon="1091826359-1091388958"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Bold Eorlingas Coffee" profession="Cook" tier="9" category="Fine Drinks (Guild)" xp="12" cooldown="583200">
+<ingredient quantity="3">
+<ingredientItem name="Eorlingas Coffee Bean" icon="1091810036-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Bold Eorlingas Coffee" icon="1091825804-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Medium Eorlingas Coffee" profession="Cook" tier="9" category="Fine Drinks (Guild)" xp="10" cooldown="237600">
+<ingredient quantity="2">
+<ingredientItem name="Eorlingas Coffee Bean" icon="1091810036-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Medium Eorlingas Coffee" icon="1091825805-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Mild Eorlingas Coffee" profession="Cook" tier="9" category="Fine Drinks (Guild)" xp="8" cooldown="64800">
+<ingredient>
+<ingredientItem name="Eorlingas Coffee Bean" icon="1091810036-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Large Clay Pot" icon="1091513573-1090640816"/>
+</ingredient>
+<recipeResult>
+<result>
+<resultItem name="Cup of Mild Eorlingas Coffee" icon="1091825802-1090522692"/>
 </result>
 </recipeResult>
 </recipe>
@@ -5423,6 +6631,126 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bag of Westemnet Coffee Grounds (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bag of Westemnet Coffee Beans" icon="1091810040-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bag of Westemnet Coffee Grounds" icon="1091810044-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Poached Pears (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Pears" icon="1091809903-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Spice" icon="1091471152-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Cinnamon" icon="1090541683-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Poached Pears" icon="1091825975-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Bowl of Vegetable Stock (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Kingstead Mushrooms" icon="1091809899-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bunch of Leeks" icon="1091656970-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Fresh Carrot" icon="1090522705-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Bowl of Vegetable Stock" icon="1091825816-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Cup of Baked Beans (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bunch of Beans" icon="1091946844-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Wildflower Honey" icon="1091825761-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Piece of Uncooked Bacon" icon="1090640820-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Water" icon="1090522808-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Cup of Baked Beans" icon="1091825811-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Jar of Pear Preserves (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="4" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Bowl of Poached Pears" icon="1091825975-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Drop of Wildflower Honey" icon="1091825761-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Fresh Ginger" icon="1091825765-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Jar of Pear Preserves" icon="1091825818-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Venison Sausage (x5)" profession="Cook" tier="9" category="Ingredients (Guild)" xp="2" cooldown="64800">
+<ingredient quantity="2">
+<ingredientItem name="Haunch of Venison" icon="1091825758-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Pepper" icon="1091757792-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Mixed Herbs" icon="1091471150-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bottle of Savoury Seasonings" icon="1091513664-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Small Westemnet Repast" icon="1091804670-1091685927"/>
+</ingredient>
+<recipeResult>
+<result quantity="5">
+<resultItem name="Venison Sausage" icon="1091825756-1090640816"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Baked Pear Pudding" profession="Cook" tier="9" category="Trail Food" xp="8">
 <ingredient>
 <ingredientItem name="Jar of Pear Preserves" icon="1091825818-1090640816"/>
@@ -5551,6 +6879,53 @@
 </result>
 </recipeResult>
 </recipe>
+<recipe name="Bacon-wrapped Roast Partridge (x10)" profession="Cook" tier="9" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Partridge Breast Fillet" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bowl of Vegetable Stock" icon="1091825816-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Pinch of Pepper" icon="1091757792-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Piece of Uncooked Bacon" icon="1090640820-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bag of Salt" icon="1091513667-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westemnet Repast" icon="1091804674-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Bacon-wrapped Roast Partridge" icon="1091825947-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Baked Beans with Partridge (x10)" profession="Cook" tier="9" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Partridge Breast Fillet" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Baked Beans" icon="1091825811-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bowl of Vegetable Stock" icon="1091825816-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Yellow Onion" icon="1090522703-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westemnet Repast" icon="1091804674-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Baked Beans with Partridge" icon="1091825942-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
 <recipe name="Partridge Hot Pot (x10)" profession="Cook" tier="9" category="Trailfood (Guild)" xp="8" cooldown="237600">
 <ingredient>
 <ingredientItem name="Partridge Breast Fillet" icon="1091757788-1090640816"/>
@@ -5573,6 +6948,53 @@
 <recipeResult>
 <result quantity="10">
 <resultItem name="Partridge Hot Pot" icon="1091657523-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Partridge Pie (x10)" profession="Cook" tier="9" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Partridge Breast Fillet" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Venison Sausage" icon="1091825756-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bowl of Vegetable Stock" icon="1091825816-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Rye Flour" icon="1091758728-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westemnet Repast" icon="1091804674-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Partridge Pie" icon="1091758690-1090522692"/>
+</result>
+</recipeResult>
+</recipe>
+<recipe name="Partridge and a Pear Treat (x10)" profession="Cook" tier="9" category="Trailfood (Guild)" xp="8" cooldown="237600">
+<ingredient>
+<ingredientItem name="Partridge Breast Fillet" icon="1091757788-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Jar of Pear Preserves" icon="1091825818-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Bunch of Pears" icon="1091809903-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Cup of Fresh Cream" icon="1090541685-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Lump of Butter" icon="1090522711-1090640816"/>
+</ingredient>
+<ingredient>
+<ingredientItem name="Medium Westemnet Repast" icon="1091804674-1091685924"/>
+</ingredient>
+<recipeResult>
+<result quantity="10">
+<resultItem name="Partridge and a Pear Treat" icon="1091825860-1090522692"/>
 </result>
 </recipeResult>
 </recipe>
