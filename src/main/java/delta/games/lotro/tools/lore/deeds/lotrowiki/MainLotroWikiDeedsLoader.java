@@ -19,6 +19,7 @@ import delta.games.lotro.tools.lore.deeds.checks.CheckItemRewardsInDeeds;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedNames;
 import delta.games.lotro.tools.lore.deeds.checks.NormalizeDeedsText;
 import delta.games.lotro.tools.lore.deeds.geo.GeoDeedsDataInjector;
+import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
 
 /**
  * Download deeds data from the site lotro-wiki.
@@ -50,7 +51,7 @@ public class MainLotroWikiDeedsLoader
 
   private void doIt()
   {
-    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface();
+    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface("deeds");
     // Load a sample "deed category" URL
     LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser(lotroWiki);
 

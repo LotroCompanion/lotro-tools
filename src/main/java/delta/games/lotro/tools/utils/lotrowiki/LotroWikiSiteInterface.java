@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds.lotrowiki;
+package delta.games.lotro.tools.utils.lotrowiki;
 
 import java.io.File;
 
@@ -21,11 +21,12 @@ public class LotroWikiSiteInterface
 
   /**
    * Constructor.
+   * @param dirName Directory name.
    */
-  public LotroWikiSiteInterface()
+  public LotroWikiSiteInterface(String dirName)
   {
     _client=new Downloader();
-    File tmpDir=new File("tmp/deeds");
+    File tmpDir=new File("tmp",dirName);
     _tmpFiles=new TmpFiles(tmpDir);
   }
 

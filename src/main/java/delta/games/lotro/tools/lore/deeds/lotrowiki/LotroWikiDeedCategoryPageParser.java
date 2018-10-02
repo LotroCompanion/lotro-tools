@@ -24,6 +24,8 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.lore.deeds.DeedsContainer;
 import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
+import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
+import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
 import delta.games.lotro.utils.Escapes;
 
 /**

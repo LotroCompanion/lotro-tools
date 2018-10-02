@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds.lotrowiki;
+package delta.games.lotro.tools.utils.lotrowiki;
 
 /**
  * Constants in the lotro-wiki data loader.
