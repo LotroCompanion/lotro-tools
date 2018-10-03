@@ -12,6 +12,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
+import delta.common.utils.text.TextTools;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
@@ -27,6 +28,8 @@ public class LotroWikiRecipeIndexPageParser
   private static final Logger _logger=Logger.getLogger(LotroWikiRecipeIndexPageParser.class);
 
   private static final String INDEX="/index.php/";
+  private static final String INDEX_MISSING_PAGE_START="/index.php?title=";
+  private static final String INDEX_MISSING_PAGE_END="&action=edit";
 
   private LotroWikiSiteInterface _lotroWiki;
 
@@ -241,11 +244,25 @@ public class LotroWikiRecipeIndexPageParser
   {
     // Item
     String itemKey=null;
+    // Regular page link
     // <a href="/index.php/Item:Rowan_Campfire_Kit" title="Item:Rowan Campfire Kit">
+    // Missing page link:
+    // <a href="/index.php?title=Item:Ploughman%27s_Loaf&amp;action=edit&amp;redlink=1" class="new" title="Item:Ploughman&#39;s Loaf (page does not exist)">Item:Ploughman's Loaf</a>
     String link=aTag.getAttributeValue("href");
-    if ((link!=null) && (link.startsWith(INDEX)))
+    if (link!=null)
     {
-      itemKey=link.substring(INDEX.length());
+      String missingLink=TextTools.findBetween(link,INDEX_MISSING_PAGE_START,INDEX_MISSING_PAGE_END);
+      if (missingLink!=null)
+      {
+        itemKey=missingLink;
+      }
+      else
+      {
+        if (link.startsWith(INDEX))
+        {
+          itemKey=link.substring(INDEX.length());
+        }
+      }
     }
     return itemKey;
   }
