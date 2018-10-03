@@ -174,7 +174,14 @@ public class LotroWikiRecipeIndexPageParser
 
   private void parseResults(Element cell, boolean critical)
   {
-    // Caution! Icon is sometimes in a separate column
+    // Extract initial count, if there is one
+    {
+      Integer count=parseItemCountFromItemText(cell);
+      if (count!=null)
+      {
+        _count=count;
+      }
+    }
     List<Element> children=cell.getChildElements();
     for(Element child : children)
     {
@@ -204,16 +211,10 @@ public class LotroWikiRecipeIndexPageParser
         if (img==null)
         {
           _itemId=parseItemIdFromLink(child);
-          String text=JerichoHtmlUtils.getTextFromTag(child).trim();
-          int firstSpaceIndex=text.indexOf(' ');
-          if (firstSpaceIndex!=-1)
+          Integer count=parseItemCountFromItemText(child);
+          if (count!=null)
           {
-            String countStr=text.substring(0,firstSpaceIndex);
-            Integer count=NumericTools.parseInteger(countStr,false);
-            if (count!=null)
-            {
-              _count=count;
-            }
+            _count=count;
           }
           showIngredient(_itemId,_count,critical);
           _count=null;
@@ -229,7 +230,7 @@ public class LotroWikiRecipeIndexPageParser
     {
       System.out.print("Critical: ");
     }
-    if (count!=null)
+    if ((count!=null) && (count.intValue()>1))
     {
       System.out.print(count+" ");
     }
@@ -260,6 +261,19 @@ public class LotroWikiRecipeIndexPageParser
       {
         count=NumericTools.parseInteger(countStr);
       }
+    }
+    return count;
+  }
+
+  private Integer parseItemCountFromItemText(Element child)
+  {
+    Integer count=null;
+    String text=JerichoHtmlUtils.getTextFromTag(child).trim();
+    int firstSpaceIndex=text.indexOf(' ');
+    if (firstSpaceIndex!=-1)
+    {
+      String countStr=text.substring(0,firstSpaceIndex);
+      count=NumericTools.parseInteger(countStr,false);
     }
     return count;
   }
