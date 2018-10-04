@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
-import delta.common.utils.text.TextUtils;
 import delta.games.lotro.common.Duration;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
@@ -250,7 +250,7 @@ public class LotroWikiRecipeIndexPageParser
   }
 
   private Integer _count;
-  private String _itemId;
+  private ItemProxy _itemId;
 
   private void parseItems(Element cell, boolean critical)
   {
@@ -304,7 +304,7 @@ public class LotroWikiRecipeIndexPageParser
     }
   }
 
-  private void showItem(String itemId, Integer count, boolean critical)
+  private void showItem(ItemProxy itemId, Integer count, boolean critical)
   {
     if (itemId==null)
     {
@@ -319,13 +319,17 @@ public class LotroWikiRecipeIndexPageParser
     {
       System.out.print(count+" ");
     }
-    System.out.println(itemId);
+    String itemName=itemId.getName();
+    String itemKey=itemId.getItemKey();
+    System.out.println(itemName+" ("+itemKey+")");
   }
 
-  private String parseItemIdFromLink(Element aTag)
+  private ItemProxy parseItemIdFromLink(Element aTag)
   {
+    ItemProxy ret=null;
     // Item
     String itemKey=null;
+    String itemName=null;
     // Regular page link
     // <a href="/index.php/Item:Rowan_Campfire_Kit" title="Item:Rowan Campfire Kit">
     // Missing page link:
@@ -337,21 +341,40 @@ public class LotroWikiRecipeIndexPageParser
       if (missingLink!=null)
       {
         itemKey=missingLink;
+        itemName=JerichoHtmlUtils.getTextFromTag(aTag);
+        if (itemName.startsWith("Item:")) itemName=itemName.substring(5);
+        ret=new ItemProxy();
+        ret.setItemKey(itemKey);
+        ret.setName(itemName);
       }
       else
       {
         if (link.startsWith(INDEX))
         {
           itemKey=link.substring(INDEX.length());
+          itemName=aTag.getAttributeValue("title");
+          if (itemName.startsWith("Item:")) itemName=itemName.substring(5);
         }
       }
     }
     if ((itemKey!=null) && (!itemKey.startsWith("Item:")))
     {
-      //System.out.println("Warn: bad item key: "+itemKey);
-      itemKey=null;
+      if ((itemKey.endsWith("_Recipe_Index")) || ("Fish".equals(itemKey)))
+      {
+        // Ignore
+      }
+      else
+      {
+        System.out.println("Warn: bad item key: "+itemKey);
+      }
     }
-    return itemKey;
+    else
+    {
+      ret=new ItemProxy();
+      ret.setItemKey(itemKey);
+      ret.setName(itemName);
+    }
+    return ret;
   }
 
   private Integer parseItemCount(Element countTag)
