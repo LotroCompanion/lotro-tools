@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
+import delta.common.utils.text.TextUtils;
+import delta.games.lotro.common.Duration;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
@@ -32,6 +34,8 @@ public class LotroWikiRecipeIndexPageParser
   private static final String INDEX_MISSING_PAGE_END="&action=edit";
 
   private LotroWikiSiteInterface _lotroWiki;
+
+  public int _recipesCount=0;
 
   /**
    * Constructor.
@@ -91,7 +95,7 @@ public class LotroWikiRecipeIndexPageParser
         if (HTMLElementName.H2.equals(tagName))
         {
           String category=JerichoHtmlUtils.getTextFromTag(child);
-          System.out.println("Category: "+category);
+          System.out.println("=== Category: "+category+" ===");
         }
         else if (HTMLElementName.TABLE.equals(tagName))
         {
@@ -103,18 +107,21 @@ public class LotroWikiRecipeIndexPageParser
       }
     }
   }
+
   private void parseTable(Element table)
   {
-    System.out.println("Table");
     List<Element> rows=JerichoHtmlUtils.findElementsByTagName(table,HTMLElementName.TR);
     // Remove header
     Element headerRow=rows.remove(0);
     Integer xpColumnIndex=findColumnByName(headerRow,"XP");
     Integer resultIndex=findColumnByName(headerRow,"Craft Item");
     Integer componentsIndex=findColumnByName(headerRow,"Components");
+    Integer recipeIndex=findColumnByName(headerRow,"Recipe");
     for(Element row : rows)
     {
-      /*Recipe recipe=*/handleRow(row,xpColumnIndex,resultIndex,componentsIndex);
+      System.out.println("-- Recipe --");
+      /*Recipe recipe=*/handleRow(row,xpColumnIndex,resultIndex,componentsIndex,recipeIndex);
+      _recipesCount++;
     }
   }
 
@@ -141,7 +148,7 @@ public class LotroWikiRecipeIndexPageParser
     return ret;
   }
 
-  private Recipe handleRow(Element row, Integer xpIndex, Integer resultIndex, Integer componentsIndex)
+  private Recipe handleRow(Element row, Integer xpIndex, Integer resultIndex, Integer componentsIndex, Integer recipeIndex)
   {
     if (resultIndex==null)
     {
@@ -154,7 +161,8 @@ public class LotroWikiRecipeIndexPageParser
       System.out.println("Results");
       Element resultsCell=cells.get(resultIndex.intValue());
       parseItems(resultsCell,false);
-      //Element typeCell=cells.get(1);
+      Element typeCell=cells.get(recipeIndex.intValue());
+      parseRecipeCell(typeCell);
       System.out.println("Ingredients");
       Element ingredientsCell=cells.get(componentsIndex.intValue());
       parseItems(ingredientsCell,false);
@@ -174,6 +182,71 @@ public class LotroWikiRecipeIndexPageParser
       }
     }
     return recipe;
+  }
+
+  private void parseRecipeCell(Element recipeCell)
+  {
+    String contents=JerichoHtmlUtils.getTextFromTag(recipeCell).trim();
+    //System.out.println("{"+contents+"}");
+    String[] lines=contents.split("\n");
+    for(String line : lines)
+    {
+      line=line.trim();
+      if (line.length()==0) continue;
+      if (line.endsWith("Recipe")) line=line.substring(0,line.length()-6).trim();
+      if (line.length()==0) continue;
+      // Types
+      if (line.contains("Basic")) System.out.println("Basic");
+      else if (line.equals("Vendor")) System.out.println("Vendor");
+      else if (line.equals("Reputation")) System.out.println("Reputation");
+      else if (line.equals("Reputation Vendor")) System.out.println("Reputation");
+      else if (line.equals("Barter")) System.out.println("Barter");
+      else if (line.equals("Festival")) System.out.println("Festival Vendor");
+      else if ((line.startsWith("former Spring Festival drop")) || (line.equals("obsolete Spring Festival recipe")) || (line.equals("obsolete Spring Festival item")))
+      {
+        System.out.println("Festival Drop");
+        System.out.println("Obsolete");
+      }
+      else if (line.equals("Guild")) System.out.println("Guild");
+      else if (line.equals("Drop")) System.out.println("Drop");
+      else if (line.equals("Quest")) System.out.println("Quest");
+      else if (line.equals("Obsolete")) System.out.println("Obsolete");
+      // Single use?
+      else if ((line.contains("Single Use")) || (line.contains("Single use")))
+      {
+        System.out.println("One time use");
+      }
+      // Cooldown
+      else if ((line.contains("d ")) || (line.endsWith("h")) || (line.endsWith("d")))
+      {
+        Integer cooldown=Duration.parseDurationString(line);
+        System.out.println("Cooldown: "+Duration.getDurationString(cooldown.intValue()));
+      }
+      else if (line.contains("day"))
+      {
+        int spaceIndex=line.indexOf(" ");
+        Integer nbDays=NumericTools.parseInteger(line.substring(0,spaceIndex));
+        if (nbDays!=null)
+        {
+          int cooldown=nbDays.intValue()*Duration.DAY;
+          System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+        }
+      }
+      else if (line.contains("week"))
+      {
+        int spaceIndex=line.indexOf(" ");
+        Integer nbWeeks=NumericTools.parseInteger(line.substring(0,spaceIndex));
+        if (nbWeeks!=null)
+        {
+          int cooldown=nbWeeks.intValue()*Duration.DAY*7;
+          System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+        }
+      }
+      else
+      {
+        System.out.println("Unmanaged line ["+line+"]");
+      }
+    }
   }
 
   private Integer _count;
@@ -237,6 +310,7 @@ public class LotroWikiRecipeIndexPageParser
     {
       return;
     }
+    System.out.print('\t');
     if (critical)
     {
       System.out.print("Critical: ");

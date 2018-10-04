@@ -44,6 +44,7 @@ public class MainLotroWikiRecipesLoader
           recipesManager.registerRecipe(recipe);
         }
       }
+      System.out.println("Found: "+parser._recipesCount+" recipes.");
     }
     File out=new File("../lotro-companion/data/lore/recipes_wiki.xml");
     recipesManager.writeToFile(out);
