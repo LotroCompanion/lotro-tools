@@ -3,11 +3,14 @@ package delta.games.lotro.tools.lore.recipes.lotrowiki;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.StartTag;
 
 import org.apache.log4j.Logger;
 
@@ -35,6 +38,9 @@ public class LotroWikiRecipeIndexPageParser
 
   private LotroWikiSiteInterface _lotroWiki;
 
+  /**
+   * Recipes count.
+   */
   public int _recipesCount=0;
 
   /**
@@ -254,54 +260,67 @@ public class LotroWikiRecipeIndexPageParser
 
   private void parseItems(Element cell, boolean critical)
   {
-    // Extract initial count, if there is one
+    Segment content=cell.getContent();
+    List<Element> childElements=cell.getChildElements();
+    for(Iterator<Segment> it=content.getNodeIterator();it.hasNext();)
     {
-      Integer count=parseItemCountFromItemText(cell);
-      if (count!=null)
-      {
-        _count=count;
-      }
-    }
-    List<Element> children=cell.getChildElements();
-    for(Element child : children)
-    {
+      Segment node=it.next();
       //<span style="font-size: 1em;">
-      String tagName=child.getStartTag().getName();
-      if (HTMLElementName.SPAN.equals(tagName))
+      if (node.getClass()==Segment.class)
       {
-        // Count:
-        // <span style="position: absolute">
-        Element countTag=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(child,HTMLElementName.SPAN,"style","position: absolute");
-        if (countTag!=null)
+        String text=node.toString();
+        Integer count=NumericTools.parseInteger(text,false);
+        if (count!=null)
         {
-          _count=parseItemCount(countTag);
+          _count=count;
         }
-        parseItems(child,false);
       }
-      else if (HTMLElementName.I.equals(tagName))
+      else if (node instanceof StartTag)
       {
-        _count=null;
-        _itemId=null;
-        parseItems(child,true);
-      }
-      else if (HTMLElementName.A.equals(tagName))
-      {
-        // Check if it is an icon link
-        Element img=JerichoHtmlUtils.findElementByTagName(child,HTMLElementName.IMG);
-        if (img==null)
+        StartTag startTag=(StartTag)node;
+        Element child=startTag.getElement();
+        if (childElements.contains(child))
         {
-          _itemId=parseItemIdFromLink(child);
-          Integer count=parseItemCountFromItemText(child);
-          if (count!=null)
+          String tagName=startTag.getName();
+          if (HTMLElementName.SPAN.equals(tagName))
           {
-            _count=count;
+            // Count:
+            // <span style="position: absolute">
+            Element countTag=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(child,HTMLElementName.SPAN,"style","position: absolute");
+            if (countTag!=null)
+            {
+              _count=parseItemCount(countTag);
+            }
+            parseItems(child,false);
           }
-          showItem(_itemId,_count,critical);
-          _count=null;
-          _itemId=null;
+          else if (HTMLElementName.I.equals(tagName))
+          {
+            _count=null;
+            _itemId=null;
+            parseItems(child,true);
+          }
+          else if (HTMLElementName.A.equals(tagName))
+          {
+            // Check if it is an icon link
+            Element img=JerichoHtmlUtils.findElementByTagName(child,HTMLElementName.IMG);
+            if (img==null)
+            {
+              _itemId=parseItemIdFromLink(child);
+              Integer count=parseItemCountFromItemText(child);
+              if (count!=null)
+              {
+                _count=count;
+              }
+              showItem(_itemId,_count,critical);
+              _count=null;
+              _itemId=null;
+            }
+          }
         }
       }
     }
+    _count=null;
+    _itemId=null;
   }
 
   private void showItem(ItemProxy itemId, Integer count, boolean critical)
