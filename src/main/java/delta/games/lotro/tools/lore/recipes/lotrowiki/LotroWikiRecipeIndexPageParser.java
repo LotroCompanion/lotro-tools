@@ -17,7 +17,10 @@ import org.apache.log4j.Logger;
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.games.lotro.common.Duration;
+import delta.games.lotro.lore.crafting.recipes.CraftingResult;
+import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
@@ -37,11 +40,6 @@ public class LotroWikiRecipeIndexPageParser
   private static final String INDEX_MISSING_PAGE_END="&action=edit";
 
   private LotroWikiSiteInterface _lotroWiki;
-
-  /**
-   * Recipes count.
-   */
-  public int _recipesCount=0;
 
   /**
    * Constructor.
@@ -74,13 +72,12 @@ public class LotroWikiRecipeIndexPageParser
    */
   private List<Recipe> parseRecipesIndexPage(File from)
   {
-    List<Recipe> recipes=new ArrayList<Recipe>();
+    List<Recipe> recipes=null;
     try
     {
       FileInputStream inputStream=new FileInputStream(from);
       Source source=new Source(inputStream);
-      parseTables(source);
-      //parseIndex(source,deedIds);
+      recipes=parseTables(source);
     }
     catch(Exception e)
     {
@@ -89,33 +86,42 @@ public class LotroWikiRecipeIndexPageParser
     return recipes;
   }
 
-  private void parseTables(Source source)
+  private List<Recipe> parseTables(Source source)
   {
+    List<Recipe> recipes=new ArrayList<Recipe>();
     Element root=JerichoHtmlUtils.findElementByTagNameAndAttributeValue(source,HTMLElementName.DIV,"class","mw-parser-output");
     if (root!=null)
     {
       List<Element> children=root.getChildElements();
+      String category=null;
       for(Element child : children)
       {
         String tagName=child.getStartTag().getName();
         if (HTMLElementName.H2.equals(tagName))
         {
-          String category=JerichoHtmlUtils.getTextFromTag(child);
-          System.out.println("=== Category: "+category+" ===");
+          category=JerichoHtmlUtils.getTextFromTag(child);
+          //System.out.println("=== Category: "+category+" ===");
         }
         else if (HTMLElementName.TABLE.equals(tagName))
         {
           if (checkTable(child))
           {
-            parseTable(child);
+            List<Recipe> parsedRecipes=parseTable(child);
+            for(Recipe parsedRecipe : parsedRecipes)
+            {
+              parsedRecipe.setCategory(category);
+            }
+            recipes.addAll(parsedRecipes);
           }
         }
       }
     }
+    return recipes;
   }
 
-  private void parseTable(Element table)
+  private List<Recipe> parseTable(Element table)
   {
+    List<Recipe> recipes=new ArrayList<Recipe>();
     List<Element> rows=JerichoHtmlUtils.findElementsByTagName(table,HTMLElementName.TR);
     // Remove header
     Element headerRow=rows.remove(0);
@@ -125,10 +131,11 @@ public class LotroWikiRecipeIndexPageParser
     Integer recipeIndex=findColumnByName(headerRow,"Recipe");
     for(Element row : rows)
     {
-      System.out.println("-- Recipe --");
-      /*Recipe recipe=*/handleRow(row,xpColumnIndex,resultIndex,componentsIndex,recipeIndex);
-      _recipesCount++;
+      //System.out.println("-- Recipe --");
+      Recipe recipe=handleRow(row,xpColumnIndex,resultIndex,componentsIndex,recipeIndex);
+      recipes.add(recipe);
     }
+    return recipes;
   }
 
   private boolean checkTable(Element table)
@@ -160,18 +167,28 @@ public class LotroWikiRecipeIndexPageParser
     {
       return null;
     }
-    Recipe recipe=null;
+    Recipe recipe=new Recipe();
     List<Element> cells=JerichoHtmlUtils.findElementsByTagName(row,HTMLElementName.TD);
     if (cells.size()>=4)
     {
-      System.out.println("Results");
+      // Results
       Element resultsCell=cells.get(resultIndex.intValue());
-      parseItems(resultsCell,false);
+      List<ItemInfos> resultsInfo=parseItems(resultsCell,false);
+      List<RecipeVersion> results=buildResults(resultsInfo);
+      recipe.setVersions(results);
+      // Name
+      if (results.size()>0)
+      {
+        String name=results.get(0).getRegular().getItem().getName();
+        recipe.setName(name);
+      }
       Element typeCell=cells.get(recipeIndex.intValue());
-      parseRecipeCell(typeCell);
-      System.out.println("Ingredients");
+      parseRecipeCell(typeCell,recipe);
+      // Ingredients
       Element ingredientsCell=cells.get(componentsIndex.intValue());
-      parseItems(ingredientsCell,false);
+      List<ItemInfos> ingredientsInfo=parseItems(ingredientsCell,false);
+      List<Ingredient> ingredients=buildIngredients(ingredientsInfo);
+      recipe.setIngredients(ingredients);
       if (xpIndex!=null)
       {
         Element xpCell=cells.get(xpIndex.intValue());
@@ -179,7 +196,10 @@ public class LotroWikiRecipeIndexPageParser
         if ((xpStr.length()>0) && (!"?".equals(xpStr)))
         {
           Integer xp=NumericTools.parseInteger(xpStr);
-          System.out.println("xp="+xp);
+          if (xp!=null)
+          {
+            recipe.setXP(xp.intValue());
+          }
         }
         else
         {
@@ -190,7 +210,7 @@ public class LotroWikiRecipeIndexPageParser
     return recipe;
   }
 
-  private void parseRecipeCell(Element recipeCell)
+  private void parseRecipeCell(Element recipeCell, Recipe recipe)
   {
     String contents=JerichoHtmlUtils.getTextFromTag(recipeCell).trim();
     //System.out.println("{"+contents+"}");
@@ -220,13 +240,15 @@ public class LotroWikiRecipeIndexPageParser
       // Single use?
       else if ((line.contains("Single Use")) || (line.contains("Single use")))
       {
-        System.out.println("One time use");
+        //System.out.println("One time use");
+        recipe.setOneTimeUse(true);
       }
       // Cooldown
       else if ((line.contains("d ")) || (line.endsWith("h")) || (line.endsWith("d")))
       {
         Integer cooldown=Duration.parseDurationString(line);
-        System.out.println("Cooldown: "+Duration.getDurationString(cooldown.intValue()));
+        //System.out.println("Cooldown: "+Duration.getDurationString(cooldown.intValue()));
+        recipe.setCooldown(cooldown.intValue());
       }
       else if (line.contains("day"))
       {
@@ -235,7 +257,8 @@ public class LotroWikiRecipeIndexPageParser
         if (nbDays!=null)
         {
           int cooldown=nbDays.intValue()*Duration.DAY;
-          System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+          //System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+          recipe.setCooldown(cooldown);
         }
       }
       else if (line.contains("week"))
@@ -245,7 +268,8 @@ public class LotroWikiRecipeIndexPageParser
         if (nbWeeks!=null)
         {
           int cooldown=nbWeeks.intValue()*Duration.DAY*7;
-          System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+          //System.out.println("Cooldown: "+Duration.getDurationString(cooldown));
+          recipe.setCooldown(cooldown);
         }
       }
       else
@@ -258,8 +282,9 @@ public class LotroWikiRecipeIndexPageParser
   private Integer _count;
   private ItemProxy _itemId;
 
-  private void parseItems(Element cell, boolean critical)
+  private List<ItemInfos> parseItems(Element cell, boolean critical)
   {
+    List<ItemInfos> items=new ArrayList<ItemInfos>();
     Segment content=cell.getContent();
     List<Element> childElements=cell.getChildElements();
     for(Iterator<Segment> it=content.getNodeIterator();it.hasNext();)
@@ -291,13 +316,13 @@ public class LotroWikiRecipeIndexPageParser
             {
               _count=parseItemCount(countTag);
             }
-            parseItems(child,false);
+            items.addAll(parseItems(child,false));
           }
           else if (HTMLElementName.I.equals(tagName))
           {
             _count=null;
             _itemId=null;
-            parseItems(child,true);
+            items.addAll(parseItems(child,true));
           }
           else if (HTMLElementName.A.equals(tagName))
           {
@@ -311,7 +336,9 @@ public class LotroWikiRecipeIndexPageParser
               {
                 _count=count;
               }
-              showItem(_itemId,_count,critical);
+              ItemInfos newItem=new ItemInfos(_itemId,_count,critical);
+              items.add(newItem);
+              //showItem(_itemId,_count,critical);
               _count=null;
               _itemId=null;
             }
@@ -321,26 +348,57 @@ public class LotroWikiRecipeIndexPageParser
     }
     _count=null;
     _itemId=null;
+    return items;
   }
 
-  private void showItem(ItemProxy itemId, Integer count, boolean critical)
+  private List<RecipeVersion> buildResults(List<ItemInfos> resultsInfo)
   {
-    if (itemId==null)
+    List<RecipeVersion> ret=new ArrayList<RecipeVersion>();
+
+    RecipeVersion currentVersion=null;
+    for(ItemInfos itemInfo : resultsInfo)
     {
-      return;
+      CraftingResult result=new CraftingResult();
+      result.setItem(itemInfo._item);
+      result.setQuantity(itemInfo._quantity);
+      if (itemInfo._critical)
+      {
+        result.setCriticalResult(true);
+        if (currentVersion!=null)
+        {
+          currentVersion.setCritical(result);
+        }
+        else
+        {
+          System.out.println("Warn: no regular result! Critical result="+itemInfo);
+        }
+      }
+      else
+      {
+        currentVersion=new RecipeVersion();
+        ret.add(currentVersion);
+        currentVersion.setRegular(result);
+      }
     }
-    System.out.print('\t');
-    if (critical)
+    return ret;
+  }
+
+  private List<Ingredient> buildIngredients(List<ItemInfos> ingredientsInfo)
+  {
+    List<Ingredient> ret=new ArrayList<Ingredient>();
+
+    for(ItemInfos itemInfo : ingredientsInfo)
     {
-      System.out.print("Critical: ");
+      if (itemInfo._item!=null)
+      {
+        Ingredient ingredient=new Ingredient();
+        ingredient.setItem(itemInfo._item);
+        ingredient.setQuantity(itemInfo._quantity);
+        ingredient.setOptional(itemInfo._critical);
+        ret.add(ingredient);
+      }
     }
-    if ((count!=null) && (count.intValue()>1))
-    {
-      System.out.print(count+" ");
-    }
-    String itemName=itemId.getName();
-    String itemKey=itemId.getItemKey();
-    System.out.println(itemName+" ("+itemKey+")");
+    return ret;
   }
 
   private ItemProxy parseItemIdFromLink(Element aTag)
@@ -422,5 +480,37 @@ public class LotroWikiRecipeIndexPageParser
       count=NumericTools.parseInteger(countStr,false);
     }
     return count;
+  }
+
+  private class ItemInfos
+  {
+    public ItemProxy _item;
+    public int _quantity;
+    public boolean _critical;
+
+    public ItemInfos(ItemProxy item, Integer quantity, boolean critical)
+    {
+      _item=item;
+      _quantity=(quantity!=null)?quantity.intValue():1;
+      _critical=critical;
+    }
+
+    @Override
+    public String toString()
+    {
+      StringBuilder sb=new StringBuilder();
+      if (_critical)
+      {
+        sb.append("Critical: ");
+      }
+      if (_quantity>1)
+      {
+        sb.append(_quantity).append(' ');
+      }
+      String itemName=_item.getName();
+      String itemKey=_item.getItemKey();
+      sb.append(itemName).append(" (").append(itemKey).append(')');
+      return sb.toString();
+    }
   }
 }

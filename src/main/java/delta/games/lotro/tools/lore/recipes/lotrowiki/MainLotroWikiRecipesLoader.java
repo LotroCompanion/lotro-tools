@@ -35,16 +35,21 @@ public class MainLotroWikiRecipesLoader
     RecipesManager recipesManager=new RecipesManager();
     for(String profession : PROFESSIONS)
     {
+      int tierIndex=1;
       for(String tier : TIERS)
       {
         String indexId=profession+"_"+tier+"_Recipe_Index";
         List<Recipe> recipes=parser.doRecipesIndex(indexId);
         for(Recipe recipe : recipes)
         {
+          recipe.setProfession(profession);
+          recipe.setTier(tierIndex);
           recipesManager.registerRecipe(recipe);
         }
+        tierIndex++;
       }
-      System.out.println("Found: "+parser._recipesCount+" recipes.");
+      int nbRecipes=recipesManager.getRecipesCount();
+      System.out.println("Found: "+nbRecipes+" recipes.");
     }
     File out=new File("../lotro-companion/data/lore/recipes_wiki.xml");
     recipesManager.writeToFile(out);
