@@ -21,7 +21,9 @@ import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
+import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
+import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
@@ -39,7 +41,9 @@ public class LotroWikiRecipeIndexPageParser
   private static final String INDEX_MISSING_PAGE_START="/index.php?title=";
   private static final String INDEX_MISSING_PAGE_END="&action=edit";
 
+  private int _tier;
   private LotroWikiSiteInterface _lotroWiki;
+  private ItemsResolver _resolver;
 
   /**
    * Constructor.
@@ -48,15 +52,18 @@ public class LotroWikiRecipeIndexPageParser
   public LotroWikiRecipeIndexPageParser(LotroWikiSiteInterface lotroWiki)
   {
     _lotroWiki=lotroWiki;
+    _resolver=new ItemsResolver();
   }
 
   /**
    * Handle a recipe index category.
    * @param indexId Index identifier.
+   * @param tier Current tier.
    * @return a list of loaded recipes.
    */
-  public List<Recipe> doRecipesIndex(String indexId)
+  public List<Recipe> doRecipesIndex(String indexId, int tier)
   {
+    _tier=tier;
     String url=LotroWikiConstants.BASE_URL+"/index.php/"+indexId;
     String filename=Escapes.escapeFile(indexId)+"/main.html";
     File recipesIndexFile=_lotroWiki.download(url,filename);
@@ -351,6 +358,117 @@ public class LotroWikiRecipeIndexPageParser
     return items;
   }
 
+  private void fixItem(ItemProxy proxy)
+  {
+    String name=proxy.getName();
+    if ("Glazed Leather".equals(name))
+    {
+      if (_tier==7) name="Glazed Calenard Leather";
+    }
+    if ("Brushed Leather".equals(name))
+    {
+      if (_tier==7) name="Brushed Calenard Leather";
+    }
+    if ("Finished Leather".equals(name))
+    {
+      if (_tier==7) name="Finished Calenard Leather";
+    }
+    if ("Rune-keeper's Stone of the First Age".equals(name))
+    {
+      name="Rune-keeper's Rune-stone of the First Age";
+    }
+    if (name.endsWith("Ingot"))
+    {
+      name=name.replace("Khazad","Khazâd");
+    }
+    if (name.endsWith("Shavings")) name=name.substring(0,name.length()-1);
+    if (name.equals("Captain's Greatsword of the First Age"))
+    {
+      name="Reshaped Captain's Greatsword of the First Age";
+    }
+    if (name.equals("Captain's Greatsword of the Second Age"))
+    {
+      name="Reforged Captain's Greatsword of the Second Age";
+    }
+    if (name.equals("Champion's Greatsword of the First Age"))
+    {
+      name="Reshaped Champion's Greatsword of the First Age";
+    }
+    if (name.equals("Champion's Greatsword of the Second Age"))
+    {
+      name="Reforged Champion's Greatsword of the Second Age";
+    }
+    if (name.equals("Guardian's Greatsword of the First Age"))
+    {
+      name="Reshaped Guardian's Greatsword of the First Age";
+    }
+    if (name.equals("Guardian's Greatsword of the Second Age"))
+    {
+      name="Reforged Guardian's Greatsword of the Second Age";
+    }
+    if ((name.endsWith("Axe of the Westfold")) ||
+        (name.endsWith("Bow of the Westfold")) ||
+        (name.endsWith("Club of the Westfold")) ||
+        (name.endsWith("Crossbow of the Westfold")) ||
+        (name.endsWith("Dagger of the Westfold")) ||
+        (name.endsWith("Hammer of the Westfold")) ||
+        (name.endsWith("Mace of the Westfold")) ||
+        (name.endsWith("Sword of the Westfold")))
+    {
+      name=name.replace("of the Westfold","of the Westemnet");
+    }
+    if ((name.endsWith(" of the Resolute")) && (name.contains("Premium")))
+    {
+      name=name.replace("of the Resolute","of Resolve");
+    }
+    if (name.equals("Anórien Assault Circlet")) name="Anórien Assault Helm";
+    if (name.equals("Anórien Campaign Circlet")) name="Anórien Campaign Helm";
+    if (name.equals("Anórien Battle Shield")) name="Anórien Battle-shield";
+    if (name.equals("Anórien Skirmish Shield")) name="Anórien Skirmish-shield";
+    if (name.equals("Commanding Battle-shield of the Westfold")) name="Commanding Battle-shield of the Westemnet";
+
+    if (name.equals("Ancient Steel Greatsword")) proxy.setId(1879188146);
+
+    if (name.equals("Conviction Signal (Artisan)")) proxy.setId(1879102738);
+    if (name.equals("Conviction Signal (Master)")) proxy.setId(1879102739);
+    if (name.equals("Conviction Signal (Supreme)")) proxy.setId(1879154023);
+    if (name.equals("Tactics Signal (Artisan)")) proxy.setId(1879102735);
+    if (name.equals("Tactics Signal (Master)")) proxy.setId(1879102736);
+    if (name.equals("Tactics Signal (Supreme)")) proxy.setId(1879154022);
+    if (name.equals("Guile Signal (Artisan)")) proxy.setId(1879102744);
+    if (name.equals("Guile Signal (Master)")) proxy.setId(1879102745);
+    if (name.equals("Guile Signal (Supreme)")) proxy.setId(1879154025);
+    if (name.equals("Strength Signal (Artisan)")) proxy.setId(1879102741);
+    if (name.equals("Strength Signal (Master)")) proxy.setId(1879102742);
+    if (name.equals("Strength Signal (Supreme)")) proxy.setId(1879154024);
+
+    if (name.equals("Battle Bow of Théodred")) name="War Bow of Théodred";
+    if (name.equals("Battle Crossbow of Théodred")) name="War Crossbow of Théodred";
+    // Cope with Westfold Mestalsmith riffler recipes
+    // - level 70
+    if (name.equals("Calenard Riffler")) name="Westfold Riffler";
+    if (name.equals("Exceptional Calenard Riffler")) name="Exceptional Westfold Riffler";
+    if (name.equals("Calenard Riffler of Hope (Crafted)")) name="Westfold Riffler of Hope";
+    if (name.equals("Exceptional Calenard Riffler of Hope")) name="Exceptional Westfold Riffler of Hope";
+    if (name.equals("Calenard Riffler of Writs")) name="Westfold Riffler of Writs";
+    if (name.equals("Exceptional Calenard Riffler of Writs")) name="Exceptional Westfold Riffler of Writs";
+    // - level 75
+    if (name.equals("Superior Calenard Riffler")) name="Calenard Riffler";
+    if (name.equals("Exceptional Superior Calenard Riffler")) name="Exceptional Calenard Riffler";
+    if (name.equals("Superior Calenard Riffler of Hope")) name="Calenard Riffler of Hope";
+    if (name.equals("Exceptional Superior Calenard Riffler of Hope")) name="Exceptional Calenard Riffler of Hope";
+    if (name.equals("Superior Calenard Riffler of Writs")) name="Calenard Riffler of Writs";
+    if (name.equals("Exceptional Superior Calenard Riffler of Writs")) name="Exceptional Calenard Riffler of Writs";
+    // Oils
+    if (name.equals("Riddermark Fire-oil")) name="Eastemnet Fire-oil";
+    if (name.equals("Riddermark Light-oil")) name="Eastemnet Light-oil";
+
+    if (name.equals("Crisp Roast Duck")) name="Crisp Roast Duck and Potato";
+    if (name.endsWith("Sabercat")) name=name.replace("Sabercat","Sabre-cat");
+
+    proxy.setName(name);
+  }
+
   private List<RecipeVersion> buildResults(List<ItemInfos> resultsInfo)
   {
     List<RecipeVersion> ret=new ArrayList<RecipeVersion>();
@@ -450,8 +568,72 @@ public class LotroWikiRecipeIndexPageParser
       ret=new ItemProxy();
       ret.setItemKey(itemKey);
       ret.setName(itemName);
+      fixItem(ret);
+      resolveItem(ret);
     }
     return ret;
+  }
+
+  private void resolveItem(ItemProxy itemProxy)
+  {
+    String name=itemProxy.getName();
+    int itemId=itemProxy.getId();
+    if (itemId==0)
+    {
+      itemId=resolveByName(name);
+    }
+    String icon=null;
+    if (itemId==0)
+    {
+      Item item=_resolver.getItem(name);
+      if (item!=null)
+      {
+        itemId=item.getIdentifier();
+        icon=item.getIcon();
+      }
+    }
+    if (itemId!=0)
+    {
+      itemProxy.setId(itemId);
+      itemProxy.setIcon(icon);
+      itemProxy.setItemKey(null);
+    }
+    else
+    {
+      System.out.println("Item not found [" + name + "]");
+    }
+  }
+
+  private int resolveByName(String name)
+  {
+    int itemId=0;
+    /*
+    if ("Armour (Wastes)".equals(name)) itemId=1879341924;
+    else if ("Bag of Flower Petals".equals(name)) itemId=1879199971;
+    else if ("Black Steel Key".equals(name)) itemId=1879356039;
+    else if ("Broken Blade (Wastes)".equals(name)) itemId=1879342063;
+    else if ("Flower Petals (Multi-use)".equals(name)) itemId=1879200102;
+    else if ("Gold-bound_Lootbox".equals(name)) itemId=1879225083;
+    else if ("Golden Token of the Riddermark".equals(name)) itemId=1879237278;
+    else if ("Grant Golf Chip Emote".equals(name)) itemId=1879187356;
+    else if ("Ivar's Helm".equals(name)) itemId=1879197561; //(Cosmetic)
+    else if ("Letter (Rohan Awaits)".equals(name)) itemId=1879249134; //("Letter")
+    else if ("Major Essence of Critical Rating".equals(name)) itemId=1879313417; // (assuming Tier7)
+    else if ("Major Essence of Physical Mitigation".equals(name)) itemId=1879313525; // (assuming Tier7)
+    else if ("Map of Eriador".equals(name)) itemId=1879205541;
+    else if ("Metal Scrap (Wastes)".equals(name)) itemId=1879342064;
+    else if ("Prized Ost Dunhoth War-steed".equals(name)) itemId=1879206179;
+    else if ("Provisions (Wastes)".equals(name)) itemId=1879341934;
+    else if ("Rotten Fruit (Multi-use)".equals(name)) itemId=1879200100;
+    else if ("Rotten Fruit".equals(name)) itemId=1879199969;
+    else if ("Salt (Wastes)".equals(name)) itemId=1879342065;
+    else if ("Steed of Elessar's Host".equals(name)) itemId=1879345100;
+    else if ("Sturdy Steel Key".equals(name)) itemId=1879227487; //1879223825 (fond bleu) or 1879227487 (fond jaune)(different icons)
+    else if ("Universal Healing Potion".equals(name)) itemId=1879248609; //(Rejuvenation Potion)
+    else if ("Upgrade Task Limit (+1)".equals(name)) itemId=1879201943; // or 1879201944, 1879201945, 1879201946
+    else if ("Weapons (Wastes)".equals(name)) itemId=1879341942;
+    */
+    return itemId;
   }
 
   private Integer parseItemCount(Element countTag)

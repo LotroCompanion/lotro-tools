@@ -39,7 +39,7 @@ public class MainLotroWikiRecipesLoader
       for(String tier : TIERS)
       {
         String indexId=profession+"_"+tier+"_Recipe_Index";
-        List<Recipe> recipes=parser.doRecipesIndex(indexId);
+        List<Recipe> recipes=parser.doRecipesIndex(indexId,tierIndex);
         for(Recipe recipe : recipes)
         {
           recipe.setProfession(profession);
