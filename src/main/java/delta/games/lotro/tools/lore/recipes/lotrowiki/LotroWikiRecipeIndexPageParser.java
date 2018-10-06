@@ -426,9 +426,15 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Anórien Battle Shield")) name="Anórien Battle-shield";
     if (name.equals("Anórien Skirmish Shield")) name="Anórien Skirmish-shield";
     if (name.equals("Commanding Battle-shield of the Westfold")) name="Commanding Battle-shield of the Westemnet";
+    if (name.equals("Defensive Battle-shield of the Westfold")) name="Defensive Battle-shield of the Westemnet";
+    if (name.equals("Forceful Skirmish-shield of the Westfold")) name="Forceful Skirmish-shield of the Westemnet";
+    if (name.equals("Watchful Skirmish-shield of the Westfold")) name="Watchful Skirmish-shield of the Westemnet";
+    if (name.equals("Spirited Campaign-shield of the Westfold")) name="Spirited Campaign-shield of the Westemnet";
+    if (name.equals("Steadfast Campaign-shield of the Westfold")) name="Steadfast Campaign-shield of the Westemnet";
 
     if (name.equals("Ancient Steel Greatsword")) proxy.setId(1879188146);
 
+    // Burglar stuff
     if (name.equals("Conviction Signal (Artisan)")) proxy.setId(1879102738);
     if (name.equals("Conviction Signal (Master)")) proxy.setId(1879102739);
     if (name.equals("Conviction Signal (Supreme)")) proxy.setId(1879154023);
@@ -444,7 +450,12 @@ public class LotroWikiRecipeIndexPageParser
 
     if (name.equals("Battle Bow of Théodred")) name="War Bow of Théodred";
     if (name.equals("Battle Crossbow of Théodred")) name="War Crossbow of Théodred";
-    // Cope with Westfold Mestalsmith riffler recipes
+    if (name.equals("War Bow of the Rider")) name="Battle Bow of the Rider";
+    if (name.equals("War Crossbow of the Rider")) name="Battle Crossbow of the Rider";
+    if (name.equals("Vibrant War Shield of the Rider")) name="Vibrant Battle Shield of the Rider";
+    if (name.equals("Strong War Shield of the Rider")) name="Strong Battle Shield of the Rider";
+
+    // Cope with Westfold Metalsmith riffler recipes
     // - level 70
     if (name.equals("Calenard Riffler")) name="Westfold Riffler";
     if (name.equals("Exceptional Calenard Riffler")) name="Exceptional Westfold Riffler";
@@ -459,12 +470,62 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Exceptional Superior Calenard Riffler of Hope")) name="Exceptional Calenard Riffler of Hope";
     if (name.equals("Superior Calenard Riffler of Writs")) name="Calenard Riffler of Writs";
     if (name.equals("Exceptional Superior Calenard Riffler of Writs")) name="Exceptional Calenard Riffler of Writs";
+    // same with chisels
+    // - level 70
+    if (name.equals("Calenard Chisel")) name="Westfold Chisel";
+    if (name.equals("Exceptional Calenard Chisel")) name="Exceptional Westfold Chisel";
+    if (name.equals("Calenard Chisel of Fire")) name="Westfold Chisel of Fire";
+    if (name.equals("Exceptional Calenard Chisel of Fire")) name="Exceptional Westfold Chisel of Fire";
+    if (name.equals("Calenard Chisel of Lightning")) name="Westfold Chisel of Lightning";
+    if (name.equals("Exceptional Calenard Chisel of Lightning")) name="Exceptional Westfold Chisel of Lightning";
+    // - level 75
+    if (name.equals("Superior Calenard Chisel")) name="Calenard Chisel";
+    if (name.equals("Exceptional Superior Calenard Chisel")) name="Exceptional Calenard Chisel";
+    if (name.equals("Superior Calenard Chisel of Fire")) name="Calenard Chisel of Fire";
+    if (name.equals("Exceptional Superior Calenard Chisel of Fire")) name="Exceptional Calenard Chisel of Fire";
+    if (name.equals("Superior Calenard Chisel of Lightning")) name="Calenard Chisel of Lightning";
+    if (name.equals("Exceptional Superior Calenard Chisel of Lightning")) name="Exceptional Calenard Chisel of Lightning";
+
+    // Cope with Eastemnet Metalsmith riffler recipes
+    // - level 80
+    if (name.equals("Riddermark Riffler")) name="Eastemnet Riffler";
+    if (name.equals("Exceptional Riddermark Riffler")) name="Exceptional Eastemnet Riffler";
+    if (name.equals("Riddermark Riffler of Hope")) name="Eastemnet Riffler of Hope";
+    if (name.equals("Exceptional Riddermark Riffler of Hope")) name="Exceptional Eastemnet Riffler of Hope";
+    if (name.equals("Riddermark Riffler of Writs")) name="Eastemnet Riffler of Writs";
+    if (name.equals("Exceptional Riddermark Riffler of Writs")) name="Exceptional Eastemnet Riffler of Writs";
+    // - level 85
+    if (name.equals("Superior Riddermark Riffler")) name="Riddermark Riffler";
+    if (name.equals("Exceptional Superior Riddermark Riffler")) name="Exceptional Riddermark Riffler";
+    if (name.equals("Superior Riddermark Riffler of Hope")) name="Riddermark Riffler of Hope";
+    if (name.equals("Exceptional Superior Riddermark Riffler of Hope")) name="Exceptional Riddermark Riffler of Hope";
+    if (name.equals("Superior Riddermark Riffler of Writs")) name="Riddermark Riffler of Writs";
+    if (name.equals("Exceptional Superior Riddermark Riffler of Writs")) name="Exceptional Riddermark Riffler of Writs";
+    // same with chisels
+    // - level 80
+    if (name.equals("Riddermark Chisel")) name="Eastemnet Chisel";
+    if (name.equals("Exceptional Riddermark Chisel")) name="Exceptional Eastemnet Chisel";
+    if (name.equals("Riddermark Chisel of Fire")) name="Eastemnet Chisel of Fire";
+    if (name.equals("Exceptional Riddermark Chisel of Fire")) name="Exceptional Eastemnet Chisel of Fire";
+    if (name.equals("Riddermark Chisel of Lightning")) name="Eastemnet Chisel of Lightning";
+    if (name.equals("Exceptional Riddermark Chisel of Lightning")) name="Exceptional Eastemnet Chisel of Lightning";
+    // - level 85
+    if (name.equals("Superior Riddermark Chisel")) name="Riddermark Chisel";
+    if (name.equals("Exceptional Superior Riddermark Chisel")) name="Exceptional Riddermark Chisel";
+    if (name.equals("Superior Riddermark Chisel of Fire")) name="Riddermark Chisel of Fire";
+    if (name.equals("Exceptional Superior Riddermark Chisel of Fire")) name="Exceptional Riddermark Chisel of Fire";
+    if (name.equals("Superior Riddermark Chisel of Lightning")) name="Riddermark Chisel of Lightning";
+    if (name.equals("Exceptional Superior Riddermark Chisel of Lightning")) name="Exceptional Riddermark Chisel of Lightning";
+
     // Oils
     if (name.equals("Riddermark Fire-oil")) name="Eastemnet Fire-oil";
     if (name.equals("Riddermark Light-oil")) name="Eastemnet Light-oil";
 
     if (name.equals("Crisp Roast Duck")) name="Crisp Roast Duck and Potato";
     if (name.endsWith("Sabercat")) name=name.replace("Sabercat","Sabre-cat");
+    if (name.equals("Gondorian Weapon Parts")) name="Set of Gondorian Weapon Parts";
+    if (name.equals("Gondorian Woodcrafts")) name="Set of Gondorian Woodcrafts";
+    if (name.equals("Piece of Sealed Wax")) name="Piece of Eastemnet Sealed Wax";
 
     proxy.setName(name);
   }
