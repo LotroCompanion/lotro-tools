@@ -432,6 +432,22 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Spirited Campaign-shield of the Westfold")) name="Spirited Campaign-shield of the Westemnet";
     if (name.equals("Steadfast Campaign-shield of the Westfold")) name="Steadfast Campaign-shield of the Westemnet";
 
+    if (name.equals("Steadfast Campaign Hat of the Westfold")) name="Steadfast Campaign Hood of the Westfold";
+    if (name.equals("Insightful Campaign Hat of the Westfold")) name="Insightful Campaign Hood of the Westfold";
+    if (name.equals("Spirited Campaign Hat of the Westfold")) name="Spirited Campaign Hood of the Westfold";
+
+    if (name.equals("Polished Ancient Steel Greatsword of Combat")) name="Polished Ancient Steel Great Sword of Combat";
+    if (name.equals("Mirrored Ancient Steel Greatsword of Combat")) name="Mirrored Ancient Steel Great Sword of Combat";
+    if (name.equals("Mirrored Ancient Steel Greatsword of Deflection")) name="Mirrored Ancient Steel Great Sword of Deflection";
+    if (name.equals("Thain's Greatsword of Combat")) name="Thain's Great Sword of Combat";
+    if (name.equals("Thain's Greatsword of Deflection")) name="Thain's Great Sword of Deflection";
+    if (name.equals("Peerless Thain's Greatsword of Combat")) name="Peerless Thain's Great Sword of Combat";
+    if (name.equals("Peerless Thain's Greatsword of Deflection")) name="Peerless Thain's Great Sword of Deflection";
+    if (name.equals("Forged Elven-steel Greatsword of Combat")) name="Forged Elven-steel Great Sword of Combat";
+    if (name.equals("Forged Elven-steel Greatsword of Deflection")) name="Forged Elven-steel Great Sword of Deflection";
+    if (name.equals("Tempered Elven-steel Greatsword of Combat")) name="Tempered Elven-steel Great Sword of Combat";
+    if (name.equals("Tempered Elven-steel Greatsword of Deflection")) name="Tempered Elven-steel Great Sword of Deflection";
+
     if (name.equals("Ancient Steel Greatsword")) proxy.setId(1879188146);
 
     // Burglar stuff
