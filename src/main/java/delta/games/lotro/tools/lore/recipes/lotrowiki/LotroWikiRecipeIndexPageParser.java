@@ -168,6 +168,8 @@ public class LotroWikiRecipeIndexPageParser
     return ret;
   }
 
+  private List<ItemInfos> _lastIngredients;
+
   private Recipe handleRow(Element row, Integer xpIndex, Integer resultIndex, Integer componentsIndex, Integer recipeIndex)
   {
     if (resultIndex==null)
@@ -189,13 +191,25 @@ public class LotroWikiRecipeIndexPageParser
         String name=results.get(0).getRegular().getItem().getName();
         recipe.setName(name);
       }
+      // Recipe info (source, single use...)
       Element typeCell=cells.get(recipeIndex.intValue());
       parseRecipeCell(typeCell,recipe);
       // Ingredients
       Element ingredientsCell=cells.get(componentsIndex.intValue());
-      List<ItemInfos> ingredientsInfo=parseItems(ingredientsCell,false);
+      String ingredientsStr=JerichoHtmlUtils.getTextFromTag(ingredientsCell).trim().toLowerCase();
+      List<ItemInfos> ingredientsInfo=null;
+      if ((ingredientsStr.contains("same")) && (ingredientsStr.contains("above")))
+      {
+        ingredientsInfo=_lastIngredients;
+      }
+      else
+      {
+        ingredientsInfo=parseItems(ingredientsCell,false);
+      }
+      _lastIngredients=ingredientsInfo;
       List<Ingredient> ingredients=buildIngredients(ingredientsInfo);
       recipe.setIngredients(ingredients);
+      // XP
       if (xpIndex!=null)
       {
         Element xpCell=cells.get(xpIndex.intValue());
