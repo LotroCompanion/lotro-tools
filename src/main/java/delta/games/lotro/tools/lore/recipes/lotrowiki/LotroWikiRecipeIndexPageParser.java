@@ -466,6 +466,9 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Fangorn Hat of Spirit")) name="Fangorn Hood of Spirit";
     if (name.equals("Supple Fangorn Hat of Spirit")) name="Supple Fangorn Hood of Spirit";
 
+    if (name.equals("Fated Westfold Campaign Helm")) name="Fated Westfold Campaign Hat";
+    if (name.equals("Fated Westfold Assault Helm")) name="Fated Westfold Assault Hat";
+
     if (name.equals("Westemnet Assault Hat of Balance")) name="Westemnet Assault Hood of Balance";
     if (name.equals("Westemnet Assault Hat of Fate")) name="Westemnet Assault Hood of Fate";
     if (name.equals("Westemnet Assault Hat of Tactics")) name="Westemnet Assault Hood of Tactics";
@@ -489,14 +492,39 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Exquisite Great River Necklace of Succor")) name="Exquisite Great River Necklace of Succour";
     if (name.equals("Great River Bracelet of Strength")) name="Great River Bracelet Strength";
 
+    if (name.equals("Horse-lords' Tome of Succor")) name="Horse-lords' Tome of Succour";
+    if (name.equals("Horse-lords' Ancient Tome of Succor")) name="Horse-lords' Ancient Tome of Succour";
+    if (name.equals("Horse-lords' Tome of Valor")) name="Horse-lords' Tome of Valour";
+    if (name.equals("Horse-lords' Ancient Tome of Valor")) name="Horse-lords' Ancient Tome of Valour";
+
     if (name.equals("Ancient Steel Greatsword")) proxy.setId(1879188146);
     if (name.equals("Precise Ancient Steel Greatsword")) proxy.setId(1879188150);
 
     if (name.equals("Defender's Greatsword")) proxy.setId(1879188207);
+    if (name.equals("Fine Defender's Greatsword")) proxy.setId(1879187397);
+
     if (name.equals("Dwarf-craft Greatsword")) proxy.setId(1879187864);
     if (name.equals("Refined Dwarf-craft Greatsword")) proxy.setId(1879187554);
     if (name.equals("Elven-steel Greatsword")) proxy.setId(1879187921);
     if (name.equals("Refined Elven-steel Greatsword")) proxy.setId(1879187742);
+
+    if (name.equals("Walnut Horn (Champion)")) proxy.setId(1879283597);
+    if (name.equals("Treated Yew Plank")) name="Thin Yew Board";
+    if (name.equals("Lily-of-the-Valley Arrangement")) name="Lily-of-the-valley Arrangement";
+
+    // Apprentice tailor
+    if (name.equals("Padded Shoes (Crafted)")) proxy.setId(1879194607);
+    if (name.equals("Thick Padded Shoes")) proxy.setId(1879194438);
+
+    // Journeyman tailor
+    if (name.equals("Leather Gloves (Crafted)")) proxy.setId(1879194715);
+    if (name.equals("Thick Leather Gloves")) proxy.setId(1879194677);
+    if (name.equals("Leather Leggings (Crafted)")) proxy.setId(1879194678);
+    if (name.equals("Thick Leather Leggings")) proxy.setId(1879194326);
+    if (name.equals("Leather Shoes (Crafted)")) proxy.setId(1879194639);
+    if (name.equals("Thick Leather Shoes")) proxy.setId(1879194345);
+    if (name.equals("Quilted Leggings (Crafted)")) proxy.setId(1879194776);
+    if (name.equals("Thick Quilted Leggings")) proxy.setId(1879195337);
 
     // Burglar stuff
     if (name.equals("Conviction Signal (Artisan)")) proxy.setId(1879102738);
@@ -539,6 +567,30 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Temper-crafted Helm")) proxy.setId(1879194887);
     if (name.equals("Temper-crafted Leggings")) proxy.setId(1879194888);
     if (name.equals("Temper-crafted Shoulder Guards")) proxy.setId(1879194891);
+
+    if (name.equals("Well-crafted Warden's Shield")) name="Well-Crafted Warden's Shield";
+    if (name.equals("Well-crafted Buckler")) name="Well-Crafted Buckler";
+    if (name.equals("Warrior's Greatsword")) proxy.setId(1879188214);
+    if (name.equals("Precise Warrior's Greatsword")) proxy.setId(1879187969);
+    if (name.equals("Sellsword's Greatsword")) proxy.setId(1879188200);
+    if (name.equals("Sharpened Sellsword's Greatsword")) proxy.setId(1879188033);
+
+    if (name.equals("Light Forge-crafted Kite Shield")) name="Light Forge-Crafted Kite Shield";
+    if (name.equals("Heavy Forge-crafted Kite Shield")) name="Heavy Forge-Crafted Kite Shield";
+    if (name.equals("Light Temper-crafted Kite Shield")) name="Light Temper-Crafted Kite Shield";
+    if (name.equals("Heavy Temper-crafted Kite Shield")) name="Heavy Temper-Crafted Kite Shield";
+
+    if (name.equals("Sharp Dunlending War Dagger")) name="Dunlending Battle Dagger";
+    if (name.equals("Sharp Dunlending Battle Dagger")) name="Potent Dunlending Battle Dagger";
+    if (name.equals("Fated Dunlending Campaign Dagger")) name="Dunlending Skirmish Dagger";
+    if (name.equals("Fated Dunlending Assault Dagger")) name="Potent Dunlending Skirmish Dagger";
+
+    if (name.equals("Strong Dunlending War Sword")) name="Dunlending Battle Sword";
+    if (name.equals("Strong Dunlending Battle Sword")) name="Potent Dunlending War Sword";
+    if (name.equals("Sustaining Dunlending Skirmish Sword")) name="Dunlending Skirmish Sword";
+    if (name.equals("Sustaining Dunlending Combat Sword")) name="Potent Dunlending Combat Sword";
+    // TODO Missing 3rd output for this Weaponsmith/Westfold recipe (Dunlending Sword)
+    // TODO Missing 2 recipes: Dunlending Axe, Dunlending Mace
 
     // Cope with Westfold Metalsmith riffler recipes
     // - level 70
