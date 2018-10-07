@@ -113,7 +113,7 @@ public class LegacyRecipesItemLinksResolver
     }
 
     name=fixName(name);
-    Item item=finder.resolveByName(name);
+    Item item=finder.resolveByName(name,null);
     if (item!=null)
     {
       itemRef.setId(item.getIdentifier());

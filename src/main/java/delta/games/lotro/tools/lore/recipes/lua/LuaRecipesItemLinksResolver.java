@@ -92,7 +92,7 @@ public class LuaRecipesItemLinksResolver
   {
     String name=itemRef.getName();
     boolean ok=false;
-    Item item=finder.resolveByName(name);
+    Item item=finder.resolveByName(name,null);
     if (item!=null)
     {
       itemRef.setId(item.getIdentifier());

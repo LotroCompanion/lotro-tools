@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.Duration;
 import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
@@ -23,6 +24,8 @@ import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
+import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.finder.ItemsFinder;
 import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
@@ -43,6 +46,7 @@ public class LotroWikiRecipeIndexPageParser
 
   private int _tier;
   private LotroWikiSiteInterface _lotroWiki;
+  private ItemsFinder _finder;
   private ItemsResolver _resolver;
 
   /**
@@ -52,6 +56,7 @@ public class LotroWikiRecipeIndexPageParser
   public LotroWikiRecipeIndexPageParser(LotroWikiSiteInterface lotroWiki)
   {
     _lotroWiki=lotroWiki;
+    _finder=ItemsManager.getInstance().getFinder();
     _resolver=new ItemsResolver();
   }
 
@@ -518,19 +523,19 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Vibrant Battle Shield of Théodred")) name="Vibrant War Shield of Théodred";
     if (name.equals("Strong Battle Shield of Théodred")) name="Strong War Shield of Théodred";
 
-    if (name.equals("Forge-crafted Armour"))  proxy.setId(1879194942);
-    if (name.equals("Forge-crafted Boots"))  proxy.setId(1879194945);
-    if (name.equals("Forge-crafted Gloves"))  proxy.setId(1879194948);
-    if (name.equals("Forge-crafted Helm"))  proxy.setId(1879194951);
-    if (name.equals("Forge-crafted Leggings"))  proxy.setId(1879194952);
-    if (name.equals("Forge-crafted Shoulder Guards"))  proxy.setId(1879194955);
+    if (name.equals("Forge-crafted Armour")) proxy.setId(1879194942);
+    if (name.equals("Forge-crafted Boots")) proxy.setId(1879194945);
+    if (name.equals("Forge-crafted Gloves")) proxy.setId(1879194948);
+    if (name.equals("Forge-crafted Helm")) proxy.setId(1879194951);
+    if (name.equals("Forge-crafted Leggings")) proxy.setId(1879194952);
+    if (name.equals("Forge-crafted Shoulder Guards")) proxy.setId(1879194955);
 
-    if (name.equals("Temper-crafted Armour"))  proxy.setId(1879194878);
-    if (name.equals("Temper-crafted Boots"))  proxy.setId(1879194881);
-    if (name.equals("Temper-crafted Gloves"))  proxy.setId(1879194884);
-    if (name.equals("Temper-crafted Helm"))  proxy.setId(1879194887);
-    if (name.equals("Temper-crafted Leggings"))  proxy.setId(1879194888);
-    if (name.equals("Temper-crafted Shoulder Guards"))  proxy.setId(1879194891);
+    if (name.equals("Temper-crafted Armour")) proxy.setId(1879194878);
+    if (name.equals("Temper-crafted Boots")) proxy.setId(1879194881);
+    if (name.equals("Temper-crafted Gloves")) proxy.setId(1879194884);
+    if (name.equals("Temper-crafted Helm")) proxy.setId(1879194887);
+    if (name.equals("Temper-crafted Leggings")) proxy.setId(1879194888);
+    if (name.equals("Temper-crafted Shoulder Guards")) proxy.setId(1879194891);
 
     // Cope with Westfold Metalsmith riffler recipes
     // - level 70
@@ -723,14 +728,10 @@ public class LotroWikiRecipeIndexPageParser
   {
     String name=itemProxy.getName();
     int itemId=itemProxy.getId();
-    if (itemId==0)
-    {
-      itemId=resolveByName(name);
-    }
     String icon=null;
     if (itemId==0)
     {
-      Item item=_resolver.getItem(name);
+      Item item=resolveItemByName(name);
       if (item!=null)
       {
         itemId=item.getIdentifier();
@@ -749,38 +750,35 @@ public class LotroWikiRecipeIndexPageParser
     }
   }
 
-  private int resolveByName(String name)
+  private Item resolveItemByName(String name)
   {
-    int itemId=0;
-    /*
-    if ("Armour (Wastes)".equals(name)) itemId=1879341924;
-    else if ("Bag of Flower Petals".equals(name)) itemId=1879199971;
-    else if ("Black Steel Key".equals(name)) itemId=1879356039;
-    else if ("Broken Blade (Wastes)".equals(name)) itemId=1879342063;
-    else if ("Flower Petals (Multi-use)".equals(name)) itemId=1879200102;
-    else if ("Gold-bound_Lootbox".equals(name)) itemId=1879225083;
-    else if ("Golden Token of the Riddermark".equals(name)) itemId=1879237278;
-    else if ("Grant Golf Chip Emote".equals(name)) itemId=1879187356;
-    else if ("Ivar's Helm".equals(name)) itemId=1879197561; //(Cosmetic)
-    else if ("Letter (Rohan Awaits)".equals(name)) itemId=1879249134; //("Letter")
-    else if ("Major Essence of Critical Rating".equals(name)) itemId=1879313417; // (assuming Tier7)
-    else if ("Major Essence of Physical Mitigation".equals(name)) itemId=1879313525; // (assuming Tier7)
-    else if ("Map of Eriador".equals(name)) itemId=1879205541;
-    else if ("Metal Scrap (Wastes)".equals(name)) itemId=1879342064;
-    else if ("Prized Ost Dunhoth War-steed".equals(name)) itemId=1879206179;
-    else if ("Provisions (Wastes)".equals(name)) itemId=1879341934;
-    else if ("Rotten Fruit (Multi-use)".equals(name)) itemId=1879200100;
-    else if ("Rotten Fruit".equals(name)) itemId=1879199969;
-    else if ("Salt (Wastes)".equals(name)) itemId=1879342065;
-    else if ("Steed of Elessar's Host".equals(name)) itemId=1879345100;
-    else if ("Sturdy Steel Key".equals(name)) itemId=1879227487; //1879223825 (fond bleu) or 1879227487 (fond jaune)(different icons)
-    else if ("Universal Healing Potion".equals(name)) itemId=1879248609; //(Rejuvenation Potion)
-    else if ("Upgrade Task Limit (+1)".equals(name)) itemId=1879201943; // or 1879201944, 1879201945, 1879201946
-    else if ("Weapons (Wastes)".equals(name)) itemId=1879341942;
-    */
-    return itemId;
+    Item ret=null;
+    if (name.endsWith("(Might)"))
+    {
+      name=name.substring(0,name.length()-7).trim();
+      StatsBasedItemSelector selector=new StatsBasedItemSelector(STAT.MIGHT);
+      ret=_finder.resolveByName(name,selector);
+    }
+    else if (name.endsWith("(Agility)"))
+    {
+      name=name.substring(0,name.length()-9).trim();
+      StatsBasedItemSelector selector=new StatsBasedItemSelector(STAT.AGILITY);
+      ret=_finder.resolveByName(name,selector);
+    }
+    else if (name.endsWith("(Will)"))
+    {
+      name=name.substring(0,name.length()-6).trim();
+      StatsBasedItemSelector selector=new StatsBasedItemSelector(STAT.WILL);
+      ret=_finder.resolveByName(name,selector);
+    }
+    if (ret==null)
+    {
+      ret=_resolver.getItem(name);
+    }
+    return ret;
   }
 
+  
   private Integer parseItemCount(Element countTag)
   {
     // Count
