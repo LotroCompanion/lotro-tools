@@ -2,26 +2,25 @@ package delta.games.lotro.tools.lore.recipes.lotrowiki;
 
 import java.util.List;
 
-import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.finder.ItemSelector;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
- * Item selector that chooses items that have a given stat.
+ * Item selector that chooses items that have a given quality.
  * @author DAM
  */
-public class StatsBasedItemSelector implements ItemSelector
+public class QualityBasedItemSelector implements ItemSelector
 {
-  private STAT _stat;
+  private ItemQuality _quality;
 
   /**
    * Constructor.
-   * @param stat Stat to select.
+   * @param quality Quality to select.
    */
-  public StatsBasedItemSelector(STAT stat)
+  public QualityBasedItemSelector(ItemQuality quality)
   {
-    _stat=stat;
+    _quality=quality;
   }
 
   /**
@@ -34,8 +33,7 @@ public class StatsBasedItemSelector implements ItemSelector
     Item ret=null;
     for(Item item : items)
     {
-      FixedDecimalsInteger stat=item.getStats().getStat(_stat);
-      if (stat!=null)
+      if (item.getQuality()==_quality)
       {
         ret=item;
         break;

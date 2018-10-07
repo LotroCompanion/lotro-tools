@@ -24,6 +24,7 @@ import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
+import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.finder.ItemsFinder;
 import delta.games.lotro.tools.lore.items.ItemsResolver;
@@ -425,6 +426,8 @@ public class LotroWikiRecipeIndexPageParser
     {
       name="Reforged Guardian's Greatsword of the Second Age";
     }
+    if (name.endsWith("Bridle of the First Age")) name="Reshaped "+name;
+
     if ((name.endsWith("Axe of the Westfold")) ||
         (name.endsWith("Bow of the Westfold")) ||
         (name.endsWith("Club of the Westfold")) ||
@@ -769,6 +772,12 @@ public class LotroWikiRecipeIndexPageParser
     {
       name=name.substring(0,name.length()-6).trim();
       StatsBasedItemSelector selector=new StatsBasedItemSelector(STAT.WILL);
+      ret=_finder.resolveByName(name,selector);
+    }
+    else if ((name.startsWith("Wildermore")) && (name.endsWith(" (Crafting)")))
+    {
+      name=name.substring(0,name.length()-11).trim();
+      QualityBasedItemSelector selector=new QualityBasedItemSelector(ItemQuality.RARE);
       ret=_finder.resolveByName(name,selector);
     }
     if (ret==null)
