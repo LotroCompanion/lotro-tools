@@ -449,6 +449,21 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Steadfast Campaign Hat of the Westfold")) name="Steadfast Campaign Hood of the Westfold";
     if (name.equals("Insightful Campaign Hat of the Westfold")) name="Insightful Campaign Hood of the Westfold";
     if (name.equals("Spirited Campaign Hat of the Westfold")) name="Spirited Campaign Hood of the Westfold";
+    if (name.equals("Spirited Assault Hat of the Deep")) name="Spirited Assault Hood of the Deep";
+    if (name.equals("Steadfast Assault Hat of the Deep")) name="Steadfast Assault Hood of the Deep";
+    if (name.equals("Insightful Assault Hat of the Deep")) name="Insightful Assault Hood of the Deep";
+
+    if (name.equals("Fangorn Hat of Insight")) name="Fangorn Hood of Insight";
+    if (name.equals("Supple Fangorn Hat of Insight")) name="Supple Fangorn Hood of Insight";
+    if (name.equals("Fangorn Hat of Spirit")) name="Fangorn Hood of Spirit";
+    if (name.equals("Supple Fangorn Hat of Spirit")) name="Supple Fangorn Hood of Spirit";
+
+    if (name.equals("Westemnet Assault Hat of Balance")) name="Westemnet Assault Hood of Balance";
+    if (name.equals("Westemnet Assault Hat of Fate")) name="Westemnet Assault Hood of Fate";
+    if (name.equals("Westemnet Assault Hat of Tactics")) name="Westemnet Assault Hood of Tactics";
+    if (name.equals("Westemnet Campaign Hat of Balance")) name="Westemnet Campaign Hood of Balance";
+    if (name.equals("Westemnet Campaign Hat of Fate")) name="Westemnet Campaign Hood of Fate";
+    if (name.equals("Westemnet Campaign Hat of Tactics")) name="Westemnet Campaign Hood of Tactics";
 
     if (name.equals("Polished Ancient Steel Greatsword of Combat")) name="Polished Ancient Steel Great Sword of Combat";
     if (name.equals("Mirrored Ancient Steel Greatsword of Combat")) name="Mirrored Ancient Steel Great Sword of Combat";
@@ -462,7 +477,18 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Tempered Elven-steel Greatsword of Combat")) name="Tempered Elven-steel Great Sword of Combat";
     if (name.equals("Tempered Elven-steel Greatsword of Deflection")) name="Tempered Elven-steel Great Sword of Deflection";
 
+    if (name.equals("Great River Necklace of Succor")) name="Great River Necklace of Succour";
+    if (name.equals("Exquisite Great River Necklace of Succor")) name="Exquisite Great River Necklace of Succour";
+    if (name.equals("Great River Bracelet of Strength")) name="Great River Bracelet Strength";
+
     if (name.equals("Ancient Steel Greatsword")) proxy.setId(1879188146);
+    if (name.equals("Precise Ancient Steel Greatsword")) proxy.setId(1879188150);
+
+    if (name.equals("Defender's Greatsword")) proxy.setId(1879188207);
+    if (name.equals("Dwarf-craft Greatsword")) proxy.setId(1879187864);
+    if (name.equals("Refined Dwarf-craft Greatsword")) proxy.setId(1879187554);
+    if (name.equals("Elven-steel Greatsword")) proxy.setId(1879187921);
+    if (name.equals("Refined Elven-steel Greatsword")) proxy.setId(1879187742);
 
     // Burglar stuff
     if (name.equals("Conviction Signal (Artisan)")) proxy.setId(1879102738);
@@ -478,12 +504,33 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Strength Signal (Master)")) proxy.setId(1879102742);
     if (name.equals("Strength Signal (Supreme)")) proxy.setId(1879154024);
 
+    if (name.equals("Calenard Serrated Knife")) name="Westfold Serrated Knife";
+    if (name.equals("Superior Calenard Serrated Knife")) name="Calenard Serrated Knife";
+    if (name.equals("Precise Calenard Serrated Knife")) name="Precise Westfold Serrated Knife";
+    if (name.equals("Precise Superior Calenard Serrated Knife")) name="Precise Calenard Serrated Knife";
+
     if (name.equals("Battle Bow of Théodred")) name="War Bow of Théodred";
     if (name.equals("Battle Crossbow of Théodred")) name="War Crossbow of Théodred";
     if (name.equals("War Bow of the Rider")) name="Battle Bow of the Rider";
     if (name.equals("War Crossbow of the Rider")) name="Battle Crossbow of the Rider";
     if (name.equals("Vibrant War Shield of the Rider")) name="Vibrant Battle Shield of the Rider";
     if (name.equals("Strong War Shield of the Rider")) name="Strong Battle Shield of the Rider";
+    if (name.equals("Vibrant Battle Shield of Théodred")) name="Vibrant War Shield of Théodred";
+    if (name.equals("Strong Battle Shield of Théodred")) name="Strong War Shield of Théodred";
+
+    if (name.equals("Forge-crafted Armour"))  proxy.setId(1879194942);
+    if (name.equals("Forge-crafted Boots"))  proxy.setId(1879194945);
+    if (name.equals("Forge-crafted Gloves"))  proxy.setId(1879194948);
+    if (name.equals("Forge-crafted Helm"))  proxy.setId(1879194951);
+    if (name.equals("Forge-crafted Leggings"))  proxy.setId(1879194952);
+    if (name.equals("Forge-crafted Shoulder Guards"))  proxy.setId(1879194955);
+
+    if (name.equals("Temper-crafted Armour"))  proxy.setId(1879194878);
+    if (name.equals("Temper-crafted Boots"))  proxy.setId(1879194881);
+    if (name.equals("Temper-crafted Gloves"))  proxy.setId(1879194884);
+    if (name.equals("Temper-crafted Helm"))  proxy.setId(1879194887);
+    if (name.equals("Temper-crafted Leggings"))  proxy.setId(1879194888);
+    if (name.equals("Temper-crafted Shoulder Guards"))  proxy.setId(1879194891);
 
     // Cope with Westfold Metalsmith riffler recipes
     // - level 70
@@ -547,6 +594,12 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Superior Riddermark Chisel of Lightning")) name="Riddermark Chisel of Lightning";
     if (name.equals("Exceptional Superior Riddermark Chisel of Lightning")) name="Exceptional Riddermark Chisel of Lightning";
 
+    // LM stuff
+    if (name.equals("Engraved Green Garnet Brooch of Rage")) name="Engraved Green Garnet Stickpin of Rage";
+    if (name.equals("Engraved Green Garnet Brooch of Regrowth")) name="Engraved Green Garnet Stickpin of Regrowth";
+    if (name.equals("Green Garnet Brooch of Rage")) name="Green Garnet Stickpin of Rage";
+    if (name.equals("Green Garnet Brooch of Regrowth")) name="Green Garnet Stickpin of Regrowth";
+
     // Oils
     if (name.equals("Riddermark Fire-oil")) name="Eastemnet Fire-oil";
     if (name.equals("Riddermark Light-oil")) name="Eastemnet Light-oil";
@@ -556,6 +609,7 @@ public class LotroWikiRecipeIndexPageParser
     if (name.equals("Gondorian Weapon Parts")) name="Set of Gondorian Weapon Parts";
     if (name.equals("Gondorian Woodcrafts")) name="Set of Gondorian Woodcrafts";
     if (name.equals("Piece of Sealed Wax")) name="Piece of Eastemnet Sealed Wax";
+    if (name.equals("Doomfold Historian's Notes")) name="Doomfold Historian's Note";
 
     proxy.setName(name);
   }
