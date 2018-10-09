@@ -45,6 +45,7 @@ public class LotroWikiRecipeIndexPageParser
   private static final String INDEX_MISSING_PAGE_START="/index.php?title=";
   private static final String INDEX_MISSING_PAGE_END="&action=edit";
 
+  private String _category;
   private int _tier;
   private LotroWikiSiteInterface _lotroWiki;
   private ItemsFinder _finder;
@@ -113,6 +114,7 @@ public class LotroWikiRecipeIndexPageParser
         if (HTMLElementName.H2.equals(tagName))
         {
           category=JerichoHtmlUtils.getTextFromTag(child);
+          _category=category;
           //System.out.println("=== Category: "+category+" ===");
         }
         else if (HTMLElementName.TABLE.equals(tagName))
@@ -830,6 +832,23 @@ public class LotroWikiRecipeIndexPageParser
     {
       name=name.substring(0,name.length()-11).trim();
       QualityBasedItemSelector selector=new QualityBasedItemSelector(ItemQuality.RARE);
+      ret=_finder.resolveByName(name,selector);
+    }
+    else if ((name.endsWith("First Age")) || (name.endsWith("Second Age")) || (name.endsWith("Third Age")))
+    {
+      if (name.endsWith("First Age"))
+      {
+        if (!name.startsWith("Reshaped ")) name="Reshaped "+name;
+      }
+      else if (name.endsWith("Second Age"))
+      {
+        if (!name.startsWith("Reforged ")) name="Reforged "+name;
+      }
+      else if (name.endsWith("Third Age"))
+      {
+        if (!name.startsWith("Crafted ")) name="Crafted "+name;
+      }
+      LegendaryItemSelector selector=new LegendaryItemSelector(_tier,_category);
       ret=_finder.resolveByName(name,selector);
     }
     if (ret==null)
