@@ -109,6 +109,8 @@ public class ItemNormalization
       new ScalingParametersFinder(ScalingRulesNames.BIG_BATTLES).findScalingParameters(bbJewels);
       new ItemStatistics().showStatistics(bbJewels);
     }
+    // Find out missing item level on crafted legendary items
+    new LegendaryItemLevelFinder().doIt(items);
 
     // Guess armor types from formulas
     findArmourTypeFromFormulas(items);
