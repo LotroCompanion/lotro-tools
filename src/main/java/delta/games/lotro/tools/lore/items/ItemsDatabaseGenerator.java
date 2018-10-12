@@ -23,10 +23,10 @@ public class ItemsDatabaseGenerator
   public static void main(String[] args)
   {
     // 1) Generate independant databases
-    // Build from Tulkas items index
-    // items19.2.2.txt -> itemsTulkasIndex.xml
+    // Build from Tulkas-like items index
+    // items23.txt -> itemsTulkasIndex.xml
     {
-      File from=new File("data/items/in/items22.5.txt").getAbsoluteFile();
+      File from=new File("data/items/in/items23.txt").getAbsoluteFile();
       new TulkasItemsDBParser(from,EncodingNames.UTF_8,TulkasItemsDBParser.INDEX).doIt();
     }
     // Build from LATEST Tulkas items with stats

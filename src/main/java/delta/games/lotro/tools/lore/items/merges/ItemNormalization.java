@@ -1512,6 +1512,7 @@ public class ItemNormalization
     { 228, 226, 227, 223, 229, 222, 221, 224, 225, 220}, // Westemnet
     null, // Anorien
     { -1, -1, -1, 239, 236, 237, 243, 241, 238, 242}, // Doomfold
+    { -1, -1, -1, 247, -1, 245, 244, 241, 246, 250}, // Ironfold
   };
 
   private Item normalizeRecipes(Item item)

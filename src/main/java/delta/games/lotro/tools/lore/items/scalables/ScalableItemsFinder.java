@@ -24,7 +24,7 @@ public class ScalableItemsFinder
     ItemQuality.UNCOMMON, ItemQuality.RARE, ItemQuality.INCOMPARABLE
   };
   private static final String[] ADJECTIVES = {
-    "Resolute","Valourous", "Dextrous", "Enduring","Steadfast"
+    "Resolute", "Valorous", "Valourous", "Dextrous", "Enduring", "Steadfast"
   };
 
   private static final String[] JEWELS = {
