@@ -20,7 +20,7 @@ import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
  */
 public class BuildItemsDbForIcons
 {
-  private static final boolean USE_UNIQUE_ICONS=true;
+  private static final boolean USE_UNIQUE_ICONS=false;
   private static final File LUA_FILE=new File("items.lua");
   private static final File ICON_IDS_FILE=new File("iconIds.txt");
   private HashMap<String,List<Integer>> _iconIds2Ids;
@@ -128,7 +128,7 @@ public class BuildItemsDbForIcons
   {
     File oldFile=new File("data\\items\\items.old.xml").getAbsoluteFile();
     oldFile=null;
-    File newFile=new File("data\\items\\items_filtered.xml").getAbsoluteFile();
+    File newFile=new File("data\\items\\items.xml").getAbsoluteFile();
     HashMap<Integer,Item> items=loadItemsFile(oldFile,newFile);
     doIt(items);
     System.out.println("Total items count: "+items.size());
