@@ -40,16 +40,19 @@ public class LotroWikiDeedCategoryPageParser
 
   private LotroWikiSiteInterface _lotroWiki;
 
+  private File _tmpFilesDir;
   private ItemsResolver _resolver;
   private HashSet<String> _deedIds;
 
   /**
    * Constructor.
    * @param lotroWiki Lotro-wiki interface.
+   * @param tmpFilesDir Directory for temporary files.
    */
-  public LotroWikiDeedCategoryPageParser(LotroWikiSiteInterface lotroWiki)
+  public LotroWikiDeedCategoryPageParser(LotroWikiSiteInterface lotroWiki, File tmpFilesDir)
   {
     _lotroWiki=lotroWiki;
+    _tmpFilesDir=tmpFilesDir;
     _deedIds=new HashSet<String>();
     _resolver=new ItemsResolver();
   }
@@ -87,6 +90,7 @@ public class LotroWikiDeedCategoryPageParser
    */
   public List<DeedDescription> doCategory(String categoryId, DeedType type, CharacterClass characterClass)
   {
+    System.out.println("Doing category: "+categoryId);
     List<DeedDescription> deeds=doCategory(categoryId);
     for(DeedDescription deed : deeds)
     {
@@ -155,9 +159,8 @@ public class LotroWikiDeedCategoryPageParser
 
   private void writeFiles(String categoryId,List<DeedDescription> deeds)
   {
-    File to=new File("tmp/deeds/deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
+    File to=new File(_tmpFilesDir,"deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
     DeedsContainer.writeSortedDeeds(deeds,to);
-    //DeedXMLWriter.writeDeedsFile(to,deeds);
   }
 
   /**
@@ -236,7 +239,8 @@ public class LotroWikiDeedCategoryPageParser
       String url=LotroWikiConstants.BASE_URL+"/index.php?title="+deedId+"&action=edit";
       String name=Escapes.escapeFile(categoryId)+"/deed"+index+".html";
       File deedFile=_lotroWiki.download(url,name);
-      List<DeedDescription> deedsForPage=parser.parseDeeds(deedFile,deedId);
+      deedId=fixDeedId(deedId);
+      List<DeedDescription> deedsForPage=parser.parseDeeds(deedFile);
       if ((deedsForPage!=null) && (deedsForPage.size()>0))
       {
         boolean alreadyKnown=_deedIds.contains(deedId);
@@ -265,6 +269,8 @@ public class LotroWikiDeedCategoryPageParser
           //System.out.println(deed);
           for(DeedDescription deed : deedsForPage)
           {
+            String deedName=fixNames(deed.getName());
+            deed.setName(deedName);
             resolveItemRewards(deed);
           }
         }
@@ -376,5 +382,69 @@ public class LotroWikiDeedCategoryPageParser
       }
     }
     return deedId;
+  }
+
+  private String fixDeedId(String deedId)
+  {
+    if ("Known_to_the_Host_of_the_West".equals(deedId)) deedId="Known_to_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Friend_to_the_Host_of_the_West".equals(deedId)) deedId="Friend_to_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Ally_to_the_Host_of_the_West".equals(deedId)) deedId="Ally_to_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Kindred_to_the_Host_of_the_West".equals(deedId)) deedId="Kindred_to_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Esteemed_in_the_Host_of_the_West".equals(deedId)) deedId="Esteemed_in_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Respected_by_the_Host_of_the_West".equals(deedId)) deedId="Respected_by_the_Host_of_the_West_(Faction)(Deed)";
+    if ("Celebrated_by_the_Host_of_the_West".equals(deedId)) deedId="Celebrated_by_the_Host_of_the_West_(Faction)(Deed)";
+
+    if ("Beast-slayer_of_Ud%C3%BBn".equals(deedId)) deedId="Beast_Slayer_of_Ud%C3%BBn";
+    if ("Beast-slayer_of_Ud%C3%BBn_(Advanced)".equals(deedId)) deedId="Beast_Slayer_of_Ud%C3%BBn_(Advanced)";
+    if ("The_Vanished_Rider".equals(deedId)) deedId="Deed:_The_Vanished_Rider";
+
+    if ("Host_of_the_West_Provisioner".equals(deedId)) deedId="Host_of_the_West_Provisioner_(Faction)_(Deed)";
+    if ("Host_of_the_West_Provisioner_(Intermediate)".equals(deedId)) deedId="Host_of_the_West_Provisioner_(Intermediate)_(Faction)_(Deed)";
+    if ("Host_of_the_West_Provisioner_(Advanced)".equals(deedId)) deedId="Host_of_the_West_Provisioner_(Advanced)(Faction)_(Deed)";
+    if ("Host_of_the_West_Provisioner_(Final)".equals(deedId)) deedId="Host_of_the_West_Provisioner_(Final)(Faction)_(Deed)";
+    if ("Host_of_the_West_Weaponist".equals(deedId)) deedId="Host_of_the_West_Weaponist_(Faction)_(Deed)";
+    if ("Host_of_the_West_Weaponist_(Intermediate)".equals(deedId)) deedId="Host_of_the_West_Weaponist_(Intermediate)_(Faction)_(Deed)";
+    if ("Host_of_the_West_Weaponist_(Advanced)".equals(deedId)) deedId="Host_of_the_West_Weaponist_(Advanced)_(Faction)_(Deed)";
+    if ("Host_of_the_West_Weaponist_(Final)".equals(deedId)) deedId="Host_of_the_West_Weaponist_(Final)_(Faction)_(Deed)";
+    if ("Host_of_the_West_Armourer".equals(deedId)) deedId="Host_of_the_West_Armourer_(Faction)_(Deed)";
+    if ("Host_of_the_West_Armourer_(Intermediate)".equals(deedId)) deedId="Host_of_the_West_Armourer_(Intermediate)_(Faction)_(Deed)";
+    if ("Host_of_the_West_Armourer_(Advanced)".equals(deedId)) deedId="Host_of_the_West_Armourer_(Advanced)(Faction)_(Deed)";
+    if ("Host_of_the_West_Armourer_(Final)".equals(deedId)) deedId="Host_of_the_West_Armourer_(Final)(Faction)_(Deed)";
+    if ("Forge-works_of_Ud%C3%BBn".equals(deedId)) deedId="Forgeworks_of_Ud%C3%BBn";
+
+    if ("Forgeworker-slayer_of_Ud%C3%BBn".equals(deedId)) deedId="Forgeworker_Slayer_of_Ud%C3%BBn";
+    if ("Forgeworker-slayer_of_Ud%C3%BBn_(Advanced)".equals(deedId)) deedId="Forgeworker_Slayer_of_Ud%C3%BBn_(Advanced)";
+    if ("Ford_of_Bruinen".equals(deedId)) deedId="Ford_of_Bruinen_(Deed)";
+
+    if ("Grim-slayer".equals(deedId)) deedId="Grim-slayer_(Forochel)";
+    if ("Grim-slayer_(Advanced)".equals(deedId)) deedId="Grim-slayer_(Advanced)_(Forochel)";
+    if ("Gwiber-slayer".equals(deedId)) deedId="Gwiber-slayer_(Enedwaith)";
+    if ("Gwiber-slayer_(Advanced)".equals(deedId)) deedId="Gwiber-slayer_(Advanced)_(Enedwaith)";
+
+    if ("The_Lay_of_Rust_and_Rime".equals(deedId)) deedId="The_Lay_of_Rust_and_Rime:_The_First_Verse";
+    
+    return deedId;
+  }
+
+  /**
+   * Fix some deed names.
+   * @param name Name to fix.
+   * @return Fixed name.
+   */
+  public static String fixNames(String name)
+  {
+    if ("Grim-slayer".equals(name)) name="Grim-slayer (Forochel)";
+    if ("Grim-slayer (Advanced)".equals(name)) name="Grim-slayer (Advanced) (Forochel)";
+    if ("Gwiber-slayer".equals(name)) name="Gwiber-slayer (Enedwaith)";
+    if ("Gwiber-slayer (Advanced)".equals(name)) name="Gwiber-slayer (Advanced) (Enedwaith)";
+    if ("Forge-works of Udûn".equals(name)) name="Forgeworks of Udûn";
+    if ("Forgeworker-slayer of Udûn".equals(name)) name="Forgeworker Slayer of Udûn";
+    if ("Forgeworker-slayer of Udûn (Advanced)".equals(name)) name="Forgeworker Slayer of Udûn (Advanced)";
+    if ("Beast-slayer of Udûn".equals(name)) name="Beast Slayer of Udûn";
+    if ("Beast-slayer of Udûn (Advanced)".equals(name)) name="Beast Slayer of Udûn (Advanced)";
+
+    if ("The Vanished Rider".equals(name)) name="Deed: The Vanished Rider";
+
+    return name;
   }
 }

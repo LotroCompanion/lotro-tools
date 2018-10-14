@@ -17,17 +17,19 @@ public class MainLotroWikiRecipesLoader
   private static final String[] PROFESSIONS={"Cook","Farmer","Jeweller","Metalsmith","Scholar","Tailor","Weaponsmith","Woodworker"};
   private static final String[] TIERS={"Apprentice","Journeyman","Expert","Artisan","Master","Supreme","Westfold","Eastemnet","Westemnet","Anórien","Doomfold"};
 
+  private File _tmpFilesDir;
+
   /**
    * Constructor.
    */
   public MainLotroWikiRecipesLoader()
   {
-    // Nothing
+    _tmpFilesDir=new File("data/recipes/tmp/lotrowiki").getAbsoluteFile();
   }
 
   private void doIt()
   {
-    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface("recipes");
+    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface(_tmpFilesDir);
 
     // Recipe index parser
     LotroWikiRecipeIndexPageParser parser=new LotroWikiRecipeIndexPageParser(lotroWiki);

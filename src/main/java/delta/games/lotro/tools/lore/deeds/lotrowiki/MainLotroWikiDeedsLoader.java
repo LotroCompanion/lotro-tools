@@ -27,14 +27,14 @@ import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
  */
 public class MainLotroWikiDeedsLoader
 {
-  //private File _outDir;
+  private File _tmpFilesDir;
 
   /**
    * Constructor.
    */
   public MainLotroWikiDeedsLoader()
   {
-    //_outDir=new File("data/lore/deeds").getAbsoluteFile();
+    _tmpFilesDir=new File("data/deeds/tmp/lotrowiki").getAbsoluteFile();
   }
 
   private static final String INSTANCES_SEED="Instances:";
@@ -51,9 +51,9 @@ public class MainLotroWikiDeedsLoader
 
   private void doIt()
   {
-    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface("deeds");
+    LotroWikiSiteInterface lotroWiki=new LotroWikiSiteInterface(_tmpFilesDir);
     // Load a sample "deed category" URL
-    LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser(lotroWiki);
+    LotroWikiDeedCategoryPageParser parser=new LotroWikiDeedCategoryPageParser(lotroWiki,_tmpFilesDir);
 
     // Class deeds
     parser.doCategory("Beorning_Deeds",DeedType.CLASS,CharacterClass.BEORNING);
@@ -96,18 +96,14 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("West_Rohan_Deeds",null,"Region:West Rohan");
     parser.doCategory("The_Helmingas_Deeds",DeedType.REPUTATION,"Region:West Rohan");
     parser.doCategory("West_Rohan_Reputation_Deeds",DeedType.REPUTATION,"Region:West Rohan");
-    parser.doCategory("Strongholds_of_the_North_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Meta_Deeds",null,"Region:Strongholds of the North");
-    parser.doCategory("Strongholds_of_the_North_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Eryn_Lasgalen_and_the_Dale-lands_Meta_Deeds",null,"Region:Strongholds of the North");
+    parser.doCategory("Eryn_Lasgalen_and_the_Dale-lands_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North");
+    parser.doCategory("Eryn_Lasgalen_and_the_Dale-lands_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North");
     parser.doCategory("Eryn_Lasgalen_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Eryn Lasgalen");
     parser.doCategory("Eryn_Lasgalen_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Eryn Lasgalen");
     parser.doCategory("Eryn_Lasgalen_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Eryn Lasgalen");
     parser.doCategory("Elves_of_Felegoth_Deeds",null,"Region:Strongholds of the North:Eryn Lasgalen");
-    parser.doCategory("Dale-lands_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Dale-lands");
-    parser.doCategory("Dale-lands_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Dale-lands");
-    parser.doCategory("Dale-lands_Slayer_Deeds",DeedType.SLAYER,"Region:Strongholds of the North:Dale-lands");
+    parser.doCategory("The_Dale-lands_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Dale-lands");
     parser.doCategory("Men_of_Dale_Deeds",null,"Region:Strongholds of the North:Dale-lands");
     parser.doCategory("Erebor_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Erebor");
     parser.doCategory("Erebor_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Erebor");
@@ -133,11 +129,10 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Lhingris_Deeds",null,"Region:Gorgoroth:Lhingris");
     parser.doCategory("Talath_Úrui_Deeds",null,"Region:Gorgoroth:Talath Úrui");
     parser.doCategory("Agarnaith_Deeds",null,"Region:Gorgoroth:Agarnaith");
-    parser.doCategory("Plateau_of_Gorgoroth_Quest_Deeds",DeedType.QUEST,"Region:Gorgoroth");
-    parser.doCategory("Plateau_of_Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
-    parser.doCategory("Plateau_of_Gorgoroth_Lore_Deeds",DeedType.LORE,"Region:Gorgoroth");
-    parser.doCategory("Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
-    parser.doCategory("Plateau_of_Gorgoroth_Reputation_Deeds",DeedType.REPUTATION,"Region:Gorgoroth");
+    parser.doCategory("The_Plateau_of_Gorgoroth_Quest_Deeds",DeedType.QUEST,"Region:Gorgoroth");
+    parser.doCategory("The_Plateau_of_Gorgoroth_Slayer_Deeds",DeedType.SLAYER,"Region:Gorgoroth");
+    parser.doCategory("The_Plateau_of_Gorgoroth_Lore_Deeds",DeedType.LORE,"Region:Gorgoroth");
+    parser.doCategory("The_Plateau_of_Gorgoroth_Reputation_Deeds",DeedType.REPUTATION,"Region:Gorgoroth");
 
     // PVP
     parser.doCategory("Freep_Deeds",null,"PVP:Freep deeds");
@@ -311,8 +306,7 @@ public class MainLotroWikiDeedsLoader
   {
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     DeedXMLParser parser=new DeedXMLParser();
-    File tmpDeedsFiles=new File("tmp/deeds");
-    for(File deedFile : tmpDeedsFiles.listFiles())
+    for(File deedFile : _tmpFilesDir.listFiles())
     {
       if (deedFile.getName().endsWith(".xml"))
       {

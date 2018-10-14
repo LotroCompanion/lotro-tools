@@ -21,13 +21,12 @@ public class LotroWikiSiteInterface
 
   /**
    * Constructor.
-   * @param dirName Directory name.
+   * @param tmpFilesDir Directory for temporary files.
    */
-  public LotroWikiSiteInterface(String dirName)
+  public LotroWikiSiteInterface(File tmpFilesDir)
   {
     _client=new Downloader();
-    File tmpDir=new File("tmp",dirName);
-    _tmpFiles=new TmpFiles(tmpDir);
+    _tmpFiles=new TmpFiles(tmpFilesDir);
   }
 
   /**

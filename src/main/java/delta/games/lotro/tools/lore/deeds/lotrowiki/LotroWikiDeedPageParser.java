@@ -46,10 +46,9 @@ public class LotroWikiDeedPageParser
   /**
    * Parse the lotro wiki deed page for the given deed ID.
    * @param from Source page.
-   * @param deedId Deed ID.
    * @return A deed or <code>null</code> if an error occurred.
    */
-  public List<DeedDescription> parseDeeds(File from, String deedId)
+  public List<DeedDescription> parseDeeds(File from)
   {
     _currentFile=from;
     List<DeedDescription> deeds=null;
@@ -230,7 +229,7 @@ public class LotroWikiDeedPageParser
       {
         virtueCount=NumericTools.parseInteger(getLineValue(line));
       }
-      else if ("TP-reward".equals(lineKey))
+      else if (("TP-reward".equals(lineKey)) || ("LP-reward".equals(lineKey)))
       {
         String tpStr=getLineValue(line);
         if ((!tpStr.isEmpty()) && (!"???".equals(tpStr)))
@@ -252,6 +251,7 @@ public class LotroWikiDeedPageParser
         String smStr=getLineValue(line);
         if (!smStr.isEmpty())
         {
+          if (smStr.endsWith("r")) smStr=smStr.substring(0,smStr.length()-1);
           Integer marks=NumericTools.parseInteger(smStr,false);
           if (marks!=null)
           {
@@ -597,6 +597,7 @@ public class LotroWikiDeedPageParser
       {
         titleName=titleName.substring(0,index);
       }
+      if (titleName.endsWith(" (title)")) titleName=titleName.substring(0,titleName.length()-8);
       titleName=titleName.trim();
       title=new Title(null,titleName);
     }
@@ -799,13 +800,15 @@ public class LotroWikiDeedPageParser
       if (index>0)
       {
         DeedProxy previous=new DeedProxy();
-        previous.setName(deedsChain.get(index-1));
+        String previousDeedName=deedsChain.get(index-1);
+        previous.setName(LotroWikiDeedCategoryPageParser.fixNames(previousDeedName));
         deed.setPreviousDeedProxy(previous);
       }
       if (index<deedsChain.size()-1)
       {
         DeedProxy next=new DeedProxy();
-        next.setName(deedsChain.get(index+1));
+        String nextDeedName=deedsChain.get(index+1);
+        next.setName(LotroWikiDeedCategoryPageParser.fixNames(nextDeedName));
         deed.setNextDeedProxy(next);
       }
     }
