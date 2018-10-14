@@ -25,34 +25,6 @@ public class ItemsResolver
   }
 
   /**
-   * Resolve an item using its lorebook key.
-   * @param key Key to use.
-   * @return An item or <code>null</code> if not found.
-   */
-  public Item resolveLorebookKey(String key)
-  {
-    /*
-    key=key.replace("'","%27");
-    key=key.replace("â","%C3%A2");
-    key=key.replace("ú","%C3%BA");
-    key=key.replace("ó","%C3%B3");
-    key=key.replace("û","%C3%BB");
-    */
-
-    Item item=getItem(key);
-    if (item==null)
-    {
-      if (key.startsWith("Item:"))
-      {
-        key=key.substring(5);
-        key=key.replace("_"," ");
-        item=getItem(key);
-      }
-    }
-    return item;
-  }
-
-  /**
    * Get an item using a 'key' (name, lorebook key, icon path).
    * @param key Key to use.
    * @return An item or <code>null</code> if not found.
@@ -66,7 +38,7 @@ public class ItemsResolver
     }
     if (items.size()>1)
     {
-      //System.out.println("Warn: "+key+" : "+items.size()+" : "+items);
+      System.out.println("Warn: "+key+" : "+items.size()+" : "+items);
       return null;
     }
     return items.get(0);

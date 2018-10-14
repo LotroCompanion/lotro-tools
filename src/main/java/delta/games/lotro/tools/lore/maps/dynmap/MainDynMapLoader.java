@@ -26,7 +26,7 @@ public class MainDynMapLoader
    */
   public MainDynMapLoader()
   {
-    File tmpDir=new File("tmp");
+    File tmpDir=new File("data");
     File mapsDir=new File(tmpDir,"maps");
     File outputDir=new File(mapsDir,"output");
     _outDir=outputDir.getAbsoluteFile();

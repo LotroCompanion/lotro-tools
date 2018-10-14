@@ -1,12 +1,15 @@
 package delta.games.lotro.tools.lore.maps.tools;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import delta.games.lotro.maps.data.Map;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.Marker;
 
 /**
  * Maps checker.
@@ -21,6 +24,8 @@ public class MainMapsChecker
     mapsManager.load();
     // Check links
     checkLinks(mapsManager);
+    // Check for duplicate IDs
+    checkForDuplicateIds(mapsManager);
   }
 
   private void checkLinks(MapsManager mapsManager)
@@ -67,6 +72,41 @@ public class MainMapsChecker
     else
     {
       System.out.println("Found no link error");
+    }
+  }
+
+  private void checkForDuplicateIds(MapsManager mapsManager)
+  {
+    int nbErrors=0;
+    List<MapBundle> maps=mapsManager.getMaps();
+    for(MapBundle mapBundle : maps)
+    {
+      //int nbErrorsInMap=0;
+      Map map=mapBundle.getMap();
+      String mapKey=map.getKey();
+      Set<Integer> foundIds=new HashSet<Integer>();
+      for(Marker marker : mapBundle.getData().getAllMarkers())
+      {
+        Integer id=Integer.valueOf(marker.getId());
+        if (foundIds.contains(id))
+        {
+          System.out.println("Map: "+mapKey+": duplicated ID: "+id);
+          nbErrors++;
+          //nbErrorsInMap++;
+        }
+        else
+        {
+          foundIds.add(id);
+        }
+      }
+    }
+    if (nbErrors>0)
+    {
+      System.out.println("Found "+nbErrors+" duplicated ID errors");
+    }
+    else
+    {
+      System.out.println("Found no duplicated ID error");
     }
   }
 
