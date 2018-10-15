@@ -108,6 +108,13 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Erebor_Explorer_Deeds",DeedType.EXPLORER,"Region:Strongholds of the North:Erebor");
     parser.doCategory("Erebor_Quest_Deeds",DeedType.QUEST,"Region:Strongholds of the North:Erebor");
     parser.doCategory("Dwarves_of_Erebor_Deeds",null,"Region:Strongholds of the North:Erebor");
+    parser.doCategory("Ered_Mithrin_and_Withered_Heath_Slayer_Deeds",DeedType.SLAYER,"Region:Ered Mithrin and Withered Heath");
+    // Type set to null because page contains more than just explorer deeds
+    parser.doCategory("Ered_Mithrin_and_Withered_Heath_Explorer_Deeds",null,"Region:Ered Mithrin and Withered Heath");
+    parser.doCategory("Ered_Mithrin_and_Withered_Heath_Lore_Deeds",DeedType.LORE,"Region:Ered Mithrin and Withered Heath");
+    // Use slayer here because it contains only a meta-slayer deed
+    parser.doCategory("Ered_Mithrin_and_Withered_Heath_Meta_Deeds",DeedType.SLAYER,"Region:Ered Mithrin and Withered Heath");
+    //parser.doCategory("Grey_Mountains_Expedition_Deeds",null,"Region:Ered Mithrin and Withered Heath");
 
     // - Gondor
     parser.doCategory("Western_Gondor_Deeds",null,"Region:Western Gondor");
@@ -294,6 +301,7 @@ public class MainLotroWikiDeedsLoader
     parser.doCategory("Hidden_Deeds");
     parser.doCategory("Meta_Deeds");
     parser.doCategory("Elves_of_Rivendell_Reputation_Quests");
+    //parser.doCategory("Regional_Deeds",null,"Region:???");
  
     // Singles
     List<String> singleDeedIds=new ArrayList<String>();
