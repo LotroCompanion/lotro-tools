@@ -15,7 +15,7 @@ public class MainLotroWikiRecipesLoader
 {
   // Professions... Forester and Prospector not managed
   private static final String[] PROFESSIONS={"Cook","Farmer","Jeweller","Metalsmith","Scholar","Tailor","Weaponsmith","Woodworker"};
-  private static final String[] TIERS={"Apprentice","Journeyman","Expert","Artisan","Master","Supreme","Westfold","Eastemnet","Westemnet","Anórien","Doomfold"};
+  private static final String[] TIERS={"Apprentice","Journeyman","Expert","Artisan","Master","Supreme","Westfold","Eastemnet","Westemnet","Anórien","Doomfold","Ironfold"};
 
   private File _tmpFilesDir;
 

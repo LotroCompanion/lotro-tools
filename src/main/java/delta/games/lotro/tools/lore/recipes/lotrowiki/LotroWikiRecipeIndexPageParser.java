@@ -380,6 +380,15 @@ public class LotroWikiRecipeIndexPageParser
     return items;
   }
 
+  private String removeSuffix(String name, String suffix)
+  {
+    if (name.endsWith(suffix))
+    {
+      name=name.substring(0,name.length()-suffix.length()).trim();
+    }
+    return name;
+  }
+
   private void fixItem(ItemProxy proxy)
   {
     String name=proxy.getName();
@@ -399,6 +408,13 @@ public class LotroWikiRecipeIndexPageParser
     {
       name="Rune-keeper's Rune-stone of the First Age";
     }
+    name=removeSuffix(name,"(Crit)");
+    name=removeSuffix(name,"(Tactical)");
+    name=removeSuffix(name,"(Tactical Crit)");
+    name=removeSuffix(name,"(Tank)");
+    name=removeSuffix(name,"(Tank Crit)");
+    name=removeSuffix(name,"(Healing)");
+    name=removeSuffix(name,"(Healing Crit)");
     if (name.endsWith("Ingot"))
     {
       name=name.replace("Khazad","Khazâd");
