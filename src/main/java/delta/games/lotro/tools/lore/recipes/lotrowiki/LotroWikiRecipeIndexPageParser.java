@@ -26,8 +26,9 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.filters.ItemSubCategoryFilter;
+import delta.games.lotro.lore.items.finder.ItemSelectorImpl;
 import delta.games.lotro.lore.items.finder.ItemsFinder;
-import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
@@ -49,7 +50,7 @@ public class LotroWikiRecipeIndexPageParser
   private int _tier;
   private LotroWikiSiteInterface _lotroWiki;
   private ItemsFinder _finder;
-  private ItemsResolver _resolver;
+  private ItemSelectorImpl _selector;
 
   /**
    * Constructor.
@@ -59,7 +60,7 @@ public class LotroWikiRecipeIndexPageParser
   {
     _lotroWiki=lotroWiki;
     _finder=ItemsManager.getInstance().getFinder();
-    _resolver=new ItemsResolver();
+    _selector=buildSelector();
   }
 
   /**
@@ -190,7 +191,7 @@ public class LotroWikiRecipeIndexPageParser
     {
       // Results
       Element resultsCell=cells.get(resultIndex.intValue());
-      List<ItemInfos> resultsInfo=parseItems(resultsCell,false);
+      List<ItemInfos> resultsInfo=parseItems(resultsCell,false,false);
       List<RecipeVersion> results=buildResults(resultsInfo);
       recipe.setVersions(results);
       // Name
@@ -212,7 +213,7 @@ public class LotroWikiRecipeIndexPageParser
       }
       else
       {
-        ingredientsInfo=parseItems(ingredientsCell,false);
+        ingredientsInfo=parseItems(ingredientsCell,false,true);
       }
       _lastIngredients=ingredientsInfo;
       List<Ingredient> ingredients=buildIngredients(ingredientsInfo);
@@ -311,7 +312,7 @@ public class LotroWikiRecipeIndexPageParser
   private Integer _count;
   private ItemProxy _itemId;
 
-  private List<ItemInfos> parseItems(Element cell, boolean critical)
+  private List<ItemInfos> parseItems(Element cell, boolean critical, boolean doWarn)
   {
     List<ItemInfos> items=new ArrayList<ItemInfos>();
     Segment content=cell.getContent();
@@ -345,13 +346,13 @@ public class LotroWikiRecipeIndexPageParser
             {
               _count=parseItemCount(countTag);
             }
-            items.addAll(parseItems(child,false));
+            items.addAll(parseItems(child,false,doWarn));
           }
           else if (HTMLElementName.I.equals(tagName))
           {
             _count=null;
             _itemId=null;
-            items.addAll(parseItems(child,true));
+            items.addAll(parseItems(child,true,doWarn));
           }
           else if (HTMLElementName.A.equals(tagName))
           {
@@ -359,7 +360,7 @@ public class LotroWikiRecipeIndexPageParser
             Element img=JerichoHtmlUtils.findElementByTagName(child,HTMLElementName.IMG);
             if (img==null)
             {
-              _itemId=parseItemIdFromLink(child);
+              _itemId=parseItemIdFromLink(child,doWarn);
               Integer count=parseItemCountFromItemText(child);
               if (count!=null)
               {
@@ -742,7 +743,7 @@ public class LotroWikiRecipeIndexPageParser
     return ret;
   }
 
-  private ItemProxy parseItemIdFromLink(Element aTag)
+  private ItemProxy parseItemIdFromLink(Element aTag, boolean doWarn)
   {
     ItemProxy ret=null;
     // Item
@@ -792,12 +793,12 @@ public class LotroWikiRecipeIndexPageParser
       ret.setItemKey(itemKey);
       ret.setName(itemName);
       fixItem(ret);
-      resolveItem(ret);
+      resolveItem(ret,doWarn);
     }
     return ret;
   }
 
-  private void resolveItem(ItemProxy itemProxy)
+  private void resolveItem(ItemProxy itemProxy, boolean doWarn)
   {
     String name=itemProxy.getName();
     int itemId=itemProxy.getId();
@@ -819,7 +820,10 @@ public class LotroWikiRecipeIndexPageParser
     }
     else
     {
-      System.out.println("Item not found [" + name + "]");
+      if (doWarn)
+      {
+        System.out.println("Item not found [" + name + "]");
+      }
     }
   }
 
@@ -869,12 +873,21 @@ public class LotroWikiRecipeIndexPageParser
     }
     if (ret==null)
     {
-      ret=_resolver.getItem(name);
+      ret=_finder.resolveByName(name,_selector);
     }
     return ret;
   }
 
-  
+  private ItemSelectorImpl buildSelector()
+  {
+    ItemSelectorImpl selector=new ItemSelectorImpl();
+    ItemSubCategoryFilter questItems=new ItemSubCategoryFilter("Misc:Quest Item");
+    selector.addRemoveFilter(questItems);
+    ItemSubCategoryFilter craftingItems=new ItemSubCategoryFilter("Crafting Item");
+    selector.addKeepFilter(craftingItems);
+    return selector;
+  }
+
   private Integer parseItemCount(Element countTag)
   {
     // Count
