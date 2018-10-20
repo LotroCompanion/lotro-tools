@@ -257,6 +257,7 @@ public class LotroWikiRecipeIndexPageParser
       else if (line.equals("Reputation")) System.out.println("Reputation");
       else if (line.equals("Reputation Vendor")) System.out.println("Reputation");
       else if (line.equals("Barter")) System.out.println("Barter");
+      else if (line.equals("Reward")) System.out.println("Barter");
       else if (line.equals("Festival")) System.out.println("Festival Vendor");
       else if ((line.startsWith("former Spring Festival drop")) || (line.equals("obsolete Spring Festival recipe")) || (line.equals("obsolete Spring Festival item")))
       {
@@ -278,7 +279,14 @@ public class LotroWikiRecipeIndexPageParser
       {
         Integer cooldown=Duration.parseDurationString(line);
         //System.out.println("Cooldown: "+Duration.getDurationString(cooldown.intValue()));
-        recipe.setCooldown(cooldown.intValue());
+        if (cooldown!=null)
+        {
+          recipe.setCooldown(cooldown.intValue());
+        }
+        else
+        {
+          _logger.warn("Bad cooldown string: ["+line+"]");
+        }
       }
       else if (line.contains("day"))
       {
