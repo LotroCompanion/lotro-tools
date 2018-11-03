@@ -2,9 +2,12 @@ package delta.games.lotro.tools.lore.recipes.dat;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -303,6 +306,94 @@ public class MainDatRecipesLoader
     // Cooldown mapping
     _cooldownMapping=loadCooldownMapping();
     RecipesManager recipesManager=new RecipesManager();
+    //useIndexes(recipesManager);
+    scanAll(recipesManager);
+    int nbRecipes=recipesManager.getRecipesCount();
+    System.out.println("Found: "+nbRecipes+" recipes.");
+    File out=new File("../lotro-companion/data/lore/recipes_dat.xml");
+    recipesManager.writeToFile(out);
+  }
+
+  private void scanAll(RecipesManager recipesManager)
+  {
+    int nb=0;
+    Set<Integer> done=new HashSet<Integer>();
+    List<Integer> recipeDataIds=loadIndexedRecipeIds();
+    List<Integer> legacyDataIds=loadLorebookRecipeIds();
+    Set<Integer> ids=new HashSet<Integer>();
+    ids.addAll(recipeDataIds);
+    ids.addAll(legacyDataIds);
+    for(Integer recipeDataId : ids)
+    {
+      for(int i=recipeDataId.intValue()-10000;i<recipeDataId.intValue()+10000;i++)
+      {
+        Integer key=Integer.valueOf(i);
+        if (!done.contains(key))
+        {
+          Recipe recipe=tryId(i);
+          if (recipe!=null)
+          {
+            recipesManager.registerRecipe(recipe);
+            nb++;
+            System.out.println(i+" => "+nb);
+          }
+        }
+        done.add(key);
+      }
+    }
+  }
+
+  private Recipe tryId(int id)
+  {
+    Recipe recipe=null;
+    PropertiesSet props=_facade.loadProperties(id+0x09000000);
+    if (props!=null)
+    {
+      Object category=props.getProperty("CraftRecipe_UICategory");
+      if (category!=null)
+      {
+        recipe=load(id);
+      }
+    }
+    return recipe;
+  }
+
+  /*
+  private void useIndexes(RecipesManager recipesManager)
+  {
+    List<Integer> recipeDataIds=loadIndexedRecipeIds();
+    for(Integer recipeDataId : recipeDataIds)
+    {
+      Recipe recipe=load(recipeDataId.intValue());
+      if (recipe!=null)
+      {
+        recipesManager.registerRecipe(recipe);
+      }
+    }
+  }
+  */
+
+  private List<Integer> loadLorebookRecipeIds()
+  {
+    RecipesManager manager=new RecipesManager();
+    File fromFile=new File("data/recipes/resolvedLegacyRecipes.xml");
+    manager.loadRecipesFromFile(fromFile);
+    List<Integer> ret=new ArrayList<Integer>();
+    for(Recipe recipe : manager.getAll())
+    {
+      int id=recipe.getIdentifier();
+      if (id!=0)
+      {
+        ret.add(Integer.valueOf(id));
+      }
+    }
+    Collections.sort(ret);
+    return ret;
+  }
+
+  private List<Integer> loadIndexedRecipeIds()
+  {
+    List<Integer> ret=new ArrayList<Integer>();
     int nbProfessions=PROFESSIONS.length;
     for(int i=0;i<nbProfessions;i++)
     {
@@ -314,22 +405,11 @@ public class MainDatRecipesLoader
         for(Integer tier : map.keySet())
         {
           List<Integer> recipedDataIds=map.get(tier);
-          System.out.println("Tier "+tier+": "+recipedDataIds);
-          for(Integer recipeDataId : recipedDataIds)
-          {
-            Recipe recipe=load(recipeDataId.intValue());
-            if (recipe!=null)
-            {
-              recipesManager.registerRecipe(recipe);
-            }
-          }
+          ret.addAll(recipedDataIds);
         }
       }
     }
-    int nbRecipes=recipesManager.getRecipesCount();
-    System.out.println("Found: "+nbRecipes+" recipes.");
-    File out=new File("../lotro-companion/data/lore/recipes_dat.xml");
-    recipesManager.writeToFile(out);
+    return ret;
   }
 
   private Map<Integer,Integer> loadXpMapping()
