@@ -116,6 +116,13 @@ public class MainDatRecipesLoader
           recipe.setCooldown(cooldownValue.intValue());
         }
       }
+      // Single use
+      Integer singleUse=(Integer)properties.getProperty("CraftRecipe_OneTimeRecipe");
+      if ((singleUse!=null) && (singleUse.intValue()==1))
+      {
+        recipe.setOneTimeUse(true);
+      }
+
       // Ingredients
       List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
       // Optional ingredients
