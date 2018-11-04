@@ -312,6 +312,7 @@ public class MainDatRecipesLoader
     ItemsManager items=ItemsManager.getInstance();
     Item item=items.getItem(id);
     ItemProxy proxy=new ItemProxy();
+    proxy.setId(id);
     proxy.setItem(item);
     return proxy;
   }
