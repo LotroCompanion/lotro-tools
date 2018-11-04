@@ -56,12 +56,6 @@ public class LuaRecipesItemLinksResolver
     for(Recipe recipe : recipes)
     {
       _stats.startItem();
-      List<Ingredient> ingredients=recipe.getIngredients();
-      for(Ingredient ingredient : ingredients)
-      {
-        ItemProxy itemRef=ingredient.getItem();
-        handleItemRef(finder,itemRef);
-      }
       ItemProxy scroll=recipe.getRecipeScroll();
       if (scroll!=null)
       {
@@ -70,6 +64,12 @@ public class LuaRecipesItemLinksResolver
       List<RecipeVersion> versions=recipe.getVersions();
       for(RecipeVersion version : versions)
       {
+        List<Ingredient> ingredients=version.getIngredients();
+        for(Ingredient ingredient : ingredients)
+        {
+          ItemProxy itemRef=ingredient.getItem();
+          handleItemRef(finder,itemRef);
+        }
         CraftingResult regular=version.getRegular();
         if (regular!=null)
         {

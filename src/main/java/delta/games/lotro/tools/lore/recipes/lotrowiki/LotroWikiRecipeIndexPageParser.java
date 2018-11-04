@@ -217,7 +217,10 @@ public class LotroWikiRecipeIndexPageParser
       }
       _lastIngredients=ingredientsInfo;
       List<Ingredient> ingredients=buildIngredients(ingredientsInfo);
-      recipe.setIngredients(ingredients);
+      for(RecipeVersion version : results)
+      {
+        version.setIngredients(ingredients);
+      }
       // XP
       if (xpIndex!=null)
       {

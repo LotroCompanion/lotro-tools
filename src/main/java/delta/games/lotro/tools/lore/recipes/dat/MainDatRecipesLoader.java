@@ -126,10 +126,10 @@ public class MainDatRecipesLoader
       List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
       // Optional ingredients
       List<Ingredient> optionalIngredients=getIngredientsList(properties,"CraftRecipe_OptionalIngredientList",true);
-      recipe.getIngredients().addAll(ingredients);
-      recipe.getIngredients().addAll(optionalIngredients);
       // Results
-      RecipeVersion firstResult=buildResult(properties);
+      RecipeVersion firstResult=buildVersion(properties);
+      firstResult.getIngredients().addAll(ingredients);
+      firstResult.getIngredients().addAll(optionalIngredients);
       recipe.getVersions().add(firstResult);
       // Multiple output results
       Object[] multiOutput=(Object[])properties.getProperty("CraftRecipe_MultiOutputArray");
@@ -138,9 +138,29 @@ public class MainDatRecipesLoader
         for(Object output : multiOutput)
         {
           PropertiesSet outputProps=(PropertiesSet)output;
-          // TODO Use also CraftRecipe_Ingredient that may be different from the initial version
-          RecipeVersion otherResult=buildResult(outputProps);
-          recipe.getVersions().add(otherResult);
+          RecipeVersion newVersion=firstResult.cloneData();
+
+          // Patch
+          // - result
+          Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
+          if ((resultId!=null) && (resultId.intValue()>0))
+          {
+            newVersion.getRegular().setItem(buildItemProxy(resultId.intValue()));
+          }
+          // - critical result
+          Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
+          if ((critResultId!=null) && (critResultId.intValue()>0))
+          {
+            CraftingResult critical=newVersion.getCritical();
+            critical.setItem(buildItemProxy(critResultId.intValue()));
+          }
+          // Ingredient
+          Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
+          if (ingredientId!=null)
+          {
+            newVersion.getIngredients().get(0).setItem(buildItemProxy(ingredientId.intValue()));
+          }
+          recipe.getVersions().add(newVersion);
         }
       }
 
@@ -164,6 +184,19 @@ public class MainDatRecipesLoader
         recipe.setName(name);
       }
 
+      /*
+      if (indexDataId==1879089025)
+      {
+        // Field recipes:
+        // CraftRecipe_ResultItem gives the id of the field "item" (not found by LUA indexer)
+        // same for the crit result: CraftRecipe_CriticalResultItem
+        // Field icons:
+        //   CraftRecipe_Field_CritResultIcon: 1091479564
+        //   CraftRecipe_Field_ResultIcon: 1091479564
+
+        System.out.println(properties.dump());
+      }
+      */
       Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
       if ((guild!=null) && (guild.intValue()!=0))
       {
@@ -228,7 +261,7 @@ public class MainDatRecipesLoader
     return ret;
   }
 
-  private RecipeVersion buildResult(PropertiesSet properties)
+  private RecipeVersion buildVersion(PropertiesSet properties)
   {
     RecipeVersion version=new RecipeVersion();
     // Regular result
@@ -348,7 +381,7 @@ public class MainDatRecipesLoader
           {
             recipesManager.registerRecipe(recipe);
             nb++;
-            //System.out.println(i+" => "+nb);
+            System.out.println(i+" => "+nb);
           }
         }
         done.add(key);

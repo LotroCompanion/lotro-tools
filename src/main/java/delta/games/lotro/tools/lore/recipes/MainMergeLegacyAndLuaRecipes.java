@@ -12,6 +12,7 @@ import java.util.Set;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeUtils;
+import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.ItemProxy;
 
@@ -58,22 +59,25 @@ public class MainMergeLegacyAndLuaRecipes
     List<Recipe> recipes=_legacyRecipes.getAll();
     for(Recipe recipe : recipes)
     {
-      List<Ingredient> ingredients=recipe.getIngredients();
-      for(Ingredient ingredient : ingredients)
+      for(RecipeVersion version : recipe.getVersions())
       {
-        int id=ingredient.getItem().getId();
-        if (id!=0)
+        List<Ingredient> ingredients=version.getIngredients();
+        for(Ingredient ingredient : ingredients)
         {
-          String name=ingredient.getName();
-          Integer oldId=ret.get(name);
-          if (oldId!=null)
+          int id=ingredient.getItem().getId();
+          if (id!=0)
           {
-            if (oldId.intValue()!=id)
+            String name=ingredient.getName();
+            Integer oldId=ret.get(name);
+            if (oldId!=null)
             {
-              System.out.println("ID ambiguity for "+name+": "+oldId+", "+id);
+              if (oldId.intValue()!=id)
+              {
+                System.out.println("ID ambiguity for "+name+": "+oldId+", "+id);
+              }
             }
+            ret.put(name,Integer.valueOf(id));
           }
-          ret.put(name,Integer.valueOf(id));
         }
       }
     }
@@ -153,8 +157,8 @@ public class MainMergeLegacyAndLuaRecipes
     legacyRecipe.setCategory(luaRecipe.getCategory());
     legacyRecipe.setXP(luaRecipe.getXP());
     // Ingredients
-    List<Ingredient> legacyIngredients=legacyRecipe.getIngredients();
-    List<Ingredient> luaIngredients=luaRecipe.getIngredients();
+    List<Ingredient> legacyIngredients=legacyRecipe.getVersions().get(0).getIngredients();
+    List<Ingredient> luaIngredients=luaRecipe.getVersions().get(0).getIngredients();
     /*
     int nbLegacyIngredients=legacyIngredients.size();
     int nbLuaIngredients=luaIngredients.size();
