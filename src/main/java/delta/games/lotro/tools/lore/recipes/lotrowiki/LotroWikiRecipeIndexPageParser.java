@@ -267,7 +267,10 @@ public class LotroWikiRecipeIndexPageParser
         System.out.println("Festival Drop");
         System.out.println("Obsolete");
       }
-      else if (line.equals("Guild")) System.out.println("Guild");
+      else if (line.equals("Guild"))
+      {
+        recipe.setGuildRequired(true);
+      }
       else if (line.equals("Drop")) System.out.println("Drop");
       else if (line.equals("Quest")) System.out.println("Quest");
       else if (line.equals("Obsolete")) System.out.println("Obsolete");

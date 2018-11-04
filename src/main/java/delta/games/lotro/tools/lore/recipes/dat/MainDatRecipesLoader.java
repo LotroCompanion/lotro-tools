@@ -200,7 +200,7 @@ public class MainDatRecipesLoader
       Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
       if ((guild!=null) && (guild.intValue()!=0))
       {
-        //System.out.println("guild: "+guild+" = "+name);
+        recipe.setGuildRequired(true);
       }
     }
     else
