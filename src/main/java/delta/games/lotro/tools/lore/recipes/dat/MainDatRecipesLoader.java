@@ -122,7 +122,6 @@ public class MainDatRecipesLoader
       {
         recipe.setOneTimeUse(true);
       }
-
       // Ingredients
       List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
       // Optional ingredients
@@ -139,6 +138,7 @@ public class MainDatRecipesLoader
         for(Object output : multiOutput)
         {
           PropertiesSet outputProps=(PropertiesSet)output;
+          // TODO Use also CraftRecipe_Ingredient that may be different from the initial version
           RecipeVersion otherResult=buildResult(outputProps);
           recipe.getVersions().add(otherResult);
         }
@@ -162,6 +162,12 @@ public class MainDatRecipesLoader
       {
         name=recipe.getVersions().get(0).getRegular().getItem().getName();
         recipe.setName(name);
+      }
+
+      Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
+      if ((guild!=null) && (guild.intValue()!=0))
+      {
+        //System.out.println("guild: "+guild+" = "+name);
       }
     }
     else
@@ -342,7 +348,7 @@ public class MainDatRecipesLoader
           {
             recipesManager.registerRecipe(recipe);
             nb++;
-            System.out.println(i+" => "+nb);
+            //System.out.println(i+" => "+nb);
           }
         }
         done.add(key);
