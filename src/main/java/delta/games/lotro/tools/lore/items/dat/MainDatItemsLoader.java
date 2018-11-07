@@ -13,6 +13,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
@@ -63,9 +64,8 @@ public class MainDatItemsLoader
         System.out.println(properties.dump());
       }
       nb++;
-      Integer weenieType=(Integer)properties.getProperty("WeenieType");
-      Integer itemClass=(Integer)properties.getProperty("Item_Class");
-      item=buildItem(weenieType.intValue(),itemClass.intValue());
+      item=buildItem(properties);
+      int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
       // ID
       item.setIdentifier(indexDataId);
       // Name
@@ -76,7 +76,7 @@ public class MainDatItemsLoader
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       item.setIcon(iconId+"-"+backgroundIconId);
       // Slot
-      EquipmentLocation slot=getSlot(itemClass.intValue());
+      EquipmentLocation slot=getSlot(itemClass);
       item.setEquipmentLocation(slot);
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
@@ -98,7 +98,8 @@ public class MainDatItemsLoader
         item.setQuality(getQuality(quality.intValue()));
       }
       // Category
-      item.setSubCategory(itemClass.toString());
+      String category=_facade.getEnumsManager().resolveEnum(0x23000036,itemClass);
+      item.setSubCategory(category);
       // Armour value
       Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
       if ((armourValue!=null) && (armourValue.intValue()>0))
@@ -133,6 +134,10 @@ public class MainDatItemsLoader
           item.getStats().addStats(stats);
         }
       }
+      if (item instanceof Weapon)
+      {
+        loadWeaponSpecifics((Weapon)item,properties);
+      }
     }
     else
     {
@@ -141,12 +146,89 @@ public class MainDatItemsLoader
     return item;
   }
 
-  private Item buildItem(int weenieType, int itemClass)
+  private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
   {
+    int itemLevel=weapon.getItemLevel().intValue();
+    float baseDPS=((Float)properties.getProperty("Combat_BaseDPS")).floatValue();
+    // Checks
+    {
+      int levelForChecks=itemLevel;
+      Integer level=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
+      if (level!=null)
+      {
+        levelForChecks=itemLevel;
+      }
+      else
+      {
+        Integer levelDelta=(Integer)properties.getProperty("Item_MaxLevelUpgrades");
+        if (levelDelta!=null)
+        {
+          levelForChecks-=levelDelta.intValue();
+        }
+      }
+      float computedDps=computeDps(levelForChecks,weapon.getQuality(),properties);
+      if (Math.abs(baseDPS-computedDps)>0.01)
+      {
+        //System.out.println("Bad DPS computation: got "+computedDps+", expected: "+baseDPS);
+      }
+    }
+    weapon.setDPS(baseDPS);
+    // Max DPS
+    float maxDamage=((Float)properties.getProperty("Combat_Damage")).floatValue();
+    weapon.setMaxDamage((int)maxDamage);
+    //Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
+    // Min DPS
+    float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();
+    float minDamage=maxDamage*(1-variance);
+    weapon.setMinDamage((int)minDamage);
+    // Damage type
+    int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
+    weapon.setDamageType(getDamageType(damageTypeEnum));
+  }
+
+  private float computeDps(int itemLevel, ItemQuality quality, PropertiesSet properties)
+  {
+    float ret=0;
+    // Compute DPS from the DPS LUT table...
+    Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
+    if (dpsLut!=null)
+    {
+      PropertiesSet dpsLutProperties=_facade.loadProperties(dpsLut.intValue()+0x9000000);
+      Object[] dpsArray=(Object[])dpsLutProperties.getProperty("Combat_BaseDPSArray");
+      float baseDPSFromTable=((Float)(dpsArray[itemLevel-1])).floatValue();
+      Object[] qualityFactors=(Object[])dpsLutProperties.getProperty("Combat_QualityModArray");
+      if (qualityFactors!=null)
+      {
+        int qualityEnum=getQualityEnum(quality);
+        for(int i=0;i<qualityFactors.length;i++)
+        {
+          PropertiesSet qualityProps=(PropertiesSet)qualityFactors[i];
+          if (qualityEnum==((Integer)qualityProps.getProperty("Combat_Quality")).intValue())
+          {
+            float dpsFactor=((Float)qualityProps.getProperty("Combat_DPSMod")).floatValue();
+            baseDPSFromTable*=dpsFactor;
+            break;
+          }
+        }
+      }
+      ret=baseDPSFromTable;
+    }
+    return ret;
+  }
+
+  private Item buildItem(PropertiesSet properties)
+  {
+    int weenieType=((Integer)properties.getProperty("WeenieType")).intValue();
+    int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
     if (weenieType==0x30081) return new Armour(); // Clothing
     if (weenieType==0x40081) return new Armour(); // Armor
     if (weenieType==0x20081) return new Weapon(); // Weapon
     if (itemClass==0x21) return new Armour(); // Shield
+    Float dps=(Float)properties.getProperty("Combat_Damage");
+    if (dps!=null)
+    {
+      return new Weapon();
+    }
     return new Item();
   }
 
@@ -358,6 +440,41 @@ public class MainDatItemsLoader
     if (qualityEnum==3) return ItemQuality.INCOMPARABLE;
     if (qualityEnum==4) return ItemQuality.UNCOMMON;
     if (qualityEnum==5) return ItemQuality.COMMON;
+    return null;
+  }
+
+  private int getQualityEnum(ItemQuality quality)
+  {
+    if (quality==ItemQuality.LEGENDARY) return 1;
+    if (quality==ItemQuality.RARE) return 2;
+    if (quality==ItemQuality.INCOMPARABLE) return 3;
+    if (quality==ItemQuality.UNCOMMON) return 4;
+    if (quality==ItemQuality.COMMON) return 5;
+    return 0;
+  }
+
+  private DamageType getDamageType(int damageTypeEnum)
+  {
+    // 0 Undef
+    if (damageTypeEnum==1) return DamageType.COMMON;
+    if (damageTypeEnum==2) return DamageType.WESTERNESSE;
+    if (damageTypeEnum==4) return DamageType.ANCIENT_DWARF;
+    if (damageTypeEnum==8) return DamageType.BELERIAND;
+    if (damageTypeEnum==16) return DamageType.FIRE;
+    if (damageTypeEnum==32) return DamageType.SHADOW;
+    if (damageTypeEnum==64) return DamageType.LIGHT;
+    // 128 ImplementInherited
+    if (damageTypeEnum==256) return DamageType.FROST;
+    if (damageTypeEnum==512) return DamageType.LIGHTNING;
+    // 1024  Acid
+    // 2048  Morgul-forged
+    // 4096  Orc-craft
+    // 8192  Fell-wrought
+    // 16384 Physical
+    // 32768 Tactical
+    // 49152 PvP
+    // 65407 ALL
+    System.out.println("Unmanaged damage type: "+damageTypeEnum);
     return null;
   }
 
