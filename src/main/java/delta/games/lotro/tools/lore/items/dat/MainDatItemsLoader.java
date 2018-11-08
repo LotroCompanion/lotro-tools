@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -70,6 +71,7 @@ public class MainDatItemsLoader
       item.setIdentifier(indexDataId);
       // Name
       String name=getStringProperty(properties,"Name");
+      name=fixName(name);
       item.setName(name);
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
@@ -84,8 +86,9 @@ public class MainDatItemsLoader
       // Min Level
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       item.setMinLevel(minLevel);
-      // TODO Max Level
-      //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
+      // Max Level
+      Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
+      item.setMaxLevel(maxLevel);
       // Binding
       item.setBinding(getBinding(properties));
       // Durability
@@ -125,6 +128,8 @@ public class MainDatItemsLoader
       {
         item.setDescription(description.trim());
       }
+      // Class requirements
+      item.setRequiredClass(getRequiredClass(properties));
       // Stats
       if (level!=null)
       {
@@ -144,6 +149,20 @@ public class MainDatItemsLoader
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
+  }
+
+  private String fixName(String name)
+  {
+    if (name==null)
+    {
+      return name;
+    }
+    int index=name.lastIndexOf('[');
+    if (index!=-1)
+    {
+      name=name.substring(0,index);
+    }
+    return name;
   }
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
@@ -378,6 +397,39 @@ public class MainDatItemsLoader
     if ("Skill_DamageMultiplier_LightintheDark".equals(name)) return STAT.BALLAD_AND_CODA_DAMAGE_PERCENTAGE;
 
     //System.out.println("unknown stat name: "+name+", id="+_currentId);
+    return null;
+  }
+
+  private CharacterClass getRequiredClass(PropertiesSet properties)
+  {
+    Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
+    if (classReqs!=null)
+    {
+      int characterClassId=((Integer)classReqs[0]).intValue();
+      return getCharacterClassFromId(characterClassId);
+    }
+    return null;
+  }
+
+  private CharacterClass getCharacterClassFromId(int id) {
+    if (id==214) return CharacterClass.BEORNING;
+    if (id==40) return CharacterClass.BURGLAR;
+    if (id==24) return CharacterClass.CAPTAIN;
+    if (id==172) return CharacterClass.CHAMPION;
+    if (id==23) return CharacterClass.GUARDIAN;
+    if (id==162) return CharacterClass.HUNTER;
+    if (id==185) return CharacterClass.LORE_MASTER;
+    if (id==31) return CharacterClass.MINSTREL;
+    if (id==193) return CharacterClass.RUNE_KEEPER;
+    if (id==194) return CharacterClass.WARDEN;
+    // Monster Play
+    if (id==71) return null; // Reaver
+    if (id==128) return null; // Defiler
+    if (id==127) return null; // Weaver
+    if (id==179) return null; // Blackarrow
+    if (id==52) return null; // Warleader
+    if (id==126) return null; // Stalker
+    System.out.println("Unmanaged ID="+id+" for "+_currentId);
     return null;
   }
 
