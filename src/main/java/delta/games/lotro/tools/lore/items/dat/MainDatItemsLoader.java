@@ -14,6 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.items.Armour;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
@@ -22,6 +23,7 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
+import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.ArrayProgression;
@@ -38,6 +40,7 @@ public class MainDatItemsLoader
 
   private DataFacade _facade;
   private int _currentId;
+  private Item _currentItem;
 
   /**
    * Constructor.
@@ -58,6 +61,7 @@ public class MainDatItemsLoader
     if (properties!=null)
     {
       _currentId=indexDataId;
+      _currentItem=ItemsManager.getInstance().getItem(_currentId);
       _debug=(_currentId==1879000000);
       if (_debug)
       {
@@ -78,8 +82,11 @@ public class MainDatItemsLoader
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       item.setIcon(iconId+"-"+backgroundIconId);
       // Slot
-      EquipmentLocation slot=getSlot(itemClass);
-      item.setEquipmentLocation(slot);
+      if (item.getEquipmentLocation()==null)
+      {
+        EquipmentLocation slot=getSlot(itemClass);
+        item.setEquipmentLocation(slot);
+      }
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
@@ -205,6 +212,12 @@ public class MainDatItemsLoader
     weapon.setDamageType(getDamageType(damageTypeEnum));
   }
 
+  private long getEquipmentCategory(PropertiesSet properties)
+  {
+    Long ret=(Long)properties.getProperty("Item_EquipmentCategory");
+    return (ret!=null)?ret.longValue():0;
+  }
+
   private float computeDps(int itemLevel, ItemQuality quality, PropertiesSet properties)
   {
     float ret=0;
@@ -237,18 +250,229 @@ public class MainDatItemsLoader
 
   private Item buildItem(PropertiesSet properties)
   {
-    int weenieType=((Integer)properties.getProperty("WeenieType")).intValue();
-    int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
-    if (weenieType==0x30081) return new Armour(); // Clothing
-    if (weenieType==0x40081) return new Armour(); // Armor
-    if (weenieType==0x20081) return new Weapon(); // Weapon
-    if (itemClass==0x21) return new Armour(); // Shield
-    Float dps=(Float)properties.getProperty("Combat_Damage");
-    if (dps!=null)
+    EquipmentLocation slot=null;
+    WeaponType weaponType=null;
+    ArmourType armourType=null;
+    long equipmentCategory=getEquipmentCategory(properties);
+    if (equipmentCategory==0)
     {
-      return new Weapon();
+      // Undefined
     }
-    return new Item();
+    else if (equipmentCategory==1) slot=EquipmentLocation.EAR;
+    else if (equipmentCategory==1L<<1) slot=EquipmentLocation.POCKET;
+    else if (equipmentCategory==1L<<2)
+    {
+      weaponType=WeaponType.TWO_HANDED_SWORD;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<3)
+    {
+      weaponType=WeaponType.TWO_HANDED_CLUB;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<4)
+    {
+      //weaponType=WeaponType.TWO_HANDED_MACE;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<5)
+    {
+      weaponType=WeaponType.TWO_HANDED_AXE;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<6)
+    {
+      // Instrument
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<7)
+    {
+      weaponType=WeaponType.BOW;
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<8)
+    {
+      armourType=ArmourType.MEDIUM;
+    }
+    else if (equipmentCategory==1L<<9)
+    {
+      armourType=ArmourType.HEAVY;
+    }
+    else if (equipmentCategory==1L<<10)
+    {
+      armourType=ArmourType.HEAVY_SHIELD;
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<11)
+    {
+      weaponType=WeaponType.ONE_HANDED_HAMMER;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<12)
+    {
+      weaponType=WeaponType.SPEAR;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<13)
+    {
+      weaponType=WeaponType.CROSSBOW;
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<14)
+    {
+      weaponType=WeaponType.TWO_HANDED_HAMMER;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<15)
+    {
+      weaponType=WeaponType.HALBERD;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<16)
+    {
+      armourType=ArmourType.SHIELD;
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<17)
+    {
+      armourType=ArmourType.LIGHT;
+    }
+    else if (equipmentCategory==1L<<18) // Ring
+    {
+      slot=EquipmentLocation.FINGER;
+    }
+    else if (equipmentCategory==1L<<19)
+    {
+      weaponType=WeaponType.DAGGER;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<20) // Craft Tool
+    {
+      slot=EquipmentLocation.TOOL;
+    }
+    else if (equipmentCategory==1L<<21)
+    {
+      weaponType=WeaponType.STAFF;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<22) // Necklace
+    {
+      slot=EquipmentLocation.NECK;
+    }
+    else if (equipmentCategory==1L<<23)
+    {
+      weaponType=WeaponType.ONE_HANDED_AXE;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<24) // Class Item
+    {
+      slot=EquipmentLocation.CLASS_SLOT;
+    }
+    else if (equipmentCategory==1L<<25)
+    {
+      weaponType=WeaponType.ONE_HANDED_CLUB;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<26)
+    {
+      weaponType=WeaponType.ONE_HANDED_MACE;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<27)
+    {
+      weaponType=WeaponType.ONE_HANDED_SWORD;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<28) // Thrown Weapon
+    {
+      //
+    }
+    else if (equipmentCategory==1L<<29) // Armband
+    {
+      slot=EquipmentLocation.WRIST;
+    }
+    else if (equipmentCategory==1L<<30) // Cloak
+    {
+      armourType=ArmourType.LIGHT;
+      slot=EquipmentLocation.BACK;
+    }
+    else if (equipmentCategory==1L<<31) // Cosmetic
+    {
+      // No slot
+    }
+    else if (equipmentCategory==1L<<33) // Two-handed implement
+    {
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<36) // One-handed implement
+    {
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<38)
+    {
+      weaponType=WeaponType.RUNE_STONE;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<39)
+    {
+      armourType=ArmourType.WARDEN_SHIELD;
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<40)
+    {
+      weaponType=WeaponType.JAVELIN;
+      slot=EquipmentLocation.MAIN_HAND;
+    }
+    else if (equipmentCategory==1L<<42) // Oath-bound Armaments
+    {
+      slot=EquipmentLocation.RANGED_ITEM;
+    }
+    else if (equipmentCategory==1L<<43) // War-steed Item
+    {
+      slot=EquipmentLocation.BRIDLE;
+    }
+    else
+    {
+      System.out.println("Unmanaged equipment category " + equipmentCategory+" for: "+_currentItem);
+    }
+    Item ret=null;
+    if (weaponType!=null)
+    {
+      Weapon weapon=new Weapon();
+      weapon.setWeaponType(weaponType);
+      ret=weapon;
+    }
+    else if (armourType!=null)
+    {
+      Armour armour=new Armour();
+      armour.setArmourType(armourType);
+      ret=armour;
+    }
+    else
+    {
+      int weenieType=((Integer)properties.getProperty("WeenieType")).intValue();
+      //System.out.println("Using weenieType "+weenieType+" for "+_currentItem);
+      if (weenieType==0x30081)
+      {
+        return new Armour(); // Clothing
+      }
+      if (weenieType==0x40081)
+      {
+        return new Armour(); // Armor
+      }
+      if (weenieType==0x20081)
+      {
+        return new Weapon(); // Weapon
+      }
+      int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
+      if (itemClass==0x21)
+      {
+        return new Armour(); // Shield
+      }
+      return new Item();
+    }
+    ret.setEquipmentLocation(slot);
+    return ret;
   }
 
   /**
@@ -576,7 +800,6 @@ public class MainDatItemsLoader
     for(int i=0;i<nbTotal;i++)
     {
       int id=refItems.get(i).getIdentifier();
-      //int id=itemIds[i];
       Item newItem=load(id);
       if (newItem!=null)
       {
