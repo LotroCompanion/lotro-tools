@@ -25,6 +25,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
+import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.LinearInterpolatingProgression;
@@ -140,6 +141,16 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
+        if (_debug)
+        {
+          ItemLevelProgression progression=buildItemLevelProgression(properties);
+          if (progression!=null)
+          {
+            Integer itemLevel80=progression.getValue(80);
+            BasicStatsSet stats80=loadStats(itemLevel80.intValue(),properties);
+            System.out.println("Stats at level 80, item level "+itemLevel80+" : "+stats80);
+          }
+        }
         BasicStatsSet stats=loadStats(level.intValue(),properties);
         if (stats!=null)
         {
@@ -450,25 +461,6 @@ public class MainDatItemsLoader
     }
     else
     {
-      int weenieType=((Integer)properties.getProperty("WeenieType")).intValue();
-      //System.out.println("Using weenieType "+weenieType+" for "+_currentItem);
-      if (weenieType==0x30081)
-      {
-        return new Armour(); // Clothing
-      }
-      if (weenieType==0x40081)
-      {
-        return new Armour(); // Armor
-      }
-      if (weenieType==0x20081)
-      {
-        return new Weapon(); // Weapon
-      }
-      int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
-      if (itemClass==0x21)
-      {
-        return new Armour(); // Shield
-      }
       return new Item();
     }
     ret.setEquipmentLocation(slot);
@@ -510,31 +502,43 @@ public class MainDatItemsLoader
           // Always 7 for "add"?
           //Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
           Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
-          if (progressId!=null)
+          if (progressId==null)
           {
-            int progressPropertiesId=progressId.intValue()+0x9000000;
-            PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
-            if (_debug)
+            continue;
+          }
+          Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
+          if ((minLevel!=null) && (itemLevel<minLevel.intValue()))
+          {
+            continue;
+          }
+          Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
+          if ((maxLevel!=null) && (itemLevel>maxLevel.intValue()))
+          {
+            continue;
+          }
+
+          int progressPropertiesId=progressId.intValue()+0x9000000;
+          PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
+          if (_debug)
+          {
+            FileIO.writeFile(new File(progressPropertiesId+".props"),progressProperties.dump().getBytes());
+          }
+          Progression progression=buildProgression(progressProperties);
+          if (progression!=null)
+          {
+            Float value=progression.getValue(itemLevel);
+            if (value!=null)
             {
-              FileIO.writeFile(new File(progressPropertiesId+".props"),progressProperties.dump().getBytes());
-            }
-            Progression progression=buildProgression(progressProperties);
-            if (progression!=null)
-            {
-              Float value=progression.getValue(itemLevel);
-              if (value!=null)
+              float statValue=value.floatValue();
+              if (stat==STAT.TACTICAL_CRITICAL_MULTIPLIER)
               {
-                float statValue=value.floatValue();
-                if (stat==STAT.TACTICAL_CRITICAL_MULTIPLIER)
-                {
-                  statValue=statValue*100;
-                }
-                if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
-                {
-                  statValue=statValue*60;
-                }
-                ret.addStat(stat,new FixedDecimalsInteger(statValue));
+                statValue=statValue*100;
               }
+              if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
+              {
+                statValue=statValue*60;
+              }
+              ret.addStat(stat,new FixedDecimalsInteger(statValue));
             }
           }
         }
@@ -704,6 +708,52 @@ public class MainDatItemsLoader
         Integer key=(Integer)pointProperties.getProperty("LinearInterpolatingProgression_Key");
         Float value=(Float)pointProperties.getProperty("LinearInterpolatingProgression_Value");
         ret.set(i,key.intValue(),value.floatValue());
+      }
+    }
+    return ret;
+  }
+
+  private ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
+  {
+    ItemLevelProgression ret=null;
+    /*
+    Integer progressionGroupOverride=(Integer)properties.getProperty("ItemAdvancement_ProgressionGroupOverride");
+    if (progressionGroupOverride!=null)
+    {
+      int progressId=progressionGroupOverride.intValue()+0x9000000;
+      PropertiesSet progressProperties=_facade.loadProperties(progressId);
+      if (_debug)
+      {
+        FileIO.writeFile(new File(progressId+".props"),progressProperties.dump().getBytes());
+        System.out.println(properties.dump());
+      }
+    }
+    */
+
+    Integer itemLevelProgression=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
+    if (itemLevelProgression!=null)
+    {
+      int progressId=itemLevelProgression.intValue()+0x9000000;
+      PropertiesSet progressProperties=_facade.loadProperties(progressId);
+      if (_debug)
+      {
+        FileIO.writeFile(new File(progressId+".props"),progressProperties.dump().getBytes());
+        System.out.println(properties.dump());
+      }
+
+      Object[] charLevel2ItemLevel=(Object[])progressProperties.getProperty("PropertyProgression_Array");
+      if (charLevel2ItemLevel!=null)
+      {
+        int nbPoints=charLevel2ItemLevel.length;
+        ret=new ItemLevelProgression(nbPoints);
+        Integer levelOffset=(Integer)progressProperties.getProperty("Progression_MinimumIndexValue");
+        int delta=((levelOffset!=null)?levelOffset.intValue():0);
+        for(int i=0;i<nbPoints;i++)
+        {
+          int level=i+delta;
+          int itemLevel=((Integer)charLevel2ItemLevel[i]).intValue();
+          ret.set(i,level,itemLevel);
+        }
       }
     }
     return ret;
