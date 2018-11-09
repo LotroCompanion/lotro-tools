@@ -88,6 +88,12 @@ public class MainDatItemsLoader
         EquipmentLocation slot=getSlot(itemClass);
         item.setEquipmentLocation(slot);
       }
+      // Essence slots
+      Integer essenceSlots=(Integer)properties.getProperty("Item_Socket_Count");
+      if ((essenceSlots!=null) && (essenceSlots.intValue()>0))
+      {
+        item.setEssenceSlots(essenceSlots.intValue());
+      }
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
