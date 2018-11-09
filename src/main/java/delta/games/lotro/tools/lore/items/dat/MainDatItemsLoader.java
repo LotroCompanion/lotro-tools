@@ -461,7 +461,7 @@ public class MainDatItemsLoader
     }
     else
     {
-      return new Item();
+      ret=new Item();
     }
     ret.setEquipmentLocation(slot);
     return ret;
