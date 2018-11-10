@@ -117,6 +117,11 @@ public class MainDatItemsLoader
       // Category
       String category=_facade.getEnumsManager().resolveEnum(0x23000036,itemClass);
       item.setSubCategory(category);
+      // Classify essences
+      if (itemClass==235)
+      {
+        classifyEssence(item,properties);
+      }
       // Armour value
       Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
       if ((armourValue!=null) && (armourValue.intValue()>0))
@@ -845,6 +850,37 @@ public class MainDatItemsLoader
       }
     }
     return ret;
+  }
+
+  private void classifyEssence(Item essence, PropertiesSet properties)
+  {
+    Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
+    String category=null;
+    if (overlay==null) category="Essence";
+    else
+    {
+      String name=essence.getName();
+      if ((name!=null) && (name.contains("Mordor - Essences")))
+      {
+        category="Box of Essences";
+      }
+      else if (overlay.intValue()==1091914756) category="Essence:Tier1";
+      else if (overlay.intValue()==1091914773) category="Essence:Tier2";
+      else if (overlay.intValue()==1091914770) category="Essence:Tier3";
+      else if (overlay.intValue()==1091914772) category="Essence:Tier4";
+      else if (overlay.intValue()==1091914776) category="Essence:Tier5";
+      else if (overlay.intValue()==1091914767) category="Essence:Tier6";
+      else if (overlay.intValue()==1091914762) category="Essence:Tier7";
+      else if (overlay.intValue()==1091914765) category="Essence:Tier8";
+      else if (overlay.intValue()==1091914774) category="Essence:Tier9";
+      else if (overlay.intValue()==1091914766) category="Essence:Tier10";
+      else if (overlay.intValue()==1092396132) category="Essence:Tier11";
+      else if (overlay.intValue()==1092396316) category="Essence:Tier12";
+    }
+    if (category!=null)
+    {
+      essence.setSubCategory(category);
+    }
   }
 
   private void doIt()
