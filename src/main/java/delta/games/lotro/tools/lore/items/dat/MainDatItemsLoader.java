@@ -25,6 +25,8 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
+import delta.games.lotro.lore.items.legendary.LegendaryItem;
+import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.ArrayProgression;
@@ -466,10 +468,14 @@ public class MainDatItemsLoader
     {
       System.out.println("Unmanaged equipment category " + equipmentCategory+" for: "+_currentItem);
     }
+    // Legendary stuff?
+    Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
+    boolean isLegendary=((isAdvancementItem!=null) && (isAdvancementItem.intValue()==1));
+
     Item ret=null;
     if (weaponType!=null)
     {
-      Weapon weapon=new Weapon();
+      Weapon weapon=(isLegendary?new LegendaryWeapon():new Weapon());
       weapon.setWeaponType(weaponType);
       ret=weapon;
     }
@@ -481,7 +487,7 @@ public class MainDatItemsLoader
     }
     else
     {
-      ret=new Item();
+      ret=(isLegendary?new LegendaryItem():new Item());
     }
     ret.setEquipmentLocation(slot);
     return ret;
@@ -594,6 +600,10 @@ public class MainDatItemsLoader
     if ("Combat_Modifier_OutgoingHealing_Points".equals(name)) return STAT.OUTGOING_HEALING;
     if ("Combat_ArmorDefense_PointsModifier_UnifiedPhysical".equals(name)) return STAT.PHYSICAL_MITIGATION;
     if ("Combat_ArmorDefense_PointsModifier_UnifiedTactical".equals(name)) return STAT.TACTICAL_MITIGATION;
+    if ("Combat_ArmorDefense_PointsModifier_Frost".equals(name)) return STAT.FROST_MITIGATION;
+    if ("Combat_ArmorDefense_PointsModifier_Acid".equals(name)) return STAT.ACID_MITIGATION;
+    if ("Combat_ArmorDefense_PointsModifier_Fire".equals(name)) return STAT.FIRE_MITIGATION;
+    if ("Combat_ArmorDefense_PointsModifier_Shadow".equals(name)) return STAT.SHADOW_MITIGATION;
     if ("Combat_PhysicalMastery_Modifier_Unified".equals(name)) return STAT.PHYSICAL_MASTERY;
     if ("Combat_TacticalMastery_Modifier_Unified".equals(name)) return STAT.TACTICAL_MASTERY;
     if ("Stealth_StealthLevelModifier".equals(name)) return STAT.STEALTH_LEVEL;
@@ -630,14 +640,6 @@ public class MainDatItemsLoader
     // 10% discount at most North-down shops
     if ("Discount_Northdowns".equals(name)) return null;
 
-    // Frost mitigation RATING...
-    if ("Combat_ArmorDefense_PointsModifier_Frost".equals(name)) return null;
-    // Acid mitigation RATING...
-    if ("Combat_ArmorDefense_PointsModifier_Acid".equals(name)) return null;
-    // Fire mitigation RATING...
-    if ("Combat_ArmorDefense_PointsModifier_Fire".equals(name)) return null;
-    // Shadow mitigation RATING...
-    if ("Combat_ArmorDefense_PointsModifier_Shadow".equals(name)) return null;
     // Critical rating, reloaded?
     if ("Combat_CriticalPoints_Modifier_Unified".equals(name)) return null;
 
@@ -755,12 +757,6 @@ public class MainDatItemsLoader
     {
       int progressId=itemLevelProgression.intValue()+0x9000000;
       PropertiesSet progressProperties=_facade.loadProperties(progressId);
-      if (_debug)
-      {
-        FileIO.writeFile(new File(progressId+".props"),progressProperties.dump().getBytes());
-        System.out.println(properties.dump());
-      }
-
       Object[] charLevel2ItemLevel=(Object[])progressProperties.getProperty("PropertyProgression_Array");
       if (charLevel2ItemLevel!=null)
       {
