@@ -152,6 +152,15 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
+        Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
+        if (minScaledLevel!=null)
+        {
+          if (level.intValue()<minScaledLevel.intValue())
+          {
+            level=minScaledLevel;
+            item.setItemLevel(level);
+          }
+        }
         if (_debug)
         {
           ItemLevelProgression progression=buildItemLevelProgression(properties);
