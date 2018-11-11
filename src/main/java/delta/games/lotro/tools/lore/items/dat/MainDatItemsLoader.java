@@ -28,9 +28,8 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
+import delta.games.lotro.lore.items.stats.ProgressionRegistry;
 import delta.games.lotro.utils.FixedDecimalsInteger;
-import delta.games.lotro.utils.maths.ArrayProgression;
-import delta.games.lotro.utils.maths.LinearInterpolatingProgression;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -44,6 +43,7 @@ public class MainDatItemsLoader
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
+  private ProgressionRegistry _progressions;
 
   /**
    * Constructor.
@@ -52,6 +52,7 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
+    _progressions=new ProgressionRegistry();
   }
 
   private boolean _debug=false;
@@ -88,6 +89,12 @@ public class MainDatItemsLoader
       Integer unique=(Integer)properties.getProperty("Inventory_Unique");
       boolean isUnique=((unique!=null) && (unique.intValue()==1));
       item.setUnique(isUnique);
+      // Max stack
+      Integer maxStack=(Integer)properties.getProperty("Inventory_MaxQuantity");
+      if ((maxStack!=null) && (maxStack.intValue()>1))
+      {
+        item.setStackMax(maxStack);
+      }
       // Slot
       if (item.getEquipmentLocation()==null)
       {
@@ -139,6 +146,12 @@ public class MainDatItemsLoader
         else
         {
           item.getStats().setStat(STAT.ARMOUR,armourValue.intValue());
+        }
+        // Armour progression...
+        Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
+        if (armourProgressId!=null)
+        {
+          /*Progression armorProgression=*/getProgression(STAT.ARMOUR,armourProgressId.intValue());
         }
       }
       // Sturdiness
@@ -547,13 +560,7 @@ public class MainDatItemsLoader
             continue;
           }
 
-          int progressPropertiesId=progressId.intValue()+0x9000000;
-          PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
-          if (_debug)
-          {
-            FileIO.writeFile(new File(progressPropertiesId+".props"),progressProperties.dump().getBytes());
-          }
-          Progression progression=buildProgression(progressProperties);
+          Progression progression=getProgression(stat,progressId.intValue());
           if (progression!=null)
           {
             Float value=progression.getValue(itemLevel);
@@ -571,6 +578,25 @@ public class MainDatItemsLoader
               ret.addStat(stat,new FixedDecimalsInteger(statValue));
             }
           }
+        }
+      }
+    }
+    return ret;
+  }
+
+  private Progression getProgression(STAT stat, int progressId)
+  {
+    Progression ret=_progressions.getProgression(progressId);
+    if (ret==null)
+    {
+      int progressPropertiesId=progressId+0x9000000;
+      PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
+      if (progressProperties!=null)
+      {
+        ret=ProgressionFactory.buildProgression(progressProperties);
+        if (ret!=null)
+        {
+          _progressions.registerProgression(progressId,ret);
         }
       }
     }
@@ -687,58 +713,6 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private Progression buildProgression(PropertiesSet properties)
-  {
-    Progression ret=buildLinearProgression(properties);
-    if (ret==null)
-    {
-      ret=buildArrayProgression(properties);
-    }
-    if (ret==null)
-    {
-      System.out.println(properties.dump());
-    }
-    return ret;
-  }
-
-  private ArrayProgression buildArrayProgression(PropertiesSet properties)
-  {
-    ArrayProgression ret=null;
-    Object[] progression=(Object[])properties.getProperty("PropertyProgression_Array");
-    if (progression!=null)
-    {
-      // Always 1?
-      Integer minIndexValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
-      int nbItems=progression.length;
-      ret=new ArrayProgression(nbItems);
-      for(int i=0;i<nbItems;i++)
-      {
-        Number value=(Number)progression[i];
-        ret.set(i,i+minIndexValue.intValue(),value.floatValue());
-      }
-    }
-    return ret;
-  }
-
-  private LinearInterpolatingProgression buildLinearProgression(PropertiesSet properties)
-  {
-    LinearInterpolatingProgression ret=null;
-    Object[] progression=(Object[])properties.getProperty("LinearInterpolatingProgression_Array");
-    if (progression!=null)
-    {
-      int nbItems=progression.length;
-      ret=new LinearInterpolatingProgression(nbItems);
-      for(int i=0;i<nbItems;i++)
-      {
-        PropertiesSet pointProperties=(PropertiesSet)progression[i];
-        Integer key=(Integer)pointProperties.getProperty("LinearInterpolatingProgression_Key");
-        Float value=(Float)pointProperties.getProperty("LinearInterpolatingProgression_Value");
-        ret.set(i,key.intValue(),value.floatValue());
-      }
-    }
-    return ret;
-  }
-
   private ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
   {
     ItemLevelProgression ret=null;
@@ -761,20 +735,7 @@ public class MainDatItemsLoader
     {
       int progressId=itemLevelProgression.intValue()+0x9000000;
       PropertiesSet progressProperties=_facade.loadProperties(progressId);
-      Object[] charLevel2ItemLevel=(Object[])progressProperties.getProperty("PropertyProgression_Array");
-      if (charLevel2ItemLevel!=null)
-      {
-        int nbPoints=charLevel2ItemLevel.length;
-        ret=new ItemLevelProgression(nbPoints);
-        Integer levelOffset=(Integer)progressProperties.getProperty("Progression_MinimumIndexValue");
-        int delta=((levelOffset!=null)?levelOffset.intValue():0);
-        for(int i=0;i<nbPoints;i++)
-        {
-          int level=i+delta;
-          int itemLevel=((Integer)charLevel2ItemLevel[i]).intValue();
-          ret.set(i,level,itemLevel);
-        }
-      }
+      ret=ProgressionFactory.buildItemLevelProgression(progressProperties);
     }
     return ret;
   }
@@ -841,7 +802,15 @@ public class MainDatItemsLoader
   private ItemBinding getBinding(PropertiesSet properties)
   {
     Integer bindOnAcquire=(Integer)properties.getProperty("Inventory_BindOnAcquire");
-    if ((bindOnAcquire!=null) && (bindOnAcquire.intValue()==1)) return ItemBinding.BIND_ON_ACQUIRE;
+    if ((bindOnAcquire!=null) && (bindOnAcquire.intValue()==1))
+    {
+      Integer bindToAccount=(Integer)properties.getProperty("Inventory_BindToAccount");
+      if ((bindToAccount!=null) && (bindToAccount.intValue()==1))
+      {
+        return ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE;
+      }
+      return ItemBinding.BIND_ON_ACQUIRE;
+    }
     Integer bindOnEquip=(Integer)properties.getProperty("Inventory_BindOnEquip");
     if ((bindOnEquip!=null) && (bindOnEquip.intValue()==1)) return ItemBinding.BIND_ON_EQUIP;
     return null;
