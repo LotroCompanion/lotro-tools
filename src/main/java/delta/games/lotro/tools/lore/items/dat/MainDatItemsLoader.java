@@ -84,6 +84,10 @@ public class MainDatItemsLoader
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       item.setIcon(iconId+"-"+backgroundIconId);
+      // Unique
+      Integer unique=(Integer)properties.getProperty("Inventory_Unique");
+      boolean isUnique=((unique!=null) && (unique.intValue()==1));
+      item.setUnique(isUnique);
       // Slot
       if (item.getEquipmentLocation()==null)
       {
