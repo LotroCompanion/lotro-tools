@@ -110,6 +110,20 @@ public class MainDatItemsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
+      //handleMunging(properties);
+      if (level!=null)
+      {
+        Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
+        if (minScaledLevel!=null)
+        {
+          if (level.intValue()<minScaledLevel.intValue())
+          {
+            //System.out.println("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
+            level=minScaledLevel;
+            item.setItemLevel(level);
+          }
+        }
+      }
       // Min Level
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       item.setMinLevel(minLevel);
@@ -151,7 +165,13 @@ public class MainDatItemsLoader
         Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
         if (armourProgressId!=null)
         {
-          /*Progression armorProgression=*/getProgression(STAT.ARMOUR,armourProgressId.intValue());
+          //ItemLevelProgression itemLevelProgression=buildItemLevelProgression(properties);
+          Progression armorProgression=getProgression(STAT.ARMOUR,armourProgressId.intValue());
+          Float computedArmourValue=armorProgression.getValue(level.intValue());
+          if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
+          {
+            //System.out.println("Delta in armour for "+_currentItem+": got "+computedArmourValue+", expected "+armourValue);
+          }
         }
       }
       // Sturdiness
@@ -171,25 +191,6 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
-        Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
-        if (minScaledLevel!=null)
-        {
-          if (level.intValue()<minScaledLevel.intValue())
-          {
-            level=minScaledLevel;
-            item.setItemLevel(level);
-          }
-        }
-        if (_debug)
-        {
-          ItemLevelProgression progression=buildItemLevelProgression(properties);
-          if (progression!=null)
-          {
-            Integer itemLevel80=progression.getValue(80);
-            BasicStatsSet stats80=loadStats(itemLevel80.intValue(),properties);
-            System.out.println("Stats at level 80, item level "+itemLevel80+" : "+stats80);
-          }
-        }
         BasicStatsSet stats=loadStats(level.intValue(),properties);
         if (stats!=null)
         {
@@ -713,7 +714,40 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
+  void handleMunging(PropertiesSet properties)
+  {
+    Integer level=(Integer)properties.getProperty("Item_Level");
+    Integer minMungingLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
+    Integer maxMungingLevel=(Integer)properties.getProperty("ItemMunging_MaxMungeLevel");
+    Integer progressionId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
+    Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
+    if (((minMungingLevel!=null) && (minMungingLevel.intValue()>0))
+        || ((maxMungingLevel!=null) && (maxMungingLevel.intValue()>0))
+        || (progressionId!=null) || (propertyId!=null))
+    {
+      if (progressionId!=null)
+      {
+        int progressPropertiesId=progressionId.intValue()+0x9000000;
+        PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
+        if (progressProperties!=null)
+        {
+          File to=new File("itemLevelOverrideProgression",progressionId.intValue()+".props").getAbsoluteFile();
+          if (!to.exists())
+          {
+            to.getParentFile().mkdirs();
+            FileIO.writeFile(to,progressProperties.dump().getBytes());
+          }
+        }
+      }
+      String name=_currentItem.getName();
+      int id=_currentId;
+      Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
+      Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
+      System.out.println(id+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
+    }
+  }
+
+  ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
   {
     ItemLevelProgression ret=null;
     /*
