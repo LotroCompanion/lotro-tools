@@ -45,14 +45,17 @@ public class DatIconsUtils
   private static boolean writeImage(BufferedImage image, File to)
   {
     boolean ret=false;
-    try
+    if (image!=null)
     {
-      to.getParentFile().mkdirs();
-      ret=ImageIO.write(image,"png",to);
-    }
-    catch(Exception e)
-    {
-      LOGGER.error("Error when writing image: "+to,e);
+      try
+      {
+        to.getParentFile().mkdirs();
+        ret=ImageIO.write(image,"png",to);
+      }
+      catch(Exception e)
+      {
+        LOGGER.error("Error when writing image: "+to,e);
+      }
     }
     return ret;
   }
@@ -82,7 +85,15 @@ public class DatIconsUtils
   public static BufferedImage buildImage(DataFacade facade, int imageId, int backgroundImageId)
   {
     BufferedImage image=loadImage(facade,imageId);
+    if (image==null)
+    {
+      return null;
+    }
     BufferedImage background=loadImage(facade,backgroundImageId);
+    if (background==null)
+    {
+      return image;
+    }
 
     // Create the new image
     int w = Math.max(image.getWidth(), background.getWidth());
