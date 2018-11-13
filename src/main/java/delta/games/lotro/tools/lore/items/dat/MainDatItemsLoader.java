@@ -12,7 +12,6 @@ import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
@@ -28,8 +27,8 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
-import delta.games.lotro.lore.items.stats.ProgressionRegistry;
-import delta.games.lotro.utils.FixedDecimalsInteger;
+import delta.games.lotro.tools.utils.dat.DatStatUtils;
+import delta.games.lotro.tools.utils.dat.DatUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -43,7 +42,6 @@ public class MainDatItemsLoader
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
-  private ProgressionRegistry _progressions;
 
   /**
    * Constructor.
@@ -52,7 +50,6 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
-    _progressions=new ProgressionRegistry();
   }
 
   private boolean _debug=false;
@@ -78,8 +75,8 @@ public class MainDatItemsLoader
       // ID
       item.setIdentifier(indexDataId);
       // Name
-      String name=getStringProperty(properties,"Name");
-      name=fixName(name);
+      String name=DatUtils.getStringProperty(properties,"Name");
+      name=DatUtils.fixName(name);
       item.setName(name);
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
@@ -166,7 +163,7 @@ public class MainDatItemsLoader
         if (armourProgressId!=null)
         {
           //ItemLevelProgression itemLevelProgression=buildItemLevelProgression(properties);
-          Progression armorProgression=getProgression(STAT.ARMOUR,armourProgressId.intValue());
+          Progression armorProgression=DatStatUtils.getProgression(_facade,STAT.ARMOUR,armourProgressId.intValue());
           Float computedArmourValue=armorProgression.getValue(level.intValue());
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
           {
@@ -181,7 +178,7 @@ public class MainDatItemsLoader
         item.setSturdiness(getSturdiness(durabilityEnum.intValue()));
       }
       // Description
-      String description=getStringProperty(properties,"Description");
+      String description=DatUtils.getStringProperty(properties,"Description");
       if (description!=null)
       {
         item.setDescription(description.trim());
@@ -191,7 +188,7 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
-        BasicStatsSet stats=loadStats(level.intValue(),properties);
+        BasicStatsSet stats=DatStatUtils.loadStats(level.intValue(),_facade,properties);
         if (stats!=null)
         {
           item.getStats().addStats(stats);
@@ -207,20 +204,6 @@ public class MainDatItemsLoader
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
-  }
-
-  private String fixName(String name)
-  {
-    if (name==null)
-    {
-      return name;
-    }
-    int index=name.lastIndexOf('[');
-    if (index!=-1)
-    {
-      name=name.substring(0,index);
-    }
-    return name;
   }
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
@@ -528,159 +511,6 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private BasicStatsSet loadStats(int itemLevel, PropertiesSet properties)
-  {
-    BasicStatsSet ret=null;
-    Object[] mods=(Object[])properties.getProperty("Mod_Array");
-    if (mods!=null)
-    {
-      ret=new BasicStatsSet();
-      for(int i=0;i<mods.length;i++)
-      {
-        PropertiesSet statProperties=(PropertiesSet)mods[i];
-        Integer statId=(Integer)statProperties.getProperty("Mod_Modified");
-        PropertyDefinition def=_facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
-        STAT stat=getStatFromName(def.getName());
-        if (stat!=null)
-        {
-          // Always 7 for "add"?
-          //Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
-          Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
-          if (progressId==null)
-          {
-            continue;
-          }
-          Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
-          if ((minLevel!=null) && (itemLevel<minLevel.intValue()))
-          {
-            continue;
-          }
-          Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
-          if ((maxLevel!=null) && (itemLevel>maxLevel.intValue()))
-          {
-            continue;
-          }
-
-          Progression progression=getProgression(stat,progressId.intValue());
-          if (progression!=null)
-          {
-            Float value=progression.getValue(itemLevel);
-            if (value!=null)
-            {
-              float statValue=value.floatValue();
-              if (stat==STAT.TACTICAL_CRITICAL_MULTIPLIER)
-              {
-                statValue=statValue*100;
-              }
-              if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
-              {
-                statValue=statValue*60;
-              }
-              ret.addStat(stat,new FixedDecimalsInteger(statValue));
-            }
-          }
-        }
-      }
-    }
-    return ret;
-  }
-
-  private Progression getProgression(STAT stat, int progressId)
-  {
-    Progression ret=_progressions.getProgression(progressId);
-    if (ret==null)
-    {
-      int progressPropertiesId=progressId+0x9000000;
-      PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
-      if (progressProperties!=null)
-      {
-        ret=ProgressionFactory.buildProgression(progressProperties);
-        if (ret!=null)
-        {
-          _progressions.registerProgression(progressId,ret);
-        }
-      }
-    }
-    return ret;
-  }
-
-  private STAT getStatFromName(String name)
-  {
-    if ("Health_MaxLevel".equals(name)) return STAT.MORALE;
-    if ("Power_MaxLevel".equals(name)) return STAT.POWER;
-    if ("Stat_Might".equals(name)) return STAT.MIGHT;
-    if ("Stat_Agility".equals(name)) return STAT.AGILITY;
-    if ("Stat_Will".equals(name)) return STAT.WILL;
-    if ("Stat_Vitality".equals(name)) return STAT.VITALITY;
-    if ("Stat_Fate".equals(name)) return STAT.FATE;
-    if ("Combat_Class_CriticalPoints_Unified".equals(name)) return STAT.CRITICAL_RATING;
-    if ("Combat_FinessePoints_Modifier".equals(name)) return STAT.FINESSE;
-    if ("LoE_Light_Modifier".equals(name)) return STAT.LIGHT_OF_EARENDIL;
-    if ("Resist_ClassPoints_Resistance_TheOneResistance".equals(name)) return STAT.RESISTANCE;
-    if ("Combat_Unified_Critical_Defense".equals(name)) return STAT.CRITICAL_DEFENCE;
-    if ("Combat_BlockPoints_Modifier".equals(name)) return STAT.BLOCK;
-    if ("Combat_EvadePoints_Modifier".equals(name)) return STAT.EVADE;
-    if ("Combat_ParryPoints_Modifier".equals(name)) return STAT.PARRY;
-    if ("Vital_PowerPeaceRegenAddMod".equals(name)) return STAT.OCPR;
-    if ("Vital_PowerCombatRegenAddMod".equals(name)) return STAT.ICPR;
-    if ("Vital_HealthPeaceRegenAddMod".equals(name)) return STAT.OCMR;
-    if ("Vital_HealthCombatRegenAddMod".equals(name)) return STAT.ICMR;
-    if ("Mood_Hope_Level".equals(name)) return STAT.HOPE;
-
-    if ("Combat_IncomingHealing_Points_Current".equals(name)) return STAT.INCOMING_HEALING;
-    if ("Combat_Modifier_OutgoingHealing_Points".equals(name)) return STAT.OUTGOING_HEALING;
-    if ("Combat_ArmorDefense_PointsModifier_UnifiedPhysical".equals(name)) return STAT.PHYSICAL_MITIGATION;
-    if ("Combat_ArmorDefense_PointsModifier_UnifiedTactical".equals(name)) return STAT.TACTICAL_MITIGATION;
-    if ("Combat_ArmorDefense_PointsModifier_Frost".equals(name)) return STAT.FROST_MITIGATION;
-    if ("Combat_ArmorDefense_PointsModifier_Acid".equals(name)) return STAT.ACID_MITIGATION;
-    if ("Combat_ArmorDefense_PointsModifier_Fire".equals(name)) return STAT.FIRE_MITIGATION;
-    if ("Combat_ArmorDefense_PointsModifier_Shadow".equals(name)) return STAT.SHADOW_MITIGATION;
-    if ("Combat_PhysicalMastery_Modifier_Unified".equals(name)) return STAT.PHYSICAL_MASTERY;
-    if ("Combat_TacticalMastery_Modifier_Unified".equals(name)) return STAT.TACTICAL_MASTERY;
-    if ("Stealth_StealthLevelModifier".equals(name)) return STAT.STEALTH_LEVEL;
-    if ("Craft_Weaponsmith_CriticalChanceAddModifier".equals(name)) return STAT.WEAPONSMITH_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Metalsmith_CriticalChanceAddModifier".equals(name)) return STAT.METALSMITH_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Woodworker_CriticalChanceAddModifier".equals(name)) return STAT.WOODWORKER_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Cook_CriticalChanceAddModifier".equals(name)) return STAT.COOK_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Scholar_CriticalChanceAddModifier".equals(name)) return STAT.SCHOLAR_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Jeweller_CriticalChanceAddModifier".equals(name)) return STAT.JEWELLER_CRIT_CHANCE_PERCENTAGE;
-    if ("Craft_Tailor_CriticalChanceAddModifier".equals(name)) return STAT.TAILOR_CRIT_CHANCE_PERCENTAGE;
-    if ("Skill_InductionDuration_MiningMod".equals(name)) return STAT.PROSPECTOR_MINING_DURATION;
-    if ("Skill_InductionDuration_WoodHarvestMod".equals(name)) return STAT.FORESTER_CHOPPING_DURATION;
-    if ("Skill_InductionDuration_FarmHarvestMod".equals(name)) return STAT.FARMER_MINING_DURATION;
-    if ("Combat_EffectCriticalMultiplierMod".equals(name)) return STAT.TACTICAL_CRITICAL_MULTIPLIER;
-
-    if ("Skill_HealingMultiplier_Item".equals(name)) return null; // +N% Healing
-    if ("Trait_Minstrel_Healing_CriticalMod".equals(name)) return null; // Critical Healing Magnitude
-
-    // Reduces ranged skill induction time
-    if ("Skill_InductionDuration_AllSkillsMod".equals(name)) return null;
-    // Healing skills power cost
-    if ("Skill_VitalCost_LifeSingerMod".equals(name)) return null;
-
-    // Armour value for Herald??? itemId=1879053134,5,6,7
-    if ("Trait_Runekeeper_All_Resistance".equals(name)) return null;
-    if ("Trait_Loremaster_PetModStat_Slot2".equals(name)) return null;
-
-    // 10% discount at most Ered Luin shops
-    if ("Discount_Eredluin".equals(name)) return null;
-    // 10% discount at most Bree-land shops
-    if ("Discount_Breeland".equals(name)) return null;
-    // 10% discount at most Trollshaws shops
-    if ("Discount_Trollshaws".equals(name)) return null;
-    // 10% discount at most North-down shops
-    if ("Discount_Northdowns".equals(name)) return null;
-
-    // Critical rating, reloaded?
-    if ("Combat_CriticalPoints_Modifier_Unified".equals(name)) return null;
-
-    // Minstrel
-    if ("Skill_DamageMultiplier_LightintheDark".equals(name)) return STAT.BALLAD_AND_CODA_DAMAGE_PERCENTAGE;
-
-    //System.out.println("unknown stat name: "+name+", id="+_currentId);
-    return null;
-  }
-
   private CharacterClass getRequiredClass(PropertiesSet properties)
   {
     Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
@@ -848,20 +678,6 @@ public class MainDatItemsLoader
     Integer bindOnEquip=(Integer)properties.getProperty("Inventory_BindOnEquip");
     if ((bindOnEquip!=null) && (bindOnEquip.intValue()==1)) return ItemBinding.BIND_ON_EQUIP;
     return null;
-  }
-
-  private String getStringProperty(PropertiesSet properties, String propertyName)
-  {
-    String ret=null;
-    Object value=properties.getProperty(propertyName);
-    if (value!=null)
-    {
-      if (value instanceof String[])
-      {
-        ret=((String[])value)[0];
-      }
-    }
-    return ret;
   }
 
   private void classifyEssence(Item essence, PropertiesSet properties)
