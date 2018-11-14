@@ -39,7 +39,7 @@ public class LotroPlanMordorRelicsLoader
     name=name.trim();
     Integer requiredLevel=item.getItemLevel();
     RelicType type=getRelicTypeFromName(name);
-    Relic relic=new Relic(name,type,requiredLevel);
+    Relic relic=new Relic(0,name,type,requiredLevel);
     BasicStatsSet stats=relic.getStats();
     stats.setStats(item.getStats());
     return relic;

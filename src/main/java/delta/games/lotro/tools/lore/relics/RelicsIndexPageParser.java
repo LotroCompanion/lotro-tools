@@ -77,7 +77,7 @@ public class RelicsIndexPageParser
       // Type
       RelicType type=getTypeFromName(name);
 
-      relic=new Relic(name,type,level);
+      relic=new Relic(0,name,type,level);
       relic.setIconFilename(iconPath);
       // Stats
       Element statsElement=tds.get(1);
@@ -97,7 +97,7 @@ public class RelicsIndexPageParser
       // Type
       RelicType type=getTypeFromName(name);
 
-      relic=new Relic(name,type,level);
+      relic=new Relic(0,name,type,level);
       relic.setIconFilename(iconPath);
       // Stats
       Element statsElement=tds.get(2);
@@ -136,7 +136,7 @@ public class RelicsIndexPageParser
       }
       */
 
-      relic=new Relic(name,defaultType,level);
+      relic=new Relic(0,name,defaultType,level);
       relic.setIconFilename(iconPath);
       // Stats
       Element statsElements=tds.get(3);
@@ -167,7 +167,7 @@ public class RelicsIndexPageParser
         level=null;
       }
 
-      relic=new Relic(name,type,level);
+      relic=new Relic(0,name,type,level);
       relic.setIconFilename(iconPath);
       // Stats
       Element statsElements=tds.get(3);

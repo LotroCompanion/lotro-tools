@@ -63,7 +63,7 @@ public class MainDatRelicsLoader
       // Type
       Integer relicType=(Integer)properties.getProperty("Runic_Type");
       RelicType type=getRelicType(name,relicType.intValue());
-      relic=new Relic(name,type,null);
+      relic=new Relic(indexDataId,name,type,null);
       // Category
       Integer categoryEnum=(Integer)properties.getProperty("Runic_Tier");
       String categoryName=_categories.getString(categoryEnum.intValue());
