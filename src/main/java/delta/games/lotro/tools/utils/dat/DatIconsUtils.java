@@ -76,6 +76,20 @@ public class DatIconsUtils
   }
 
   /**
+   * Build an image file from an icon ID.
+   * @param facade Data facade.
+   * @param imageId Icon ID.
+   * @param to File to write to.
+   * @return <code>true</code> if it succeeded, <code>false</code> otherwise.
+   */
+  public static boolean buildImageFile(DataFacade facade, int imageId, File to)
+  {
+    BufferedImage image=loadImage(facade,imageId);
+    boolean ok=writeImage(image,to);
+    return ok;
+  }
+
+  /**
    * Build an icon image using a foreground and a background image.
    * @param facade Data facade.
    * @param imageId Foreground icon ID.
