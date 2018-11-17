@@ -2,11 +2,18 @@ package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.character.stats.base.StartStatsManager;
+import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Get class definitions from DAT files.
@@ -14,9 +21,10 @@ import delta.games.lotro.tools.utils.dat.DatUtils;
  */
 public class MainClassDataLoader
 {
-  //private static final Logger LOGGER=Logger.getLogger(MainClassDataLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(MainClassDataLoader.class);
 
   private DataFacade _facade;
+  private StartStatsManager _startStatsManager;
 
   /**
    * Constructor.
@@ -25,6 +33,7 @@ public class MainClassDataLoader
   public MainClassDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _startStatsManager=new StartStatsManager();
   }
 
   private void handleClass(int classId)
@@ -34,11 +43,13 @@ public class MainClassDataLoader
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("AdvTable_ClassInfo");
     // Class name
     String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
+    CharacterClass characterClass=CharacterClass.getByName(className);
+    LOGGER.info("Handling class: "+characterClass);
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
-    System.out.println("Class name: "+className + " ("+classAbbreviation+")");
+    LOGGER.info("Class abbreviation: "+classAbbreviation);
     // Class description
     String classDescription=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
-    System.out.println("Class description: "+classDescription);
+    LOGGER.info("Class description: "+classDescription);
     // Icons
     // Normal size (48 pixels)
     int classIconId=((Integer)classInfo.getProperty("AdvTable_ClassIcon")).intValue();
@@ -49,25 +60,32 @@ public class MainClassDataLoader
     File smallClassIconFile=new File("small-"+className+".png").getAbsoluteFile();
     DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
 
-    loadInitialStats(properties);
+    loadInitialStats(characterClass,properties);
     loadStatDerivations(properties);
     loadTraits(properties);
     // TODO loadSkills: AdvTable_AvailableSkillEntryList
-    // TODO Initial gear: AdvTable_StartingInventory_List: initial gear at level 1, ...
+    // TODO Initial gear:
+    // AdvTable_StartingInventory_List: initial gear at level 1, ...
+    /*
+AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List: 
+  #1: 
+    AdvTable_AdvancedCharacterStart_CharacterStartInfo: 1879228369
+    AdvTable_AdvancedCharacterStart_Tier: 8
+     */
+    // Class deeds?
+    // AdvTable_AccomplishmentDirectory: 1879064046
+    
   }
 
-  private void loadInitialStats(PropertiesSet properties)
+  private void loadInitialStats(CharacterClass characterClass, PropertiesSet properties)
   {
     Object[] levelsProperties=(Object[])properties.getProperty("AdvTable_LevelEntryList");
     for(Object levelPropertiesObj : levelsProperties)
     {
       PropertiesSet levelProperties=(PropertiesSet)levelPropertiesObj;
       int level=((Integer)levelProperties.getProperty("AdvTable_Level")).intValue();
-      if (level>5)
-      {
-        continue;
-      }
-      System.out.println("Level: "+level);
+      LOGGER.info("Level: "+level);
+      BasicStatsSet stats=new BasicStatsSet();
       // Vitals
       Object[] vitalStats=(Object[])levelProperties.getProperty("AdvTable_BaseVitalEntryList");
       for(Object vitalStatObj : vitalStats)
@@ -78,7 +96,11 @@ public class MainClassDataLoader
         STAT stat=getStatFromVitalType(type.intValue());
         if (stat!=null)
         {
-          System.out.println("\t"+stat+": "+value);
+          stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+        }
+        else
+        {
+          LOGGER.warn("Stat not found (1): "+type);
         }
       }
       // Other stats
@@ -91,9 +113,14 @@ public class MainClassDataLoader
         STAT stat=getStatFromStatType(type.intValue());
         if (stat!=null)
         {
-          System.out.println("\t"+stat+": "+value);
+          stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+        }
+        else
+        {
+          LOGGER.warn("Stat not found (2): "+type);
         }
       }
+      _startStatsManager.setStats(characterClass,level,stats);
     }
   }
 
@@ -163,8 +190,8 @@ public class MainClassDataLoader
   {
     if (vitalType==1) return STAT.MORALE;
     if (vitalType==2) return STAT.POWER;
-    if (vitalType==3) return null; // War-steed Endurance
-    if (vitalType==4) return null; // War-steed Power
+    if (vitalType==3) return STAT.WARSTEED_ENDURANCE;
+    if (vitalType==4) return STAT.WARSTEED_POWER;
     return null;
   }
 
@@ -175,8 +202,8 @@ public class MainClassDataLoader
     if (statType==3) return STAT.FATE;
     if (statType==4) return STAT.MIGHT;
     if (statType==5) return STAT.WILL;
-    if (statType==6) return null; // War-steed Agility
-    if (statType==7) return null; // War-steed Strength
+    if (statType==6) return STAT.WARSTEED_AGILITY;
+    if (statType==7) return STAT.WARSTEED_STRENGTH;
     return null;
   }
 
@@ -220,6 +247,9 @@ public class MainClassDataLoader
     {
       handleClass(((Integer)classId).intValue());
     }
+    // Save daya
+    File toFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
+    StartStatsXMLWriter.write(toFile.getAbsoluteFile(),_startStatsManager);
   }
 
   /**
