@@ -51,7 +51,11 @@ public class ProgressionFactory
     Progression ret=buildLinearProgression(properties);
     if (ret==null)
     {
-      ret=buildArrayProgression(properties);
+      ret=buildArrayProgression(properties,"FloatProgression_Array");
+    }
+    if (ret==null)
+    {
+      ret=buildArrayProgression(properties,"PropertyProgression_Array");
     }
     if (ret==null)
     {
@@ -60,10 +64,10 @@ public class ProgressionFactory
     return ret;
   }
 
-  private static ArrayProgression buildArrayProgression(PropertiesSet properties)
+  private static ArrayProgression buildArrayProgression(PropertiesSet properties, String arrayProperty)
   {
     ArrayProgression ret=null;
-    Object[] progression=(Object[])properties.getProperty("PropertyProgression_Array");
+    Object[] progression=(Object[])properties.getProperty(arrayProperty);
     if (progression!=null)
     {
       // Always 1?
