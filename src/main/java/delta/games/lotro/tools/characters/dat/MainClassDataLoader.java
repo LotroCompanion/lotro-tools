@@ -6,7 +6,9 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
+import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.DataFacade;
@@ -25,6 +27,7 @@ public class MainClassDataLoader
 
   private DataFacade _facade;
   private StartStatsManager _startStatsManager;
+  private DerivedStatsContributionsMgr _derivatedStatsManager;
 
   /**
    * Constructor.
@@ -34,6 +37,7 @@ public class MainClassDataLoader
   {
     _facade=facade;
     _startStatsManager=new StartStatsManager();
+    _derivatedStatsManager=new DerivedStatsContributionsMgr();
   }
 
   private void handleClass(int classId)
@@ -61,7 +65,7 @@ public class MainClassDataLoader
     DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
 
     loadInitialStats(characterClass,properties);
-    loadStatDerivations(properties);
+    loadStatDerivations(characterClass,properties);
     loadTraits(properties);
     // TODO loadSkills: AdvTable_AvailableSkillEntryList
     // TODO Initial gear:
@@ -124,7 +128,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     }
   }
 
-  private void loadStatDerivations(PropertiesSet properties)
+  private void loadStatDerivations(CharacterClass characterClass, PropertiesSet properties)
   {
     Object[] derivedStatsProperties=(Object[])properties.getProperty("AdvTable_DerivedStat_Configuration");
     for(Object derivedStatPropertiesObj : derivedStatsProperties)
@@ -136,24 +140,39 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         for(Object formulaPropertiesObj : formulasProperties)
         {
           PropertiesSet formulaProperties=(PropertiesSet)formulaPropertiesObj;
-          Float value=(Float)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Value");
-          if (Math.abs(value.floatValue())>0.001)
+          float value=((Float)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Value")).floatValue();
+          if (Math.abs(value)>0.001)
           {
             Integer targetStatId=(Integer)derivedStatProperties.getProperty("AdvTable_DerivedStat");
             if (targetStatId.intValue()<=27) // Ignore war-steed related stats
             {
               STAT targetStat=getDerivedStat(targetStatId.intValue());
+              value=fixStatValue(targetStat,value);
               Integer sourceStatId=(Integer)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Stat");
               STAT sourceStat=getStatFromStatType(sourceStatId.intValue());
               if (sourceStat!=null)
               {
                 System.out.println(sourceStat+"*"+value+" => "+targetStat);
+                _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,new FixedDecimalsInteger(value));
               }
             }
           }
         }
       }
     }
+  }
+
+  private float fixStatValue(STAT stat, float value)
+  {
+    if (stat.isPercentage())
+    {
+      value=value*100;
+    }
+    if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
+    {
+      value=value*60;
+    }
+    return value;
   }
 
   private void loadTraits(PropertiesSet properties)
@@ -247,9 +266,11 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     {
       handleClass(((Integer)classId).intValue());
     }
-    // Save daya
-    File toFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
-    StartStatsXMLWriter.write(toFile.getAbsoluteFile(),_startStatsManager);
+    // Save data
+    File startStatsFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
+    StartStatsXMLWriter.write(startStatsFile.getAbsoluteFile(),_startStatsManager);
+    File statContribsFile=new File("../lotro-companion/data/lore/characters/statContribs.xml");
+    DerivedStatsContributionsXMLWriter.write(statContribsFile.getAbsoluteFile(),_derivatedStatsManager);
   }
 
   /**
