@@ -29,6 +29,7 @@ import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.tools.utils.dat.ProgressionFactory;
 import delta.games.lotro.utils.maths.Progression;
 
 /**

@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items.dat;
+package delta.games.lotro.tools.utils.dat;
 
 import org.apache.log4j.Logger;
 
@@ -43,19 +43,20 @@ public class ProgressionFactory
 
   /**
    * Build a progression from the given properties.
+   * @param progressionId Progression identifier.
    * @param properties Properties to use.
    * @return A progression or <code>null</code> if not supported.
    */
-  public static Progression buildProgression(PropertiesSet properties)
+  public static Progression buildProgression(int progressionId, PropertiesSet properties)
   {
-    Progression ret=buildLinearProgression(properties);
+    Progression ret=buildLinearProgression(progressionId, properties);
     if (ret==null)
     {
-      ret=buildArrayProgression(properties,"FloatProgression_Array");
+      ret=buildArrayProgression(progressionId, properties,"FloatProgression_Array");
     }
     if (ret==null)
     {
-      ret=buildArrayProgression(properties,"PropertyProgression_Array");
+      ret=buildArrayProgression(progressionId, properties,"PropertyProgression_Array");
     }
     if (ret==null)
     {
@@ -64,7 +65,7 @@ public class ProgressionFactory
     return ret;
   }
 
-  private static ArrayProgression buildArrayProgression(PropertiesSet properties, String arrayProperty)
+  private static ArrayProgression buildArrayProgression(int progressionId, PropertiesSet properties, String arrayProperty)
   {
     ArrayProgression ret=null;
     Object[] progression=(Object[])properties.getProperty(arrayProperty);
@@ -73,7 +74,7 @@ public class ProgressionFactory
       // Always 1?
       Integer minIndexValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
       int nbItems=progression.length;
-      ret=new ArrayProgression(nbItems);
+      ret=new ArrayProgression(progressionId, nbItems);
       for(int i=0;i<nbItems;i++)
       {
         Number value=(Number)progression[i];
@@ -83,14 +84,14 @@ public class ProgressionFactory
     return ret;
   }
 
-  private static LinearInterpolatingProgression buildLinearProgression(PropertiesSet properties)
+  private static LinearInterpolatingProgression buildLinearProgression(int progressionId, PropertiesSet properties)
   {
     LinearInterpolatingProgression ret=null;
     Object[] progression=(Object[])properties.getProperty("LinearInterpolatingProgression_Array");
     if (progression!=null)
     {
       int nbItems=progression.length;
-      ret=new LinearInterpolatingProgression(nbItems);
+      ret=new LinearInterpolatingProgression(progressionId, nbItems);
       for(int i=0;i<nbItems;i++)
       {
         PropertiesSet pointProperties=(PropertiesSet)progression[i];

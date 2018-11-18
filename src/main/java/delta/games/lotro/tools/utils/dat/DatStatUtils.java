@@ -8,7 +8,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.items.stats.ProgressionRegistry;
-import delta.games.lotro.tools.lore.items.dat.ProgressionFactory;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -110,7 +109,7 @@ public class DatStatUtils
       PropertiesSet progressProperties=facade.loadProperties(progressPropertiesId);
       if (progressProperties!=null)
       {
-        ret=ProgressionFactory.buildProgression(progressProperties);
+        ret=ProgressionFactory.buildProgression(progressId, progressProperties);
         if (ret!=null)
         {
           _progressions.registerProgression(progressId,ret);
