@@ -105,27 +105,8 @@ RaceTable_Race: 23
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
       System.out.println("Level: "+level+" (rank="+rank+")");
-      loadTrait(traitId.intValue());
+      TraitLoader.loadTrait(_facade,traitId.intValue());
     }
-  }
-
-  private void loadTrait(int traitId)
-  {
-    PropertiesSet traitProperties=_facade.loadProperties(0x9000000+traitId);
-    System.out.println("*********** Trait: "+traitId+" ****************");
-    System.out.println(traitProperties.dump());
-    String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
-    Integer iconId=(Integer)traitProperties.getProperty("Trait_Icon");
-    Integer minLevel=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
-    String traitIconFile=traitName.replace(":","-")+".png";
-    File to=new File("traitsRace/"+traitIconFile).getAbsoluteFile();
-    if (!to.exists())
-    {
-      DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
-    }
-    System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
-    File toRace=new File("race.png").getAbsoluteFile();
-    DatIconsUtils.buildImageFile(_facade,1091602763,toRace);
   }
 
   private void doIt()

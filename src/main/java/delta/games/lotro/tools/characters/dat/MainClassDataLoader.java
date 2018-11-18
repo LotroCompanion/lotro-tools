@@ -186,23 +186,8 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
       Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
       System.out.println("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
-      loadTrait(traitId.intValue());
+      TraitLoader.loadTrait(_facade,traitId.intValue());
     }
-  }
-
-  private void loadTrait(int traitId)
-  {
-    PropertiesSet traitProperties=_facade.loadProperties(0x9000000+traitId);
-    String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
-    Integer iconId=(Integer)traitProperties.getProperty("Trait_Icon");
-    Integer minLevel=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
-    String traitIconFile=traitName.replace(":","-")+".png";
-    File to=new File("traits/"+traitIconFile).getAbsoluteFile();
-    if (!to.exists())
-    {
-      DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
-    }
-    System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
   }
 
   private STAT getStatFromVitalType(int vitalType)
