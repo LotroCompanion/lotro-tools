@@ -1,11 +1,20 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
+import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.utils.maths.Progression;
+import delta.games.lotro.utils.maths.io.xml.ProgressionsXMLWriter;
 
 /**
  * Get race definitions from DAT files.
@@ -16,6 +25,7 @@ public class MainRaceDataLoader
   //private static final Logger LOGGER=Logger.getLogger(MainRaceDataLoader.class);
 
   private DataFacade _facade;
+  private List<TraitDescription> _traits;
 
   /**
    * Constructor.
@@ -24,6 +34,7 @@ public class MainRaceDataLoader
   public MainRaceDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _traits=new ArrayList<TraitDescription>();
   }
 
   private void handleRace(int classId)
@@ -105,7 +116,8 @@ RaceTable_Race: 23
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
       System.out.println("Level: "+level+" (rank="+rank+")");
-      TraitLoader.loadTrait(_facade,traitId.intValue());
+      TraitDescription description=TraitLoader.loadTrait(_facade,traitId.intValue());
+      _traits.add(description);
     }
   }
 
@@ -117,6 +129,14 @@ RaceTable_Race: 23
     {
       handleRace(((Integer)raceId).intValue());
     }
+    // Save progressions
+    List<Progression> progressions=ProgressionsManager.getInstance().getAll();
+    File progressionsFile=new File("../lotro-companion/data/lore/progressions_races.xml").getAbsoluteFile();
+    ProgressionsXMLWriter.write(progressionsFile,progressions);
+    // Save traits
+    File traitsFile=new File("../lotro-companion/data/lore/characters/traits_races.xml").getAbsoluteFile();
+    Collections.sort(_traits,new IdentifiableComparator<TraitDescription>());
+    TraitDescriptionXMLWriter.write(traitsFile,_traits);
   }
 
   /**

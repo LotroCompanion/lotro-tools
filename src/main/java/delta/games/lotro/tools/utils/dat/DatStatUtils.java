@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
@@ -15,7 +16,6 @@ import delta.games.lotro.common.stats.TieredScalableStatProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.lore.items.stats.ProgressionRegistry;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -27,7 +27,7 @@ public class DatStatUtils
 {
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
-  private static ProgressionRegistry _progressions=new ProgressionRegistry();
+  private static ProgressionsManager _progressions=ProgressionsManager.getInstance();
 
   /**
    * Load a set of stats from some properties.
@@ -72,7 +72,7 @@ public class DatStatUtils
           else
           {
             value=(Number)statProperties.getProperty(def.getName());
-            if (value!=null)
+            if ((value!=null) && (Math.abs(value.floatValue())>0.001))
             {
               ConstantStatProvider constantStat=new ConstantStatProvider(stat,value.floatValue());
               ret.add(constantStat);
@@ -172,7 +172,7 @@ public class DatStatUtils
     {
       return getTieredProgression(facade,stat,properties);
     }
-    Progression progression=_progressions.getProgression(progressId);
+    Progression progression=getProgression(facade,progressId);
     if (progression==null)
     {
       progression=ProgressionFactory.buildProgression(progressId, properties);

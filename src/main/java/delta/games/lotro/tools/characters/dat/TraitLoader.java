@@ -41,11 +41,18 @@ public class TraitLoader
       ret.setDescription(description);
       // Icon
       int iconId=((Integer)traitProperties.getProperty("Trait_Icon")).intValue();
-      ret.setIcon(iconId);
+      ret.setIconId(iconId);
       // Min level
       int minLevel=((Integer)traitProperties.getProperty("Trait_Minimum_Level")).intValue();
       ret.setMinLevel(minLevel);
-      System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
+      // Tier
+      //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();
+      Integer maxTier=(Integer)traitProperties.getProperty("Trait_Virtue_Maximum_Rank");
+      if ((maxTier!=null) && (maxTier.intValue()>1))
+      {
+        ret.setTiersCount(maxTier.intValue());
+      }
+      //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
 
       // Stats
       StatsProvider statsProvider=ret.getStatsProvider();
