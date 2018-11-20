@@ -70,7 +70,7 @@ public class MainTraitTreesDataLoader
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
       String cell=_traitCell.getString(traitLocation);
       System.out.println("Cell: "+cell);
-      TraitLoader.loadTrait(_facade,traitId);
+      /*TraitDescription description=*/TraitLoader.loadTrait(_facade,traitId);
     }
   }
 
@@ -85,7 +85,7 @@ public class MainTraitTreesDataLoader
       int nbPoints=nbPointsValue.intValue();
       System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
-      TraitLoader.loadTrait(_facade,traitId);
+      /*TraitDescription description=*/TraitLoader.loadTrait(_facade,traitId);
     }
   }
 
@@ -113,7 +113,16 @@ public class MainTraitTreesDataLoader
 
   private CharacterClass getCharacterClassFromTraitNatureKey(int traitNatureKey)
   {
+    if (traitNatureKey==19) return CharacterClass.BURGLAR;
+    if (traitNatureKey==20) return CharacterClass.LORE_MASTER;
+    if (traitNatureKey==21) return CharacterClass.HUNTER;
+    if (traitNatureKey==22) return CharacterClass.MINSTREL;
     if (traitNatureKey==23) return CharacterClass.CHAMPION;
+    if (traitNatureKey==24) return CharacterClass.RUNE_KEEPER;
+    if (traitNatureKey==25) return CharacterClass.WARDEN;
+    if (traitNatureKey==26) return CharacterClass.CAPTAIN;
+    if (traitNatureKey==27) return CharacterClass.GUARDIAN;
+    if (traitNatureKey==31) return CharacterClass.BEORNING;
     return null;
   }
 

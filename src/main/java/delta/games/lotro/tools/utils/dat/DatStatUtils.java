@@ -1,9 +1,17 @@
 package delta.games.lotro.tools.utils.dat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.common.stats.ConstantStatProvider;
+import delta.games.lotro.common.stats.RangedStatProvider;
+import delta.games.lotro.common.stats.ScalableStatProvider;
+import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.TieredScalableStatProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -23,18 +31,16 @@ public class DatStatUtils
 
   /**
    * Load a set of stats from some properties.
-   * @param level Level to use.
    * @param facade Data facade.
    * @param properties Properties to use to get stats.
-   * @return A set of stats or <code>null</code> if not enough data.
+   * @return A possibly empty, but not <code>null</code> list of stats providers.
    */
-  public static BasicStatsSet loadStats(int level, DataFacade facade, PropertiesSet properties)
+  public static List<StatProvider> buildStatProviders(DataFacade facade, PropertiesSet properties)
   {
-    BasicStatsSet ret=null;
+    List<StatProvider> ret=new ArrayList<StatProvider>();
     Object[] mods=(Object[])properties.getProperty("Mod_Array");
     if (mods!=null)
     {
-      ret=new BasicStatsSet();
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
@@ -47,45 +53,34 @@ public class DatStatUtils
           // Always 7 for "add"?
           //Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
           Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
-          if (progressId==null)
+          if (progressId!=null)
           {
-            value=(Number)statProperties.getProperty(def.getName());
-            if (value==null)
+            StatProvider provider=buildStatProvider(facade,stat,progressId.intValue());
+
+            Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
+            Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
+            if ((minLevel!=null) || (maxLevel!=null))
             {
-              LOGGER.warn("No progression ID and no direct value...");
+              RangedStatProvider rangedProvider=new RangedStatProvider(provider,minLevel,maxLevel);
+              ret.add(rangedProvider);
+            }
+            else
+            {
+              ret.add(provider);
             }
           }
           else
           {
-            Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
-            if ((minLevel!=null) && (level<minLevel.intValue()))
+            value=(Number)statProperties.getProperty(def.getName());
+            if (value!=null)
             {
-              continue;
+              ConstantStatProvider constantStat=new ConstantStatProvider(stat,value.floatValue());
+              ret.add(constantStat);
             }
-            Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
-            if ((maxLevel!=null) && (level>maxLevel.intValue()))
+            else
             {
-              continue;
+              LOGGER.warn("No progression ID and no direct value...");
             }
-
-            Progression progression=getProgression(facade,stat,progressId.intValue());
-            if (progression!=null)
-            {
-              value=progression.getValue(level);
-            }
-          }
-          if (value!=null)
-          {
-            float statValue=value.floatValue();
-            if (stat.isPercentage())
-            {
-              statValue=statValue*100;
-            }
-            if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
-            {
-              statValue=statValue*60;
-            }
-            ret.addStat(stat,new FixedDecimalsInteger(statValue));
           }
         }
       }
@@ -94,13 +89,56 @@ public class DatStatUtils
   }
 
   /**
+   * Fix the value of a stat.
+   * @param stat Targeted stat.
+   * @param statValue Raw value.
+   * @return the fixed value.
+   */
+  private static float fixStatValue(STAT stat, float statValue)
+  {
+    if (stat.isPercentage())
+    {
+      statValue=statValue*100;
+    }
+    if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
+    {
+      statValue=statValue*60;
+    }
+    return statValue;
+  }
+
+  /**
+   * Load a set of stats from some properties.
+   * @param level Level to use.
+   * @param facade Data facade.
+   * @param properties Properties to use to get stats.
+   * @return A set of stats or <code>null</code> if not enough data.
+   */
+  public static BasicStatsSet loadStats(int level, DataFacade facade, PropertiesSet properties)
+  {
+    List<StatProvider> providers=buildStatProviders(facade,properties);
+    BasicStatsSet ret=new BasicStatsSet();
+    for(StatProvider provider : providers)
+    {
+      Float statValue=provider.getStatValue(1,level);
+      if (statValue!=null)
+      {
+        STAT stat=provider.getStat();
+        float value=statValue.floatValue();
+        value=fixStatValue(stat,value);
+        ret.addStat(stat,new FixedDecimalsInteger(value));
+      }
+    }
+    return ret;
+  }
+
+  /**
    * Get a progression curve.
    * @param facade Data facade.
-   * @param stat Involved stat.
    * @param progressId Progression ID.
    * @return A progression curve or <code>null</code> if not found.
    */
-  public static Progression getProgression(DataFacade facade, STAT stat, int progressId)
+  private static Progression getProgression(DataFacade facade, int progressId)
   {
     Progression ret=_progressions.getProgression(progressId);
     if (ret==null)
@@ -115,6 +153,53 @@ public class DatStatUtils
           _progressions.registerProgression(progressId,ret);
         }
       }
+    }
+    return ret;
+  }
+
+  /**
+   * Build a stat provider from the given progression identifier.
+   * @param facade Data facade.
+   * @param stat Targeted stat.
+   * @param progressId Progression ID.
+   * @return A stat provider.
+   */
+  public static StatProvider buildStatProvider(DataFacade facade, STAT stat, int progressId)
+  {
+    PropertiesSet properties=facade.loadProperties(progressId+0x9000000);
+    Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
+    if (progressionIds!=null)
+    {
+      return getTieredProgression(facade,stat,properties);
+    }
+    Progression progression=_progressions.getProgression(progressId);
+    if (progression==null)
+    {
+      progression=ProgressionFactory.buildProgression(progressId, properties);
+    }
+    ScalableStatProvider scalableStat=new ScalableStatProvider(stat,progression);
+    return scalableStat;
+  }
+
+  /**
+   * Get a progression curve.
+   * @param facade Data facade.
+   * @param stat Involved stat.
+   * @param properties Progression properties.
+   * @return A progression curve or <code>null</code> if not found.
+   */
+  private static TieredScalableStatProvider getTieredProgression(DataFacade facade, STAT stat, PropertiesSet properties)
+  {
+    Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
+    int nbTiers=progressionIds.length;
+    TieredScalableStatProvider ret=new TieredScalableStatProvider(stat,nbTiers);
+    int tier=1;
+    for(Object progressionIdObj : progressionIds)
+    {
+      int progressionId=((Integer)progressionIdObj).intValue();
+      Progression progression=getProgression(facade,progressionId);
+      ret.setProgression(tier,progression);
+      tier++;
     }
     return ret;
   }

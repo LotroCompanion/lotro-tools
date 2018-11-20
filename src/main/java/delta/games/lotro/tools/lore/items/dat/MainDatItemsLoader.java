@@ -10,6 +10,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Armour;
@@ -30,7 +31,6 @@ import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 import delta.games.lotro.tools.utils.dat.ProgressionFactory;
-import delta.games.lotro.utils.maths.Progression;
 
 /**
  * Get item definitions from DAT files.
@@ -164,8 +164,8 @@ public class MainDatItemsLoader
         if (armourProgressId!=null)
         {
           //ItemLevelProgression itemLevelProgression=buildItemLevelProgression(properties);
-          Progression armorProgression=DatStatUtils.getProgression(_facade,STAT.ARMOUR,armourProgressId.intValue());
-          Float computedArmourValue=armorProgression.getValue(level.intValue());
+          StatProvider armorStatProvider=DatStatUtils.buildStatProvider(_facade,STAT.ARMOUR,armourProgressId.intValue());
+          Float computedArmourValue=armorStatProvider.getStatValue(1,level.intValue());
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
           {
             //System.out.println("Delta in armour for "+_currentItem+": got "+computedArmourValue+", expected "+armourValue);

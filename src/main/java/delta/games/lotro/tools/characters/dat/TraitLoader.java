@@ -1,10 +1,15 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
+import java.util.List;
 
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
+import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 
 /**
@@ -17,22 +22,48 @@ public class TraitLoader
    * Load a trait.
    * @param facade Data facade.
    * @param traitId Trait identifier.
+   * @return the loaded trait description.
    */
-  public static void loadTrait(DataFacade facade, int traitId)
+  public static TraitDescription loadTrait(DataFacade facade, int traitId)
   {
+    TraitDescription ret=null;
     PropertiesSet traitProperties=facade.loadProperties(0x9000000+traitId);
-    System.out.println("*********** Trait: "+traitId+" ****************");
-    String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
-    Integer iconId=(Integer)traitProperties.getProperty("Trait_Icon");
-    Integer minLevel=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
-    traitName=traitName.replace(":","-");
-    traitName=traitName.replace("/",";");
-    String traitIconFile=traitName+".png";
-    File to=new File("traits/"+traitIconFile).getAbsoluteFile();
-    if (!to.exists())
+    if (traitProperties!=null)
     {
-      DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
+      //System.out.println("*********** Trait: "+traitId+" ****************");
+      ret=new TraitDescription();
+      ret.setIdentifier(traitId);
+      // Name
+      String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
+      ret.setName(traitName);
+      // Description
+      String description=DatUtils.getStringProperty(traitProperties,"Trait_Description");
+      ret.setDescription(description);
+      // Icon
+      int iconId=((Integer)traitProperties.getProperty("Trait_Icon")).intValue();
+      ret.setIcon(iconId);
+      // Min level
+      int minLevel=((Integer)traitProperties.getProperty("Trait_Minimum_Level")).intValue();
+      ret.setMinLevel(minLevel);
+      System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
+
+      // Stats
+      StatsProvider statsProvider=ret.getStatsProvider();
+      List<StatProvider> providers=DatStatUtils.buildStatProviders(facade,traitProperties);
+      for(StatProvider provider : providers)
+      {
+        statsProvider.addStatProvider(provider);
+      }
+      // Build icon file
+      String traitIconFile=traitName.replace(":","-");
+      traitIconFile=traitIconFile.replace("/",";");
+      traitIconFile=traitIconFile+".png";
+      File to=new File("traits/"+traitIconFile).getAbsoluteFile();
+      if (!to.exists())
+      {
+        DatIconsUtils.buildImageFile(facade,iconId,to);
+      }
     }
-    System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
+    return ret;
   }
 }
