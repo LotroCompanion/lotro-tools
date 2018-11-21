@@ -12,6 +12,7 @@ import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.TieredScalableStatProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -72,10 +73,14 @@ public class DatStatUtils
           else
           {
             value=(Number)statProperties.getProperty(def.getName());
-            if ((value!=null) && (Math.abs(value.floatValue())>0.001))
+            if (value!=null)
             {
-              ConstantStatProvider constantStat=new ConstantStatProvider(stat,value.floatValue());
-              ret.add(constantStat);
+              float statValue=StatUtils.fixStatValue(stat,value.floatValue());
+              if (Math.abs(statValue)>0.001)
+              {
+                ConstantStatProvider constantStat=new ConstantStatProvider(stat,statValue);
+                ret.add(constantStat);
+              }
             }
             else
             {
@@ -86,25 +91,6 @@ public class DatStatUtils
       }
     }
     return ret;
-  }
-
-  /**
-   * Fix the value of a stat.
-   * @param stat Targeted stat.
-   * @param statValue Raw value.
-   * @return the fixed value.
-   */
-  private static float fixStatValue(STAT stat, float statValue)
-  {
-    if (stat.isPercentage())
-    {
-      statValue=statValue*100;
-    }
-    if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
-    {
-      statValue=statValue*60;
-    }
-    return statValue;
   }
 
   /**
@@ -125,7 +111,6 @@ public class DatStatUtils
       {
         STAT stat=provider.getStat();
         float value=statValue.floatValue();
-        value=fixStatValue(stat,value);
         ret.addStat(stat,new FixedDecimalsInteger(value));
       }
     }
