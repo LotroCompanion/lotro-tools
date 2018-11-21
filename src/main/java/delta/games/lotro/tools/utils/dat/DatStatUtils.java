@@ -205,15 +205,22 @@ public class DatStatUtils
     if ("Stat_Fate".equals(name)) return STAT.FATE;
     if ("Combat_Class_CriticalPoints_Unified".equals(name)) return STAT.CRITICAL_RATING;
     if ("Combat_SuperCritical_Magnitude_PercentAddMod".equals(name)) return STAT.DEVASTATE_MAGNITUDE_PERCENTAGE;
+    if ("Combat_CriticalHitChanceAddMod".equals(name)) return STAT.CRITICAL_MELEE_PERCENTAGE;
+    if ("Combat_RangedCriticalHitChanceAddMod".equals(name)) return STAT.CRITICAL_RANGED_PERCENTAGE;
+    if ("Combat_MagicCriticalHitChanceAddMod".equals(name)) return STAT.CRITICAL_TACTICAL_PERCENTAGE;
     if ("Combat_FinessePoints_Modifier".equals(name)) return STAT.FINESSE;
     if ("LoE_Light_Modifier".equals(name)) return STAT.LIGHT_OF_EARENDIL;
     if ("Resist_ClassPoints_Resistance_TheOneResistance".equals(name)) return STAT.RESISTANCE;
     if ("Combat_Unified_Critical_Defense".equals(name)) return STAT.CRITICAL_DEFENCE;
+    // Combat_Unified_Critical_Defense_Percent_Mod for melee/ranged/tactical crit defense % (Exacting Wards)
     if ("Combat_BlockPoints_Modifier".equals(name)) return STAT.BLOCK;
+    if ("Combat_BlockChanceModifier".equals(name)) return STAT.BLOCK_PERCENTAGE;
     if ("Combat_PartialBlock_Mitigation_Mod".equals(name)) return STAT.PARTIAL_BLOCK_MITIGATION_PERCENTAGE;
     if ("Combat_EvadePoints_Modifier".equals(name)) return STAT.EVADE;
+    if ("Combat_EvadeChanceModifier".equals(name)) return STAT.EVADE_PERCENTAGE;
     if ("Combat_PartialEvade_Mitigation_Mod".equals(name)) return STAT.PARTIAL_EVADE_MITIGATION_PERCENTAGE;
     if ("Combat_ParryPoints_Modifier".equals(name)) return STAT.PARRY;
+    if ("Combat_ParryChanceModifier".equals(name)) return STAT.PARRY_PERCENTAGE;
     if ("Combat_PartialParry_Mitigation_Mod".equals(name)) return STAT.PARTIAL_PARRY_MITIGATION_PERCENTAGE;
     if ("Vital_PowerPeaceRegenAddMod".equals(name)) return STAT.OCPR;
     if ("Vital_PowerCombatRegenAddMod".equals(name)) return STAT.ICPR;
@@ -221,7 +228,8 @@ public class DatStatUtils
     if ("Vital_HealthCombatRegenAddMod".equals(name)) return STAT.ICMR;
     if ("Mood_Hope_Level".equals(name)) return STAT.HOPE;
     if ("Combat_ActionDurationMultiplierMod".equals(name)) return STAT.ATTACK_DURATION_PERCENTAGE;
-
+    if ("Combat_DamageQualifier_Melee_Offense".equals(name)) return STAT.MELEE_DAMAGE_PERCENTAGE;
+    if ("Combat_DamageQualifier_Magic_Offense".equals(name)) return STAT.TACTICAL_DAMAGE_PERCENTAGE;
     if ("Combat_IncomingHealing_Points_Current".equals(name)) return STAT.INCOMING_HEALING;
     if ("Combat_Modifier_OutgoingHealing_Points".equals(name)) return STAT.OUTGOING_HEALING;
     if ("Combat_ArmorDefense_PointsModifier_UnifiedPhysical".equals(name)) return STAT.PHYSICAL_MITIGATION;
@@ -230,6 +238,7 @@ public class DatStatUtils
     if ("Combat_ArmorDefense_PointsModifier_Acid".equals(name)) return STAT.ACID_MITIGATION;
     if ("Combat_ArmorDefense_PointsModifier_Fire".equals(name)) return STAT.FIRE_MITIGATION;
     if ("Combat_ArmorDefense_PointsModifier_Shadow".equals(name)) return STAT.SHADOW_MITIGATION;
+    if ("Combat_MitigationPercentage_Shadow".equals(name)) return STAT.SHADOW_MITIGATION_PERCENTAGE;
     if ("Combat_PhysicalMastery_Modifier_Unified".equals(name)) return STAT.PHYSICAL_MASTERY;
     if ("Combat_TacticalMastery_Modifier_Unified".equals(name)) return STAT.TACTICAL_MASTERY;
     if ("Combat_Class_PhysicalMastery_Unified".equals(name)) return STAT.PHYSICAL_MASTERY;
@@ -293,8 +302,6 @@ public class DatStatUtils
     if ("CombatStateMod_CC_DurationMultModifier".equals(name)) return null;
     if ("Combat_Agent_Armor_Value_Float".equals(name)) return null;
     if ("Combat_Agent_MountArmor_Value_Float".equals(name)) return null;
-    if ("Combat_DamageQualifier_Magic_Offense".equals(name)) return null;
-    if ("Combat_DamageQualifier_Melee_Offense".equals(name)) return null;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Fire".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Light".equals(name)) return null;
@@ -364,6 +371,7 @@ public class DatStatUtils
     if ("Mount_Movement_Acceleration".equals(name)) return null;
     if ("Mount_Movement_Turn_Rate".equals(name)) return null;
     if ("Resist_AdditionalPoints_Resistance_TheOneResistance".equals(name)) return null;
+    if ("Resist_Additional_Resistance_Fear".equals(name)) return null;
     if ("Runekeeper_BattleWrit_PowerCost".equals(name)) return null;
     if ("Runekeeper_HealingWrit_PowerCost".equals(name)) return null;
     if ("SkillMod_Damage_Guardian_SweepingCut".equals(name)) return null;
