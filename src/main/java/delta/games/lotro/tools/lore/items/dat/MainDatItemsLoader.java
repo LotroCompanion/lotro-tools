@@ -28,6 +28,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
+import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 import delta.games.lotro.tools.utils.dat.ProgressionFactory;
@@ -82,7 +83,51 @@ public class MainDatItemsLoader
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
-      item.setIcon(iconId+"-"+backgroundIconId);
+      if ((iconId!=null) || (backgroundIconId!=null))
+      {
+        String iconName;
+        if (iconId!=null)
+        {
+          iconName=iconId+((backgroundIconId!=null)?"-"+backgroundIconId:"");
+        }
+        else
+        {
+          iconName=backgroundIconId.toString();
+        }
+        item.setIcon(iconName);
+        File iconFile=new File("icons/"+item.getIcon()+".png").getAbsoluteFile();
+        if (!iconFile.exists())
+        {
+          if ((iconId!=null) && (backgroundIconId!=null))
+          {
+            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),backgroundIconId.intValue(),iconFile);
+          }
+          else if (iconId==null)
+          {
+            DatIconsUtils.buildImageFile(_facade,backgroundIconId.intValue(),iconFile);
+          }
+          else if (backgroundIconId==null)
+          {
+            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),iconFile);
+          }
+        }
+        if (iconId!=null)
+        {
+          File mainIconFile=new File("iconsMain/"+iconId+".png").getAbsoluteFile();
+          if (!mainIconFile.exists())
+          {
+            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),mainIconFile);
+          }
+        }
+        if (backgroundIconId!=null)
+        {
+          File backgroundIconFile=new File("iconsBackground/"+backgroundIconId+".png").getAbsoluteFile();
+          if (!backgroundIconFile.exists())
+          {
+            DatIconsUtils.buildImageFile(_facade,backgroundIconId.intValue(),backgroundIconFile);
+          }
+        }
+      }
       // Unique
       Integer unique=(Integer)properties.getProperty("Inventory_Unique");
       boolean isUnique=((unique!=null) && (unique.intValue()==1));
