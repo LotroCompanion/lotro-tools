@@ -1,7 +1,6 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -37,7 +37,7 @@ public class MainClassDataLoader
   private DataFacade _facade;
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
-  private List<TraitDescription> _traits;
+  private TraitsManager _traits;
 
   /**
    * Constructor.
@@ -48,7 +48,7 @@ public class MainClassDataLoader
     _facade=facade;
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
-    _traits=new ArrayList<TraitDescription>();
+    _traits=new TraitsManager();
   }
 
   private void handleClass(int classId)
@@ -198,7 +198,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
       System.out.println("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId.intValue());
-      _traits.add(description);
+      _traits.registerTrait(description);
     }
   }
 
@@ -274,8 +274,9 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     ProgressionsXMLWriter.write(progressionsFile,progressions);
     // Save traits
     File traitsFile=new File("../lotro-companion/data/lore/characters/traits_classes.xml").getAbsoluteFile();
-    Collections.sort(_traits,new IdentifiableComparator<TraitDescription>());
-    TraitDescriptionXMLWriter.write(traitsFile,_traits);
+    List<TraitDescription> traits=_traits.getAll();
+    Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
+    TraitDescriptionXMLWriter.write(traitsFile,traits);
   }
 
   /**

@@ -1,11 +1,11 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -27,7 +27,7 @@ public class MainTraitTreesDataLoader
   private DataFacade _facade;
   private EnumMapper _traitTreeBranch;
   private EnumMapper _traitCell;
-  private List<TraitDescription> _traits;
+  private TraitsManager _traits;
 
   /**
    * Constructor.
@@ -38,7 +38,7 @@ public class MainTraitTreesDataLoader
     _facade=facade;
     _traitTreeBranch=_facade.getEnumsManager().getEnumMapper(0x230003A1);
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
-    _traits=new ArrayList<TraitDescription>();
+    _traits=new TraitsManager();
   }
 
   private void handleTraitTree(CharacterClass characterClass, int traitTreeId)
@@ -84,7 +84,7 @@ public class MainTraitTreesDataLoader
       String cell=_traitCell.getString(traitLocation);
       System.out.println("Cell: "+cell);
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traits.add(description);
+      _traits.registerTrait(description);
     }
   }
 
@@ -100,7 +100,7 @@ public class MainTraitTreesDataLoader
       System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traits.add(description);
+      _traits.registerTrait(description);
     }
   }
 
@@ -130,8 +130,9 @@ public class MainTraitTreesDataLoader
     ProgressionsXMLWriter.write(progressionsFile,progressions);
     // Save traits
     File traitsFile=new File("../lotro-companion/data/lore/characters/traits_trees.xml").getAbsoluteFile();
-    Collections.sort(_traits,new IdentifiableComparator<TraitDescription>());
-    TraitDescriptionXMLWriter.write(traitsFile,_traits);
+    List<TraitDescription> traits=_traits.getAll();
+    Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
+    TraitDescriptionXMLWriter.write(traitsFile,traits);
   }
 
   private CharacterClass getCharacterClassFromTraitNatureKey(int traitNatureKey)
