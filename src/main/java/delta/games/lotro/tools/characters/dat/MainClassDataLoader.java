@@ -1,11 +1,14 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
@@ -35,6 +38,7 @@ public class MainClassDataLoader
   private static final Logger LOGGER=Logger.getLogger(MainClassDataLoader.class);
 
   private DataFacade _facade;
+  private List<ClassDescription> _classes;
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
   private TraitsManager _traits;
@@ -46,6 +50,7 @@ public class MainClassDataLoader
   public MainClassDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _classes=new ArrayList<ClassDescription>();
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
     _traits=new TraitsManager();
@@ -59,25 +64,30 @@ public class MainClassDataLoader
     // Class name
     String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
     CharacterClass characterClass=CharacterClass.getByName(className);
+    ClassDescription classDescription=new ClassDescription(characterClass);
     LOGGER.info("Handling class: "+characterClass);
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
     LOGGER.info("Class abbreviation: "+classAbbreviation);
+    //classDescription.setAbbreviation(classAbbreviation);
     // Class description
-    String classDescription=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
-    LOGGER.info("Class description: "+classDescription);
+    String description=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
+    LOGGER.info("Class description: "+description);
+    //classDescription.setDescription(description);
     // Icons
     // Normal size (48 pixels)
     int classIconId=((Integer)classInfo.getProperty("AdvTable_ClassIcon")).intValue();
     File classIconFile=new File(className+".png").getAbsoluteFile();
     DatIconsUtils.buildImageFile(_facade,classIconId,classIconFile);
+    classDescription.setIconId(classIconId);
     // Small size (32 pixels)
     int classSmallIconId=((Integer)classInfo.getProperty("AdvTable_ClassSmallIcon")).intValue();
     File smallClassIconFile=new File("small-"+className+".png").getAbsoluteFile();
     DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
+    classDescription.setSmallIconId(classIconId);
 
     loadInitialStats(characterClass,properties);
     loadStatDerivations(characterClass,properties);
-    loadTraits(properties);
+    loadTraits(classDescription,properties);
     // TODO loadSkills: AdvTable_AvailableSkillEntryList
     // TODO Initial gear:
     // AdvTable_StartingInventory_List: initial gear at level 1, ...
@@ -89,7 +99,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
      */
     // Class deeds?
     // AdvTable_AccomplishmentDirectory: 1879064046
-    
+    _classes.add(classDescription);
   }
 
   private void loadInitialStats(CharacterClass characterClass, PropertiesSet properties)
@@ -163,7 +173,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
               STAT sourceStat=getStatFromStatType(sourceStatId.intValue());
               if (sourceStat!=null)
               {
-                System.out.println(sourceStat+"*"+value+" => "+targetStat);
+                //System.out.println(sourceStat+"*"+value+" => "+targetStat);
                 _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,new FixedDecimalsInteger(value));
               }
             }
@@ -186,19 +196,21 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     return value;
   }
 
-  private void loadTraits(PropertiesSet properties)
+  private void loadTraits(ClassDescription description, PropertiesSet properties)
   {
     Object[] traitsProperties=(Object[])properties.getProperty("AdvTable_ClassCharacteristic_List");
     for(Object traitPropertiesObj : traitsProperties)
     {
       PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      Integer level=(Integer)traitProperties.getProperty("AdvTable_Trait_Level");
+      int level=((Integer)traitProperties.getProperty("AdvTable_Trait_Level")).intValue();
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
-      Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
-      System.out.println("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
-      TraitDescription description=TraitLoader.loadTrait(_facade,traitId.intValue());
-      _traits.registerTrait(description);
+      int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
+      LOGGER.info("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
+      TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
+      _traits.registerTrait(trait);
+      ClassTrait classTrait=new ClassTrait(level,trait);
+      description.addTrait(classTrait);
     }
   }
 
