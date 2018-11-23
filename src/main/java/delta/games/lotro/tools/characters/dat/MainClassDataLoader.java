@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassTrait;
+import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
@@ -289,6 +290,9 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     List<TraitDescription> traits=_traits.getAll();
     Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
     TraitDescriptionXMLWriter.write(traitsFile,traits);
+    // Save classes descriptions
+    File classesFile=new File("../lotro-companion/data/lore/characters/classes.xml").getAbsoluteFile();
+    ClassDescriptionXMLWriter.write(classesFile,_classes);
   }
 
   /**
