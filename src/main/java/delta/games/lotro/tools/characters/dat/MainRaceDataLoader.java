@@ -1,13 +1,19 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RaceGender;
+import delta.games.lotro.character.races.RaceTrait;
+import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.Race;
 import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -26,6 +32,7 @@ public class MainRaceDataLoader
 
   private DataFacade _facade;
   private TraitsManager _traits;
+  private List<RaceDescription> _races;
 
   /**
    * Constructor.
@@ -35,12 +42,16 @@ public class MainRaceDataLoader
   {
     _facade=facade;
     _traits=new TraitsManager();
+    _races=new ArrayList<RaceDescription>();
   }
 
-  private void handleRace(int classId)
+  private void handleRace(int racePropertiesId)
   {
-    PropertiesSet properties=_facade.loadProperties(classId+0x9000000);
-
+    PropertiesSet properties=_facade.loadProperties(racePropertiesId+0x9000000);
+    int raceId=((Integer)properties.getProperty("RaceTable_Race")).intValue();
+    System.out.println(raceId);
+    Race race=getRaceFromRaceId(raceId);
+    RaceDescription raceDescription=new RaceDescription(race);
     /*
 RaceTable_ClassList: 
   #1: 40
@@ -53,20 +64,6 @@ RaceTable_ClassList:
   #8: 194
 RaceTable_Description: 
   #1: \nNot as long-lived as Elves, sturdy as dwarves, or resilient as hobbits, Men are renowned for their courage and resourcefulness.\n\n
-RaceTable_GenderList: 
-  #1: 
-    RaceTable_GenderType: 4096
-    RaceTable_Gender_Desc: 
-      #1: The male men. Blah blah blah.
-    RaceTable_Gender_Name: 
-      #1: Race of Man (Male)
-    RaceTable_Gender_Race_Name: 
-      #1: Man
-    RaceTable_RaceSelect_Background: 1091603817
-    RaceTable_RaceSelect_Entity: 1191183880
-    RaceTable_RaceSelect_Icon: 1091602757
-    RaceTable_RaceSelect_LargeIcon: 1092350624
-    RaceTable_RaceSelect_SmallIcon: 1092365270
 RaceTable_NationalityList: 
   #1: 17
   #2: 16
@@ -74,50 +71,98 @@ RaceTable_NationalityList:
   #4: 5
 RaceTable_Race: 23
     */
-    System.out.println(properties.dump());
+    //System.out.println(properties.dump());
 
-    loadGenders(properties);
-    loadCharacteristics(properties);
+    loadGenders(raceDescription,properties);
+    loadCharacteristics(raceDescription,properties);
+    _races.add(raceDescription);
   }
 
-  private void loadGenders(PropertiesSet properties)
+  private Race getRaceFromRaceId(int raceId)
   {
-    Object[] traitsProperties=(Object[])properties.getProperty("RaceTable_GenderList");
-    for(Object traitPropertiesObj : traitsProperties)
+    if (raceId==23) return Race.MAN;
+    if (raceId==65) return Race.ELF;
+    if (raceId==73) return Race.DWARF;
+    if (raceId==81) return Race.HOBBIT;
+    if (raceId==114) return Race.BEORNING;
+    if (raceId==117) return Race.HIGH_ELF;
+    return null;
+  }
+
+  private void loadGenders(RaceDescription description, PropertiesSet properties)
+  {
+    Object[] gendersProperties=(Object[])properties.getProperty("RaceTable_GenderList");
+    PropertiesSet maleProperties=(PropertiesSet)gendersProperties[0];
+    RaceGender male=buildGender(maleProperties);
+    description.setMaleGender(male);
+    if (gendersProperties.length>1)
     {
-      PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      //String name=DatUtils.getStringProperty(traitProperties,"RaceTable_Gender_Race_Name");
-      String name=DatUtils.getStringProperty(traitProperties,"RaceTable_Gender_Name");
-      {
-        int selectIconId=((Integer)traitProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
-        File selectIconFile=new File("races/select-"+name+".png").getAbsoluteFile();
-        DatIconsUtils.buildImageFile(_facade,selectIconId,selectIconFile);
-      }
-      {
-        int selectIconId=((Integer)traitProperties.getProperty("RaceTable_RaceSelect_LargeIcon")).intValue();
-        File selectIconFile=new File("races/selectLarge-"+name+".png").getAbsoluteFile();
-        DatIconsUtils.buildImageFile(_facade,selectIconId,selectIconFile);
-      }
-      {
-        int selectIconId=((Integer)traitProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
-        File selectIconFile=new File("races/selectSmall-"+name+".png").getAbsoluteFile();
-        DatIconsUtils.buildImageFile(_facade,selectIconId,selectIconFile);
-      }
+      PropertiesSet femaleProperties=(PropertiesSet)gendersProperties[1];
+      RaceGender female=buildGender(femaleProperties);
+      description.setFemaleGender(female);
     }
   }
 
-  private void loadCharacteristics(PropertiesSet properties)
+  private RaceGender buildGender(PropertiesSet genderProperties)
+  {
+    RaceGender gender=new RaceGender();
+    String name=DatUtils.getStringProperty(genderProperties,"RaceTable_Gender_Name");
+    gender.setName(name);
+    System.out.println(name);
+    int iconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
+    gender.setIconId(iconId);
+    {
+      File selectIconFile=new File("races/select-"+name+".png").getAbsoluteFile();
+      DatIconsUtils.buildImageFile(_facade,iconId,selectIconFile);
+    }
+    int largeIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_LargeIcon")).intValue();
+    gender.setLargeIconId(largeIconId);
+    {
+      File selectIconFile=new File("races/selectLarge-"+name+".png").getAbsoluteFile();
+      DatIconsUtils.buildImageFile(_facade,largeIconId,selectIconFile);
+    }
+    int smallIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
+    gender.setSmallIconId(smallIconId);
+    {
+      File selectIconFile=new File("races/selectSmall-"+name+".png").getAbsoluteFile();
+      DatIconsUtils.buildImageFile(_facade,smallIconId,selectIconFile);
+    }
+    return gender;
+  }
+
+  private void loadCharacteristics(RaceDescription description, PropertiesSet properties)
   {
     Object[] traitsProperties=(Object[])properties.getProperty("AdvTable_RaceCharacteristic_List");
     for(Object traitPropertiesObj : traitsProperties)
     {
       PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      Integer level=(Integer)traitProperties.getProperty("AdvTable_Trait_Level");
-      Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
-      Integer traitId=(Integer)traitProperties.getProperty("AdvTable_Trait_WC");
-      System.out.println("Level: "+level+" (rank="+rank+")");
-      TraitDescription description=TraitLoader.loadTrait(_facade,traitId.intValue());
-      _traits.registerTrait(description);
+      int level=((Integer)traitProperties.getProperty("AdvTable_Trait_Level")).intValue();
+      //Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
+      int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
+      //System.out.println("Level: "+level+" (rank="+rank+")");
+      TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
+      _traits.registerTrait(trait);
+      RaceTrait raceTrait=new RaceTrait(level,trait);
+      description.addTrait(raceTrait);
+    }
+  }
+
+  private void loadRaceTraits()
+  {
+    PropertiesSet properties=_facade.loadProperties(0x7900025B);
+    //System.out.println(properties.dump());
+    Object[] raceArrays=(Object[])properties.getProperty("Trait_Control_RaceArray");
+    for(Object raceArrayObj : raceArrays)
+    {
+      PropertiesSet raceProps=(PropertiesSet)raceArrayObj;
+      int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
+      System.out.println("Race: "+raceId);
+      Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
+      for(Object traitObj : traitsArray)
+      {
+        int traitId=((Integer)traitObj).intValue();
+        System.out.println("\tTrait: "+traitId);
+      }
     }
   }
 
@@ -129,6 +174,7 @@ RaceTable_Race: 23
     {
       handleRace(((Integer)raceId).intValue());
     }
+    loadRaceTraits();
     // Save progressions
     List<Progression> progressions=ProgressionsManager.getInstance().getAll();
     File progressionsFile=new File("../lotro-companion/data/lore/progressions_races.xml").getAbsoluteFile();
@@ -138,6 +184,9 @@ RaceTable_Race: 23
     List<TraitDescription> traits=_traits.getAll();
     Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
     TraitDescriptionXMLWriter.write(traitsFile,traits);
+    // Save races
+    File racesFile=new File("../lotro-companion/data/lore/characters/races.xml").getAbsoluteFile();
+    RaceDescriptionXMLWriter.write(racesFile,_races);
   }
 
   /**
