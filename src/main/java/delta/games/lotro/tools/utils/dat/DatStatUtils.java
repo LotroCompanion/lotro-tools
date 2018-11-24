@@ -231,8 +231,10 @@ public class DatStatUtils
     if ("Combat_DamageQualifier_Melee_Offense".equals(name)) return STAT.MELEE_DAMAGE_PERCENTAGE;
     if ("Combat_DamageQualifier_Magic_Offense".equals(name)) return STAT.TACTICAL_DAMAGE_PERCENTAGE;
     if ("Combat_IncomingHealing_Points_Current".equals(name)) return STAT.INCOMING_HEALING;
+    if ("Combat_IncomingHealing_Modifier_Current".equals(name)) return STAT.INCOMING_HEALING_PERCENTAGE;
     if ("Combat_Modifier_OutgoingHealing_Points".equals(name)) return STAT.OUTGOING_HEALING;
     if ("Combat_ArmorDefense_PointsModifier_UnifiedPhysical".equals(name)) return STAT.PHYSICAL_MITIGATION;
+    if ("Combat_MitigationPercentage_Common".equals(name)) return STAT.PHYSICAL_MITIGATION_PERCENTAGE;
     if ("Combat_ArmorDefense_PointsModifier_UnifiedTactical".equals(name)) return STAT.TACTICAL_MITIGATION;
     if ("Combat_ArmorDefense_PointsModifier_Frost".equals(name)) return STAT.FROST_MITIGATION;
     if ("Combat_ArmorDefense_PointsModifier_Acid".equals(name)) return STAT.ACID_MITIGATION;
