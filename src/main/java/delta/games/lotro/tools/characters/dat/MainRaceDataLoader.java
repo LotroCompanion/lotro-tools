@@ -3,7 +3,9 @@ package delta.games.lotro.tools.characters.dat;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RaceGender;
@@ -32,7 +34,7 @@ public class MainRaceDataLoader
 
   private DataFacade _facade;
   private TraitsManager _traits;
-  private List<RaceDescription> _races;
+  private Map<Integer,RaceDescription> _racesById;
 
   /**
    * Constructor.
@@ -42,7 +44,7 @@ public class MainRaceDataLoader
   {
     _facade=facade;
     _traits=new TraitsManager();
-    _races=new ArrayList<RaceDescription>();
+    _racesById=new HashMap<Integer,RaceDescription>();
   }
 
   private void handleRace(int racePropertiesId)
@@ -69,13 +71,12 @@ RaceTable_NationalityList:
   #2: 16
   #3: 6
   #4: 5
-RaceTable_Race: 23
     */
     //System.out.println(properties.dump());
 
     loadGenders(raceDescription,properties);
     loadCharacteristics(raceDescription,properties);
-    _races.add(raceDescription);
+    _racesById.put(Integer.valueOf(raceId),raceDescription);
   }
 
   private Race getRaceFromRaceId(int raceId)
@@ -147,7 +148,7 @@ RaceTable_Race: 23
     }
   }
 
-  private void loadRaceTraits()
+  private void loadRaceEarnableTraits()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
@@ -156,12 +157,15 @@ RaceTable_Race: 23
     {
       PropertiesSet raceProps=(PropertiesSet)raceArrayObj;
       int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
-      System.out.println("Race: "+raceId);
+      //System.out.println("Race: "+raceId);
+      RaceDescription description=_racesById.get(Integer.valueOf(raceId));
       Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
       for(Object traitObj : traitsArray)
       {
         int traitId=((Integer)traitObj).intValue();
-        System.out.println("\tTrait: "+traitId);
+        TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
+        _traits.registerTrait(trait);
+        description.addEarnableTrait(trait);
       }
     }
   }
@@ -169,12 +173,12 @@ RaceTable_Race: 23
   private void doIt()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900020F);
-    Object[] raceIds=(Object[])properties.getProperty("RaceTable_RaceTableList");
-    for(Object raceId : raceIds)
+    Object[] raceIdsArray=(Object[])properties.getProperty("RaceTable_RaceTableList");
+    for(Object raceId : raceIdsArray)
     {
       handleRace(((Integer)raceId).intValue());
     }
-    loadRaceTraits();
+    loadRaceEarnableTraits();
     // Save progressions
     List<Progression> progressions=ProgressionsManager.getInstance().getAll();
     File progressionsFile=new File("../lotro-companion/data/lore/progressions_races.xml").getAbsoluteFile();
@@ -186,7 +190,14 @@ RaceTable_Race: 23
     TraitDescriptionXMLWriter.write(traitsFile,traits);
     // Save races
     File racesFile=new File("../lotro-companion/data/lore/characters/races.xml").getAbsoluteFile();
-    RaceDescriptionXMLWriter.write(racesFile,_races);
+    List<RaceDescription> races=new ArrayList<RaceDescription>();
+    List<Integer> raceIds=new ArrayList<Integer>(_racesById.keySet());
+    Collections.sort(raceIds);
+    for(Integer raceId : raceIds)
+    {
+      races.add(_racesById.get(raceId));
+    }
+    RaceDescriptionXMLWriter.write(racesFile,races);
   }
 
   /**
