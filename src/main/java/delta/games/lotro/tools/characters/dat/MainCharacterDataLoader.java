@@ -42,6 +42,7 @@ public class MainCharacterDataLoader
     File progressionsFile=new File("../lotro-companion/data/lore/progressions.xml").getAbsoluteFile();
     ProgressionsXMLWriter.write(progressionsFile,progressions);
     // Save traits
+    new TraitKeyGenerator(traitsManager).setup();
     File traitsFile=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();
     List<TraitDescription> traits=traitsManager.getAll();
     Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
