@@ -62,10 +62,7 @@ public class TraitLoader
         statsProvider.addStatProvider(provider);
       }
       // Build icon file
-      String traitIconFile=traitName.replace(":","-");
-      traitIconFile=traitIconFile.replace("/",";");
-      traitIconFile=traitIconFile+".png";
-      File to=new File("traits/"+traitIconFile).getAbsoluteFile();
+      File to=new File("data/icons/traits/"+iconId+".png").getAbsoluteFile();
       if (!to.exists())
       {
         DatIconsUtils.buildImageFile(facade,iconId,to);
