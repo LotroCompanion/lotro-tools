@@ -158,10 +158,6 @@ public class DatStatUtils
       return getTieredProgression(facade,stat,properties);
     }
     Progression progression=getProgression(facade,progressId);
-    if (progression==null)
-    {
-      progression=ProgressionFactory.buildProgression(progressId, properties);
-    }
     ScalableStatProvider scalableStat=new ScalableStatProvider(stat,progression);
     return scalableStat;
   }
