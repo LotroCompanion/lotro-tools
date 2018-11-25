@@ -1,44 +1,36 @@
 package delta.games.lotro.tools.characters.dat;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.List;
-
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.utils.maths.Progression;
-import delta.games.lotro.utils.maths.io.xml.ProgressionsXMLWriter;
 
 /**
  * Get trait trees definitions from DAT files.
  * @author DAM
  */
-public class MainTraitTreesDataLoader
+public class TraitTreesDataLoader
 {
   //private static final Logger LOGGER=Logger.getLogger(MainTraitTreesDataLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _traitTreeBranch;
   private EnumMapper _traitCell;
-  private TraitsManager _traits;
+  private TraitsManager _traitsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param traitsManager Traits manager.
    */
-  public MainTraitTreesDataLoader(DataFacade facade)
+  public TraitTreesDataLoader(DataFacade facade, TraitsManager traitsManager)
   {
     _facade=facade;
     _traitTreeBranch=_facade.getEnumsManager().getEnumMapper(0x230003A1);
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
-    _traits=new TraitsManager();
+    _traitsManager=traitsManager;
   }
 
   private void handleTraitTree(CharacterClass characterClass, int traitTreeId)
@@ -84,7 +76,7 @@ public class MainTraitTreesDataLoader
       String cell=_traitCell.getString(traitLocation);
       System.out.println("Cell: "+cell);
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traits.registerTrait(description);
+      _traitsManager.registerTrait(description);
     }
   }
 
@@ -100,11 +92,14 @@ public class MainTraitTreesDataLoader
       System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traits.registerTrait(description);
+      _traitsManager.registerTrait(description);
     }
   }
 
-  private void doIt()
+  /**
+   * Do it.
+   */
+  public void doIt()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
@@ -124,15 +119,6 @@ public class MainTraitTreesDataLoader
         }
       }
     }
-    // Save progressions
-    List<Progression> progressions=ProgressionsManager.getInstance().getAll();
-    File progressionsFile=new File("../lotro-companion/data/lore/progressions_trees.xml").getAbsoluteFile();
-    ProgressionsXMLWriter.write(progressionsFile,progressions);
-    // Save traits
-    File traitsFile=new File("../lotro-companion/data/lore/characters/traits_trees.xml").getAbsoluteFile();
-    List<TraitDescription> traits=_traits.getAll();
-    Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
-    TraitDescriptionXMLWriter.write(traitsFile,traits);
   }
 
   private CharacterClass getCharacterClassFromTraitNatureKey(int traitNatureKey)
@@ -148,16 +134,5 @@ public class MainTraitTreesDataLoader
     if (traitNatureKey==27) return CharacterClass.GUARDIAN;
     if (traitNatureKey==31) return CharacterClass.BEORNING;
     return null;
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    new MainTraitTreesDataLoader(facade).doIt();
-    facade.dispose();
   }
 }

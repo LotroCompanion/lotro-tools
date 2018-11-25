@@ -2,7 +2,6 @@ package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,43 +17,39 @@ import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXM
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 import delta.games.lotro.utils.FixedDecimalsInteger;
-import delta.games.lotro.utils.maths.Progression;
-import delta.games.lotro.utils.maths.io.xml.ProgressionsXMLWriter;
 
 /**
  * Get class definitions from DAT files.
  * @author DAM
  */
-public class MainClassDataLoader
+public class CharacterClassDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainClassDataLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(CharacterClassDataLoader.class);
 
   private DataFacade _facade;
   private List<ClassDescription> _classes;
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
-  private TraitsManager _traits;
+  private TraitsManager _traitsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param traitsManager Traits manager.
    */
-  public MainClassDataLoader(DataFacade facade)
+  public CharacterClassDataLoader(DataFacade facade, TraitsManager traitsManager)
   {
     _facade=facade;
     _classes=new ArrayList<ClassDescription>();
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
-    _traits=new TraitsManager();
+    _traitsManager=traitsManager;
   }
 
   private void handleClass(int classId)
@@ -209,7 +204,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       LOGGER.info("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
       TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-      _traits.registerTrait(trait);
+      _traitsManager.registerTrait(trait);
       ClassTrait classTrait=new ClassTrait(level,trait);
       description.addTrait(classTrait);
     }
@@ -268,7 +263,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     return null;
   }
 
-  private void doIt()
+  /**
+   * Do it.
+   */
+  public void doIt()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900020E);
     Object[] classIds=(Object[])properties.getProperty("AdvTable_LevelTableList");
@@ -276,33 +274,13 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     {
       handleClass(((Integer)classId).intValue());
     }
-    // Save data
+    // Save start stats
     File startStatsFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
     StartStatsXMLWriter.write(startStatsFile.getAbsoluteFile(),_startStatsManager);
     File statContribsFile=new File("../lotro-companion/data/lore/characters/statContribs.xml");
     DerivedStatsContributionsXMLWriter.write(statContribsFile.getAbsoluteFile(),_derivatedStatsManager);
-    // Save progressions
-    List<Progression> progressions=ProgressionsManager.getInstance().getAll();
-    File progressionsFile=new File("../lotro-companion/data/lore/progressions_classes.xml").getAbsoluteFile();
-    ProgressionsXMLWriter.write(progressionsFile,progressions);
-    // Save traits
-    File traitsFile=new File("../lotro-companion/data/lore/characters/traits_classes.xml").getAbsoluteFile();
-    List<TraitDescription> traits=_traits.getAll();
-    Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
-    TraitDescriptionXMLWriter.write(traitsFile,traits);
     // Save classes descriptions
     File classesFile=new File("../lotro-companion/data/lore/characters/classes.xml").getAbsoluteFile();
     ClassDescriptionXMLWriter.write(classesFile,_classes);
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    new MainClassDataLoader(facade).doIt();
-    facade.dispose();
   }
 }
