@@ -274,6 +274,9 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     {
       handleClass(((Integer)classId).intValue());
     }
+    // Load trait trees
+    new TraitTreesDataLoader(_facade,_traitsManager).doIt(_classes);
+
     // Save start stats
     File startStatsFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
     StartStatsXMLWriter.write(startStatsFile.getAbsoluteFile(),_startStatsManager);

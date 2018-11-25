@@ -1,5 +1,13 @@
 package delta.games.lotro.tools.characters.dat;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.TraitTree;
+import delta.games.lotro.character.classes.TraitTreeBranch;
+import delta.games.lotro.character.classes.TraitTreeProgression;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
@@ -33,7 +41,7 @@ public class TraitTreesDataLoader
     _traitsManager=traitsManager;
   }
 
-  private void handleTraitTree(CharacterClass characterClass, int traitTreeId)
+  private TraitTree handleTraitTree(CharacterClass characterClass, int traitTreeId)
   {
     PropertiesSet properties=_facade.loadProperties(traitTreeId+0x9000000);
     //System.out.println(properties.dump());
@@ -50,6 +58,9 @@ public class TraitTreesDataLoader
       //System.out.println("branch description: "+branchDescription);
     }
     */
+    TraitTree tree=new TraitTree();
+    //System.out.println("Got trait tree for: "+characterClass);
+    Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
     Object[] specializations=(Object[])properties.getProperty("Trait_TraitTree_SpecializationsArray");
     if (specializations!=null)
@@ -59,10 +70,14 @@ public class TraitTreesDataLoader
         PropertiesSet specializationProps=(PropertiesSet)specializationObj;
         int branchId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationBranch")).intValue();
         String branchName=_traitTreeBranch.getString(branchId);
-        System.out.println("branch name: "+branchName);
+        //System.out.println("branch name: "+branchName);
+        TraitTreeBranch branch=new TraitTreeBranch(branchName);
+        branchesById.put(Integer.valueOf(branchId),branch);
+        tree.addBranch(branch);
+        TraitTreeProgression progression=branch.getProgression();
         int progressionId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationProgression")).intValue();
         PropertiesSet progressionProperties=_facade.loadProperties(progressionId+0x9000000);
-        handleSpecializationProgression(progressionProperties);
+        handleSpecializationProgression(progression,progressionProperties);
       }
     }
     // Traits
@@ -70,17 +85,20 @@ public class TraitTreesDataLoader
     for(Object traitObj : traits)
     {
       PropertiesSet traitProps=(PropertiesSet)traitObj;
-      //int branchId=((Integer)traitProps.getProperty("Trait_TraitTree_Branch")).intValue();
+      int branchId=((Integer)traitProps.getProperty("Trait_TraitTree_Branch")).intValue();
+      TraitTreeBranch branch=branchesById.get(Integer.valueOf(branchId));
       int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
       String cell=_traitCell.getString(traitLocation);
-      System.out.println("Cell: "+cell);
+      //System.out.println("Cell: "+cell);
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
       _traitsManager.registerTrait(description);
+      branch.setCell(cell,description);
     }
+    return tree;
   }
 
-  private void handleSpecializationProgression(PropertiesSet progressionProperties)
+  private void handleSpecializationProgression(TraitTreeProgression progression, PropertiesSet progressionProperties)
   {
     //System.out.println(progressionProperties.dump());
     Object[] progressionSteps=(Object[])progressionProperties.getProperty("SparseDIDProgression_Array");
@@ -89,17 +107,19 @@ public class TraitTreesDataLoader
       PropertiesSet progressionStepProps=(PropertiesSet)progressionStepObj;
       Number nbPointsValue=(Number)progressionStepProps.getProperty("SparseDIDProgressionEntry_Key");
       int nbPoints=nbPointsValue.intValue();
-      System.out.println("Nb points: "+nbPoints);
+      //System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
       TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
       _traitsManager.registerTrait(description);
+      progression.addStep(nbPoints,description);
     }
   }
 
   /**
    * Do it.
+   * @param classes Classes to update.
    */
-  public void doIt()
+  public void doIt(List<ClassDescription> classes)
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
@@ -115,7 +135,14 @@ public class TraitTreesDataLoader
         for(Object traitTreeIdObj : traitTreeArray)
         {
           int traitTreeId=((Integer)traitTreeIdObj).intValue();
-          handleTraitTree(characterClass,traitTreeId);
+          TraitTree tree=handleTraitTree(characterClass,traitTreeId);
+          for(ClassDescription description : classes)
+          {
+            if (description.getCharacterClass()==characterClass)
+            {
+              description.setTraitTree(tree);
+            }
+          }
         }
       }
     }

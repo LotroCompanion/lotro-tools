@@ -32,8 +32,6 @@ public class MainCharacterDataLoader
     new RaceDataLoader(facade,traitsManager).doIt();
     // Load character class data
     new CharacterClassDataLoader(facade,traitsManager).doIt();
-    // Load trait trees
-    new TraitTreesDataLoader(facade,traitsManager).doIt();
 
     // Save progressions
     List<Progression> progressions=ProgressionsManager.getInstance().getAll();
