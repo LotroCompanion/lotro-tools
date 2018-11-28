@@ -1,11 +1,7 @@
 package delta.games.lotro.tools.utils.dat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.common.stats.ConstantStatProvider;
@@ -13,11 +9,11 @@ import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatUtils;
+import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.TieredScalableStatProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -34,11 +30,11 @@ public class DatStatUtils
    * Load a set of stats from some properties.
    * @param facade Data facade.
    * @param properties Properties to use to get stats.
-   * @return A possibly empty, but not <code>null</code> list of stats providers.
+   * @return A stats provider.
    */
-  public static List<StatProvider> buildStatProviders(DataFacade facade, PropertiesSet properties)
+  public static StatsProvider buildStatProviders(DataFacade facade, PropertiesSet properties)
   {
-    List<StatProvider> ret=new ArrayList<StatProvider>();
+    StatsProvider statsProvider=new StatsProvider();
     Object[] mods=(Object[])properties.getProperty("Mod_Array");
     if (mods!=null)
     {
@@ -63,11 +59,11 @@ public class DatStatUtils
             if ((minLevel!=null) || (maxLevel!=null))
             {
               RangedStatProvider rangedProvider=new RangedStatProvider(provider,minLevel,maxLevel);
-              ret.add(rangedProvider);
+              statsProvider.addStatProvider(rangedProvider);
             }
             else
             {
-              ret.add(provider);
+              statsProvider.addStatProvider(provider);
             }
           }
           else
@@ -79,7 +75,7 @@ public class DatStatUtils
               if (Math.abs(statValue)>0.001)
               {
                 ConstantStatProvider constantStat=new ConstantStatProvider(stat,statValue);
-                ret.add(constantStat);
+                statsProvider.addStatProvider(constantStat);
               }
             }
             else
@@ -90,31 +86,7 @@ public class DatStatUtils
         }
       }
     }
-    return ret;
-  }
-
-  /**
-   * Load a set of stats from some properties.
-   * @param level Level to use.
-   * @param facade Data facade.
-   * @param properties Properties to use to get stats.
-   * @return A set of stats or <code>null</code> if not enough data.
-   */
-  public static BasicStatsSet loadStats(int level, DataFacade facade, PropertiesSet properties)
-  {
-    List<StatProvider> providers=buildStatProviders(facade,properties);
-    BasicStatsSet ret=new BasicStatsSet();
-    for(StatProvider provider : providers)
-    {
-      Float statValue=provider.getStatValue(1,level);
-      if (statValue!=null)
-      {
-        STAT stat=provider.getStat();
-        float value=statValue.floatValue();
-        ret.addStat(stat,new FixedDecimalsInteger(value));
-      }
-    }
-    return ret;
+    return statsProvider;
   }
 
   /**
@@ -306,7 +278,7 @@ public class DatStatUtils
     if ("Combat_Agent_MountArmor_Value_Float".equals(name)) return null;
     if ("Combat_DamageQualifier_Magic_Defense".equals(name)) return null;
     if ("Combat_DamageQualifier_Melee_Defense".equals(name)) return null;
-    if ("Combat_DamageQualifier_Ranged_Defense".equals(name)) return null;
+    if ("Combat_DamageQualifier_Ranged_Defense".equals(name)) return STAT.RANGED_DEFENCE_PERCENTAGE;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Fire".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Frost".equals(name)) return null;

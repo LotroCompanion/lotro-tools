@@ -10,7 +10,9 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Armour;
@@ -231,14 +233,15 @@ public class MainDatItemsLoader
       }
       // Class requirements
       item.setRequiredClass(getRequiredClass(properties));
+      // Stats providers
+      StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      // Item fixes
+      itemFixes(item,statsProvider);
       // Stats
       if (level!=null)
       {
-        BasicStatsSet stats=DatStatUtils.loadStats(level.intValue(),_facade,properties);
-        if (stats!=null)
-        {
-          item.getStats().addStats(stats);
-        }
+        BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
+        item.getStats().addStats(stats);
       }
       if (item instanceof Weapon)
       {
@@ -250,6 +253,53 @@ public class MainDatItemsLoader
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
+  }
+
+  private void itemFixes(Item item, StatsProvider statsProvider)
+  {
+    if (item instanceof Weapon)
+    {
+      Weapon weapon=(Weapon)item;
+      WeaponType weaponType=weapon.getWeaponType();
+      if (weaponType==WeaponType.ONE_HANDED_SWORD)
+      {
+        // +1% parry
+        ConstantStatProvider provider=new ConstantStatProvider(STAT.PARRY_PERCENTAGE,1);
+        statsProvider.addStatProvider(provider);
+      }
+      else if (weaponType==WeaponType.TWO_HANDED_SWORD)
+      {
+        // +2% parry
+        ConstantStatProvider provider=new ConstantStatProvider(STAT.PARRY_PERCENTAGE,2);
+        statsProvider.addStatProvider(provider);
+      }
+    }
+    else if (item instanceof Armour)
+    {
+      Armour armour=(Armour)item;
+      ArmourType armourType=armour.getArmourType();
+      if (armourType==ArmourType.HEAVY_SHIELD)
+      {
+        // +10% Ranged defence
+        ConstantStatProvider provider=new ConstantStatProvider(STAT.RANGED_DEFENCE_PERCENTAGE,-10);
+        statsProvider.addStatProvider(provider);
+        // Critical defence
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879260945);
+        statsProvider.addStatProvider(critDef);
+      }
+      else if (armourType==ArmourType.SHIELD)
+      {
+        // Critical defence
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879211641);
+        statsProvider.addStatProvider(critDef);
+      }
+      else if (armourType==ArmourType.WARDEN_SHIELD)
+      {
+        // Critical defence
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879260947);
+        statsProvider.addStatProvider(critDef);
+      }
+    }
   }
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)

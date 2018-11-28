@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -72,11 +73,9 @@ public class MainDatRelicsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
-      BasicStatsSet stats=DatStatUtils.loadStats(level.intValue(),_facade,properties);
-      if (stats!=null)
-      {
-        relic.getStats().addStats(stats);
-      }
+      StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
+      relic.getStats().addStats(stats);
       // Required level
       Integer requiredLevel=(Integer)properties.getProperty("Runic_RequiredItemLevel");
       relic.setRequiredLevel(requiredLevel);
