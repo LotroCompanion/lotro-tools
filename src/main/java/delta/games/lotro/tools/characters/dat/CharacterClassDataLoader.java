@@ -177,6 +177,19 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         }
       }
     }
+    addImplicitDerivations(characterClass);
+  }
+
+  private void addImplicitDerivations(CharacterClass characterClass)
+  {
+    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.MELEE_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.RANGED_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.TACTICAL_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.PHYSICAL_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.TACTICAL_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    _derivatedStatsManager.setFactor(STAT.PHYSICAL_MITIGATION,STAT.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(STAT.TACTICAL_MASTERY,STAT.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
   }
 
   private float fixStatValue(STAT stat, float value)
