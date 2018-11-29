@@ -27,7 +27,10 @@ public class DatStatUtils
 {
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
-  private static ProgressionsManager _progressions=ProgressionsManager.getInstance();
+  /**
+   * Progressions manager.
+   */
+  public static ProgressionsManager _progressions=new ProgressionsManager();
 
   /**
    * Load a set of stats from some properties.

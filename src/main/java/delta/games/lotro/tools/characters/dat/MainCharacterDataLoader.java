@@ -10,10 +10,9 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.utils.maths.Progression;
-import delta.games.lotro.utils.maths.io.xml.ProgressionsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.utils.dat.DatStatUtils;
 
 /**
  * Loader for character data: classes, races, trait trees.
@@ -34,11 +33,7 @@ public class MainCharacterDataLoader
     new CharacterClassDataLoader(facade,traitsManager).doIt();
 
     // Save progressions
-    List<Progression> progressions=ProgressionsManager.getInstance().getAll();
-    int nbProgressions=progressions.size();
-    LOGGER.info("Writing "+nbProgressions+" progressions");
-    File progressionsFile=new File("../lotro-companion/data/lore/progressions.xml").getAbsoluteFile();
-    ProgressionsXMLWriter.write(progressionsFile,progressions);
+    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Save traits
     new TraitKeyGenerator(traitsManager).setup();
     File traitsFile=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();

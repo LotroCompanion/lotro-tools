@@ -33,6 +33,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
@@ -826,11 +827,13 @@ public class MainDatItemsLoader
         items.add(newItem);
       }
     }
-    // Write result file
+    // Save items
     File toFile=new File("../lotro-companion/data/lore/items_dat.xml").getAbsoluteFile();
     ItemXMLWriter writer=new ItemXMLWriter(true);
     Collections.sort(items,new ItemIdComparator());
     /*boolean ok=*/writer.writeItems(toFile,items,EncodingNames.UTF_8);
+    // Save progressions
+    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
   }
 
   /**
