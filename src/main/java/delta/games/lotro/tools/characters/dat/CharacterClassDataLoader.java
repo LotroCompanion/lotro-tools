@@ -117,7 +117,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         STAT stat=getStatFromVitalType(type.intValue());
         if (stat!=null)
         {
-          stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+          if (useStartStat(stat))
+          {
+            stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+          }
         }
         else
         {
@@ -134,7 +137,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         STAT stat=getStatFromStatType(type.intValue());
         if (stat!=null)
         {
-          stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+          if (useStartStat(stat))
+          {
+            stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+          }
         }
         else
         {
@@ -143,6 +149,12 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       }
       _startStatsManager.setStats(characterClass,level,stats);
     }
+  }
+
+  private boolean useStartStat(STAT stat)
+  {
+    if (stat.name().indexOf("WARSTEED")!=-1) return false;
+    return true;
   }
 
   private void loadStatDerivations(CharacterClass characterClass, PropertiesSet properties)
