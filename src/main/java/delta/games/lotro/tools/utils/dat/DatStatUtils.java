@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.utils.dat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.STAT;
@@ -38,6 +41,7 @@ public class DatStatUtils
     Object[] mods=(Object[])properties.getProperty("Mod_Array");
     if (mods!=null)
     {
+      Map<STAT,RangedStatProvider> rangedStatProviders=null;
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
@@ -46,25 +50,14 @@ public class DatStatUtils
         STAT stat=DatStatUtils.getStatFromName(def.getName());
         if (stat!=null)
         {
+          StatProvider provider=null;
           Number value=null;
           // Always 7 for "add"?
           //Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
           Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
           if (progressId!=null)
           {
-            StatProvider provider=buildStatProvider(facade,stat,progressId.intValue());
-
-            Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
-            Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
-            if ((minLevel!=null) || (maxLevel!=null))
-            {
-              RangedStatProvider rangedProvider=new RangedStatProvider(provider,minLevel,maxLevel);
-              statsProvider.addStatProvider(rangedProvider);
-            }
-            else
-            {
-              statsProvider.addStatProvider(provider);
-            }
+            provider=buildStatProvider(facade,stat,progressId.intValue());
           }
           else
           {
@@ -74,13 +67,34 @@ public class DatStatUtils
               float statValue=StatUtils.fixStatValue(stat,value.floatValue());
               if (Math.abs(statValue)>0.001)
               {
-                ConstantStatProvider constantStat=new ConstantStatProvider(stat,statValue);
-                statsProvider.addStatProvider(constantStat);
+                provider=new ConstantStatProvider(stat,statValue);
               }
             }
             else
             {
               LOGGER.warn("No progression ID and no direct value...");
+            }
+          }
+          if (provider!=null)
+          {
+            Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
+            Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
+            if ((minLevel!=null) || (maxLevel!=null))
+            {
+              RangedStatProvider rangedProvider=null;
+              if (rangedStatProviders==null) rangedStatProviders=new HashMap<STAT,RangedStatProvider>();
+              rangedProvider=rangedStatProviders.get(stat);
+              if (rangedProvider==null)
+              {
+                rangedProvider=new RangedStatProvider(stat);
+                rangedStatProviders.put(stat,rangedProvider);
+                statsProvider.addStatProvider(rangedProvider);
+              }
+              rangedProvider.addRange(minLevel,maxLevel,provider);
+            }
+            else
+            {
+              statsProvider.addStatProvider(provider);
             }
           }
         }
