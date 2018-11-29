@@ -2,11 +2,13 @@ package delta.games.lotro.tools.lore.items.dat;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
@@ -26,6 +28,7 @@ import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
@@ -235,6 +238,7 @@ public class MainDatItemsLoader
       item.setRequiredClass(getRequiredClass(properties));
       // Stats providers
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      item.setStatsProvider(statsProvider);
       // Item fixes
       itemFixes(item,statsProvider);
       // Stats
@@ -824,7 +828,9 @@ public class MainDatItemsLoader
     }
     // Write result file
     File toFile=new File("../lotro-companion/data/lore/items_dat.xml").getAbsoluteFile();
-    ItemXMLWriter.writeItemsFile(toFile,items);
+    ItemXMLWriter writer=new ItemXMLWriter(true);
+    Collections.sort(items,new ItemIdComparator());
+    /*boolean ok=*/writer.writeItems(toFile,items,EncodingNames.UTF_8);
   }
 
   /**
