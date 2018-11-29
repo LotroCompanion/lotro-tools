@@ -1,10 +1,8 @@
 package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
-import java.util.List;
 
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -55,12 +53,8 @@ public class TraitLoader
       //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
 
       // Stats
-      StatsProvider statsProvider=ret.getStatsProvider();
-      List<StatProvider> providers=DatStatUtils.buildStatProviders(facade,traitProperties);
-      for(StatProvider provider : providers)
-      {
-        statsProvider.addStatProvider(provider);
-      }
+      StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
+      ret.setStatsProvider(statsProvider);
       // Build icon file
       File to=new File("data/icons/traits/"+iconId+".png").getAbsoluteFile();
       if (!to.exists())
