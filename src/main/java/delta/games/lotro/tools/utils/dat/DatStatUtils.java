@@ -179,7 +179,11 @@ public class DatStatUtils
     if ("Combat_FinessePoints_Modifier".equals(name)) return STAT.FINESSE;
     if ("LoE_Light_Modifier".equals(name)) return STAT.LIGHT_OF_EARENDIL;
     if ("Resist_ClassPoints_Resistance_TheOneResistance".equals(name)) return STAT.RESISTANCE;
+    if ("Combat_DamageQualifier_Melee_Defense".equals(name)) return STAT.MELEE_DEFENCE_PERCENTAGE;
+    if ("Combat_DamageQualifier_Magic_Defense".equals(name)) return STAT.TACTICAL_DEFENCE_PERCENTAGE;
+    if ("Combat_DamageQualifier_Ranged_Defense".equals(name)) return STAT.RANGED_DEFENCE_PERCENTAGE;
     if ("Combat_Unified_Critical_Defense".equals(name)) return STAT.CRITICAL_DEFENCE;
+    if ("Combat_Unified_Critical_Defense_Percent_Mod".equals(name)) return STAT.CRITICAL_DEFENCE_PERCENTAGE;
     // Combat_Unified_Critical_Defense_Percent_Mod for melee/ranged/tactical crit defense % (Exacting Wards)
     if ("Combat_BlockPoints_Modifier".equals(name)) return STAT.BLOCK;
     if ("Combat_BlockChanceModifier".equals(name)) return STAT.BLOCK_PERCENTAGE;
@@ -273,12 +277,9 @@ public class DatStatUtils
     // Other unsupported stats
     if ("Burglar_Skill_CriticalMagnitude".equals(name)) return null;
     if ("Burglar_Skill_Gamble_Chance".equals(name)) return null;
-    if ("CombatStateMod_CC_DurationMultModifier".equals(name)) return null;
+    if ("CombatStateMod_CC_DurationMultModifier".equals(name)) return null; // Crowd Control Duration (see Audacity)
     if ("Combat_Agent_Armor_Value_Float".equals(name)) return null;
     if ("Combat_Agent_MountArmor_Value_Float".equals(name)) return null;
-    if ("Combat_DamageQualifier_Magic_Defense".equals(name)) return null;
-    if ("Combat_DamageQualifier_Melee_Defense".equals(name)) return null;
-    if ("Combat_DamageQualifier_Ranged_Defense".equals(name)) return STAT.RANGED_DEFENCE_PERCENTAGE;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Fire".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Frost".equals(name)) return null;
