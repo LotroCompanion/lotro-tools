@@ -28,7 +28,6 @@ import delta.common.ui.swing.GuiFactory;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemQuality;
-import delta.games.lotro.lore.items.stats.ScaledArmourComputer;
 
 /**
  * Controller for armour stat charts.
@@ -41,7 +40,7 @@ public class ScalableStatChartController
   private JFreeChart _chart;
   private ArmourType _type;
   private EquipmentLocation _location;
-  private ScaledArmourComputer _computer;
+  //private ScaledArmourComputer _computer;
 
   /**
    * Constructor.
@@ -52,7 +51,7 @@ public class ScalableStatChartController
   {
     _type=type;
     _location=location;
-    _computer=new ScaledArmourComputer();
+    //_computer=new ScaledArmourComputer();
   }
 
   private String getTitle() {
@@ -170,7 +169,7 @@ public class ScalableStatChartController
     for(int i=0;i<levels.length;i++)
     {
       int level=levels[i];
-      double value=_computer.getArmour(level,_type,_location,quality,1);
+      double value=1;/*_computer.getArmour(level,_type,_location,quality,1);*/
       toonSeries.add(level,value);
     }
     data.addSeries(toonSeries);
