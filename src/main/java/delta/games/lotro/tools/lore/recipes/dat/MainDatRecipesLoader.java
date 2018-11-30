@@ -2,17 +2,15 @@ package delta.games.lotro.tools.lore.recipes.dat;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
@@ -47,32 +45,6 @@ public class MainDatRecipesLoader
   public MainDatRecipesLoader(DataFacade facade)
   {
     _facade=facade;
-  }
-
-  private Map<Integer,List<Integer>> loadProfessionIndex(int indexDataId)
-  {
-    Map<Integer,List<Integer>> ret=new HashMap<Integer,List<Integer>>();
-    PropertiesSet properties=_facade.loadProperties(indexDataId);
-    if (properties!=null)
-    {
-      Object[] tiersPropertiesGen=(Object[])properties.getProperty("CraftProfession_TierArray");
-      for(Object tierPropertiesGen : tiersPropertiesGen)
-      {
-        PropertiesSet tierProperties=(PropertiesSet)tierPropertiesGen;
-        Integer tier=(Integer)tierProperties.getProperty("CraftProfession_Tier");
-        Object[] recipeDataIdsGen=(Object[])tierProperties.getProperty("CraftProfession_RecipeArray");
-        if ((tier!=null) && (recipeDataIdsGen!=null))
-        {
-          List<Integer> recipeIds=new ArrayList<Integer>();
-          for(Object recipeDataIdGen : recipeDataIdsGen)
-          {
-            recipeIds.add((Integer)recipeDataIdGen);
-          }
-          ret.put(tier,recipeIds);
-        }
-      }
-    }
-    return ret;
   }
 
   private Recipe load(int indexDataId)
@@ -357,27 +329,24 @@ public class MainDatRecipesLoader
     scanAll(recipesManager);
     int nbRecipes=recipesManager.getRecipesCount();
     System.out.println("Found: "+nbRecipes+" recipes.");
-    File out=new File("../lotro-companion/data/lore/recipes_dat.xml");
+    File out=new File("../lotro-companion/data/lore/recipes.xml");
     recipesManager.writeToFile(out);
   }
 
   private void scanAll(RecipesManager recipesManager)
   {
     int nb=0;
-    Set<Integer> done=new HashSet<Integer>();
-    List<Integer> recipeDataIds=loadIndexedRecipeIds();
-    List<Integer> legacyDataIds=loadLorebookRecipeIds();
-    Set<Integer> ids=new HashSet<Integer>();
-    ids.addAll(recipeDataIds);
-    ids.addAll(legacyDataIds);
-    for(Integer recipeDataId : ids)
+    for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
-      for(int i=recipeDataId.intValue()-10000;i<recipeDataId.intValue()+10000;i++)
+      byte[] data=_facade.loadData(i);
+      if (data!=null)
       {
-        Integer key=Integer.valueOf(i);
-        if (!done.contains(key))
+        //int did=BufferUtils.getDoubleWordAt(data,0);
+        int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
+        //System.out.println(classDefIndex);
+        if (classDefIndex==1024)
         {
-          Recipe recipe=tryId(i);
+          Recipe recipe=load(i);
           if (recipe!=null)
           {
             recipesManager.registerRecipe(recipe);
@@ -385,78 +354,8 @@ public class MainDatRecipesLoader
             System.out.println(i+" => "+nb);
           }
         }
-        done.add(key);
       }
     }
-  }
-
-  private Recipe tryId(int id)
-  {
-    Recipe recipe=null;
-    PropertiesSet props=_facade.loadProperties(id+0x09000000);
-    if (props!=null)
-    {
-      Object category=props.getProperty("CraftRecipe_UICategory");
-      if (category!=null)
-      {
-        recipe=load(id);
-      }
-    }
-    return recipe;
-  }
-
-  /*
-  private void useIndexes(RecipesManager recipesManager)
-  {
-    List<Integer> recipeDataIds=loadIndexedRecipeIds();
-    for(Integer recipeDataId : recipeDataIds)
-    {
-      Recipe recipe=load(recipeDataId.intValue());
-      if (recipe!=null)
-      {
-        recipesManager.registerRecipe(recipe);
-      }
-    }
-  }
-  */
-
-  private List<Integer> loadLorebookRecipeIds()
-  {
-    RecipesManager manager=new RecipesManager();
-    File fromFile=new File("data/recipes/resolvedLegacyRecipes.xml");
-    manager.loadRecipesFromFile(fromFile);
-    List<Integer> ret=new ArrayList<Integer>();
-    for(Recipe recipe : manager.getAll())
-    {
-      int id=recipe.getIdentifier();
-      if (id!=0)
-      {
-        ret.add(Integer.valueOf(id));
-      }
-    }
-    Collections.sort(ret);
-    return ret;
-  }
-
-  private List<Integer> loadIndexedRecipeIds()
-  {
-    List<Integer> ret=new ArrayList<Integer>();
-    int nbProfessions=PROFESSIONS.length;
-    for(int i=0;i<nbProfessions;i++)
-    {
-      // Load profession index
-      int indexDataId=INDEX[i];
-      if (indexDataId!=0)
-      {
-        Map<Integer,List<Integer>> map=loadProfessionIndex(indexDataId);
-        for(Integer tier : map.keySet())
-        {
-          List<Integer> recipedDataIds=map.get(tier);
-          ret.addAll(recipedDataIds);
-        }
-      }
-    }
-    return ret;
   }
 
   private Map<Integer,Integer> loadXpMapping()
