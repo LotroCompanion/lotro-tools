@@ -17,6 +17,7 @@ import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
@@ -25,7 +26,6 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.comparators.ItemIdComparator;
@@ -47,6 +47,7 @@ public class MainDatItemsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsLoader.class);
 
+  private static final int[] TYPES={2097, 2814, 799, 798, 797, 796, 795, /*794,*/ 804, 805, 802, 3663, 803, 815, 1722, 3924 };
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
@@ -70,22 +71,25 @@ public class MainDatItemsLoader
     if (properties!=null)
     {
       _currentId=indexDataId;
-      _currentItem=ItemsManager.getInstance().getItem(_currentId);
       _debug=(_currentId==1879000000);
       if (_debug)
       {
         FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
         System.out.println(properties.dump());
       }
+      Integer itemClassInt=(Integer)properties.getProperty("Item_Class");
+      String name=DatUtils.getStringProperty(properties,"Name");
+      name=DatUtils.fixName(name);
+      if (!useItem(name,itemClassInt)) return null;
       nb++;
       item=buildItem(properties);
-      int itemClass=((Integer)properties.getProperty("Item_Class")).intValue();
+      _currentItem=item;
       // ID
       item.setIdentifier(indexDataId);
       // Name
-      String name=DatUtils.getStringProperty(properties,"Name");
-      name=DatUtils.fixName(name);
       item.setName(name);
+      // Item class
+      int itemClass=itemClassInt.intValue();
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
@@ -258,6 +262,18 @@ public class MainDatItemsLoader
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
+  }
+
+  private boolean useItem(String name, Integer itemClassInt)
+  {
+    if (name==null) return false;
+    if (itemClassInt==null) return false;
+    if ((name.startsWith("DNT")) || (name.contains("TBD"))) return false;
+    if (name.contains("Tester")) return false;
+    if (name.contains("Barter Test")) return false;
+    int itemClass=itemClassInt.intValue();
+    if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
+    return true;
   }
 
   private void itemFixes(Item item, StatsProvider statsProvider)
@@ -568,7 +584,7 @@ public class MainDatItemsLoader
     }
     else
     {
-      System.out.println("Unmanaged equipment category " + equipmentCategory+" for: "+_currentItem);
+      System.out.println("Unmanaged equipment category " + equipmentCategory+" for: "+_currentId);
     }
     // Legendary stuff?
     Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
@@ -671,10 +687,9 @@ public class MainDatItemsLoader
         }
       }
       String name=_currentItem.getName();
-      int id=_currentId;
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
-      System.out.println(id+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
+      System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
   }
 
@@ -812,19 +827,38 @@ public class MainDatItemsLoader
     }
   }
 
+  private boolean useId(int id)
+  {
+    byte[] data=_facade.loadData(id);
+    if (data!=null)
+    {
+      //int did=BufferUtils.getDoubleWordAt(data,0);
+      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
+      for(int i=0;i<TYPES.length;i++)
+      {
+        if (TYPES[i]==classDefIndex)
+        {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   private void doIt()
   {
     List<Item> items=new ArrayList<Item>();
-    ItemsManager itemsManager=ItemsManager.getInstance();
-    List<Item> refItems=itemsManager.getAllItems();
-    int nbTotal=refItems.size();
-    for(int i=0;i<nbTotal;i++)
+
+    for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
-      int id=refItems.get(i).getIdentifier();
-      Item newItem=load(id);
-      if (newItem!=null)
+      boolean useIt=useId(id);
+      if (useIt)
       {
-        items.add(newItem);
+        Item newItem=load(id);
+        if (newItem!=null)
+        {
+          items.add(newItem);
+        }
       }
     }
     // Save items
