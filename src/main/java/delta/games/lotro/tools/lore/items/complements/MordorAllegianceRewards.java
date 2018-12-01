@@ -1,16 +1,11 @@
 package delta.games.lotro.tools.lore.items.complements;
 
-import delta.games.lotro.lore.items.ArmourType;
-import delta.games.lotro.lore.items.ItemBinding;
-
 /**
  * Adds complements on the rewards of the Allegiance quests (chapter 4 and 7 for each race).
  * @author DAM
  */
 public class MordorAllegianceRewards
 {
-  private static final Integer MIN_LEVEL=Integer.valueOf(106);
-
   private FactoryCommentsInjector _injector;
 
   /**
@@ -46,8 +41,6 @@ public class MordorAllegianceRewards
       String ringComment="Dwarves Allegiance Quest: Chapter 4: Treachery in Mordor";
       int[] rings=new int[]{ 1879354795, 1879354797, 1879354801, 1879354803, 1879354810, 1879354812 };
       _injector.injectComment(ringComment,rings);
-      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,rings);
-      _injector.injectMinLevel(MIN_LEVEL,rings);
     }
 
     // Cloaks
@@ -61,9 +54,6 @@ public class MordorAllegianceRewards
       String cloakComment="Dwarves Allegiance Quest: Chapter 7: A True Friend of Durin's Folk";
       int[] cloaks=new int[]{ 1879354776, 1879354777, 1879354781, 1879354785, 1879354788, 1879354792 };
       _injector.injectComment(cloakComment,cloaks);
-      _injector.injectArmourType(ArmourType.LIGHT,cloaks);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
-      _injector.injectMinLevel(MIN_LEVEL,cloaks);
     }
   }
 
@@ -80,8 +70,6 @@ public class MordorAllegianceRewards
       String ringComment="Elves Allegiance Quest: Chapter 4: The Wandering and the Lost";
       int[] rings=new int[]{ 1879354793, 1879354798, 1879354799, 1879354802, 1879354804, 1879354816 };
       _injector.injectComment(ringComment,rings);
-      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,rings);
-      _injector.injectMinLevel(MIN_LEVEL,rings);
     }
 
     // Cloaks
@@ -95,9 +83,6 @@ public class MordorAllegianceRewards
       String cloakComment="Elves Allegiance Quest: Chapter 7: Chapter 7: The Bow is Drawn";
       int[] cloaks=new int[]{ 1879354769, 1879354770, 1879354771, 1879354784, 1879354787, 1879354790 };
       _injector.injectComment(cloakComment,cloaks);
-      _injector.injectArmourType(ArmourType.LIGHT,cloaks);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
-      _injector.injectMinLevel(MIN_LEVEL,cloaks);
     }
   }
 
@@ -114,8 +99,6 @@ public class MordorAllegianceRewards
       String ringComment="Men Allegiance Quest: Chapter 4: Judgements of the King";
       int[] rings=new int[]{ 1879354796, 1879354800, 1879354807, 1879354808, 1879354809, 1879354815 };
       _injector.injectComment(ringComment,rings);
-      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,rings);
-      _injector.injectMinLevel(MIN_LEVEL,rings);
     }
 
     // Cloaks
@@ -129,9 +112,6 @@ public class MordorAllegianceRewards
       String cloakComment="Men Allegiance Quest: Chapter 7: A True Friend of Gondor";
       int[] cloaks=new int[]{ 1879354772, 1879354775, 1879354779, 1879354782, 1879354786, 1879354789 };
       _injector.injectComment(cloakComment,cloaks);
-      _injector.injectArmourType(ArmourType.LIGHT,cloaks);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
-      _injector.injectMinLevel(MIN_LEVEL,cloaks);
     }
   }
 
@@ -148,8 +128,6 @@ public class MordorAllegianceRewards
       String ringComment="Hobbits Allegiance Quest: Chapter 4: Deeper In";
       int[] rings=new int[]{ 1879354794, 1879354805, 1879354806, 1879354811, 1879354813, 1879354814 };
       _injector.injectComment(ringComment,rings);
-      _injector.injectBinding(ItemBinding.BIND_ON_ACQUIRE,rings);
-      _injector.injectMinLevel(MIN_LEVEL,rings);
     }
 
     // Cloaks
@@ -163,9 +141,6 @@ public class MordorAllegianceRewards
       String cloakComment="Hobbits Allegiance Quest: Chapter 7: World Behind and Home Ahead";
       int[] cloaks=new int[]{ 1879354773, 1879354774, 1879354778, 1879354780, 1879354783, 1879354791 };
       _injector.injectComment(cloakComment,cloaks);
-      _injector.injectArmourType(ArmourType.LIGHT,cloaks);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,cloaks);
-      _injector.injectMinLevel(MIN_LEVEL,cloaks);
     }
   }
 }

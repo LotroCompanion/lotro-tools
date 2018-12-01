@@ -1,9 +1,5 @@
 package delta.games.lotro.tools.lore.items.complements;
 
-import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.lore.items.ArmourType;
-import delta.games.lotro.lore.items.ItemBinding;
-
 /**
  * Adds complements on armour sets from the 'Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor)'.
  * @author DAM
@@ -13,7 +9,6 @@ public class GorgorothScoutGearRewardsVendor
   private static final String ARMOR_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 2500 ash";
   private static final String INCOMPARABLE_WEAPONS_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Rewards Vendor) ; Abyss of Mordath Tier 2 ; 1750 ash";
   private static final String RARE_COMMENT="Master of Mordor Lore (Gorgoroth Scout's Gear Scout's Vendor) ; Abyss of Mordath Tier 1 ; 700 ash";
-  private static final Integer MIN_LEVEL=Integer.valueOf(115);
 
   private FactoryCommentsInjector _injector;
 
@@ -55,10 +50,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362536 Changeling's Hauberk of the Abyss
       int[] items=new int[]{ 1879362530, 1879362532, 1879362533, 1879362534, 1879362536 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BEORNING,items);
     }
     // Berserker's armour
     {
@@ -69,10 +60,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362572 Berserker's Hauberk of the Abyss
       int[] items=new int[]{ 1879362564, 1879362566, 1879362569, 1879362571, 1879362572 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BEORNING,items);
     }
     // Weald-guard's armour
     {
@@ -83,10 +70,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362573 Weald-guard's Boots of the Abyss
       int[] items=new int[]{ 1879362563, 1879362567, 1879362568, 1879362570, 1879362573 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BEORNING,items);
     }
   }
 
@@ -101,10 +84,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362723 Gambler's Gages of the Abyss
       int[] items=new int[]{ 1879362610, 1879362675, 1879362698, 1879362699, 1879362723 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BURGLAR,items);
     }
     // Blade's armour
     {
@@ -115,10 +94,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362707 Blade's Gages of the Abyss
       int[] items=new int[]{ 1879362605, 1879362639, 1879362651, 1879362667, 1879362707 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BURGLAR,items);
     }
     // Troublemaker's armour
     {
@@ -129,10 +104,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362661 Troublemaker's Boots of the Abyss
       int[] items=new int[]{ 1879362614, 1879362618, 1879362641, 1879362655, 1879362661 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.BURGLAR,items);
     }
   }
 
@@ -147,10 +118,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362715 Stalker's Camail of the Abyss
       int[] items=new int[]{ 1879362625, 1879362645, 1879362689, 1879362701, 1879362715 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.HUNTER,items);
     }
     // Archer's armour
     {
@@ -161,10 +128,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362747 Archer's Gages of the Abyss
       int[] items=new int[]{ 1879362636, 1879362643, 1879362670, 1879362738, 1879362747 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.HUNTER,items);
     }
     // Trapper's armour
     {
@@ -175,10 +138,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362741 Trapper's Leggings of the Abyss
       int[] items=new int[]{ 1879362592, 1879362616, 1879362638, 1879362713, 1879362741 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.HUNTER,items);
     }
   }
 
@@ -193,10 +152,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362712 Stalwart Boots of the Abyss
       int[] items=new int[]{ 1879362635, 1879362654, 1879362677, 1879362679, 1879362712 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.WARDEN,items);
     }
     // Strident armour
     {
@@ -207,10 +162,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362724 Strident Gages of the Abyss
       int[] items=new int[]{ 1879362601, 1879362687, 1879362710, 1879362718, 1879362724 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.WARDEN,items);
     }
     // Lancer's armour
     {
@@ -221,10 +172,6 @@ public class GorgorothScoutGearRewardsVendor
       // 1879362696 Lancer's Gages of the Abyss
       int[] items=new int[]{ 1879362603, 1879362608, 1879362632, 1879362665, 1879362696 };
       _injector.injectComment(ARMOR_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      _injector.injectCharacterClass(CharacterClass.WARDEN,items);
     }
   }
 
@@ -247,13 +194,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879350197, 1879364276, 1879364220, 1879364222, 1879364201, 1879364185,
           1879364274, 1879364188, 1879349992, 1879364295, 1879364227, 1879364288 };
       _injector.injectComment(RARE_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      for(int i=0;i<items.length;i++)
-      {
-        _injector.shareStats(items[i]);
-      }
     }
     // Agility
     {
@@ -272,13 +212,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879364263, 1879350030, 1879364193, 1879364281, 1879364279, 1879364267,
           1879350138, 1879350282, 1879364245, 1879364199, 1879364206, 1879364248 };
       _injector.injectComment(RARE_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
-      _injector.injectArmourType(ArmourType.MEDIUM,items);
-      for(int i=0;i<items.length;i++)
-      {
-        _injector.shareStats(items[i]);
-      }
     }
   }
 
@@ -303,8 +236,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879360475, 1879360428, 1879360515, 1879360422,
           1879360420, 1879360410, 1879360441, 1879360508 };
       _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
     }
 
     // Wyrm
@@ -320,8 +251,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879360451, 1879360478, 1879360486, 1879360414,
           1879360459, 1879360453, 1879360443, 1879360403 };
       _injector.injectComment(INCOMPARABLE_WEAPONS_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
     }
   }
 
@@ -340,8 +269,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879360418, 1879360433, 1879360498, 1879360468,
           1879360454, 1879360471, 1879360500, 1879360448 };
       _injector.injectComment(RARE_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
     }
 
     // Wyrm
@@ -357,8 +284,6 @@ public class GorgorothScoutGearRewardsVendor
       int[] items=new int[]{ 1879360489, 1879360511, 1879360458, 1879360406,
           1879360488, 1879360457, 1879360446, 1879360496 };
       _injector.injectComment(RARE_COMMENT,items);
-      _injector.injectBinding(ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE,items);
-      _injector.injectMinLevel(MIN_LEVEL,items);
     }
   }
 }
