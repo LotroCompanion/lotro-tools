@@ -207,14 +207,6 @@ public class MainDatItemsLoader
       Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
       if ((armourValue!=null) && (armourValue.intValue()>0))
       {
-        if (item instanceof Armour)
-        {
-          ((Armour)item).setArmourValue(armourValue.intValue());
-        }
-        else
-        {
-          item.getStats().setStat(STAT.ARMOUR,armourValue.intValue());
-        }
         // Armour progression...
         Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
         if (armourProgressId!=null)

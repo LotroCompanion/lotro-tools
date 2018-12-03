@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -12,6 +13,7 @@ import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.Legendary;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Performs consistency checks on a collection of items.
@@ -54,8 +56,8 @@ public class ConsistencyChecks
       if (item instanceof Armour)
       {
         Armour armour=(Armour)item;
-        int armourValue=armour.getArmourValue();
-        if (armourValue==0)
+        FixedDecimalsInteger armourValue=armour.getStats().getStat(STAT.ARMOUR);
+        if (armourValue==null)
         {
           nbMissingArmourValues++;
           //System.out.println("No armour value for: " + name + " (" + id + ')');
@@ -128,14 +130,6 @@ public class ConsistencyChecks
         if (stats.getStatsCount()==0)
         {
           ok=false;
-          if (item instanceof Armour)
-          {
-            Armour armour=(Armour)item;
-            if (armour.getArmourValue()!=0)
-            {
-              ok=true;
-            }
-          }
         }
         if (!ok)
         {
