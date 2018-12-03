@@ -203,6 +203,7 @@ public class MainDatItemsLoader
         classifyEssence(item,properties);
       }
       // Armour value
+      StatProvider armorStatProvider=null;
       Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
       if ((armourValue!=null) && (armourValue.intValue()>0))
       {
@@ -218,8 +219,7 @@ public class MainDatItemsLoader
         Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
         if (armourProgressId!=null)
         {
-          //ItemLevelProgression itemLevelProgression=buildItemLevelProgression(properties);
-          StatProvider armorStatProvider=DatStatUtils.buildStatProvider(_facade,STAT.ARMOUR,armourProgressId.intValue());
+          armorStatProvider=DatStatUtils.buildStatProvider(_facade,STAT.ARMOUR,armourProgressId.intValue());
           Float computedArmourValue=armorStatProvider.getStatValue(1,level.intValue());
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
           {
@@ -243,6 +243,10 @@ public class MainDatItemsLoader
       item.setRequiredClass(getRequiredClass(properties));
       // Stats providers
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      if (armorStatProvider!=null)
+      {
+        statsProvider.addStatProvider(armorStatProvider);
+      }
       item.setStatsProvider(statsProvider);
       // Item fixes
       itemFixes(item,statsProvider);
