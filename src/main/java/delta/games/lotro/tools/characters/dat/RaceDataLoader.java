@@ -13,6 +13,7 @@ import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -47,7 +48,7 @@ public class RaceDataLoader
   {
     PropertiesSet properties=_facade.loadProperties(racePropertiesId+0x9000000);
     int raceId=((Integer)properties.getProperty("RaceTable_Race")).intValue();
-    System.out.println(raceId);
+    //System.out.println(raceId);
     Race race=getRaceFromRaceId(raceId);
     RaceDescription raceDescription=new RaceDescription(race);
     /*
@@ -88,43 +89,42 @@ RaceTable_NationalityList:
 
   private void loadGenders(RaceDescription description, PropertiesSet properties)
   {
+    Race race=description.getRace();
     Object[] gendersProperties=(Object[])properties.getProperty("RaceTable_GenderList");
     PropertiesSet maleProperties=(PropertiesSet)gendersProperties[0];
-    RaceGender male=buildGender(maleProperties);
+    RaceGender male=buildGender(race,CharacterSex.MALE,maleProperties);
     description.setMaleGender(male);
     if (gendersProperties.length>1)
     {
       PropertiesSet femaleProperties=(PropertiesSet)gendersProperties[1];
-      RaceGender female=buildGender(femaleProperties);
+      RaceGender female=buildGender(race,CharacterSex.FEMALE,femaleProperties);
       description.setFemaleGender(female);
     }
   }
 
-  private RaceGender buildGender(PropertiesSet genderProperties)
+  private RaceGender buildGender(Race race, CharacterSex sex, PropertiesSet genderProperties)
   {
     RaceGender gender=new RaceGender();
+    // Name
     String name=DatUtils.getStringProperty(genderProperties,"RaceTable_Gender_Name");
     gender.setName(name);
-    System.out.println(name);
+    // Icons
     int iconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
     gender.setIconId(iconId);
-    {
-      File selectIconFile=new File("races/select-"+name+".png").getAbsoluteFile();
-      DatIconsUtils.buildImageFile(_facade,iconId,selectIconFile);
-    }
     int largeIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_LargeIcon")).intValue();
     gender.setLargeIconId(largeIconId);
-    {
-      File selectIconFile=new File("races/selectLarge-"+name+".png").getAbsoluteFile();
-      DatIconsUtils.buildImageFile(_facade,largeIconId,selectIconFile);
-    }
+    File largeIconFile=getIconFile(race,sex);
+    DatIconsUtils.buildImageFile(_facade,largeIconId,largeIconFile);
     int smallIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
     gender.setSmallIconId(smallIconId);
-    {
-      File selectIconFile=new File("races/selectSmall-"+name+".png").getAbsoluteFile();
-      DatIconsUtils.buildImageFile(_facade,smallIconId,selectIconFile);
-    }
     return gender;
+  }
+
+  private File getIconFile(Race race, CharacterSex sex) {
+    String raceIconPath=race.getIconPath();
+    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/races");
+    File iconFile=new File(rootDir,raceIconPath+"_"+sex.getKey().toLowerCase()+".png").getAbsoluteFile();
+    return iconFile;
   }
 
   private void loadCharacteristics(RaceDescription description, PropertiesSet properties)
