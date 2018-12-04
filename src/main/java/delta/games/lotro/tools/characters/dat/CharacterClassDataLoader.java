@@ -72,12 +72,12 @@ public class CharacterClassDataLoader
     // Icons
     // Normal size (48 pixels)
     int classIconId=((Integer)classInfo.getProperty("AdvTable_ClassIcon")).intValue();
-    File classIconFile=new File(className+".png").getAbsoluteFile();
+    File classIconFile=getIconFile(characterClass,"compact");
     DatIconsUtils.buildImageFile(_facade,classIconId,classIconFile);
     classDescription.setIconId(classIconId);
     // Small size (32 pixels)
     int classSmallIconId=((Integer)classInfo.getProperty("AdvTable_ClassSmallIcon")).intValue();
-    File smallClassIconFile=new File("small-"+className+".png").getAbsoluteFile();
+    File smallClassIconFile=getIconFile(characterClass,"small");
     DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
     classDescription.setSmallIconId(classIconId);
 
@@ -96,6 +96,13 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     // Class deeds?
     // AdvTable_AccomplishmentDirectory: 1879064046
     _classes.add(classDescription);
+  }
+
+  private File getIconFile(CharacterClass characterClass, String size) {
+    String classIconPath=characterClass.getIconPath();
+    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/classes");
+    File iconFile=new File(rootDir,size+"/"+classIconPath+".png").getAbsoluteFile();
+    return iconFile;
   }
 
   private void loadInitialStats(CharacterClass characterClass, PropertiesSet properties)
