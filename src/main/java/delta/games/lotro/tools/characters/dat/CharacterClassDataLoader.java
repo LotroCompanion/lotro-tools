@@ -190,6 +190,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
               {
                 //System.out.println(sourceStat+"*"+value+" => "+targetStat);
                 _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,new FixedDecimalsInteger(value));
+                if (targetStat==STAT.TACTICAL_MASTERY)
+                {
+                  _derivatedStatsManager.setFactor(sourceStat,STAT.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(value));
+                }
               }
             }
           }
