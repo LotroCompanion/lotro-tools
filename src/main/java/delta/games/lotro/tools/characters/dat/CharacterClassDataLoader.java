@@ -154,6 +154,59 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
           LOGGER.warn("Stat not found (2): "+type);
         }
       }
+      // Regen
+      // ICPR
+      if (characterClass!=CharacterClass.BEORNING)
+      {
+        stats.setStat(STAT.ICPR,new FixedDecimalsInteger(240));
+      }
+      // OCPR
+      if (characterClass!=CharacterClass.BEORNING)
+      {
+        int ocpr=75;
+        if (level>=3) ocpr=90;
+        if (level>=8) ocpr=105;
+        if (level>=26) ocpr=120;
+        stats.setStat(STAT.OCPR,new FixedDecimalsInteger(ocpr));
+      }
+      // OCMR
+      if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
+      {
+        int ocmr=120;
+        if (level>=4) ocmr=180;
+        if (level>=10) ocmr=240;
+        if (level>=31) ocmr=300;
+        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+      }
+      else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
+      {
+        int ocmr=60;
+        if (level>=2) ocmr=120;
+        if (level>=6) ocmr=180;
+        if (level>=16) ocmr=240;
+        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+      }
+      else
+      {
+        int ocmr=60;
+        if (level>=5) ocmr=120;
+        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+      }
+      // ICMR
+      int icmr;
+      if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
+      {
+        icmr=(int)(91.25 + level * 0.75);
+      }
+      else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
+      {
+        icmr=(int)(80.5 + level * (2/3));
+      }
+      else
+      {
+        icmr=(int)(71.1 + level * 0.6);
+      }
+      stats.setStat(STAT.ICMR,new FixedDecimalsInteger(icmr));
       _startStatsManager.setStats(characterClass,level,stats);
     }
   }
