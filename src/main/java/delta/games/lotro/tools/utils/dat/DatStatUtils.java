@@ -10,6 +10,7 @@ import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
+import delta.games.lotro.common.stats.StatOperator;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -55,8 +56,9 @@ public class DatStatUtils
         {
           StatProvider provider=null;
           Number value=null;
-          // Always 7 for "add"?
-          //Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
+          // Often 7 for "add"
+          int modOp=((Integer)statProperties.getProperty("Mod_Op")).intValue();
+          StatOperator operator=getOperator(modOp);
           Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
           if (progressId!=null)
           {
@@ -99,11 +101,22 @@ public class DatStatUtils
             {
               statsProvider.addStatProvider(provider);
             }
+            provider.setOperator(operator);
           }
         }
       }
     }
     return statsProvider;
+  }
+
+  private static StatOperator getOperator(int modOp)
+  {
+    if (modOp==5) return StatOperator.SET;
+    if (modOp==6) return StatOperator.SUBSTRACT;
+    if (modOp==7) return StatOperator.ADD;
+    if (modOp==8) return StatOperator.MULTIPLY;
+    LOGGER.warn("Unmanage operator: "+modOp);
+    return null;
   }
 
   /**
