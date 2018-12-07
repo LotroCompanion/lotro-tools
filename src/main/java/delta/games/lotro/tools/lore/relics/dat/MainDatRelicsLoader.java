@@ -74,7 +74,7 @@ public class MainDatRelicsLoader
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
-      BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
+      BasicStatsSet stats=statsProvider.getStats(1,level.intValue(),true);
       relic.getStats().addStats(stats);
       // Required level
       Integer requiredLevel=(Integer)properties.getProperty("Runic_RequiredItemLevel");
