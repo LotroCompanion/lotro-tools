@@ -245,7 +245,7 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
-        BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
+        BasicStatsSet stats=statsProvider.getStats(1,level.intValue(),true);
         item.getStats().addStats(stats);
       }
       if (item instanceof Weapon)
