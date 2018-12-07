@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.characters.dat;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,12 +35,11 @@ public class MainCharacterDataLoader
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Save traits
     new TraitKeyGenerator(traitsManager).setup();
-    File traitsFile=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();
     List<TraitDescription> traits=traitsManager.getAll();
     Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
     int nbTraits=traits.size();
     LOGGER.info("Writing "+nbTraits+" traits");
-    TraitDescriptionXMLWriter.write(traitsFile,traits);
+    TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
 
     facade.dispose();
   }

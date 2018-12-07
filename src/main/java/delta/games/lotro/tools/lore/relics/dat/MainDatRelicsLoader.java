@@ -136,19 +136,19 @@ public class MainDatRelicsLoader
     boolean ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS);
     if (ok)
     {
-      System.out.println("Write relics file: "+GeneratedFiles.RELICS);
+      System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
     }
     ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS2);
     if (ok)
     {
-      System.out.println("Write relics file: "+GeneratedFiles.RELICS2);
+      System.out.println("Wrote relics file: "+GeneratedFiles.RELICS2);
     }
     // Write relic icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.RELIC_ICONS,RELIC_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Write relic icons archive: "+GeneratedFiles.RELIC_ICONS);
+      System.out.println("Wrote relic icons archive: "+GeneratedFiles.RELIC_ICONS);
     }
   }
 

@@ -858,10 +858,9 @@ public class MainDatItemsLoader
       }
     }
     // Save items
-    File toFile=new File("../lotro-companion/data/lore/items_dat.xml").getAbsoluteFile();
     ItemXMLWriter writer=new ItemXMLWriter(true);
     Collections.sort(items,new ItemIdComparator());
-    /*boolean ok=*/writer.writeItems(toFile,items,EncodingNames.UTF_8);
+    /*boolean ok=*/writer.writeItems(GeneratedFiles.ITEMS,items,EncodingNames.UTF_8);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
   }

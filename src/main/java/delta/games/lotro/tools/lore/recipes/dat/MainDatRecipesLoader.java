@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.lore.recipes.dat;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Get recipe definitions from DAT files.
@@ -329,13 +329,20 @@ public class MainDatRecipesLoader
     scanAll(recipesManager);
     int nbRecipes=recipesManager.getRecipesCount();
     System.out.println("Found: "+nbRecipes+" recipes.");
-    File out=new File("../lotro-companion/data/lore/recipes.xml");
-    recipesManager.writeToFile(out);
+    boolean ok=recipesManager.writeToFile(GeneratedFiles.RECIPES);
+    if (ok)
+    {
+      System.out.println("Wrote recipes file: "+GeneratedFiles.RECIPES);
+    }
+    ok=recipesManager.writeToFile(GeneratedFiles.RECIPES2);
+    if (ok)
+    {
+      System.out.println("Wrote recipes file: "+GeneratedFiles.RECIPES2);
+    }
   }
 
   private void scanAll(RecipesManager recipesManager)
   {
-    int nb=0;
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
@@ -343,15 +350,12 @@ public class MainDatRecipesLoader
       {
         //int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        //System.out.println(classDefIndex);
         if (classDefIndex==1024)
         {
           Recipe recipe=load(i);
           if (recipe!=null)
           {
             recipesManager.registerRecipe(recipe);
-            nb++;
-            System.out.println(i+" => "+nb);
           }
         }
       }

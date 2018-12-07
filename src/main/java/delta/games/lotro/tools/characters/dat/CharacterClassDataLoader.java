@@ -20,6 +20,7 @@ import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 import delta.games.lotro.utils.FixedDecimalsInteger;
@@ -367,12 +368,9 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     new TraitTreesDataLoader(_facade,_traitsManager).doIt(_classes);
 
     // Save start stats
-    File startStatsFile=new File("../lotro-companion/data/lore/characters/startStats.xml");
-    StartStatsXMLWriter.write(startStatsFile.getAbsoluteFile(),_startStatsManager);
-    File statContribsFile=new File("../lotro-companion/data/lore/characters/statContribs.xml");
-    DerivedStatsContributionsXMLWriter.write(statContribsFile.getAbsoluteFile(),_derivatedStatsManager);
+    StartStatsXMLWriter.write(GeneratedFiles.START_STATS,_startStatsManager);
+    DerivedStatsContributionsXMLWriter.write(GeneratedFiles.STAT_CONTRIBS,_derivatedStatsManager);
     // Save classes descriptions
-    File classesFile=new File("../lotro-companion/data/lore/characters/classes.xml").getAbsoluteFile();
-    ClassDescriptionXMLWriter.write(classesFile,_classes);
+    ClassDescriptionXMLWriter.write(GeneratedFiles.CLASSES,_classes);
   }
 }

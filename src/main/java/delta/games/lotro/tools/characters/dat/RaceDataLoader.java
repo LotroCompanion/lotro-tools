@@ -17,6 +17,7 @@ import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
 
@@ -179,7 +180,6 @@ RaceTable_NationalityList:
     }
     loadRaceEarnableTraits();
     // Save races
-    File racesFile=new File("../lotro-companion/data/lore/characters/races.xml").getAbsoluteFile();
     List<RaceDescription> races=new ArrayList<RaceDescription>();
     List<Integer> raceIds=new ArrayList<Integer>(_racesById.keySet());
     Collections.sort(raceIds);
@@ -187,6 +187,6 @@ RaceTable_NationalityList:
     {
       races.add(_racesById.get(raceId));
     }
-    RaceDescriptionXMLWriter.write(racesFile,races);
+    RaceDescriptionXMLWriter.write(GeneratedFiles.RACES,races);
   }
 }
