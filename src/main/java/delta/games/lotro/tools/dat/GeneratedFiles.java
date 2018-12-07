@@ -20,4 +20,16 @@ public class GeneratedFiles
    * All progressions.
    */
   public static final File PROGRESSIONS=new File("../lotro-companion/data/lore/progressions.xml").getAbsoluteFile();
+  /**
+   * Relics.
+   */
+  public static final File RELICS=new File("../lotro-companion/data/lore/relics.xml").getAbsoluteFile();
+  /**
+   * Relics (2).
+   */
+  public static final File RELICS2=new File("../lotro-relics/relics.xml").getAbsoluteFile();
+  /**
+   * Relic icons.
+   */
+  public static final File RELIC_ICONS=new File("../lotro-relics/relicIcons.zip").getAbsoluteFile();
 }

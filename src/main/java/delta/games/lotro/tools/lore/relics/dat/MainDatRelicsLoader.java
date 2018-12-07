@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -15,6 +16,7 @@ import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.utils.dat.DatIconsUtils;
 import delta.games.lotro.tools.utils.dat.DatStatUtils;
 import delta.games.lotro.tools.utils.dat.DatUtils;
@@ -27,6 +29,7 @@ public class MainDatRelicsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
 
+  private static File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
   private DataFacade _facade;
   private RelicsManager _relicsMgr;
   private EnumMapper _categories;
@@ -52,11 +55,10 @@ public class MainDatRelicsLoader
     if (properties!=null)
     {
       _currentId=indexDataId;
-      _debug=((_currentId==1879114450) || (_currentId==1879200000));
+      _debug=(_currentId==1879000000);
       if (_debug)
       {
         FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
-        System.out.println(properties.dump());
       }
       // Name
       String name=DatUtils.getStringProperty(properties,"Runic_Name");
@@ -83,7 +85,7 @@ public class MainDatRelicsLoader
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer imageIconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       String iconFilename=imageIconId+"-"+backgroundIconId+".png";
-      File to=new File("relicIcons/"+iconFilename).getAbsoluteFile();
+      File to=new File(RELIC_ICONS_DIR,"relicIcons/"+iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
         boolean ok=DatIconsUtils.buildImageFile(_facade,imageIconId.intValue(),backgroundIconId.intValue(),to);
@@ -131,9 +133,23 @@ public class MainDatRelicsLoader
       }
     }
     // Write result file
-    File toFile=new File("relics_dat.xml").getAbsoluteFile();
-    _relicsMgr.writeRelicsFile(toFile);
-    System.out.println("Wrote file: "+toFile);
+    boolean ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS);
+    if (ok)
+    {
+      System.out.println("Write relics file: "+GeneratedFiles.RELICS);
+    }
+    ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS2);
+    if (ok)
+    {
+      System.out.println("Write relics file: "+GeneratedFiles.RELICS2);
+    }
+    // Write relic icons
+    DirectoryArchiver archiver=new DirectoryArchiver();
+    ok=archiver.go(GeneratedFiles.RELIC_ICONS,RELIC_ICONS_DIR);
+    if (ok)
+    {
+      System.out.println("Write relic icons archive: "+GeneratedFiles.RELIC_ICONS);
+    }
   }
 
   /**

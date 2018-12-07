@@ -18,7 +18,6 @@
 /data/recipes/*.xml
 /data/deeds/tmp
 /data/recipes/tmp
-/relic-icons
 /stats
 /itemLevelOverrideProgression
 /*.props
@@ -26,7 +25,6 @@
 /data/items/*.txt
 /data/lore
 /*.ods
-/relicIcons
 /src/main/lua/ItemTreasury_17.1.0.zip
 /traits
 /*.png
@@ -37,3 +35,4 @@
 /iconsMain
 /data/icons/traits
 /data/icons.zip
+/data/relics/tmp/relicIcons
