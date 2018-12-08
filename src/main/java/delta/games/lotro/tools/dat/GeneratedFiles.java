@@ -63,7 +63,7 @@ public class GeneratedFiles
   /**
    * Recipes (2).
    */
-  public static final File RECIPES2=new File("../lotro-recipes-db/recipes.xml").getAbsoluteFile();
+  public static final File RECIPES2=new File("../lotro-data/recipes/recipes.xml").getAbsoluteFile();
   /**
    * Relics.
    */
