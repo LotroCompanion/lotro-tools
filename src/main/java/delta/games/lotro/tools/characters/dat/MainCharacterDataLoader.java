@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
@@ -39,7 +40,23 @@ public class MainCharacterDataLoader
     Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
     int nbTraits=traits.size();
     LOGGER.info("Writing "+nbTraits+" traits");
-    TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
+    boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
+    if (ok)
+    {
+      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
+    }
+    ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS2,traits);
+    if (ok)
+    {
+      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS2);
+    }
+    // Write trait icons
+    DirectoryArchiver archiver=new DirectoryArchiver();
+    ok=archiver.go(GeneratedFiles.TRAIT_ICONS,TraitLoader.TRAIT_ICONS_DIR);
+    if (ok)
+    {
+      System.out.println("Wrote trait icons archive: "+GeneratedFiles.TRAIT_ICONS);
+    }
 
     facade.dispose();
   }

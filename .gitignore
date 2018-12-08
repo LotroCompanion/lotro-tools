@@ -12,7 +12,6 @@
 /relics*.xml
 /traitPoints.xml
 /tmp/
-/data/items/items_filtered.xml
 /data/items/log*.txt
 /factions.xml
 /data/recipes/*.xml
@@ -27,12 +26,5 @@
 /*.ods
 /src/main/lua/ItemTreasury_17.1.0.zip
 /traits
-/*.png
-/races
-/traitsRace
-/icons
-/iconsBackground
-/iconsMain
-/data/icons/traits
-/data/icons.zip
 /data/relics/tmp/relicIcons
+/data/traits/tmp/traitIcons

@@ -2,6 +2,8 @@ package delta.games.lotro.tools.characters.dat;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
@@ -16,6 +18,13 @@ import delta.games.lotro.tools.utils.dat.DatUtils;
  */
 public class TraitLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(TraitLoader.class);
+
+  /**
+   * Directory for trait icons.
+   */
+  public static File TRAIT_ICONS_DIR=new File("data\\traits\\tmp").getAbsoluteFile();
+
   /**
    * Load a trait.
    * @param facade Data facade.
@@ -56,10 +65,15 @@ public class TraitLoader
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
       ret.setStatsProvider(statsProvider);
       // Build icon file
-      File to=new File("data/icons/traits/"+iconId+".png").getAbsoluteFile();
+      String iconFilename=iconId+".png";
+      File to=new File(TRAIT_ICONS_DIR,"traitIcons/"+iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
-        DatIconsUtils.buildImageFile(facade,iconId,to);
+        boolean ok=DatIconsUtils.buildImageFile(facade,iconId,to);
+        if (!ok)
+        {
+          LOGGER.warn("Could not build trait icon: "+iconFilename);
+        }
       }
     }
     return ret;

@@ -29,6 +29,14 @@ public class GeneratedFiles
    */
   public static final File TRAITS=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();
   /**
+   * Traits (2).
+   */
+  public static final File TRAITS2=new File("../lotro-data/traits/traits.xml").getAbsoluteFile();
+  /**
+   * Trait icons.
+   */
+  public static final File TRAIT_ICONS=new File("../lotro-data/traits/traitIcons.zip").getAbsoluteFile();
+  /**
    * Items.
    */
   public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
