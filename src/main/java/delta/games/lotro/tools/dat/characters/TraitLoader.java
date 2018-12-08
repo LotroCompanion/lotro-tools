@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.characters.dat;
+package delta.games.lotro.tools.dat.characters;
 
 import java.io.File;
 
@@ -8,9 +8,9 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.tools.utils.dat.DatIconsUtils;
-import delta.games.lotro.tools.utils.dat.DatStatUtils;
-import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.tools.dat.utils.DatIconsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Traits loader.

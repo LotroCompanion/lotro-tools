@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.recipes.dat;
+package delta.games.lotro.tools.dat.recipes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

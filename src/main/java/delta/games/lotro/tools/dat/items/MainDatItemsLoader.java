@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items.dat;
+package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.utils.dat.DatIconsUtils;
-import delta.games.lotro.tools.utils.dat.DatStatUtils;
-import delta.games.lotro.tools.utils.dat.DatUtils;
-import delta.games.lotro.tools.utils.dat.ProgressionFactory;
+import delta.games.lotro.tools.dat.utils.DatIconsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionFactory;
 
 /**
  * Get item definitions from DAT files.

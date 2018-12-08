@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.characters.dat;
+package delta.games.lotro.tools.dat.characters;
 
 import java.util.ArrayList;
 import java.util.List;

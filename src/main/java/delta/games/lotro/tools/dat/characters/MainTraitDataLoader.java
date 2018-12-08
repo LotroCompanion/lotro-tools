@@ -1,11 +1,11 @@
-package delta.games.lotro.tools.characters.dat;
+package delta.games.lotro.tools.dat.characters;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get trait definitions from DAT files.

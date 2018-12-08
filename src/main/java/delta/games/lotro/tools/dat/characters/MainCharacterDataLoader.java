@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.characters.dat;
+package delta.games.lotro.tools.dat.characters;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +12,7 @@ import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.utils.dat.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Loader for character data: classes, races, trait trees.

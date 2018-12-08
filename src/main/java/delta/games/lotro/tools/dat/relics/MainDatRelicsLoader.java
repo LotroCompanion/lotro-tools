@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.relics.dat;
+package delta.games.lotro.tools.dat.relics;
 
 import java.io.File;
 
@@ -17,9 +17,9 @@ import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.utils.dat.DatIconsUtils;
-import delta.games.lotro.tools.utils.dat.DatStatUtils;
-import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.tools.dat.utils.DatIconsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get relic definitions from DAT files.

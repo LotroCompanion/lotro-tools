@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.utils.dat;
+package delta.games.lotro.tools.dat.utils;
 
 import java.util.HashMap;
 import java.util.Map;

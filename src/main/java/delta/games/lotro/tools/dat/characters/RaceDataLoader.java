@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.characters.dat;
+package delta.games.lotro.tools.dat.characters;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.utils.dat.DatIconsUtils;
-import delta.games.lotro.tools.utils.dat.DatUtils;
+import delta.games.lotro.tools.dat.utils.DatIconsUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get race definitions from DAT files.
