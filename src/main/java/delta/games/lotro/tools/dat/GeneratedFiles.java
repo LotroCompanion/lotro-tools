@@ -33,6 +33,10 @@ public class GeneratedFiles
    */
   public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
   /**
+   * Item icons.
+   */
+  public static final File ITEM_ICONS_DIR=new File("../lotro-item-icons-db/icons").getAbsoluteFile();
+  /**
    * Progressions for items.
    */
   public static final File PROGRESSIONS_ITEMS=new File("../lotro-companion/data/lore/progressions_items.xml").getAbsoluteFile();

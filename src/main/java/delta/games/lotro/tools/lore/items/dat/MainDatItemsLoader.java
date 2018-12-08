@@ -95,17 +95,9 @@ public class MainDatItemsLoader
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       if ((iconId!=null) || (backgroundIconId!=null))
       {
-        String iconName;
-        if (iconId!=null)
-        {
-          iconName=iconId+((backgroundIconId!=null)?"-"+backgroundIconId:"");
-        }
-        else
-        {
-          iconName=backgroundIconId.toString();
-        }
+        String iconName=((iconId!=null)?iconId:"0")+"-"+((backgroundIconId!=null)?backgroundIconId:"0");
         item.setIcon(iconName);
-        File iconFile=new File("icons/"+item.getIcon()+".png").getAbsoluteFile();
+        File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconName+".png").getAbsoluteFile();
         if (!iconFile.exists())
         {
           if ((iconId!=null) && (backgroundIconId!=null))
@@ -119,22 +111,6 @@ public class MainDatItemsLoader
           else if (backgroundIconId==null)
           {
             DatIconsUtils.buildImageFile(_facade,iconId.intValue(),iconFile);
-          }
-        }
-        if (iconId!=null)
-        {
-          File mainIconFile=new File("iconsMain/"+iconId+".png").getAbsoluteFile();
-          if (!mainIconFile.exists())
-          {
-            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),mainIconFile);
-          }
-        }
-        if (backgroundIconId!=null)
-        {
-          File backgroundIconFile=new File("iconsBackground/"+backgroundIconId+".png").getAbsoluteFile();
-          if (!backgroundIconFile.exists())
-          {
-            DatIconsUtils.buildImageFile(_facade,backgroundIconId.intValue(),backgroundIconFile);
           }
         }
       }
