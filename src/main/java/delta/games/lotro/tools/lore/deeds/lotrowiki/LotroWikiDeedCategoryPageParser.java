@@ -21,7 +21,7 @@ import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.tools.lore.deeds.DeedsContainer;
+import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 import delta.games.lotro.tools.lore.items.ItemsResolver;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
@@ -160,7 +160,7 @@ public class LotroWikiDeedCategoryPageParser
   private void writeFiles(String categoryId,List<DeedDescription> deeds)
   {
     File to=new File(_tmpFilesDir,"deeds-"+Escapes.escapeFile(categoryId)+".xml").getAbsoluteFile();
-    DeedsContainer.writeSortedDeeds(deeds,to);
+    DeedsWriter.writeSortedDeeds(deeds,to);
   }
 
   /**
