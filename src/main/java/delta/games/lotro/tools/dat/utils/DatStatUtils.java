@@ -125,7 +125,7 @@ public class DatStatUtils
    * @param progressId Progression ID.
    * @return A progression curve or <code>null</code> if not found.
    */
-  private static Progression getProgression(DataFacade facade, int progressId)
+  public static Progression getProgression(DataFacade facade, int progressId)
   {
     Progression ret=_progressions.getProgression(progressId);
     if (ret==null)

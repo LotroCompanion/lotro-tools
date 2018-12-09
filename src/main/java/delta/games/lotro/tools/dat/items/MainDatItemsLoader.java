@@ -32,12 +32,12 @@ import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
-import delta.games.lotro.lore.items.stats.ItemLevelProgression;
+import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.dat.utils.ProgressionFactory;
+import delta.games.lotro.utils.maths.Progression;
 
 /**
  * Get item definitions from DAT files.
@@ -139,7 +139,7 @@ public class MainDatItemsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
-      //handleMunging(properties);
+      handleMunging(properties);
       if (level!=null)
       {
         Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
@@ -633,63 +633,30 @@ public class MainDatItemsLoader
     return null;
   }
 
-  void handleMunging(PropertiesSet properties)
+  private void handleMunging(PropertiesSet properties)
   {
-    Integer level=(Integer)properties.getProperty("Item_Level");
+    //Integer level=(Integer)properties.getProperty("Item_Level");
     Integer minMungingLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
     Integer maxMungingLevel=(Integer)properties.getProperty("ItemMunging_MaxMungeLevel");
     Integer progressionId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
-    Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
+    //Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
     if (((minMungingLevel!=null) && (minMungingLevel.intValue()>0))
         || ((maxMungingLevel!=null) && (maxMungingLevel.intValue()>0))
-        || (progressionId!=null) || (propertyId!=null))
+        || (progressionId!=null))
     {
+      Progression progression=null;
       if (progressionId!=null)
       {
-        int progressPropertiesId=progressionId.intValue()+0x9000000;
-        PropertiesSet progressProperties=_facade.loadProperties(progressPropertiesId);
-        if (progressProperties!=null)
-        {
-          File to=new File("itemLevelOverrideProgression",progressionId.intValue()+".props").getAbsoluteFile();
-          if (!to.exists())
-          {
-            to.getParentFile().mkdirs();
-            FileIO.writeFile(to,progressProperties.dump().getBytes());
-          }
-        }
+        progression=DatStatUtils.getProgression(_facade,progressionId.intValue());
       }
-      String name=_currentItem.getName();
-      Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
-      Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
-      System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
+      Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
+      String mungingSpec=munging.asString();
+      //_currentItem.setProperty(ItemPropertyNames.MUNGING,mungingSpec);
+      //String name=_currentItem.getName();
+      //Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
+      //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
+      //System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
-  }
-
-  ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
-  {
-    ItemLevelProgression ret=null;
-    /*
-    Integer progressionGroupOverride=(Integer)properties.getProperty("ItemAdvancement_ProgressionGroupOverride");
-    if (progressionGroupOverride!=null)
-    {
-      int progressId=progressionGroupOverride.intValue()+0x9000000;
-      PropertiesSet progressProperties=_facade.loadProperties(progressId);
-      if (_debug)
-      {
-        FileIO.writeFile(new File(progressId+".props"),progressProperties.dump().getBytes());
-        System.out.println(properties.dump());
-      }
-    }
-    */
-
-    Integer itemLevelProgression=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
-    if (itemLevelProgression!=null)
-    {
-      int progressId=itemLevelProgression.intValue()+0x9000000;
-      PropertiesSet progressProperties=_facade.loadProperties(progressId);
-      ret=ProgressionFactory.buildItemLevelProgression(progressProperties);
-    }
-    return ret;
   }
 
   private ItemQuality getQuality(int qualityEnum)

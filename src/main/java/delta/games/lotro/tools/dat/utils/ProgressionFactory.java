@@ -3,7 +3,6 @@ package delta.games.lotro.tools.dat.utils;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.lore.items.stats.ItemLevelProgression;
 import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.LinearInterpolatingProgression;
 import delta.games.lotro.utils.maths.Progression;
@@ -15,31 +14,6 @@ import delta.games.lotro.utils.maths.Progression;
 public class ProgressionFactory
 {
   private static final Logger LOGGER=Logger.getLogger(ProgressionFactory.class);
-
-  /**
-   * Build an item level progression from the given properties.
-   * @param properties Properties to use.
-   * @return A progression or <code>null</code> if not supported.
-   */
-  public static ItemLevelProgression buildItemLevelProgression(PropertiesSet properties)
-  {
-    ItemLevelProgression ret=null;
-    Object[] charLevel2ItemLevel=(Object[])properties.getProperty("PropertyProgression_Array");
-    if (charLevel2ItemLevel!=null)
-    {
-      int nbPoints=charLevel2ItemLevel.length;
-      ret=new ItemLevelProgression(nbPoints);
-      Integer levelOffset=(Integer)properties.getProperty("Progression_MinimumIndexValue");
-      int delta=((levelOffset!=null)?levelOffset.intValue():0);
-      for(int i=0;i<nbPoints;i++)
-      {
-        int level=i+delta;
-        int itemLevel=((Integer)charLevel2ItemLevel[i]).intValue();
-        ret.set(i,level,itemLevel);
-      }
-    }
-    return ret;
-  }
 
   /**
    * Build a progression from the given properties.
