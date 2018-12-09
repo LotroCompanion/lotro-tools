@@ -24,6 +24,7 @@ import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
+import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
@@ -652,7 +653,7 @@ public class MainDatItemsLoader
       }
       Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
       String mungingSpec=munging.asString();
-      //_currentItem.setProperty(ItemPropertyNames.MUNGING,mungingSpec);
+      _currentItem.setProperty(ItemPropertyNames.MUNGING,mungingSpec);
       //String name=_currentItem.getName();
       //Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
