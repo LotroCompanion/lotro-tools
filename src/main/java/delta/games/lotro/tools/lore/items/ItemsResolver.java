@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemsManager;
 
 /**
@@ -44,26 +43,6 @@ public class ItemsResolver
     return items.get(0);
   }
 
-  private static final String MARKER="images/icons/";
-
-  /**
-   * Normalize an icon URL (keep only end of URL).
-   * @param iconUrl URL to update.
-   * @return A normalized URL or the original URL.
-   */
-  public static String normalizeIconUrl(String iconUrl)
-  {
-    if (iconUrl!=null)
-    {
-      int index=iconUrl.indexOf(MARKER);
-      if (index!=-1)
-      {
-        iconUrl=iconUrl.substring(index+MARKER.length());
-      }
-    }
-    return iconUrl;
-  }
-
   /**
    * Load map (keys/names)->list of item ids
    * @return a map.
@@ -75,17 +54,8 @@ public class ItemsResolver
     List<Item> items=mgr.getAllItems();
     for(Item item : items)
     {
-      String key=item.getKey();
-      registerMapping(idStr2Id,key,item);
       String name=item.getName();
       registerMapping(idStr2Id,name,item);
-      String legacyName=item.getProperty(ItemPropertyNames.LEGACY_NAME);
-      registerMapping(idStr2Id,legacyName,item);
-      String oldTulkasName=item.getProperty(ItemPropertyNames.OLD_TULKAS_NAME);
-      registerMapping(idStr2Id,oldTulkasName,item);
-      String iconUrl=item.getProperty(ItemPropertyNames.ICON_URL);
-      iconUrl=normalizeIconUrl(iconUrl);
-      registerMapping(idStr2Id,iconUrl,item);
     }
     // Dump keys
     /*

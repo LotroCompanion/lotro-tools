@@ -10,7 +10,6 @@ import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -31,7 +30,6 @@ public class ItemStatistics
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
   private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
   private HashMap<EquipmentLocation,List<String>> _itemNamesBySlot;
-  private HashMap<String,List<String>> _scalingRules;
 
   // Armour
   private int _armoursCount;
@@ -51,7 +49,6 @@ public class ItemStatistics
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
     _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
-    _scalingRules=new HashMap<String,List<String>>();
     _itemNamesBySlot=new HashMap<EquipmentLocation,List<String>>();
   }
 
@@ -123,20 +120,6 @@ public class ItemStatistics
       if (name==null) name="";
       names.add(name+": "+item.getIdentifier());
     }
-    // Scaling data
-    {
-      String scalingRule=item.getProperty(ItemPropertyNames.SCALING);
-      if (scalingRule==null) scalingRule="";
-      List<String> names=_scalingRules.get(scalingRule);
-      if (names==null)
-      {
-        names=new ArrayList<String>();
-        _scalingRules.put(scalingRule,names);
-      }
-      String name=item.getName();
-      if (name==null) name="";
-      names.add(name);
-    }
   }
 
   private void handleArmour(Armour armour) 
@@ -205,23 +188,6 @@ public class ItemStatistics
       System.out.println("\t"+location+": "+count);
       List<String> names=_itemNamesBySlot.get(location);
       if (location!=null)
-      {
-        Collections.sort(names);
-        for(String name : names)
-        {
-          System.out.println("\t\t" + name);
-        }
-      }
-    }
-    // - scaling rules
-    System.out.println("- by scaling rules:");
-    List<String> scalingRules=new ArrayList<String>(_scalingRules.keySet());
-    Collections.sort(scalingRules);
-    for(String scalingRule : scalingRules)
-    {
-      List<String> names=_scalingRules.get(scalingRule);
-      System.out.println("\t"+scalingRule+": "+names.size());
-      if (names.size()<300)
       {
         Collections.sort(names);
         for(String name : names)

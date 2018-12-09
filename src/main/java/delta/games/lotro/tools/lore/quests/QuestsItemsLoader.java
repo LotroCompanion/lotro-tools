@@ -29,8 +29,6 @@ public class QuestsItemsLoader
 {
   private static final Logger _logger=LotroLoggers.getWebInputLogger();
 
-  private static final String WIKI_SEED="/wiki/";
-
   private ItemsResolver _resolver;
 
   private int _resolved=0;
@@ -62,26 +60,6 @@ public class QuestsItemsLoader
     // Use name
     String name=itemReference.getName();
     Item item=_resolver.getItem(name);
-    if (item==null)
-    {
-      // Use item 'key' (Wiki key)
-      String url=itemReference.getObjectURL();
-      if ((url!=null) && (url.startsWith(WIKI_SEED)))
-      {
-        String itemKey=url.substring(WIKI_SEED.length());
-        item=_resolver.getItem(itemKey);
-      }
-    }
-    if (item==null)
-    {
-      // Use icon path
-      String iconUrl=itemReference.getIconURL();
-      if (iconUrl!=null)
-      {
-        iconUrl=ItemsResolver.normalizeIconUrl(iconUrl);
-        item=_resolver.getItem(iconUrl);
-      }
-    }
     if (item!=null)
     {
       // Found!

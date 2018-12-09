@@ -9,7 +9,6 @@ import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.Legendary;
@@ -21,7 +20,6 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
  */
 public class ConsistencyChecks
 {
-  private List<Item> _scalableItems;
   private List<Item> _missingStats;
   private int _nbMissingStats;
   private int _nbStats;
@@ -33,7 +31,6 @@ public class ConsistencyChecks
   public ConsistencyChecks()
   {
     _missingStats=new ArrayList<Item>();
-    _scalableItems=new ArrayList<Item>();
   }
 
   /**
@@ -80,27 +77,6 @@ public class ConsistencyChecks
           //System.out.println("No weapon type for: " + name + " (" + id + ')');
         }
       }
-      // Scalables
-      String scalingIds=item.getProperty(ItemPropertyNames.SCALING);
-      String slicedStats=item.getProperty(ItemPropertyNames.FORMULAS);
-      if (slicedStats!=null)
-      {
-        nbFormulas++;
-        if (scalingIds!=null)
-        {
-          nbScalables++;
-          _scalableItems.add(item);
-          if (item instanceof Armour)
-          {
-            Armour armour=(Armour)item;
-            ArmourType type=armour.getArmourType();
-            if (type==null)
-            {
-              System.out.println("No armour type for: " + item + " with formula: "+slicedStats);
-            }
-          }
-        }
-      }
     }
     System.out.println("Nb armours with missing armour type: " + nbMissingArmourTypes);
     System.out.println("Nb armours with missing armour value: " + nbMissingArmourValues);
@@ -110,7 +86,6 @@ public class ConsistencyChecks
     System.out.println("Nb items with missing stats: " + _nbMissingStats);
     System.out.println("Nb items with formula: " + nbFormulas);
     System.out.println("Nb scalable items: " + nbScalables);
-    //new ItemStatistics().showStatistics(_scalableItems);
   }
 
   private void checkItemStats(Item item) 
