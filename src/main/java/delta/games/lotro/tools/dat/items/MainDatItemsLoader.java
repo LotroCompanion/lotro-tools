@@ -240,7 +240,8 @@ public class MainDatItemsLoader
   {
     if (name==null) return false;
     if (itemClassInt==null) return false;
-    if ((name.startsWith("DNT")) || (name.contains("TBD"))) return false;
+    if (name.contains("TBD")) return false;
+    if (name.contains("DNT")) return false;
     if (name.contains("Tester")) return false;
     if (name.contains("Barter Test")) return false;
     int itemClass=itemClassInt.intValue();
