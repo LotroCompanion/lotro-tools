@@ -17,8 +17,8 @@ import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
