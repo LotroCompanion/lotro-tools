@@ -2,13 +2,11 @@ package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
-import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
@@ -30,7 +28,6 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.comparators.ItemIdComparator;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
@@ -803,9 +800,7 @@ public class MainDatItemsLoader
       }
     }
     // Save items
-    ItemXMLWriter writer=new ItemXMLWriter(true);
-    Collections.sort(items,new ItemIdComparator());
-    /*boolean ok=*/writer.writeItems(GeneratedFiles.ITEMS,items,EncodingNames.UTF_8);
+    /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
   }
