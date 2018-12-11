@@ -67,6 +67,10 @@ public class MainDatRelicsLoader
       Integer relicType=(Integer)properties.getProperty("Runic_Type");
       RelicType type=getRelicType(name,relicType.intValue());
       relic=new Relic(indexDataId,name,type,null);
+      // Bridle
+      int slots=((Integer)properties.getProperty("Relic_ValidContainerSlots")).intValue();
+      boolean isBridleRelic=(slots==2097152);
+      relic.setBridleRelic(isBridleRelic);
       // Category
       Integer categoryEnum=(Integer)properties.getProperty("Runic_Tier");
       String categoryName=_categories.getString(categoryEnum.intValue());
