@@ -75,7 +75,6 @@ public class MainDatRelicsLoader
       Integer categoryEnum=(Integer)properties.getProperty("Runic_Tier");
       String categoryName=_categories.getString(categoryEnum.intValue());
       RelicsCategory category=_relicsMgr.getRelicCategory(categoryName,true);
-      category.addRelic(relic);
       // Level
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
@@ -99,12 +98,33 @@ public class MainDatRelicsLoader
         }
       }
       relic.setIconFilename(iconFilename);
+      // Check and add
+      boolean useIt=checkRelic(category,relic);
+      if (useIt)
+      {
+        category.addRelic(relic);
+      }
     }
     else
     {
       LOGGER.warn("Could not handle relic ID="+indexDataId);
     }
     return relic;
+  }
+
+  private boolean checkRelic(RelicsCategory category, Relic relic)
+  {
+    String newRelicName=relic.getName();
+    Relic oldRelic=category.getByName(newRelicName);
+    if (oldRelic!=null)
+    {
+      if (oldRelic.getStats().equals(relic.getStats()))
+      {
+        System.out.println("Duplicate relic:\n old="+oldRelic+"\n new="+relic);
+        return false;
+      }
+    }
+    return true;
   }
 
   private RelicType getRelicType(String name, int relicTypeEnum)
