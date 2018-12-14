@@ -39,7 +39,7 @@ public class MainTraitDataLoader
     }
     else
     {
-      LOGGER.warn("Could not handle relic ID="+indexDataId);
+      LOGGER.warn("Could not handle trait ID="+indexDataId);
     }
   }
 

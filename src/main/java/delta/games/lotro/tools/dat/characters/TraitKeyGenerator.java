@@ -62,7 +62,7 @@ public class TraitKeyGenerator
     setup("HEAVY_BLOWS","Heavy Blows");
     setup("SKILLED_DEFLECTION","Skilled Deflection");
     // Hunter
-    setup("CRITICAL_EYE","Critical Eye");
+    setup("CRITICAL_EYE",1879259548);
     setup("IMPACT_ARROWS","Impact Arrows");
     // Lore-master
     setup("TACTICAL_DAMAGE","Tactical Damage");
