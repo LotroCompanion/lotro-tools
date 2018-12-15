@@ -201,7 +201,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       }
       else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
       {
-        icmr=(int)(80.5 + level * (2/3));
+        icmr=(int)(80.5 + level * (2.0/3));
       }
       else
       {
