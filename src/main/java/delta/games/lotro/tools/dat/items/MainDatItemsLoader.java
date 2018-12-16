@@ -582,7 +582,7 @@ public class MainDatItemsLoader
     else if (equipmentCategory==1L<<40)
     {
       weaponType=WeaponType.JAVELIN;
-      slot=EquipmentLocation.MAIN_HAND;
+      slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<42) // Oath-bound Armaments
     {
