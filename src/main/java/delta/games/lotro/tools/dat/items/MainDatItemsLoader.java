@@ -214,6 +214,8 @@ public class MainDatItemsLoader
         statsProvider.addStatProvider(armorStatProvider);
       }
       item.setStatsProvider(statsProvider);
+      // Effects
+      handleEffects(properties);
       // Item fixes
       itemFixes(item,statsProvider);
       // Stats
@@ -292,6 +294,43 @@ public class MainDatItemsLoader
         statsProvider.addStatProvider(critDef);
       }
     }
+  }
+
+  private void handleEffects(PropertiesSet properties)
+  {
+    Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
+    if (effects!=null)
+    {
+      for(Object effectObj : effects)
+      {
+        PropertiesSet effectProps=(PropertiesSet)effectObj;
+        int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
+        StatsProvider effectStats=handleEffect(effectId);
+        if (effectStats!=null)
+        {
+          int nbProviders=effectStats.getNumberOfStatProviders();
+          for(int i=0;i<nbProviders;i++)
+          {
+            _currentItem.getStatsProvider().addStatProvider(effectStats.getStatProvider(i));
+          }
+        }
+      }
+    }
+  }
+
+  private StatsProvider handleEffect(int effectId)
+  {
+    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
+    Object probability=effectProps.getProperty("Effect_ConstantApplicationProbability");
+    if ((probability!=null) && (probability.equals(Float.valueOf(1.0f))))
+    {
+      Integer permanent=(Integer)effectProps.getProperty("Effect_Duration_Permanent");
+      if ((permanent!=null) && (permanent.intValue()==1))
+      {
+        return DatStatUtils.buildStatProviders(_facade,effectProps);
+      }
+    }
+    return null;
   }
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
