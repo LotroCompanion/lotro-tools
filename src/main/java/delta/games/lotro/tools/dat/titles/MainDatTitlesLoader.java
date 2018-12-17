@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -15,6 +16,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -24,6 +26,11 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 public class MainDatTitlesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatTitlesLoader.class);
+
+  /**
+   * Directory for title icons.
+   */
+  private static File TITLE_ICONS_DIR=new File("data\\titles\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _category;
@@ -83,7 +90,7 @@ Title_String:
       title.setDescription(description);
       // Icon
       int iconId=((Integer)properties.getProperty("Title_Icon")).intValue();
-      File titleIcon=new File("titleIcons",iconId+".png").getAbsoluteFile();
+      File titleIcon=new File(TITLE_ICONS_DIR,"titleIcons/"+iconId+".png").getAbsoluteFile();
       if (!titleIcon.exists())
       {
         DatIconsUtils.buildImageFile(_facade,iconId,titleIcon);
@@ -172,10 +179,26 @@ Title_String:
         }
       }
     }
-    // Save items
-    System.out.println("Nb titles: "+titles.size());
-    File toFile=new File("titles.xml").getAbsoluteFile();
-    TitleXMLWriter.writeTitlesFile(toFile,titles);
+    // Save titles
+    int nbTitles=titles.size();
+    LOGGER.info("Writing "+nbTitles+" titles");
+    boolean ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES,titles);
+    if (ok)
+    {
+      System.out.println("Wrote titles file: "+GeneratedFiles.TITLES);
+    }
+    ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES2,titles);
+    if (ok)
+    {
+      System.out.println("Wrote titles file: "+GeneratedFiles.TITLES2);
+    }
+    // Write title icons
+    DirectoryArchiver archiver=new DirectoryArchiver();
+    ok=archiver.go(GeneratedFiles.TITLE_ICONS,TITLE_ICONS_DIR);
+    if (ok)
+    {
+      System.out.println("Wrote title icons archive: "+GeneratedFiles.TITLE_ICONS);
+    }
   }
 
   /**

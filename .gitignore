@@ -1,4 +1,5 @@
 /target/
+/data/deeds/tmp
 /data/items/tmp/items-rc.xml
 /data/items/tmp/itemsLegacy+Tulkas.xml
 /data/items/tmp/itemsLegacy+TulkasIndex.xml
@@ -7,6 +8,10 @@
 /data/items/tmp/itemsdb.xml
 /data/items/items.xml
 /data/maps/
+/data/recipes/tmp
+/data/relics/tmp/relicIcons
+/data/titles/tmp/titleIcons
+/data/traits/tmp/traitIcons
 /iconIds.txt
 /items.lua
 /relics*.xml
@@ -14,9 +19,6 @@
 /tmp/
 /data/items/log*.txt
 /factions.xml
-/data/recipes/*.xml
-/data/deeds/tmp
-/data/recipes/tmp
 /stats
 /itemLevelOverrideProgression
 /*.props
@@ -25,8 +27,3 @@
 /data/lore
 /*.ods
 /src/main/lua/ItemTreasury_17.1.0.zip
-/traits
-/data/relics/tmp/relicIcons
-/data/traits/tmp/traitIcons
-/titleIcons
-/titles.xml

@@ -37,6 +37,18 @@ public class GeneratedFiles
    */
   public static final File TRAIT_ICONS=new File("../lotro-data/traits/traitIcons.zip").getAbsoluteFile();
   /**
+   * Titles.
+   */
+  public static final File TITLES=new File("../lotro-companion/data/lore/titles.xml").getAbsoluteFile();
+  /**
+   * Titles (2).
+   */
+  public static final File TITLES2=new File("../lotro-data/titles/titles.xml").getAbsoluteFile();
+  /**
+   * Title icons.
+   */
+  public static final File TITLE_ICONS=new File("../lotro-data/titles/titleIcons.zip").getAbsoluteFile();
+  /**
    * Items.
    */
   public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
