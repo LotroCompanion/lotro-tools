@@ -305,11 +305,16 @@ public class DatStatUtils
     if ("Itemset_Application_Captain_BattleShout_Fear".equals(name)) return null;
 
     // Other unsupported stats
+    if ("AI_PetEffect_ArcherBaseWC_Override".equals(name)) return null;
+    if ("AI_PetEffect_HeraldBaseWC_Override".equals(name)) return null;
+    if ("AI_PetEffect_HeraldHopeWC_Override".equals(name)) return null;
+    if ("AI_PetEffect_HeraldVictoryWC_Override".equals(name)) return null;
     if ("Burglar_Skill_CriticalMagnitude".equals(name)) return null;
     if ("Burglar_Skill_Gamble_Chance".equals(name)) return null;
     if ("CombatStateMod_CC_DurationMultModifier".equals(name)) return null; // Crowd Control Duration (see Audacity)
     if ("Combat_Agent_Armor_Value_Float".equals(name)) return null;
     if ("Combat_Agent_MountArmor_Value_Float".equals(name)) return null;
+    if ("Combat_Current_OffensePoints_Tactical".equals(name)) return null;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Fire".equals(name)) return null;
     if ("Combat_SkillDamageMultiplier_Frost".equals(name)) return null;
@@ -388,14 +393,19 @@ public class DatStatUtils
     if ("Item_InductionDuration_Burglar_Looting".equals(name)) return null;
     if ("Item_Minstrel_Oathbreaker_Damagetype".equals(name)) return null;
     if ("Item_Root_Duration".equals(name)) return null;
+    if ("Item_Runekeeper_PreludeofHope_Cleanse".equals(name)) return null;
     if ("Item_Warden_FireJavelin_MissChance".equals(name)) return null;
     if ("Item_Warden_LightJavelin_MissChance".equals(name)) return null;
+    if ("ItemAdvancement_XP_AwardMultiplier".equals(name)) return null;
+    if ("ItemSet_MeleeSkill_PowerCost".equals(name)) return null;
     if ("MC_Trait_Champion_Application_Fervour_Consumption".equals(name)) return null;
     if ("MountEndurance_MaxLevel".equals(name)) return null;
     if ("MountPower_MaxLevel".equals(name)) return null;
     if ("Mount_Combat_EvadePoints_Modifier".equals(name)) return null;
     if ("Mount_Movement_Acceleration".equals(name)) return null;
     if ("Mount_Movement_Turn_Rate".equals(name)) return null;
+    if ("Mount_SteedXP_Multiplier".equals(name)) return null;
+    if ("Movement_OutOfCombat_Speed_AddMod".equals(name)) return null;
     if ("Resist_AdditionalPoints_Resistance_TheOneResistance".equals(name)) return null;
     if ("Resist_Additional_Resistance_Fear".equals(name)) return null;
     if ("Resist_Additional_Resistance_Disease".equals(name)) return null;
@@ -421,10 +431,16 @@ public class DatStatUtils
     if ("Skill_DamageMultiplier_Warden_SpearDot".equals(name)) return null;
     if ("Skill_Duration_Trait_Captain_TacticalProwess".equals(name)) return null;
     if ("Skill_Duration_Warden_ClubDebuff".equals(name)) return null;
+    if ("Skill_EffectOverride_Burglar_ExploitOpening".equals(name)) return null;
     if ("Skill_HealingMultiplier_Trait_Race_Conjuction_Conviction".equals(name)) return null;
     if ("Skill_Healing_Induction_MP_PowerofFear".equals(name)) return null;
     if ("Skill_InductionDuration_ResearchingMod".equals(name)) return null;
     if ("Skill_Loremaster_BeaconofHope_HealMultiplier".equals(name)) return null;
+    if ("Skill_Loremaster_DamageBreakMod_BlindingFlash".equals(name)) return null;
+    if ("Skill_Loremaster_SignofProtection_IncDamage".equals(name)) return null;
+    if ("Skill_Loremaster_SignofProtection_Morale".equals(name)) return null;
+    if ("Skill_Loremaster_SignofRage_AttackDuration".equals(name)) return null;
+    if ("Skill_Loremaster_SignofRage_Damage".equals(name)) return null;
     if ("Skill_Minstrel_CriticalChance_Ballad".equals(name)) return null;
     if ("Skill_Minstrel_CriticalChance_Coda".equals(name)) return null;
     if ("Skill_PowerMoraleMultiplier_Trait_Race_Conjuction_Tactics".equals(name)) return null;
@@ -439,6 +455,8 @@ public class DatStatUtils
     if ("Skill_Runekeeper_PreludeToHope_InitialPulse".equals(name)) return null;
     if ("Skill_Stagger_PositionalDamageMod".equals(name)) return null;
     if ("Skill_ToHitBonus_Warden_Swords".equals(name)) return null;
+    if ("Skill_VitalCost_Book_CallNatureMod".equals(name)) return null;
+    if ("Skill_VitalCost_Book_SigilDunedainMod".equals(name)) return null;
     if ("Skill_VitalCost_Champion_AOEMod".equals(name)) return null;
     if ("Skill_VitalCost_Champion_StrikeMod".equals(name)) return null;
     if ("Skill_VitalCost_CriesMod".equals(name)) return null;
@@ -446,7 +464,10 @@ public class DatStatUtils
     if ("Skill_VitalCost_RangedMod".equals(name)) return null;
     if ("Skill_VitalCost_SerenadeDefenseMod".equals(name)) return null;
     if ("Skill_VitalCost_SerenadeOffenseMod".equals(name)) return null;
+    if ("Skill_VitalCost_Warden_FistMod".equals(name)) return null;
     if ("Skill_VitalReturn_Captain_ValiantStrike".equals(name)) return null;
+    if ("Skill_Warden_Diminished_Target".equals(name)) return null;
+    if ("Skill_Warden_Marked_Target".equals(name)) return null;
     if ("Skill_Warden_MoraleTapDamage".equals(name)) return null;
     if ("Skill_Warden_PersevereHeal".equals(name)) return null;
     if ("Stat_MountAgility".equals(name)) return null;
@@ -462,7 +483,9 @@ public class DatStatUtils
     if ("Trait_Mounted_Beorning_Recuperate_Pulses".equals(name)) return null;
     if ("Trait_Mounted_Beorning_Wrath_Generation".equals(name)) return null;
     if ("Trait_Mounted_Critical_Multiplier".equals(name)) return null;
+    if ("Trait_PvMP_BattleRank".equals(name)) return null;
     if ("Trait_Virtue_Rank_Charity".equals(name)) return null;
+    if ("Trait_Virtue_Rank_Compassionate".equals(name)) return null;
     if ("Trait_Virtue_Rank_Confidence".equals(name)) return null;
     if ("Trait_Virtue_Rank_Determination".equals(name)) return null;
     if ("Trait_Virtue_Rank_Discipline".equals(name)) return null;
@@ -479,8 +502,12 @@ public class DatStatUtils
     if ("Trait_Virtue_Rank_Tolerant".equals(name)) return null;
     if ("Trait_Virtue_Rank_Valor".equals(name)) return null;
     if ("Trait_Virtue_Rank_Wisdom".equals(name)) return null;
+    if ("Trait_VitalCost_EfficientShieldWork".equals(name)) return null;
+    if ("Trait_VitalCost_WardenSpear2".equals(name)) return null;
     if ("Vital_MountEnduranceCombatRegenAddMod".equals(name)) return null;
     if ("Vital_MountPowerCombatRegenAddMod".equals(name)) return null;
+    if ("XP_AwardMultiplier".equals(name)) return null;
+    if ("XP_QuestAwardMultiplier".equals(name)) return null;
 
     LOGGER.warn("Unknown stat name: "+name);
     return null;
