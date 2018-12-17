@@ -42,8 +42,6 @@ public class ConsistencyChecks
     int nbMissingArmourValues=0;
     int nbMissingArmourTypes=0;
     int nbMissingWeaponTypes=0;
-    int nbScalables=0;
-    int nbFormulas=0;
     for(Item item : items)
     {
       checkItemStats(item);
@@ -84,8 +82,6 @@ public class ConsistencyChecks
     System.out.println("Nb legendary items: " + _nbLegendaryItems);
     System.out.println("Nb items with stats: " + _nbStats);
     System.out.println("Nb items with missing stats: " + _nbMissingStats);
-    System.out.println("Nb items with formula: " + nbFormulas);
-    System.out.println("Nb scalable items: " + nbScalables);
   }
 
   private void checkItemStats(Item item) 

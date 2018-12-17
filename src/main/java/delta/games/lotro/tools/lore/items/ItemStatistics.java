@@ -29,7 +29,6 @@ public class ItemStatistics
   private HashMap<ItemQuality,IntegerHolder> _itemsByQuality;
   private HashMap<String,IntegerHolder> _itemsBySubCategory;
   private HashMap<EquipmentLocation,IntegerHolder> _itemsBySlot;
-  private HashMap<EquipmentLocation,List<String>> _itemNamesBySlot;
 
   // Armour
   private int _armoursCount;
@@ -49,7 +48,6 @@ public class ItemStatistics
     _weaponsByType=new HashMap<WeaponType,IntegerHolder>();
     _itemsBySubCategory=new HashMap<String,IntegerHolder>();
     _itemsBySlot=new HashMap<EquipmentLocation,IntegerHolder>();
-    _itemNamesBySlot=new HashMap<EquipmentLocation,List<String>>();
   }
 
   /**
@@ -110,15 +108,6 @@ public class ItemStatistics
         _itemsBySlot.put(location,counter);
       }
       counter.increment();
-      List<String> names=_itemNamesBySlot.get(location);
-      if (names==null)
-      {
-        names=new ArrayList<String>();
-        _itemNamesBySlot.put(location,names);
-      }
-      String name=item.getName();
-      if (name==null) name="";
-      names.add(name+": "+item.getIdentifier());
     }
   }
 
@@ -186,15 +175,6 @@ public class ItemStatistics
     {
       IntegerHolder count=_itemsBySlot.get(location);
       System.out.println("\t"+location+": "+count);
-      List<String> names=_itemNamesBySlot.get(location);
-      if (location!=null)
-      {
-        Collections.sort(names);
-        for(String name : names)
-        {
-          System.out.println("\t\t" + name);
-        }
-      }
     }
     // Armours
     System.out.println("Armours: " + _armoursCount);

@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -35,6 +36,9 @@ import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.lore.items.ConsistencyChecks;
+import delta.games.lotro.tools.lore.items.ItemStatistics;
+import delta.games.lotro.tools.lore.items.complements.FactoryCommentsInjector;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -826,6 +830,7 @@ public class MainDatItemsLoader
   {
     List<Item> items=new ArrayList<Item>();
 
+    HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);
@@ -835,9 +840,19 @@ public class MainDatItemsLoader
         if (newItem!=null)
         {
           items.add(newItem);
+          mapById.put(Integer.valueOf(id),newItem);
         }
       }
     }
+    // Custom data injection
+    FactoryCommentsInjector injector=new FactoryCommentsInjector(mapById);
+    injector.doIt();
+    // Consistency checks
+    ConsistencyChecks checks=new ConsistencyChecks();
+    checks.consistencyChecks(items);
+    // Statistics
+    ItemStatistics statistics=new ItemStatistics();
+    statistics.showStatistics(items);
     // Save items
     /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save progressions
