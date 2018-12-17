@@ -1,5 +1,6 @@
 /target/
 /data/deeds/tmp
+/data/emotes/tmp/emoteIcons
 /data/items/tmp/items-rc.xml
 /data/items/tmp/itemsLegacy+Tulkas.xml
 /data/items/tmp/itemsLegacy+TulkasIndex.xml

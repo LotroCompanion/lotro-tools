@@ -49,6 +49,18 @@ public class GeneratedFiles
    */
   public static final File TITLE_ICONS=new File("../lotro-data/titles/titleIcons.zip").getAbsoluteFile();
   /**
+   * Emotes.
+   */
+  public static final File EMOTES=new File("../lotro-companion/data/lore/emotes.xml").getAbsoluteFile();
+  /**
+   * Emotes (2).
+   */
+  public static final File EMOTES2=new File("../lotro-data/emotes/emotes.xml").getAbsoluteFile();
+  /**
+   * Emote icons.
+   */
+  public static final File EMOTE_ICONS=new File("../lotro-data/emotes/emoteIcons.zip").getAbsoluteFile();
+  /**
    * Items.
    */
   public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
