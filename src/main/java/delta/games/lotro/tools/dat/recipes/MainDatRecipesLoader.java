@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.recipes;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
@@ -18,7 +20,9 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get recipe definitions from DAT files.
@@ -35,6 +39,7 @@ public class MainDatRecipesLoader
   private static final int CRAFTING_UI_CATEGORY=0x23000065;
 
   private DataFacade _facade;
+  private ItemsManager _itemsManager;
   private Map<Integer,Integer> _xpMapping;
   private Map<Integer,Float> _cooldownMapping;
 
@@ -45,6 +50,8 @@ public class MainDatRecipesLoader
   public MainDatRecipesLoader(DataFacade facade)
   {
     _facade=facade;
+    List<Item> items=ItemSaxParser.parseItemsFile(GeneratedFiles.ITEMS);
+    _itemsManager=new ItemsManager(items);
   }
 
   private Recipe load(int indexDataId)
@@ -117,14 +124,16 @@ public class MainDatRecipesLoader
           Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
           if ((resultId!=null) && (resultId.intValue()>0))
           {
-            newVersion.getRegular().setItem(buildItemProxy(resultId.intValue()));
+            Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
+            newVersion.getRegular().setItem(buildItemProxy(resultId.intValue(),iconId));
           }
           // - critical result
           Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
           if ((critResultId!=null) && (critResultId.intValue()>0))
           {
             CraftingResult critical=newVersion.getCritical();
-            critical.setItem(buildItemProxy(critResultId.intValue()));
+            Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
+            critical.setItem(buildItemProxy(critResultId.intValue(),iconId));
           }
           // Ingredient
           Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
@@ -155,25 +164,12 @@ public class MainDatRecipesLoader
         name=recipe.getVersions().get(0).getRegular().getItem().getName();
         recipe.setName(name);
       }
-
-      /*
-      if (indexDataId==1879089025)
-      {
-        // Field recipes:
-        // CraftRecipe_ResultItem gives the id of the field "item" (not found by LUA indexer)
-        // same for the crit result: CraftRecipe_CriticalResultItem
-        // Field icons:
-        //   CraftRecipe_Field_CritResultIcon: 1091479564
-        //   CraftRecipe_Field_ResultIcon: 1091479564
-
-        System.out.println(properties.dump());
-      }
-      */
       Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
       if ((guild!=null) && (guild.intValue()!=0))
       {
         recipe.setGuildRequired(true);
       }
+      checkRecipe(recipe);
     }
     else
     {
@@ -243,7 +239,9 @@ public class MainDatRecipesLoader
       if (resultId!=null)
       {
         // Item
-        regular.setItem(buildItemProxy(resultId.intValue()));
+        Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
+        ItemProxy proxy=buildItemProxy(resultId.intValue(),iconId);
+        regular.setItem(proxy);
         // Quantity
         Integer quantity=(Integer)properties.getProperty("CraftRecipe_ResultItemQuantity");
         if (quantity!=null)
@@ -261,7 +259,9 @@ public class MainDatRecipesLoader
       criticalResult=new CraftingResult();
       criticalResult.setCriticalResult(true);
       // Item
-      criticalResult.setItem(buildItemProxy(criticalResultId.intValue()));
+      Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
+      ItemProxy proxy=buildItemProxy(criticalResultId.intValue(),iconId);
+      criticalResult.setItem(proxy);
       // Quantity
       Integer quantity=(Integer)properties.getProperty("CraftRecipe_CriticalResultItemQuantity");
       if (quantity!=null)
@@ -281,12 +281,49 @@ public class MainDatRecipesLoader
 
   private ItemProxy buildItemProxy(int id)
   {
-    ItemsManager items=ItemsManager.getInstance();
-    Item item=items.getItem(id);
+    Item item=_itemsManager.getItem(id);
     ItemProxy proxy=new ItemProxy();
     proxy.setId(id);
+    if (item==null)
+    {
+      item=resolveItem(id);
+    }
     proxy.setItem(item);
     return proxy;
+  }
+
+  private ItemProxy buildItemProxy(int id, Integer iconId)
+  {
+    ItemProxy proxy=buildItemProxy(id);
+    if (proxy.getIcon()==null)
+    {
+      if (iconId!=null)
+      {
+        resolveIcon(iconId.intValue());
+        proxy.getItem().setIcon(iconId.toString());
+      }
+    }
+    return proxy;
+  }
+
+  private Item resolveItem(int itemId)
+  {
+    PropertiesSet properties=_facade.loadProperties(itemId+0x9000000);
+    String name=DatUtils.getStringProperty(properties,"Name");
+    name=DatUtils.fixName(name);
+    Item item=new Item();
+    item.setIdentifier(itemId);
+    item.setName(name);
+    return item;
+  }
+
+  private void resolveIcon(int iconId)
+  {
+    File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconId+".png").getAbsoluteFile();
+    if (!iconFile.exists())
+    {
+      DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
+    }
   }
 
   private String getStringProperty(PropertiesSet properties, String propertyName)
@@ -396,6 +433,41 @@ public class MainDatRecipesLoader
       }
     }
     return ret;
+  }
+
+  private void checkRecipe(Recipe recipe)
+  {
+    String context=recipe.getName();
+    List<RecipeVersion> versions=recipe.getVersions();
+    for(RecipeVersion version : versions)
+    {
+      // Regular
+      CraftingResult regular=version.getRegular();
+      ItemProxy regularResultProxy=regular.getItem();
+      checkProxy(context,regularResultProxy);
+      // Regular
+      CraftingResult critical=version.getCritical();
+      if (critical!=null)
+      {
+        ItemProxy criticalResultProxy=critical.getItem();
+        checkProxy(context,criticalResultProxy);
+      }
+    }
+  }
+
+  private void checkProxy(String context,ItemProxy proxy)
+  {
+    if (proxy==null)
+    {
+      System.out.println(context+": missing proxy");
+      return;
+    }
+    String icon=proxy.getIcon();
+    if (icon==null)
+    {
+      System.out.println(context+": missing icon");
+      return;
+    }
   }
 
   /**
