@@ -23,6 +23,7 @@ public class DatUtils
       if (value instanceof String[])
       {
         ret=((String[])value)[0];
+        ret=ret.replace("\\n","\n");
       }
     }
     return ret;
