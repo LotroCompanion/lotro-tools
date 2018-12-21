@@ -127,11 +127,8 @@ public class MainDatItemsLoader
         item.setStackMax(maxStack);
       }
       // Slot
-      if (item.getEquipmentLocation()==null)
-      {
-        EquipmentLocation slot=getSlot(itemClass);
-        item.setEquipmentLocation(slot);
-      }
+      EquipmentLocation slot=getSlot(properties);
+      item.setEquipmentLocation(slot);
       // Essence slots
       Integer essenceSlots=(Integer)properties.getProperty("Item_Socket_Count");
       if ((essenceSlots!=null) && (essenceSlots.intValue()>0))
@@ -415,7 +412,7 @@ public class MainDatItemsLoader
 
   private Item buildItem(PropertiesSet properties)
   {
-    EquipmentLocation slot=null;
+    //EquipmentLocation slot=null;
     WeaponType weaponType=null;
     ArmourType armourType=null;
     long equipmentCategory=getEquipmentCategory(properties);
@@ -423,37 +420,42 @@ public class MainDatItemsLoader
     {
       // Undefined
     }
-    else if (equipmentCategory==1) slot=EquipmentLocation.EAR;
-    else if (equipmentCategory==1L<<1) slot=EquipmentLocation.POCKET;
+    else if (equipmentCategory==1)
+    {
+      //slot=EquipmentLocation.EAR;
+    }
+    else if (equipmentCategory==1L<<1)
+    {
+      //slot=EquipmentLocation.POCKET;
+    }
     else if (equipmentCategory==1L<<2)
     {
       weaponType=WeaponType.TWO_HANDED_SWORD;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<3)
     {
       weaponType=WeaponType.TWO_HANDED_CLUB;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<4)
     {
       //weaponType=WeaponType.TWO_HANDED_MACE;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<5)
     {
       weaponType=WeaponType.TWO_HANDED_AXE;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<6)
     {
       // Instrument
-      slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<7)
     {
       weaponType=WeaponType.BOW;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<8)
     {
@@ -466,37 +468,37 @@ public class MainDatItemsLoader
     else if (equipmentCategory==1L<<10)
     {
       armourType=ArmourType.HEAVY_SHIELD;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<11)
     {
       weaponType=WeaponType.ONE_HANDED_HAMMER;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<12)
     {
       weaponType=WeaponType.SPEAR;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<13)
     {
       weaponType=WeaponType.CROSSBOW;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<14)
     {
       weaponType=WeaponType.TWO_HANDED_HAMMER;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<15)
     {
       weaponType=WeaponType.HALBERD;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<16)
     {
       armourType=ArmourType.SHIELD;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<17)
     {
@@ -504,49 +506,49 @@ public class MainDatItemsLoader
     }
     else if (equipmentCategory==1L<<18) // Ring
     {
-      slot=EquipmentLocation.FINGER;
+      //slot=EquipmentLocation.FINGER;
     }
     else if (equipmentCategory==1L<<19)
     {
       weaponType=WeaponType.DAGGER;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<20) // Craft Tool
     {
-      slot=EquipmentLocation.TOOL;
+      //slot=EquipmentLocation.TOOL;
     }
     else if (equipmentCategory==1L<<21)
     {
       weaponType=WeaponType.STAFF;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<22) // Necklace
     {
-      slot=EquipmentLocation.NECK;
+      //slot=EquipmentLocation.NECK;
     }
     else if (equipmentCategory==1L<<23)
     {
       weaponType=WeaponType.ONE_HANDED_AXE;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<24) // Class Item
     {
-      slot=EquipmentLocation.CLASS_SLOT;
+      //slot=EquipmentLocation.CLASS_SLOT;
     }
     else if (equipmentCategory==1L<<25)
     {
       weaponType=WeaponType.ONE_HANDED_CLUB;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<26)
     {
       weaponType=WeaponType.ONE_HANDED_MACE;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<27)
     {
       weaponType=WeaponType.ONE_HANDED_SWORD;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<28) // Thrown Weapon
     {
@@ -554,12 +556,12 @@ public class MainDatItemsLoader
     }
     else if (equipmentCategory==1L<<29) // Armband
     {
-      slot=EquipmentLocation.WRIST;
+      //slot=EquipmentLocation.WRIST;
     }
     else if (equipmentCategory==1L<<30) // Cloak
     {
       armourType=ArmourType.LIGHT;
-      slot=EquipmentLocation.BACK;
+      //slot=EquipmentLocation.BACK;
     }
     else if (equipmentCategory==1L<<31) // Cosmetic
     {
@@ -567,34 +569,36 @@ public class MainDatItemsLoader
     }
     else if (equipmentCategory==1L<<33) // Two-handed implement
     {
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<36) // One-handed implement
     {
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<38)
     {
       weaponType=WeaponType.RUNE_STONE;
-      slot=EquipmentLocation.MAIN_HAND;
+      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<39)
     {
       armourType=ArmourType.WARDEN_SHIELD;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<40)
     {
       weaponType=WeaponType.JAVELIN;
-      slot=EquipmentLocation.RANGED_ITEM;
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
-    else if (equipmentCategory==1L<<42) // Oath-bound Armaments
+    else if (equipmentCategory==1L<<42)
     {
-      slot=EquipmentLocation.RANGED_ITEM;
+      // Oath-bound Armaments
+      //slot=EquipmentLocation.RANGED_ITEM;
     }
-    else if (equipmentCategory==1L<<43) // War-steed Item
+    else if (equipmentCategory==1L<<43)
     {
-      slot=EquipmentLocation.BRIDLE;
+      // War-steed Item
+      //slot=EquipmentLocation.BRIDLE;
     }
     else
     {
@@ -621,24 +625,33 @@ public class MainDatItemsLoader
     {
       ret=(isLegendary?new LegendaryItem():new Item());
     }
-    ret.setEquipmentLocation(slot);
+    //ret.setEquipmentLocation(slot);
     return ret;
   }
 
-  /**
-   * Get the slot of an item, using its item class.
-   * @param itemClass Item class.
-   * @return A slot or <code>null</code> if not supported.
-   */
-  private EquipmentLocation getSlot(int itemClass)
+  private EquipmentLocation getSlot(PropertiesSet properties)
   {
-    if (itemClass==3) return EquipmentLocation.CHEST;
-    if (itemClass==5) return EquipmentLocation.HAND;
-    if (itemClass==6) return EquipmentLocation.SHOULDER;
-    if (itemClass==7) return EquipmentLocation.HEAD;
-    if (itemClass==15) return EquipmentLocation.LEGS;
-    if (itemClass==23) return EquipmentLocation.FEET;
-    if (itemClass==45) return EquipmentLocation.BACK;
+    Integer defaultSlotInt=(Integer)properties.getProperty("Inventory_DefaultSlot");
+    int defaultSlot=(defaultSlotInt!=null)?defaultSlotInt.intValue():0;
+
+    if ((defaultSlot&1L<<1)!=0) return EquipmentLocation.HEAD;
+    if ((defaultSlot&1L<<2)!=0) return EquipmentLocation.CHEST;
+    if ((defaultSlot&1L<<3)!=0) return EquipmentLocation.LEGS;
+    if ((defaultSlot&1L<<4)!=0) return EquipmentLocation.HAND;
+    if ((defaultSlot&1L<<5)!=0) return EquipmentLocation.FEET;
+    if ((defaultSlot&1L<<6)!=0) return EquipmentLocation.SHOULDER;
+    if ((defaultSlot&1L<<7)!=0) return EquipmentLocation.BACK;
+    if (((defaultSlot&1L<<8)!=0) || ((defaultSlot&1L<<9)!=0)) return EquipmentLocation.WRIST;
+    if ((defaultSlot&1L<<10)!=0) return EquipmentLocation.NECK;
+    if (((defaultSlot&1L<<11)!=0) || ((defaultSlot&1L<<12)!=0)) return EquipmentLocation.FINGER;
+    if (((defaultSlot&1L<<13)!=0) || ((defaultSlot&1L<<14)!=0)) return EquipmentLocation.EAR;
+    if ((defaultSlot&1L<<15)!=0) return EquipmentLocation.POCKET;
+    if ((defaultSlot&1L<<16)!=0) return EquipmentLocation.MAIN_HAND;
+    if ((defaultSlot&1L<<17)!=0) return EquipmentLocation.OFF_HAND;
+    if ((defaultSlot&1L<<18)!=0) return EquipmentLocation.RANGED_ITEM;
+    if ((defaultSlot&1L<<19)!=0) return EquipmentLocation.TOOL;
+    if ((defaultSlot&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
+    if ((defaultSlot&1L<<21)!=0) return EquipmentLocation.BRIDLE;
     return null;
   }
 
