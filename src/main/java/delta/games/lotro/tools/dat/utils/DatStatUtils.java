@@ -194,6 +194,7 @@ public class DatStatUtils
    */
   public static STAT getStatFromName(String name)
   {
+    if ("Combat_Agent_Armor_Value_Float".equals(name)) return STAT.ARMOUR;
     if ("Health_MaxLevel".equals(name)) return STAT.MORALE;
     if ("Power_MaxLevel".equals(name)) return STAT.POWER;
     if ("Stat_Might".equals(name)) return STAT.MIGHT;
@@ -312,7 +313,6 @@ public class DatStatUtils
     if ("Burglar_Skill_CriticalMagnitude".equals(name)) return null;
     if ("Burglar_Skill_Gamble_Chance".equals(name)) return null;
     if ("CombatStateMod_CC_DurationMultModifier".equals(name)) return null; // Crowd Control Duration (see Audacity)
-    if ("Combat_Agent_Armor_Value_Float".equals(name)) return null;
     if ("Combat_Agent_MountArmor_Value_Float".equals(name)) return null;
     if ("Combat_Current_OffensePoints_Tactical".equals(name)) return null;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(name)) return null;
