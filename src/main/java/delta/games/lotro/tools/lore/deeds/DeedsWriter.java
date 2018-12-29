@@ -8,6 +8,7 @@ import java.util.List;
 
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
 import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
@@ -27,6 +28,7 @@ public class DeedsWriter
   public static void writeSortedDeeds(List<DeedDescription> deeds, File out)
   {
     List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
+    comparators.add(new IdentifiableComparator<DeedDescription>());
     comparators.add(new DeedNameComparator());
     comparators.add(new DeedDescriptionComparator());
     CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
