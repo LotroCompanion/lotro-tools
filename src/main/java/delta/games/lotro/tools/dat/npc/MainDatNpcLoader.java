@@ -41,6 +41,10 @@ public class MainDatNpcLoader
 
   private Recipe load(int indexDataId)
   {
+    if (indexDataId==1879074078)
+    {
+      return null;
+    }
     Recipe recipe=null;
     int dbPropertiesId=indexDataId+0x09000000;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
@@ -52,11 +56,11 @@ public class MainDatNpcLoader
         String npcName=DatUtils.getStringProperty(properties,"Name");
         String title=DatUtils.getStringProperty(properties,"OccupationTitle");
         title=((title!=null)?title:"no title/occupation");
-        System.out.println("NPC: "+npcName+" ("+title+")");
+        System.out.println("NPC #"+indexDataId+": "+npcName+" ("+title+")");
         for(Object barterProfileObj : barterProfiles)
         {
           int profileId=((Integer)barterProfileObj).intValue();
-          loadBarterProfile(profileId);
+          loadBarterProfile(indexDataId,profileId);
         }
 
         /*
@@ -86,7 +90,7 @@ public class MainDatNpcLoader
 
   private Set<Integer> profileIds=new HashSet<Integer>();
 
-  private void loadBarterProfile(int profileId)
+  private void loadBarterProfile(int npcId,int profileId)
   {
     if (profileIds.contains(Integer.valueOf(profileId)))
     {
@@ -95,7 +99,10 @@ public class MainDatNpcLoader
     profileIds.add(Integer.valueOf(profileId));
     int dbPropertiesId=profileId+0x09000000;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    //System.out.println(properties.dump());
+    if (npcId==0)
+    {
+      System.out.println(properties.dump());
+    }
 
     String profileName=DatUtils.getStringProperty(properties,"Barter_Profile_Name");
     profileName=((profileName!=null)?profileName:"none");
@@ -106,51 +113,68 @@ public class MainDatNpcLoader
       for(Object barterEntryObj : barterList)
       {
         Object[] barterEntry=(Object[])barterEntryObj;
-        // First item: what to give
-        PropertiesSet toGiveProps=(PropertiesSet)(barterEntry[0]);
-        boolean doDumpGive=false;
-        int idItemToGive=((Integer)toGiveProps.getProperty("Barter_Item")).intValue();
-        Item itemToGive=_itemsManager.getItem(idItemToGive);
-        String nameItemToGive=(itemToGive!=null)?itemToGive.getName():"?";
-        Integer quantityToGive=(Integer)toGiveProps.getProperty("Barter_ItemQuantity");
-        if ((itemToGive==null) || (quantityToGive==null))
+        int nbItems=barterEntry.length;
+        int nbItemsToGive=nbItems-1;
+        // What to give?
+        String itemsToGive="";
+        for(int i=0;i<nbItemsToGive;i++)
         {
-          doDumpGive=true;
-        }
-        // Second item: what to receive
-        PropertiesSet toReceiveProps=(PropertiesSet)(barterEntry[1]);
-        boolean doDumpReceive=false;
-        String toReceive="?";
-        // - item ?
-        Integer idItemToReceive=(Integer)toReceiveProps.getProperty("Barter_Item");
-        if (idItemToReceive!=null)
-        {
-          Item itemToReceive=_itemsManager.getItem(idItemToReceive.intValue());
-          String nameItemToReceive=(itemToReceive!=null)?itemToReceive.getName():"?";
-          Integer quantityToReceive=(Integer)toReceiveProps.getProperty("Barter_ItemQuantity");
-          if ((itemToReceive==null) || (quantityToReceive==null))
+          PropertiesSet toGiveProps=(PropertiesSet)(barterEntry[i]);
+          String toGive=handleItemToGiveOrReceive(toGiveProps);
+          if (toGive.length()>0)
           {
-            doDumpReceive=true;
+            if (itemsToGive.length()>0) itemsToGive+=" / ";
+            itemsToGive+=toGive;
           }
-          toReceive=quantityToReceive+" "+nameItemToReceive;
         }
-        else
-        {
-          // - faction ?
-          doDumpReceive=true;
-        }
-        if (doDumpGive)
-        {
-          System.out.println(toReceiveProps.dump());
-        }
-        if (doDumpReceive)
-        {
-          System.out.println(toGiveProps.dump());
-        }
-        String label=quantityToGive+" "+nameItemToGive+" => "+toReceive;
+        // What to receive?
+        PropertiesSet toReceiveProps=(PropertiesSet)(barterEntry[nbItems-1]);
+        String itemToReceive=handleItemToGiveOrReceive(toReceiveProps);
+        String label=itemsToGive+" => "+itemToReceive;
         System.out.println("\t\t"+label);
       }
     }
+  }
+
+  private String handleItemToGiveOrReceive(PropertiesSet itemProps)
+  {
+    Integer itemId=(Integer)itemProps.getProperty("Barter_Item");
+    Integer quantity=(Integer)itemProps.getProperty("Barter_ItemQuantity");
+    if ((itemId==null) && (quantity!=null))
+    {
+      return "";
+    }
+    Integer faction=(Integer)itemProps.getProperty("Barter_ReputationFaction");
+    Integer rewardTier=(Integer)itemProps.getProperty("Barter_ReputationRewardTier");
+
+    String label="";
+    if (itemId!=null)
+    {
+      Item item=_itemsManager.getItem(itemId.intValue());
+      String itemName=(item!=null)?item.getName():"?";
+      if (quantity!=null)
+      {
+        label=quantity+" "+itemName;
+      }
+      else
+      {
+        int lookupTable=((Integer)itemProps.getProperty("Barter_ItemQuantity_LookupTable")).intValue();
+        label="(table:"+lookupTable+") "+itemName;
+      }
+      if (item==null)
+      {
+        System.out.println(itemProps.dump());
+      }
+    }
+    else if ((faction!=null) && (rewardTier!=null))
+    {
+      label="NN (tier"+rewardTier+") reputation with faction "+faction;
+    }
+    else
+    {
+      System.out.println(itemProps.dump());
+    }
+    return label;
   }
 
   /*
