@@ -8,9 +8,8 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.lore.crafting.recipes.Recipe;
-import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
@@ -27,6 +26,7 @@ public class MainDatNpcLoader
 
   private DataFacade _facade;
   private ItemsManager _itemsManager;
+  private EnumMapper _characterClass;
 
   /**
    * Constructor.
@@ -37,26 +37,34 @@ public class MainDatNpcLoader
     _facade=facade;
     List<Item> items=ItemSaxParser.parseItemsFile(GeneratedFiles.ITEMS);
     _itemsManager=new ItemsManager(items);
+    _characterClass=facade.getEnumsManager().getEnumMapper(587202574);
   }
 
-  private Recipe load(int indexDataId)
+  private void load(int indexDataId)
   {
+    // Ignore test NPC
     if (indexDataId==1879074078)
     {
-      return null;
+      return;
     }
-    Recipe recipe=null;
     int dbPropertiesId=indexDataId+0x09000000;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
+      // Profiles
       Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
       if (barterProfiles!=null)
       {
+        // Name / title
         String npcName=DatUtils.getStringProperty(properties,"Name");
         String title=DatUtils.getStringProperty(properties,"OccupationTitle");
         title=((title!=null)?title:"no title/occupation");
         System.out.println("NPC #"+indexDataId+": "+npcName+" ("+title+")");
+        // Requirements
+        loadClassRequirement(properties);
+        loadReputationRequirement(properties);
+        loadQuestRequirements(properties);
+        // Profiles
         for(Object barterProfileObj : barterProfiles)
         {
           int profileId=((Integer)barterProfileObj).intValue();
@@ -85,7 +93,50 @@ public class MainDatNpcLoader
     {
       LOGGER.warn("Could not handle NPC ID="+indexDataId);
     }
-    return recipe;
+  }
+
+  private void loadClassRequirement(PropertiesSet properties)
+  {
+    Object[] requiredClassArray=(Object[])properties.getProperty("Usage_RequiredClassList");
+    if (requiredClassArray!=null)
+    {
+      for(Object requiredClassObj : requiredClassArray)
+      {
+        Integer requiredClass=(Integer)requiredClassObj;
+        String className=_characterClass.getString(requiredClass.intValue());
+        System.out.println("\tRequired class:"+className);
+      }
+    }
+  }
+
+  private void loadQuestRequirements(PropertiesSet properties)
+  {
+    Object[] questRequirements=(Object[])properties.getProperty("Usage_QuestRequirements");
+    if (questRequirements!=null)
+    {
+      for(Object questRequirementObj : questRequirements)
+      {
+        // {Usage_QuestStatus=805306368, Usage_Operator=3, Usage_QuestID=1879093911}
+        PropertiesSet questReqProps=(PropertiesSet)questRequirementObj;
+        int questId=((Integer)questReqProps.getProperty("Usage_QuestID")).intValue();
+        int questStatus=((Integer)questReqProps.getProperty("Usage_QuestStatus")).intValue();
+        Integer operator=(Integer)questReqProps.getProperty("Usage_Operator");
+        System.out.println("\tQuest requirement: ID="+questId+", status="+questStatus+", operator="+operator);
+      }
+    }
+  }
+
+  private void loadReputationRequirement(PropertiesSet properties)
+  {
+    Object requiredFactionObj=properties.getProperty("Usage_RequiredFaction");
+    if (requiredFactionObj!=null)
+    {
+      //{Usage_RequiredFaction_Tier=4, Usage_RequiredFaction_DataID=1879097420}
+      PropertiesSet factionReqProps=(PropertiesSet)requiredFactionObj;
+      int factionId=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_DataID")).intValue();
+      int factionTier=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_Tier")).intValue();
+      System.out.println("\tFaction requirement: ID="+factionId+", tier="+factionTier);
+    }
   }
 
   private Set<Integer> profileIds=new HashSet<Integer>();
@@ -104,9 +155,20 @@ public class MainDatNpcLoader
       System.out.println(properties.dump());
     }
 
+    // Profile name
     String profileName=DatUtils.getStringProperty(properties,"Barter_Profile_Name");
     profileName=((profileName!=null)?profileName:"none");
     System.out.println("\tProfile: "+profileName);
+
+    PropertiesSet permissionsProps=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
+    if (permissionsProps!=null)
+    {
+      loadClassRequirement(permissionsProps);
+      loadReputationRequirement(permissionsProps);
+      loadQuestRequirements(permissionsProps);
+    }
+
+    // Barter list
     Object[] barterList=(Object[])properties.getProperty("Barter_ItemListArray");
     if (barterList!=null)
     {
@@ -177,22 +239,7 @@ public class MainDatNpcLoader
     return label;
   }
 
-  /*
-  // NPC (Quartermaster of Court of Lothlorien)
-  //showProperties(facade,0x7004AADB+0x9000000);
-  // Barter_ProfileArray: #1 (Heavy Armour) 
-  //showProperties(facade,1879353979+0x9000000);
-  // Barter_ProfileArray: #17 (Lockbox Keys) 
-  //showProperties(facade,1879361624+0x9000000);
-   */
-
   private void doIt()
-  {
-    RecipesManager recipesManager=new RecipesManager();
-    scanAll(recipesManager);
-  }
-
-  private void scanAll(RecipesManager recipesManager)
   {
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
@@ -204,11 +251,7 @@ public class MainDatNpcLoader
         //System.out.println(classDefIndex);
         if (classDefIndex==1724)
         {
-          Recipe recipe=load(i);
-          if (recipe!=null)
-          {
-            recipesManager.registerRecipe(recipe);
-          }
+          load(i);
         }
       }
     }
