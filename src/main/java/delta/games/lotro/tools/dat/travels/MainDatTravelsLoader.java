@@ -2,10 +2,8 @@ package delta.games.lotro.tools.dat.travels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -34,25 +32,6 @@ public class MainDatTravelsLoader
     _nodes=new HashMap<Integer,String>();
   }
 
-  /*
-Sample properties:
-************* 1879091341 *****************
-Reputation_Faction_AdvancementTable: 1879090256
-Reputation_Faction_CurrentTier_PropertyName: 268441507
-Reputation_Faction_DefaultTier: 3
-Reputation_Faction_Description: 
-  #1: A Council of several races who struggle to take the war into the heart of Angmar itself. They strike from the hidden refuge of Gath Forthnír in the far northern wastes of Angmar.
-Reputation_Faction_EarnedReputation_PropertyName: 268441501
-Reputation_Faction_GlobalCap_PropertyName: 268441759
-Reputation_Faction_Name: 
-  #1: Council of the North
-Reputation_Faction_TierNameProgression: 1879209346
-Reputation_HighestTier: 7
-Reputation_LowestTier: 1
-  */
-
-  private Set<String> propNames=new HashSet<String>();
-
   private void load(int indexDataId)
   {
     int dbPropertiesId=indexDataId+0x09000000;
@@ -69,20 +48,22 @@ Reputation_LowestTier: 1
     }
     // Home location
     int homeLocationId=((Integer)properties.getProperty("TravelHomeLocation")).intValue();
-    loadHomeLocation(homeLocationId);
+    String nodeName=loadTravelNode(homeLocationId);
+    System.out.println("Node: "+nodeName);
 
     // Destinations
     Object[] routesArray=(Object[])properties.getProperty("TravelDestinationRecordArray");
     for(Object routeObj : routesArray)
     {
       PropertiesSet routeProps = (PropertiesSet)routeObj;
+      @SuppressWarnings("unused")
       int routeCost=((Integer)routeProps.getProperty("TravelDestinationCost")).intValue();
       int destinationId=((Integer)routeProps.getProperty("TravelDestinationRoute")).intValue();
       loadTravelRoute(destinationId);
     }
   }
 
-  private String loadHomeLocation(int locationId)
+  private String loadTravelNode(int locationId)
   {
     String nodeName=_nodes.get(Integer.valueOf(locationId));
     if (nodeName==null)
@@ -95,8 +76,9 @@ Reputation_LowestTier: 1
       nodeName=DatUtils.getStringProperty(properties,"TravelDisplayName");
       // Swift travel?
       Integer swiftTravelInt=(Integer)properties.getProperty("TravelDestinationIsSwiftTravel");
+      @SuppressWarnings("unused")
       boolean isSwiftTravel=((swiftTravelInt!=null) && (swiftTravelInt.intValue()==1));
-      System.out.println("Node ID: "+locationId+", name: "+nodeName + " (swift travel="+isSwiftTravel+")");
+      //System.out.println("Loaded Node ID: "+locationId+", name: "+nodeName + " (swift travel="+isSwiftTravel+")");
       _nodes.put(Integer.valueOf(locationId),nodeName);
     }
     return nodeName;
@@ -138,7 +120,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     String routeName=DatUtils.getStringProperty(properties,"Name");
     // Destination
     int destinationId=((Integer)properties.getProperty("TravelRoute_Destination")).intValue();
-    String destinationName=loadHomeLocation(destinationId);
+    String destinationName=loadTravelNode(destinationId);
     // Min level
     Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
 
@@ -174,7 +156,6 @@ Usage_RequiresSubscriberOrUnsub: 1
     PropertiesSet properties=_facade.loadProperties(routeActionId+0x09000000);
     //System.out.println("************* "+routeActionId+" *****************");
     //System.out.println(properties.dump());
-    propNames.addAll(properties.getPropertyNames());
     String ret=(String)properties.getProperty("TravelSegment_HeadName");
     if (ret==null)
     {
@@ -198,7 +179,6 @@ Usage_RequiresSubscriberOrUnsub: 1
       int id=((Integer)idObj).intValue();
       load(id);
     }
-    System.out.println("Props: "+propNames);
   }
 
   /**
