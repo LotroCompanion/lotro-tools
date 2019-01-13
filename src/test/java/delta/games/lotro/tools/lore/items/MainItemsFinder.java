@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import delta.games.lotro.character.stats.STAT;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
@@ -42,7 +42,7 @@ public class MainItemsFinder
         {
           if (item instanceof Armour)
           {
-            FixedDecimalsInteger stat=item.getStats().getStat(STAT.MIGHT);
+            FixedDecimalsInteger stat=item.getStats().getStat(WellKnownStat.MIGHT);
             if (stat!=null)
             {
               if (locs.contains(item.getEquipmentLocation()))

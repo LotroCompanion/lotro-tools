@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -186,7 +186,7 @@ public class MainDatItemsLoader
         Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
         if (armourProgressId!=null)
         {
-          armorStatProvider=DatStatUtils.buildStatProvider(_facade,STAT.ARMOUR,armourProgressId.intValue());
+          armorStatProvider=DatStatUtils.buildStatProvider(_facade,WellKnownStat.ARMOUR,armourProgressId.intValue());
           Float computedArmourValue=armorStatProvider.getStatValue(1,level.intValue());
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
           {
@@ -259,13 +259,13 @@ public class MainDatItemsLoader
       if (weaponType==WeaponType.ONE_HANDED_SWORD)
       {
         // +1% parry
-        ConstantStatProvider provider=new ConstantStatProvider(STAT.PARRY_PERCENTAGE,1);
+        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,1);
         statsProvider.addStatProvider(provider);
       }
       else if (weaponType==WeaponType.TWO_HANDED_SWORD)
       {
         // +2% parry
-        ConstantStatProvider provider=new ConstantStatProvider(STAT.PARRY_PERCENTAGE,2);
+        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,2);
         statsProvider.addStatProvider(provider);
       }
     }
@@ -276,22 +276,22 @@ public class MainDatItemsLoader
       if (armourType==ArmourType.HEAVY_SHIELD)
       {
         // +10% Ranged defence
-        ConstantStatProvider provider=new ConstantStatProvider(STAT.RANGED_DEFENCE_PERCENTAGE,-10);
+        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
         statsProvider.addStatProvider(provider);
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879260945);
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
         statsProvider.addStatProvider(critDef);
       }
       else if (armourType==ArmourType.SHIELD)
       {
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879211641);
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879211641);
         statsProvider.addStatProvider(critDef);
       }
       else if (armourType==ArmourType.WARDEN_SHIELD)
       {
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,STAT.CRITICAL_DEFENCE,1879260947);
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260947);
         statsProvider.addStatProvider(critDef);
       }
     }

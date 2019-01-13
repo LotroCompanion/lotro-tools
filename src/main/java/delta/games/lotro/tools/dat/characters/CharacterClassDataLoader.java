@@ -10,7 +10,6 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.character.stats.STAT;
 import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
@@ -18,6 +17,8 @@ import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -122,7 +123,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         PropertiesSet statProperties=(PropertiesSet)vitalStatObj;
         Integer value=(Integer)statProperties.getProperty("AdvTable_BaseVitalValue");
         Integer type=(Integer)statProperties.getProperty("AdvTable_VitalType");
-        STAT stat=getStatFromVitalType(type.intValue());
+        StatDescription stat=getStatFromVitalType(type.intValue());
         if (stat!=null)
         {
           if (useStartStat(stat))
@@ -142,7 +143,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         PropertiesSet statProperties=(PropertiesSet)otherStatObj;
         Integer value=(Integer)statProperties.getProperty("AdvTable_StatValue");
         Integer type=(Integer)statProperties.getProperty("AdvTable_StatType");
-        STAT stat=getStatFromStatType(type.intValue());
+        StatDescription stat=getStatFromStatType(type.intValue());
         if (stat!=null)
         {
           if (useStartStat(stat))
@@ -159,7 +160,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       // ICPR
       if (characterClass!=CharacterClass.BEORNING)
       {
-        stats.setStat(STAT.ICPR,new FixedDecimalsInteger(240));
+        stats.setStat(WellKnownStat.ICPR,new FixedDecimalsInteger(240));
       }
       // OCPR
       if (characterClass!=CharacterClass.BEORNING)
@@ -168,7 +169,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=3) ocpr=90;
         if (level>=8) ocpr=105;
         if (level>=26) ocpr=120;
-        stats.setStat(STAT.OCPR,new FixedDecimalsInteger(ocpr));
+        stats.setStat(WellKnownStat.OCPR,new FixedDecimalsInteger(ocpr));
       }
       // OCMR
       if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
@@ -177,7 +178,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=4) ocmr=180;
         if (level>=10) ocmr=240;
         if (level>=31) ocmr=300;
-        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
       }
       else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
       {
@@ -185,13 +186,13 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=2) ocmr=120;
         if (level>=6) ocmr=180;
         if (level>=16) ocmr=240;
-        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
       }
       else
       {
         int ocmr=60;
         if (level>=5) ocmr=120;
-        stats.setStat(STAT.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
       }
       // ICMR
       int icmr;
@@ -207,14 +208,14 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       {
         icmr=(int)(71.1 + level * 0.6);
       }
-      stats.setStat(STAT.ICMR,new FixedDecimalsInteger(icmr));
+      stats.setStat(WellKnownStat.ICMR,new FixedDecimalsInteger(icmr));
       _startStatsManager.setStats(characterClass,level,stats);
     }
   }
 
-  private boolean useStartStat(STAT stat)
+  private boolean useStartStat(StatDescription stat)
   {
-    if (stat.name().indexOf("WARSTEED")!=-1) return false;
+    if (stat.getLegacyKey().indexOf("WARSTEED")!=-1) return false;
     return true;
   }
 
@@ -236,17 +237,17 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
             Integer targetStatId=(Integer)derivedStatProperties.getProperty("AdvTable_DerivedStat");
             if (targetStatId.intValue()<=27) // Ignore war-steed related stats
             {
-              STAT targetStat=getDerivedStat(targetStatId.intValue());
+              StatDescription targetStat=getDerivedStat(targetStatId.intValue());
               value=fixStatValue(targetStat,value);
               Integer sourceStatId=(Integer)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Stat");
-              STAT sourceStat=getStatFromStatType(sourceStatId.intValue());
+              StatDescription sourceStat=getStatFromStatType(sourceStatId.intValue());
               if (sourceStat!=null)
               {
                 //System.out.println(sourceStat+"*"+value+" => "+targetStat);
                 _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,new FixedDecimalsInteger(value));
-                if (targetStat==STAT.TACTICAL_MASTERY)
+                if (targetStat==WellKnownStat.TACTICAL_MASTERY)
                 {
-                  _derivatedStatsManager.setFactor(sourceStat,STAT.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(value));
+                  _derivatedStatsManager.setFactor(sourceStat,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(value));
                 }
               }
             }
@@ -259,23 +260,23 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private void addImplicitDerivations(CharacterClass characterClass)
   {
-    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.MELEE_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.RANGED_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(STAT.CRITICAL_DEFENCE_PERCENTAGE,STAT.TACTICAL_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.PHYSICAL_MITIGATION,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.TACTICAL_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
-    _derivatedStatsManager.setFactor(STAT.ARMOUR,STAT.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
-    _derivatedStatsManager.setFactor(STAT.PHYSICAL_MITIGATION,STAT.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(STAT.TACTICAL_MASTERY,STAT.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.MELEE_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.RANGED_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.TACTICAL_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.PHYSICAL_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.TACTICAL_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
   }
 
-  private float fixStatValue(STAT stat, float value)
+  private float fixStatValue(StatDescription stat, float value)
   {
     if (stat.isPercentage())
     {
       value=value*100;
     }
-    if ((stat==STAT.ICMR) || (stat==STAT.ICPR) || (stat==STAT.OCMR) || (stat==STAT.OCPR))
+    if ((stat==WellKnownStat.ICMR) || (stat==WellKnownStat.ICPR) || (stat==WellKnownStat.OCMR) || (stat==WellKnownStat.OCPR))
     {
       value=value*60;
     }
@@ -300,55 +301,55 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     }
   }
 
-  private STAT getStatFromVitalType(int vitalType)
+  private StatDescription getStatFromVitalType(int vitalType)
   {
-    if (vitalType==1) return STAT.MORALE;
-    if (vitalType==2) return STAT.POWER;
-    if (vitalType==3) return STAT.WARSTEED_ENDURANCE;
-    if (vitalType==4) return STAT.WARSTEED_POWER;
+    if (vitalType==1) return WellKnownStat.MORALE;
+    if (vitalType==2) return WellKnownStat.POWER;
+    if (vitalType==3) return WellKnownStat.WARSTEED_ENDURANCE;
+    if (vitalType==4) return WellKnownStat.WARSTEED_POWER;
     return null;
   }
 
-  private STAT getStatFromStatType(int statType)
+  private StatDescription getStatFromStatType(int statType)
   {
-    if (statType==1) return STAT.VITALITY;
-    if (statType==2) return STAT.AGILITY;
-    if (statType==3) return STAT.FATE;
-    if (statType==4) return STAT.MIGHT;
-    if (statType==5) return STAT.WILL;
-    if (statType==6) return STAT.WARSTEED_AGILITY;
-    if (statType==7) return STAT.WARSTEED_STRENGTH;
+    if (statType==1) return WellKnownStat.VITALITY;
+    if (statType==2) return WellKnownStat.AGILITY;
+    if (statType==3) return WellKnownStat.FATE;
+    if (statType==4) return WellKnownStat.MIGHT;
+    if (statType==5) return WellKnownStat.WILL;
+    if (statType==6) return WellKnownStat.WARSTEED_AGILITY;
+    if (statType==7) return WellKnownStat.WARSTEED_STRENGTH;
     return null;
   }
 
-  private STAT getDerivedStat(int statType)
+  private StatDescription getDerivedStat(int statType)
   {
     // From enum DerivedStatType, (id=587203378)
-    if (statType==1) return STAT.MORALE;
-    if (statType==2) return STAT.POWER;
+    if (statType==1) return WellKnownStat.MORALE;
+    if (statType==2) return WellKnownStat.POWER;
     //if (statType==3) return STAT.PHYSICAL_MASTERY; // Melee Offence Rating
     //if (statType==4) return STAT.PHYSICAL_MASTERY; // Ranged Offence Rating
     //if (statType==5) return STAT.TACTICAL_MASTERY; // Tactical Offence Rating
-    if (statType==6) return STAT.OUTGOING_HEALING; // Outgoing Healing Rating
-    if (statType==7) return STAT.CRITICAL_RATING;
-    if (statType==8) return STAT.PHYSICAL_MITIGATION;
-    if (statType==9) return STAT.TACTICAL_MITIGATION;
-    if (statType==10) return STAT.BLOCK;
-    if (statType==11) return STAT.PARRY;
-    if (statType==12) return STAT.EVADE;
-    if (statType==13) return STAT.RESISTANCE;
-    if (statType==14) return STAT.ICMR;
-    if (statType==15) return STAT.OCMR;
-    if (statType==16) return STAT.ICPR;
-    if (statType==17) return STAT.OCPR;
-    if (statType==18) return STAT.FINESSE;
+    if (statType==6) return WellKnownStat.OUTGOING_HEALING; // Outgoing Healing Rating
+    if (statType==7) return WellKnownStat.CRITICAL_RATING;
+    if (statType==8) return WellKnownStat.PHYSICAL_MITIGATION;
+    if (statType==9) return WellKnownStat.TACTICAL_MITIGATION;
+    if (statType==10) return WellKnownStat.BLOCK;
+    if (statType==11) return WellKnownStat.PARRY;
+    if (statType==12) return WellKnownStat.EVADE;
+    if (statType==13) return WellKnownStat.RESISTANCE;
+    if (statType==14) return WellKnownStat.ICMR;
+    if (statType==15) return WellKnownStat.OCMR;
+    if (statType==16) return WellKnownStat.ICPR;
+    if (statType==17) return WellKnownStat.OCPR;
+    if (statType==18) return WellKnownStat.FINESSE;
     if (statType==19) return null; // Elemental Resist Rating
     if (statType==20) return null; // Resistance_Corruption
     if (statType==21) return null; // Song Resist Rating
     if (statType==22) return null; // Cry Resist Rating
     if (statType==23) return null; // Resistance_Magic
-    if (statType==26) return STAT.TACTICAL_MASTERY;
-    if (statType==27) return STAT.PHYSICAL_MASTERY;
+    if (statType==26) return WellKnownStat.TACTICAL_MASTERY;
+    if (statType==27) return WellKnownStat.PHYSICAL_MASTERY;
     System.out.println("Unsupported stat type: "+statType);
     return null;
   }
