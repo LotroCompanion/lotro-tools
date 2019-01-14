@@ -1,10 +1,12 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.tools.dat.utils.ProgressionFactory;
-import delta.games.lotro.utils.maths.Progression;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Get legendary data from DAT files.
@@ -23,22 +25,58 @@ public class MainDatLegendariesExplorer
     _facade=facade;
   }
 
+  private void loadLegacy(int id)
+  {
+    System.out.println("**** ID="+id+" *****");
+    PropertiesSet props=_facade.loadProperties(id+0x9000000);
+    //System.out.println(props.dump());
+
+    Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
+    if (imbuedEffect!=null)
+    {
+      loadEffect(imbuedEffect.intValue());
+    }
+    PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
+    if (mutationProps!=null)
+    {
+      Object[] oldLegacies=(Object[])mutationProps.getProperty("ItemAdvancement_LegacyTypeName_Array");
+      for(Object oldStatObj : oldLegacies)
+      {
+        int oldLegacy=((Integer)oldStatObj).intValue();
+        PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(oldLegacy);
+        System.out.println("Old legacy: "+propDef.getName());
+      }
+    }
+    else
+    {
+      System.out.println("No mutation data");
+    }
+  }
+
   private void doIt()
   {
     PropertiesSet props=_facade.loadProperties(1879108262+0x9000000);
-    System.out.println(props.dump());
+    //System.out.println(props.dump());
     Object[] array=(Object[])props.getProperty("ItemAdvancement_WidgetDID_Array");
-    int index=0;
     for(Object obj : array)
     {
-      if (index<1)
-      {
-        int id=((Integer)obj).intValue();
-        PropertiesSet props2=_facade.loadProperties(id+0x9000000);
-        System.out.println(props2.dump());
-        index++;
-      }
+      // 327 items
+      int id=((Integer)obj).intValue();
+      loadLegacy(id);
     }
+
+    // ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform gives pre-imbued->imbued transformation data
+    //ItemAdvancement_LegacyTypeName_Array: #1: 268460418 => old stat
+    // ItemAdvancement_ImbuedLegacy_Effect:
+    /*
+    System.out.println("ItemAdvancement_ImbuedLegacy_Effect:");
+    System.out.println(_facade.loadProperties(1879321627+0x9000000).dump());
+    => Effect
+        ID: 268460418, key=Skill_Beorning_IA_BearDamage, name=Bear form Damage, percentage
+
+  => same stat before and after imbuement.
+        */
+
     // ItemAdvancement_LegacyReplacement_Extraction_Array
     //System.out.println(_facade.loadProperties(1879319148+0x9000000).dump());
     // ItemAdvancement_LegendarySlotOffer_Array
@@ -48,6 +86,7 @@ public class MainDatLegendariesExplorer
     // ItemAdvancement_ImbuedLegacy_Effect
     //System.out.println(_facade.loadProperties(1879324318+0x9000000).dump());
 
+    /*
     // ItemAdvancement_ImbuedDPSWidget: #1
     System.out.println(_facade.loadProperties(1879325264+0x9000000).dump());
     // ItemAdvancement_AdvanceableWidget_DPSLUT
@@ -58,6 +97,7 @@ public class MainDatLegendariesExplorer
     // ItemAdvancement_AdvanceableWidget_DPSLUT
     System.out.println("DPS"); // Physical?
     System.out.println(_facade.loadProperties(1879325253+0x9000000).dump());
+    */
   }
 
   void doIt2()
@@ -80,6 +120,7 @@ public class MainDatLegendariesExplorer
     {
       return;
     }
+    System.out.println("ItemAdvancement_ProgressionGroupOverride = "+progGroupOverride);
     PropertiesSet props=_facade.loadProperties(progGroupOverride.intValue()+0x9000000);
     //System.out.println(props.dump());
     Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
@@ -90,55 +131,31 @@ public class MainDatLegendariesExplorer
       int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
       System.out.println("List: "+progressionListId+", weight="+weight);
       PropertiesSet progressionListProps=_facade.loadProperties(progressionListId+0x9000000);
-      System.out.println(progressionListProps.dump());
+      //System.out.println(progressionListProps.dump());
       Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
+      System.out.println("Found "+effectArray.length+" effects");
       for(Object effectEntryObj : effectArray)
       {
         PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
         int effectId=((Integer)effectEntry.getProperty("ItemAdvancement_Effect")).intValue();
         int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
         System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight);
-        PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-        System.out.println(effectProps.dump());
-        Object[] modArray=(Object[])effectProps.getProperty("Mod_Array");
-        if (modArray!=null)
-        {
-          for(Object singleModObj : modArray)
-          {
-            PropertiesSet modProps=(PropertiesSet)singleModObj;
-            int propertyId=((Integer)modProps.getProperty("Mod_Modified")).intValue();
-            int progressionId=((Integer)modProps.getProperty("Mod_Progression")).intValue();
-            PropertiesSet progressProperties=_facade.loadProperties(progressionId+0x9000000);
-            Progression progression=ProgressionFactory.buildProgression(progressionId,progressProperties);
-            PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDef(propertyId);
-            String propertyName=propertyDef.getName();
-            System.out.println("\t\t"+propertyName+" = > "+progression);
-          }
-        }
-        /*
-Effect_ApplicationProbabilityVariance: 0.0
-Effect_Applied_Description: 
-Effect_ClassPriority: 1
-Effect_ConstantApplicationProbability: 1.0
-Effect_Debuff: 0
-Effect_Definition_Description: 
-Effect_Duration_Permanent: 1
-Effect_EquivalenceClass: 0
-Effect_Harmful: 0
-Effect_Icon: 1090519170 // 41000082
-Effect_Name: 
-  #1: ModificationEffect
-Effect_RemoveOnAwaken: 0
-Effect_RemoveOnDefeat: 0
-Effect_SentToClient: 1
-Effect_UIVisible: 0
-Mod_Array: 
-  #1: 
-    Mod_Modified: 268447964
-    Mod_Op: 7
-    Mod_Progression: 1879164087
-         */
+        loadEffect(effectId);
       }
+    }
+  }
+
+  private void loadEffect(int effectId)
+  {
+    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
+    //System.out.println(effectProps.dump());
+    StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,effectProps);
+    int nbStats=statsProvider.getNumberOfStatProviders();
+    for(int i=0;i<nbStats;i++)
+    {
+      StatProvider statProvider=statsProvider.getStatProvider(i);
+      StatDescription stat=statProvider.getStat();
+      System.out.println("\t\t"+stat);
     }
   }
 
