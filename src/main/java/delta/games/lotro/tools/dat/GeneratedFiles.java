@@ -2,12 +2,15 @@ package delta.games.lotro.tools.dat;
 
 import java.io.File;
 
+import delta.games.lotro.LotroCoreConfig;
+
 /**
  * Constants for files used in the generation of data from the DAT files.
  * @author DAM
  */
 public class GeneratedFiles
 {
+  private static final File LORE=LotroCoreConfig.getInstance().getLoreDir();
   /**
    * Classes.
    */
@@ -68,6 +71,10 @@ public class GeneratedFiles
    * Item icons.
    */
   public static final File ITEM_ICONS_DIR=new File("../lotro-item-icons-db/icons").getAbsoluteFile();
+  /**
+   * Stats.
+   */
+  public static final File STATS=new File(LORE,"stats.xml");
   /**
    * Progressions for items.
    */
