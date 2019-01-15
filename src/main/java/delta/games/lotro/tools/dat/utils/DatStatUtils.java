@@ -79,6 +79,9 @@ public class DatStatUtils
         PropertiesSet statProperties=(PropertiesSet)mods[i];
         Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
         PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
+        String statKey=def.getName();
+        boolean useStat=useStat(statKey);
+        if (!useStat) continue;
         StatDescription stat=DatStatUtils.getStatDescription(def);
         if (stat!=null)
         {
@@ -244,5 +247,25 @@ public class DatStatUtils
       ret=stat;
     }
     return ret;
+  }
+
+  private static boolean useStat(String key)
+  {
+    if ("AI_PetEffect_HeraldBaseWC_Override".equals(key)) return false;
+    if ("AI_PetEffect_ArcherBaseWC_Override".equals(key)) return false;
+    if ("AI_PetEffect_HeraldHopeWC_Override".equals(key)) return false;
+    if ("AI_PetEffect_HeraldVictoryWC_Override".equals(key)) return false;
+    if ("Trait_Loremaster_PetModStat_Slot2".equals(key)) return false;
+    if ("Trait_Captain_PetModStat_Slot4".equals(key)) return false;
+    // Only on a test item
+    if ("Skill_RiftSet_Absorb_Fire".equals(key)) return false;
+    // Gives affinity for RK stones: fire, frost or lightning
+    if ("ForwardSource_Combat_TraitCombo".equals(key)) return false;
+    if ("Item_Runekeeper_PreludeofHope_Cleanse".equals(key)) return false;
+    if ("Skill_EffectOverride_Burglar_ExploitOpening".equals(key)) return false;
+    if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(key)) return false;
+    if ("Item_Minstrel_Oathbreaker_Damagetype".equals(key)) return false;
+
+    return true;
   }
 }
