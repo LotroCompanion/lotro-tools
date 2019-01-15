@@ -174,6 +174,8 @@ public class MainDatRelicsLoader
     {
       System.out.println("Wrote relic icons archive: "+GeneratedFiles.RELIC_ICONS);
     }
+    // Stats usage statistics
+    DatStatUtils._statsUsageStatistics.showResults();
   }
 
   /**

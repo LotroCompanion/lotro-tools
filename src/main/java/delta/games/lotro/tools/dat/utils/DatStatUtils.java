@@ -35,6 +35,11 @@ public class DatStatUtils
   public static ProgressionsManager _progressions=new ProgressionsManager();
 
   /**
+   * Stats usage statistics.
+   */
+  public static StatsUsageStatistics _statsUsageStatistics=new StatsUsageStatistics();
+
+  /**
    * Load a set of stats from some properties.
    * @param facade Data facade.
    * @param properties Properties to use to get stats.
@@ -55,6 +60,7 @@ public class DatStatUtils
         StatDescription stat=DatStatUtils.getStatDescription(def);
         if (stat!=null)
         {
+          _statsUsageStatistics.registerStatUsage(stat);
           StatProvider provider=null;
           Number value=null;
           // Often 7 for "add"

@@ -36,6 +36,8 @@ public class MainCharacterDataLoader
 
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
+    // Stats usage statistics
+    DatStatUtils._statsUsageStatistics.showResults();
     // Save traits
     new TraitKeyGenerator(traitsManager).setup();
     List<TraitDescription> traits=traitsManager.getAll();

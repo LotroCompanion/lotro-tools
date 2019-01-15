@@ -870,6 +870,8 @@ public class MainDatItemsLoader
     /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    // Stats usage statistics
+    DatStatUtils._statsUsageStatistics.showResults();
   }
 
   /**
