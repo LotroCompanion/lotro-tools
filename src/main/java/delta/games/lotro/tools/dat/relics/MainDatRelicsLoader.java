@@ -47,7 +47,7 @@ public class MainDatRelicsLoader
   private boolean _debug=false;
   private int _currentId;
 
-  private Relic loadRelic(int indexDataId)
+  private void loadRelic(int indexDataId)
   {
     //System.out.println(indexDataId);
     Relic relic=null;
@@ -71,6 +71,11 @@ public class MainDatRelicsLoader
       int slots=((Integer)properties.getProperty("Relic_ValidContainerSlots")).intValue();
       boolean isBridleRelic=(slots==2097152);
       relic.setBridleRelic(isBridleRelic);
+      boolean useRelic=useRelic(type,isBridleRelic);
+      if (!useRelic)
+      {
+        return;
+      }
       // Category
       Integer categoryEnum=(Integer)properties.getProperty("Runic_Tier");
       String categoryName=_categories.getString(categoryEnum.intValue());
@@ -81,6 +86,13 @@ public class MainDatRelicsLoader
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       BasicStatsSet stats=statsProvider.getStats(1,level.intValue(),true);
       relic.getStats().addStats(stats);
+      // Runic stats
+      StatsProvider runicStatsProvider=DatStatUtils.buildStatProviders("Runic_",_facade,properties);
+      if (runicStatsProvider.getNumberOfStatProviders()>0)
+      {
+        BasicStatsSet runicStats=runicStatsProvider.getStats(1,level.intValue(),true);
+        relic.getStats().addStats(runicStats);
+      }
       // Required level
       Integer requiredLevel=(Integer)properties.getProperty("Runic_RequiredItemLevel");
       relic.setRequiredLevel(requiredLevel);
@@ -109,7 +121,14 @@ public class MainDatRelicsLoader
     {
       LOGGER.warn("Could not handle relic ID="+indexDataId);
     }
-    return relic;
+  }
+
+  private boolean useRelic(RelicType relicType, boolean isBridle)
+  {
+    if (relicType==RelicType.INSIGNIA) return false;
+    if (relicType==RelicType.CLASS_RELIC) return false;
+    if (isBridle) return false;
+    return true;
   }
 
   private boolean checkRelic(RelicsCategory category, Relic relic)
@@ -142,9 +161,10 @@ public class MainDatRelicsLoader
   private void doIt()
   {
     _categories=_facade.getEnumsManager().getEnumMapper(587203232);
-    for(int i=1879114433;i<=1879368329;i++)
+    for(int id=0x70000000;id<=0x77FFFFFF;id++)
+    //for(int i=1879114433;i<=1879368329;i++)
     {
-      byte[] data=_facade.loadData(i);
+      byte[] data=_facade.loadData(id);
       if (data!=null)
       {
         int did=BufferUtils.getDoubleWordAt(data,0);

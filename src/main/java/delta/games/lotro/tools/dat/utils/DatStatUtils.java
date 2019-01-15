@@ -47,15 +47,37 @@ public class DatStatUtils
    */
   public static StatsProvider buildStatProviders(DataFacade facade, PropertiesSet properties)
   {
+    return buildStatProviders(null,facade,properties);
+  }
+
+  /**
+   * Load a set of stats from some properties.
+   * @param propsPrefix Prefix for properties to use, default is <code>null</code>.
+   * @param facade Data facade.
+   * @param properties Properties to use to get stats.
+   * @return A stats provider.
+   */
+  public static StatsProvider buildStatProviders(String propsPrefix, DataFacade facade, PropertiesSet properties)
+  {
+    String arrayPropName="Mod_Array";
+    String modifiedPropName="Mod_Modified";
+    String progressionPropName="Mod_Progression";
+    if (propsPrefix!=null)
+    {
+      arrayPropName=propsPrefix+arrayPropName;
+      modifiedPropName=propsPrefix+modifiedPropName;
+      progressionPropName=propsPrefix+progressionPropName;
+    }
+
     StatsProvider statsProvider=new StatsProvider();
-    Object[] mods=(Object[])properties.getProperty("Mod_Array");
+    Object[] mods=(Object[])properties.getProperty(arrayPropName);
     if (mods!=null)
     {
       Map<StatDescription,RangedStatProvider> rangedStatProviders=null;
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
-        Integer statId=(Integer)statProperties.getProperty("Mod_Modified");
+        Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
         PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
         StatDescription stat=DatStatUtils.getStatDescription(def);
         if (stat!=null)
@@ -64,9 +86,9 @@ public class DatStatUtils
           StatProvider provider=null;
           Number value=null;
           // Often 7 for "add"
-          int modOp=((Integer)statProperties.getProperty("Mod_Op")).intValue();
+          Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
           StatOperator operator=getOperator(modOp);
-          Integer progressId=(Integer)statProperties.getProperty("Mod_Progression");
+          Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
           if (progressId!=null)
           {
             provider=buildStatProvider(facade,stat,progressId.intValue());
@@ -85,7 +107,7 @@ public class DatStatUtils
             }
             else
             {
-              LOGGER.warn("No progression ID and no direct value...");
+              LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
             }
           }
           if (provider!=null)
@@ -117,8 +139,10 @@ public class DatStatUtils
     return statsProvider;
   }
 
-  private static StatOperator getOperator(int modOp)
+  private static StatOperator getOperator(Integer modOpInteger)
   {
+    if (modOpInteger==null) return StatOperator.ADD;
+    int modOp=modOpInteger.intValue();
     if (modOp==5) return StatOperator.SET;
     if (modOp==6) return StatOperator.SUBSTRACT;
     if (modOp==7) return StatOperator.ADD;
@@ -161,6 +185,7 @@ public class DatStatUtils
    */
   public static StatProvider buildStatProvider(DataFacade facade, StatDescription stat, int progressId)
   {
+    if (progressId==0) return null;
     PropertiesSet properties=facade.loadProperties(progressId+0x9000000);
     Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
     if (progressionIds!=null)
@@ -204,6 +229,10 @@ public class DatStatUtils
   {
     StatsRegistry registry=StatsRegistry.getInstance();
     int id=propertyDefinition.getPropertyId();
+    if (id==0)
+    {
+      return null;
+    }
     StatDescription ret=registry.getById(id);
     if (ret==null)
     {
