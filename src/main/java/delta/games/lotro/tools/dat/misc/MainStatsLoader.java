@@ -1,9 +1,14 @@
 package delta.games.lotro.tools.dat.misc;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -74,8 +79,14 @@ public class MainStatsLoader
     addCustomStats();
     // Add legacy mappings
     StatMappings.setupMappings(_stats);
+    // Filter stats to keep only legacy ones, ordered as before
+    filterStats();
     // Save stats
-    _stats.writeToFile(GeneratedFiles.STATS);
+    List<StatDescription> stats=_stats.getAll();
+    int nbStats=stats.size();
+    File toFile=GeneratedFiles.STATS;
+    LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
+    StatXMLWriter.write(toFile,stats);
   }
 
   private void addDatStat(int id, String key, String name, boolean isPercentage)
@@ -108,6 +119,29 @@ public class MainStatsLoader
     addCustomStat(id--,"FINESSE_PERCENTAGE",true);
     addCustomStat(id--,"RESISTANCE_PERCENTAGE",true);
     addCustomStat(id--,"ARMOUR",false);
+  }
+
+  private void filterStats()
+  {
+    List<StatDescription> newList=new ArrayList<StatDescription>();
+    for(OldStatEnum old : OldStatEnum.values())
+    {
+      String key=old.name();
+      StatDescription stat=_stats.getByKey(key);
+      if (stat!=null)
+      {
+        newList.add(stat);
+      }
+      else
+      {
+        LOGGER.warn("Stat not found: "+key);
+      }
+    }
+    _stats.clear();
+    for(StatDescription stat : newList)
+    {
+      _stats.addStat(stat);
+    }
   }
 
   /**

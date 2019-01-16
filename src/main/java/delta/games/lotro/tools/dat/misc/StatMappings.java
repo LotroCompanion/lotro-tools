@@ -98,6 +98,7 @@ public class StatMappings
     registerMapping("Skill_InductionDuration_MiningMod","PROSPECTOR_MINING_DURATION");
     registerMapping("Skill_InductionDuration_WoodHarvestMod","FORESTER_CHOPPING_DURATION");
     registerMapping("Skill_InductionDuration_FarmHarvestMod","FARMER_MINING_DURATION");
+    registerMapping("Skill_InductionDuration_ResearchingMod","SCHOLAR_RESEARCHING_DURATION");
     registerMapping("MountEndurance_MaxLevel","WARSTEED_ENDURANCE");
     registerMapping("MountPower_MaxLevel","WARSTEED_POWER");
     registerMapping("Stat_MountAgility","WARSTEED_AGILITY");
@@ -105,6 +106,17 @@ public class StatMappings
     registerMapping("ItemWear_ChanceMod_CombatHit","ITEM_WEAR_CHANCE_ON_HIT");
     registerMapping("Skill_DamageMultiplier_LightintheDark","BALLAD_AND_CODA_DAMAGE_PERCENTAGE");
     registerMapping("Combat_EffectCriticalMultiplierMod","TACTICAL_CRITICAL_MULTIPLIER");
+    registerMapping("Trait_PvMP_BattleRank","AUDACITY");
+    registerMapping("Skill_VitalCost_Champion_AOEMod","BLADE_LINE_AOE_POWER_COST_PERCENTAGE");
+    registerMapping("Skill_VitalCost_Champion_StrikeMod","STRIKE_SKILLS_POWER_COST_PERCENTAGE");
+    registerMapping("Burglar_TricksPowerReduce","TRICKS_POWER_COST_PERCENTAGE");
+    registerMapping("Skill_VitalCost_Book_SigilAnimalMod","SIGN_OF_THE_WILD_POWER_COST_PERCENTAGE");
+    registerMapping("TotalThreatModifier_Player","PERCEIVED_THREAT");
+    registerMapping("Skill_InductionDuration_AllSkillsMod","ALL_SKILL_INDUCTION");
+    registerMapping("Combat_Current_DefensePoints_Melee","MELEE_DEFENCE");
+    registerMapping("Combat_Current_DefensePoints_Ranged","RANGED_DEFENCE");
+    registerMapping("Combat_Current_DefensePoints_Tactical","TACTICAL_DEFENCE");
+    registerMapping("Skill_AutoAttackCriticalHitChance","RANGED_AUTO_ATTACKS_CRIT_CHANCE_PERCENTAGE");
   }
 
   private static void registerMapping(String gameKey, String legacyKey)
@@ -113,6 +125,8 @@ public class StatMappings
     if (stat!=null)
     {
       stat.setLegacyKey(legacyKey);
+      _stats.removeStat(stat);
+      _stats.addStat(stat);
     }
     else
     {
