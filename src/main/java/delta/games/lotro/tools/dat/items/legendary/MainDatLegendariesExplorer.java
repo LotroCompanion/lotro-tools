@@ -1,12 +1,9 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
-import delta.games.lotro.common.stats.StatDescription;
-import delta.games.lotro.common.stats.StatProvider;
-import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 
 /**
  * Get legendary data from DAT files.
@@ -34,7 +31,7 @@ public class MainDatLegendariesExplorer
     Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
     if (imbuedEffect!=null)
     {
-      loadEffect(imbuedEffect.intValue());
+      DatEffectUtils.loadEffect(_facade,imbuedEffect.intValue());
     }
     PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
     if (mutationProps!=null)
@@ -140,22 +137,8 @@ public class MainDatLegendariesExplorer
         int effectId=((Integer)effectEntry.getProperty("ItemAdvancement_Effect")).intValue();
         int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
         System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight);
-        loadEffect(effectId);
+        DatEffectUtils.loadEffect(_facade,effectId);
       }
-    }
-  }
-
-  private void loadEffect(int effectId)
-  {
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-    //System.out.println(effectProps.dump());
-    StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,effectProps);
-    int nbStats=statsProvider.getNumberOfStatProviders();
-    for(int i=0;i<nbStats;i++)
-    {
-      StatProvider statProvider=statsProvider.getStatProvider(i);
-      StatDescription stat=statProvider.getStat();
-      System.out.println("\t\t"+stat);
     }
   }
 
