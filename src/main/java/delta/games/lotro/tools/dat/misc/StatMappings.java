@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.misc;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
 
@@ -9,6 +11,8 @@ import delta.games.lotro.common.stats.StatsRegistry;
  */
 public class StatMappings
 {
+  private static final Logger LOGGER=Logger.getLogger(StatMappings.class);
+
   private static StatsRegistry _stats;
 
   /**
@@ -68,7 +72,7 @@ public class StatMappings
     registerMapping("Combat_Modifier_OutgoingHealing_Points","OUTGOING_HEALING");
     registerMapping("Combat_Modifier_OutgoingHealing_Percent","OUTGOING_HEALING_PERCENTAGE");
     registerMapping("Combat_ArmorDefense_PointsModifier_UnifiedPhysical","PHYSICAL_MITIGATION");
-    registerMapping("Combat_MitigationPercentage_Common","PHYSICAL_MITIGATION_PERCENTAGE"); // Should be only for common damage type
+    //registerMapping("Combat_MitigationPercentage_Common","PHYSICAL_MITIGATION_PERCENTAGE"); // Should be only for common damage type
     registerMapping("Combat_MitigationPercentage_UnifiedPhysical","PHYSICAL_MITIGATION_PERCENTAGE");
     registerMapping("Combat_ArmorDefense_PointsModifier_UnifiedTactical","TACTICAL_MITIGATION");
     registerMapping("Combat_MitigationPercentage_UnifiedTactical","TACTICAL_MITIGATION_PERCENTAGE");
@@ -85,8 +89,8 @@ public class StatMappings
     registerMapping("Combat_MitigationPercentage_OrcCraft","OCFW_MITIGATION_PERCENTAGE");
     registerMapping("Combat_PhysicalMastery_Modifier_Unified","PHYSICAL_MASTERY");
     registerMapping("Combat_TacticalMastery_Modifier_Unified","TACTICAL_MASTERY");
-    registerMapping("Combat_Class_PhysicalMastery_Unified","PHYSICAL_MASTERY");
-    registerMapping("Combat_Class_TacticalMastery_Unified","TACTICAL_MASTERY");
+    //registerMapping("Combat_Class_PhysicalMastery_Unified","PHYSICAL_MASTERY");
+    //registerMapping("Combat_Class_TacticalMastery_Unified","TACTICAL_MASTERY");
     registerMapping("Stealth_StealthLevelModifier","STEALTH_LEVEL");
     registerMapping("Craft_Weaponsmith_CriticalChanceAddModifier","WEAPONSMITH_CRIT_CHANCE_PERCENTAGE");
     registerMapping("Craft_Metalsmith_CriticalChanceAddModifier","METALSMITH_CRIT_CHANCE_PERCENTAGE");
@@ -121,6 +125,12 @@ public class StatMappings
 
   private static void registerMapping(String gameKey, String legacyKey)
   {
+    StatDescription oldStat=_stats.getByKey(legacyKey);
+    if (oldStat!=null)
+    {
+      LOGGER.warn("Legacy key already used: "+legacyKey);
+      return;
+    }
     StatDescription stat=_stats.getByKey(gameKey);
     if (stat!=null)
     {
