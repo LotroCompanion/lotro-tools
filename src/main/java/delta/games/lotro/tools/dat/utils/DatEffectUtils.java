@@ -1,7 +1,5 @@
 package delta.games.lotro.tools.dat.utils;
 
-import delta.games.lotro.common.stats.StatDescription;
-import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -23,6 +21,7 @@ public class DatEffectUtils
     PropertiesSet effectProps=facade.loadProperties(effectId+0x9000000);
     //System.out.println(effectProps.dump());
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,effectProps);
+    /*
     int nbStats=statsProvider.getNumberOfStatProviders();
     for(int i=0;i<nbStats;i++)
     {
@@ -30,6 +29,7 @@ public class DatEffectUtils
       StatDescription stat=statProvider.getStat();
       System.out.println("\t\t"+stat);
     }
+    */
     return statsProvider;
   }
 

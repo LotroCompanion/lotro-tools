@@ -107,4 +107,8 @@ public class GeneratedFiles
    * Relic icons.
    */
   public static final File RELIC_ICONS=new File("../lotro-relics/relicIcons.zip").getAbsoluteFile();
+  /**
+   * Legendary titles.
+   */
+  public static final File LEGENDARY_TITLES=new File(LORE,"legendary_titles.xml");
 }

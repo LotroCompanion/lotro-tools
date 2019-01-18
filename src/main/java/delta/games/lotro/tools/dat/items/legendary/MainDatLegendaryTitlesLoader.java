@@ -1,13 +1,22 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.lore.items.legendary.LegendaryTitle;
+import delta.games.lotro.lore.items.legendary.io.xml.LegendaryTitleXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -20,8 +29,6 @@ public class MainDatLegendaryTitlesLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
-  private EnumMapper _tier;
-  private EnumMapper _damageType;
   private EnumMapper _genus;
 
   /**
@@ -32,8 +39,6 @@ public class MainDatLegendaryTitlesLoader
   {
     _facade=facade;
     _category=_facade.getEnumsManager().getEnumMapper(587203267);
-    _tier=_facade.getEnumsManager().getEnumMapper(587203238);
-    _damageType=_facade.getEnumsManager().getEnumMapper(587202600);
     _genus=_facade.getEnumsManager().getEnumMapper(587202570);
   }
 
@@ -75,36 +80,42 @@ Mod_Array:
     Mod_Progression: 1879211576
   */
 
-  private void load(int indexDataId)
+  private LegendaryTitle load(int indexDataId)
   {
+    LegendaryTitle ret=null;
     int dbPropertiesId=indexDataId+0x09000000;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      System.out.println("************* "+indexDataId+" *****************");
+      //System.out.println("************* "+indexDataId+" *****************");
       //System.out.println(properties.dump());
-
+      ret=new LegendaryTitle();
+      // ID
+      ret.setIdentifier(indexDataId);
       // Name
       String name=DatUtils.getStringProperty(properties,"Name");
-      System.out.println("Name: "+name);
+      ret.setName(name);
+      // Category
       int category=((Integer)properties.getProperty("ItemAdvancement_IATitle_Category")).intValue();
       String categoryName=_category.getString(category);
-      System.out.println("\tCategory: "+categoryName);
+      ret.setCategory(categoryName);
+      // Tier
       int tier=((Integer)properties.getProperty("ItemAdvancement_IATitle_Tier")).intValue();
-      String tierName=_tier.getString(tier);
-      System.out.println("\tTier: "+tierName);
-      int damageType=((Integer)properties.getProperty("ItemAdvancement_Title_DamageType")).intValue();
-      String damageTypeName=_damageType.getString(damageType);
-      System.out.println("\tDamage type: "+damageTypeName);
+      ret.setTier(tier);
+      // Damage type
+      int damageTypeCode=((Integer)properties.getProperty("ItemAdvancement_Title_DamageType")).intValue();
+      DamageType damageType=DatEnumsUtils.getDamageType(damageTypeCode);
+      ret.setDamageType(damageType);
+      // Slayer genus type
       Integer slayerGenusType=(Integer)properties.getProperty("ItemAdvancement_Title_SlayerGenusType");
       if ((slayerGenusType!=null) && (slayerGenusType.intValue()!=0))
       {
         int genusType=slayerGenusType.intValue();
         int indexGenus=getPower(genusType);
         String genus=_genus.getString(indexGenus+1);
-        System.out.println("\tSlayer: "+genus);
+        ret.setSlayerGenusType(genus);
       }
-
+      // Stats
       Object[] effects=(Object[])properties.getProperty("EffectGenerator_RunicEffectList");
       if (effects!=null)
       {
@@ -113,10 +124,10 @@ Mod_Array:
           PropertiesSet effectProps=(PropertiesSet)effectObj;
           int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
           Float spellCraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-          System.out.println("Spellcraft: "+spellCraft);
           StatsProvider statsProvider=DatEffectUtils.loadEffect(_facade,effectId);
           int level=spellCraft.intValue();
-          System.out.println("Stats: "+statsProvider.getStats(1,level));
+          BasicStatsSet stats=statsProvider.getStats(1,level);
+          ret.getStats().addStats(stats);
         }
       }
     }
@@ -124,6 +135,7 @@ Mod_Array:
     {
       LOGGER.warn("Could not handle legendary title ID="+indexDataId);
     }
+    return ret;
   }
 
   private static int getPower(int value)
@@ -152,13 +164,26 @@ Mod_Array:
 
   private void doIt()
   {
+    List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);
       if (useIt)
       {
-        load(id);
+        LegendaryTitle title=load(id);
+        if (title!=null)
+        {
+          titles.add(title);
+        }
       }
+    }
+    // Save titles
+    int nbTitles=titles.size();
+    System.out.println("Writing "+nbTitles+" legendary titles");
+    boolean ok=LegendaryTitleXMLWriter.writeLegendaryTitlesFile(GeneratedFiles.LEGENDARY_TITLES,titles);
+    if (ok)
+    {
+      System.out.println("Wrote titles file: "+GeneratedFiles.LEGENDARY_TITLES);
     }
   }
 

@@ -20,7 +20,6 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
-import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
@@ -34,6 +33,7 @@ import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
@@ -372,7 +372,7 @@ public class MainDatItemsLoader
     weapon.setMinDamage((int)minDamage);
     // Damage type
     int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
-    weapon.setDamageType(getDamageType(damageTypeEnum));
+    weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
   }
 
   private long getEquipmentCategory(PropertiesSet properties)
@@ -733,31 +733,6 @@ public class MainDatItemsLoader
     if (quality==ItemQuality.UNCOMMON) return 4;
     if (quality==ItemQuality.COMMON) return 5;
     return 0;
-  }
-
-  private DamageType getDamageType(int damageTypeEnum)
-  {
-    // 0 Undef
-    if (damageTypeEnum==1) return DamageType.COMMON;
-    if (damageTypeEnum==2) return DamageType.WESTERNESSE;
-    if (damageTypeEnum==4) return DamageType.ANCIENT_DWARF;
-    if (damageTypeEnum==8) return DamageType.BELERIAND;
-    if (damageTypeEnum==16) return DamageType.FIRE;
-    if (damageTypeEnum==32) return DamageType.SHADOW;
-    if (damageTypeEnum==64) return DamageType.LIGHT;
-    // 128 ImplementInherited
-    if (damageTypeEnum==256) return DamageType.FROST;
-    if (damageTypeEnum==512) return DamageType.LIGHTNING;
-    // 1024  Acid
-    // 2048  Morgul-forged
-    // 4096  Orc-craft
-    // 8192  Fell-wrought
-    // 16384 Physical
-    // 32768 Tactical
-    // 49152 PvP
-    // 65407 ALL
-    System.out.println("Unmanaged damage type: "+damageTypeEnum);
-    return null;
   }
 
   private ItemSturdiness getSturdiness(int durabilityEnum)
