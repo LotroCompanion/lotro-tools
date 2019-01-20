@@ -17,6 +17,7 @@ import delta.games.lotro.lore.items.legendary.io.xml.LegendaryTitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -116,6 +117,17 @@ Mod_Array:
         ret.setSlayerGenusType(genus);
       }
       // Stats
+      // - Private stats
+      {
+        StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+        if (statsProvider.getNumberOfStatProviders()>0)
+        {
+          // Level does not matter because it's only constant stats
+          BasicStatsSet stats=statsProvider.getStats(1,100);
+          ret.getStats().addStats(stats);
+        }
+      }
+      // - Effects
       Object[] effects=(Object[])properties.getProperty("EffectGenerator_RunicEffectList");
       if (effects!=null)
       {
