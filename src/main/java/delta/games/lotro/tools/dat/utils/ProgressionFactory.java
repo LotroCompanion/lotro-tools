@@ -34,6 +34,10 @@ public class ProgressionFactory
     }
     if (ret==null)
     {
+      ret=buildArrayProgression(progressionId, properties,"Combat_BaseDPSArray");
+    }
+    if (ret==null)
+    {
       LOGGER.warn("Could not build progression with properties: "+properties.dump());
     }
     return ret;
@@ -47,12 +51,13 @@ public class ProgressionFactory
     {
       // Always 1?
       Integer minIndexValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
+      int minIndex=(minIndexValue!=null)?minIndexValue.intValue():1;
       int nbItems=progression.length;
       ret=new ArrayProgression(progressionId, nbItems);
       for(int i=0;i<nbItems;i++)
       {
         Number value=(Number)progression[i];
-        ret.set(i,i+minIndexValue.intValue(),value.floatValue());
+        ret.set(i,i+minIndex,value.floatValue());
       }
     }
     return ret;
