@@ -41,13 +41,10 @@ public class MainLinksDecoder
   {
     LuaParser parser=new LuaParser();
     Map<String,Object> data=parser.read(dataFile);
-    useData(data);
-  }
-
-  private void useData(Map<String,Object> data)
-  {
     byte[] buffer=loadBuffer(data);
-    decodeBuffer(buffer);
+    Object legAttr=data.get("legendary");
+    boolean legendary=((legAttr==null) || (Boolean.TRUE.equals(legAttr)));
+    decodeBuffer(buffer,legendary);
   }
 
   @SuppressWarnings("unchecked")
@@ -57,7 +54,6 @@ public class MainLinksDecoder
     Map<String,Double> rawData=(Map<String,Double>)data.get("rawData");
     if (rawData!=null)
     {
-      System.out.println(rawData);
       int nb=rawData.size();
       buffer=new byte[nb];
       for(int i=0;i<nb;i++)
@@ -74,7 +70,7 @@ public class MainLinksDecoder
     return buffer;
   }
 
-  private void decodeBuffer(byte[] buffer)
+  private void decodeBuffer(byte[] buffer, boolean isLegendary)
   {
     ByteArrayInputStream bis=new ByteArrayInputStream(buffer);
     int lowInstanceId=BufferUtils.readUInt32(bis);
@@ -82,7 +78,6 @@ public class MainLinksDecoder
     System.out.println("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
     int itemId=BufferUtils.readUInt32(bis);
     System.out.println("Item ID: "+itemId);
-    boolean isLegendary=true;
     if (isLegendary)
     {
       decodeLegendary(bis);
@@ -91,7 +86,6 @@ public class MainLinksDecoder
 
   private void decodeLegendary(ByteArrayInputStream bis)
   {
-    boolean imbued=false;
     // Name
     int hasName=BufferUtils.readUInt8(bis);
     if (hasName==1)
@@ -106,25 +100,23 @@ public class MainLinksDecoder
       System.out.println("Name id1="+liNameId1+", id2="+liNameId2);
     }
 
-    // ??
-    BufferUtils.skip(bis,6);
+    BufferUtils.skip(bis,6); // Usually 1 0 0 0 1 0
     // Title
     int titleId=BufferUtils.readUInt32(bis);
     System.out.println("Title: "+titleId); // 0 if no title
 
     // Legacies
-    BufferUtils.skip(bis,1);
+    BufferUtils.skip(bis,1); // Usually 0
     int nbLegacies=BufferUtils.readUInt8(bis);
     for(int i=0;i<nbLegacies;i++)
     {
       int legacyID=BufferUtils.readUInt32(bis);
       int rank=BufferUtils.readUInt32(bis);
-      System.out.println("Legacy: ID="+legacyID+", rank="+rank);
-      loadLegacy(legacyID,rank);
+      loadEffect(legacyID,rank);
     }
 
     // Relics
-    /*int fRelics=*/BufferUtils.readUInt8(bis);
+    /*int fRelics=*/BufferUtils.readUInt8(bis); // 0 if relics, 1 if no relic
     int nbRelics=BufferUtils.readUInt8(bis);
     for(int i=0;i<nbRelics;i++)
     {
@@ -143,43 +135,52 @@ public class MainLinksDecoder
       loadPassive(passiveId);
     }
 
+    int test=BufferUtils.readUInt32(bis);
+    boolean imbued=false;
+    if (test==268460298)
+    {
+      imbued=true;
+    }
+    else if (test==0)
+    {
+      imbued=false;
+    }
+    else
+    {
+      System.out.println("Expected test value: "+test);
+      return;
+    }
     // If non imbued
     if (!imbued)
     {
-      /*int n=*/BufferUtils.readUInt32(bis);
       // points spent / left (only for non imbued ones)
       int nbPointsLeft=BufferUtils.readUInt32(bis);
       int nbPointsSpent=BufferUtils.readUInt32(bis);
       System.out.println("Left: "+nbPointsLeft+" / Spent: "+nbPointsSpent);
-      /*int n2=*/BufferUtils.readUInt32(bis);
+      /*int n2=*/BufferUtils.readUInt32(bis); // Got 0, 62, 83, 189, 192...
 
       // Default legacy
-      int defaultLegacyRank=BufferUtils.readUInt32(bis); // 52 = tier 7
+      int defaultLegacyRank=BufferUtils.readUInt32(bis);
       int defaultLegacyID=BufferUtils.readUInt32(bis);
       if (defaultLegacyID!=0)
       {
-        loadDefaultLegacy(defaultLegacyID,defaultLegacyRank);
+        loadDefaultEffect(defaultLegacyID,defaultLegacyRank);
       }
     }
     else
     {
-      int dataArrayId=BufferUtils.readUInt32(bis);
-      if (dataArrayId!=268460298)
-      {
-        System.out.println("Expected dataArrayId=268460298, got: "+dataArrayId);
-        return;
-      }
       int nbImbuedLegacies=BufferUtils.readUInt32(bis);
       System.out.println("Found "+nbImbuedLegacies+" legacies");
       for(int i=0;i<nbImbuedLegacies;i++)
       {
+        System.out.println("Legacy #"+(i+1));
         int dataStructId=BufferUtils.readUInt32(bis);
-        if (dataStructId!=268460297)
+        if (dataStructId!=268460297) // 268460297=ItemAdvancement_AdvanceableWidget_Data_Struct
         {
           System.out.println("Expected dataStructId=268460297, got: "+dataStructId);
           return;
         }
-        BufferUtils.readUInt8(bis);
+        /*int n3=*/BufferUtils.readUInt8(bis); // Always 0
 
         int legacyId=-1;
         int unlockedLevels=0;
@@ -312,7 +313,7 @@ public class MainLinksDecoder
           }
           else if (subHeader==0x100000C4)
           {
-            // LI level (for a non imbued item. Max 60 or 70)
+            // Item level (for a non imbued item. Max 60 or 70)
             int itemLevel=BufferUtils.readUInt32(bis);
             System.out.println("Item level: "+itemLevel);
           }
@@ -330,9 +331,9 @@ public class MainLinksDecoder
           }
           else if (subHeader==0x10001042)
           {
-            // LI 2nd range of DPS: meaning?
-            int liMaxHit=BufferUtils.readUInt32(bis);
-            System.out.println("LI Max Hit: "+liMaxHit);
+            // Combat_Damage (Max Damage)
+            float damage=BufferUtils.readFloat(bis);
+            System.out.println("Max Damage: "+damage);
           }
           else if (subHeader==0x10000835)
           {
@@ -411,34 +412,34 @@ public class MainLinksDecoder
      */
   }
 
-  private void loadDefaultLegacy(int legacyId, int rank)
+  private void loadDefaultEffect(int effectId, int rank)
   {
-    PropertiesSet effectProps=_facade.loadProperties(legacyId+0x9000000);
+    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
     StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
     System.out.println(provider.getStats(1,rank));
   }
 
   private void loadImbuedLegacy(int legacyId, int unlockedLevels, int legacyXp)
   {
-    PropertiesSet effectProps=_facade.loadProperties(legacyId+0x9000000);
-    if (effectProps!=null)
+    PropertiesSet legacyProps=_facade.loadProperties(legacyId+0x9000000);
+    if (legacyProps!=null)
     {
-      int maxLevel=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_AbsoluteMaxLevel")).intValue();
+      int maxLevel=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_AbsoluteMaxLevel")).intValue();
       //int category=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_Category")).intValue();
-      int initialMaxLevel=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_InitialMaxLevel")).intValue();
+      int initialMaxLevel=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_InitialMaxLevel")).intValue();
       //int iconId=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
       //int smallIconId=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
-      int levelTable=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
+      int levelTable=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
       int currentMaxTiers=initialMaxLevel+unlockedLevels;
       System.out.println("Legacy ID="+legacyId+", initMaxLevel="+initialMaxLevel+", currentMaxLevel="+currentMaxTiers+", maxLevel="+maxLevel);
       System.out.println("Level table: "+levelTable);
       int tiers=getTierFromXp(legacyXp);
-      Integer effectId=(Integer)effectProps.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
+      Integer effectId=(Integer)legacyProps.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
       if (effectId!=null)
       {
-        loadLegacy(effectId.intValue(),tiers);
+        loadEffect(effectId.intValue(),tiers);
       }
-      Integer dpsLut=(Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_DPSLUT");
+      Integer dpsLut=(Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_DPSLUT");
       if (dpsLut!=null)
       {
         float dps=loadDps(dpsLut.intValue(),tiers);
@@ -454,11 +455,10 @@ public class MainLinksDecoder
     return tier;
   }
 
-  private void loadLegacy(int legacyId, int rank)
+  private void loadEffect(int effectId, int rank)
   {
-    System.out.println("Legacy ID="+legacyId+", rank="+rank);
-    // If non-imbued, tier=rank-46
-    PropertiesSet effectProps=_facade.loadProperties(legacyId+0x9000000);
+    System.out.println("Effect ID="+effectId+", rank="+rank);
+    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
     //System.out.println(effectProps.dump());
     StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
     System.out.println(provider.getStats(1,rank));
@@ -506,20 +506,29 @@ public class MainLinksDecoder
   {
     File linksDir=new File("D:\\shared\\damien\\dev\\lotrocompanion\\lua\\links");
     // Ethell
-    //File ethell=new File(linksDir,"ethell");
-    //doFile(new File(ethell,"weapon.txt"));
-    //doFile(new File(ethell,"emblem.txt"));
+    File ethell=new File(linksDir,"ethell");
+    doFile(new File(ethell,"weapon.txt")); // Imbued
+    doFile(new File(ethell,"emblem.txt")); // Non imbued
     // Lorewyne
-    //File lorewyne=new File(linksDir,"lorewyne");
-    //doFile(new File(lorewyne,"legendary book.plugindata"));
+    File lorewyne=new File(linksDir,"lorewyne");
+    doFile(new File(lorewyne,"legendary book.plugindata")); // Imbued
     // Tilmo
-    //File tilmo=new File(linksDir,"tilmo");
-    //doFile(new File(tilmo,"club.txt"));
+    File tilmo=new File(linksDir,"tilmo");
+    doFile(new File(tilmo,"club.txt")); // Imbued
     // Glumlug
     File glumlug=new File(linksDir,"glumlug");
-    //doFile(new File(glumlug,"katioucha5.txt"));
-    //doFile(new File(glumlug,"axe.txt"));
-    //doFile(new File(glumlug,"oldbow.txt"));
-    doFile(new File(glumlug,"3rdage axe.txt"));
+    doFile(new File(glumlug,"katioucha5.txt")); // Imbued
+    doFile(new File(glumlug,"axe.txt")); // Non imbued
+    doFile(new File(glumlug,"oldbow.txt")); // Non imbued
+    doFile(new File(glumlug,"3rdage axe.txt")); // Non imbued
+    // Kargarth
+    File kargarth=new File(linksDir,"kargarth");
+    doFile(new File(kargarth,"belt.txt")); // Non imbued
+    // Utharr
+    File utharr=new File(linksDir,"utharr");
+    doFile(new File(utharr,"satchel.txt")); // Non imbued
+    // Beleganth
+    File beleganth=new File(linksDir,"beleganth");
+    doFile(new File(beleganth,"weapon.txt")); // Non imbued
   }
 }
