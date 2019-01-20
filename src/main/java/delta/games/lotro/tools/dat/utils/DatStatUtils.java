@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +84,11 @@ public class DatStatUtils
         boolean useStat=useStat(statKey);
         if (!useStat) continue;
         StatDescription stat=DatStatUtils.getStatDescription(def);
+        String descriptionOverride=getDescriptionOverride(statProperties);
+        if (descriptionOverride!=null)
+        {
+          //System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
+        }
         if (stat!=null)
         {
           _statsUsageStatistics.registerStatUsage(stat);
@@ -140,6 +146,30 @@ public class DatStatUtils
       }
     }
     return statsProvider;
+  }
+
+  private static String getDescriptionOverride(PropertiesSet statProperties)
+  {
+    String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
+    if (descriptionOverride!=null)
+    {
+      return Arrays.toString(descriptionOverride);
+      /*
+      if ((descriptionOverride.length==2) && ("+".equals(descriptionOverride[0].trim())))
+      {
+        return descriptionOverride[1].trim();
+      }
+      else if (descriptionOverride.length==1)
+      {
+        return descriptionOverride[0].trim();
+      }
+      else
+      {
+        System.out.println(Arrays.toString(descriptionOverride));
+      }
+      */
+    }
+    return null;
   }
 
   private static StatOperator getOperator(Integer modOpInteger)
