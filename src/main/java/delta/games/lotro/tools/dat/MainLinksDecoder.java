@@ -82,6 +82,10 @@ public class MainLinksDecoder
     {
       decodeLegendary(bis);
     }
+    else
+    {
+      decodeNonLegendary(bis);
+    }
   }
 
   private void decodeLegendary(ByteArrayInputStream bis)
@@ -229,21 +233,21 @@ public class MainLinksDecoder
       System.out.println("Bad marker: "+marker);
     }
 
+    decodeShared(bis);
+  }
+
+  private void decodeNonLegendary(ByteArrayInputStream bis)
+  {
+    decodeShared(bis);
+  }
+
+  private void decodeShared(ByteArrayInputStream bis)
+  {
     /*int padding=*/BufferUtils.readUInt8(bis);
     int nbSubs=BufferUtils.readUInt8(bis);
     System.out.println("Nb subs: "+nbSubs);
     for(int i=0;i<nbSubs;i++)
     {
-      /*
-      if (i>0)
-      {
-        for(int k=0;k<5;k++)
-        {
-          int header=BufferUtils.readUInt32(bis);
-          System.out.println("Next headers: "+header);
-        }
-      }
-      */
       int header=BufferUtils.readUInt32(bis);
       int header2=BufferUtils.readUInt32(bis);
       if (header!=header2)
@@ -274,10 +278,10 @@ public class MainLinksDecoder
           }
           else if (subHeader==0x10000884)
           {
-            // Item name
+            // Crafted Item Inscription
             BufferUtils.readUInt8(bis);
-            String crafter=decodeName(bis);
-            System.out.println("Item name: "+crafter);
+            String inscription=decodeName(bis);
+            System.out.println("Crafted item inscription: "+inscription);
             BufferUtils.skip(bis,6);
           }
           else if (subHeader==0x10000AC1)
@@ -313,9 +317,9 @@ public class MainLinksDecoder
           }
           else if (subHeader==0x100000C4)
           {
-            // Item level (for a non imbued item. Max 60 or 70)
+            // Usage min level
             int itemLevel=BufferUtils.readUInt32(bis);
-            System.out.println("Item level: "+itemLevel);
+            System.out.println("Usage min level: "+itemLevel);
           }
           else if (subHeader==0x1000132C)
           {
@@ -337,15 +341,15 @@ public class MainLinksDecoder
           }
           else if (subHeader==0x10000835)
           {
-            // Item worth
-            int itemWorth=BufferUtils.readUInt32(bis);
-            System.out.println("Item worth: "+itemWorth);
+            // Item value
+            int itemValue=BufferUtils.readUInt32(bis);
+            System.out.println("Item value: "+itemValue);
           }
           else if (subHeader==0x10000669)
           {
-            // True level
-            int itemTrueLevel=BufferUtils.readUInt32(bis);
-            System.out.println("Item true level: "+itemTrueLevel);
+            // Item level
+            int itemLevel=BufferUtils.readUInt32(bis);
+            System.out.println("Item level: "+itemLevel);
           }
           else if (subHeader==0x10004996)
           {
@@ -353,13 +357,29 @@ public class MainLinksDecoder
             int itemUpgrades=BufferUtils.readUInt32(bis);
             System.out.println("Item upgrades: "+itemUpgrades);
           }
+          else if (subHeader==0x10005F0E) // 268459790 - Item_Socket_Gem_Array
+          {
+            decodeEssences(bis);
+          }
+          else if (subHeader==0x10000ACD) // 268438221 - Item_ClothingColor
+          {
+            // Indigo: 0.15; Umber: 0.5/3F000000 ; Orange: 0.75/3F400000
+            float dye=BufferUtils.readFloat(bis);
+            //int dye=BufferUtils.readUInt32(bis);
+            System.out.println("Dye: "+dye);
+          }
+          else if (subHeader==0x10000570) // 268436848 - Item_Armor_Value
+          {
+            int armorValue=BufferUtils.readUInt32(bis);
+            System.out.println("Armour: "+armorValue);
+          }
           else
           {
             System.out.println("Unmanaged header: "+subHeader);
           }
         }
       }
-      else if (header==0x10000421)
+      else if (header==0x10000421) // UI_Examination_Tooltip_DID
       {
         // Item ID, reloaded
         int itemId=BufferUtils.readUInt32(bis);
@@ -375,45 +395,65 @@ public class MainLinksDecoder
     }
     // Properties
     /*
-        elseif header == 0x100026BC then
+        elseif header == 0x100026BC then // ItemAdvancement_SelectedEffect_Array
           -- legacies, we have them already
           local nLegs = ins:GetLongLE();
           ins:Consume( 8 * nLegs );
-        elseif header == 0x100038A7 then -- Binds  to account ?
+        elseif header == 0x100038A7 then -- Inventory_BindToAccount
           result.itemBindToAccount = ins:Get();
-        elseif header == 0x0000034E then -- storage info
-          result.itemStorageInfo = ins:GetLongLE();
-          write("result.itemStorageInfo: "..result.itemStorageInfo);
-        elseif header == 0x10001042 then -- LI 2nd range of DPS
-          result.liMaxHit = ins:GetLongLE();
-          write("result.liMaxHit: "..result.liMaxHit);
-        elseif header == 0x10000ACD then -- dye info
-          result.itemDye = ins:GetLongLE();
-          write("result.itemDye: "..result.itemDye);
-        elseif header == 0x10000570 then -- armour
-          result.itemArmour = ins:GetLongLE();
-          write("result.itemArmour: "..result.itemArmour);
-        elseif header == 0x10005F0E then
-          local nbSlots = ins:GetLongLE(); -- ?
-          write("nbSlots: "..nbSlots);
-          for i = 1, nbSlots do
-            local subheader = ins:GetLongLE();
-            write("subheader "..i.." - "..subheader);
-            if header == 0x10005F0E then
-              for i = 1, 20 do
-                local value = ins:Get();
-                write("value #"..i..": "..value);
-              end
-            end
-          end
         end
       end
   end
      */
   }
 
+  private void decodeEssences(ByteArrayInputStream bis)
+  {
+    int nbEssences=BufferUtils.readUInt32(bis);
+    System.out.println("Nb essences: "+nbEssences);
+    for(int i=0;i<nbEssences;i++)
+    {
+      // 0x10005F3D=268459837 - Item_Socket_Gem_Array_Entry
+      int propId=BufferUtils.readUInt32(bis);
+      if (propId!=268459837)
+      {
+        System.out.println("Expected property ID: "+268459837+", got: "+propId);
+        return;
+      }
+      /*int n3=*/BufferUtils.readUInt8(bis); // Always 0
+      int nbProps=BufferUtils.readUInt8(bis);
+      for(int j=0;j<nbProps;j++)
+      {
+        int header=BufferUtils.readUInt32(bis);
+        int header2=BufferUtils.readUInt32(bis);
+        if (header!=header2)
+        {
+          System.out.println("Decoding error: header="+header+", header2="+header2);
+          return;
+        }
+        // 0x10005F05=268459781 - Item_Socket_GemDID
+        if (header==0x10005F05)
+        {
+          int essenceId=BufferUtils.readUInt32(bis);
+          System.out.println("Essence #"+(i+1)+": "+essenceId);
+        }
+        // 0x10005F3E=268459838 - Item_Socket_GemLevel
+        else if (header==0x10005F3E)
+        {
+          int essenceLevel=BufferUtils.readUInt32(bis);
+          System.out.println("Essence level: "+essenceLevel);
+        }
+        else
+        {
+          System.out.println("Unmanaged property: "+propId);
+        }
+      }
+    }
+  }
+
   private void loadDefaultEffect(int effectId, int rank)
   {
+    System.out.println("Default effect: ID="+effectId+", rank="+rank);
     PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
     StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
     System.out.println(provider.getStats(1,rank));
@@ -530,5 +570,18 @@ public class MainLinksDecoder
     // Beleganth
     File beleganth=new File(linksDir,"beleganth");
     doFile(new File(beleganth,"weapon.txt")); // Non imbued
+    // Meva
+    File meva=new File(linksDir,"meva");
+    doFile(new File(meva,"EarringOfTheWillfulDefender.txt")); // Earring, with essences
+    doFile(new File(meva,"EmbossedMantleOfBardsWill.txt")); // Mantle, with essences
+    doFile(new File(meva,"RunedGlovesOfBardWill.txt")); // Gloves, with essences
+    // Giswald
+    File giswald=new File(linksDir,"giswald");
+    doFile(new File(giswald,"2h weapon.txt")); // LI weapon, non imbued
+    doFile(new File(giswald,"dyed helm.txt")); // umber dyed helm
+    doFile(new File(giswald,"indigo dyed gauntlets.txt")); // indigo dyed gauntlets
+    doFile(new File(giswald,"helm-thorin.txt")); // scaled helm
+    doFile(new File(giswald,"mathomhunter box.txt")); // Box
+    doFile(new File(giswald,"orange dye.txt")); // orange dye
   }
 }
