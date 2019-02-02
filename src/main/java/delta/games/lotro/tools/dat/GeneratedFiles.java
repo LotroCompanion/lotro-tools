@@ -111,4 +111,8 @@ public class GeneratedFiles
    * Legendary titles.
    */
   public static final File LEGENDARY_TITLES=new File(LORE,"legendary_titles.xml");
+  /**
+   * Legacies.
+   */
+  public static final File LEGACIES=new File(LORE,"legacies.xml").getAbsoluteFile();
 }
