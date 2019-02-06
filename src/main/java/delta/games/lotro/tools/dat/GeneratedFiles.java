@@ -2,7 +2,8 @@ package delta.games.lotro.tools.dat;
 
 import java.io.File;
 
-import delta.games.lotro.LotroCoreConfig;
+import delta.games.lotro.config.DataFiles;
+import delta.games.lotro.config.LotroCoreConfig;
 
 /**
  * Constants for files used in the generation of data from the DAT files.
@@ -10,7 +11,6 @@ import delta.games.lotro.LotroCoreConfig;
  */
 public class GeneratedFiles
 {
-  private static final File LORE=LotroCoreConfig.getInstance().getLoreDir();
   /**
    * Classes.
    */
@@ -74,7 +74,7 @@ public class GeneratedFiles
   /**
    * Stats.
    */
-  public static final File STATS=new File(LORE,"stats.xml");
+  public static final File STATS=LotroCoreConfig.getInstance().getFile(DataFiles.STATS);
   /**
    * Progressions for items.
    */
@@ -110,13 +110,13 @@ public class GeneratedFiles
   /**
    * Legendary titles.
    */
-  public static final File LEGENDARY_TITLES=new File(LORE,"legendary_titles.xml");
+  public static final File LEGENDARY_TITLES=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_TITLES);
   /**
    * Legacies.
    */
-  public static final File LEGACIES=new File(LORE,"legacies.xml").getAbsoluteFile();
+  public static final File LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.LEGACIES);
   /**
    * Colors.
    */
-  public static final File COLORS=new File(LORE,"colors.xml").getAbsoluteFile();
+  public static final File COLORS=LotroCoreConfig.getInstance().getFile(DataFiles.COLORS);
 }
