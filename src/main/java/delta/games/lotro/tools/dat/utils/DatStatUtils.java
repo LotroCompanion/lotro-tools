@@ -84,11 +84,13 @@ public class DatStatUtils
         boolean useStat=useStat(statKey);
         if (!useStat) continue;
         StatDescription stat=DatStatUtils.getStatDescription(def);
+        /*
         String descriptionOverride=getDescriptionOverride(statProperties);
         if (descriptionOverride!=null)
         {
           //System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
         }
+        */
         if (stat!=null)
         {
           _statsUsageStatistics.registerStatUsage(stat);
@@ -267,6 +269,7 @@ public class DatStatUtils
       return null;
     }
     StatDescription ret=registry.getById(id);
+    /*
     if (ret==null)
     {
       String key=propertyDefinition.getName();
@@ -276,6 +279,7 @@ public class DatStatUtils
       registry.addStat(stat);
       ret=stat;
     }
+    */
     return ret;
   }
 
@@ -295,6 +299,13 @@ public class DatStatUtils
     if ("Skill_EffectOverride_Burglar_ExploitOpening".equals(key)) return false;
     if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(key)) return false;
     if ("Item_Minstrel_Oathbreaker_Damagetype".equals(key)) return false;
+
+    if ("Trait_PvMP_BattleRank".equals(key)) return false;
+    if ("Skill_VitalCost_Champion_AOEMod".equals(key)) return false;
+    if ("Skill_VitalCost_Champion_StrikeMod".equals(key)) return false;
+    if ("Skill_InductionDuration_ResearchingMod".equals(key)) return false;
+    if ("TotalThreatModifier_Player".equals(key)) return false;
+    if ("Skill_InductionDuration_AllSkillsMod".equals(key)) return false;
 
     return true;
   }
