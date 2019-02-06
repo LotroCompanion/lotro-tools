@@ -662,30 +662,9 @@ public class MainDatItemsLoader
     if (classReqs!=null)
     {
       int characterClassId=((Integer)classReqs[0]).intValue();
-      return getCharacterClassFromId(characterClassId);
+      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(characterClassId);
+      return characterClass;
     }
-    return null;
-  }
-
-  private CharacterClass getCharacterClassFromId(int id) {
-    if (id==214) return CharacterClass.BEORNING;
-    if (id==40) return CharacterClass.BURGLAR;
-    if (id==24) return CharacterClass.CAPTAIN;
-    if (id==172) return CharacterClass.CHAMPION;
-    if (id==23) return CharacterClass.GUARDIAN;
-    if (id==162) return CharacterClass.HUNTER;
-    if (id==185) return CharacterClass.LORE_MASTER;
-    if (id==31) return CharacterClass.MINSTREL;
-    if (id==193) return CharacterClass.RUNE_KEEPER;
-    if (id==194) return CharacterClass.WARDEN;
-    // Monster Play
-    if (id==71) return null; // Reaver
-    if (id==128) return null; // Defiler
-    if (id==127) return null; // Weaver
-    if (id==179) return null; // Blackarrow
-    if (id==52) return null; // Warleader
-    if (id==126) return null; // Stalker
-    System.out.println("Unmanaged ID="+id+" for "+_currentId);
     return null;
   }
 

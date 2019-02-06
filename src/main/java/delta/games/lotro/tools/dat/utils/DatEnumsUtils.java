@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.items.DamageType;
 
 /**
@@ -39,6 +40,32 @@ public class DatEnumsUtils
     // 49152 PvP
     // 65407 ALL
     LOGGER.warn("Unmanaged damage type: "+damageTypeEnum);
+    return null;
+  }
+
+  /**
+   * Get a character class from a DAT enum code.
+   * @param id Input code.
+   * @return A character class or <code>null</code> if not supported.
+   */
+  public static CharacterClass getCharacterClassFromId(int id) {
+    if (id==214) return CharacterClass.BEORNING;
+    if (id==40) return CharacterClass.BURGLAR;
+    if (id==24) return CharacterClass.CAPTAIN;
+    if (id==172) return CharacterClass.CHAMPION;
+    if (id==23) return CharacterClass.GUARDIAN;
+    if (id==162) return CharacterClass.HUNTER;
+    if (id==185) return CharacterClass.LORE_MASTER;
+    if (id==31) return CharacterClass.MINSTREL;
+    if (id==193) return CharacterClass.RUNE_KEEPER;
+    if (id==194) return CharacterClass.WARDEN;
+    // Monster Play
+    if (id==71) return null; // Reaver
+    if (id==128) return null; // Defiler
+    if (id==127) return null; // Weaver
+    if (id==179) return null; // Blackarrow
+    if (id==52) return null; // Warleader
+    if (id==126) return null; // Stalker
     return null;
   }
 }
