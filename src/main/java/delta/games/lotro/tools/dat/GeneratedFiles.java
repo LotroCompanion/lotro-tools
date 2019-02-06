@@ -115,4 +115,8 @@ public class GeneratedFiles
    * Legacies.
    */
   public static final File LEGACIES=new File(LORE,"legacies.xml").getAbsoluteFile();
+  /**
+   * Colors.
+   */
+  public static final File COLORS=new File(LORE,"colors.xml").getAbsoluteFile();
 }
