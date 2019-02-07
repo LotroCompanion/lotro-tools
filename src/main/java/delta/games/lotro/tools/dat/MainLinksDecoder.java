@@ -6,11 +6,23 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
+import delta.games.lotro.lore.items.legendary.ImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.ImbuedLegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.LegaciesManager;
+import delta.games.lotro.lore.items.legendary.Legacy;
+import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.LegendaryTitle;
+import delta.games.lotro.lore.items.legendary.LegendaryTitlesManager;
+import delta.games.lotro.lore.items.legendary.NonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.NonImbuedLegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.relics.Relic;
+import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.plugins.LuaParser;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
@@ -80,7 +92,8 @@ public class MainLinksDecoder
     System.out.println("Item ID: "+itemId);
     if (isLegendary)
     {
-      decodeLegendary(bis);
+      LegendaryAttrs legAttrs=decodeLegendary(bis);
+      System.out.println(legAttrs.dump());
     }
     else
     {
@@ -88,14 +101,16 @@ public class MainLinksDecoder
     }
   }
 
-  private void decodeLegendary(ByteArrayInputStream bis)
+  private LegendaryAttrs decodeLegendary(ByteArrayInputStream bis)
   {
+    LegendaryAttrs ret=new LegendaryAttrs();
     // Name
     int hasName=BufferUtils.readUInt8(bis);
     if (hasName==1)
     {
       String name=decodeName(bis);
       System.out.println("Name: "+name);
+      ret.setLegendaryName(name);
     }
     else
     {
@@ -107,7 +122,13 @@ public class MainLinksDecoder
     BufferUtils.skip(bis,6); // Usually 1 0 0 0 1 0
     // Title
     int titleId=BufferUtils.readUInt32(bis);
-    System.out.println("Title: "+titleId); // 0 if no title
+    //System.out.println("Title: "+titleId); // 0 if no title
+    if (titleId!=0)
+    {
+      LegendaryTitlesManager legendaryTitlesMgr=LegendaryTitlesManager.getInstance();
+      LegendaryTitle legendaryTitle=legendaryTitlesMgr.getLegendaryTitle(titleId);
+      ret.setTitle(legendaryTitle);
+    }
 
     // Legacies
     BufferUtils.skip(bis,1); // Usually 0
@@ -116,18 +137,34 @@ public class MainLinksDecoder
     {
       int legacyID=BufferUtils.readUInt32(bis);
       int rank=BufferUtils.readUInt32(bis);
-      loadEffect(legacyID,rank);
+      Effect legacyEffect=loadEffect(legacyID);
+      NonImbuedLegacyInstance legacyInstance=new NonImbuedLegacyInstance();
+      legacyInstance.setLegacy(legacyEffect);
+      legacyInstance.setRank(rank);
+      ret.getNonImbuedAttrs().addLegacy(legacyInstance);
     }
 
     // Relics
     /*int fRelics=*/BufferUtils.readUInt8(bis); // 0 if relics, 1 if no relic
     int nbRelics=BufferUtils.readUInt8(bis);
-    for(int i=0;i<nbRelics;i++)
+    if (nbRelics>0)
     {
-      int relicID=BufferUtils.readUInt32(bis);
-      // 1: Setting, 2: Gem, 3: Rune ; Crafted=4
-      int slot=BufferUtils.readUInt32(bis);
-      System.out.println("Relic: ID="+relicID+", slot="+slot);
+      RelicsManager relicsMgr=RelicsManager.getInstance();
+      for(int i=0;i<nbRelics;i++)
+      {
+        int relicID=BufferUtils.readUInt32(bis);
+        // 1: Setting, 2: Gem, 3: Rune ; Crafted=4
+        int slot=BufferUtils.readUInt32(bis);
+        //System.out.println("Relic: ID="+relicID+", slot="+slot);
+        Relic relic=relicsMgr.getById(relicID);
+        if (relic!=null)
+        {
+          if (slot==1) ret.setSetting(relic);
+          else if (slot==2) ret.setGem(relic);
+          else if (slot==3) ret.setRune(relic);
+          else if (slot==4) ret.setCraftedRelic(relic);
+        }
+      }
     }
 
     // Passives
@@ -135,8 +172,9 @@ public class MainLinksDecoder
     for(int i=0;i<nbPassives;i++)
     {
       int passiveId=BufferUtils.readUInt32(bis);
-      System.out.println("Passive: "+passiveId);
-      loadPassive(passiveId);
+      //System.out.println("Passive: "+passiveId);
+      Effect passive=loadPassive(passiveId);
+      ret.addPassive(passive);
     }
 
     int test=BufferUtils.readUInt32(bis);
@@ -152,15 +190,19 @@ public class MainLinksDecoder
     else
     {
       System.out.println("Expected test value: "+test);
-      return;
+      return null;
     }
     // If non imbued
     if (!imbued)
     {
+      NonImbuedLegendaryAttrs nonImbuedAttrs=ret.getNonImbuedAttrs();
       // points spent / left (only for non imbued ones)
       int nbPointsLeft=BufferUtils.readUInt32(bis);
+      nonImbuedAttrs.setPointsLeft(nbPointsLeft);
       int nbPointsSpent=BufferUtils.readUInt32(bis);
-      System.out.println("Left: "+nbPointsLeft+" / Spent: "+nbPointsSpent);
+      nonImbuedAttrs.setPointsSpent(nbPointsSpent);
+      //System.out.println("Left: "+nbPointsLeft+" / Spent: "+nbPointsSpent);
+
       /*int n2=*/BufferUtils.readUInt32(bis); // Got 0, 62, 83, 189, 192...
 
       // Default legacy
@@ -168,21 +210,28 @@ public class MainLinksDecoder
       int defaultLegacyID=BufferUtils.readUInt32(bis);
       if (defaultLegacyID!=0)
       {
-        loadDefaultEffect(defaultLegacyID,defaultLegacyRank);
+        Effect defaultEffect=loadEffect(defaultLegacyID);
+        NonImbuedLegacyInstance defaultLegacy=new NonImbuedLegacyInstance();
+        defaultLegacy.setLegacy(defaultEffect);
+        defaultLegacy.setRank(defaultLegacyRank);
+        nonImbuedAttrs.setDefaultLegacy(defaultLegacy);
       }
     }
     else
     {
+      ImbuedLegendaryAttrs imbuedAttrs=new ImbuedLegendaryAttrs();
+      ret.setImbuedAttrs(imbuedAttrs);
+
       int nbImbuedLegacies=BufferUtils.readUInt32(bis);
       System.out.println("Found "+nbImbuedLegacies+" legacies");
       for(int i=0;i<nbImbuedLegacies;i++)
       {
-        System.out.println("Legacy #"+(i+1));
+        //System.out.println("Legacy #"+(i+1));
         int dataStructId=BufferUtils.readUInt32(bis);
         if (dataStructId!=268460297) // 268460297=ItemAdvancement_AdvanceableWidget_Data_Struct
         {
           System.out.println("Expected dataStructId=268460297, got: "+dataStructId);
-          return;
+          return null;
         }
         /*int n3=*/BufferUtils.readUInt8(bis); // Always 0
 
@@ -197,7 +246,7 @@ public class MainLinksDecoder
           if (propId!=propId2)
           {
             System.out.println("Decoding error: propId="+propId+", propId2="+propId2);
-            return;
+            return null;
           }
           if (propId==268460305)
           {
@@ -208,23 +257,30 @@ public class MainLinksDecoder
           {
             // ItemAdvancement_AdvanceableWidget_UnlockedLevels
             unlockedLevels=BufferUtils.readUInt32(bis);
-            System.out.println("Unlocked levels: "+unlockedLevels);
+            //System.out.println("Unlocked levels: "+unlockedLevels);
           }
           else if (propId==268442976)
           {
-            // ItemAdvancement_WidgetDID
+            // ItemAdvancement_EarnedXP
             legacyXp=BufferUtils.readUInt32(bis);
-            System.out.println("Legacy XP: "+legacyXp);
+            //System.out.println("Legacy XP: "+legacyXp);
             BufferUtils.skip(bis,4);
           }
         }
-        loadImbuedLegacy(legacyId,unlockedLevels,legacyXp);
+        ImbuedLegacyInstance legacy=loadImbuedLegacy(legacyId);
+        if (legacy!=null)
+        {
+          legacy.setUnlockedLevels(unlockedLevels);
+          legacy.setXp(legacyXp);
+          imbuedAttrs.addLegacy(legacy);
+        }
       }
       /*
       3E  ...`...Rn......>
       0x000001b0  03 00 00 00 00 00 00 00 00 00 00 21 00 00 00 29  ...........!...)
       0x000001c0  3A 04 70 [EF 10 00 10 00 03 C5 12 00 10 C5 12 00  :.p.............
            */
+    // 29 3A 04 70 is an effect that gives Tactical HPS
       BufferUtils.skip(bis,20);
     }
     int marker=BufferUtils.readUInt32(bis); // Expected 0x100010EF
@@ -234,6 +290,7 @@ public class MainLinksDecoder
     }
 
     decodeShared(bis);
+    return ret;
   }
 
   private void decodeNonLegendary(ByteArrayInputStream bis)
@@ -451,73 +508,41 @@ public class MainLinksDecoder
     }
   }
 
-  private void loadDefaultEffect(int effectId, int rank)
+  private ImbuedLegacyInstance loadImbuedLegacy(int legacyId)
   {
-    System.out.println("Default effect: ID="+effectId+", rank="+rank);
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
-    System.out.println(provider.getStats(1,rank));
-  }
-
-  private void loadImbuedLegacy(int legacyId, int unlockedLevels, int legacyXp)
-  {
-    PropertiesSet legacyProps=_facade.loadProperties(legacyId+0x9000000);
-    if (legacyProps!=null)
+    ImbuedLegacyInstance ret=null;
+    LegaciesManager legaciesMgr=LegaciesManager.getInstance();
+    Legacy legacy=legaciesMgr.getLegacy(legacyId);
+    if (legacy!=null)
     {
-      int maxLevel=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_AbsoluteMaxLevel")).intValue();
-      //int category=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_Category")).intValue();
-      int initialMaxLevel=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_InitialMaxLevel")).intValue();
-      //int iconId=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
-      //int smallIconId=((Integer)effectProps.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
-      int levelTable=((Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
-      int currentMaxTiers=initialMaxLevel+unlockedLevels;
-      System.out.println("Legacy ID="+legacyId+", initMaxLevel="+initialMaxLevel+", currentMaxLevel="+currentMaxTiers+", maxLevel="+maxLevel);
-      System.out.println("Level table: "+levelTable);
-      int tiers=getTierFromXp(legacyXp);
-      Integer effectId=(Integer)legacyProps.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
-      if (effectId!=null)
-      {
-        loadEffect(effectId.intValue(),tiers);
-      }
-      Integer dpsLut=(Integer)legacyProps.getProperty("ItemAdvancement_AdvanceableWidget_DPSLUT");
-      if (dpsLut!=null)
-      {
-        float dps=loadDps(dpsLut.intValue(),tiers);
-        System.out.println("DPS: "+dps);
-      }
-      
+      ret=new ImbuedLegacyInstance();
+      ret.setLegacy(legacy);
     }
+    else
+    {
+      LOGGER.warn("Legacy not found: "+legacyId);
+    }
+    return ret;
   }
 
-  private int getTierFromXp(int xp)
+  private Effect loadPassive(int passiveId)
   {
-    int tier=(xp/30000)+((xp%30000!=0)?1:0);
-    return tier;
+    System.out.println("Passive ID: "+passiveId);
+    return loadEffect(passiveId);
   }
 
-  private void loadEffect(int effectId, int rank)
+  private Effect loadEffect(int effectId)
   {
-    System.out.println("Effect ID="+effectId+", rank="+rank);
+    Effect ret=null;
     PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-    //System.out.println(effectProps.dump());
-    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
-    System.out.println(provider.getStats(1,rank));
-  }
-
-  private void loadPassive(int passiveId)
-  {
-    PropertiesSet effectProps=_facade.loadProperties(passiveId+0x9000000);
-    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
-    int itemLevel=236;
-    System.out.println(provider.getStats(1,itemLevel));
-  }
-
-  private float loadDps(int dpsLut, int tier)
-  {
-    PropertiesSet dpsLutProperties=_facade.loadProperties(dpsLut+0x9000000);
-    Object[] dpsArray=(Object[])dpsLutProperties.getProperty("Combat_BaseDPSArray");
-    float baseDPSFromTable=((Float)(dpsArray[tier-1])).floatValue();
-    return baseDPSFromTable;
+    if (effectProps!=null)
+    {
+      ret=new Effect();
+      ret.setId(effectId);
+      StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
+      ret.setStatsProvider(provider);
+    }
+    return ret;
   }
 
   private String decodeName(ByteArrayInputStream bis)
@@ -549,6 +574,7 @@ public class MainLinksDecoder
     File ethell=new File(linksDir,"ethell");
     doFile(new File(ethell,"weapon.txt")); // Imbued
     doFile(new File(ethell,"emblem.txt")); // Non imbued
+    doFile(new File(ethell,"supdoomfoldtstandardofwar.txt"));
     // Lorewyne
     File lorewyne=new File(linksDir,"lorewyne");
     doFile(new File(lorewyne,"legendary book.plugindata")); // Imbued
@@ -575,6 +601,7 @@ public class MainLinksDecoder
     doFile(new File(meva,"EarringOfTheWillfulDefender.txt")); // Earring, with essences
     doFile(new File(meva,"EmbossedMantleOfBardsWill.txt")); // Mantle, with essences
     doFile(new File(meva,"RunedGlovesOfBardWill.txt")); // Gloves, with essences
+    doFile(new File(meva,"old book.txt")); // old book, non imbued
     // Giswald
     File giswald=new File(linksDir,"giswald");
     doFile(new File(giswald,"2h weapon.txt")); // LI weapon, non imbued
