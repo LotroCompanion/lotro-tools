@@ -1,21 +1,28 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Effect;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.Legacy;
 import delta.games.lotro.lore.items.legendary.LegacyType;
 import delta.games.lotro.lore.items.legendary.io.xml.LegacyXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Get legacy descriptions from DAT files.
@@ -141,7 +148,7 @@ public class MainDatLegaciesLoader
     return false;
   }
 
-  private void doItWithScan()
+  void doItWithScan()
   {
     LegaciesManager legaciesMgr=new LegaciesManager();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
@@ -222,42 +229,174 @@ public class MainDatLegaciesLoader
     }
   }
 
+  private Set<Integer> _loadedEffects=new HashSet<Integer>();
+
+  private void loadLegacies()
+  {
+    // Load reforge table: value of ItemAdvancement_ReforgeTable from 1879134775 (NPC: Forge-master)
+    PropertiesSet globalReforgeTableProps=_facade.loadProperties(1879138325+0x9000000);
+    //System.out.println(globalReforgeTableProps.dump());
+
+    Object[] reforgeTables=(Object[])globalReforgeTableProps.getProperty("ItemAdvancement_ReforgeSlotInfo_Array");
+    for(Object reforgeTableObj : reforgeTables)
+    {
+      PropertiesSet reforgeTableProps=(PropertiesSet)reforgeTableObj;
+      int reforgeTableId=((Integer)reforgeTableProps.getProperty("ItemAdvancement_ReforgeTable")).intValue();
+      int slotMask=((Integer)reforgeTableProps.getProperty("ItemAdvancement_Slot")).intValue();
+      EquipmentLocation slot=getSlotFromCode(slotMask);
+      handleReforgeTable(reforgeTableId,slot);
+    }
+  }
+
+  private void handleReforgeTable(int reforgeTableId, EquipmentLocation slot)
+  {
+    System.out.println("Slot: "+slot);
+    PropertiesSet reforgeTableProps=_facade.loadProperties(reforgeTableId+0x9000000);
+    //System.out.println(reforgeTableProps.dump());
+    Object[] reforgeTableItems=(Object[])reforgeTableProps.getProperty("ItemAdvancement_ReforgeTable_Array");
+    for(Object reforgeTableItemObj : reforgeTableItems)
+    {
+      PropertiesSet reforgeTableItemProps=(PropertiesSet)reforgeTableItemObj;
+      int classId=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
+      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+      System.out.println("Class: "+characterClass);
+      Object[] reforgeGroups=(Object[])reforgeTableItemProps.getProperty("ItemAdvancement_ReforgeGroup_Array");
+      for(Object reforgeGroupObj : reforgeGroups)
+      {
+        int reforgeGroupId=((Integer)reforgeGroupObj).intValue();
+        handleReforgeGroup(characterClass,slot,reforgeGroupId);
+      }
+    }
+  }
+
+  private void handleReforgeGroup(CharacterClass characterClass, EquipmentLocation slot, int reforgeGroupId)
+  {
+    //System.out.println("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
+    PropertiesSet props=_facade.loadProperties(reforgeGroupId+0x9000000);
+    Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
+    for(Object progressionListObj : progressionLists)
+    {
+      PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
+      int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
+      //int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
+      //System.out.println("List: "+progressionListId+", weight="+weight);
+
+      PropertiesSet progressionListProps=_facade.loadProperties(progressionListId+0x9000000);
+      //System.out.println(progressionListProps.dump());
+      Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
+      //System.out.println("Found "+effectArray.length+" effects");
+      for(Object effectEntryObj : effectArray)
+      {
+        PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
+        Integer effectId=(Integer)effectEntry.getProperty("ItemAdvancement_Effect");
+        //int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
+        if (!_loadedEffects.contains(effectId))
+        {
+          Effect effect=loadEffect(effectId.intValue());
+          _loadedEffects.add(effectId);
+          System.out.println(effect);
+        }
+        else
+        {
+          System.out.println("Already known: "+effectId);
+        }
+        //System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight+", label="+effect.getLabel());
+      }
+    }
+  }
+
+  private Effect loadEffect(int effectId)
+  {
+    Effect ret=null;
+    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
+    if (effectProps!=null)
+    {
+      ret=new Effect();
+      ret.setId(effectId);
+      StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
+      ret.setStatsProvider(provider);
+    }
+    return ret;
+  }
+
+  private EquipmentLocation getSlotFromCode(int code)
+  {
+    if (code==0x10000) return EquipmentLocation.MAIN_HAND;
+    else if (code==0x40000) return EquipmentLocation.RANGED_ITEM;
+    else if (code==0x100000) return EquipmentLocation.CLASS_SLOT;
+    else if (code==0x200000) return EquipmentLocation.BRIDLE;
+    return null;
+  }
+
   void inspectLegendaryItem()
   {
     // From: 1879311770 Reshaped Champion's Sword of the First Age
-    PropertiesSet weaponProps=_facade.loadProperties(1879311770+0x9000000);
+    //PropertiesSet weaponProps=_facade.loadProperties(1879311770+0x9000000);
+    // From: 1879311779 Reshaped Captain's Greatsword of the First Age
+    PropertiesSet weaponProps=_facade.loadProperties(1879311779+0x9000000);
     //System.out.println(weaponProps.dump());
-    Integer progGroupOverride=(Integer)weaponProps.getProperty("ItemAdvancement_ProgressionGroupOverride");
-    if (progGroupOverride==null)
     {
-      return;
+      Integer progGroupOverride=(Integer)weaponProps.getProperty("ItemAdvancement_ProgressionGroupOverride");
+      if (progGroupOverride!=null)
+      {
+        inspectProgressionListArray(progGroupOverride.intValue());
+      }
     }
+    // Passives
+    {
+      System.out.println("Passives:");
+      Integer staticEffectGroupOverride=(Integer)weaponProps.getProperty("ItemAdvancement_StaticEffectGroupOverride");
+      if (staticEffectGroupOverride!=null)
+      {
+        System.out.println("ItemAdvancement_StaticEffectGroupOverride = "+staticEffectGroupOverride);
+        PropertiesSet props=_facade.loadProperties(staticEffectGroupOverride.intValue()+0x9000000);
+        //System.out.println(props.dump());
+        Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
+        for(Object progressionListObj : progressionLists)
+        {
+          PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
+          int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
+          int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
+          System.out.println("List: "+progressionListId+", weight="+weight);
+          inspectEffectArray(progressionListId);
+        }
+      }
+    }
+    System.out.println("Other effect array: ");
+    // Minor non-imbued legacies of captain weapons:
+    inspectEffectArray(1879173132);
+  }
+
+  private void inspectProgressionListArray(int progGroupOverride)
+  {
     System.out.println("ItemAdvancement_ProgressionGroupOverride = "+progGroupOverride);
-    PropertiesSet props=_facade.loadProperties(progGroupOverride.intValue()+0x9000000);
+    PropertiesSet props=_facade.loadProperties(progGroupOverride+0x9000000);
     //System.out.println(props.dump());
     Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
-    // Here we find 6 lists that all contain the same 8 major legacies for a champion weapon
-    // 6 is the number of tiers?
     for(Object progressionListObj : progressionLists)
     {
       PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
       int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
       int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
       System.out.println("List: "+progressionListId+", weight="+weight);
-      PropertiesSet progressionListProps=_facade.loadProperties(progressionListId+0x9000000);
-      //System.out.println(progressionListProps.dump());
-      Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
-      System.out.println("Found "+effectArray.length+" effects");
-      for(Object effectEntryObj : effectArray)
-      {
-        PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
-        int effectId=((Integer)effectEntry.getProperty("ItemAdvancement_Effect")).intValue();
-        int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
-        System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight);
-        DatEffectUtils.loadEffect(_facade,effectId);
-        // Feral/Savage Strikes Damage
-        // Progression gives values for tier 1-9 at: 47:0.01, 48:0.027, 49:0.045, 50:0.062, 51:0.08, 52:0.097, 53:0.115, 54:0.132
-      }
+      inspectEffectArray(progressionListId);
+    }
+  }
+
+  private void inspectEffectArray(int id)
+  {
+    PropertiesSet progressionListProps=_facade.loadProperties(id+0x9000000);
+    //System.out.println(progressionListProps.dump());
+    Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
+    System.out.println("Found "+effectArray.length+" effects");
+    for(Object effectEntryObj : effectArray)
+    {
+      PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
+      int effectId=((Integer)effectEntry.getProperty("ItemAdvancement_Effect")).intValue();
+      DatEffectUtils.loadEffect(_facade,effectId);
+      int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
+      StatsProvider effect=DatEffectUtils.loadEffect(_facade,effectId);
+      System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight+", label="+effect.getLabel());
     }
   }
 
@@ -268,7 +407,7 @@ public class MainDatLegaciesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatLegaciesLoader(facade).doItWithScan();
+    new MainDatLegaciesLoader(facade).loadLegacies();
     //DatIconsUtils.buildImageFile(facade,1090519170,new File("1090519170.png"));
     facade.dispose();
   }

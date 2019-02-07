@@ -150,7 +150,7 @@ public class DatStatUtils
     return statsProvider;
   }
 
-  private static String getDescriptionOverride(PropertiesSet statProperties)
+  static String getDescriptionOverride(PropertiesSet statProperties)
   {
     String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
     if (descriptionOverride!=null)
