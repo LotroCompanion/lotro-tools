@@ -371,11 +371,6 @@ public class MainDatRecipesLoader
     {
       System.out.println("Wrote recipes file: "+GeneratedFiles.RECIPES);
     }
-    ok=recipesManager.writeToFile(GeneratedFiles.RECIPES2);
-    if (ok)
-    {
-      System.out.println("Wrote recipes file: "+GeneratedFiles.RECIPES2);
-    }
   }
 
   private void scanAll(RecipesManager recipesManager)

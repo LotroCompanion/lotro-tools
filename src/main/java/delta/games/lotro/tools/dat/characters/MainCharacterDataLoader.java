@@ -49,11 +49,6 @@ public class MainCharacterDataLoader
     {
       System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
     }
-    ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS2,traits);
-    if (ok)
-    {
-      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS2);
-    }
     // Write trait icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.TRAIT_ICONS,TraitLoader.TRAIT_ICONS_DIR);

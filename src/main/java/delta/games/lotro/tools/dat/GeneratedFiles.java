@@ -14,27 +14,23 @@ public class GeneratedFiles
   /**
    * Classes.
    */
-  public static final File CLASSES=new File("../lotro-companion/data/lore/characters/classes.xml").getAbsoluteFile();
+  public static final File CLASSES=LotroCoreConfig.getInstance().getFile(DataFiles.CLASSES);
   /**
    * Start stats.
    */
-  public static final File START_STATS=new File("../lotro-companion/data/lore/characters/startStats.xml").getAbsoluteFile();
+  public static final File START_STATS=LotroCoreConfig.getInstance().getFile(DataFiles.START_STATS);
   /**
    * Stat contribs.
    */
-  public static final File STAT_CONTRIBS=new File("../lotro-companion/data/lore/characters/statContribs.xml").getAbsoluteFile();
+  public static final File STAT_CONTRIBS=LotroCoreConfig.getInstance().getFile(DataFiles.STAT_CONTRIBS);
   /**
    * Races.
    */
-  public static final File RACES=new File("../lotro-companion/data/lore/characters/races.xml").getAbsoluteFile();
+  public static final File RACES=LotroCoreConfig.getInstance().getFile(DataFiles.RACES);
   /**
    * Traits.
    */
-  public static final File TRAITS=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();
-  /**
-   * Traits (2).
-   */
-  public static final File TRAITS2=new File("../lotro-data/traits/traits.xml").getAbsoluteFile();
+  public static final File TRAITS=LotroCoreConfig.getInstance().getFile(DataFiles.TRAITS);
   /**
    * Trait icons.
    */
@@ -42,11 +38,7 @@ public class GeneratedFiles
   /**
    * Titles.
    */
-  public static final File TITLES=new File("../lotro-companion/data/lore/titles.xml").getAbsoluteFile();
-  /**
-   * Titles (2).
-   */
-  public static final File TITLES2=new File("../lotro-data/titles/titles.xml").getAbsoluteFile();
+  public static final File TITLES=LotroCoreConfig.getInstance().getFile(DataFiles.TITLES);
   /**
    * Title icons.
    */
@@ -54,11 +46,7 @@ public class GeneratedFiles
   /**
    * Emotes.
    */
-  public static final File EMOTES=new File("../lotro-companion/data/lore/emotes.xml").getAbsoluteFile();
-  /**
-   * Emotes (2).
-   */
-  public static final File EMOTES2=new File("../lotro-data/emotes/emotes.xml").getAbsoluteFile();
+  public static final File EMOTES=LotroCoreConfig.getInstance().getFile(DataFiles.EMOTES);
   /**
    * Emote icons.
    */
@@ -66,7 +54,7 @@ public class GeneratedFiles
   /**
    * Items.
    */
-  public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
+  public static final File ITEMS=LotroCoreConfig.getInstance().getFile(DataFiles.ITEMS);
   /**
    * Item icons.
    */
@@ -78,31 +66,23 @@ public class GeneratedFiles
   /**
    * Progressions for items.
    */
-  public static final File PROGRESSIONS_ITEMS=new File("../lotro-companion/data/lore/progressions_items.xml").getAbsoluteFile();
+  public static final File PROGRESSIONS_ITEMS=new File("data/progressions/tmp/progressions_items.xml").getAbsoluteFile();
   /**
    * Progressions for characters.
    */
-  public static final File PROGRESSIONS_CHARACTERS=new File("../lotro-companion/data/lore/progressions_characters.xml").getAbsoluteFile();
+  public static final File PROGRESSIONS_CHARACTERS=new File("data/progressions/tmp/progressions_characters.xml").getAbsoluteFile();
   /**
    * All progressions.
    */
-  public static final File PROGRESSIONS=new File("../lotro-companion/data/lore/progressions.xml").getAbsoluteFile();
+  public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);
   /**
    * Recipes.
    */
-  public static final File RECIPES=new File("../lotro-companion/data/lore/recipes.xml").getAbsoluteFile();
-  /**
-   * Recipes (2).
-   */
-  public static final File RECIPES2=new File("../lotro-data/recipes/recipes.xml").getAbsoluteFile();
+  public static final File RECIPES=LotroCoreConfig.getInstance().getFile(DataFiles.RECIPES);
   /**
    * Relics.
    */
-  public static final File RELICS=new File("../lotro-companion/data/lore/relics.xml").getAbsoluteFile();
-  /**
-   * Relics (2).
-   */
-  public static final File RELICS2=new File("../lotro-relics/relics.xml").getAbsoluteFile();
+  public static final File RELICS=LotroCoreConfig.getInstance().getFile(DataFiles.RELICS);
   /**
    * Relic icons.
    */

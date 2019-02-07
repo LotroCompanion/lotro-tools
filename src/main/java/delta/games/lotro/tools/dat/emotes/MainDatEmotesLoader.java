@@ -142,11 +142,6 @@ Emote_SourceText:
     {
       System.out.println("Wrote emotes file: "+GeneratedFiles.EMOTES);
     }
-    ok=EmoteXMLWriter.writeEmotesFile(GeneratedFiles.EMOTES2,emotes);
-    if (ok)
-    {
-      System.out.println("Wrote emotes file: "+GeneratedFiles.EMOTES2);
-    }
     // Write emote icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.EMOTE_ICONS,EMOTE_ICONS_DIR);

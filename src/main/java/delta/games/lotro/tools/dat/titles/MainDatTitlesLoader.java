@@ -187,11 +187,6 @@ Title_String:
     {
       System.out.println("Wrote titles file: "+GeneratedFiles.TITLES);
     }
-    ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES2,titles);
-    if (ok)
-    {
-      System.out.println("Wrote titles file: "+GeneratedFiles.TITLES2);
-    }
     // Write title icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.TITLE_ICONS,TITLE_ICONS_DIR);

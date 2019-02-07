@@ -182,11 +182,6 @@ public class MainDatRelicsLoader
     {
       System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
     }
-    ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS2);
-    if (ok)
-    {
-      System.out.println("Wrote relics file: "+GeneratedFiles.RELICS2);
-    }
     // Write relic icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.RELIC_ICONS,RELIC_ICONS_DIR);
