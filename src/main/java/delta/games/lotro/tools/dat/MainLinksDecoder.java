@@ -12,15 +12,15 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
-import delta.games.lotro.lore.items.legendary.ImbuedLegacyInstance;
-import delta.games.lotro.lore.items.legendary.ImbuedLegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
-import delta.games.lotro.lore.items.legendary.Legacy;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryTitle;
 import delta.games.lotro.lore.items.legendary.LegendaryTitlesManager;
-import delta.games.lotro.lore.items.legendary.NonImbuedLegacyInstance;
-import delta.games.lotro.lore.items.legendary.NonImbuedLegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.plugins.LuaParser;
@@ -512,7 +512,7 @@ public class MainLinksDecoder
   {
     ImbuedLegacyInstance ret=null;
     LegaciesManager legaciesMgr=LegaciesManager.getInstance();
-    Legacy legacy=legaciesMgr.getLegacy(legacyId);
+    ImbuedLegacy legacy=legaciesMgr.getLegacy(legacyId);
     if (legacy!=null)
     {
       ret=new ImbuedLegacyInstance();

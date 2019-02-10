@@ -1,28 +1,35 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Effect;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.stats.ScalableStatProvider;
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
-import delta.games.lotro.lore.items.legendary.Legacy;
 import delta.games.lotro.lore.items.legendary.LegacyType;
+import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.io.xml.LegacyXMLWriter;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManager;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacy;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.utils.maths.Progression;
 
 /**
  * Get legacy descriptions from DAT files.
@@ -33,6 +40,7 @@ public class MainDatLegaciesLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatLegaciesLoader.class);
 
   private DataFacade _facade;
+  private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
 
   /**
    * Constructor.
@@ -41,18 +49,19 @@ public class MainDatLegaciesLoader
   public MainDatLegaciesLoader(DataFacade facade)
   {
     _facade=facade;
+    _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
   }
 
   //private Set<String> statNames=new HashSet<String>();
 
-  private Legacy loadLegacy(int id)
+  private ImbuedLegacy loadLegacy(int id)
   {
     //System.out.println("**** ID="+id+" *****");
     PropertiesSet props=_facade.loadProperties(id+0x9000000);
     //System.out.println(props.dump());
 
     //statNames.addAll(props.getPropertyNames());
-    Legacy ret=new Legacy();
+    ImbuedLegacy ret=new ImbuedLegacy();
     // ID
     ret.setIdentifier(id);
     // Max tier
@@ -156,7 +165,7 @@ public class MainDatLegaciesLoader
       boolean useIt=useId(id);
       if (useIt)
       {
-        Legacy legacy=loadLegacy(id);
+        ImbuedLegacy legacy=loadLegacy(id);
         legaciesMgr.registerLegacy(legacy);
       }
     }
@@ -174,7 +183,7 @@ public class MainDatLegaciesLoader
       {
         // 327 items
         int id=((Integer)obj).intValue();
-        Legacy legacy=loadLegacy(id);
+        ImbuedLegacy legacy=loadLegacy(id);
         legaciesMgr.registerLegacy(legacy);
       }
     }
@@ -203,7 +212,7 @@ public class MainDatLegaciesLoader
         PropertiesSet legacyProps=(PropertiesSet)obj;
         int legacyId=((Integer)legacyProps.getProperty("ItemAdvancement_ImbuedDPSWidget")).intValue();
         //int equipmentCategory=((Integer)legacyProps.getProperty("Item_EquipmentCategory")).intValue();
-        Legacy legacy=loadLegacy(legacyId);
+        ImbuedLegacy legacy=loadLegacy(legacyId);
         legaciesMgr.registerLegacy(legacy);
       }
     }
@@ -218,8 +227,8 @@ public class MainDatLegaciesLoader
 
   private void save(LegaciesManager legaciesMgr)
   {
-    List<Legacy> legacies=legaciesMgr.getAll();
-    Collections.sort(legacies,new IdentifiableComparator<Legacy>());
+    List<ImbuedLegacy> legacies=legaciesMgr.getAll();
+    Collections.sort(legacies,new IdentifiableComparator<ImbuedLegacy>());
     int nbLegacies=legacies.size();
     LOGGER.info("Writing "+nbLegacies+" legacies");
     boolean ok=LegacyXMLWriter.write(GeneratedFiles.LEGACIES,legacies);
@@ -229,7 +238,7 @@ public class MainDatLegaciesLoader
     }
   }
 
-  private Set<Integer> _loadedEffects=new HashSet<Integer>();
+  private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
 
   private void loadLegacies()
   {
@@ -246,11 +255,12 @@ public class MainDatLegaciesLoader
       EquipmentLocation slot=getSlotFromCode(slotMask);
       handleReforgeTable(reforgeTableId,slot);
     }
+    System.out.println(_nonImbuedLegaciesManager.dump());
   }
 
   private void handleReforgeTable(int reforgeTableId, EquipmentLocation slot)
   {
-    System.out.println("Slot: "+slot);
+    //System.out.println("Slot: "+slot+", reforge table: "+reforgeTableId);
     PropertiesSet reforgeTableProps=_facade.loadProperties(reforgeTableId+0x9000000);
     //System.out.println(reforgeTableProps.dump());
     Object[] reforgeTableItems=(Object[])reforgeTableProps.getProperty("ItemAdvancement_ReforgeTable_Array");
@@ -259,7 +269,7 @@ public class MainDatLegaciesLoader
       PropertiesSet reforgeTableItemProps=(PropertiesSet)reforgeTableItemObj;
       int classId=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
       CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
-      System.out.println("Class: "+characterClass);
+      //System.out.println("Class: "+characterClass);
       Object[] reforgeGroups=(Object[])reforgeTableItemProps.getProperty("ItemAdvancement_ReforgeGroup_Array");
       for(Object reforgeGroupObj : reforgeGroups)
       {
@@ -274,6 +284,7 @@ public class MainDatLegaciesLoader
     //System.out.println("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
     PropertiesSet props=_facade.loadProperties(reforgeGroupId+0x9000000);
     Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
+    int index=0;
     for(Object progressionListObj : progressionLists)
     {
       PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
@@ -281,6 +292,16 @@ public class MainDatLegaciesLoader
       //int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
       //System.out.println("List: "+progressionListId+", weight="+weight);
 
+      Boolean major=null;
+      if (slot!=EquipmentLocation.BRIDLE)
+      {
+        if (index==0) major=Boolean.FALSE;
+        if (index==5) major=Boolean.TRUE;
+      }
+      else
+      {
+        if (index==0) major=Boolean.FALSE; else major=Boolean.TRUE;
+      }
       PropertiesSet progressionListProps=_facade.loadProperties(progressionListId+0x9000000);
       //System.out.println(progressionListProps.dump());
       Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
@@ -290,18 +311,22 @@ public class MainDatLegaciesLoader
         PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
         Integer effectId=(Integer)effectEntry.getProperty("ItemAdvancement_Effect");
         //int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
-        if (!_loadedEffects.contains(effectId))
+        //System.out.println("Effect weight:"+effectWeight);
+        NonImbuedLegacyTier legacyTier=_loadedEffects.get(effectId);
+        if (legacyTier==null)
         {
-          Effect effect=loadEffect(effectId.intValue());
-          _loadedEffects.add(effectId);
-          System.out.println(effect);
+          legacyTier=buildLegacy(effectId.intValue(),major);
+          _loadedEffects.put(effectId,legacyTier);
         }
-        else
+        NonImbuedLegacy legacy=legacyTier.getParentLegacy();
+        StatDescription stat=legacy.getStat();
+        if (_nonImbuedLegaciesManager.getLegacy(stat)==null)
         {
-          System.out.println("Already known: "+effectId);
+          _nonImbuedLegaciesManager.addLegacy(legacy);
         }
-        //System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight+", label="+effect.getLabel());
+        _nonImbuedLegaciesManager.addLegacyUsage(legacy,characterClass,slot);
       }
+      index++;
     }
   }
 
@@ -317,6 +342,50 @@ public class MainDatLegaciesLoader
       ret.setStatsProvider(provider);
     }
     return ret;
+  }
+
+  private NonImbuedLegacyTier buildLegacy(int effectId, Boolean major)
+  {
+    NonImbuedLegacyTier legacyTier=null;
+    Effect effect=loadEffect(effectId);
+    StatDescription stat=getStat(effect);
+    NonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
+    if (legacy==null)
+    {
+      legacy=new NonImbuedLegacy(stat);
+      // Major / minor
+      if (major!=null)
+      {
+        legacy.setMajor(major.booleanValue());
+      }
+    }
+    StatsProvider statsProvider=effect.getStatsProvider();
+    int nbStats=statsProvider.getNumberOfStatProviders();
+    if (nbStats>0)
+    {
+      StatProvider statProvider=statsProvider.getStatProvider(0);
+      ScalableStatProvider scalableStatProvider=(ScalableStatProvider)statProvider;
+      Progression progression=scalableStatProvider.getProgression();
+      int progressionId=progression.getIdentifier();
+      PropertiesSet progressionProps=_facade.loadProperties(progressionId+0x9000000);
+      int pointTier=((Integer)progressionProps.getProperty("Progression_PointTier")).intValue();
+      //Integer progType=(Integer)progressionProps.getProperty("Progression_Type");
+      int tier=pointTier-1;
+      legacyTier=legacy.addTier(tier,effect);
+    }
+    return legacyTier;
+  }
+
+  private StatDescription getStat(Effect effect)
+  {
+    StatsProvider statsProvider=effect.getStatsProvider();
+    int nbStats=statsProvider.getNumberOfStatProviders();
+    if (nbStats>0)
+    {
+      StatProvider statProvider=statsProvider.getStatProvider(0);
+      return statProvider.getStat();
+    }
+    return null;
   }
 
   private EquipmentLocation getSlotFromCode(int code)
