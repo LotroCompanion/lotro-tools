@@ -14,21 +14,25 @@ import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegacyType;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.io.xml.LegacyXMLWriter;
+import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManager;
-import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacy;
+import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -50,6 +54,12 @@ public class MainDatLegaciesLoader
   {
     _facade=facade;
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
+  }
+
+  private void doIt()
+  {
+    loadLegacies();
+    doItWithScan();
   }
 
   //private Set<String> statNames=new HashSet<String>();
@@ -99,7 +109,6 @@ public class MainDatLegaciesLoader
 
     //System.out.println(ret);
 
-    /*
     PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
     if (mutationProps!=null)
     {
@@ -117,21 +126,19 @@ public class MainDatLegaciesLoader
     {
       System.out.println("No mutation data");
     }
-    */
     return ret;
   }
 
   private void loadDpsLut(int id)
   {
-    /*
     Progression prog=DatStatUtils.getProgression(_facade,id);
     System.out.println("Nb points: "+((ArrayProgression)prog).getNumberOfPoints());
     System.out.println("ID: "+((ArrayProgression)prog).getIdentifier());
-    */
   }
 
   private LegacyType getLegacyType(int categoryCode)
   {
+    if (categoryCode==0) return LegacyType.FURY;
     if (categoryCode==1) return LegacyType.STAT;
     if (categoryCode==2) return LegacyType.CLASS;
     if (categoryCode==3) return LegacyType.DPS;
@@ -255,6 +262,18 @@ public class MainDatLegaciesLoader
       EquipmentLocation slot=getSlotFromCode(slotMask);
       handleReforgeTable(reforgeTableId,slot);
     }
+    // Load default legacies (CombatPropertyModControl)
+    PropertiesSet combatPropertyProps=_facade.loadProperties(1879167147+0x9000000);
+    Object[] legacyPropsTable=(Object[])combatPropertyProps.getProperty("Item_CombatPropertyModArray");
+    for(Object legacyObj : legacyPropsTable)
+    {
+      PropertiesSet legacyProps=(PropertiesSet)legacyObj;
+      int effectsTableId=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
+      int typeCode=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
+      LegacyType type=getLegacyTypeFromCode(typeCode);
+      loadLegaciesTable(effectsTableId,type);
+    }
+
     System.out.println(_nonImbuedLegaciesManager.dump());
   }
 
@@ -318,13 +337,13 @@ public class MainDatLegaciesLoader
           legacyTier=buildLegacy(effectId.intValue(),major);
           _loadedEffects.put(effectId,legacyTier);
         }
-        NonImbuedLegacy legacy=legacyTier.getParentLegacy();
+        TieredNonImbuedLegacy legacy=legacyTier.getParentLegacy();
         StatDescription stat=legacy.getStat();
         if (_nonImbuedLegaciesManager.getLegacy(stat)==null)
         {
           _nonImbuedLegaciesManager.addLegacy(legacy);
         }
-        _nonImbuedLegaciesManager.addLegacyUsage(legacy,characterClass,slot);
+        _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
       }
       index++;
     }
@@ -341,6 +360,10 @@ public class MainDatLegaciesLoader
       StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
       ret.setStatsProvider(provider);
     }
+    else
+    {
+      System.out.println("Effect not found: "+effectId);
+    }
     return ret;
   }
 
@@ -349,10 +372,10 @@ public class MainDatLegaciesLoader
     NonImbuedLegacyTier legacyTier=null;
     Effect effect=loadEffect(effectId);
     StatDescription stat=getStat(effect);
-    NonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
+    TieredNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
     if (legacy==null)
     {
-      legacy=new NonImbuedLegacy(stat);
+      legacy=new TieredNonImbuedLegacy(stat);
       // Major / minor
       if (major!=null)
       {
@@ -395,6 +418,68 @@ public class MainDatLegaciesLoader
     else if (code==0x100000) return EquipmentLocation.CLASS_SLOT;
     else if (code==0x200000) return EquipmentLocation.BRIDLE;
     return null;
+  }
+
+  private LegacyType getLegacyTypeFromCode(int code)
+  {
+    if (code==3) return LegacyType.TACTICAL_DPS; // TacticalDPS
+    if (code==6) return LegacyType.TACTICAL_DPS; // Minstrel_TacticalDPS
+    if (code==22) return LegacyType.TACTICAL_DPS; // Loremaster_TacticalDPS
+    if (code==15) return LegacyType.TACTICAL_DPS; // Guardian_TacticalDPS
+    if (code==5) return LegacyType.TACTICAL_DPS; // Runekeeper_TacticalDPS
+    if (code==7) return LegacyType.OUTGOING_HEALING; // Minstrel_HealingPS
+    if (code==21) return LegacyType.OUTGOING_HEALING; // Loremaster_HealingPS
+    if (code==8) return LegacyType.OUTGOING_HEALING; // Captain_HealingPS
+    if (code==13) return LegacyType.OUTGOING_HEALING; // Runekeeper_HealingPS
+    if (code==16) return LegacyType.INCOMING_HEALING; // Champion_IncomingHealing
+    if (code==23) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing
+    if (code==25) return LegacyType.INCOMING_HEALING; // Champion_IncomingHealing_65
+    if (code==24) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing_65
+    if (code==26) return LegacyType.DPS; // Mounted_MomentumMod
+    if (code==28) return LegacyType.OUTGOING_HEALING; // Beorning_HealingPS
+    return null;
+  }
+
+  private void loadLegaciesTable(int tableId, LegacyType type)
+  {
+    PropertiesSet props=_facade.loadProperties(tableId+0x9000000);
+
+    //int imbuedLegacyId=((Integer)props.getProperty("Item_CPM_IAImbuedCombatPropertyMod")).intValue();
+    Object[] qualityArray=(Object[])props.getProperty("Item_QualityCombatPropertyModArray");
+    for(Object qualityPropsObj : qualityArray)
+    {
+      PropertiesSet qualityProps=(PropertiesSet)qualityPropsObj;
+      int effectId=((Integer)qualityProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
+      int quality=((Integer)qualityProps.getProperty("Item_Quality")).intValue();
+
+      if (effectId!=0)
+      {
+        handleEffect(effectId,type,quality);
+      }
+      else
+      {
+        int prog=((Integer)qualityProps.getProperty("Item_PropertyModProgression")).intValue();
+        PropertiesSet progProps=_facade.loadProperties(prog+0x9000000);
+        Object[] effectArray=(Object[])progProps.getProperty("DataIDProgression_Array");
+        for(Object effectIdObj : effectArray)
+        {
+          effectId=((Integer)effectIdObj).intValue();
+          handleEffect(effectId,type,quality);
+        }
+      }
+    }
+  }
+
+  private void handleEffect(int effectId, LegacyType type, int quality)
+  {
+    Effect effect=loadEffect(effectId);
+    if (effect!=null)
+    {
+      DefaultNonImbuedLegacy legacy=new DefaultNonImbuedLegacy();
+      legacy.setEffect(effect);
+      legacy.setType(type);
+      System.out.println("Got "+legacy+" for quality "+quality);
+    }
   }
 
   void inspectLegendaryItem()
@@ -476,7 +561,7 @@ public class MainDatLegaciesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatLegaciesLoader(facade).loadLegacies();
+    new MainDatLegaciesLoader(facade).doIt();
     //DatIconsUtils.buildImageFile(facade,1090519170,new File("1090519170.png"));
     facade.dispose();
   }
