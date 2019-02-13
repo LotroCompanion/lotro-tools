@@ -15,6 +15,7 @@ import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -26,8 +27,8 @@ import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.io.xml.LegacyXMLWriter;
 import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManager;
-import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
+import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacy;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -59,7 +60,7 @@ public class MainDatLegaciesLoader
   private void doIt()
   {
     loadLegacies();
-    doItWithScan();
+    //doItWithScan();
   }
 
   //private Set<String> statNames=new HashSet<String>();
@@ -269,9 +270,8 @@ public class MainDatLegaciesLoader
     {
       PropertiesSet legacyProps=(PropertiesSet)legacyObj;
       int effectsTableId=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
-      int typeCode=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
-      LegacyType type=getLegacyTypeFromCode(typeCode);
-      loadLegaciesTable(effectsTableId,type);
+      int combatPropertyType=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
+      loadLegaciesTable(effectsTableId,combatPropertyType);
     }
 
     System.out.println(_nonImbuedLegaciesManager.dump());
@@ -334,14 +334,14 @@ public class MainDatLegaciesLoader
         NonImbuedLegacyTier legacyTier=_loadedEffects.get(effectId);
         if (legacyTier==null)
         {
-          legacyTier=buildLegacy(effectId.intValue(),major);
+          legacyTier=buildTieredLegacy(effectId.intValue(),major);
           _loadedEffects.put(effectId,legacyTier);
         }
         TieredNonImbuedLegacy legacy=legacyTier.getParentLegacy();
         StatDescription stat=legacy.getStat();
         if (_nonImbuedLegaciesManager.getLegacy(stat)==null)
         {
-          _nonImbuedLegaciesManager.addLegacy(legacy);
+          _nonImbuedLegaciesManager.addTieredLegacy(legacy);
         }
         _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
       }
@@ -367,7 +367,7 @@ public class MainDatLegaciesLoader
     return ret;
   }
 
-  private NonImbuedLegacyTier buildLegacy(int effectId, Boolean major)
+  private NonImbuedLegacyTier buildTieredLegacy(int effectId, Boolean major)
   {
     NonImbuedLegacyTier legacyTier=null;
     Effect effect=loadEffect(effectId);
@@ -380,6 +380,16 @@ public class MainDatLegaciesLoader
       if (major!=null)
       {
         legacy.setMajor(major.booleanValue());
+      }
+      // Type
+      boolean isStatLegacy=isStatLegacy(stat);
+      if (isStatLegacy)
+      {
+        legacy.setType(LegacyType.STAT);
+      }
+      else
+      {
+        legacy.setType(LegacyType.CLASS);
       }
     }
     StatsProvider statsProvider=effect.getStatsProvider();
@@ -420,7 +430,7 @@ public class MainDatLegaciesLoader
     return null;
   }
 
-  private LegacyType getLegacyTypeFromCode(int code)
+  private LegacyType getLegacyTypeFromCombatPropertyType(int code)
   {
     if (code==3) return LegacyType.TACTICAL_DPS; // TacticalDPS
     if (code==6) return LegacyType.TACTICAL_DPS; // Minstrel_TacticalDPS
@@ -435,14 +445,58 @@ public class MainDatLegaciesLoader
     if (code==23) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing
     if (code==25) return LegacyType.INCOMING_HEALING; // Champion_IncomingHealing_65
     if (code==24) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing_65
-    if (code==26) return LegacyType.DPS; // Mounted_MomentumMod
+    if (code==26) return LegacyType.FURY; // Mounted_MomentumMod
     if (code==28) return LegacyType.OUTGOING_HEALING; // Beorning_HealingPS
     return null;
   }
 
-  private void loadLegaciesTable(int tableId, LegacyType type)
+  private CharacterClass getClassFromCombatPropertyType(int code)
+  {
+    if (code==3) return null; // TacticalDPS
+    if (code==6) return CharacterClass.MINSTREL; // Minstrel_TacticalDPS
+    if (code==22) return CharacterClass.LORE_MASTER; // Loremaster_TacticalDPS
+    if (code==15) return CharacterClass.GUARDIAN; // Guardian_TacticalDPS
+    if (code==5) return CharacterClass.RUNE_KEEPER; // Runekeeper_TacticalDPS
+    if (code==7) return CharacterClass.MINSTREL; // Minstrel_HealingPS
+    if (code==21) return CharacterClass.LORE_MASTER; // Loremaster_HealingPS
+    if (code==8) return CharacterClass.CAPTAIN; // Captain_HealingPS
+    if (code==13) return CharacterClass.RUNE_KEEPER; // Runekeeper_HealingPS
+    if (code==16) return CharacterClass.CHAMPION; // Champion_IncomingHealing
+    if (code==23) return CharacterClass.BURGLAR; // Burglar_IncomingHealing
+    if (code==25) return CharacterClass.CHAMPION; // Champion_IncomingHealing_65
+    if (code==24) return CharacterClass.BURGLAR; // Burglar_IncomingHealing_65
+    if (code==26) return null; // Mounted_MomentumMod
+    if (code==28) return CharacterClass.BEORNING; // Beorning_HealingPS
+    return null;
+  }
+
+  private EquipmentLocation getSlotFromCombatPropertyType(int code)
+  {
+    if (code==3) return null; // TacticalDPS
+    if (code==6) return EquipmentLocation.MAIN_HAND; // Minstrel_TacticalDPS
+    if (code==22) return EquipmentLocation.MAIN_HAND; // Loremaster_TacticalDPS
+    if (code==15) return EquipmentLocation.CLASS_SLOT; // Guardian_TacticalDPS
+    if (code==5) return EquipmentLocation.MAIN_HAND; // Runekeeper_TacticalDPS
+    if (code==7) return EquipmentLocation.CLASS_SLOT; // Minstrel_HealingPS
+    if (code==21) return EquipmentLocation.CLASS_SLOT; // Loremaster_HealingPS
+    if (code==8) return EquipmentLocation.CLASS_SLOT; // Captain_HealingPS
+    if (code==13) return EquipmentLocation.CLASS_SLOT; // Runekeeper_HealingPS
+    if (code==16) return EquipmentLocation.CLASS_SLOT; // Champion_IncomingHealing
+    if (code==23) return EquipmentLocation.CLASS_SLOT; // Burglar_IncomingHealing
+    if (code==25) return EquipmentLocation.CLASS_SLOT; // Champion_IncomingHealing_65
+    if (code==24) return EquipmentLocation.CLASS_SLOT; // Burglar_IncomingHealing_65
+    if (code==26) return EquipmentLocation.BRIDLE; // Mounted_MomentumMod
+    if (code==28) return EquipmentLocation.CLASS_SLOT; // Beorning_HealingPS
+    return null;
+  }
+
+  private void loadLegaciesTable(int tableId, int combatPropertyType)
   {
     PropertiesSet props=_facade.loadProperties(tableId+0x9000000);
+
+    LegacyType type=getLegacyTypeFromCombatPropertyType(combatPropertyType);
+    CharacterClass characterClass=getClassFromCombatPropertyType(combatPropertyType);
+    EquipmentLocation slot=getSlotFromCombatPropertyType(combatPropertyType);
 
     //int imbuedLegacyId=((Integer)props.getProperty("Item_CPM_IAImbuedCombatPropertyMod")).intValue();
     Object[] qualityArray=(Object[])props.getProperty("Item_QualityCombatPropertyModArray");
@@ -454,7 +508,7 @@ public class MainDatLegaciesLoader
 
       if (effectId!=0)
       {
-        handleEffect(effectId,type,quality);
+        buildDefaultLegacy(effectId,type,quality,characterClass,slot);
       }
       else
       {
@@ -464,94 +518,37 @@ public class MainDatLegaciesLoader
         for(Object effectIdObj : effectArray)
         {
           effectId=((Integer)effectIdObj).intValue();
-          handleEffect(effectId,type,quality);
+          buildDefaultLegacy(effectId,type,quality,characterClass,slot);
         }
       }
     }
   }
 
-  private void handleEffect(int effectId, LegacyType type, int quality)
+  private DefaultNonImbuedLegacy buildDefaultLegacy(int effectId, LegacyType type, int quality,
+      CharacterClass characterClass, EquipmentLocation slot)
   {
-    Effect effect=loadEffect(effectId);
-    if (effect!=null)
+    DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
+    if (legacy==null)
     {
-      DefaultNonImbuedLegacy legacy=new DefaultNonImbuedLegacy();
-      legacy.setEffect(effect);
-      legacy.setType(type);
-      System.out.println("Got "+legacy+" for quality "+quality);
-    }
-  }
-
-  void inspectLegendaryItem()
-  {
-    // From: 1879311770 Reshaped Champion's Sword of the First Age
-    //PropertiesSet weaponProps=_facade.loadProperties(1879311770+0x9000000);
-    // From: 1879311779 Reshaped Captain's Greatsword of the First Age
-    PropertiesSet weaponProps=_facade.loadProperties(1879311779+0x9000000);
-    //System.out.println(weaponProps.dump());
-    {
-      Integer progGroupOverride=(Integer)weaponProps.getProperty("ItemAdvancement_ProgressionGroupOverride");
-      if (progGroupOverride!=null)
+      Effect effect=loadEffect(effectId);
+      if (effect!=null)
       {
-        inspectProgressionListArray(progGroupOverride.intValue());
+        legacy=new DefaultNonImbuedLegacy();
+        legacy.setEffect(effect);
+        legacy.setType(type);
+        _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
       }
     }
-    // Passives
-    {
-      System.out.println("Passives:");
-      Integer staticEffectGroupOverride=(Integer)weaponProps.getProperty("ItemAdvancement_StaticEffectGroupOverride");
-      if (staticEffectGroupOverride!=null)
-      {
-        System.out.println("ItemAdvancement_StaticEffectGroupOverride = "+staticEffectGroupOverride);
-        PropertiesSet props=_facade.loadProperties(staticEffectGroupOverride.intValue()+0x9000000);
-        //System.out.println(props.dump());
-        Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
-        for(Object progressionListObj : progressionLists)
-        {
-          PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
-          int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
-          int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
-          System.out.println("List: "+progressionListId+", weight="+weight);
-          inspectEffectArray(progressionListId);
-        }
-      }
-    }
-    System.out.println("Other effect array: ");
-    // Minor non-imbued legacies of captain weapons:
-    inspectEffectArray(1879173132);
+    //System.out.println("Got "+legacy+" for quality "+quality);
+    _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
+    return legacy;
   }
 
-  private void inspectProgressionListArray(int progGroupOverride)
+  private boolean isStatLegacy(StatDescription description)
   {
-    System.out.println("ItemAdvancement_ProgressionGroupOverride = "+progGroupOverride);
-    PropertiesSet props=_facade.loadProperties(progGroupOverride+0x9000000);
-    //System.out.println(props.dump());
-    Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
-    for(Object progressionListObj : progressionLists)
-    {
-      PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
-      int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
-      int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
-      System.out.println("List: "+progressionListId+", weight="+weight);
-      inspectEffectArray(progressionListId);
-    }
-  }
-
-  private void inspectEffectArray(int id)
-  {
-    PropertiesSet progressionListProps=_facade.loadProperties(id+0x9000000);
-    //System.out.println(progressionListProps.dump());
-    Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
-    System.out.println("Found "+effectArray.length+" effects");
-    for(Object effectEntryObj : effectArray)
-    {
-      PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
-      int effectId=((Integer)effectEntry.getProperty("ItemAdvancement_Effect")).intValue();
-      DatEffectUtils.loadEffect(_facade,effectId);
-      int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
-      StatsProvider effect=DatEffectUtils.loadEffect(_facade,effectId);
-      System.out.println("\tEffect ID: "+effectId+", weight="+effectWeight+", label="+effect.getLabel());
-    }
+    return ((description==WellKnownStat.MIGHT) || (description==WellKnownStat.AGILITY)
+        || (description==WellKnownStat.WILL) || (description==WellKnownStat.VITALITY)
+        || (description==WellKnownStat.FATE));
   }
 
   /**
