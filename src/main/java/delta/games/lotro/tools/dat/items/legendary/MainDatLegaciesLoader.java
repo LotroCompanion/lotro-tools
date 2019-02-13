@@ -61,6 +61,31 @@ public class MainDatLegaciesLoader
   {
     loadLegacies();
     //doItWithScan();
+    getLegacies();
+  }
+
+  private void getLegacies()
+  {
+    EquipmentLocation[] slots= { EquipmentLocation.MAIN_HAND, EquipmentLocation.RANGED_ITEM,
+        EquipmentLocation.CLASS_SLOT,EquipmentLocation.BRIDLE
+    };
+    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
+    {
+      for(EquipmentLocation slot : slots)
+      {
+        System.out.println("Class: "+characterClass+", slot: "+slot);
+        List<DefaultNonImbuedLegacy> legacies=_nonImbuedLegaciesManager.getDefaultLegacies(characterClass,slot);
+        for(DefaultNonImbuedLegacy legacy : legacies)
+        {
+          System.out.println("\t"+legacy);
+        }
+        List<TieredNonImbuedLegacy> tieredLegacies=_nonImbuedLegaciesManager.getTieredLegacies(characterClass,slot);
+        for(TieredNonImbuedLegacy legacy : tieredLegacies)
+        {
+          System.out.println("\t"+legacy);
+        }
+      }
+    }
   }
 
   //private Set<String> statNames=new HashSet<String>();
@@ -540,7 +565,10 @@ public class MainDatLegaciesLoader
       }
     }
     //System.out.println("Got "+legacy+" for quality "+quality);
-    _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
+    if ((characterClass!=null) || (slot!=null))
+    {
+      _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
+    }
     return legacy;
   }
 
