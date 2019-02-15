@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,9 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.legendary.AbstractLegacy;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegacyType;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
@@ -59,12 +63,13 @@ public class MainDatLegaciesLoader
 
   private void doIt()
   {
-    loadLegacies();
-    //doItWithScan();
-    getLegacies();
+    loadNonImbuedLegacies();
+    doItWithScan();
+    //doItFromIndex();
+    //showLegacies();
   }
 
-  private void getLegacies()
+  void showLegacies()
   {
     EquipmentLocation[] slots= { EquipmentLocation.MAIN_HAND, EquipmentLocation.RANGED_ITEM,
         EquipmentLocation.CLASS_SLOT,EquipmentLocation.BRIDLE
@@ -141,16 +146,29 @@ public class MainDatLegaciesLoader
       Object[] oldLegacies=(Object[])mutationProps.getProperty("ItemAdvancement_LegacyTypeName_Array");
       for(Object oldStatObj : oldLegacies)
       {
-        int oldLegacy=((Integer)oldStatObj).intValue();
-        PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(oldLegacy);
+        int oldLegacyId=((Integer)oldStatObj).intValue();
+        PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(oldLegacyId);
         StatsRegistry stats=StatsRegistry.getInstance();
         StatDescription oldStat=stats.getByKey(propDef.getName());
-        System.out.println("Old stat: "+oldStat.getName());
+        if (oldStat!=null)
+        {
+          System.out.println("Old stat: "+oldStat.getName());
+          TieredNonImbuedLegacy oldLegacy=_nonImbuedLegaciesManager.getLegacy(oldStat);
+          if (oldLegacy!=null)
+          {
+            ret.setType(oldLegacy.getType());
+            ret.setClassAndSlotFilter(oldLegacy.getClassAndSlotFilter());
+          }
+          else
+          {
+            System.out.println("Old legacy not found for stat: "+oldStat.getName());
+          }
+        }
       }
     }
     else
     {
-      System.out.println("No mutation data");
+      System.out.println("No mutation data for: "+ret);
     }
     return ret;
   }
@@ -209,32 +227,19 @@ public class MainDatLegaciesLoader
   {
     LegaciesManager legaciesMgr=new LegaciesManager();
     PropertiesSet props=_facade.loadProperties(1879108262+0x9000000);
-    //System.out.println(props.dump());
+    System.out.println(props.dump());
+
+    // Extract imbued class/stat legacies
     {
       Object[] array=(Object[])props.getProperty("ItemAdvancement_WidgetDID_Array");
       for(Object obj : array)
       {
-        // 327 items
+        // 300+ items
         int id=((Integer)obj).intValue();
         ImbuedLegacy legacy=loadLegacy(id);
         legaciesMgr.registerLegacy(legacy);
       }
     }
-    // Stat legacies (already included in the previous array)
-    /*
-    {
-      Object[] array=(Object[])props.getProperty("ItemAdvancement_ClassAgnosticWidgetDID_Array");
-      for(Object obj : array)
-      {
-        // 5 items
-        int id=((Integer)obj).intValue();
-        loadLegacy(id);
-      }
-    }
-    */
-    // Blank legacy (useless)
-    //int blank=((Integer)props.getProperty("ItemAdvancement_BlankImbuedWidgetDID")).intValue();
-    //loadLegacy(blank);
 
     // DPS legacies
     {
@@ -250,12 +255,44 @@ public class MainDatLegaciesLoader
       }
     }
 
-    // ItemAdvancement_LegacyReplacement_Extraction_Array
-    //System.out.println(_facade.loadProperties(1879319148+0x9000000).dump());
-    // ItemAdvancement_LegendarySlotOffer_Array
-    //System.out.println(_facade.loadProperties(1879202229+0x9000000).dump());
-    //System.out.println(statNames);
+    // Tier icons
+    {
+      Object[] array=(Object[])props.getProperty("ItemAdvancement_ProgressionTierGroupToIcon_Array");
+      for(Object obj : array)
+      {
+        PropertiesSet legacyProps=(PropertiesSet)obj;
+        int tier=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionTierGroup")).intValue();
+        // - small icon
+        int smallIconId=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionIcon_Small")).intValue();
+        File smallIconFile=getTierIconFile(true,tier);
+        DatIconsUtils.buildImageFile(_facade,smallIconId,smallIconFile);
+        // - normal icon
+        int iconId=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionIcon")).intValue();
+        File iconFile=getTierIconFile(false,tier);
+        DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
+      }
+    }
+
+    // ItemAdvancement_ClassAgnosticWidgetDID_Array: 5 stat legacies (already included in the previous array)
+    // ItemAdvancement_BlankImbuedWidgetDID: blank legacy (useless)
+    // ItemAdvancement_ReforgeLevel_AddLegacy_Array: levels with legacy addition (10, 20, 30)
+    // ItemAdvancement_ReforgeLevel_Array: levels with reforge (10, 20, 30, 40, 50, 60, 70)
+    // ItemAdvancement_RelicCurrency: 1879202375 (shard)
+    // ItemAdvancement_RequiredTrait: 1879141627 (Seeker of Deep Places)
+    // ItemAdvancement_LegacyReplacement_Extraction_Array: IDs of legacy replacement scrolls (300+ items)
+    // ItemAdvancement_LegendarySlotOffer_Array: web store item IDs
+    // ItemAdvancement_LegacyTypeName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Type
+    // ItemAdvancement_LegacyLevelName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Level
+    // ItemAdvancement_StaticEffectTypeName_Array: array of 14 property IDs: ItemAdvancement_StaticEffect[N]_Type
+
     save(legaciesMgr);
+  }
+
+  private File getTierIconFile(boolean small, int tier) {
+    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/legendary/tiers");
+    String fileName="tier"+tier+(small?"-small":"-large")+".png";
+    File iconFile=new File(rootDir,fileName).getAbsoluteFile();
+    return iconFile;
   }
 
   private void save(LegaciesManager legaciesMgr)
@@ -271,9 +308,26 @@ public class MainDatLegaciesLoader
     }
   }
 
+  private void save(NonImbuedLegaciesManager legaciesMgr)
+  {
+    List<DefaultNonImbuedLegacy> defaultLegacies=legaciesMgr.getDefaultLegacies();
+    List<TieredNonImbuedLegacy> tieredLegacies=legaciesMgr.getTieredLegacies();
+    List<AbstractLegacy> all=new ArrayList<AbstractLegacy>();
+    all.addAll(defaultLegacies);
+    all.addAll(tieredLegacies);
+
+    int nbLegacies=all.size();
+    LOGGER.info("Writing "+nbLegacies+" legacies");
+    boolean ok=LegacyXMLWriter.write(GeneratedFiles.NON_IMBUED_LEGACIES,all);
+    if (ok)
+    {
+      System.out.println("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
+    }
+  }
+
   private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
 
-  private void loadLegacies()
+  private void loadNonImbuedLegacies()
   {
     // Load reforge table: value of ItemAdvancement_ReforgeTable from 1879134775 (NPC: Forge-master)
     PropertiesSet globalReforgeTableProps=_facade.loadProperties(1879138325+0x9000000);
@@ -298,8 +352,8 @@ public class MainDatLegaciesLoader
       int combatPropertyType=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
       loadLegaciesTable(effectsTableId,combatPropertyType);
     }
-
-    System.out.println(_nonImbuedLegaciesManager.dump());
+    save(_nonImbuedLegaciesManager);
+    //System.out.println(_nonImbuedLegaciesManager.dump());
   }
 
   private void handleReforgeTable(int reforgeTableId, EquipmentLocation slot)
