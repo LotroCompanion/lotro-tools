@@ -136,7 +136,7 @@ Mod_Array:
           PropertiesSet effectProps=(PropertiesSet)effectObj;
           int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
           Float spellCraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-          StatsProvider statsProvider=DatEffectUtils.loadEffect(_facade,effectId);
+          StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_facade,effectId);
           int level=spellCraft.intValue();
           BasicStatsSet stats=statsProvider.getStats(1,level);
           ret.getStats().addStats(stats);

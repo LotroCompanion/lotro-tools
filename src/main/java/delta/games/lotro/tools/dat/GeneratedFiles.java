@@ -100,6 +100,10 @@ public class GeneratedFiles
    */
   public static final File NON_IMBUED_LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.NON_IMBUED_LEGACIES);
   /**
+   * Passives.
+   */
+  public static final File PASSIVES=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES);
+  /**
    * Colors.
    */
   public static final File COLORS=LotroCoreConfig.getInstance().getFile(DataFiles.COLORS);

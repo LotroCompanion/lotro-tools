@@ -129,7 +129,7 @@ public class MainDatLegaciesLoader
     Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
     if (imbuedEffect!=null)
     {
-      StatsProvider provider=DatEffectUtils.loadEffect(_facade,imbuedEffect.intValue());
+      StatsProvider provider=DatEffectUtils.loadEffectStats(_facade,imbuedEffect.intValue());
       ret.setStatsProvider(provider);
     }
 
@@ -428,28 +428,10 @@ public class MainDatLegaciesLoader
     }
   }
 
-  private Effect loadEffect(int effectId)
-  {
-    Effect ret=null;
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-    if (effectProps!=null)
-    {
-      ret=new Effect();
-      ret.setId(effectId);
-      StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
-      ret.setStatsProvider(provider);
-    }
-    else
-    {
-      System.out.println("Effect not found: "+effectId);
-    }
-    return ret;
-  }
-
   private NonImbuedLegacyTier buildTieredLegacy(int effectId, Boolean major)
   {
     NonImbuedLegacyTier legacyTier=null;
-    Effect effect=loadEffect(effectId);
+    Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
     StatDescription stat=getStat(effect);
     TieredNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
     if (legacy==null)
@@ -609,7 +591,7 @@ public class MainDatLegaciesLoader
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
     if (legacy==null)
     {
-      Effect effect=loadEffect(effectId);
+      Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
       if (effect!=null)
       {
         legacy=new DefaultNonImbuedLegacy();

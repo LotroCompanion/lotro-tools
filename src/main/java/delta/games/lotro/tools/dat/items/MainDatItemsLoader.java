@@ -33,6 +33,7 @@ import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -53,6 +54,7 @@ public class MainDatItemsLoader
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
+  private PassivesLoader _passivesLoader;
 
   /**
    * Constructor.
@@ -61,6 +63,7 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
+    _passivesLoader=new PassivesLoader(_facade);
   }
 
   private boolean _debug=false;
@@ -229,6 +232,8 @@ public class MainDatItemsLoader
       {
         loadWeaponSpecifics((Weapon)item,properties);
       }
+      // Handle legendaries
+      handleLegendaries(properties);
     }
     else
     {
@@ -333,6 +338,21 @@ public class MainDatItemsLoader
       }
     }
     return null;
+  }
+
+  private void handleLegendaries(PropertiesSet properties)
+  {
+    handleLegendaries(properties,"ItemAdvancement_StaticEffectGroupOverride");
+    handleLegendaries(properties,"ItemAdvancement_StaticEffectGroup2Override");
+  }
+
+  private void handleLegendaries(PropertiesSet properties, String key)
+  {
+    Integer staticEffectGroup=(Integer)(properties.getProperty(key));
+    if (staticEffectGroup!=null)
+    {
+      _passivesLoader.handleTable(staticEffectGroup.intValue());
+    }
   }
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
@@ -827,6 +847,8 @@ public class MainDatItemsLoader
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
     DatStatUtils._statsUsageStatistics.showResults();
+    // Save passives
+    _passivesLoader.savePassives();
   }
 
   /**
