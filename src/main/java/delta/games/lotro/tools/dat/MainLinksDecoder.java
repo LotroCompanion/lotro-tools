@@ -7,24 +7,25 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Effect;
-import delta.games.lotro.common.stats.StatsProvider;
-import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryTitle;
 import delta.games.lotro.lore.items.legendary.LegendaryTitlesManager;
+import delta.games.lotro.lore.items.legendary.PassivesManager;
+import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegendaryAttrs;
-import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
-import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
+import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManager;
+import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.plugins.LuaParser;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Parser for the main data as found in LotroCompanion plugin data.
@@ -34,14 +35,12 @@ public class MainLinksDecoder
 {
   private static final Logger LOGGER=Logger.getLogger(MainLinksDecoder.class);
 
-  private DataFacade _facade;
-
   /**
    * Constructor.
    */
   public MainLinksDecoder()
   {
-    _facade=new DataFacade();
+    // Nothing
   }
 
   /**
@@ -131,15 +130,16 @@ public class MainLinksDecoder
     }
 
     // Legacies
+    NonImbuedLegaciesManager nonImbuedMgr=NonImbuedLegaciesManager.getInstance();
     BufferUtils.skip(bis,1); // Usually 0
     int nbLegacies=BufferUtils.readUInt8(bis);
     for(int i=0;i<nbLegacies;i++)
     {
       int legacyID=BufferUtils.readUInt32(bis);
       int rank=BufferUtils.readUInt32(bis);
-      Effect legacyEffect=loadEffect(legacyID);
-      NonImbuedLegacyInstance legacyInstance=new NonImbuedLegacyInstance();
-      legacyInstance.setLegacy(legacyEffect);
+      NonImbuedLegacyTier legacyTier=nonImbuedMgr.getLegacyTier(legacyID);
+      TieredNonImbuedLegacyInstance legacyInstance=new TieredNonImbuedLegacyInstance();
+      legacyInstance.setLegacyTier(legacyTier);
       legacyInstance.setRank(rank);
       ret.getNonImbuedAttrs().addLegacy(legacyInstance);
     }
@@ -168,12 +168,13 @@ public class MainLinksDecoder
     }
 
     // Passives
+    PassivesManager passivesMgr=PassivesManager.getInstance();
     int nbPassives=BufferUtils.readUInt32(bis);
     for(int i=0;i<nbPassives;i++)
     {
       int passiveId=BufferUtils.readUInt32(bis);
       //System.out.println("Passive: "+passiveId);
-      Effect passive=loadPassive(passiveId);
+      Effect passive=passivesMgr.getEffect(passiveId);
       ret.addPassive(passive);
     }
 
@@ -210,9 +211,9 @@ public class MainLinksDecoder
       int defaultLegacyID=BufferUtils.readUInt32(bis);
       if (defaultLegacyID!=0)
       {
-        Effect defaultEffect=loadEffect(defaultLegacyID);
-        NonImbuedLegacyInstance defaultLegacy=new NonImbuedLegacyInstance();
-        defaultLegacy.setLegacy(defaultEffect);
+        DefaultNonImbuedLegacy legacy=nonImbuedMgr.getDefaultLegacy(defaultLegacyID);
+        DefaultNonImbuedLegacyInstance defaultLegacy=new DefaultNonImbuedLegacyInstance();
+        defaultLegacy.setLegacy(legacy);
         defaultLegacy.setRank(defaultLegacyRank);
         nonImbuedAttrs.setDefaultLegacy(defaultLegacy);
       }
@@ -525,26 +526,6 @@ public class MainLinksDecoder
     return ret;
   }
 
-  private Effect loadPassive(int passiveId)
-  {
-    System.out.println("Passive ID: "+passiveId);
-    return loadEffect(passiveId);
-  }
-
-  private Effect loadEffect(int effectId)
-  {
-    Effect ret=null;
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
-    if (effectProps!=null)
-    {
-      ret=new Effect();
-      ret.setId(effectId);
-      StatsProvider provider=DatStatUtils.buildStatProviders(_facade,effectProps);
-      ret.setStatsProvider(provider);
-    }
-    return ret;
-  }
-
   private String decodeName(ByteArrayInputStream bis)
   {
     return BufferUtils.readPrefixedUtf16String(bis);
@@ -552,6 +533,10 @@ public class MainLinksDecoder
 
   private static void doFile(File dataFile)
   {
+    if (!dataFile.exists())
+    {
+      return;
+    }
     try
     {
       MainLinksDecoder parser=new MainLinksDecoder();
