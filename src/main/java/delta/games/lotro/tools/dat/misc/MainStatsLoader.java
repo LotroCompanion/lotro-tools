@@ -119,6 +119,7 @@ public class MainStatsLoader
     addCustomStat(id--,"FINESSE_PERCENTAGE",true);
     addCustomStat(id--,"RESISTANCE_PERCENTAGE",true);
     addCustomStat(id--,"ARMOUR",false);
+    addCustomStat(id--,"DPS",false);
   }
 
   private void filterStats()
