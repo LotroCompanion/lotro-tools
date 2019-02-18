@@ -119,7 +119,8 @@ public class MainDatLegaciesLoader
     Integer dpsLut=(Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_DPSLUT");
     if (dpsLut!=null)
     {
-      loadDpsLut(dpsLut.intValue());
+      StatsProvider dpsProvider=loadDpsLut(dpsLut.intValue());
+      ret.setStatsProvider(dpsProvider);
     }
 
     // Initial max tier
@@ -173,11 +174,13 @@ public class MainDatLegaciesLoader
     return ret;
   }
 
-  private void loadDpsLut(int id)
+  private StatsProvider loadDpsLut(int id)
   {
-    Progression prog=DatStatUtils.getProgression(_facade,id);
-    System.out.println("Nb points: "+((ArrayProgression)prog).getNumberOfPoints());
-    System.out.println("ID: "+((ArrayProgression)prog).getIdentifier());
+    StatsProvider ret=new StatsProvider();
+    Progression progression=DatStatUtils.getProgression(_facade,id);
+    ScalableStatProvider dps=new ScalableStatProvider(WellKnownStat.DPS,progression);
+    ret.addStatProvider(dps);
+    return ret;
   }
 
   private LegacyType getLegacyType(int categoryCode)
