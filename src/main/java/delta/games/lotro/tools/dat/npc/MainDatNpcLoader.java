@@ -43,7 +43,7 @@ public class MainDatNpcLoader
   {
     _facade=facade;
     List<Item> items=ItemSaxParser.parseItemsFile(GeneratedFiles.ITEMS);
-    _itemsManager=new ItemsManager(items);
+    _itemsManager=ItemsManager.getInstance();
     _characterClass=facade.getEnumsManager().getEnumMapper(587202574);
   }
 

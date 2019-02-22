@@ -50,8 +50,7 @@ public class MainDatRecipesLoader
   public MainDatRecipesLoader(DataFacade facade)
   {
     _facade=facade;
-    List<Item> items=ItemSaxParser.parseItemsFile(GeneratedFiles.ITEMS);
-    _itemsManager=new ItemsManager(items);
+    _itemsManager=ItemsManager.getInstance();
   }
 
   private Recipe load(int indexDataId)
