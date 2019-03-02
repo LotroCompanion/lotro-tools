@@ -20,7 +20,6 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 

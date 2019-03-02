@@ -28,7 +28,7 @@ public class VirtueDataLoader
   private void loadVirtues()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
-    System.out.println(properties.dump());
+    //System.out.println(properties.dump());
     Object[] freepTraitsArray=(Object[])properties.getProperty("Trait_Control_FreepTraits");
     for(Object freepTraitObj : freepTraitsArray)
     {

@@ -17,8 +17,6 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.comparators.ItemNameComparator;
-import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
-import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -42,7 +40,6 @@ public class MainDatNpcLoader
   public MainDatNpcLoader(DataFacade facade)
   {
     _facade=facade;
-    List<Item> items=ItemSaxParser.parseItemsFile(GeneratedFiles.ITEMS);
     _itemsManager=ItemsManager.getInstance();
     _characterClass=facade.getEnumsManager().getEnumMapper(587202574);
   }

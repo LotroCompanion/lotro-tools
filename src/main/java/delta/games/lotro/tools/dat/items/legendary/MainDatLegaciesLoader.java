@@ -37,7 +37,6 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
