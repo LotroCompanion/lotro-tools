@@ -11,8 +11,6 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
-import delta.games.lotro.lore.items.legendary.LegendaryTitle;
-import delta.games.lotro.lore.items.legendary.LegendaryTitlesManager;
 import delta.games.lotro.lore.items.legendary.PassivesManager;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacyInstance;
@@ -25,6 +23,8 @@ import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryAttrs
 import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
+import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
+import delta.games.lotro.lore.items.legendary.titles.LegendaryTitlesManager;
 import delta.games.lotro.plugins.LuaParser;
 
 /**

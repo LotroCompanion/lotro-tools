@@ -10,7 +10,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.legendary.LegendaryTitle;
+import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
