@@ -10,7 +10,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -34,18 +33,18 @@ public class MainDatMobsLoader
     _items=ItemsManager.getInstance();
   }
 
-  private LegendaryTitle load(int indexDataId)
+  private Object load(int indexDataId)
   {
-    LegendaryTitle ret=null;
+    Object ret=null;
     PropertiesSet properties=_facade.loadProperties(indexDataId+0x09000000);
     if (properties!=null)
     {
-      ret=new LegendaryTitle();
+      //ret=new LegendaryTitle();
       // ID
-      ret.setIdentifier(indexDataId);
+      //ret.setIdentifier(indexDataId);
       // Name
       String name=DatUtils.getStringProperty(properties,"Name");
-      ret.setName(name);
+      //ret.setName(name);
       System.out.println("ID="+indexDataId+", Name: "+name);
       int barterTrophyList=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
       if (barterTrophyList!=0)
@@ -180,14 +179,14 @@ Quest_MonsterDivision: 245 => HallOfMirror
 
   private void doIt()
   {
-    List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
+    List<Object> titles=new ArrayList<Object>();
     //for(int id=1879079705;id<=1879079705;id++)
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);
       if (useIt)
       {
-        LegendaryTitle title=load(id);
+        Object title=load(id);
         if (title!=null)
         {
           titles.add(title);
