@@ -4,13 +4,26 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Map;
 
+import javax.xml.transform.sax.TransformerHandler;
+
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.xml.XmlFileWriterHelper;
+import delta.common.utils.io.xml.XmlWriter;
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.Effect;
+import delta.games.lotro.common.money.Money;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemFactory;
+import delta.games.lotro.lore.items.ItemInstance;
+import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.essences.EssencesSet;
+import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
+import delta.games.lotro.lore.items.legendary.LegendaryInstance;
 import delta.games.lotro.lore.items.legendary.PassivesManager;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.imbued.ImbuedLegacyInstance;
@@ -26,6 +39,7 @@ import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitlesManager;
 import delta.games.lotro.plugins.LuaParser;
+import delta.games.lotro.plugins.lotrocompanion.links.LinkDecodingException;
 
 /**
  * Parser for the main data as found in LotroCompanion plugin data.
@@ -55,9 +69,24 @@ public class MainLinksDecoder
     byte[] buffer=loadBuffer(data);
     Object legAttr=data.get("legendary");
     boolean legendary=((legAttr==null) || (Boolean.TRUE.equals(legAttr)));
-    decodeBuffer(buffer,legendary);
+    ItemInstance<? extends Item> instance=decodeBuffer(buffer,legendary);
+    File to=new File(dataFile.getParentFile(),dataFile.getName()+".xml");
+    writeItemInstance(to,instance);
   }
 
+  private void writeItemInstance(File to, final ItemInstance<? extends Item> instance)
+  {
+    XmlFileWriterHelper helper=new XmlFileWriterHelper();
+    XmlWriter writer=new XmlWriter()
+    {
+      public void writeXml(TransformerHandler hd) throws Exception
+      {
+        ItemXMLWriter itemWriter=new ItemXMLWriter();
+        itemWriter.writeItemInstance(hd,instance);
+      }
+    };
+    helper.write(to,EncodingNames.UTF_8,writer);
+  }
   @SuppressWarnings("unchecked")
   private byte[] loadBuffer(Map<String,Object> data)
   {
@@ -81,52 +110,58 @@ public class MainLinksDecoder
     return buffer;
   }
 
-  private void decodeBuffer(byte[] buffer, boolean isLegendary)
+  private ItemInstance<? extends Item> decodeBuffer(byte[] buffer, boolean isLegendary) throws LinkDecodingException
   {
     ByteArrayInputStream bis=new ByteArrayInputStream(buffer);
     int lowInstanceId=BufferUtils.readUInt32(bis);
     int highInstanceId=BufferUtils.readUInt32(bis);
-    System.out.println("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
+    LOGGER.debug("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
     int itemId=BufferUtils.readUInt32(bis);
-    System.out.println("Item ID: "+itemId);
-    if (isLegendary)
+    LOGGER.debug("Item ID: "+itemId);
+    ItemsManager itemsMgr=ItemsManager.getInstance();
+    Item item=itemsMgr.getItem(itemId);
+    ItemInstance<? extends Item> instance=ItemFactory.buildInstance(item);
+    boolean itemIsLegendary=(instance instanceof LegendaryInstance);
+    if (itemIsLegendary)
     {
-      LegendaryAttrs legAttrs=decodeLegendary(bis);
-      System.out.println(legAttrs.dump());
+      decodeLegendary(bis,instance);
     }
     else
     {
-      decodeNonLegendary(bis);
+      decodeNonLegendary(bis,instance);
     }
+    System.out.println(instance.dumpInstanceData());
+    return instance;
   }
 
-  private LegendaryAttrs decodeLegendary(ByteArrayInputStream bis)
+  private void decodeLegendary(ByteArrayInputStream bis, ItemInstance<? extends Item> instance) throws LinkDecodingException
   {
-    LegendaryAttrs ret=new LegendaryAttrs();
+    LegendaryInstance legendary=(LegendaryInstance)instance;
+    LegendaryAttrs attrs=legendary.getLegendaryAttributes();
     // Name
     int hasName=BufferUtils.readUInt8(bis);
     if (hasName==1)
     {
       String name=decodeName(bis);
-      System.out.println("Name: "+name);
-      ret.setLegendaryName(name);
+      LOGGER.debug("Name: "+name);
+      attrs.setLegendaryName(name);
     }
     else
     {
       int liNameId1=BufferUtils.readUInt32(bis);
       int liNameId2=BufferUtils.readUInt32(bis);
-      System.out.println("Name id1="+liNameId1+", id2="+liNameId2);
+      LOGGER.debug("Name id1="+liNameId1+", id2="+liNameId2);
     }
 
     BufferUtils.skip(bis,6); // Usually 1 0 0 0 1 0
     // Title
     int titleId=BufferUtils.readUInt32(bis);
-    //System.out.println("Title: "+titleId); // 0 if no title
+    LOGGER.debug("Title: "+titleId); // 0 if no title
     if (titleId!=0)
     {
       LegendaryTitlesManager legendaryTitlesMgr=LegendaryTitlesManager.getInstance();
       LegendaryTitle legendaryTitle=legendaryTitlesMgr.getLegendaryTitle(titleId);
-      ret.setTitle(legendaryTitle);
+      attrs.setTitle(legendaryTitle);
     }
 
     // Legacies
@@ -141,7 +176,7 @@ public class MainLinksDecoder
       TieredNonImbuedLegacyInstance legacyInstance=new TieredNonImbuedLegacyInstance();
       legacyInstance.setLegacyTier(legacyTier);
       legacyInstance.setRank(rank);
-      ret.getNonImbuedAttrs().addLegacy(legacyInstance);
+      attrs.getNonImbuedAttrs().addLegacy(legacyInstance);
     }
 
     // Relics
@@ -155,14 +190,14 @@ public class MainLinksDecoder
         int relicID=BufferUtils.readUInt32(bis);
         // 1: Setting, 2: Gem, 3: Rune ; Crafted=4
         int slot=BufferUtils.readUInt32(bis);
-        //System.out.println("Relic: ID="+relicID+", slot="+slot);
+        LOGGER.debug("Relic: ID="+relicID+", slot="+slot);
         Relic relic=relicsMgr.getById(relicID);
         if (relic!=null)
         {
-          if (slot==1) ret.setSetting(relic);
-          else if (slot==2) ret.setGem(relic);
-          else if (slot==3) ret.setRune(relic);
-          else if (slot==4) ret.setCraftedRelic(relic);
+          if (slot==1) attrs.setSetting(relic);
+          else if (slot==2) attrs.setGem(relic);
+          else if (slot==3) attrs.setRune(relic);
+          else if (slot==4) attrs.setCraftedRelic(relic);
         }
       }
     }
@@ -173,14 +208,14 @@ public class MainLinksDecoder
     for(int i=0;i<nbPassives;i++)
     {
       int passiveId=BufferUtils.readUInt32(bis);
-      //System.out.println("Passive: "+passiveId);
+      LOGGER.debug("Passive: "+passiveId);
       Effect passive=passivesMgr.getEffect(passiveId);
-      ret.addPassive(passive);
+      attrs.addPassive(passive);
     }
 
     int test=BufferUtils.readUInt32(bis);
     boolean imbued=false;
-    if (test==268460298)
+    if (test==268460298) // ItemAdvancement_AdvanceableWidget_Data_Array
     {
       imbued=true;
     }
@@ -190,19 +225,18 @@ public class MainLinksDecoder
     }
     else
     {
-      System.out.println("Expected test value: "+test);
-      return null;
+      throw new LinkDecodingException("Unexpected test value: "+test);
     }
     // If non imbued
     if (!imbued)
     {
-      NonImbuedLegendaryAttrs nonImbuedAttrs=ret.getNonImbuedAttrs();
+      NonImbuedLegendaryAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
       // points spent / left (only for non imbued ones)
       int nbPointsLeft=BufferUtils.readUInt32(bis);
       nonImbuedAttrs.setPointsLeft(nbPointsLeft);
       int nbPointsSpent=BufferUtils.readUInt32(bis);
       nonImbuedAttrs.setPointsSpent(nbPointsSpent);
-      //System.out.println("Left: "+nbPointsLeft+" / Spent: "+nbPointsSpent);
+      LOGGER.debug("Left: "+nbPointsLeft+" / Spent: "+nbPointsSpent);
 
       /*int n2=*/BufferUtils.readUInt32(bis); // Got 0, 62, 83, 189, 192...
 
@@ -221,18 +255,17 @@ public class MainLinksDecoder
     else
     {
       ImbuedLegendaryAttrs imbuedAttrs=new ImbuedLegendaryAttrs();
-      ret.setImbuedAttrs(imbuedAttrs);
+      attrs.setImbuedAttrs(imbuedAttrs);
 
       int nbImbuedLegacies=BufferUtils.readUInt32(bis);
-      System.out.println("Found "+nbImbuedLegacies+" legacies");
+      LOGGER.debug("Found "+nbImbuedLegacies+" legacies");
       for(int i=0;i<nbImbuedLegacies;i++)
       {
-        //System.out.println("Legacy #"+(i+1));
+        LOGGER.debug("Legacy #"+(i+1));
         int dataStructId=BufferUtils.readUInt32(bis);
         if (dataStructId!=268460297) // 268460297=ItemAdvancement_AdvanceableWidget_Data_Struct
         {
-          System.out.println("Expected dataStructId=268460297, got: "+dataStructId);
-          return null;
+          throw new LinkDecodingException("Expected dataStructId=268460297, got: "+dataStructId);
         }
         /*int n3=*/BufferUtils.readUInt8(bis); // Always 0
 
@@ -246,8 +279,7 @@ public class MainLinksDecoder
           int propId2=BufferUtils.readUInt32(bis);
           if (propId!=propId2)
           {
-            System.out.println("Decoding error: propId="+propId+", propId2="+propId2);
-            return null;
+            throw new LinkDecodingException("Decoding error: propId="+propId+", propId2="+propId2);
           }
           if (propId==268460305)
           {
@@ -258,13 +290,13 @@ public class MainLinksDecoder
           {
             // ItemAdvancement_AdvanceableWidget_UnlockedLevels
             unlockedLevels=BufferUtils.readUInt32(bis);
-            //System.out.println("Unlocked levels: "+unlockedLevels);
+            LOGGER.debug("Unlocked levels: "+unlockedLevels);
           }
           else if (propId==268442976)
           {
             // ItemAdvancement_EarnedXP
             legacyXp=BufferUtils.readUInt32(bis);
-            //System.out.println("Legacy XP: "+legacyXp);
+            LOGGER.debug("Legacy XP: "+legacyXp);
             BufferUtils.skip(bis,4);
           }
         }
@@ -287,36 +319,41 @@ public class MainLinksDecoder
     int marker=BufferUtils.readUInt32(bis); // Expected 0x100010EF
     if (marker!=0x100010EF)
     {
-      System.out.println("Bad marker: "+marker);
+      throw new LinkDecodingException("Bad marker: "+marker);
     }
 
-    decodeShared(bis);
-    return ret;
+    decodeShared(bis,instance);
   }
 
-  private void decodeNonLegendary(ByteArrayInputStream bis)
+  private void decodeNonLegendary(ByteArrayInputStream bis, ItemInstance<? extends Item> instance) throws LinkDecodingException
   {
-    decodeShared(bis);
+    decodeShared(bis,instance);
   }
 
-  private void decodeShared(ByteArrayInputStream bis)
+  private void decodeShared(ByteArrayInputStream bis, ItemInstance<? extends Item> itemInstance) throws LinkDecodingException
   {
+    LegendaryAttrs attrs=null;
+    if (itemInstance instanceof LegendaryInstance)
+    {
+      LegendaryInstance legendary=(LegendaryInstance)itemInstance;
+      attrs=legendary.getLegendaryAttributes();
+    }
+
     /*int padding=*/BufferUtils.readUInt8(bis);
     int nbSubs=BufferUtils.readUInt8(bis);
-    System.out.println("Nb subs: "+nbSubs);
+    LOGGER.debug("Nb subs: "+nbSubs);
     for(int i=0;i<nbSubs;i++)
     {
       int header=BufferUtils.readUInt32(bis);
       int header2=BufferUtils.readUInt32(bis);
       if (header!=header2)
       {
-        System.out.println("Decoding error: header="+header+", header2="+header2);
-        return;
+        throw new LinkDecodingException("Decoding error: header="+header+", header2="+header2);
       }
       if (header==0x100012C5)
       {
         int nbExtras=BufferUtils.readUInt32(bis);
-        System.out.println("Extras: "+nbExtras);
+        LOGGER.debug("Extras: "+nbExtras);
         for(int j=0;j<nbExtras;j++)
         {
           int subHeader=BufferUtils.readUInt32(bis);
@@ -324,14 +361,15 @@ public class MainLinksDecoder
           {
             // Container slot
             int bitsSet=BufferUtils.readUInt32(bis);
-            System.out.println("Container slots: "+bitsSet);
+            LOGGER.debug("Container slots: "+bitsSet);
           }
           else if(subHeader==0x10000E20)
           {
             // Crafted by
             BufferUtils.readUInt8(bis);
             String crafter=decodeName(bis);
-            System.out.println("Crafter: "+crafter);
+            LOGGER.debug("Crafter: "+crafter);
+            itemInstance.setCrafterName(crafter);
             BufferUtils.skip(bis,6);
           }
           else if (subHeader==0x10000884)
@@ -339,7 +377,8 @@ public class MainLinksDecoder
             // Crafted Item Inscription
             BufferUtils.readUInt8(bis);
             String inscription=decodeName(bis);
-            System.out.println("Crafted item inscription: "+inscription);
+            LOGGER.debug("Crafted item inscription: "+inscription);
+            itemInstance.setBirthName(inscription);
             BufferUtils.skip(bis,6);
           }
           else if (subHeader==0x10000AC1)
@@ -347,93 +386,107 @@ public class MainLinksDecoder
             // Bound to
             int boundToLowId=BufferUtils.readUInt32(bis);
             int boundToHighId=BufferUtils.readUInt32(bis);
-            System.out.println("Bound to high: "+boundToHighId+", low: "+boundToLowId);
+            LOGGER.debug("Bound to high: "+boundToHighId+", low: "+boundToLowId);
           }
           else if (subHeader==0x10000AC2)
           {
             // Binds on acquire
             int boA=BufferUtils.readUInt8(bis);
-            System.out.println("Bind on acquire: "+boA);
+            LOGGER.debug("Bind on acquire: "+boA);
           }
           else if (subHeader==0x10000E7B)
           {
             // Quantity
             int quantity=BufferUtils.readUInt32(bis);
-            System.out.println("Quantity: "+quantity);
+            LOGGER.debug("Quantity: "+quantity);
           }
           else if (subHeader==0x100031A4)
           {
             // Default legacy rank
             int defaultLegacyRank=BufferUtils.readUInt32(bis);
-            System.out.println("Default legacy rank: "+defaultLegacyRank);
+            LOGGER.debug("Default legacy rank: "+defaultLegacyRank);
           }
           else if (subHeader==0x10001D5F)
           {
             // LI level (for a non imbued item. Max 60 or 70)
             int liLevel=BufferUtils.readUInt32(bis);
-            System.out.println("LI level: "+liLevel);
+            if (attrs!=null)
+            {
+              attrs.getNonImbuedAttrs().setLegendaryItemLevel(liLevel);
+            }
+            LOGGER.debug("LI level: "+liLevel);
           }
           else if (subHeader==0x100000C4)
           {
             // Usage min level
-            int itemLevel=BufferUtils.readUInt32(bis);
-            System.out.println("Usage min level: "+itemLevel);
+            int usageMinLevel=BufferUtils.readUInt32(bis);
+            itemInstance.setMinLevel(Integer.valueOf(usageMinLevel));
+            LOGGER.debug("Usage min level: "+usageMinLevel);
           }
           else if (subHeader==0x1000132C)
           {
             // Current item durability
             int durability=BufferUtils.readUInt32(bis);
-            System.out.println("Durability: "+durability);
+            itemInstance.setDurability(Integer.valueOf(durability));
+            LOGGER.debug("Durability: "+durability);
           }
           else if (subHeader==0x100060B5)
           {
             // ItemAdvancement_Imbued
             int iaImbued=BufferUtils.readUInt8(bis);
-            System.out.println("Imbued: "+iaImbued);
+            LOGGER.debug("Imbued: "+iaImbued);
           }
           else if (subHeader==0x10001042)
           {
             // Combat_Damage (Max Damage)
             float damage=BufferUtils.readFloat(bis);
-            System.out.println("Max Damage: "+damage);
+            LOGGER.debug("Max Damage: "+damage);
           }
           else if (subHeader==0x10000835)
           {
             // Item value
             int itemValue=BufferUtils.readUInt32(bis);
-            System.out.println("Item value: "+itemValue);
+            Money money=parseItemValue(itemValue);
+            itemInstance.setValue(money);
+            LOGGER.debug("Item value: "+itemValue);
           }
           else if (subHeader==0x10000669)
           {
             // Item level
             int itemLevel=BufferUtils.readUInt32(bis);
-            System.out.println("Item level: "+itemLevel);
+            itemInstance.setItemLevel(Integer.valueOf(itemLevel));
+            LOGGER.debug("Item level: "+itemLevel);
           }
           else if (subHeader==0x10004996)
           {
             // Upgrades (crystals)
             int itemUpgrades=BufferUtils.readUInt32(bis);
-            System.out.println("Item upgrades: "+itemUpgrades);
+            if (attrs!=null)
+            {
+              attrs.getNonImbuedAttrs().setNbUpgrades(itemUpgrades);
+            }
+            LOGGER.debug("Item upgrades: "+itemUpgrades);
           }
           else if (subHeader==0x10005F0E) // 268459790 - Item_Socket_Gem_Array
           {
-            decodeEssences(bis);
+            EssencesSet essences=decodeEssences(bis);
+            itemInstance.setEssences(essences);
           }
           else if (subHeader==0x10000ACD) // 268438221 - Item_ClothingColor
           {
             // Indigo: 0.15; Umber: 0.5/3F000000 ; Orange: 0.75/3F400000
             float dye=BufferUtils.readFloat(bis);
             //int dye=BufferUtils.readUInt32(bis);
-            System.out.println("Dye: "+dye);
+            LOGGER.debug("Dye: "+dye);
           }
           else if (subHeader==0x10000570) // 268436848 - Item_Armor_Value
           {
             int armorValue=BufferUtils.readUInt32(bis);
-            System.out.println("Armour: "+armorValue);
+            LOGGER.debug("Armour: "+armorValue);
           }
           else
           {
-            System.out.println("Unmanaged header: "+subHeader);
+            throw new LinkDecodingException("Unmanaged header: "+subHeader);
           }
         }
       }
@@ -441,14 +494,14 @@ public class MainLinksDecoder
       {
         // Item ID, reloaded
         int itemId=BufferUtils.readUInt32(bis);
-        System.out.println("Item ID: "+itemId);
+        LOGGER.debug("Item ID: "+itemId);
       }
       else if (header==0x10002897)
       {
         // Instance ID, reloaded
         int lowInstanceId=BufferUtils.readUInt32(bis);
         int highInstanceId=BufferUtils.readUInt32(bis);
-        System.out.println("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
+        LOGGER.debug("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
       }
     }
     // Properties
@@ -465,19 +518,34 @@ public class MainLinksDecoder
      */
   }
 
-  private void decodeEssences(ByteArrayInputStream bis)
+  private Money parseItemValue(int itemValue)
   {
+    int copper=itemValue%100;
+    itemValue=itemValue/100;
+    int silver=itemValue%1000;
+    int gold=itemValue/1000;
+    return new Money(gold,silver,copper);
+  }
+
+  private EssencesSet decodeEssences(ByteArrayInputStream bis) throws LinkDecodingException
+  {
+    ItemsManager itemMgr=ItemsManager.getInstance();
     int nbEssences=BufferUtils.readUInt32(bis);
-    System.out.println("Nb essences: "+nbEssences);
+    EssencesSet ret=new EssencesSet(nbEssences);
+    LOGGER.debug("Nb essences: "+nbEssences);
     for(int i=0;i<nbEssences;i++)
     {
       // 0x10005F3D=268459837 - Item_Socket_Gem_Array_Entry
       int propId=BufferUtils.readUInt32(bis);
       if (propId!=268459837)
       {
-        System.out.println("Expected property ID: "+268459837+", got: "+propId);
-        return;
+        throw new LinkDecodingException("Expected property ID: "+268459837+", got: "+propId);
       }
+
+      // Decode essence properties
+      int essenceId=0;
+      int essenceLevel=0;
+
       /*int n3=*/BufferUtils.readUInt8(bis); // Always 0
       int nbProps=BufferUtils.readUInt8(bis);
       for(int j=0;j<nbProps;j++)
@@ -486,27 +554,32 @@ public class MainLinksDecoder
         int header2=BufferUtils.readUInt32(bis);
         if (header!=header2)
         {
-          System.out.println("Decoding error: header="+header+", header2="+header2);
-          return;
+          throw new LinkDecodingException("Decoding error: header="+header+", header2="+header2);
         }
         // 0x10005F05=268459781 - Item_Socket_GemDID
         if (header==0x10005F05)
         {
-          int essenceId=BufferUtils.readUInt32(bis);
-          System.out.println("Essence #"+(i+1)+": "+essenceId);
+          essenceId=BufferUtils.readUInt32(bis);
+          LOGGER.debug("Essence #"+(i+1)+": "+essenceId);
         }
         // 0x10005F3E=268459838 - Item_Socket_GemLevel
         else if (header==0x10005F3E)
         {
-          int essenceLevel=BufferUtils.readUInt32(bis);
-          System.out.println("Essence level: "+essenceLevel);
+          essenceLevel=BufferUtils.readUInt32(bis);
+          LOGGER.debug("Essence level: "+essenceLevel);
         }
         else
         {
-          System.out.println("Unmanaged property: "+propId);
+          throw new LinkDecodingException("Unmanaged property: "+propId);
+        }
+        if ((essenceId!=0) && (essenceLevel!=0))
+        {
+          Item essence=itemMgr.getItem(essenceId);
+          ret.setEssence(i,essence);
         }
       }
     }
+    return ret;
   }
 
   private ImbuedLegacyInstance loadImbuedLegacy(int legacyId)
