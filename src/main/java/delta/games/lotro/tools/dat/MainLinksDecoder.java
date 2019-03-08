@@ -12,6 +12,10 @@ import delta.common.utils.io.xml.XmlFileWriterHelper;
 import delta.common.utils.io.xml.XmlWriter;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.Effect;
+import delta.games.lotro.common.colors.ColorDescription;
+import delta.games.lotro.common.colors.ColorsManager;
+import delta.games.lotro.common.id.CharacterId;
+import delta.games.lotro.common.id.ItemInstanceId;
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.Dump;
@@ -115,12 +119,14 @@ public class MainLinksDecoder
     ByteArrayInputStream bis=new ByteArrayInputStream(buffer);
     int lowInstanceId=BufferUtils.readUInt32(bis);
     int highInstanceId=BufferUtils.readUInt32(bis);
-    LOGGER.debug("Instance ID: low="+lowInstanceId+", high="+highInstanceId);
+    ItemInstanceId instanceId=new ItemInstanceId(lowInstanceId,highInstanceId);
+    LOGGER.debug("Instance ID: "+instanceId);
     int itemId=BufferUtils.readUInt32(bis);
     LOGGER.debug("Item ID: "+itemId);
     ItemsManager itemsMgr=ItemsManager.getInstance();
     Item item=itemsMgr.getItem(itemId);
     ItemInstance<? extends Item> instance=ItemFactory.buildInstance(item);
+    instance.setInstanceId(instanceId);
     boolean itemIsLegendary=(instance instanceof LegendaryInstance);
     if (itemIsLegendary)
     {
@@ -386,7 +392,10 @@ public class MainLinksDecoder
             // Bound to
             int boundToLowId=BufferUtils.readUInt32(bis);
             int boundToHighId=BufferUtils.readUInt32(bis);
-            LOGGER.debug("Bound to high: "+boundToHighId+", low: "+boundToLowId);
+            // Assume character ID
+            CharacterId id=new CharacterId(boundToLowId,boundToHighId);
+            LOGGER.debug("Bound to: "+id);
+            itemInstance.setBoundTo(id);
           }
           else if (subHeader==0x10000AC2)
           {
@@ -478,6 +487,9 @@ public class MainLinksDecoder
             float dye=BufferUtils.readFloat(bis);
             //int dye=BufferUtils.readUInt32(bis);
             LOGGER.debug("Dye: "+dye);
+            ColorsManager colorsMgr=ColorsManager.getInstance();
+            ColorDescription color=colorsMgr.getColor(dye);
+            itemInstance.setColor(color);
           }
           else if (subHeader==0x10000570) // 268436848 - Item_Armor_Value
           {
@@ -612,6 +624,7 @@ public class MainLinksDecoder
     }
     try
     {
+      System.out.println("File: "+dataFile);
       MainLinksDecoder parser=new MainLinksDecoder();
       parser.doIt(dataFile);
     }
