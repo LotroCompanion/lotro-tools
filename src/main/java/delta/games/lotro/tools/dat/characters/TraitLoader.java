@@ -61,6 +61,9 @@ public class TraitLoader
       }
       //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
 
+      // Category
+      // See enum: SkillCharacteristicCategory (id=587202586). 93 = Discounts:
+
       // Stats
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
       ret.setStatsProvider(statsProvider);

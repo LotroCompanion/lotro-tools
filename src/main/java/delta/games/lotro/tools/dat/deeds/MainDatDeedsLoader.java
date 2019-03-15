@@ -7,14 +7,30 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Emote;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.Rewards;
+import delta.games.lotro.common.Title;
+import delta.games.lotro.common.Trait;
+import delta.games.lotro.common.Virtue;
+import delta.games.lotro.common.VirtueId;
+import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.emotes.EmoteDescription;
+import delta.games.lotro.lore.emotes.EmotesManager;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.titles.TitleDescription;
+import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
@@ -28,6 +44,7 @@ public class MainDatDeedsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatDeedsLoader.class);
 
   private DataFacade _facade;
+  private ItemsManager _itemsMgr;
   private List<DeedDescription> _deeds;
   private EnumMapper _category;
   private EnumMapper _uiTab;
@@ -45,6 +62,7 @@ public class MainDatDeedsLoader
   public MainDatDeedsLoader(DataFacade facade)
   {
     _facade=facade;
+    _itemsMgr=ItemsManager.getInstance();
     _deeds=new ArrayList<DeedDescription>();
     _category=_facade.getEnumsManager().getEnumMapper(587202587);
     _uiTab=_facade.getEnumsManager().getEnumMapper(587202588);
@@ -105,10 +123,11 @@ public class MainDatDeedsLoader
       //Quest_ChallengeLevel: 13
 
       // Rewards
+      Rewards rewards=deed.getRewards();
       Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
       if (treasureId!=null)
       {
-        getRewards(treasureId.intValue());
+        getRewards(rewards,treasureId.intValue());
       }
       // Faction
       getFaction(properties);
@@ -116,7 +135,8 @@ public class MainDatDeedsLoader
       Integer tp=getTurbinePoints(properties);
       if (tp!=null)
       {
-        System.out.println("TP: "+tp);
+        rewards.setLotroPoints(tp.intValue());
+        //System.out.println("TP: "+tp);
       }
       // Children
       getChildDeeds(properties);
@@ -252,13 +272,13 @@ public class MainDatDeedsLoader
       }
       else
       {
-        System.out.println("Unmanaged type: "+typeCode);
+        LOGGER.warn("Unmanaged type: "+typeCode);
       }
     }
     deed.setType(type);
   }
 
-  private void getRewards(int questTreasureId)
+  private void getRewards(Rewards rewards, int questTreasureId)
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
 
@@ -270,8 +290,21 @@ public class MainDatDeedsLoader
       {
         PropertiesSet itemProps=(PropertiesSet)itemObj;
         int itemId=((Integer)itemProps.getProperty("QuestTreasure_Item")).intValue();
-        Integer quantity=(Integer)itemProps.getProperty("QuestTreasure_ItemQuantity");
-        System.out.println("Item: "+itemId+", quantity: "+quantity);
+        Integer quantityValue=(Integer)itemProps.getProperty("QuestTreasure_ItemQuantity");
+        //System.out.println("Item: "+itemId+", quantity: "+quantityValue);
+        Item item=_itemsMgr.getItem(itemId);
+        if (item!=null)
+        {
+          String name=(item!=null)?item.getName():"???";
+          ObjectItem objectItem=new ObjectItem(name);
+          objectItem.setItemId(itemId);
+          int quantity=(quantityValue!=null?quantityValue.intValue():1);
+          rewards.getObjects().addObject(objectItem,quantity);
+        }
+        else
+        {
+          LOGGER.warn("Item not found: "+itemId);
+        }
       }
     }
     // Virtues
@@ -283,7 +316,11 @@ public class MainDatDeedsLoader
         PropertiesSet virtueProps=(PropertiesSet)virtueObj;
         int virtueId=((Integer)virtueProps.getProperty("QuestTreasure_Virtue")).intValue();
         Integer increment=(Integer)virtueProps.getProperty("QuestTreasure_Virtue_Increment");
-        System.out.println("Virtue: "+virtueId+", quantity: "+increment);
+        //System.out.println("Virtue: "+virtueId+", quantity: "+increment);
+        String virtueName=getVirtue(virtueId);
+        int count=(increment!=null)?increment.intValue():1;
+        Virtue virtue=new Virtue(VirtueId.valueOf(virtueName),count);
+        rewards.addVirtue(virtue);
       }
     }
     // Titles
@@ -293,7 +330,19 @@ public class MainDatDeedsLoader
       for(Object titleObj : titleArray)
       {
         int titleId=((Integer)titleObj).intValue();
-        System.out.println("Title: "+titleId);
+        //System.out.println("Title: "+titleId);
+        TitlesManager titlesMgr=TitlesManager.getInstance();
+        TitleDescription title=titlesMgr.getTitle(titleId);
+        if (title!=null)
+        {
+          String name=title.getName();
+          Title titleReward=new Title(null,name);
+          rewards.addTitle(titleReward);
+        }
+        else
+        {
+          LOGGER.warn("Title not found: "+titleId);
+        }
       }
     }
     // Emote
@@ -303,7 +352,19 @@ public class MainDatDeedsLoader
       for(Object emoteObj : emoteArray)
       {
         int emoteId=((Integer)emoteObj).intValue();
-        System.out.println("Emote: "+emoteId);
+        //System.out.println("Emote: "+emoteId);
+        EmotesManager emotesMgr=EmotesManager.getInstance();
+        EmoteDescription emote=emotesMgr.getEmote(emoteId);
+        if (emote!=null)
+        {
+          String command=emote.getCommand();
+          Emote emoteReward=new Emote(command);
+          rewards.addEmote(emoteReward);
+        }
+        else
+        {
+          LOGGER.warn("Emote not found: "+emoteId);
+        }
       }
     }
     // Trait
@@ -313,7 +374,19 @@ public class MainDatDeedsLoader
       for(Object traitObj : traitArray)
       {
         int traitId=((Integer)traitObj).intValue();
-        System.out.println("Trait: "+traitId);
+        //System.out.println("Trait: "+traitId);
+        TraitsManager traitsMgr=TraitsManager.getInstance();
+        TraitDescription trait=traitsMgr.getTrait(traitId);
+        if (trait!=null)
+        {
+          String command=trait.getName();
+          Trait traitReward=new Trait(command);
+          rewards.addTrait(traitReward);
+        }
+        else
+        {
+          LOGGER.warn("Trait not found: "+traitId);
+        }
       }
     }
     // Billing token
@@ -342,6 +415,24 @@ public class MainDatDeedsLoader
     }
   }
 
+  private static final String VIRTUE_SEED="Trait_Virtue_Rank_";
+  private String getVirtue(int virtueId)
+  {
+    PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(virtueId);
+    String propName=propDef.getName();
+    if (propName.startsWith(VIRTUE_SEED))
+    {
+      String virtueName=propName.substring(VIRTUE_SEED.length()).toUpperCase();
+      if ("COMPASSIONATE".equals(virtueName)) virtueName="COMPASSION";
+      if ("TOLERANT".equals(virtueName)) virtueName="TOLERANCE";
+      if ("JUST".equals(virtueName)) virtueName="JUSTICE";
+      if ("VALOR".equals(virtueName)) virtueName="VALOUR";
+      if ("MERCIFUL".equals(virtueName)) virtueName="MERCY";
+      return virtueName;
+    }
+    return propName;
+  }
+
   private Integer getTurbinePoints(PropertiesSet properties)
   {
     Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
@@ -353,7 +444,7 @@ public class MainDatDeedsLoader
       if (tierCode==4) return Integer.valueOf(15);
       if (tierCode==5) return Integer.valueOf(20);
       if (tierCode==6) return Integer.valueOf(50);
-      System.out.println("Unmanaged TP tier: "+tierCode);
+      LOGGER.warn("Unmanaged TP tier: "+tierCode);
     }
     return null;
   }
