@@ -66,6 +66,8 @@ public class MainDatLegaciesLoader
     doItWithScan();
     //doItFromIndex();
     //showLegacies();
+    // Save progressions
+    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
   }
 
   void showLegacies()

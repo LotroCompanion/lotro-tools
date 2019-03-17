@@ -72,6 +72,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_CHARACTERS=new File("data/progressions/tmp/progressions_characters.xml").getAbsoluteFile();
   /**
+   * Progressions for legacies.
+   */
+  public static final File PROGRESSIONS_LEGACIES=new File("data/progressions/tmp/progressions_legacies.xml").getAbsoluteFile();
+  /**
    * All progressions.
    */
   public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);

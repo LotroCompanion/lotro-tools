@@ -18,6 +18,7 @@ public class MainDatLoader
     ProgressionsManager progressions=new ProgressionsManager();
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
+    progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
     progressions.writeToFile(GeneratedFiles.PROGRESSIONS);
   }
 
