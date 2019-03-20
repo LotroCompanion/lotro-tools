@@ -1,7 +1,9 @@
 package delta.games.lotro.tools.dat.misc;
 
 /**
- * @author dmorcellet
+ * Enum that contains all legacy stats that are not referenced in WellKnownStat
+ * (not used in stat computations).
+ * @author DAM
  */
 public enum NotWellKnownLegacyStats
 {
@@ -33,6 +35,10 @@ public enum NotWellKnownLegacyStats
    * Shadow mitigation percentage.
    */
   SHADOW_MITIGATION("Shadow Mitigation"),
+  /**
+   * Item Wear Chance on Hit.
+   */
+  ITEM_WEAR_CHANCE_ON_HIT("Item Wear Chance on Hit",true),
   /**
    * Audacity.
    */
@@ -143,13 +149,33 @@ public enum NotWellKnownLegacyStats
    */
   ALL_SKILL_INDUCTION("All Skill Induction (%)",true);
 
+  private String _name;
+
   private NotWellKnownLegacyStats(String name, String... aliases)
   {
-    // Nothing ATM
+    _name=name;
   }
 
   private NotWellKnownLegacyStats(String name, boolean isPercentage, String... aliases)
   {
-    // Nothing ATM
+    _name=name;
+  }
+
+  /**
+   * Get the name of this stat.
+   * @return a stat name.
+   */
+  public String getKey()
+  {
+    return name();
+  }
+
+  /**
+   * Get the name of this stat.
+   * @return a stat name.
+   */
+  public String getName()
+  {
+    return _name;
   }
 }

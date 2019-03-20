@@ -2,12 +2,15 @@ package delta.games.lotro.tools.dat.misc;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
@@ -87,6 +90,60 @@ public class MainStatsLoader
     File toFile=GeneratedFiles.STATS;
     LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
     StatXMLWriter.write(toFile,stats);
+    showStats();
+  }
+
+  private void showStats()
+  {
+    // Old STATs
+    Set<String> oldStatsKeys=new HashSet<String>();
+    for(OldStatEnum oldEnum : OldStatEnum.values())
+    {
+      oldStatsKeys.add(oldEnum.getKey());
+    }
+    LOGGER.info("Old stats count: "+oldStatsKeys.size());
+    // Well-known stats
+    List<StatDescription> wellKnownStats=WellKnownStat.getAllWellKnownStats();
+    Set<String> wellKnownStatsKeys=new HashSet<String>();
+    for(StatDescription wellKnownStat : wellKnownStats)
+    {
+      wellKnownStatsKeys.add(wellKnownStat.getLegacyKey());
+    }
+    LOGGER.info("Well-known stats count: "+wellKnownStatsKeys.size());
+    // Not well-known stats
+    Set<String> notWellKnownStatsKeys=new HashSet<String>();
+    for(NotWellKnownLegacyStats notWellKnownStat : NotWellKnownLegacyStats.values())
+    {
+      String notWellKnownStatsKey=notWellKnownStat.getKey();
+      notWellKnownStatsKeys.add(notWellKnownStatsKey);
+    }
+    LOGGER.info("Not well-known stats count: "+notWellKnownStatsKeys.size());
+    // Check that well-known and not-well-known do not intersect
+    {
+      Set<String> intersection=new HashSet<String>(wellKnownStatsKeys);
+      intersection.retainAll(notWellKnownStatsKeys);
+      if (intersection.size()>0)
+      {
+        LOGGER.warn("Well-known and not well-known do intersect: "+intersection);
+      }
+    }
+    // Check that old stats are covered by well-known and not-well known
+    {
+      Set<String> allKnown=new HashSet<String>(wellKnownStatsKeys);
+      allKnown.addAll(notWellKnownStatsKeys);
+      Set<String> oldOrphans=new HashSet<String>(oldStatsKeys);
+      oldOrphans.removeAll(allKnown);
+      if (oldOrphans.size()>0)
+      {
+        LOGGER.warn("Old stats have orphans: "+oldOrphans);
+      }
+    }
+    // Show well-known stats not found in old stats
+    {
+      Set<String> rest=new HashSet<String>(wellKnownStatsKeys);
+      rest.removeAll(oldStatsKeys);
+      LOGGER.info("New well-known stats: "+rest);
+    }
   }
 
   private void addDatStat(int id, String key, String name, boolean isPercentage)
@@ -110,6 +167,7 @@ public class MainStatsLoader
   private void addCustomStats()
   {
     int id=-1000;
+    // Add stats from WellKnownStat
     addCustomStat(id--,"DEVASTATE_MELEE_PERCENTAGE",true);
     addCustomStat(id--,"DEVASTATE_RANGED_PERCENTAGE",true);
     addCustomStat(id--,"DEVASTATE_TACTICAL_PERCENTAGE",true);
@@ -119,15 +177,19 @@ public class MainStatsLoader
     addCustomStat(id--,"FINESSE_PERCENTAGE",true);
     addCustomStat(id--,"RESISTANCE_PERCENTAGE",true);
     addCustomStat(id--,"ARMOUR",false);
+    // Add other stats
     addCustomStat(id--,"DPS",false);
   }
 
+  /**
+   * Filter loaded stats to keep only previously known stats, ordered as previously.
+   */
   private void filterStats()
   {
     List<StatDescription> newList=new ArrayList<StatDescription>();
-    for(OldStatEnum old : OldStatEnum.values())
+    List<String> keys=getFilteredStatsKeys();
+    for(String key : keys)
     {
-      String key=old.name();
       StatDescription stat=_stats.getByKey(key);
       if (stat!=null)
       {
@@ -143,6 +205,19 @@ public class MainStatsLoader
     {
       _stats.addStat(stat);
     }
+  }
+
+  private List<String> getFilteredStatsKeys()
+  {
+    List<String> keys=new ArrayList<String>();
+    for(OldStatEnum old : OldStatEnum.values())
+    {
+      String key=old.name();
+      keys.add(key);
+    }
+    keys.remove("BLADE_AOE_SKILLS_POWER_COST_PERCENTAGE");
+    keys.add("DPS");
+    return keys;
   }
 
   /**

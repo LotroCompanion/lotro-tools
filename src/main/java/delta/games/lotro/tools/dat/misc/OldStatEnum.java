@@ -3,7 +3,7 @@ package delta.games.lotro.tools.dat.misc;
 import java.util.HashMap;
 
 /**
- * A LOTRO character stat.
+ * New enum that contains the stats previously found in class STAT.
  * @author DAM
  */
 public enum OldStatEnum
@@ -346,6 +346,10 @@ public enum OldStatEnum
    * Strike skills power cost (percentage).
    */
   STRIKE_SKILLS_POWER_COST_PERCENTAGE("Strike Skills Power Cost %",true),
+  /**
+   * Blade line AOE skills power cost (percentage).
+   */
+  BLADE_AOE_SKILLS_POWER_COST_PERCENTAGE("Blade Line AOE Skills Power Cost %",true),
   /**
    * Tricks power cost (percentage).
    */
