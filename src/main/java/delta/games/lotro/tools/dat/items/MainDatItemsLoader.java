@@ -215,6 +215,13 @@ public class MainDatItemsLoader
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       if (armorStatProvider!=null)
       {
+        // Handle special case of the 3 "Shield of the Hammerhand"
+        // TODO: find out which armour stat we shall keep: armorStatProvider, statProviderForArmor or both
+        StatProvider statProviderForArmor=statsProvider.getStat(WellKnownStat.ARMOUR);
+        if (statProviderForArmor!=null)
+        {
+          statsProvider.removeStat(WellKnownStat.ARMOUR);
+        }
         statsProvider.addStatProvider(armorStatProvider);
       }
       item.setStatsProvider(statsProvider);

@@ -83,7 +83,7 @@ public class DatStatUtils
         String statKey=def.getName();
         boolean useStat=useStat(statKey);
         if (!useStat) continue;
-        StatDescription stat=DatStatUtils.getStatDescription(def);
+        StatDescription stat=getStatDescription(def);
         /*
         String descriptionOverride=getDescriptionOverride(statProperties);
         if (descriptionOverride!=null)
@@ -262,13 +262,24 @@ public class DatStatUtils
    */
   public static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
   {
+    StatDescription ret=null;
     StatsRegistry registry=StatsRegistry.getInstance();
-    int id=propertyDefinition.getPropertyId();
-    if (id==0)
+
+    String statKey=propertyDefinition.getName();
+    String fixedStatKey=fixStat(statKey);
+    if (fixedStatKey!=null)
     {
-      return null;
+      ret=registry.getByKey(fixedStatKey);
     }
-    StatDescription ret=registry.getById(id);
+    else
+    {
+      int id=propertyDefinition.getPropertyId();
+      if (id==0)
+      {
+        return null;
+      }
+      ret=registry.getById(id);
+    }
     /*
     if (ret==null)
     {
@@ -308,5 +319,14 @@ public class DatStatUtils
     if ("Skill_InductionDuration_AllSkillsMod".equals(key)) return false;
 
     return true;
+  }
+
+  private static String fixStat(String key)
+  {
+    if ("Combat_Agent_Armor_Value_Float".equals(key)) return "ARMOUR";
+    if ("Combat_MitigationPercentage_Common".equals(key)) return "PHYSICAL_MITIGATION_PERCENTAGE";
+    if ("Combat_Class_PhysicalMastery_Unified".equals(key)) return "PHYSICAL_MASTERY";
+    if ("Combat_Class_TacticalMastery_Unified".equals(key)) return "TACTICAL_MASTERY";
+    return null;
   }
 }
