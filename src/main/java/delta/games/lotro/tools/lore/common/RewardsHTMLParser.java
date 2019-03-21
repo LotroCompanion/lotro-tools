@@ -2,13 +2,6 @@ package delta.games.lotro.tools.lore.common;
 
 import java.util.List;
 
-import net.htmlparser.jericho.CharacterReference;
-import net.htmlparser.jericho.Element;
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.Segment;
-import net.htmlparser.jericho.StartTag;
-import net.htmlparser.jericho.TextExtractor;
-
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
@@ -27,7 +20,12 @@ import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
-import delta.games.lotro.utils.LotroLoggers;
+import net.htmlparser.jericho.CharacterReference;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Segment;
+import net.htmlparser.jericho.StartTag;
+import net.htmlparser.jericho.TextExtractor;
 
 /**
  * Parser for rewards described in HTML.
@@ -35,7 +33,7 @@ import delta.games.lotro.utils.LotroLoggers;
  */
 public class RewardsHTMLParser
 {
-  private static final Logger _logger=LotroLoggers.getWebInputLogger();
+  private static final Logger LOGGER=Logger.getLogger(RewardsHTMLParser.class);
 
   private static final String RECEIVE_KEY="Receive";
   private static final String SELECT_ONE_OF_KEY="Select one of";
@@ -113,7 +111,7 @@ public class RewardsHTMLParser
                   }
                   else
                   {
-                    _logger.warn(_objectId+": unknown coin type ["+type+"]");
+                    LOGGER.warn(_objectId+": unknown coin type ["+type+"]");
                   }
                 }
               }
@@ -179,7 +177,7 @@ public class RewardsHTMLParser
         }
         else
         {
-          _logger.warn(_objectId+": unmanaged trait/skill identifier ["+qualifiedIdentifier+"]");
+          LOGGER.warn(_objectId+": unmanaged trait/skill identifier ["+qualifiedIdentifier+"]");
         }
         /*
         List<Element> imgs=firstA.getAllElements(HTMLElementName.IMG);
@@ -192,12 +190,12 @@ public class RewardsHTMLParser
       }
       else
       {
-        _logger.warn(_objectId+": malformed URL ["+url+"]");
+        LOGGER.warn(_objectId+": malformed URL ["+url+"]");
       }
     }
     else
     {
-      _logger.warn(_objectId+": trait reward with "+size+" anchor tags!");
+      LOGGER.warn(_objectId+": trait reward with "+size+" anchor tags!");
     }
     /*
     <div class="questReward">
@@ -238,7 +236,7 @@ public class RewardsHTMLParser
     }
     else
     {
-      _logger.warn(_objectId+": title with "+size+" anchor tags!");
+      LOGGER.warn(_objectId+": title with "+size+" anchor tags!");
     }
 /*
 <div class="questReward">
@@ -322,7 +320,7 @@ public class RewardsHTMLParser
     }
     else
     {
-      _logger.warn(_objectId+": virtue with "+size+" anchor tags!");
+      LOGGER.warn(_objectId+": virtue with "+size+" anchor tags!");
     }
 /*
 <div class="questReward">
@@ -370,7 +368,7 @@ public class RewardsHTMLParser
           }
           else
           {
-            _logger.error("Cannot get faction ["+factionName+"]!");
+            LOGGER.error("Cannot get faction ["+factionName+"]!");
           }
         }
       }
@@ -415,7 +413,7 @@ public class RewardsHTMLParser
         }
         else
         {
-          _logger.warn(_objectId+": unmanaged object selection key ["+key+"]");
+          LOGGER.warn(_objectId+": unmanaged object selection key ["+key+"]");
         }
       }
       else
@@ -460,7 +458,7 @@ public class RewardsHTMLParser
           }
           else
           {
-            _logger.warn(_objectId+": ignored object ["+item+"], quantity="+quantity);
+            LOGGER.warn(_objectId+": ignored object ["+item+"], quantity="+quantity);
           }
           //System.out.println("Item: "+itemName+", URL: "+url);
         }
@@ -582,7 +580,7 @@ Item Advancement Experience
       }
       else
       {
-        _logger.error(_objectId+": unknown reward type: "+key);
+        LOGGER.error(_objectId+": unknown reward type: "+key);
       }
     }
   }

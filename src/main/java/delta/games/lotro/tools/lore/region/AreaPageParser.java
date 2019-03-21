@@ -2,17 +2,15 @@ package delta.games.lotro.tools.lore.region;
 
 import java.util.List;
 
-import net.htmlparser.jericho.CharacterReference;
-import net.htmlparser.jericho.Element;
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.Source;
-
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.region.Area;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.DownloadService;
-import delta.games.lotro.utils.LotroLoggers;
+import net.htmlparser.jericho.CharacterReference;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Source;
 
 /**
  * Parser for MyLotro.com area page.
@@ -20,7 +18,7 @@ import delta.games.lotro.utils.LotroLoggers;
  */
 public class AreaPageParser
 {
-  private static final Logger _logger=LotroLoggers.getWebInputLogger();
+  private static final Logger LOGGER=Logger.getLogger(AreaPageParser.class);
 
   private static final String QUEST_URL_SEED="/wiki/Quest:";
   private static final String TITLE_SEED="Area:";
@@ -100,7 +98,7 @@ public class AreaPageParser
     }
     catch(Exception e)
     {
-      _logger.error("Cannot parse region page ["+url+"]",e);
+      LOGGER.error("Cannot parse region page ["+url+"]",e);
     }
     return ret;
   }
