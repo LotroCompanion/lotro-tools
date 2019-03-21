@@ -1,6 +1,6 @@
 package delta.games.lotro.tools.dat.utils;
 
-import delta.games.lotro.common.Effect;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;

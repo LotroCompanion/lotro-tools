@@ -10,8 +10,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Effect;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
@@ -470,6 +470,10 @@ public class MainDatLegaciesLoader
       //Integer progType=(Integer)progressionProps.getProperty("Progression_Type");
       int tier=pointTier-1;
       legacyTier=legacy.addTier(tier,effect);
+    }
+    else
+    {
+      LOGGER.warn("Legacy with no stat!");
     }
     return legacyTier;
   }

@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.xml.XmlFileWriterHelper;
 import delta.common.utils.io.xml.XmlWriter;
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.common.Effect;
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.id.CharacterId;
 import delta.games.lotro.common.id.ItemInstanceId;
 import delta.games.lotro.common.money.Money;
@@ -136,7 +136,7 @@ public class MainLinksDecoder
     {
       decodeNonLegendary(bis,instance);
     }
-    System.out.println(instance.dumpInstanceData());
+    System.out.println(instance.dump());
     return instance;
   }
 
