@@ -11,7 +11,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.KPM;
-import delta.games.lotro.utils.maths.Progression;
 
 /**
  * @author DAM
@@ -87,10 +86,12 @@ public class MainDatBrowser
           }
           holder.increment();
           System.out.println("Found "+id+" index="+index+", type="+type);
-          PropertiesSet props=_facade.loadProperties(id+0x9000000);
+          int propsId=(id<0x78FFFFFF)?id+0x9000000:id;
+          PropertiesSet props=_facade.loadProperties(propsId);
           System.out.println("*********** entry "+id+"******************");
           System.out.println(props.dump());
           ids.add(Integer.valueOf(id));
+          /*
           Progression prog=ProgressionFactory.buildProgression(id,props);
           if (prog!=null)
           {
@@ -100,6 +101,7 @@ public class MainDatBrowser
               System.out.println(props.dump());
             }
           }
+          */
         }
       }
     }
@@ -128,7 +130,7 @@ public class MainDatBrowser
     }
     System.out.println("************** searching id=" + idToSearch + "******************");
     // Iterate on wstates
-    for(int id=0x70000000;id<=0x77FFFFFF;id++)
+    for(int id=0x70000000;id<=0x7FFFFFFF;id++)
     {
       handleEntry(id);
     }
@@ -141,7 +143,9 @@ public class MainDatBrowser
     //searchId(268439070); // Vital_HealthCombatBaseRegen
     //searchId(268445007); // Trait_MP_Virtue_Core_Rank_Health_Regen
     //searchId(268437690); // Health_RegenRate
-    searchId(268435576); // Vital_HealthCombatCurrentRegen
+    //searchId(268435576); // Vital_HealthCombatCurrentRegen
+    //searchId(1879141759); // Effect for IA_Minstrel_CalltoFate_CriticalMagnitude
+    searchId(268444877); // IA_Minstrel_CalltoFate_CriticalMagnitude
 
     /*
     for(int id: IDS)
