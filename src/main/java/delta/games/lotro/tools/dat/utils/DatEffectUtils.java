@@ -20,17 +20,7 @@ public class DatEffectUtils
   public static StatsProvider loadEffectStats(DataFacade facade, int effectId)
   {
     PropertiesSet effectProps=facade.loadProperties(effectId+0x9000000);
-    //System.out.println(effectProps.dump());
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,effectProps);
-    /*
-    int nbStats=statsProvider.getNumberOfStatProviders();
-    for(int i=0;i<nbStats;i++)
-    {
-      StatProvider statProvider=statsProvider.getStatProvider(i);
-      StatDescription stat=statProvider.getStat();
-      System.out.println("\t\t"+stat);
-    }
-    */
     return statsProvider;
   }
 
@@ -48,6 +38,13 @@ public class DatEffectUtils
     {
       ret=new Effect();
       ret.setId(effectId);
+      // Name
+      String effectName=DatUtils.getStringProperty(effectProps,"Effect_Name");
+      ret.setName(effectName);
+      // Duration
+      Float duration=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
+      ret.setDuration(duration);
+      // Stats
       StatsProvider provider=DatStatUtils.buildStatProviders(facade,effectProps);
       ret.setStatsProvider(provider);
     }
