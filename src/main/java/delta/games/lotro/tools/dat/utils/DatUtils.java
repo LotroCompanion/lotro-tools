@@ -30,6 +30,37 @@ public class DatUtils
   }
 
   /**
+   * Extract a string property.
+   * @param properties Properties to use.
+   * @param propertyName Property name.
+   * @param padding String to use between text items.
+   * @return the extracted property.
+   */
+  public static String getFullStringProperty(PropertiesSet properties, String propertyName, String padding)
+  {
+    String ret=null;
+    Object value=properties.getProperty(propertyName);
+    if (value!=null)
+    {
+      if (value instanceof String[])
+      {
+        StringBuilder sb=new StringBuilder();
+        for(String line : (String[])value)
+        {
+          line=line.replace("\\n","\n");
+          if (sb.length()>0)
+          {
+            sb.append(padding);
+          }
+          sb.append(line);
+        }
+        ret=sb.toString().trim();
+      }
+    }
+    return ret;
+  }
+
+  /**
    * Fix a name (remove any trailing [...]).
    * @param name Name to fix.
    * @return Fixed name.

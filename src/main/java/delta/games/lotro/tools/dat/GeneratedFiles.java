@@ -111,4 +111,8 @@ public class GeneratedFiles
    * Colors.
    */
   public static final File COLORS=LotroCoreConfig.getInstance().getFile(DataFiles.COLORS);
+  /**
+   * Quests.
+   */
+  public static final File QUESTS=LotroCoreConfig.getInstance().getFile(DataFiles.QUESTS);
 }

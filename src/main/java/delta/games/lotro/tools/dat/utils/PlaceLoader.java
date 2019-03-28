@@ -62,7 +62,6 @@ public class PlaceLoader
    */
   public static String loadLandmark(DataFacade facade, int landmarkId)
   {
-    //TraitDescription ret=null;
     String ret=null;
     PropertiesSet landmarkProperties=facade.loadProperties(0x9000000+landmarkId);
     if (landmarkProperties!=null)
@@ -74,6 +73,9 @@ public class PlaceLoader
         //System.out.println(landmarkProperties.dump());
         // Name
         ret=DatUtils.getStringProperty(landmarkProperties,"Name");
+        // Type:
+        // MapNote_Type: 4398046511104=2^(43-1), see Enum: MapNoteType, (id=587202775), 43=Point of Interest
+        // 1099511627776 = 2^(41-1) => Settlement
         if (ret!=null)
         {
           _names.put(Integer.valueOf(landmarkId),ret);

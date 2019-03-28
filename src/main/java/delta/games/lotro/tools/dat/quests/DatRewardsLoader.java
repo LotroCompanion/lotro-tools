@@ -220,6 +220,7 @@ public class DatRewardsLoader
 
   private void getFaction(PropertiesSet props)
   {
+    // Positive
     PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_PositiveFaction");
     if (factionProps!=null)
     {
@@ -232,6 +233,8 @@ public class DatRewardsLoader
         System.out.println("Reputation: faction="+factionId+", tier="+repTier);
       }
     }
+    // Negative
+    //Quest_NegativeFaction
   }
 
   private Integer getTurbinePoints(PropertiesSet properties)
