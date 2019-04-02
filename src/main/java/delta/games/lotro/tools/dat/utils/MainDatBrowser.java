@@ -145,7 +145,11 @@ public class MainDatBrowser
     //searchId(268437690); // Health_RegenRate
     //searchId(268435576); // Vital_HealthCombatCurrentRegen
     //searchId(1879141759); // Effect for IA_Minstrel_CalltoFate_CriticalMagnitude
-    searchId(268444877); // IA_Minstrel_CalltoFate_CriticalMagnitude
+    //searchId(268444877); // IA_Minstrel_CalltoFate_CriticalMagnitude
+    //searchId(1879112405); // Item Boots of the Lady's Discernment
+    //searchId(268438673); // Property: Item_QualityModLevel
+    //searchId(268458123); // Property: LevelScalingControl_Quality_To_ItemLevelProgression_Hash
+    searchId(268457979); // Property: Examination_ItemLevel_Struct
 
     /*
     for(int id: IDS)

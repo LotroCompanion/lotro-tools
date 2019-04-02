@@ -1,9 +1,6 @@
 package delta.games.lotro.tools.dat.quests;
 
 import java.util.HashMap;
-import java.util.HashSet;
-
-import org.apache.log4j.Logger;
 
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DataFacade;
@@ -18,8 +15,6 @@ import delta.games.lotro.tools.dat.utils.PlaceLoader;
  */
 public class DatObjectivesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
-
   private DataFacade _facade;
 
   private EnumMapper _monsterDivision;
@@ -28,7 +23,6 @@ public class DatObjectivesLoader
   private EnumMapper _subSpecies;
 
   HashMap<Integer,IntegerHolder> eventIds=new HashMap<Integer,IntegerHolder>();
-  HashSet<String> propNames=new HashSet<String>();
 
   /**
    * Constructor.
@@ -52,29 +46,42 @@ public class DatObjectivesLoader
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
-      // A deed can have several objectives (ordered)
+      // Can have several objectives (ordered)
       for(Object objectiveObj : objectivesArray)
       {
         PropertiesSet objectiveProps=(PropertiesSet)objectiveObj;
         //System.out.println(objectiveProps.dump());
+        // Index
+        Integer objectiveIndex=(Integer)objectiveProps.getProperty("Quest_ObjectiveIndex");
+        System.out.println("Objective #"+objectiveIndex);
+        // Description
+        String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription","{***}");
+        System.out.println("\tDescription: "+description);
+        // Conditions (can have several conditions)
         Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
         if (completionConditionsArray!=null)
         {
-          // An objective can have several conditions
-          for(Object completionConditionObj : completionConditionsArray)
+          for(Object item : completionConditionsArray)
           {
-            Object[] completionConditionArray=(Object[])completionConditionObj;
-            for(Object completionConditionObj2 : completionConditionArray)
-            {
-              if (completionConditionObj2 instanceof PropertiesSet)
-              {
-                PropertiesSet completionConditionProps=(PropertiesSet)completionConditionObj2;
-                handleCompletionCondition(completionConditionProps);
-              }
-            }
+            handleObjectiveItem(item);
           }
         }
       }
+    }
+  }
+
+  private void handleObjectiveItem(Object item)
+  {
+    if (item instanceof Object[])
+    {
+      for(Object childItem : (Object[])item)
+      {
+        handleObjectiveItem(childItem);
+      }
+    }
+    else if (item instanceof PropertiesSet)
+    {
+      handleCompletionCondition((PropertiesSet)item);
     }
   }
 
@@ -91,7 +98,7 @@ public class DatObjectivesLoader
 
     /*
      * Shared condition attributes:
-     * Accomplishment_LoreInfo: verbose text about the condition
+     * Accomplishment_LoreInfo: verbose text about the condition (deeds only)
      * QuestEvent_EventOrder: usually 0, but can be 1,2,3 if several conditions in an objective.
      * QuestEvent_ID: condition type identifier (see Enum: QuestEventType, (id=587202639))
      * QuestEvent_ProgressOverride: small text for the condition (ex: "Complete quests within the Shire")
@@ -100,6 +107,41 @@ public class DatObjectivesLoader
      * QuestEvent_ShowBillboardText: usually 0, can be 1 (means that the condition shall be displayed in the UI?)
      * QuestEvent_ShowProgressText: optional, 0 if set, used many times
      */
+    // Order
+    Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
+    System.out.println("\tEvent #"+eventOrder);
+    // ID
+    Integer eventId=(Integer)properties.getProperty("QuestEvent_ID");
+    System.out.println("\t\tEvent ID: "+eventId);
+    // Billboard
+    Integer showBillboardText=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
+    if ((showBillboardText!=null) && (showBillboardText.intValue()!=0))
+    {
+      System.out.println("\t\tShow billboard text: "+showBillboardText);
+    }
+    String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",Markers.CHARACTER);
+    if (billboardProgressOverride!=null)
+    {
+      System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
+    }
+    // Progress override
+    String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",Markers.CHARACTER);
+    if (progressOverride!=null)
+    {
+      System.out.println("\t\tProgress override: "+progressOverride);
+    }
+    // Role constraint
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    if (roleConstraint!=null)
+    {
+      System.out.println("\t\tRole constraint: "+roleConstraint);
+    }
+    // Lore info
+    String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
+    if (loreInfo!=null)
+    {
+      System.out.println("\t\tLore info: "+loreInfo);
+    }
 
     // Deeds:
     // QuestEvent_ID: {32=3936, 22=1142, 1=889, 21=869, 26=611, 31=487, 45=411, 7=349, 25=116,

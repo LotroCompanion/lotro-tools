@@ -274,7 +274,6 @@ public class MainDatDeedsLoader
     System.out.println("Nb deeds: "+nb);
     DeedsWriter.writeSortedDeeds(_deeds,new File("deeds_dat.xml").getAbsoluteFile());
     System.out.println(_objectivesLoader.eventIds);
-    System.out.println(_objectivesLoader.propNames);
     //System.out.println("Places: "+PlaceLoader._names);
   }
 
