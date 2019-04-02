@@ -1,11 +1,17 @@
 package delta.games.lotro.tools.dat.factions;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.Dump;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -17,6 +23,7 @@ public class MainDatFactionsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatFactionsLoader.class);
 
   private DataFacade _facade;
+  private FactionsRegistry _factions;
 
   /**
    * Constructor.
@@ -25,6 +32,7 @@ public class MainDatFactionsLoader
   public MainDatFactionsLoader(DataFacade facade)
   {
     _facade=facade;
+    _factions=FactionsRegistry.getInstance();
   }
 
   /*
@@ -62,6 +70,15 @@ Reputation_LowestTier: 1
     // Name
     String name=DatUtils.getStringProperty(properties,"Reputation_Faction_Name");
     System.out.println("Name: "+name);
+    Faction faction=_factions.getByName(name.trim());
+    if (faction!=null)
+    {
+      faction.setIdentifier(indexDataId);
+    }
+    else
+    {
+      LOGGER.warn("Faction not found: "+name);
+    }
     // Description
     String description=DatUtils.getStringProperty(properties,"Reputation_Faction_Description");
     System.out.println("Description: "+description);
@@ -115,6 +132,7 @@ Reputation_LowestTier: 1
       int id=((Integer)idObj).intValue();
       load(id);
     }
+    /*
     System.out.println("Reputation_GroupModifierTable:");
     int tableId=((Integer)indexProperties.getProperty("Reputation_GroupModifierTable")).intValue();
     //System.out.println(_facade.loadProperties(tableId+0x9000000).dump());
@@ -124,6 +142,7 @@ Reputation_LowestTier: 1
     // Here we find the amount of reputation points for each tier
     System.out.println("Reputation_Faction_AdvancementTable:");
     System.out.println(Dump.dumpString(_facade.loadData(1879090256)));
+    */
     /*
 0x00000000  50 A4 00 70 51 03 00 00 02 00 00 00 01 80 00 00  P..pQ...........
 0x00000010  00 02 00 00 00 00 01 00 00 00 01 00 51 03 01 00  ............Q...
@@ -142,15 +161,16 @@ Reputation_LowestTier: 1
 0x000000e0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
 0x000000f0  00 00 00 00 00 00 00 00                          ........
      */
-
-    /*
-    List<String> sortedPropNames=new ArrayList<String>(propNames);
-    Collections.sort(sortedPropNames);
-    for(String propName : sortedPropNames)
+    File toFile=GeneratedFiles.FACTIONS;
+    boolean ok=FactionsXMLWriter.writeFactionsFile(toFile,_factions);
+    if (ok)
     {
-      System.out.println(propName);
+      LOGGER.info("Wrote file: "+toFile);
     }
-    */
+    else
+    {
+      LOGGER.error("Failed to build factions registry file: "+toFile);
+    }
   }
 
   /**

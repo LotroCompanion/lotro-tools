@@ -175,14 +175,14 @@ public class FactionsFactory
     initFaction(category,"FANGORN","Ents of Fangorn Forest",new String[]{"The Ents of Fangorn Forest"},FactionLevelsTemplates.CLASSIC);
     category="Dol Amroth";
     initFaction(category,"DOL_AMROTH","Dol Amroth",null,FactionLevelsTemplates.CLASSIC);
-    initFaction(category,"DA_ARMOURY","Dol Amroth – Armoury",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_BANK","Dol Amroth – Bank",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_DOCKS","Dol Amroth – Docks",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_GREAT_HALL","Dol Amroth – Great Hall",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_LIBRARY","Dol Amroth – Library",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_MASON","Dol Amroth – Mason",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_SWAN_KNIGHTS","Dol Amroth – Swan Knights",null,FactionLevelsTemplates.DOL_AMROTH);
-    initFaction(category,"DA_WAREHOUSE","Dol Amroth – Warehouse",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_ARMOURY","Dol Amroth - Armoury",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_BANK","Dol Amroth - Bank",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_DOCKS","Dol Amroth - Docks",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_GREAT_HALL","Dol Amroth - Great Hall",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_LIBRARY","Dol Amroth - Library",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_MASON","Dol Amroth - Mason",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_SWAN_KNIGHTS","Dol Amroth - Swan-knights",null,FactionLevelsTemplates.DOL_AMROTH);
+    initFaction(category,"DA_WAREHOUSE","Dol Amroth - Warehouse",null,FactionLevelsTemplates.DOL_AMROTH);
     category="Gondor";
     // For all 3 Central Gondor regions: all levels gives no LP
     initFaction(category,"RINGLO_VALE","Men of Ringló Vale",null,FactionLevelsTemplates.CENTRAL_GONDOR); 
