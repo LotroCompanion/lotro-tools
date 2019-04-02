@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.Dump;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.Emote;
+import delta.games.lotro.common.ReputationItem;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
@@ -23,6 +24,8 @@ import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
 
@@ -39,6 +42,7 @@ public class DatRewardsLoader
   private DataFacade _facade;
   private ItemsManager _itemsMgr;
   private EnumMapper _billingGroup;
+  private FactionsRegistry _factions;
 
   /**
    * Constructor.
@@ -49,6 +53,7 @@ public class DatRewardsLoader
     _facade=facade;
     _itemsMgr=ItemsManager.getInstance();
     _billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
+    _factions=FactionsRegistry.getInstance();
   }
 
   /**
@@ -64,7 +69,7 @@ public class DatRewardsLoader
       getRewards(rewards,treasureId.intValue());
     }
     // Faction
-    getFaction(properties);
+    getFaction(rewards,properties);
     // LOTRO points
     Integer tp=getTurbinePoints(properties);
     if (tp!=null)
@@ -229,7 +234,7 @@ public class DatRewardsLoader
     return propName;
   }
 
-  private void getFaction(PropertiesSet props)
+  private void getFaction(Rewards rewards, PropertiesSet props)
   {
     // Positive
     {
@@ -239,10 +244,10 @@ public class DatRewardsLoader
         Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
         if (factionId!=null)
         {
-          // 1879143761: Iron Garrison Guards
           Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
           int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
           System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+          updateFaction(rewards,factionId.intValue(),reputationValue);
         }
       }
     }
@@ -257,8 +262,24 @@ public class DatRewardsLoader
           Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
           int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
           System.out.println("Negative reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+          updateFaction(rewards,factionId.intValue(),-reputationValue);
         }
       }
+    }
+  }
+
+  private void updateFaction(Rewards rewards, int factionId, int reputationValue)
+  {
+    Faction faction=_factions.getById(factionId);
+    if (faction!=null)
+    {
+      ReputationItem repItem=new ReputationItem(faction);
+      repItem.setAmount(reputationValue);
+      rewards.getReputation().add(repItem);
+    }
+    else
+    {
+      LOGGER.warn("Faction not found: "+factionId);
     }
   }
 
