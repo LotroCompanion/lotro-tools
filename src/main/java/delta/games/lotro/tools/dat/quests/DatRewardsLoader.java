@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.traits.TraitDescription;
@@ -11,6 +14,7 @@ import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.objects.ObjectItem;
+import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -66,7 +70,6 @@ public class DatRewardsLoader
     if (tp!=null)
     {
       rewards.setLotroPoints(tp.intValue());
-      //System.out.println("TP: "+tp);
     }
   }
 
@@ -75,30 +78,8 @@ public class DatRewardsLoader
     PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
 
     // Items
-    Object[] itemArray=(Object[])props.getProperty("QuestTreasure_FixedItemArray");
-    if (itemArray!=null)
-    {
-      for(Object itemObj : itemArray)
-      {
-        PropertiesSet itemProps=(PropertiesSet)itemObj;
-        int itemId=((Integer)itemProps.getProperty("QuestTreasure_Item")).intValue();
-        Integer quantityValue=(Integer)itemProps.getProperty("QuestTreasure_ItemQuantity");
-        //System.out.println("Item: "+itemId+", quantity: "+quantityValue);
-        Item item=_itemsMgr.getItem(itemId);
-        if (item!=null)
-        {
-          String name=(item!=null)?item.getName():"???";
-          ObjectItem objectItem=new ObjectItem(name);
-          objectItem.setItemId(itemId);
-          int quantity=(quantityValue!=null?quantityValue.intValue():1);
-          rewards.getObjects().addObject(objectItem,quantity);
-        }
-        else
-        {
-          LOGGER.warn("Item not found: "+itemId);
-        }
-      }
-    }
+    loadItems(props,"QuestTreasure_FixedItemArray", rewards.getObjects());
+    loadItems(props,"QuestTreasure_SelectableItemArray", rewards.getSelectObjects());
     // Virtues
     Object[] virtueArray=(Object[])props.getProperty("QuestTreasure_FixedVirtueArray");
     if (virtueArray!=null)
@@ -201,6 +182,36 @@ public class DatRewardsLoader
     }
   }
 
+  private List<ObjectItem> loadItems(PropertiesSet props, String propertyName, ObjectsSet storage)
+  {
+    List<ObjectItem> items=new ArrayList<ObjectItem>();
+    Object[] itemArray=(Object[])props.getProperty(propertyName);
+    if (itemArray!=null)
+    {
+      for(Object itemObj : itemArray)
+      {
+        PropertiesSet itemProps=(PropertiesSet)itemObj;
+        int itemId=((Integer)itemProps.getProperty("QuestTreasure_Item")).intValue();
+        Integer quantityValue=(Integer)itemProps.getProperty("QuestTreasure_ItemQuantity");
+        //System.out.println("Item: "+itemId+", quantity: "+quantityValue);
+        Item item=_itemsMgr.getItem(itemId);
+        if (item!=null)
+        {
+          String name=(item!=null)?item.getName():"???";
+          ObjectItem objectItem=new ObjectItem(name);
+          objectItem.setItemId(itemId);
+          int quantity=(quantityValue!=null?quantityValue.intValue():1);
+          storage.addObject(objectItem,quantity);
+        }
+        else
+        {
+          LOGGER.warn("Item not found: "+itemId);
+        }
+      }
+    }
+    return items;
+  }
+
   private String getVirtue(int virtueId)
   {
     PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(virtueId);
@@ -221,20 +232,34 @@ public class DatRewardsLoader
   private void getFaction(PropertiesSet props)
   {
     // Positive
-    PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_PositiveFaction");
-    if (factionProps!=null)
     {
-      Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
-      if (factionId!=null)
+      PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_PositiveFaction");
+      if (factionProps!=null)
       {
-        // 1879143761: Iron Garrison Guards
-        Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
-        // Tier 3: 500
-        System.out.println("Reputation: faction="+factionId+", tier="+repTier);
+        Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
+        if (factionId!=null)
+        {
+          // 1879143761: Iron Garrison Guards
+          Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
+          int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
+          System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+        }
       }
     }
     // Negative
-    //Quest_NegativeFaction
+    {
+      PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_NegativeFaction");
+      if (factionProps!=null)
+      {
+        Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
+        if (factionId!=null)
+        {
+          Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
+          int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
+          System.out.println("Negative reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+        }
+      }
+    }
   }
 
   private Integer getTurbinePoints(PropertiesSet properties)
@@ -251,5 +276,16 @@ public class DatRewardsLoader
       LOGGER.warn("Unmanaged TP tier: "+tierCode);
     }
     return null;
+  }
+
+  private int getReputation(int tier)
+  {
+    if (tier==2) return 300;
+    if (tier==3) return 500;
+    if (tier==4) return 700;
+    if (tier==5) return 900;
+    if (tier==6) return 1200;
+    LOGGER.warn("Unmanaged reputation tier: "+tier);
+    return 0;
   }
 }
