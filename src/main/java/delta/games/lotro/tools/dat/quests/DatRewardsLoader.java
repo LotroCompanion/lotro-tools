@@ -1,7 +1,9 @@
 package delta.games.lotro.tools.dat.quests;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +30,8 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
+import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
+import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
 
 /**
  * Loader for quest/deed rewards from DAT files.
@@ -43,6 +47,8 @@ public class DatRewardsLoader
   private ItemsManager _itemsMgr;
   private EnumMapper _billingGroup;
   private FactionsRegistry _factions;
+  private Map<Integer,RewardsMap> _rewardLevels;
+  private RewardsMapLoader _rewardLevelLoader;
 
   /**
    * Constructor.
@@ -54,6 +60,8 @@ public class DatRewardsLoader
     _itemsMgr=ItemsManager.getInstance();
     _billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
     _factions=FactionsRegistry.getInstance();
+    _rewardLevels=new HashMap<Integer,RewardsMap>();
+    _rewardLevelLoader=new RewardsMapLoader();
   }
 
   /**
@@ -85,6 +93,9 @@ public class DatRewardsLoader
     // Items
     loadItems(props,"QuestTreasure_FixedItemArray", rewards.getObjects());
     loadItems(props,"QuestTreasure_SelectableItemArray", rewards.getSelectObjects());
+    // Class points
+    // Destiny points?
+    // Skills?
     // Virtues
     Object[] virtueArray=(Object[])props.getProperty("QuestTreasure_FixedVirtueArray");
     if (virtueArray!=null)
@@ -308,5 +319,88 @@ public class DatRewardsLoader
     if (tier==6) return 1200;
     LOGGER.warn("Unmanaged reputation tier: "+tier);
     return 0;
+  }
+
+  /**
+   * Handle quest specific rewards.
+   * @param rewards Storage.
+   * @param properties Properties to use.
+   */
+  public void handleQuestRewards(Rewards rewards, PropertiesSet properties)
+  {
+    RewardsMap rewardLevel=null;
+    Integer rewardLevelId=((Integer)properties.getProperty("Quest_RewardLevelDID"));
+    if (rewardLevelId!=null)
+    {
+      System.out.println("Reward level ID: "+rewardLevelId);
+      rewardLevel=getRewardsMap(rewardLevelId.intValue());
+    }
+    else
+    {
+      LOGGER.warn("No reward level!");
+    }
+    Integer goldTier=((Integer)properties.getProperty("Quest_GoldTier"));
+    if (goldTier!=null) System.out.println("Gold tier: "+goldTier);
+    Integer xpTier=((Integer)properties.getProperty("Quest_ExpTier"));
+    if (xpTier!=null)
+    {
+      if (rewardLevel!=null)
+      {
+        Integer xpValue=rewardLevel.getXpMap().getValue(xpTier.intValue());
+        System.out.println("XP tier: "+xpTier+" => "+xpValue);
+      }
+      else
+      {
+        System.out.println("XP tier: "+xpTier);
+      }
+    }
+    Integer itemXpTier=((Integer)properties.getProperty("Quest_ItemExpTier"));
+    if (itemXpTier!=null)
+    {
+      if (rewardLevel!=null)
+      {
+        Integer itemXpValue=rewardLevel.getItemXpMap().getValue(itemXpTier.intValue());
+        System.out.println("Item XP tier: "+itemXpTier+" => "+itemXpValue);
+      }
+      else
+      {
+        System.out.println("Item XP tier: "+itemXpTier);
+      }
+    }
+    Integer mountXpTier=((Integer)properties.getProperty("Quest_MountExpTier"));
+    if (mountXpTier!=null) System.out.println("Mount XP tier: "+mountXpTier);
+    Integer craftXpTier=((Integer)properties.getProperty("Quest_CraftExpTier"));
+    if (craftXpTier!=null) System.out.println("Craft XP tier: "+craftXpTier);
+    Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
+    if (gloryTier!=null) System.out.println("Glory tier: "+gloryTier);
+    Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
+    if (mcTier!=null) System.out.println("Mithril coin tier: "+mcTier);
+
+    // Only for 'Level Up' quests:
+    /*
+    Integer goldToGive=((Integer)properties.getProperty("Quest_GoldToGive"));
+    if (goldToGive!=null) System.out.println("Gold to give: "+goldToGive);
+    Integer xpToGive=((Integer)properties.getProperty("Quest_ExpToGive"));
+    if (xpToGive!=null) System.out.println("XP to give: "+xpToGive);
+    Integer repToGive=((Integer)properties.getProperty("Quest_PosRepToGive"));
+    if (repToGive!=null) System.out.println("Rep to give: "+repToGive);
+    Integer gloryToGive=((Integer)properties.getProperty("Quest_GloryToGive"));
+    if (gloryToGive!=null) System.out.println("Glory to give: "+gloryToGive);
+    */
+  }
+
+  private RewardsMap getRewardsMap(int rewardLevelId)
+  {
+    Integer key=Integer.valueOf(rewardLevelId);
+    RewardsMap rewardLevel=_rewardLevels.get(key);
+    if (rewardLevel==null)
+    {
+      PropertiesSet props=_facade.loadProperties(rewardLevelId+0x9000000);
+      rewardLevel=new RewardsMap();
+      _rewardLevelLoader.fill(props,rewardLevel);
+      System.out.println(props.dump());
+      _rewardLevels.put(key,rewardLevel);
+    }
+    return rewardLevel;
   }
 }

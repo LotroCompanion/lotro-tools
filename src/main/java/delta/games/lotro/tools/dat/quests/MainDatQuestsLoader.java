@@ -142,7 +142,7 @@ public class MainDatQuestsLoader
       // Rewards
       Rewards rewards=quest.getQuestRewards();
       _rewardsLoader.fillRewards(properties,rewards);
-      handleQuestRewards(properties);
+      _rewardsLoader.handleQuestRewards(rewards,properties);
 
       // Quest Loot Table
       // (additional loot tables that are active when the quest is active)
@@ -225,38 +225,6 @@ public class MainDatQuestsLoader
     if (isHidden!=null) System.out.println("IS hidden quest: "+isHidden);
     Integer isPeBestowedQuest=((Integer)properties.getProperty("Quest_IsPEBestowedQuest"));
     if (isPeBestowedQuest!=null) System.out.println("IS PE bestowed quest: "+isPeBestowedQuest);
-  }
-
-  private void handleQuestRewards(PropertiesSet properties)
-  {
-    Integer rewardLevelId=((Integer)properties.getProperty("Quest_RewardLevelDID"));
-    if (rewardLevelId!=null) System.out.println("Reward level ID: "+rewardLevelId);
-    Integer goldTier=((Integer)properties.getProperty("Quest_GoldTier"));
-    if (goldTier!=null) System.out.println("Gold tier: "+goldTier);
-    Integer xpTier=((Integer)properties.getProperty("Quest_ExpTier"));
-    if (xpTier!=null) System.out.println("XP tier: "+xpTier);
-    Integer itemXpTier=((Integer)properties.getProperty("Quest_ItemExpTier"));
-    if (itemXpTier!=null) System.out.println("Item XP tier: "+itemXpTier);
-    Integer mountXpTier=((Integer)properties.getProperty("Quest_MountExpTier"));
-    if (mountXpTier!=null) System.out.println("Mount XP tier: "+mountXpTier);
-    Integer craftXpTier=((Integer)properties.getProperty("Quest_CraftExpTier"));
-    if (craftXpTier!=null) System.out.println("Craft XP tier: "+craftXpTier);
-    Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
-    if (gloryTier!=null) System.out.println("Glory tier: "+gloryTier);
-    Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
-    if (mcTier!=null) System.out.println("Mithril coin tier: "+mcTier);
-
-    // Only for 'Level Up' quests:
-    /*
-    Integer goldToGive=((Integer)properties.getProperty("Quest_GoldToGive"));
-    if (goldToGive!=null) System.out.println("Gold to give: "+goldToGive);
-    Integer xpToGive=((Integer)properties.getProperty("Quest_ExpToGive"));
-    if (xpToGive!=null) System.out.println("XP to give: "+xpToGive);
-    Integer repToGive=((Integer)properties.getProperty("Quest_PosRepToGive"));
-    if (repToGive!=null) System.out.println("Rep to give: "+repToGive);
-    Integer gloryToGive=((Integer)properties.getProperty("Quest_GloryToGive"));
-    if (gloryToGive!=null) System.out.println("Glory to give: "+gloryToGive);
-    */
   }
 
   void handleRoles(QuestDescription quest, PropertiesSet properties)
