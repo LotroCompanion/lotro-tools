@@ -21,6 +21,7 @@ public class DatObjectivesLoader
   private EnumMapper _genus;
   private EnumMapper _species;
   private EnumMapper _subSpecies;
+  private EnumMapper _questEvent;
 
   HashMap<Integer,IntegerHolder> eventIds=new HashMap<Integer,IntegerHolder>();
 
@@ -35,6 +36,7 @@ public class DatObjectivesLoader
     _genus=_facade.getEnumsManager().getEnumMapper(587202570);
     _species=_facade.getEnumsManager().getEnumMapper(587202571);
     _subSpecies=_facade.getEnumsManager().getEnumMapper(587202572);
+    _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
   }
 
   /**
@@ -112,7 +114,8 @@ public class DatObjectivesLoader
     System.out.println("\tEvent #"+eventOrder);
     // ID
     Integer eventId=(Integer)properties.getProperty("QuestEvent_ID");
-    System.out.println("\t\tEvent ID: "+eventId);
+    String eventMeaning=_questEvent.getString(eventId.intValue());
+    System.out.println("\t\tEvent ID: "+eventId+" ("+eventMeaning+")");
     // Billboard
     Integer showBillboardText=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
     if ((showBillboardText!=null) && (showBillboardText.intValue()!=0))
