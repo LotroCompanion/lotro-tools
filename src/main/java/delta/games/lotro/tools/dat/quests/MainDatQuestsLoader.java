@@ -18,6 +18,7 @@ import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Get quests definitions from DAT files.
@@ -138,12 +139,15 @@ public class MainDatQuestsLoader
       */
       // Chain
       // - previous
-      findPreviousQuests(properties);
+      findPreviousQuests(quest,properties);
       // - next
       Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
       if (nextQuestId!=null)
       {
-        System.out.println("Next quest: "+nextQuestId);
+        Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+        proxy.setId(nextQuestId.intValue());
+        quest.setNextQuest(proxy);
+        //System.out.println("Next quest: "+nextQuestId);
       }
       // Flags
       handleFlags(quest,properties);
@@ -359,7 +363,7 @@ DefaultPermissionBlobStruct:
     */
   }
 
-  private void findPreviousQuests(PropertiesSet properties)
+  private void findPreviousQuests(QuestDescription quest, PropertiesSet properties)
   {
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
@@ -375,7 +379,10 @@ DefaultPermissionBlobStruct:
           int questStatus=((Integer)questRequirementProps.getProperty("Usage_QuestStatus")).intValue();
           if ((operator==3) && (questStatus==805306368))
           {
-            System.out.println("Requires completed quest: "+questId);
+            //System.out.println("Requires completed quest: "+questId);
+            Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+            proxy.setId(questId);
+            quest.addPrerequisiteQuest(proxy);
           }
           else
           {
