@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.common.Rewards;
+import delta.games.lotro.common.Size;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -64,7 +65,6 @@ public class MainDatQuestsLoader
     }
   }
 
-  private int nb=0;
   private QuestDescription load(int indexDataId)
   {
     QuestDescription quest=null;
@@ -90,7 +90,7 @@ public class MainDatQuestsLoader
       quest.setIdentifier(indexDataId);
       // Name
       String name=DatUtils.getStringProperty(properties,"Quest_Name");
-      quest.setTitle(name);
+      quest.setName(name);
       // Description
       String description=DatUtils.getStringProperty(properties,"Quest_Description");
       quest.setDescription(description);
@@ -148,7 +148,8 @@ public class MainDatQuestsLoader
       // Flags
       handleFlags(quest,properties);
       // Requirements
-      // Usage_RequiredClassList
+      findRaceRequirements(quest,properties);
+      findClassRequirements(quest,properties);
 
       // Rewards
       Rewards rewards=quest.getQuestRewards();
@@ -169,8 +170,9 @@ public class MainDatQuestsLoader
 
       // Objectives
       _objectivesLoader.handleObjectives(properties);
+
       // Web Store (needed xpack/region): WebStoreAccountItem_DataID
-      nb++;
+
       _quests.add(quest);
     }
     else
@@ -189,7 +191,7 @@ public class MainDatQuestsLoader
       int value=scope.intValue();
       if (value==1)
       {
-        //System.out.println("Scope 1: "+quest.getTitle()); // Tasks (x417) matches category="Task"
+        //System.out.println("Scope 1: "+quest.getTitle()); // Task (x417) matches category="Task"
         quest.setRepeatable(true);
       }
       else if (value==2)
@@ -199,12 +201,12 @@ public class MainDatQuestsLoader
       }
       else if (value==3)
       {
-        //System.out.println("Scope 3: "+quest.getTitle()); // Intro/Epic? (x ~1k)
+        //System.out.println("Scope 3: "+quest.getTitle()); // Epic (x ~1k)
         quest.setSize(Size.SMALL_FELLOWSHIP);
       }
       else if (value==5)
       {
-        //System.out.println("Scope 5: "+quest.getTitle()); // Instances (x12) (eg Moria or Eregion instance that require shards ; Defence of Glatrev)?
+        //System.out.println("Scope 5: "+quest.getTitle()); // Legendary Items (x12) (eg Moria or Eregion instance that require shards ; Defence of Glatrev)?
         // Normal...
         quest.setSize(Size.SOLO);
       }
@@ -223,25 +225,62 @@ public class MainDatQuestsLoader
 
   private void handleFlags(QuestDescription quest, PropertiesSet properties)
   {
+    // Size
+    // - small fellowship
     Integer smallFellowshipRecommended=((Integer)properties.getProperty("Quest_IsSmallFellowshipRecommended"));
-    if (smallFellowshipRecommended!=null) System.out.println("IS Small Fellowship recommended: "+smallFellowshipRecommended);
+    if ((smallFellowshipRecommended!=null) && (smallFellowshipRecommended.intValue()==1))
+    {
+      quest.setSize(Size.SMALL_FELLOWSHIP);
+      //System.out.println("IS Small Fellowship recommended: "+smallFellowshipRecommended);
+    }
+    // - fellowship
     Integer fellowshipRecommended=((Integer)properties.getProperty("Quest_IsFellowshipRecommended"));
-    if (fellowshipRecommended!=null) System.out.println("IS Fellowship recommended: "+fellowshipRecommended);
-    Integer isInstanceQuest=((Integer)properties.getProperty("Quest_IsInstanceQuest"));
-    if (isInstanceQuest!=null) System.out.println("IS Instance quest: "+isInstanceQuest);
+    if ((fellowshipRecommended!=null) && (fellowshipRecommended.intValue()==1))
+    {
+      quest.setSize(Size.FELLOWSHIP);
+      //System.out.println("IS Fellowship recommended: "+fellowshipRecommended);
+    }
+    // - raid
     Integer isRaidQuest=((Integer)properties.getProperty("Quest_IsRaidQuest"));
-    if (isRaidQuest!=null) System.out.println("IS Raid quest: "+isRaidQuest);
-    Integer isSessionQuest=((Integer)properties.getProperty("Quest_IsSessionQuest"));
-    if (isSessionQuest!=null) System.out.println("IS session quest: "+isSessionQuest);
-    Integer isSessionAcc=((Integer)properties.getProperty("Quest_IsSessionAccomplishment"));
-    if (isSessionAcc!=null) System.out.println("IS session acc: "+isSessionAcc);
+    if ((isRaidQuest!=null) && (isRaidQuest.intValue()==1))
+    {
+      quest.setSize(Size.RAID);
+      //System.out.println("IS Raid quest: "+isRaidQuest);
+    }
+    // Instance quest? Default is no.
+    Integer isInstanceQuest=((Integer)properties.getProperty("Quest_IsInstanceQuest"));
+    if ((isInstanceQuest!=null) && (isInstanceQuest.intValue()==1))
+    {
+      quest.setInstanced(true);
+      //System.out.println("IS Instance quest: "+isInstanceQuest);
+    }
+    // Shareable? Default is yes.
     Integer isShareable=((Integer)properties.getProperty("Quest_IsShareable"));
-    if (isShareable!=null) System.out.println("IS shareable quest: "+isShareable);
-    Integer isHidden=((Integer)properties.getProperty("Quest_IsHidden"));
-    if (isHidden!=null) System.out.println("IS hidden quest: "+isHidden);
+    if ((isShareable!=null) && (isShareable.intValue()==0))
+    {
+      quest.setShareable(false);
+      //System.out.println("IS shareable quest: "+isShareable);
+    }
+    // Session play? Default is no.
+    Integer isSessionQuest=((Integer)properties.getProperty("Quest_IsSessionQuest"));
+    if ((isSessionQuest!=null) && (isSessionQuest.intValue()==1))
+    {
+      quest.setSessionPlay(true);
+      //System.out.println("IS session quest: "+isSessionQuest);
+    }
+    // Automatic bestowed quest (landscape, in-instance quest). Default is no.
     Integer isPeBestowedQuest=((Integer)properties.getProperty("Quest_IsPEBestowedQuest"));
-    if (isPeBestowedQuest!=null) System.out.println("IS PE bestowed quest: "+isPeBestowedQuest);
+    if ((isPeBestowedQuest!=null) && (isPeBestowedQuest.intValue()==1))
+    {
+      quest.setAutoBestowed(true);
+      //System.out.println("IS PE bestowed quest: "+isPeBestowedQuest);
+    }
+    // Unused:
+    // Quest_IsSessionAccomplishment
+    // Quest_IsHidden
   }
+
+  // Usage_MaxLevel also exists
 
   private Integer findMinLevel(PropertiesSet properties)
   {
@@ -298,6 +337,26 @@ DefaultPermissionBlobStruct:
     Quest_IgnoreDefaultChallengeLevel: 1
     */
     return challengeLevel;
+  }
+
+  private void findRaceRequirements(QuestDescription quest, PropertiesSet properties)
+  {
+    /*
+    DefaultPermissionBlobStruct: 
+      Usage_RequiredRaces: 
+        #1: 81
+        #2: 23
+        #3: 114
+    */
+  }
+
+  private void findClassRequirements(QuestDescription quest, PropertiesSet properties)
+  {
+    /*
+    DefaultPermissionBlobStruct: 
+      Usage_RequiredClassList: 
+        #1: 162
+    */
   }
 
   private void findPreviousQuests(PropertiesSet properties)
@@ -396,11 +455,11 @@ DefaultPermissionBlobStruct:
         }
       }
     }
-    System.out.println("Nb quests: "+nb);
+    System.out.println("Nb quests: "+quests.size());
     QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
   }
 
-  void doIt2()
+  void loadQuestArcs()
   {
     PropertiesSet questArcsDirectory=_facade.loadProperties(0x7900E36F);
     //System.out.println(questArcsDirectory.dump());
@@ -410,8 +469,6 @@ DefaultPermissionBlobStruct:
       Integer arcId=(Integer)obj;
       handleArc(arcId.intValue());
     }
-    System.out.println("Nb quests: "+nb);
-    //DeedsWriter.writeSortedDeeds(_deeds,new File("deeds_dat.xml").getAbsoluteFile());
   }
 
   /**
