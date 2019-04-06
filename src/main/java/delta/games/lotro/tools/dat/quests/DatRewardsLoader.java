@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.Emote;
@@ -30,6 +32,7 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
+import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
 
@@ -41,6 +44,8 @@ public class DatRewardsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DatRewardsLoader.class);
 
+  private static final int DEBUG_ID=1879000000;
+
   private static final String VIRTUE_SEED="Trait_Virtue_Rank_";
 
   private DataFacade _facade;
@@ -48,6 +53,7 @@ public class DatRewardsLoader
   private EnumMapper _billingGroup;
   private FactionsRegistry _factions;
   private Map<Integer,RewardsMap> _rewardLevels;
+  private Map<Integer,RewardsMap> _defaultRewardMaps;
   private RewardsMapLoader _rewardLevelLoader;
 
   /**
@@ -61,7 +67,9 @@ public class DatRewardsLoader
     _billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
     _factions=FactionsRegistry.getInstance();
     _rewardLevels=new HashMap<Integer,RewardsMap>();
-    _rewardLevelLoader=new RewardsMapLoader();
+    _defaultRewardMaps=new HashMap<Integer,RewardsMap>();
+    _rewardLevelLoader=new RewardsMapLoader(facade);
+    loadMainMaps();
   }
 
   /**
@@ -90,12 +98,19 @@ public class DatRewardsLoader
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
 
+    if (questTreasureId==DEBUG_ID)
+    {
+      FileIO.writeFile(new File(questTreasureId+".props"),props.dump().getBytes());
+      System.out.println(props.dump());
+    }
+
     // Items
     loadItems(props,"QuestTreasure_FixedItemArray", rewards.getObjects());
     loadItems(props,"QuestTreasure_SelectableItemArray", rewards.getSelectObjects());
-    // Class points
-    // Destiny points?
-    // Skills?
+    // Class points: not for quests
+    // Lotro points: not for quests
+    // Destiny points
+    // Skills? = traits?
     // Virtues
     Object[] virtueArray=(Object[])props.getProperty("QuestTreasure_FixedVirtueArray");
     if (virtueArray!=null)
@@ -173,10 +188,14 @@ public class DatRewardsLoader
         //System.out.println("Trait: "+traitId);
         TraitsManager traitsMgr=TraitsManager.getInstance();
         TraitDescription trait=traitsMgr.getTrait(traitId);
+        if (trait==null)
+        {
+          trait=TraitLoader.loadTrait(_facade,traitId);
+        }
         if (trait!=null)
         {
-          String command=trait.getName();
-          Trait traitReward=new Trait(command);
+          String traitName=trait.getName();
+          Trait traitReward=new Trait(traitName);
           rewards.addTrait(traitReward);
         }
         else
@@ -324,57 +343,83 @@ public class DatRewardsLoader
   /**
    * Handle quest specific rewards.
    * @param rewards Storage.
+   * @param challengeLevel Level to use.
    * @param properties Properties to use.
    */
-  public void handleQuestRewards(Rewards rewards, PropertiesSet properties)
+  public void handleQuestRewards(Rewards rewards, Integer challengeLevel, PropertiesSet properties)
   {
+    // Find out reward level
     RewardsMap rewardLevel=null;
     Integer rewardLevelId=((Integer)properties.getProperty("Quest_RewardLevelDID"));
     if (rewardLevelId!=null)
     {
-      System.out.println("Reward level ID: "+rewardLevelId);
+      // Specific one
       rewardLevel=getRewardsMap(rewardLevelId.intValue());
     }
     else
     {
-      LOGGER.warn("No reward level!");
+      // Generic one, based on the challenge level
+      int level;
+      if (challengeLevel!=null)
+      {
+        level=challengeLevel.intValue();
+      }
+      else
+      {
+        LOGGER.warn("No challenge level and no reward map!");
+        level=1;
+      }
+      rewardLevel=_defaultRewardMaps.get(Integer.valueOf(level));
     }
+    // Gold
     Integer goldTier=((Integer)properties.getProperty("Quest_GoldTier"));
-    if (goldTier!=null) System.out.println("Gold tier: "+goldTier);
+    if (goldTier!=null)
+    {
+      Integer gold=rewardLevel.getMoneyMap().getValue(goldTier.intValue());
+      System.out.println("Gold tier: "+goldTier+" => "+gold);
+    }
+    // XP
     Integer xpTier=((Integer)properties.getProperty("Quest_ExpTier"));
     if (xpTier!=null)
     {
-      if (rewardLevel!=null)
-      {
-        Integer xpValue=rewardLevel.getXpMap().getValue(xpTier.intValue());
-        System.out.println("XP tier: "+xpTier+" => "+xpValue);
-      }
-      else
-      {
-        System.out.println("XP tier: "+xpTier);
-      }
+      Integer xp=rewardLevel.getXpMap().getValue(xpTier.intValue());
+      System.out.println("XP tier: "+xpTier+" => "+xp);
     }
+    // Item XP
     Integer itemXpTier=((Integer)properties.getProperty("Quest_ItemExpTier"));
     if (itemXpTier!=null)
     {
-      if (rewardLevel!=null)
-      {
-        Integer itemXpValue=rewardLevel.getItemXpMap().getValue(itemXpTier.intValue());
-        System.out.println("Item XP tier: "+itemXpTier+" => "+itemXpValue);
-      }
-      else
-      {
-        System.out.println("Item XP tier: "+itemXpTier);
-      }
+      Integer itemXp=rewardLevel.getItemXpMap().getValue(itemXpTier.intValue());
+      System.out.println("Item XP tier: "+itemXpTier+" => "+itemXp);
     }
+    // Mount XP
     Integer mountXpTier=((Integer)properties.getProperty("Quest_MountExpTier"));
-    if (mountXpTier!=null) System.out.println("Mount XP tier: "+mountXpTier);
+    if (mountXpTier!=null)
+    {
+      Integer mountXp=rewardLevel.getMountXpMap().getValue(mountXpTier.intValue());
+      System.out.println("Mount XP tier: "+mountXpTier+" => "+mountXp);
+    }
+    // Craft XP
     Integer craftXpTier=((Integer)properties.getProperty("Quest_CraftExpTier"));
-    if (craftXpTier!=null) System.out.println("Craft XP tier: "+craftXpTier);
+    if (craftXpTier!=null)
+    {
+      Integer craftXp=rewardLevel.getCraftXpMap().getValue(craftXpTier.intValue());
+      System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp);
+    }
+    // Glory
     Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
-    if (gloryTier!=null) System.out.println("Glory tier: "+gloryTier);
+    if (gloryTier!=null)
+    {
+      Integer glory=rewardLevel.getGloryMap().getValue(gloryTier.intValue());
+      System.out.println("Glory tier: "+gloryTier+" => "+glory);
+    }
+    // Mithril coins
     Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
-    if (mcTier!=null) System.out.println("Mithril coin tier: "+mcTier);
+    if (mcTier!=null)
+    {
+      Integer mithrilCoins=rewardLevel.getMithrilCoinsMap().getValue(mcTier.intValue());
+      System.out.println("Mithril coin tier: "+mcTier+" => "+mithrilCoins);
+    }
 
     // Only for 'Level Up' quests:
     /*
@@ -395,12 +440,24 @@ public class DatRewardsLoader
     RewardsMap rewardLevel=_rewardLevels.get(key);
     if (rewardLevel==null)
     {
-      PropertiesSet props=_facade.loadProperties(rewardLevelId+0x9000000);
-      rewardLevel=new RewardsMap();
-      _rewardLevelLoader.fill(props,rewardLevel);
-      System.out.println(props.dump());
+      rewardLevel=_rewardLevelLoader.loadMap(rewardLevelId);
       _rewardLevels.put(key,rewardLevel);
     }
     return rewardLevel;
+  }
+
+  private void loadMainMaps()
+  {
+    // QuestControl
+    PropertiesSet questControlProps=_facade.loadProperties(1879048802+0x9000000);
+    Object[] rewardMaps=(Object[])questControlProps.getProperty("QuestControl_RewardLevelDIDArray");
+    int index=1;
+    for(Object rewardMapObj : rewardMaps)
+    {
+      Integer rewardLevelId=(Integer)rewardMapObj;
+      RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
+      _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);
+      index++;
+    }
   }
 }

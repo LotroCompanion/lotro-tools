@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.quests.rewards;
 
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
 /**
@@ -8,12 +9,40 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class RewardsMapLoader
 {
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public RewardsMapLoader(DataFacade facade)
+  {
+    _facade=facade;
+  }
+
+  /**
+   * Load a rewards map.
+   * @param rewardLevelId Reward map ID.
+   * @return A rewards map or <code>null</code> if properties not found.
+   */
+  public RewardsMap loadMap(int rewardLevelId)
+  {
+    RewardsMap rewardsMap=null;
+    PropertiesSet props=_facade.loadProperties(rewardLevelId+0x9000000);
+    if (props!=null)
+    {
+      rewardsMap=new RewardsMap();
+      fill(props,rewardsMap);
+    }
+    return rewardsMap;
+  }
+
   /**
    * Fill a rewards map from properties.
    * @param props Input properties.
    * @param storage Storage for loaded data.
    */
-  public void fill(PropertiesSet props, RewardsMap storage)
+  private void fill(PropertiesSet props, RewardsMap storage)
   {
     fillList(props,"QuestReward_Accomplishment_ExpEntryList","QuestReward_ExpAmount",storage.getAccomplishmentXpMap());
     fillList(props,"QuestReward_Accomplishment_MoneyEntryList","QuestReward_MoneyAmount",storage.getAccomplishmentMoneyMap());

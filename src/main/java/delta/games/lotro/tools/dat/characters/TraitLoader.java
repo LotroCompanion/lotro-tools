@@ -50,7 +50,8 @@ public class TraitLoader
       int iconId=((Integer)traitProperties.getProperty("Trait_Icon")).intValue();
       ret.setIconId(iconId);
       // Min level
-      int minLevel=((Integer)traitProperties.getProperty("Trait_Minimum_Level")).intValue();
+      Integer minLevelInt=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
+      int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
       ret.setMinLevel(minLevel);
       // Tier
       //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();

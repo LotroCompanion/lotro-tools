@@ -48,7 +48,7 @@ public class PassivesLoader
     {
       return;
     }
-    System.out.println("Handle table: "+id);
+    //System.out.println("Handle table: "+id);
     PropertiesSet tableProps=_facade.loadProperties(id+0x9000000);
     Object[] listsArray=(Object[])tableProps.getProperty("ItemAdvancement_ProgressionListArray");
     for(Object listObj : listsArray)
@@ -62,7 +62,7 @@ public class PassivesLoader
 
   private void handleList(int effectsListId)
   {
-    System.out.println("Handle list: "+effectsListId);
+    //System.out.println("Handle list: "+effectsListId);
     PropertiesSet effectsProps=_facade.loadProperties(effectsListId+0x9000000);
     Object[] effectsListArray=(Object[])effectsProps.getProperty("ItemAdvancement_Effect_Array");
     for(Object effectObj : effectsListArray)
@@ -76,7 +76,7 @@ public class PassivesLoader
         {
           effect=DatEffectUtils.loadEffect(_facade,effectId.intValue());
           _parsedEffects.put(effectId,effect);
-          System.out.println("\tLoaded effect: "+effect);
+          //System.out.println("\tLoaded effect: "+effect);
         }
       }
     }
