@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -370,7 +371,7 @@ public class MainDatNpcLoader
         //int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
         //System.out.println(classDefIndex);
-        if (classDefIndex==1724)
+        if (classDefIndex==WStateClass.NPC)
         {
           load(i);
         }

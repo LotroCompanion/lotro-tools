@@ -12,6 +12,7 @@ import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Size;
 import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -481,7 +482,7 @@ public class MainDatQuestsLoader
       //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       //System.out.println(classDefIndex);
-      return (classDefIndex==1398); // TODO: use WStateClass constant
+      return (classDefIndex==WStateClass.ACCOMPLISHMENT);
     }
     return false;
   }

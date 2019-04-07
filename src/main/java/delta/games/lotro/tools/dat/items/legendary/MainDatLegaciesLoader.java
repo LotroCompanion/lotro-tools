@@ -18,6 +18,7 @@ import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.WellKnownStat;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -204,10 +205,7 @@ public class MainDatLegaciesLoader
       //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       //System.out.println(classDefIndex);
-      // 4015 (found in 300+ array), 4024 (DPS legacies)
-      // 4025 ()
-      // Add constant: WStateClass.LEGACY
-      return ((classDefIndex==4015) || (classDefIndex==4024) || (classDefIndex==4025));
+      return ((classDefIndex==WStateClass.IMBUED_LEGACY) || (classDefIndex==WStateClass.IMBUED_LEGACY_DPS) || (classDefIndex==WStateClass.IMBUED_LEGACY_OTHER_MAIN));
     }
     return false;
   }

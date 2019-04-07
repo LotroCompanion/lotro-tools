@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -169,7 +170,7 @@ Mod_Array:
       //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       //System.out.println(classDefIndex);
-      return (classDefIndex==2338); // Add constant: WStateClass.LEGENDARY_TITLE
+      return (classDefIndex==WStateClass.LEGENDARY_TITLE);
     }
     return false;
   }

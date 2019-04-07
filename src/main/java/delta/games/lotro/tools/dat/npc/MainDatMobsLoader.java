@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -172,7 +173,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
       //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       //System.out.println(classDefIndex);
-      return (classDefIndex==1723); // Add constant: WStateClass.MOB
+      return (classDefIndex==WStateClass.MOB);
     }
     return false;
   }

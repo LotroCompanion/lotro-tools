@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Rewards;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -61,15 +62,6 @@ public class MainDatDeedsLoader
       {
         System.out.println(properties.dump());
       }
-      deed=new DeedDescription();
-      // ID
-      deed.setIdentifier(indexDataId);
-      // Name
-      String name=DatUtils.getStringProperty(properties,"Quest_Name");
-      deed.setName(name);
-      // Description
-      String description=DatUtils.getStringProperty(properties,"Quest_Description");
-      deed.setDescription(description);
       // Check
       boolean useIt=useIt(properties);
       if (!useIt)
@@ -77,7 +69,16 @@ public class MainDatDeedsLoader
         //System.out.println("Ignored ID="+indexDataId+", name="+name);
         return null;
       }
+      deed=new DeedDescription();
+      // ID
+      deed.setIdentifier(indexDataId);
+      // Name
+      String name=DatUtils.getStringProperty(properties,"Quest_Name");
+      deed.setName(name);
       System.out.println("ID: "+indexDataId+", name: "+name);
+      // Description
+      String description=DatUtils.getStringProperty(properties,"Quest_Description");
+      deed.setDescription(description);
       // Category
       Integer categoryId=((Integer)properties.getProperty("Accomplishment_Category"));
       if (categoryId!=null)
@@ -249,7 +250,7 @@ public class MainDatDeedsLoader
       //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       //System.out.println(classDefIndex);
-      return (classDefIndex==1398); // TODO: use WStateClass constant
+      return (classDefIndex==WStateClass.ACCOMPLISHMENT);
     }
     return false;
   }
