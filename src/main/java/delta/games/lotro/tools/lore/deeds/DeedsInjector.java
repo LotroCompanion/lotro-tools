@@ -3,10 +3,11 @@ package delta.games.lotro.tools.lore.deeds;
 import java.util.List;
 
 import delta.games.lotro.common.Rewards;
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Inject additional deeds.
@@ -62,11 +63,12 @@ public class DeedsInjector
       // Token of Service: 1879353887
       Rewards rewards=deed.getRewards();
       ObjectsSet objects=rewards.getObjects();
-      ObjectItem object=new ObjectItem("Token of Service");
-      object.setItemId(1879353887);
+      Proxy<Item> itemProxy=new Proxy<Item>();
+      itemProxy.setName("Token of Service");
+      itemProxy.setId(1879353887);
       // Number of tokens
       int nbTokens=getNumberOfTokens(i);
-      objects.addObject(object,nbTokens);
+      objects.addObject(itemProxy,nbTokens);
       _deeds.add(deed);
     }
   }

@@ -1,9 +1,7 @@
 package delta.games.lotro.tools.dat.quests;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -18,7 +16,6 @@ import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -35,6 +32,7 @@ import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for quest/deed rewards from DAT files.
@@ -217,9 +215,8 @@ public class DatRewardsLoader
     }
   }
 
-  private List<ObjectItem> loadItems(PropertiesSet props, String propertyName, ObjectsSet storage)
+  private void loadItems(PropertiesSet props, String propertyName, ObjectsSet storage)
   {
-    List<ObjectItem> items=new ArrayList<ObjectItem>();
     Object[] itemArray=(Object[])props.getProperty(propertyName);
     if (itemArray!=null)
     {
@@ -233,10 +230,12 @@ public class DatRewardsLoader
         if (item!=null)
         {
           String name=(item!=null)?item.getName():"???";
-          ObjectItem objectItem=new ObjectItem(name);
-          objectItem.setItemId(itemId);
+          Proxy<Item> itemProxy=new Proxy<Item>();
+          itemProxy.setObject(item);
+          itemProxy.setName(name);
+          itemProxy.setId(itemId);
           int quantity=(quantityValue!=null?quantityValue.intValue():1);
-          storage.addObject(objectItem,quantity);
+          storage.addObject(itemProxy,quantity);
         }
         else
         {
@@ -244,7 +243,6 @@ public class DatRewardsLoader
         }
       }
     }
-    return items;
   }
 
   private String getVirtue(int virtueId)

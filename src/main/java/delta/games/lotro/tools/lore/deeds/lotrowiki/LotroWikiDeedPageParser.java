@@ -22,14 +22,16 @@ import delta.games.lotro.common.Title;
 import delta.games.lotro.common.Trait;
 import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.WellKnownItems;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Parse for lotro-wiki deed pages.
@@ -256,8 +258,9 @@ public class LotroWikiDeedPageParser
           if (marks!=null)
           {
             ObjectsSet objects=deed.getRewards().getObjects();
-            ObjectItem item=new ObjectItem("Mark");
-            item.setItemId(1879224343);
+            Proxy<Item> item=new Proxy<Item>();
+            item.setName("Mark");
+            item.setId(WellKnownItems.MARK);
             objects.addObject(item,marks.intValue());
           }
           else
@@ -537,7 +540,8 @@ public class LotroWikiDeedPageParser
         {
           count=Integer.valueOf(1);
         }
-        ObjectItem item=new ObjectItem(itemName);
+        Proxy<Item> item=new Proxy<Item>();
+        item.setName(itemName);
         objects.addObject(item,count.intValue());
       }
     }

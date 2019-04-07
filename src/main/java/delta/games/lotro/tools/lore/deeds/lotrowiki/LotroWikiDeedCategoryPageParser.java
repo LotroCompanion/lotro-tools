@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Rewards;
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -27,6 +26,7 @@ import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiConstants;
 import delta.games.lotro.tools.utils.lotrowiki.LotroWikiSiteInterface;
 import delta.games.lotro.utils.Escapes;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Parse for lotro-wiki deed category pages.
@@ -287,14 +287,14 @@ public class LotroWikiDeedCategoryPageParser
     int nbItems=objects.getNbObjectItems();
     for(int i=0;i<nbItems;i++)
     {
-      ObjectItem objectItem=objects.getItem(i);
-      resolveItem(objectItem);
+      Proxy<Item> itemProxy=objects.getItem(i);
+      resolveItem(itemProxy);
     }
   }
 
-  private void resolveItem(ObjectItem objectItem)
+  private void resolveItem(Proxy<Item> itemProxy)
   {
-    String name=objectItem.getName();
+    String name=itemProxy.getName();
     int itemId=resolveByName(name);
     if (itemId==0)
     {
@@ -306,7 +306,7 @@ public class LotroWikiDeedCategoryPageParser
     }
     if (itemId!=0)
     {
-      objectItem.setItemId(itemId);
+      itemProxy.setId(itemId);
     }
     else
     {

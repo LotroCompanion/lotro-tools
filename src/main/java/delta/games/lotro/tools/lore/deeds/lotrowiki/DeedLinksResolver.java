@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedProxies;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.WellKnownItems;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Resolver for deed links.
@@ -168,8 +170,9 @@ public class DeedLinksResolver
     previous.setName(previous.getName());
     deed.setPreviousDeedProxy(previous);
     // Rewards
-    ObjectItem item=new ObjectItem("Mark");
-    item.setItemId(1879224343);
+    Proxy<Item> item=new Proxy<Item>();
+    item.setName("Mark");
+    item.setId(WellKnownItems.MARK);
     deed.getRewards().getObjects().addObject(item,500);
     return deed;
   }

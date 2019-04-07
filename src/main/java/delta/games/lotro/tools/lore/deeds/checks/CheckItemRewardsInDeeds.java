@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 import delta.games.lotro.common.Rewards;
-import delta.games.lotro.common.objects.ObjectItem;
 import delta.games.lotro.common.objects.ObjectsSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Check consistency of item rewards in deeds.
@@ -35,9 +35,9 @@ public class CheckItemRewardsInDeeds
     int nbItems=objects.getNbObjectItems();
     for(int i=0;i<nbItems;i++)
     {
-      ObjectItem objectItem=objects.getItem(i);
-      int id=objectItem.getItemId();
-      String name=objectItem.getName();
+      Proxy<Item> itemProxy=objects.getItem(i);
+      int id=itemProxy.getId();
+      String name=itemProxy.getName();
       Item item=ItemsManager.getInstance().getItem(id);
       if (item==null)
       {
@@ -49,7 +49,7 @@ public class CheckItemRewardsInDeeds
         if (!Objects.equals(name,itemName))
         {
           System.out.println("Fix item reward name from ["+name+"] to ["+itemName+"]");
-          objectItem.setName(itemName);
+          itemProxy.setName(itemName);
         }
       }
     }
