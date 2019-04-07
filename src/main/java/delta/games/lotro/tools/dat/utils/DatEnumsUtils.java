@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.utils;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.items.DamageType;
 
 /**
@@ -48,7 +49,8 @@ public class DatEnumsUtils
    * @param id Input code.
    * @return A character class or <code>null</code> if not supported.
    */
-  public static CharacterClass getCharacterClassFromId(int id) {
+  public static CharacterClass getCharacterClassFromId(int id)
+  {
     if (id==214) return CharacterClass.BEORNING;
     if (id==40) return CharacterClass.BURGLAR;
     if (id==24) return CharacterClass.CAPTAIN;
@@ -68,4 +70,22 @@ public class DatEnumsUtils
     if (id==126) return null; // Stalker
     return null;
   }
+
+  /**
+   * Get a race from a DAT enum code.
+   * @param raceId Input code.
+   * @return A race or <code>null</code> if not supported.
+   */
+  public static Race getRaceFromRaceId(int raceId)
+  {
+    if (raceId==23) return Race.MAN;
+    if (raceId==65) return Race.ELF;
+    if (raceId==73) return Race.DWARF;
+    if (raceId==81) return Race.HOBBIT;
+    if (raceId==114) return Race.BEORNING;
+    if (raceId==117) return Race.HIGH_ELF;
+    return null;
+  }
+
+
 }

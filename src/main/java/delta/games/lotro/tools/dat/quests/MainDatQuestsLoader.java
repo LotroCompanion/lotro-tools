@@ -7,8 +7,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
+import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.Size;
+import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -17,6 +20,7 @@ import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -102,9 +106,6 @@ public class MainDatQuestsLoader
         String category=_category.getString(categoryId.intValue());
         quest.setCategory(category);
       }
-      // Min level
-      Integer minLevel=findMinLevel(properties);
-      quest.setMinimumLevel(minLevel);
       // Challenge level
       Integer challengeLevel=findChallengeLevel(properties);
       // Max times
@@ -152,7 +153,11 @@ public class MainDatQuestsLoader
       // Flags
       handleFlags(quest,properties);
       // Requirements
+      // - level
+      findLevelRequirements(quest,properties);
+      // - race
       findRaceRequirements(quest,properties);
+      // - class
       findClassRequirements(quest,properties);
 
       // Rewards
@@ -284,21 +289,22 @@ public class MainDatQuestsLoader
     // Quest_IsHidden
   }
 
-  // Usage_MaxLevel also exists
-
-  private Integer findMinLevel(PropertiesSet properties)
+  private void findLevelRequirements(QuestDescription quest, PropertiesSet properties)
   {
-    Integer minLevel=null;
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
-      minLevel=(Integer)permissions.getProperty("Usage_MinLevel");
+      Integer minLevel=(Integer)permissions.getProperty("Usage_MinLevel");
+      if ((minLevel!=null) && (minLevel.intValue()!=0))
+      {
+        quest.setMinimumLevel(minLevel);
+      }
+      Integer maxLevel=(Integer)permissions.getProperty("Usage_MaxLevel");
+      if ((maxLevel!=null) && (maxLevel.intValue()!=-1))
+      {
+        quest.setMaximumLevel(maxLevel);
+      }
     }
-    /*
-DefaultPermissionBlobStruct: 
-  Usage_MinLevel: 40
-    */
-    return minLevel;
   }
 
   private Integer findChallengeLevel(PropertiesSet properties)
@@ -345,6 +351,24 @@ DefaultPermissionBlobStruct:
 
   private void findRaceRequirements(QuestDescription quest, PropertiesSet properties)
   {
+    PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
+    if (permissions!=null)
+    {
+      Object[] raceIds=(Object[])permissions.getProperty("Usage_RequiredRaces");
+      if (raceIds!=null)
+      {
+        UsageRequirement requirements=quest.getUsageRequirement();
+        for(Object raceIdObj : raceIds)
+        {
+          Integer raceId=(Integer)raceIdObj;
+          Race race=DatEnumsUtils.getRaceFromRaceId(raceId.intValue());
+          if (race!=null)
+          {
+            requirements.addAllowedRace(race);
+          }
+        }
+      }
+    }
     /*
     DefaultPermissionBlobStruct: 
       Usage_RequiredRaces: 
@@ -356,6 +380,24 @@ DefaultPermissionBlobStruct:
 
   private void findClassRequirements(QuestDescription quest, PropertiesSet properties)
   {
+    PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
+    if (permissions!=null)
+    {
+      Object[] classIds=(Object[])permissions.getProperty("Usage_RequiredClassList");
+      if (classIds!=null)
+      {
+        UsageRequirement requirements=quest.getUsageRequirement();
+        for(Object classIdObj : classIds)
+        {
+          Integer classId=(Integer)classIdObj;
+          CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId.intValue());
+          if (characterClass!=null)
+          {
+            requirements.addAllowedClass(characterClass);
+          }
+        }
+      }
+    }
     /*
     DefaultPermissionBlobStruct: 
       Usage_RequiredClassList: 

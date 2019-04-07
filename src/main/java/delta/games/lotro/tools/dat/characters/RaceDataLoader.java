@@ -19,6 +19,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -50,7 +51,7 @@ public class RaceDataLoader
     PropertiesSet properties=_facade.loadProperties(racePropertiesId+0x9000000);
     int raceId=((Integer)properties.getProperty("RaceTable_Race")).intValue();
     //System.out.println(raceId);
-    Race race=getRaceFromRaceId(raceId);
+    Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
     RaceDescription raceDescription=new RaceDescription(race);
     /*
 RaceTable_ClassList: 
@@ -75,17 +76,6 @@ RaceTable_NationalityList:
     loadGenders(raceDescription,properties);
     loadCharacteristics(raceDescription,properties);
     _racesById.put(Integer.valueOf(raceId),raceDescription);
-  }
-
-  private Race getRaceFromRaceId(int raceId)
-  {
-    if (raceId==23) return Race.MAN;
-    if (raceId==65) return Race.ELF;
-    if (raceId==73) return Race.DWARF;
-    if (raceId==81) return Race.HOBBIT;
-    if (raceId==114) return Race.BEORNING;
-    if (raceId==117) return Race.HIGH_ELF;
-    return null;
   }
 
   private void loadGenders(RaceDescription description, PropertiesSet properties)
