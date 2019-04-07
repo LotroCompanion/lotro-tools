@@ -307,8 +307,6 @@ public class LotroWikiDeedCategoryPageParser
     if (itemId!=0)
     {
       objectItem.setItemId(itemId);
-      objectItem.setObjectURL(null);
-      objectItem.setIconURL(null);
     }
     else
     {
