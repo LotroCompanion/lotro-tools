@@ -150,7 +150,7 @@ public class MainStatsLoader
   {
     StatDescription stat=new StatDescription(id);
     stat.setKey(key);
-    stat.setName(name);
+    stat.setInternalName(name);
     stat.setPercentage(isPercentage);
     _stats.addStat(stat);
   }
