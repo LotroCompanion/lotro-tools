@@ -82,6 +82,8 @@ public class MainStatsLoader
     addCustomStats();
     // Add legacy mappings
     StatMappings.setupMappings(_stats);
+    // Add legacy data (name, index)
+    addLegacyData();
     // Filter stats to keep only legacy ones, ordered as before
     filterStats();
     // Save stats
@@ -91,6 +93,25 @@ public class MainStatsLoader
     LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
     StatXMLWriter.write(toFile,stats);
     showStats();
+  }
+
+  private void addLegacyData()
+  {
+    int index=0;
+    for(OldStatEnum oldStat : OldStatEnum.values())
+    {
+      String legacyKey=oldStat.getKey();
+      StatDescription stat=_stats.getByKey(legacyKey);
+      if (stat!=null)
+      {
+        // Add legacy name
+        String legacyName=oldStat.getName();
+        stat.setLegacyName(legacyName);
+        // Add index
+        stat.setIndex(Integer.valueOf(index));
+      }
+      index++;
+    }
   }
 
   private void showStats()
@@ -155,11 +176,20 @@ public class MainStatsLoader
     _stats.addStat(stat);
   }
 
-  private void addCustomStat(int id, String legacyKey, boolean isPercentage)
+  private void addCustomStatFromOldStat(int id, OldStatEnum oldStat)
+  {
+    String legacyKey=oldStat.name();
+    boolean isPercentage=oldStat.isPercentage();
+    String legacyName=oldStat.getName();
+    addCustomStat(id,legacyKey,legacyName,isPercentage);
+  }
+
+  private void addCustomStat(int id, String legacyKey, String legacyName, boolean isPercentage)
   {
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
+    stat.setLegacyName(legacyName);
     stat.setPercentage(isPercentage);
     _stats.addStat(stat);
   }
@@ -167,27 +197,27 @@ public class MainStatsLoader
   private void addCustomStats()
   {
     int id=-1000;
-    // Add stats from WellKnownStat
-    addCustomStat(id--,"DEVASTATE_MELEE_PERCENTAGE",true);
-    addCustomStat(id--,"DEVASTATE_RANGED_PERCENTAGE",true);
-    addCustomStat(id--,"DEVASTATE_TACTICAL_PERCENTAGE",true);
-    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE",true);
-    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE",true);
-    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE",true);
-    addCustomStat(id--,"FINESSE_PERCENTAGE",true);
-    addCustomStat(id--,"RESISTANCE_PERCENTAGE",true);
-    addCustomStat(id--,"ARMOUR",false);
+    // Add missing well known stats from the old stats enum
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_MELEE_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_RANGED_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_TACTICAL_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.FINESSE_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.RESISTANCE_PERCENTAGE);
+    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR);
     // Add other stats
-    addCustomStat(id--,"DPS",false);
+    addCustomStat(id--,"DPS","DPS",false);
   }
 
   /**
    * Filter loaded stats to keep only previously known stats, ordered as previously.
    */
-  private void filterStats()
+  void filterStats()
   {
     List<StatDescription> newList=new ArrayList<StatDescription>();
-    List<String> keys=getFilteredStatsKeys();
+    List<String> keys=getKeysOfStatsToKeep();
     for(String key : keys)
     {
       StatDescription stat=_stats.getByKey(key);
@@ -207,7 +237,7 @@ public class MainStatsLoader
     }
   }
 
-  private List<String> getFilteredStatsKeys()
+  private List<String> getKeysOfStatsToKeep()
   {
     List<String> keys=new ArrayList<String>();
     for(OldStatEnum old : OldStatEnum.values())

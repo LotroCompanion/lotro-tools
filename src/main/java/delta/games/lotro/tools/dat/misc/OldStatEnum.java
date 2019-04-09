@@ -438,6 +438,7 @@ public enum OldStatEnum
 
   private String _name;
   private String[] _aliases;
+  private boolean _isPercentage;
 
   private static HashMap<String,OldStatEnum> _map=new HashMap<String,OldStatEnum>();
 
@@ -453,12 +454,14 @@ public enum OldStatEnum
   {
     _name=name;
     _aliases=aliases;
+    _isPercentage=false;
   }
 
   private OldStatEnum(String name, boolean isPercentage, String... aliases)
   {
     _name=name;
     _aliases=aliases;
+    _isPercentage=isPercentage;
   }
 
   private void register() {
@@ -499,5 +502,14 @@ public enum OldStatEnum
   public String getName()
   {
     return _name;
+  }
+
+  /**
+   * Indicates if this is a percentage or not.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public boolean isPercentage()
+  {
+    return _isPercentage; 
   }
 }

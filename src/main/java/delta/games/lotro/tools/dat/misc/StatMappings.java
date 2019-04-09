@@ -134,7 +134,9 @@ public class StatMappings
     StatDescription stat=_stats.getByKey(gameKey);
     if (stat!=null)
     {
+      // Add legacy key
       stat.setLegacyKey(legacyKey);
+      // Remove/add to update maps with the new legacy key
       _stats.removeStat(stat);
       _stats.addStat(stat);
     }
