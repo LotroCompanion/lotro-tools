@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.utils;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
@@ -11,6 +13,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class DatEffectUtils
 {
+  private static final Logger LOGGER=Logger.getLogger(DatEffectUtils.class);
+
   /**
    * Load stats for an effect.
    * @param facade Data facade.
@@ -44,13 +48,19 @@ public class DatEffectUtils
       // Duration
       Float duration=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
       ret.setDuration(duration);
+      // Icon
+      Integer effectIconId=(Integer)effectProps.getProperty("Effect_Icon");
+      if (effectIconId!=null)
+      {
+        ret.setIconId(effectIconId);
+      }
       // Stats
       StatsProvider provider=DatStatUtils.buildStatProviders(facade,effectProps);
       ret.setStatsProvider(provider);
     }
     else
     {
-      System.out.println("Effect not found: "+effectId);
+      LOGGER.warn("Effect not found: "+effectId);
     }
     return ret;
   }
