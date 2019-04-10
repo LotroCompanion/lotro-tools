@@ -33,6 +33,7 @@ import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.items.legendary.ConsumablesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -55,6 +56,7 @@ public class MainDatItemsLoader
   private int _currentId;
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
+  private ConsumablesLoader _consumablesLoader;
 
   /**
    * Constructor.
@@ -64,6 +66,7 @@ public class MainDatItemsLoader
   {
     _facade=facade;
     _passivesLoader=new PassivesLoader(_facade);
+    _consumablesLoader=new ConsumablesLoader(_facade);
   }
 
   private boolean _debug=false;
@@ -312,6 +315,7 @@ public class MainDatItemsLoader
 
   private void handleEffects(PropertiesSet properties)
   {
+    // On equip
     Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
     if (effects!=null)
     {
@@ -330,6 +334,8 @@ public class MainDatItemsLoader
         }
       }
     }
+    // On use
+    _consumablesLoader.handleOnUseEffects(_currentItem,properties);
   }
 
   private StatsProvider handleEffect(int effectId)
@@ -856,6 +862,8 @@ public class MainDatItemsLoader
     DatStatUtils._statsUsageStatistics.showResults();
     // Save passives
     _passivesLoader.savePassives();
+    // Save consumables
+    _consumablesLoader.saveConsumables();
   }
 
   /**

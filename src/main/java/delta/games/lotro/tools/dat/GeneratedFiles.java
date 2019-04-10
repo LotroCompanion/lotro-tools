@@ -112,6 +112,10 @@ public class GeneratedFiles
    */
   public static final File PASSIVES=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES);
   /**
+   * Consumables.
+   */
+  public static final File CONSUMABLES=LotroCoreConfig.getInstance().getFile(DataFiles.CONSUMABLES);
+  /**
    * Colors.
    */
   public static final File COLORS=LotroCoreConfig.getInstance().getFile(DataFiles.COLORS);
