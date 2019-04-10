@@ -1,23 +1,28 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
+import delta.games.lotro.common.stats.ConstantStatProvider;
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.consumables.Consumable;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Loader for consumables.
@@ -25,8 +30,15 @@ import delta.games.lotro.tools.dat.utils.DatEffectUtils;
  */
 public class ConsumablesLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(ConsumablesLoader.class);
+
   private DataFacade _facade;
   private Map<Integer,Effect> _parsedEffects;
+  private Consumable _currentConsumable;
+  private Integer _spellcraftProperty;
+  private List<Consumable> _consumables;
+
+  private static final int APPARENT_LEVEL_PROPERTY=268457149;
 
   /**
    * Constructor.
@@ -36,6 +48,7 @@ public class ConsumablesLoader
   {
     _facade=facade;
     _parsedEffects=new HashMap<Integer,Effect>();
+    _consumables=new ArrayList<Consumable>();
   }
 
   /**
@@ -48,103 +61,128 @@ public class ConsumablesLoader
     Object[] effectsOnUse=(Object[])properties.getProperty("EffectGenerator_UsageEffectList");
     if (effectsOnUse!=null)
     {
-      //SpellcraftCalculator: 1879210172
-      Integer spellcraftCalculatorId=(Integer)properties.getProperty("SpellcraftCalculator");
-      if (spellcraftCalculatorId!=null)
+      if (!useItem(item))
       {
-        loadSpellcraftCalculator(spellcraftCalculatorId.intValue());
+        return;
       }
+      int id=item.getIdentifier();
+      String name=item.getName();
+      String category=item.getSubCategory();
+      String icon=item.getIcon();
 
-      int effectIndex1=1;
+      _currentConsumable=new Consumable(id,name,icon,category);
+
+      // Look for a spellcraft property
+      _spellcraftProperty=loadSpellcraftProperty(properties);
+
+      // Iterate on effects
       for(Object effectObj : effectsOnUse)
       {
         PropertiesSet effectProps=(PropertiesSet)effectObj;
         int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
         Float spellCraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-        handleOnUseEffects(item,effectId,spellCraft,effectIndex1);
-        effectIndex1++;
+        handleOnUseEffects(item,effectId,spellCraft);
+      }
+      // Register consumable
+      StatsProvider statsProvider=_currentConsumable.getProvider();
+      if (statsProvider.getNumberOfStatProviders()>0)
+      {
+        _consumables.add(_currentConsumable);
+        //BasicStatsSet stats=_currentConsumable.getProvider().getStats(1,120);
+        //System.out.println(_currentConsumable.getIdentifier()+"\t"+_currentConsumable.getName()+"\t"+_currentConsumable.getIcon()+"\t"+_currentConsumable.getCategory()+"\t"+stats);
+        _currentConsumable=null;
       }
     }
   }
 
-  private void loadSpellcraftCalculator(int spellcraftCalculatorId)
+  private boolean useItem(Item item)
   {
-    PropertiesSet calculatorProps=_facade.loadProperties(spellcraftCalculatorId+0x9000000);
-    System.out.println(calculatorProps.dump());
-    /*
-    if (spellcraftCalculatorId!=null)
-    {
-      Progression spellcraftProgression=DatStatUtils.getProgression(_facade,spellcraftCalculatorId.intValue());
-      System.out.println(spellcraftProgression);
-    }
-    */
-  
+    String category=item.getSubCategory();
+    if ("Quest Item".equals(category)) return false;
+    if ("Device".equals(category)) return false;
+    //if ("Festival Items".equals(category)) return false;
+    return true;
   }
 
-  private void handleOnUseEffects(Item item, int effectGeneratorId, Float spellcraft, int effectIndex1)
+  private Integer loadSpellcraftProperty(PropertiesSet properties)
+  {
+    Integer propertyId=null;
+    Integer spellcraftCalculatorId=(Integer)properties.getProperty("SpellcraftCalculator");
+    if (spellcraftCalculatorId!=null)
+    {
+      PropertiesSet calculatorProps=_facade.loadProperties(spellcraftCalculatorId.intValue()+0x9000000);
+      propertyId=(Integer)calculatorProps.getProperty("Spellcraft_Driver_PropertyName");
+    }
+    return propertyId;
+  }
+
+  private void handleOnUseEffects(Item item, int effectGeneratorId, Float spellcraft)
   {
     PropertiesSet effectProps=_facade.loadProperties(effectGeneratorId+0x9000000);
     Object[] effects=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
     if (effects!=null)
     {
-      int effectIndex=1;
       for(Object effectGeneratorObj : effects)
       {
         PropertiesSet effectGeneratorProps=(PropertiesSet)effectGeneratorObj;
         int effectId=((Integer)effectGeneratorProps.getProperty("EffectGenerator_EffectID")).intValue();
-        handleUseEffect(item, effectId, spellcraft, effectIndex1, effectIndex);
-        effectIndex++;
+        handleUseEffect(item, effectId, spellcraft);
       }
     }
     else
     {
-      handleUseEffect(item, effectGeneratorId, spellcraft, effectIndex1, 0);
+      handleUseEffect(item, effectGeneratorId, spellcraft);
     }
   }
 
-  private void handleUseEffect(Item item, int effectId, Float spellcraft, int effectIndex1, int effectIndex)
+  private void handleUseEffect(Item item, int effectId, Float spellcraft)
   {
     Integer key=Integer.valueOf(effectId);
     Effect effect=_parsedEffects.get(key);
     if (effect==null)
     {
       effect=DatEffectUtils.loadEffect(_facade,effectId);
-      StatsProvider statsProvider=effect.getStatsProvider();
-      //if (statsProvider.getNumberOfStatProviders()>0)
+      _parsedEffects.put(key,effect);
+    }
+    StatsProvider statsProvider=effect.getStatsProvider();
+    if (statsProvider.getNumberOfStatProviders()>0)
+    {
+      int level=0;
+      if ((spellcraft!=null) && (spellcraft.floatValue()>0))
       {
-        System.out.println("Item: "+item.getName()+", category: "+item.getSubCategory());
-        System.out.println("Effect: #"+effectIndex1+"."+effectIndex+": "+effect);
-        Integer effectIconId=effect.getIconId();
-        if (effectIconId!=null)
+        level=spellcraft.intValue();
+      }
+      else
+      {
+        Integer itemLevel=item.getItemLevel();
+        if (itemLevel!=null)
         {
-          String filename="effect-"+effectIconId+".png";
-          File to=new File(filename);
-          if (!to.exists())
-          {
-            DatIconsUtils.buildImageFile(_facade,effectIconId.intValue(),to);
-          }
-          System.out.println("Icon: "+effectIconId);
+          level=itemLevel.intValue();
         }
-
-        int level=0;
-        if ((spellcraft!=null) && (spellcraft.floatValue()>0))
+      }
+      StatsProvider consumableStatsProvider=_currentConsumable.getProvider();
+      if (level!=0)
+      {
+        BasicStatsSet stats=statsProvider.getStats(1,level);
+        for(StatDescription stat : stats.getStats())
         {
-          level=spellcraft.intValue();
+          FixedDecimalsInteger value=stats.getStat(stat);
+          StatProvider provider=new ConstantStatProvider(stat,value.floatValue());
+          consumableStatsProvider.addStatProvider(provider);
         }
-        else
+      }
+      else if ((_spellcraftProperty!=null) && (_spellcraftProperty.intValue()==APPARENT_LEVEL_PROPERTY))
+      {
+        int nbStats=statsProvider.getNumberOfStatProviders();
+        for(int i=0;i<nbStats;i++)
         {
-          Integer itemLevel=item.getItemLevel();
-          if (itemLevel!=null)
-          {
-            level=itemLevel.intValue();
-          }
+          StatProvider provider=statsProvider.getStatProvider(i);
+          consumableStatsProvider.addStatProvider(provider);
         }
-        if (level!=0)
-        {
-          BasicStatsSet stats=statsProvider.getStats(1,level);
-          System.out.println("Level: "+level+" => "+stats);
-        }
-        _parsedEffects.put(key,effect);
+      }
+      else
+      {
+        LOGGER.warn("Unmanaged case: spellcraftProperty="+_spellcraftProperty+", spellcraft="+spellcraft);
       }
     }
   }
