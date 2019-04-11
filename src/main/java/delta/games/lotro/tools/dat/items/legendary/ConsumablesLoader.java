@@ -6,12 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
-import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
@@ -19,6 +16,7 @@ import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.consumables.Consumable;
+import delta.games.lotro.lore.consumables.io.xml.ConsumableXMLWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
@@ -30,8 +28,6 @@ import delta.games.lotro.utils.FixedDecimalsInteger;
  */
 public class ConsumablesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ConsumablesLoader.class);
-
   private DataFacade _facade;
   private Map<Integer,Effect> _parsedEffects;
   private Consumable _currentConsumable;
@@ -152,6 +148,10 @@ public class ConsumablesLoader
       {
         level=spellcraft.intValue();
       }
+      else if ((_spellcraftProperty!=null) && (_spellcraftProperty.intValue()==APPARENT_LEVEL_PROPERTY))
+      {
+        // Use character level
+      }
       else
       {
         Integer itemLevel=item.getItemLevel();
@@ -171,7 +171,7 @@ public class ConsumablesLoader
           consumableStatsProvider.addStatProvider(provider);
         }
       }
-      else if ((_spellcraftProperty!=null) && (_spellcraftProperty.intValue()==APPARENT_LEVEL_PROPERTY))
+      else
       {
         int nbStats=statsProvider.getNumberOfStatProviders();
         for(int i=0;i<nbStats;i++)
@@ -179,10 +179,6 @@ public class ConsumablesLoader
           StatProvider provider=statsProvider.getStatProvider(i);
           consumableStatsProvider.addStatProvider(provider);
         }
-      }
-      else
-      {
-        LOGGER.warn("Unmanaged case: spellcraftProperty="+_spellcraftProperty+", spellcraft="+spellcraft);
       }
     }
   }
@@ -192,8 +188,7 @@ public class ConsumablesLoader
    */
   public void saveConsumables()
   {
-    List<Effect> effects=new ArrayList<Effect>(_parsedEffects.values());
-    Collections.sort(effects,new IdentifiableComparator<Effect>());
-    EffectXMLWriter.write(GeneratedFiles.CONSUMABLES,effects);
+    Collections.sort(_consumables,new IdentifiableComparator<Consumable>());
+    ConsumableXMLWriter.write(GeneratedFiles.CONSUMABLES,_consumables);
   }
 }
