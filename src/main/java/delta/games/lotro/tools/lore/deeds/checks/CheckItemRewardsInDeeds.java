@@ -3,8 +3,8 @@ package delta.games.lotro.tools.lore.deeds.checks;
 import java.util.List;
 import java.util.Objects;
 
-import delta.games.lotro.common.Rewards;
 import delta.games.lotro.common.objects.ObjectsSet;
+import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
