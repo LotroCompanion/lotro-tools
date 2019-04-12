@@ -3,7 +3,7 @@ package delta.games.lotro.tools.lore.deeds.checks;
 import java.util.List;
 import java.util.Objects;
 
-import delta.games.lotro.common.objects.ObjectsSet;
+import delta.games.lotro.common.rewards.ItemsSetReward;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.items.Item;
@@ -31,7 +31,7 @@ public class CheckItemRewardsInDeeds
   private void handleDeed(DeedDescription deed)
   {
     Rewards rewards=deed.getRewards();
-    ObjectsSet objects=rewards.getObjects();
+    ItemsSetReward objects=rewards.getObjects();
     int nbItems=objects.getNbObjectItems();
     for(int i=0;i<nbItems;i++)
     {

@@ -2,7 +2,7 @@ package delta.games.lotro.tools.lore.deeds;
 
 import java.util.List;
 
-import delta.games.lotro.common.objects.ObjectsSet;
+import delta.games.lotro.common.rewards.ItemsSetReward;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -62,7 +62,7 @@ public class DeedsInjector
       // Rewards
       // Token of Service: 1879353887
       Rewards rewards=deed.getRewards();
-      ObjectsSet objects=rewards.getObjects();
+      ItemsSetReward objects=rewards.getObjects();
       Proxy<Item> itemProxy=new Proxy<Item>();
       itemProxy.setName("Token of Service");
       itemProxy.setId(1879353887);

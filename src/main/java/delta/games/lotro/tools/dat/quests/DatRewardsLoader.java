@@ -9,14 +9,14 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.common.Emote;
-import delta.games.lotro.common.ReputationItem;
-import delta.games.lotro.common.Title;
-import delta.games.lotro.common.Trait;
-import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
-import delta.games.lotro.common.objects.ObjectsSet;
+import delta.games.lotro.common.rewards.EmoteReward;
+import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.Rewards;
+import delta.games.lotro.common.rewards.TitleReward;
+import delta.games.lotro.common.rewards.TraitReward;
+import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -123,7 +123,7 @@ public class DatRewardsLoader
         int count=(increment!=null)?increment.intValue():1;
         try
         {
-          Virtue virtue=new Virtue(VirtueId.valueOf(virtueName),count);
+          VirtueReward virtue=new VirtueReward(VirtueId.valueOf(virtueName),count);
           rewards.addVirtue(virtue);
         }
         catch(Exception e)
@@ -145,7 +145,7 @@ public class DatRewardsLoader
         if (title!=null)
         {
           String name=title.getName();
-          Title titleReward=new Title(null,name);
+          TitleReward titleReward=new TitleReward(null,name);
           rewards.addTitle(titleReward);
         }
         else
@@ -167,7 +167,7 @@ public class DatRewardsLoader
         if (emote!=null)
         {
           String command=emote.getCommand();
-          Emote emoteReward=new Emote(command);
+          EmoteReward emoteReward=new EmoteReward(command);
           rewards.addEmote(emoteReward);
         }
         else
@@ -193,7 +193,7 @@ public class DatRewardsLoader
         if (trait!=null)
         {
           String traitName=trait.getName();
-          Trait traitReward=new Trait(traitName);
+          TraitReward traitReward=new TraitReward(traitName);
           rewards.addTrait(traitReward);
         }
         else
@@ -215,7 +215,7 @@ public class DatRewardsLoader
     }
   }
 
-  private void loadItems(PropertiesSet props, String propertyName, ObjectsSet storage)
+  private void loadItems(PropertiesSet props, String propertyName, ItemsSetReward storage)
   {
     Object[] itemArray=(Object[])props.getProperty(propertyName);
     if (itemArray!=null)
@@ -301,7 +301,7 @@ public class DatRewardsLoader
     Faction faction=_factions.getById(factionId);
     if (faction!=null)
     {
-      ReputationItem repItem=new ReputationItem(faction);
+      ReputationReward repItem=new ReputationReward(faction);
       repItem.setAmount(reputationValue);
       rewards.getReputation().add(repItem);
     }
@@ -404,7 +404,7 @@ public class DatRewardsLoader
       Integer craftXp=rewardLevel.getCraftXpMap().getValue(craftXpTier.intValue());
       System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp);
     }
-    // Glory
+    // Glory (Renown or Infamy if MONSTER_PLAY)
     Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
     if (gloryTier!=null)
     {

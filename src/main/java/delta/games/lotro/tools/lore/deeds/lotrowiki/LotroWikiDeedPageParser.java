@@ -14,15 +14,15 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Emote;
-import delta.games.lotro.common.ReputationItem;
-import delta.games.lotro.common.Skill;
-import delta.games.lotro.common.Title;
-import delta.games.lotro.common.Trait;
-import delta.games.lotro.common.Virtue;
 import delta.games.lotro.common.VirtueId;
-import delta.games.lotro.common.objects.ObjectsSet;
+import delta.games.lotro.common.rewards.EmoteReward;
+import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.Rewards;
+import delta.games.lotro.common.rewards.SkillReward;
+import delta.games.lotro.common.rewards.TitleReward;
+import delta.games.lotro.common.rewards.TraitReward;
+import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -217,7 +217,7 @@ public class LotroWikiDeedPageParser
       }
       else if ("Title".equals(lineKey))
       {
-        Title title=extractTitle(line);
+        TitleReward title=extractTitle(line);
         if (title!=null)
         {
           rewards.addTitle(title);
@@ -257,7 +257,7 @@ public class LotroWikiDeedPageParser
           Integer marks=NumericTools.parseInteger(smStr,false);
           if (marks!=null)
           {
-            ObjectsSet objects=deed.getRewards().getObjects();
+            ItemsSetReward objects=deed.getRewards().getObjects();
             Proxy<Item> item=new Proxy<Item>();
             item.setName("Mark");
             item.setId(WellKnownItems.MARK);
@@ -431,14 +431,14 @@ public class LotroWikiDeedPageParser
     }
     if ((faction!=null) && (reputation!=null))
     {
-      ReputationItem item=new ReputationItem(faction);
+      ReputationReward item=new ReputationReward(faction);
       item.setAmount(reputation.intValue());
       rewards.getReputation().add(item);
     }
     if (virtueId!=null)
     {
       int count=(virtueCount!=null)?virtueCount.intValue():1;
-      Virtue virtue=new Virtue(virtueId,count);
+      VirtueReward virtue=new VirtueReward(virtueId,count);
       rewards.addVirtue(virtue);
     }
     if (itemRewards!=null)
@@ -499,33 +499,33 @@ public class LotroWikiDeedPageParser
     }
     if (virtueId!=null)
     {
-      Virtue virtue=new Virtue(virtueId,1);
+      VirtueReward virtue=new VirtueReward(virtueId,1);
       rewards.addVirtue(virtue);
     }
     else
     {
       if (traitStr.toLowerCase().endsWith(" (trait)")) traitStr=traitStr.substring(0,traitStr.length()-8);
       if (traitStr.toLowerCase().endsWith(" (beorning trait)")) traitStr=traitStr.substring(0,traitStr.length()-17);
-      Trait trait=new Trait(traitStr);
+      TraitReward trait=new TraitReward(traitStr);
       rewards.addTrait(trait);
     }
   }
 
   private void handleEmoteReward(Rewards rewards, String emoteStr)
   {
-    Emote emote=new Emote(emoteStr);
+    EmoteReward emote=new EmoteReward(emoteStr);
     rewards.addEmote(emote);
   }
 
   private void handleSkillReward(Rewards rewards, String skillStr)
   {
-    Skill skill=new Skill(skillStr);
+    SkillReward skill=new SkillReward(skillStr);
     rewards.addSkill(skill);
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
   {
-    ObjectsSet objects=deed.getRewards().getObjects();
+    ItemsSetReward objects=deed.getRewards().getObjects();
     for(int i=0;i<itemRewards.length;i++)
     {
       String itemName=itemRewards[i];
@@ -575,9 +575,9 @@ public class LotroWikiDeedPageParser
     return faction;
   }
 
-  private Title extractTitle(String line)
+  private TitleReward extractTitle(String line)
   {
-    Title title=null;
+    TitleReward title=null;
     String titleName=getLineValue(line);
     if (!titleName.isEmpty())
     {
@@ -603,7 +603,7 @@ public class LotroWikiDeedPageParser
       }
       if (titleName.endsWith(" (title)")) titleName=titleName.substring(0,titleName.length()-8);
       titleName=titleName.trim();
-      title=new Title(null,titleName);
+      title=new TitleReward(null,titleName);
     }
     return title;
   }
