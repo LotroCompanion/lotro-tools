@@ -80,18 +80,22 @@ public class DatRewardsLoader
    */
   public void fillRewards(PropertiesSet properties, Rewards rewards)
   {
-    Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
-    if (treasureId!=null)
-    {
-      getRewards(rewards,treasureId.intValue());
-    }
     // Faction
     getFaction(rewards,properties);
+    // Destiny points
     // LOTRO points
     Integer tp=getTurbinePoints(properties);
     if (tp!=null)
     {
       rewards.setLotroPoints(tp.intValue());
+    }
+    // Class points
+    // Item XP
+    // Loot table (titles, emotes, items...)
+    Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
+    if (treasureId!=null)
+    {
+      getRewards(rewards,treasureId.intValue());
     }
   }
 
@@ -105,37 +109,30 @@ public class DatRewardsLoader
       System.out.println(props.dump());
     }
 
+    // Traits
+    handleTraits(rewards,props);
+    // Titles
+    handleTitles(rewards,props);
+    // Virtues
+    handleVirtues(rewards,props);
+    // Emotes
+    handleEmotes(rewards,props);
     // Items
-    loadItems(props,"QuestTreasure_FixedItemArray", rewards.getRewardElements());
+    handleItems(props,"QuestTreasure_FixedItemArray", rewards.getRewardElements());
     SelectableRewardElement selectableReward=new SelectableRewardElement();
-    loadItems(props,"QuestTreasure_SelectableItemArray", selectableReward.getElements());
+    handleItems(props,"QuestTreasure_SelectableItemArray", selectableReward.getElements());
     if (selectableReward.getNbElements()>0)
     {
       rewards.addRewardElement(selectableReward);
     }
 
     /*
-     QuestTreasure_FixedRunicArray,
-     QuestTreasure_SelectableTitleArray,
-     QuestTreasure_SelectableRunicArray,
-     QuestTreasure_SelectableEmoteArray,
-    */
-    /*
-    Object[] selectableTitleArray=(Object[])props.getProperty("QuestTreasure_SelectableTitleArray");
-    if (selectableTitleArray!=null)
-    {
-      System.out.println(selectableTitleArray);
-    }
-    // QuestTreasure_FixedRunicArray
+    QuestTreasure_FixedRunicArray,
+    QuestTreasure_SelectableRunicArray,
     Object[] selectableRunicArray=(Object[])props.getProperty("QuestTreasure_SelectableRunicArray");
     if (selectableRunicArray!=null)
     {
       System.out.println(selectableRunicArray); // Same as items, but IDs reference relics, not items
-    }
-    Object[] selectableEmoteArray=(Object[])props.getProperty("QuestTreasure_SelectableEmoteArray");
-    if (selectableEmoteArray!=null)
-    {
-      System.out.println(selectableEmoteArray);
     }
     */
 
@@ -143,7 +140,23 @@ public class DatRewardsLoader
     // Lotro points: not for quests
     // Destiny points
     // Skills? = traits?
-    // Virtues
+
+    // Billing token
+    Object[] billingTokenArray=(Object[])props.getProperty("QuestTreasure_FixedBillingTokenArray");
+    if (billingTokenArray!=null)
+    {
+      for(Object billingTokenObj : billingTokenArray)
+      {
+        int billingTokenId=((Integer)billingTokenObj).intValue();
+        String key=_billingGroup.getString(billingTokenId);
+        System.out.println("Billing token: "+billingTokenId+": "+key);
+      }
+    }
+  }
+
+  // Virtues
+  private void handleVirtues(Rewards rewards, PropertiesSet props)
+  {
     Object[] virtueArray=(Object[])props.getProperty("QuestTreasure_FixedVirtueArray");
     if (virtueArray!=null)
     {
@@ -166,90 +179,127 @@ public class DatRewardsLoader
         }
       }
     }
-    // Titles
-    Object[] titleArray=(Object[])props.getProperty("QuestTreasure_FixedTitleArray");
+  }
+
+  private void handleTitles(Rewards rewards, PropertiesSet props)
+  {
+    handleTitlesArray(props,"QuestTreasure_FixedTitleArray",rewards.getRewardElements());
+    Object hasSelectableTitles=props.getProperty("QuestTreasure_SelectableTitleArray");
+    if (hasSelectableTitles!=null)
+    {
+      SelectableRewardElement selectableTitles=new SelectableRewardElement();
+      handleTitlesArray(props,"QuestTreasure_SelectableTitleArray",selectableTitles.getElements());
+      rewards.addRewardElement(selectableTitles);
+    }
+  }
+
+  private void handleTitlesArray(PropertiesSet props, String propertyName, List<RewardElement> rewards)
+  {
+    Object[] titleArray=(Object[])props.getProperty(propertyName);
     if (titleArray!=null)
     {
       for(Object titleObj : titleArray)
       {
         int titleId=((Integer)titleObj).intValue();
-        //System.out.println("Title: "+titleId);
-        TitlesManager titlesMgr=TitlesManager.getInstance();
-        TitleDescription title=titlesMgr.getTitle(titleId);
-        if (title!=null)
-        {
-          String name=title.getName();
-          TitleReward titleReward=new TitleReward(null,name);
-          rewards.addRewardElement(titleReward);
-        }
-        else
-        {
-          LOGGER.warn("Title not found: "+titleId);
-        }
+        handleTitle(titleId,rewards);
       }
     }
-    // Emote
-    Object[] emoteArray=(Object[])props.getProperty("QuestTreasure_FixedEmoteArray");
+  }
+
+  private void handleTitle(int titleId, List<RewardElement> rewards)
+  {
+    //System.out.println("Title: "+titleId);
+    TitlesManager titlesMgr=TitlesManager.getInstance();
+    TitleDescription title=titlesMgr.getTitle(titleId);
+    if (title!=null)
+    {
+      String name=title.getName();
+      TitleReward titleReward=new TitleReward(null,name);
+      rewards.add(titleReward);
+    }
+    else
+    {
+      LOGGER.warn("Title not found: "+titleId);
+    }
+  }
+
+  private void handleEmotes(Rewards rewards, PropertiesSet props)
+  {
+    handleEmotesArray(props,"QuestTreasure_FixedEmoteArray",rewards.getRewardElements());
+    Object hasSelectableEmotes=props.getProperty("QuestTreasure_SelectableEmoteArray");
+    if (hasSelectableEmotes!=null)
+    {
+      SelectableRewardElement selectableEmotes=new SelectableRewardElement();
+      handleEmotesArray(props,"QuestTreasure_SelectableEmoteArray",selectableEmotes.getElements());
+      rewards.addRewardElement(selectableEmotes);
+    }
+  }
+
+  private void handleEmotesArray(PropertiesSet props, String propertyName, List<RewardElement> rewards)
+  {
+    Object[] emoteArray=(Object[])props.getProperty(propertyName);
     if (emoteArray!=null)
     {
       for(Object emoteObj : emoteArray)
       {
         int emoteId=((Integer)emoteObj).intValue();
-        //System.out.println("Emote: "+emoteId);
-        EmotesManager emotesMgr=EmotesManager.getInstance();
-        EmoteDescription emote=emotesMgr.getEmote(emoteId);
-        if (emote!=null)
-        {
-          String command=emote.getCommand();
-          EmoteReward emoteReward=new EmoteReward(command);
-          rewards.addRewardElement(emoteReward);
-        }
-        else
-        {
-          LOGGER.warn("Emote not found: "+emoteId);
-        }
+        handleEmote(emoteId,rewards);
       }
     }
-    // Trait
+  }
+
+  private void handleEmote(int emoteId, List<RewardElement> rewards)
+  {
+    //System.out.println("Emote: "+emoteId);
+    EmotesManager emotesMgr=EmotesManager.getInstance();
+    EmoteDescription emote=emotesMgr.getEmote(emoteId);
+    if (emote!=null)
+    {
+      String command=emote.getCommand();
+      EmoteReward emoteReward=new EmoteReward(command);
+      rewards.add(emoteReward);
+    }
+    else
+    {
+      LOGGER.warn("Emote not found: "+emoteId);
+    }
+  }
+
+  private void handleTraits(Rewards rewards, PropertiesSet props)
+  {
     Object[] traitArray=(Object[])props.getProperty("QuestTreasure_FixedTraitArray");
     if (traitArray!=null)
     {
       for(Object traitObj : traitArray)
       {
         int traitId=((Integer)traitObj).intValue();
-        //System.out.println("Trait: "+traitId);
-        TraitsManager traitsMgr=TraitsManager.getInstance();
-        TraitDescription trait=traitsMgr.getTrait(traitId);
-        if (trait==null)
-        {
-          trait=TraitLoader.loadTrait(_facade,traitId);
-        }
-        if (trait!=null)
-        {
-          String traitName=trait.getName();
-          TraitReward traitReward=new TraitReward(traitName);
-          rewards.addRewardElement(traitReward);
-        }
-        else
-        {
-          LOGGER.warn("Trait not found: "+traitId);
-        }
-      }
-    }
-    // Billing token
-    Object[] billingTokenArray=(Object[])props.getProperty("QuestTreasure_FixedBillingTokenArray");
-    if (billingTokenArray!=null)
-    {
-      for(Object billingTokenObj : billingTokenArray)
-      {
-        int billingTokenId=((Integer)billingTokenObj).intValue();
-        String key=_billingGroup.getString(billingTokenId);
-        System.out.println("Billing token: "+billingTokenId+": "+key);
+        handleTrait(traitId,rewards.getRewardElements());
       }
     }
   }
 
-  private void loadItems(PropertiesSet props, String propertyName, List<RewardElement> storage)
+  private void handleTrait(int traitId, List<RewardElement> rewards)
+  {
+    //System.out.println("Trait: "+traitId);
+    TraitsManager traitsMgr=TraitsManager.getInstance();
+    TraitDescription trait=traitsMgr.getTrait(traitId);
+    if (trait==null)
+    {
+      trait=TraitLoader.loadTrait(_facade,traitId);
+    }
+    if (trait!=null)
+    {
+      String traitName=trait.getName();
+      TraitReward traitReward=new TraitReward(traitName);
+      rewards.add(traitReward);
+    }
+    else
+    {
+      LOGGER.warn("Trait not found: "+traitId);
+    }
+  }
+
+  private void handleItems(PropertiesSet props, String propertyName, List<RewardElement> rewards)
   {
     Object[] itemArray=(Object[])props.getProperty(propertyName);
     if (itemArray!=null)
@@ -270,7 +320,7 @@ public class DatRewardsLoader
           itemProxy.setId(itemId);
           int quantity=(quantityValue!=null?quantityValue.intValue():1);
           ItemReward itemReward=new ItemReward(itemProxy,quantity);
-          storage.add(itemReward);
+          rewards.add(itemReward);
         }
         else
         {
