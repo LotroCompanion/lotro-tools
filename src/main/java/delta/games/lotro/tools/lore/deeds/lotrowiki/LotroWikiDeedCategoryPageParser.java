@@ -15,7 +15,8 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
-import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ItemReward;
+import delta.games.lotro.common.rewards.RewardElement;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -283,12 +284,14 @@ public class LotroWikiDeedCategoryPageParser
   private void resolveItemRewards(DeedDescription deed)
   {
     Rewards rewards=deed.getRewards();
-    ItemsSetReward objects=rewards.getObjects();
-    int nbItems=objects.getNbObjectItems();
-    for(int i=0;i<nbItems;i++)
+    for(RewardElement rewardElement : rewards.getRewardElements())
     {
-      Proxy<Item> itemProxy=objects.getItem(i);
-      resolveItem(itemProxy);
+      if (rewardElement instanceof ItemReward)
+      {
+        ItemReward itemReward=(ItemReward)rewardElement;
+        Proxy<Item> itemProxy=itemReward.getItemProxy();
+        resolveItem(itemProxy);
+      }
     }
   }
 

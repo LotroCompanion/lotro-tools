@@ -3,7 +3,8 @@ package delta.games.lotro.tools.lore.deeds.checks;
 import java.util.List;
 import java.util.Objects;
 
-import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ItemReward;
+import delta.games.lotro.common.rewards.RewardElement;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.items.Item;
@@ -31,25 +32,27 @@ public class CheckItemRewardsInDeeds
   private void handleDeed(DeedDescription deed)
   {
     Rewards rewards=deed.getRewards();
-    ItemsSetReward objects=rewards.getObjects();
-    int nbItems=objects.getNbObjectItems();
-    for(int i=0;i<nbItems;i++)
+    for(RewardElement rewardElement : rewards.getRewardElements())
     {
-      Proxy<Item> itemProxy=objects.getItem(i);
-      int id=itemProxy.getId();
-      String name=itemProxy.getName();
-      Item item=ItemsManager.getInstance().getItem(id);
-      if (item==null)
+      if (rewardElement instanceof ItemReward)
       {
-        System.out.println("Item not found: id="+id+", name="+name);
-      }
-      else
-      {
-        String itemName=item.getName();
-        if (!Objects.equals(name,itemName))
+        ItemReward itemReward=(ItemReward)rewardElement;
+        Proxy<Item> itemProxy=itemReward.getItemProxy();
+        int id=itemProxy.getId();
+        String name=itemProxy.getName();
+        Item item=ItemsManager.getInstance().getItem(id);
+        if (item==null)
         {
-          System.out.println("Fix item reward name from ["+name+"] to ["+itemName+"]");
-          itemProxy.setName(itemName);
+          System.out.println("Item not found: id="+id+", name="+name);
+        }
+        else
+        {
+          String itemName=item.getName();
+          if (!Objects.equals(name,itemName))
+          {
+            System.out.println("Fix item reward name from ["+name+"] to ["+itemName+"]");
+            itemProxy.setName(itemName);
+          }
         }
       }
     }

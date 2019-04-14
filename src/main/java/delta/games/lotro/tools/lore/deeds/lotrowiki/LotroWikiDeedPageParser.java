@@ -16,7 +16,7 @@ import delta.common.utils.NumericTools;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.EmoteReward;
-import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ItemReward;
 import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.common.rewards.SkillReward;
@@ -220,7 +220,7 @@ public class LotroWikiDeedPageParser
         TitleReward title=extractTitle(line);
         if (title!=null)
         {
-          rewards.addTitle(title);
+          rewards.addRewardElement(title);
         }
       }
       else if ("Virtue".equals(lineKey))
@@ -257,11 +257,11 @@ public class LotroWikiDeedPageParser
           Integer marks=NumericTools.parseInteger(smStr,false);
           if (marks!=null)
           {
-            ItemsSetReward objects=deed.getRewards().getObjects();
             Proxy<Item> item=new Proxy<Item>();
             item.setName("Mark");
             item.setId(WellKnownItems.MARK);
-            objects.addObject(item,marks.intValue());
+            ItemReward itemReward=new ItemReward(item,marks.intValue());
+            deed.getRewards().addRewardElement(itemReward);
           }
           else
           {
@@ -433,13 +433,13 @@ public class LotroWikiDeedPageParser
     {
       ReputationReward item=new ReputationReward(faction);
       item.setAmount(reputation.intValue());
-      rewards.getReputation().add(item);
+      rewards.addRewardElement(item);
     }
     if (virtueId!=null)
     {
       int count=(virtueCount!=null)?virtueCount.intValue():1;
       VirtueReward virtue=new VirtueReward(virtueId,count);
-      rewards.addVirtue(virtue);
+      rewards.addRewardElement(virtue);
     }
     if (itemRewards!=null)
     {
@@ -500,32 +500,31 @@ public class LotroWikiDeedPageParser
     if (virtueId!=null)
     {
       VirtueReward virtue=new VirtueReward(virtueId,1);
-      rewards.addVirtue(virtue);
+      rewards.addRewardElement(virtue);
     }
     else
     {
       if (traitStr.toLowerCase().endsWith(" (trait)")) traitStr=traitStr.substring(0,traitStr.length()-8);
       if (traitStr.toLowerCase().endsWith(" (beorning trait)")) traitStr=traitStr.substring(0,traitStr.length()-17);
       TraitReward trait=new TraitReward(traitStr);
-      rewards.addTrait(trait);
+      rewards.addRewardElement(trait);
     }
   }
 
   private void handleEmoteReward(Rewards rewards, String emoteStr)
   {
     EmoteReward emote=new EmoteReward(emoteStr);
-    rewards.addEmote(emote);
+    rewards.addRewardElement(emote);
   }
 
   private void handleSkillReward(Rewards rewards, String skillStr)
   {
     SkillReward skill=new SkillReward(skillStr);
-    rewards.addSkill(skill);
+    rewards.addRewardElement(skill);
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
   {
-    ItemsSetReward objects=deed.getRewards().getObjects();
     for(int i=0;i<itemRewards.length;i++)
     {
       String itemName=itemRewards[i];
@@ -542,7 +541,8 @@ public class LotroWikiDeedPageParser
         }
         Proxy<Item> item=new Proxy<Item>();
         item.setName(itemName);
-        objects.addObject(item,count.intValue());
+        ItemReward itemReward=new ItemReward(item,count.intValue());
+        deed.getRewards().addRewardElement(itemReward);
       }
     }
   }

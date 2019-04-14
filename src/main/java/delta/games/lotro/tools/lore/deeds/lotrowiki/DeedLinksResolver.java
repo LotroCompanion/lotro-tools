@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.common.rewards.ItemReward;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedProxies;
 import delta.games.lotro.lore.deeds.DeedProxy;
@@ -173,7 +174,8 @@ public class DeedLinksResolver
     Proxy<Item> item=new Proxy<Item>();
     item.setName("Mark");
     item.setId(WellKnownItems.MARK);
-    deed.getRewards().getObjects().addObject(item,500);
+    ItemReward itemReward=new ItemReward(item,500);
+    deed.getRewards().addRewardElement(itemReward);
     return deed;
   }
 

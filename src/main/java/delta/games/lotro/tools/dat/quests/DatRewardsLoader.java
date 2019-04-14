@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.quests;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -11,9 +12,11 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.EmoteReward;
-import delta.games.lotro.common.rewards.ItemsSetReward;
+import delta.games.lotro.common.rewards.ItemReward;
 import delta.games.lotro.common.rewards.ReputationReward;
+import delta.games.lotro.common.rewards.RewardElement;
 import delta.games.lotro.common.rewards.Rewards;
+import delta.games.lotro.common.rewards.SelectableRewardElement;
 import delta.games.lotro.common.rewards.TitleReward;
 import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
@@ -103,8 +106,39 @@ public class DatRewardsLoader
     }
 
     // Items
-    loadItems(props,"QuestTreasure_FixedItemArray", rewards.getObjects());
-    loadItems(props,"QuestTreasure_SelectableItemArray", rewards.getSelectObjects());
+    loadItems(props,"QuestTreasure_FixedItemArray", rewards.getRewardElements());
+    SelectableRewardElement selectableReward=new SelectableRewardElement();
+    loadItems(props,"QuestTreasure_SelectableItemArray", selectableReward.getElements());
+    if (selectableReward.getNbElements()>0)
+    {
+      rewards.addRewardElement(selectableReward);
+    }
+
+    /*
+     QuestTreasure_FixedRunicArray,
+     QuestTreasure_SelectableTitleArray,
+     QuestTreasure_SelectableRunicArray,
+     QuestTreasure_SelectableEmoteArray,
+    */
+    /*
+    Object[] selectableTitleArray=(Object[])props.getProperty("QuestTreasure_SelectableTitleArray");
+    if (selectableTitleArray!=null)
+    {
+      System.out.println(selectableTitleArray);
+    }
+    // QuestTreasure_FixedRunicArray
+    Object[] selectableRunicArray=(Object[])props.getProperty("QuestTreasure_SelectableRunicArray");
+    if (selectableRunicArray!=null)
+    {
+      System.out.println(selectableRunicArray); // Same as items, but IDs reference relics, not items
+    }
+    Object[] selectableEmoteArray=(Object[])props.getProperty("QuestTreasure_SelectableEmoteArray");
+    if (selectableEmoteArray!=null)
+    {
+      System.out.println(selectableEmoteArray);
+    }
+    */
+
     // Class points: not for quests
     // Lotro points: not for quests
     // Destiny points
@@ -124,7 +158,7 @@ public class DatRewardsLoader
         try
         {
           VirtueReward virtue=new VirtueReward(VirtueId.valueOf(virtueName),count);
-          rewards.addVirtue(virtue);
+          rewards.addRewardElement(virtue);
         }
         catch(Exception e)
         {
@@ -146,7 +180,7 @@ public class DatRewardsLoader
         {
           String name=title.getName();
           TitleReward titleReward=new TitleReward(null,name);
-          rewards.addTitle(titleReward);
+          rewards.addRewardElement(titleReward);
         }
         else
         {
@@ -168,7 +202,7 @@ public class DatRewardsLoader
         {
           String command=emote.getCommand();
           EmoteReward emoteReward=new EmoteReward(command);
-          rewards.addEmote(emoteReward);
+          rewards.addRewardElement(emoteReward);
         }
         else
         {
@@ -194,7 +228,7 @@ public class DatRewardsLoader
         {
           String traitName=trait.getName();
           TraitReward traitReward=new TraitReward(traitName);
-          rewards.addTrait(traitReward);
+          rewards.addRewardElement(traitReward);
         }
         else
         {
@@ -215,7 +249,7 @@ public class DatRewardsLoader
     }
   }
 
-  private void loadItems(PropertiesSet props, String propertyName, ItemsSetReward storage)
+  private void loadItems(PropertiesSet props, String propertyName, List<RewardElement> storage)
   {
     Object[] itemArray=(Object[])props.getProperty(propertyName);
     if (itemArray!=null)
@@ -235,7 +269,8 @@ public class DatRewardsLoader
           itemProxy.setName(name);
           itemProxy.setId(itemId);
           int quantity=(quantityValue!=null?quantityValue.intValue():1);
-          storage.addObject(itemProxy,quantity);
+          ItemReward itemReward=new ItemReward(itemProxy,quantity);
+          storage.add(itemReward);
         }
         else
         {
@@ -303,7 +338,7 @@ public class DatRewardsLoader
     {
       ReputationReward repItem=new ReputationReward(faction);
       repItem.setAmount(reputationValue);
-      rewards.getReputation().add(repItem);
+      rewards.addRewardElement(repItem);
     }
     else
     {
@@ -402,7 +437,7 @@ public class DatRewardsLoader
     if (craftXpTier!=null)
     {
       Integer craftXp=rewardLevel.getCraftXpMap().getValue(craftXpTier.intValue());
-      System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp);
+      System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp); // Quest_CraftExpTier:6, Usage_RequiredCraftProfession:1879061252,Quest_CraftProfessionDID:1879061252
     }
     // Glory (Renown or Infamy if MONSTER_PLAY)
     Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
