@@ -13,6 +13,7 @@ import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
+import delta.games.lotro.common.rewards.RelicReward;
 import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.RewardElement;
 import delta.games.lotro.common.rewards.Rewards;
@@ -28,6 +29,8 @@ import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.legendary.relics.Relic;
+import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
@@ -125,16 +128,8 @@ public class DatRewardsLoader
     {
       rewards.addRewardElement(selectableReward);
     }
-
-    /*
-    QuestTreasure_FixedRunicArray,
-    QuestTreasure_SelectableRunicArray,
-    Object[] selectableRunicArray=(Object[])props.getProperty("QuestTreasure_SelectableRunicArray");
-    if (selectableRunicArray!=null)
-    {
-      System.out.println(selectableRunicArray); // Same as items, but IDs reference relics, not items
-    }
-    */
+    // Relics
+    handleRelics(rewards,props);
 
     // Class points: not for quests
     // Lotro points: not for quests
@@ -327,6 +322,55 @@ public class DatRewardsLoader
           LOGGER.warn("Item not found: "+itemId);
         }
       }
+    }
+  }
+
+  private void handleRelics(Rewards rewards, PropertiesSet props)
+  {
+    handleRelicsArray(props,"QuestTreasure_FixedRunicArray",rewards.getRewardElements());
+    Object hasSelectableEmotes=props.getProperty("QuestTreasure_SelectableRunicArray");
+    if (hasSelectableEmotes!=null)
+    {
+      SelectableRewardElement selectableEmotes=new SelectableRewardElement();
+      handleRelicsArray(props,"QuestTreasure_SelectableRunicArray",selectableEmotes.getElements());
+      rewards.addRewardElement(selectableEmotes);
+    }
+  }
+
+  private void handleRelicsArray(PropertiesSet props, String propertyName, List<RewardElement> rewards)
+  {
+    Object[] relicsArray=(Object[])props.getProperty(propertyName);
+    if (relicsArray!=null)
+    {
+      for(Object relicObj : relicsArray)
+      {
+        PropertiesSet relicProps=(PropertiesSet)relicObj;
+        int relicId=((Integer)relicProps.getProperty("QuestTreasure_Item")).intValue();
+        Integer quantityValue=(Integer)relicProps.getProperty("QuestTreasure_ItemQuantity");
+        handleRelic(relicId,quantityValue,rewards);
+      }
+    }
+  }
+
+  private void handleRelic(int relicId, Integer quantityValue, List<RewardElement> rewards)
+  {
+    //System.out.println("Relic: "+relicId);
+    RelicsManager relicsMgr=RelicsManager.getInstance();
+    Relic item=relicsMgr.getById(relicId);
+    if (item!=null)
+    {
+      String name=(item!=null)?item.getName():"???";
+      Proxy<Relic> itemProxy=new Proxy<Relic>();
+      itemProxy.setObject(item);
+      itemProxy.setName(name);
+      itemProxy.setId(relicId);
+      int quantity=(quantityValue!=null?quantityValue.intValue():1);
+      RelicReward itemReward=new RelicReward(itemProxy,quantity);
+      rewards.add(itemReward);
+    }
+    else
+    {
+      LOGGER.warn("Relic not found: "+relicId);
     }
   }
 
