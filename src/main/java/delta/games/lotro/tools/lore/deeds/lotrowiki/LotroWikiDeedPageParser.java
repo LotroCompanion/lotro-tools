@@ -30,6 +30,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.WellKnownItems;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.tools.utils.JerichoHtmlUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -577,7 +578,7 @@ public class LotroWikiDeedPageParser
 
   private TitleReward extractTitle(String line)
   {
-    TitleReward title=null;
+    TitleReward titleReward=null;
     String titleName=getLineValue(line);
     if (!titleName.isEmpty())
     {
@@ -603,9 +604,11 @@ public class LotroWikiDeedPageParser
       }
       if (titleName.endsWith(" (title)")) titleName=titleName.substring(0,titleName.length()-8);
       titleName=titleName.trim();
-      title=new TitleReward(null,titleName);
+      Proxy<TitleDescription> proxy=new Proxy<TitleDescription>();
+      proxy.setName(titleName);
+      titleReward=new TitleReward(proxy);
     }
-    return title;
+    return titleReward;
   }
 
   private VirtueId extractVirtue(String line)

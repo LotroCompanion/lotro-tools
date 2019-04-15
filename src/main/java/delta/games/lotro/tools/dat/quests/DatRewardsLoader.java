@@ -208,8 +208,11 @@ public class DatRewardsLoader
     TitleDescription title=titlesMgr.getTitle(titleId);
     if (title!=null)
     {
-      String name=title.getName();
-      TitleReward titleReward=new TitleReward(null,name);
+      Proxy<TitleDescription> proxy=new Proxy<TitleDescription>();
+      proxy.setId(title.getIdentifier());
+      proxy.setName(title.getName());
+      proxy.setObject(title);
+      TitleReward titleReward=new TitleReward(proxy);
       rewards.add(titleReward);
     }
     else
