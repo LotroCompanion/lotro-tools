@@ -13,6 +13,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
+import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.EmoteReward;
@@ -508,8 +509,11 @@ public class LotroWikiDeedPageParser
     {
       if (traitStr.toLowerCase().endsWith(" (trait)")) traitStr=traitStr.substring(0,traitStr.length()-8);
       if (traitStr.toLowerCase().endsWith(" (beorning trait)")) traitStr=traitStr.substring(0,traitStr.length()-17);
-      TraitReward trait=new TraitReward(traitStr);
-      rewards.addRewardElement(trait);
+
+      Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();
+      proxy.setName(traitStr);
+      TraitReward traitReward=new TraitReward(proxy);
+      rewards.addRewardElement(traitReward);
     }
   }
 

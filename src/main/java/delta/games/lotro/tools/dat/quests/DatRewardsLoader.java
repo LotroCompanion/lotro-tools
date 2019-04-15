@@ -290,8 +290,11 @@ public class DatRewardsLoader
     }
     if (trait!=null)
     {
-      String traitName=trait.getName();
-      TraitReward traitReward=new TraitReward(traitName);
+      Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();
+      proxy.setId(trait.getIdentifier());
+      proxy.setName(trait.getName());
+      proxy.setObject(trait);
+      TraitReward traitReward=new TraitReward(proxy);
       rewards.add(traitReward);
     }
     else
