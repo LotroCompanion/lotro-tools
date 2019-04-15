@@ -253,8 +253,11 @@ public class DatRewardsLoader
     EmoteDescription emote=emotesMgr.getEmote(emoteId);
     if (emote!=null)
     {
-      String command=emote.getCommand();
-      EmoteReward emoteReward=new EmoteReward(command);
+      Proxy<EmoteDescription> proxy=new Proxy<EmoteDescription>();
+      proxy.setId(emote.getIdentifier());
+      proxy.setName(emote.getCommand());
+      proxy.setObject(emote);
+      EmoteReward emoteReward=new EmoteReward(proxy);
       rewards.add(emoteReward);
     }
     else

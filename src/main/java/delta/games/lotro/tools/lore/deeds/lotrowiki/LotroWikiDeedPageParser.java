@@ -26,6 +26,7 @@ import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.WellKnownItems;
 import delta.games.lotro.lore.reputation.Faction;
@@ -514,7 +515,9 @@ public class LotroWikiDeedPageParser
 
   private void handleEmoteReward(Rewards rewards, String emoteStr)
   {
-    EmoteReward emote=new EmoteReward(emoteStr);
+    Proxy<EmoteDescription> proxy=new Proxy<EmoteDescription>();
+    proxy.setName(emoteStr);
+    EmoteReward emote=new EmoteReward(proxy);
     rewards.addRewardElement(emote);
   }
 
