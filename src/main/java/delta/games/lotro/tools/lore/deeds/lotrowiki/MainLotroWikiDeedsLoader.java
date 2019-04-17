@@ -12,6 +12,7 @@ import delta.games.lotro.lore.deeds.DeedProxies;
 import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.lore.deeds.DeedsInjector;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 import delta.games.lotro.tools.lore.deeds.checks.CheckDeedLinks;
@@ -341,8 +342,7 @@ public class MainLotroWikiDeedsLoader
     new NormalizeDeedsText().doIt(deeds);
     new NormalizeDeedNames().doIt(deeds);
     new CheckDeedLinks().doIt(deeds);
-    File out=new File("../lotro-companion/data/lore/deeds.xml");
-    DeedsWriter.writeSortedDeeds(deeds,out);
+    DeedsWriter.writeSortedDeeds(deeds,GeneratedFiles.DEEDS);
   }
 
   private void filterDeeds(List<DeedDescription> deeds)

@@ -123,4 +123,8 @@ public class GeneratedFiles
    * Quests.
    */
   public static final File QUESTS=LotroCoreConfig.getInstance().getFile(DataFiles.QUESTS);
+  /**
+   * Deeds.
+   */
+  public static final File DEEDS=LotroCoreConfig.getInstance().getFile(DataFiles.DEEDS);
 }
