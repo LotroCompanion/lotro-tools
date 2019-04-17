@@ -19,6 +19,7 @@ public class RewardsMap
   private RewardLevelEntryList<Float> _paperItem;
   private RewardLevelEntryList<Integer> _reputation;
   private RewardLevelEntryList<Integer> _tp;
+  private RewardLevelEntryList<Integer> _destinyPoints;
 
   /**
    * Constructor.
@@ -38,6 +39,7 @@ public class RewardsMap
     _paperItem=new RewardLevelEntryList<Float>();
     _reputation=new RewardLevelEntryList<Integer>();
     _tp=new RewardLevelEntryList<Integer>();
+    _destinyPoints=new RewardLevelEntryList<Integer>();
   }
 
   /**
@@ -155,5 +157,14 @@ public class RewardsMap
   public RewardLevelEntryList<Integer> getTpMap()
   {
     return _tp;
+  }
+
+  /**
+   * Get the destiny points map.
+   * @return the destiny points map.
+   */
+  public RewardLevelEntryList<Integer> getDestinyPointsMap()
+  {
+    return _destinyPoints;
   }
 }

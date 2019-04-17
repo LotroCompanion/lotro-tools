@@ -107,8 +107,6 @@ public class MainDatQuestsLoader
         String category=_category.getString(categoryId.intValue());
         quest.setCategory(category);
       }
-      // Challenge level
-      Integer challengeLevel=findChallengeLevel(properties);
       // Max times
       Integer maxTimes=((Integer)properties.getProperty("Quest_MaxTimesCompletable"));
       if (maxTimes!=null)
@@ -164,7 +162,6 @@ public class MainDatQuestsLoader
       // Rewards
       Rewards rewards=quest.getQuestRewards();
       _rewardsLoader.fillRewards(properties,rewards);
-      _rewardsLoader.handleQuestRewards(rewards,challengeLevel,properties);
 
       // Quest Loot Table
       // (additional loot tables that are active when the quest is active)
@@ -306,48 +303,6 @@ public class MainDatQuestsLoader
         quest.setMaximumLevel(maxLevel);
       }
     }
-  }
-
-  private Integer findChallengeLevel(PropertiesSet properties)
-  {
-    Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
-    Integer challengeLevelOverrideProperty=(Integer)properties.getProperty("Quest_ChallengeLevelOverrideProperty");
-    Integer ignoreDefaultChallengeLevel=(Integer)properties.getProperty("Quest_IgnoreDefaultChallengeLevel");
-    boolean ignoreChallengeLevel=((ignoreDefaultChallengeLevel!=null) && (ignoreDefaultChallengeLevel.intValue()!=0));
-    if ((ignoreChallengeLevel) || (challengeLevel==null))
-    {
-      if (challengeLevelOverrideProperty!=null)
-      {
-        if (challengeLevelOverrideProperty.intValue()==268439569)
-        {
-          System.out.println("Challenge level is character level");
-          challengeLevel=Integer.valueOf(120); // TODO tmp
-        }
-        else if (challengeLevelOverrideProperty.intValue()==268446666)
-        {
-          System.out.println("Challenge level is skirmish level");
-          challengeLevel=Integer.valueOf(120); // TODO tmp
-        }
-        else
-        {
-          LOGGER.warn("Unmanaged challenge level property: "+challengeLevelOverrideProperty);
-        }
-      }
-      else
-      {
-        //LOGGER.warn("No challenge level property!");
-      }
-    }
-    else
-    {
-      //System.out.println("Challenge level is: "+challengeLevel);
-    }
-    /*
-    Quest_ChallengeLevel: 100
-    Quest_ChallengeLevelOverrideProperty: 268439569
-    Quest_IgnoreDefaultChallengeLevel: 1
-    */
-    return challengeLevel;
   }
 
   private void findRaceRequirements(QuestDescription quest, PropertiesSet properties)

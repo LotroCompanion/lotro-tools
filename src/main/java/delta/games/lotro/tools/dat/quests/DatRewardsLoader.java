@@ -83,10 +83,31 @@ public class DatRewardsLoader
    */
   public void fillRewards(PropertiesSet properties, Rewards rewards)
   {
+    //System.out.println(properties.getPropertyNames());
+    // Challenge level
+    Integer challengeLevel=findChallengeLevel(properties);
+
+    // Find out reward level
+    RewardsMap rewardLevel=findRewardsMap(challengeLevel, properties);
+
     // Faction
-    getFaction(rewards,properties);
-    // Destiny points
+    getFaction(rewards,properties,rewardLevel);
+    // Destiny points: Quest_SessionPointsTier
+    /* Disabled - found weird values.
+    Integer destinyPointsTier=((Integer)properties.getProperty("Quest_SessionPointsTier"));
+    if (destinyPointsTier!=null)
+    {
+      Integer destinyPoints=rewardLevel.getDestinyPointsMap().getValue(destinyPointsTier.intValue());
+      System.out.println("Destiny points tier: "+destinyPointsTier+" => "+destinyPoints);
+    }
+    */
     // Class points
+    Integer classPoints=((Integer)properties.getProperty("Quest_ClassTraitPointReward"));
+    if (classPoints!=null)
+    {
+      rewards.setClassPoints(classPoints.intValue());
+      //System.out.println("Class points: "+classPoints);
+    }
     // Item XP
     // Loot table (titles, emotes, items...)
     Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
@@ -94,6 +115,7 @@ public class DatRewardsLoader
     {
       getRewards(rewards,treasureId.intValue());
     }
+    handleQuestRewards(rewards,properties,rewardLevel);
   }
 
   private void getRewards(Rewards rewards, int questTreasureId)
@@ -394,81 +416,61 @@ public class DatRewardsLoader
     return propName;
   }
 
-  private void getFaction(Rewards rewards, PropertiesSet props)
+  private void getFaction(Rewards rewards, PropertiesSet props, RewardsMap rewardsMap)
   {
     // Positive
     {
       PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_PositiveFaction");
-      if (factionProps!=null)
-      {
-        Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
-        if (factionId!=null)
-        {
-          Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
-          int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
-          //System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
-          updateFaction(rewards,factionId.intValue(),reputationValue);
-        }
-      }
+      handleFactionProps(rewards,rewardsMap,factionProps,1);
     }
     // Negative
     {
       PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_NegativeFaction");
-      if (factionProps!=null)
+      handleFactionProps(rewards,rewardsMap,factionProps,-1);
+    }
+  }
+
+  private void handleFactionProps(Rewards rewards, RewardsMap rewardsMap, PropertiesSet factionProps, int factor)
+  {
+    if (factionProps!=null)
+    {
+      Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
+      if (factionId!=null)
       {
-        Integer factionId=(Integer)factionProps.getProperty("Quest_FactionDID");
-        if (factionId!=null)
+        int reputationValue=0;
+        Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
+        if (repTier!=null)
         {
-          Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
-          int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
-          //System.out.println("Negative reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
-          updateFaction(rewards,factionId.intValue(),-reputationValue);
+          Integer repValue=rewardsMap.getReputationMap().getValue(repTier.intValue());
+          reputationValue=(repValue!=null)?repValue.intValue():0;
+        }
+        //System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+        if (reputationValue!=0)
+        {
+          Faction faction=_factions.getById(factionId.intValue());
+          if (faction!=null)
+          {
+            ReputationReward repItem=new ReputationReward(faction);
+            repItem.setAmount(reputationValue*factor);
+            rewards.addRewardElement(repItem);
+          }
+          else
+          {
+            LOGGER.warn("Faction not found: "+factionId);
+          }
         }
       }
     }
   }
 
-  private void updateFaction(Rewards rewards, int factionId, int reputationValue)
+  private RewardsMap findRewardsMap(Integer challengeLevel, PropertiesSet properties)
   {
-    Faction faction=_factions.getById(factionId);
-    if (faction!=null)
-    {
-      ReputationReward repItem=new ReputationReward(faction);
-      repItem.setAmount(reputationValue);
-      rewards.addRewardElement(repItem);
-    }
-    else
-    {
-      LOGGER.warn("Faction not found: "+factionId);
-    }
-  }
-
-  private int getReputation(int tier)
-  {
-    if (tier==2) return 300;
-    if (tier==3) return 500;
-    if (tier==4) return 700;
-    if (tier==5) return 900;
-    if (tier==6) return 1200;
-    LOGGER.warn("Unmanaged reputation tier: "+tier);
-    return 0;
-  }
-
-  /**
-   * Handle quest specific rewards.
-   * @param rewards Storage.
-   * @param challengeLevel Level to use.
-   * @param properties Properties to use.
-   */
-  public void handleQuestRewards(Rewards rewards, Integer challengeLevel, PropertiesSet properties)
-  {
-    // Find out reward level
-    RewardsMap rewardLevel=null;
+    RewardsMap rewardsMap=null;
     Integer rewardLevelId=((Integer)properties.getProperty("Quest_RewardLevelDID"));
     if (rewardLevelId!=null)
     {
       // Specific one
-      rewardLevel=getRewardsMap(rewardLevelId.intValue());
+      rewardsMap=getRewardsMap(rewardLevelId.intValue());
     }
     else
     {
@@ -483,48 +485,53 @@ public class DatRewardsLoader
         LOGGER.warn("No challenge level and no reward map!");
         level=1;
       }
-      rewardLevel=_defaultRewardMaps.get(Integer.valueOf(level));
+      rewardsMap=_defaultRewardMaps.get(Integer.valueOf(level));
     }
+    return rewardsMap;
+  }
+
+  private void handleQuestRewards(Rewards rewards, PropertiesSet properties, RewardsMap rewardsMap)
+  {
     // Gold
     Integer goldTier=((Integer)properties.getProperty("Quest_GoldTier"));
     if (goldTier!=null)
     {
-      Integer gold=rewardLevel.getMoneyMap().getValue(goldTier.intValue());
+      Integer gold=rewardsMap.getMoneyMap().getValue(goldTier.intValue());
       System.out.println("Gold tier: "+goldTier+" => "+gold);
     }
     // XP
     Integer xpTier=((Integer)properties.getProperty("Quest_ExpTier"));
     if (xpTier!=null)
     {
-      Integer xp=rewardLevel.getXpMap().getValue(xpTier.intValue());
+      Integer xp=rewardsMap.getXpMap().getValue(xpTier.intValue());
       System.out.println("XP tier: "+xpTier+" => "+xp);
     }
     // Item XP
     Integer itemXpTier=((Integer)properties.getProperty("Quest_ItemExpTier"));
     if (itemXpTier!=null)
     {
-      Integer itemXp=rewardLevel.getItemXpMap().getValue(itemXpTier.intValue());
+      Integer itemXp=rewardsMap.getItemXpMap().getValue(itemXpTier.intValue());
       System.out.println("Item XP tier: "+itemXpTier+" => "+itemXp);
     }
     // Mount XP
     Integer mountXpTier=((Integer)properties.getProperty("Quest_MountExpTier"));
     if (mountXpTier!=null)
     {
-      Integer mountXp=rewardLevel.getMountXpMap().getValue(mountXpTier.intValue());
+      Integer mountXp=rewardsMap.getMountXpMap().getValue(mountXpTier.intValue());
       System.out.println("Mount XP tier: "+mountXpTier+" => "+mountXp);
     }
     // Craft XP
     Integer craftXpTier=((Integer)properties.getProperty("Quest_CraftExpTier"));
     if (craftXpTier!=null)
     {
-      Integer craftXp=rewardLevel.getCraftXpMap().getValue(craftXpTier.intValue());
+      Integer craftXp=rewardsMap.getCraftXpMap().getValue(craftXpTier.intValue());
       System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp); // Quest_CraftExpTier:6, Usage_RequiredCraftProfession:1879061252,Quest_CraftProfessionDID:1879061252
     }
     // Glory (Renown or Infamy if MONSTER_PLAY)
     Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));
     if (gloryTier!=null)
     {
-      Integer glory=rewardLevel.getGloryMap().getValue(gloryTier.intValue());
+      Integer glory=rewardsMap.getGloryMap().getValue(gloryTier.intValue());
       System.out.println("Glory tier: "+gloryTier+" => "+glory);
     }
     // Mithril coins
@@ -532,14 +539,14 @@ public class DatRewardsLoader
     Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
     if (mcTier!=null)
     {
-      Integer mithrilCoins=rewardLevel.getMithrilCoinsMap().getValue(mcTier.intValue());
+      Integer mithrilCoins=rewardsMap.getMithrilCoinsMap().getValue(mcTier.intValue());
       System.out.println("Mithril coin tier: "+mcTier+" => "+mithrilCoins);
     }
     // Turbine/Lotro points
     Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
     if (tpTier!=null)
     {
-      Integer turbinePoints=rewardLevel.getTpMap().getValue(tpTier.intValue());
+      Integer turbinePoints=rewardsMap.getTpMap().getValue(tpTier.intValue());
       System.out.println("Turbine points tier: "+tpTier+" => "+turbinePoints);
       if (turbinePoints!=null)
       {
@@ -558,6 +565,48 @@ public class DatRewardsLoader
     Integer gloryToGive=((Integer)properties.getProperty("Quest_GloryToGive"));
     if (gloryToGive!=null) System.out.println("Glory to give: "+gloryToGive);
     */
+  }
+
+  private Integer findChallengeLevel(PropertiesSet properties)
+  {
+    Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
+    Integer challengeLevelOverrideProperty=(Integer)properties.getProperty("Quest_ChallengeLevelOverrideProperty");
+    Integer ignoreDefaultChallengeLevel=(Integer)properties.getProperty("Quest_IgnoreDefaultChallengeLevel");
+    boolean ignoreChallengeLevel=((ignoreDefaultChallengeLevel!=null) && (ignoreDefaultChallengeLevel.intValue()!=0));
+    if ((ignoreChallengeLevel) || (challengeLevel==null))
+    {
+      if (challengeLevelOverrideProperty!=null)
+      {
+        if (challengeLevelOverrideProperty.intValue()==268439569)
+        {
+          System.out.println("Challenge level is character level");
+          challengeLevel=Integer.valueOf(120); // TODO tmp
+        }
+        else if (challengeLevelOverrideProperty.intValue()==268446666)
+        {
+          System.out.println("Challenge level is skirmish level");
+          challengeLevel=Integer.valueOf(120); // TODO tmp
+        }
+        else
+        {
+          LOGGER.warn("Unmanaged challenge level property: "+challengeLevelOverrideProperty);
+        }
+      }
+      else
+      {
+        //LOGGER.warn("No challenge level property!");
+      }
+    }
+    else
+    {
+      //System.out.println("Challenge level is: "+challengeLevel);
+    }
+    /*
+    Quest_ChallengeLevel: 100
+    Quest_ChallengeLevelOverrideProperty: 268439569
+    Quest_IgnoreDefaultChallengeLevel: 1
+    */
+    return challengeLevel;
   }
 
   private RewardsMap getRewardsMap(int rewardLevelId)
@@ -580,6 +629,7 @@ public class DatRewardsLoader
     int index=1;
     for(Object rewardMapObj : rewardMaps)
     {
+      LOGGER.info("Loading default rewards map for level: "+index);
       Integer rewardLevelId=(Integer)rewardMapObj;
       RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
       _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);

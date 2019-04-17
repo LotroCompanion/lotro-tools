@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.quests.rewards;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -9,7 +11,10 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class RewardsMapLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(RewardsMapLoader.class);
+
   private DataFacade _facade;
+  private int _rewardsMapId;
 
   /**
    * Constructor.
@@ -22,15 +27,17 @@ public class RewardsMapLoader
 
   /**
    * Load a rewards map.
-   * @param rewardLevelId Reward map ID.
+   * @param rewardsMapId Rewards map ID.
    * @return A rewards map or <code>null</code> if properties not found.
    */
-  public RewardsMap loadMap(int rewardLevelId)
+  public RewardsMap loadMap(int rewardsMapId)
   {
+    _rewardsMapId=rewardsMapId;
     RewardsMap rewardsMap=null;
-    PropertiesSet props=_facade.loadProperties(rewardLevelId+0x9000000);
+    PropertiesSet props=_facade.loadProperties(rewardsMapId+0x9000000);
     if (props!=null)
     {
+      LOGGER.info("Loading map ID: "+rewardsMapId);
       rewardsMap=new RewardsMap();
       fill(props,rewardsMap);
     }
@@ -57,6 +64,7 @@ public class RewardsMapLoader
     fillList(props,"QuestReward_PaperItemsEntryList","QuestReward_PaperItems",storage.getPaperItemMap());
     fillList(props,"QuestReward_RepEntryList","QuestReward_RepAmount",storage.getReputationMap());
     fillList(props,"QuestReward_TurbinePointEntryList","QuestReward_TurbinePointAmount",storage.getTpMap());
+    fillList(props,"QuestReward_SessionPointsEntryList","QuestReward_SessionPointsAmount",storage.getDestinyPointsMap());
   }
 
   private <T extends Number> void fillList(PropertiesSet props, String listPropName, String entryPropName, RewardLevelEntryList<T> storage)
@@ -72,6 +80,11 @@ public class RewardsMapLoader
         T value=(T)entryProps.getProperty(entryPropName);
         storage.addEntry(tier.intValue(),value);
       }
+      LOGGER.info("Loaded list: "+listPropName+": "+storage);
+    }
+    else
+    {
+      LOGGER.warn("Failed to load list: "+listPropName+" for rewards map ID="+_rewardsMapId);
     }
   }
 }
