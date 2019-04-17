@@ -86,12 +86,6 @@ public class DatRewardsLoader
     // Faction
     getFaction(rewards,properties);
     // Destiny points
-    // LOTRO points
-    Integer tp=getTurbinePoints(properties);
-    if (tp!=null)
-    {
-      rewards.setLotroPoints(tp.intValue());
-    }
     // Class points
     // Item XP
     // Loot table (titles, emotes, items...)
@@ -412,7 +406,7 @@ public class DatRewardsLoader
         {
           Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
           int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
-          System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+          //System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
           updateFaction(rewards,factionId.intValue(),reputationValue);
         }
       }
@@ -427,7 +421,7 @@ public class DatRewardsLoader
         {
           Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
           int reputationValue=(repTier!=null)?getReputation(repTier.intValue()):0;
-          System.out.println("Negative reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
+          //System.out.println("Negative reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
           updateFaction(rewards,factionId.intValue(),-reputationValue);
         }
       }
@@ -447,22 +441,6 @@ public class DatRewardsLoader
     {
       LOGGER.warn("Faction not found: "+factionId);
     }
-  }
-
-  private Integer getTurbinePoints(PropertiesSet properties)
-  {
-    Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
-    if (tpTier!=null)
-    {
-      int tierCode=tpTier.intValue();
-      if (tierCode==2) return Integer.valueOf(5);
-      if (tierCode==3) return Integer.valueOf(10);
-      if (tierCode==4) return Integer.valueOf(15);
-      if (tierCode==5) return Integer.valueOf(20);
-      if (tierCode==6) return Integer.valueOf(50);
-      LOGGER.warn("Unmanaged TP tier: "+tierCode);
-    }
-    return null;
   }
 
   private int getReputation(int tier)
@@ -550,11 +528,23 @@ public class DatRewardsLoader
       System.out.println("Glory tier: "+gloryTier+" => "+glory);
     }
     // Mithril coins
+    // Do not use for deeds... seems to be the same value as LP
     Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
     if (mcTier!=null)
     {
       Integer mithrilCoins=rewardLevel.getMithrilCoinsMap().getValue(mcTier.intValue());
       System.out.println("Mithril coin tier: "+mcTier+" => "+mithrilCoins);
+    }
+    // Turbine/Lotro points
+    Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
+    if (tpTier!=null)
+    {
+      Integer turbinePoints=rewardLevel.getTpMap().getValue(tpTier.intValue());
+      System.out.println("Turbine points tier: "+tpTier+" => "+turbinePoints);
+      if (turbinePoints!=null)
+      {
+        rewards.setLotroPoints(turbinePoints.intValue());
+      }
     }
 
     // Only for 'Level Up' quests:

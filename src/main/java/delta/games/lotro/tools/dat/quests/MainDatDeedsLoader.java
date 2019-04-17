@@ -101,6 +101,9 @@ public class MainDatDeedsLoader
       // Rewards
       Rewards rewards=deed.getRewards();
       _rewardsLoader.fillRewards(properties,rewards);
+      Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
+      //int level=(challengeLevel!=null)?challengeLevel.intValue():1;
+      _rewardsLoader.handleQuestRewards(rewards,challengeLevel,properties);
 
       // Objectives
       _objectivesLoader.handleObjectives(properties);
