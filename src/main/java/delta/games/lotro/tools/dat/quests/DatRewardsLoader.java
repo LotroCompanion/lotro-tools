@@ -497,28 +497,44 @@ public class DatRewardsLoader
     if (goldTier!=null)
     {
       Integer gold=rewardsMap.getMoneyMap().getValue(goldTier.intValue());
-      System.out.println("Gold tier: "+goldTier+" => "+gold);
+      //System.out.println("Gold tier: "+goldTier+" => "+gold);
+      if (gold!=null)
+      {
+        rewards.getMoney().setRawValue(gold.intValue());
+      }
     }
     // XP
     Integer xpTier=((Integer)properties.getProperty("Quest_ExpTier"));
     if (xpTier!=null)
     {
       Integer xp=rewardsMap.getXpMap().getValue(xpTier.intValue());
-      System.out.println("XP tier: "+xpTier+" => "+xp);
+      //System.out.println("XP tier: "+xpTier+" => "+xp);
+      if (xp!=null)
+      {
+        rewards.setXp(xp.intValue());
+      }
     }
     // Item XP
     Integer itemXpTier=((Integer)properties.getProperty("Quest_ItemExpTier"));
     if (itemXpTier!=null)
     {
       Integer itemXp=rewardsMap.getItemXpMap().getValue(itemXpTier.intValue());
-      System.out.println("Item XP tier: "+itemXpTier+" => "+itemXp);
+      //System.out.println("Item XP tier: "+itemXpTier+" => "+itemXp);
+      if (itemXp!=null)
+      {
+        rewards.setItemXp(itemXp.intValue());
+      }
     }
     // Mount XP
     Integer mountXpTier=((Integer)properties.getProperty("Quest_MountExpTier"));
     if (mountXpTier!=null)
     {
       Integer mountXp=rewardsMap.getMountXpMap().getValue(mountXpTier.intValue());
-      System.out.println("Mount XP tier: "+mountXpTier+" => "+mountXp);
+      //System.out.println("Mount XP tier: "+mountXpTier+" => "+mountXp);
+      if (mountXp!=null)
+      {
+        rewards.setMountXp(mountXp.intValue());
+      }
     }
     // Craft XP
     Integer craftXpTier=((Integer)properties.getProperty("Quest_CraftExpTier"));
@@ -532,7 +548,11 @@ public class DatRewardsLoader
     if (gloryTier!=null)
     {
       Integer glory=rewardsMap.getGloryMap().getValue(gloryTier.intValue());
-      System.out.println("Glory tier: "+gloryTier+" => "+glory);
+      //System.out.println("Glory tier: "+gloryTier+" => "+glory);
+      if (glory!=null)
+      {
+        rewards.setGlory(glory.intValue());
+      }
     }
     // Mithril coins
     // Do not use for deeds... seems to be the same value as LP
