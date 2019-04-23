@@ -73,11 +73,11 @@ public class DatObjectivesLoader
         //System.out.println(objectiveProps.dump());
         // Index
         int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
-        System.out.println("Objective #"+objectiveIndex);
+        //System.out.println("Objective #"+objectiveIndex);
         objective.setIndex(objectiveIndex);
         // Description
         String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription","{***}");
-        System.out.println("\tDescription: "+description);
+        //System.out.println("\tDescription: "+description);
         objective.setText(description);
         // Conditions (can have several conditions)
         Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
@@ -132,7 +132,7 @@ public class DatObjectivesLoader
      */
     // Order
     Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
-    System.out.println("\tEvent #"+eventOrder);
+    //System.out.println("\tEvent #"+eventOrder);
     // ID
     Integer eventId=(Integer)properties.getProperty("QuestEvent_ID");
     String eventMeaning=_questEvent.getString(eventId.intValue());
