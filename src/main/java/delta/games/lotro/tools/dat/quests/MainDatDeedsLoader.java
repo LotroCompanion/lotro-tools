@@ -9,11 +9,9 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.rewards.Rewards;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -57,17 +55,17 @@ public class MainDatDeedsLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
+      // Check
+      boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
+      if (isQuest)
+      {
+        //System.out.println("Ignored ID="+indexDataId+", name="+name);
+        return null;
+      }
       System.out.println("************* "+indexDataId+" *****************");
       if (indexDataId==1879000000)
       {
         System.out.println(properties.dump());
-      }
-      // Check
-      boolean useIt=useIt(properties);
-      if (!useIt)
-      {
-        //System.out.println("Ignored ID="+indexDataId+", name="+name);
-        return null;
       }
       deed=new DeedDescription();
       // ID
@@ -103,7 +101,7 @@ public class MainDatDeedsLoader
       _rewardsLoader.fillRewards(properties,rewards);
 
       // Objectives
-      _objectivesLoader.handleObjectives(properties);
+      _objectivesLoader.handleObjectives(null,properties);
       // Web Store (needed xpack/region): WebStoreAccountItem_DataID
       nb++;
       _deeds.add(deed);
@@ -113,15 +111,6 @@ public class MainDatDeedsLoader
       LOGGER.warn("Could not handle deed ID="+indexDataId);
     }
     return deed;
-  }
-
-  private boolean useIt(PropertiesSet properties)
-  {
-    Object isAccomplishment=properties.getProperty("Quest_IsAccomplishment");
-    if (isAccomplishment==null) return false;
-    if (!(isAccomplishment instanceof Integer)) return false;
-    if (((Integer)isAccomplishment).intValue()!=1) return false;
-    return true;
   }
 
   private void handleDeedType(DeedDescription deed, PropertiesSet properties)
@@ -242,26 +231,13 @@ public class MainDatDeedsLoader
     deed.setType(type);
   }
 
-  private boolean useId(int id)
-  {
-    byte[] data=_facade.loadData(id);
-    if (data!=null)
-    {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
-      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      //System.out.println(classDefIndex);
-      return (classDefIndex==WStateClass.ACCOMPLISHMENT);
-    }
-    return false;
-  }
-
   private void doIt()
   {
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
 
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
-      boolean useIt=useId(id);
+      boolean useIt=DatQuestDeedsUtils.isQuestOrDeedId(_facade,id);
       if (useIt)
       {
         DeedDescription deed=load(id);

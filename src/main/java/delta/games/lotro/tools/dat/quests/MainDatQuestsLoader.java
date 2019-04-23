@@ -12,11 +12,9 @@ import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Size;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.rewards.Rewards;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
@@ -176,7 +174,7 @@ public class MainDatQuestsLoader
       _rolesLoader.loadRoles(quest,properties);
 
       // Objectives
-      _objectivesLoader.handleObjectives(properties);
+      _objectivesLoader.handleObjectives(quest.getObjectives(),properties);
 
       // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
@@ -401,13 +399,10 @@ public class MainDatQuestsLoader
 
   private boolean useIt(PropertiesSet properties)
   {
-    Object isAccomplishment=properties.getProperty("Quest_IsAccomplishment");
-    if (isAccomplishment instanceof Integer)
+    boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
+    if (!isQuest)
     {
-      if (((Integer)isAccomplishment).intValue()==1)
-      {
-        return false;
-      }
+      return false;
     }
     // Ignore 'Test' quests
     Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
@@ -426,20 +421,11 @@ public class MainDatQuestsLoader
     {
       return false;
     }
-    return true;
-  }
-
-  private boolean useId(int id)
-  {
-    byte[] data=_facade.loadData(id);
-    if (data!=null)
+    if (name.contains("TBD"))
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
-      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      //System.out.println(classDefIndex);
-      return (classDefIndex==WStateClass.ACCOMPLISHMENT);
+      return false;
     }
-    return false;
+    return true;
   }
 
   private void doIt()
@@ -449,7 +435,7 @@ public class MainDatQuestsLoader
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
-      boolean useIt=useId(id);
+      boolean useIt=DatQuestDeedsUtils.isQuestOrDeedId(_facade,id);
       if (useIt)
       {
         QuestDescription quest=load(id);

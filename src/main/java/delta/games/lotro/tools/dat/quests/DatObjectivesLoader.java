@@ -6,8 +6,15 @@ import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.objectives.Objective;
+import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
+import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for quest/deed objectives from DAT files.
@@ -22,6 +29,8 @@ public class DatObjectivesLoader
   private EnumMapper _species;
   private EnumMapper _subSpecies;
   private EnumMapper _questEvent;
+  private EnumMapper _questCategory;
+  //private EnumMapper _deedCategory;
 
   HashMap<Integer,IntegerHolder> eventIds=new HashMap<Integer,IntegerHolder>();
 
@@ -37,14 +46,21 @@ public class DatObjectivesLoader
     _species=_facade.getEnumsManager().getEnumMapper(587202571);
     _subSpecies=_facade.getEnumsManager().getEnumMapper(587202572);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
+    _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
+    //_deedCategory=_facade.getEnumsManager().getEnumMapper(587202587);
   }
 
   /**
    * Load quest/deed objectives from DAT files data.
+   * @param objectivesManager Objectives manager.
    * @param properties Quest/deed properties.
    */
-  public void handleObjectives(PropertiesSet properties)
+  public void handleObjectives(ObjectivesManager objectivesManager, PropertiesSet properties)
   {
+    if (objectivesManager==null)
+    {
+      return;
+    }
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
@@ -52,42 +68,47 @@ public class DatObjectivesLoader
       for(Object objectiveObj : objectivesArray)
       {
         PropertiesSet objectiveProps=(PropertiesSet)objectiveObj;
+
+        Objective objective=new Objective();
         //System.out.println(objectiveProps.dump());
         // Index
-        Integer objectiveIndex=(Integer)objectiveProps.getProperty("Quest_ObjectiveIndex");
+        int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
         System.out.println("Objective #"+objectiveIndex);
+        objective.setIndex(objectiveIndex);
         // Description
         String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription","{***}");
         System.out.println("\tDescription: "+description);
+        objective.setText(description);
         // Conditions (can have several conditions)
         Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
         if (completionConditionsArray!=null)
         {
           for(Object item : completionConditionsArray)
           {
-            handleObjectiveItem(item);
+            handleObjectiveItem(objective,item);
           }
         }
+        objectivesManager.addObjective(objective);
       }
     }
   }
 
-  private void handleObjectiveItem(Object item)
+  private void handleObjectiveItem(Objective objective, Object item)
   {
     if (item instanceof Object[])
     {
       for(Object childItem : (Object[])item)
       {
-        handleObjectiveItem(childItem);
+        handleObjectiveItem(objective, childItem);
       }
     }
     else if (item instanceof PropertiesSet)
     {
-      handleCompletionCondition((PropertiesSet)item);
+      handleCompletionCondition(objective, (PropertiesSet)item);
     }
   }
 
-  private void handleCompletionCondition(PropertiesSet properties)
+  private void handleCompletionCondition(Objective objective, PropertiesSet properties)
   {
     Integer questEventId=(Integer)properties.getProperty("QuestEvent_ID");
     IntegerHolder holder=eventIds.get(questEventId);
@@ -194,6 +215,7 @@ public class DatObjectivesLoader
   59 => QuestBestowed (deeds,quests)
  */
 
+    ObjectiveCondition condition=null;
     if (questEventId.intValue()==1)
     {
       handleEnterDetection(properties);
@@ -232,7 +254,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId.intValue()==32)
     {
-      handleQuestComplete(properties);
+      condition=handleQuestComplete(properties);
     }
     else if (questEventId.intValue()==34)
     {
@@ -245,6 +267,14 @@ public class DatObjectivesLoader
     else if (questEventId.intValue()==45)
     {
       handleFactionLevel(properties);
+    }
+    if (condition!=null)
+    {
+      if (eventOrder!=null)
+      {
+        condition.setIndex(eventOrder.intValue());
+      }
+      objective.addCondition(condition);
     }
   }
 
@@ -470,7 +500,7 @@ QuestEvent_MonsterGenus_Array:
      */
   }
 
-  private void handleQuestComplete(PropertiesSet properties)
+  private QuestCompleteCondition handleQuestComplete(PropertiesSet properties)
   {
     /*
     QuestEvent_QuestComplete_SuppressQuestCountUpdate, QuestEvent_Locations_ForceFullLandblock,
@@ -485,23 +515,68 @@ QuestEvent_MonsterGenus_Array:
     // QuestEvent_QuestCompleteScope: optional; 1 or 3 if set, used 8 times (see Enum: UIQuestScope, (id=587202590)?). 1=Repeatable ; 3=Small Fellowship
     */
 
+    QuestCompleteCondition ret=new QuestCompleteCondition();
+
+    // Count
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    if (count!=null)
+    {
+      //System.out.println("\t\tQuests count: "+count);
+      ret.setCompletionCount(count.intValue());
+    }
     Integer questId=(Integer)properties.getProperty("QuestEvent_QuestComplete");
     if (questId!=null)
     {
       // Check if deed or quest
-      System.out.println("\tChild deed/quest: "+questId);
+      Boolean isQuest=DatQuestDeedsUtils.isQuestId(_facade,questId.intValue());
+      if (isQuest!=null)
+      {
+        if (isQuest.booleanValue())
+        {
+          //System.out.println("\t\tChild quest: "+questId);
+          Proxy<QuestDescription> questProxy=new Proxy<QuestDescription>();
+          questProxy.setId(questId.intValue());
+          ret.setQuest(questProxy);
+        }
+        else
+        {
+          //System.out.println("\t\tChild deed: "+questId);
+          Proxy<DeedDescription> deedProxy=new Proxy<DeedDescription>();
+          deedProxy.setId(questId.intValue());
+          ret.setDeed(deedProxy);
+        }
+      }
     }
-    Integer deedCategory=(Integer)properties.getProperty("QuestEvent_AccomplishmentCompleteCategory");
-    if (deedCategory!=null)
+    else
     {
-      System.out.println("Deed category: "+deedCategory);
+      // Quests in category
+      Integer questCategoryCode=(Integer)properties.getProperty("QuestEvent_QuestCompleteCategory");
+      if (questCategoryCode!=null)
+      {
+        String questCategory=_questCategory.getString(questCategoryCode.intValue());
+        //System.out.println("\t\tQuest category: "+questCategoryCode+" => "+questCategory);
+        ret.setQuestCategory(questCategory);
+      }
+      // Unused
+      /*
+      Integer deedCategoryCode=(Integer)properties.getProperty("QuestEvent_AccomplishmentCompleteCategory");
+      if (deedCategoryCode!=null)
+      {
+        String deedCategory=_deedCategory.getString(deedCategoryCode.intValue());
+        System.out.println("\t\tDeed category: "+deedCategoryCode+" => "+deedCategory);
+        ret.setDeedCategory(deedCategory);
+      }
+      */
     }
+    // Unused
+    /*
     Integer dailyMax=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
     if (dailyMax!=null)
     {
       System.out.println("dailyMax: "+dailyMax); // -1?
     }
-    // QuestEvent_RoleConstraint
+    */
+    return ret;
   }
 
   private void handleWorldEventCondition(PropertiesSet properties)
