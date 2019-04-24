@@ -68,7 +68,7 @@ public class LinkFactionLevelsToReputationDeeds
       currentDeed=null;
       if (nextDeedProxy!=null)
       {
-        currentDeed=nextDeedProxy.getDeed();
+        currentDeed=nextDeedProxy.getObject();
         index++;
       }
     }

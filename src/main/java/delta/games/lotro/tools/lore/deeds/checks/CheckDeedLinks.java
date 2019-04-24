@@ -36,13 +36,13 @@ public class CheckDeedLinks
     List<DeedProxy> childProxies=deed.getChildDeedProxies().getDeedProxies();
     for(DeedProxy childProxy : childProxies)
     {
-      DeedDescription childDeed=childProxy.getDeed();
+      DeedDescription childDeed=childProxy.getObject();
       DeedProxies parentProxies=childDeed.getParentDeedProxies();
       DeedProxy parentProxy=parentProxies.getByKey(deed.getKey());
       if (parentProxy==null)
       {
         parentProxy=new DeedProxy();
-        parentProxy.setDeed(deed);
+        parentProxy.setObject(deed);
         parentProxy.setKey(deed.getKey());
         parentProxy.setName(deed.getName());
         parentProxies.add(parentProxy);
@@ -76,7 +76,7 @@ public class CheckDeedLinks
     List<DeedProxy> childProxies=deed.getChildDeedProxies().getDeedProxies();
     for(DeedProxy childProxy : childProxies)
     {
-      DeedDescription childDeed=childProxy.getDeed();
+      DeedDescription childDeed=childProxy.getObject();
       previousDeeds.addAll(loadPreviousDeeds(childDeed));
     }
     return previousDeeds;
@@ -90,7 +90,7 @@ public class CheckDeedLinks
     {
       String key=previousProxy.getKey();
       previousDeeds.add(key);
-      DeedDescription previousDeed=previousProxy.getDeed();
+      DeedDescription previousDeed=previousProxy.getObject();
       if (previousDeed!=null)
       {
         previousProxy=previousDeed.getPreviousDeedProxy();

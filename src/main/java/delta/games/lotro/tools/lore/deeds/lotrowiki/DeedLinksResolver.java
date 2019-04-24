@@ -116,7 +116,7 @@ public class DeedLinksResolver
     if (proxiedDeed!=null)
     {
       proxy.setName(deedName);
-      proxy.setDeed(proxiedDeed);
+      proxy.setObject(proxiedDeed);
       proxy.setKey(proxiedDeed.getKey());
     }
     else
@@ -166,7 +166,7 @@ public class DeedLinksResolver
     }
     // Previous
     DeedProxy previous=new DeedProxy();
-    previous.setDeed(baseDeed);
+    previous.setObject(baseDeed);
     previous.setKey(previous.getKey());
     previous.setName(previous.getName());
     deed.setPreviousDeedProxy(previous);
@@ -213,7 +213,7 @@ public class DeedLinksResolver
         if (previousProxy==null)
         {
           previousProxy=new DeedProxy();
-          previousProxy.setDeed(deed);
+          previousProxy.setObject(deed);
           previousProxy.setKey(deed.getKey());
           previousProxy.setName(deed.getName());
           nextDeed.setPreviousDeedProxy(previousProxy);
@@ -235,7 +235,7 @@ public class DeedLinksResolver
         if (nextProxy==null)
         {
           nextProxy=new DeedProxy();
-          nextProxy.setDeed(deed);
+          nextProxy.setObject(deed);
           nextProxy.setKey(deed.getKey());
           nextProxy.setName(deed.getName());
           previousDeed.setNextDeedProxy(nextProxy);
@@ -276,7 +276,7 @@ public class DeedLinksResolver
     if (!found)
     {
       DeedProxy childProxy=new DeedProxy();
-      childProxy.setDeed(childDeed);
+      childProxy.setObject(childDeed);
       childProxy.setKey(childDeed.getKey());
       childProxy.setName(childDeed.getName());
       parentDeed.getChildDeedProxies().add(childProxy);
@@ -296,7 +296,7 @@ public class DeedLinksResolver
     List<DeedProxy> toRemove=new ArrayList<DeedProxy>();
     for(DeedProxy child : children)
     {
-      DeedDescription childDeed=child.getDeed();
+      DeedDescription childDeed=child.getObject();
       DeedProxy previous=childDeed.getPreviousDeedProxy();
       while(previous!=null)
       {
@@ -306,7 +306,7 @@ public class DeedLinksResolver
           toRemove.add(previousInChildren);
           break;
         }
-        DeedDescription previousDeed=previous.getDeed();
+        DeedDescription previousDeed=previous.getObject();
         previous=(previousDeed!=null)?previousDeed.getPreviousDeedProxy():null;
       }
     }
@@ -331,7 +331,7 @@ public class DeedLinksResolver
     if (toRemove!=null)
     {
       children.remove(toRemove);
-      toRemove.getDeed().getParentDeedProxies().remove(toRemove.getKey());
+      toRemove.getObject().getParentDeedProxies().remove(toRemove.getKey());
     }
   }
 }

@@ -44,7 +44,7 @@ public class NormalizeDeedNames
     // Parents
     for(DeedProxy proxy : deed.getParentDeedProxies().getDeedProxies())
     {
-      DeedDescription proxiedDeed=proxy.getDeed();
+      DeedDescription proxiedDeed=proxy.getObject();
       if (proxiedDeed!=null)
       {
         String expectedName=proxiedDeed.getName();
@@ -54,14 +54,14 @@ public class NormalizeDeedNames
     // Childrens
     for(DeedProxy proxy : deed.getChildDeedProxies().getDeedProxies())
     {
-      String expectedName=proxy.getDeed().getName();
+      String expectedName=proxy.getObject().getName();
       proxy.setName(expectedName);
     }
     // Previous
     DeedProxy previous=deed.getPreviousDeedProxy();
     if (previous!=null)
     {
-      DeedDescription proxiedDeed=previous.getDeed();
+      DeedDescription proxiedDeed=previous.getObject();
       if (proxiedDeed!=null)
       {
         String expectedName=proxiedDeed.getName();
@@ -72,7 +72,7 @@ public class NormalizeDeedNames
     DeedProxy next=deed.getNextDeedProxy();
     if (next!=null)
     {
-      DeedDescription proxiedDeed=next.getDeed();
+      DeedDescription proxiedDeed=next.getObject();
       if (proxiedDeed!=null)
       {
         String expectedName=proxiedDeed.getName();
