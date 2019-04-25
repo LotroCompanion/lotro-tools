@@ -1,15 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import delta.common.utils.files.archives.DirectoryArchiver;
-import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
-import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -20,8 +11,6 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
  */
 public class MainCharacterDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainCharacterDataLoader.class);
-
   private void doIt()
   {
     DataFacade facade=new DataFacade();
@@ -39,23 +28,7 @@ public class MainCharacterDataLoader
     // Stats usage statistics
     DatStatUtils._statsUsageStatistics.showResults();
     // Save traits
-    new TraitKeyGenerator(traitsManager).setup();
-    List<TraitDescription> traits=traitsManager.getAll();
-    Collections.sort(traits,new IdentifiableComparator<TraitDescription>());
-    int nbTraits=traits.size();
-    LOGGER.info("Writing "+nbTraits+" traits");
-    boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
-    if (ok)
-    {
-      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
-    }
-    // Write trait icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.TRAIT_ICONS,TraitLoader.TRAIT_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote trait icons archive: "+GeneratedFiles.TRAIT_ICONS);
-    }
+    TraitLoader.saveTraits(traitsManager);
 
     facade.dispose();
   }

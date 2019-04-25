@@ -303,6 +303,7 @@ public class DatRewardsLoader
     if (trait==null)
     {
       trait=TraitLoader.loadTrait(_facade,traitId);
+      traitsMgr.registerTrait(trait);
     }
     if (trait!=null)
     {

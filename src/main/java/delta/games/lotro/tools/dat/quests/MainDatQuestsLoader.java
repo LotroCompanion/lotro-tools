@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Size;
@@ -19,6 +20,7 @@ import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
@@ -441,13 +443,16 @@ public class MainDatQuestsLoader
         QuestDescription quest=load(id);
         if (quest!=null)
         {
-          System.out.println("Quest: "+quest.dump());
+          //System.out.println("Quest: "+quest.dump());
           quests.add(quest);
         }
       }
     }
     System.out.println("Nb quests: "+quests.size());
     QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
+    // Save traits
+    TraitsManager traitsMgr=TraitsManager.getInstance();
+    TraitLoader.saveTraits(traitsMgr);
   }
 
   void loadQuestArcs()
