@@ -10,6 +10,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.rewards.Rewards;
@@ -109,10 +110,12 @@ public class MainDatQuestsLoader
       }
       // Max times
       Integer maxTimes=((Integer)properties.getProperty("Quest_MaxTimesCompletable"));
+      Repeatability repeatability=Repeatability.NOT_REPEATABLE;
       if (maxTimes!=null)
       {
-        System.out.println("Max times: "+maxTimes);
+        repeatability=Repeatability.getByCode(maxTimes.byteValue());
       }
+      quest.setRepeatability(repeatability);
       // Scope
       //handleScope(quest, properties);
       // Monster play?
