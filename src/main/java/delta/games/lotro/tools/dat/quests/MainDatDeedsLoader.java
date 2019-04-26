@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.quests;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 
@@ -249,7 +249,7 @@ public class MainDatDeedsLoader
       }
     }
     System.out.println("Nb deeds: "+nb);
-    DeedsWriter.writeSortedDeeds(_deeds,new File("deeds_dat.xml").getAbsoluteFile());
+    DeedsWriter.writeSortedDeeds(_deeds,GeneratedFiles.DEEDS);
     System.out.println(_objectivesLoader.eventIds);
     //System.out.println("Places: "+PlaceLoader._names);
   }
@@ -282,7 +282,7 @@ public class MainDatDeedsLoader
       }
     }
     System.out.println("Nb deeds: "+nb);
-    DeedsWriter.writeSortedDeeds(_deeds,new File("deeds_dat.xml").getAbsoluteFile());
+    DeedsWriter.writeSortedDeeds(_deeds,GeneratedFiles.DEEDS);
   }
 
   /**
