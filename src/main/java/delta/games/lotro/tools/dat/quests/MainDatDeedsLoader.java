@@ -27,7 +27,6 @@ public class MainDatDeedsLoader
 
   private DataFacade _facade;
   private List<DeedDescription> _deeds;
-  private EnumMapper _category;
   private EnumMapper _uiTab;
 
   private DatRewardsLoader _rewardsLoader;
@@ -41,7 +40,6 @@ public class MainDatDeedsLoader
   {
     _facade=facade;
     _deeds=new ArrayList<DeedDescription>();
-    _category=_facade.getEnumsManager().getEnumMapper(587202587);
     _uiTab=_facade.getEnumsManager().getEnumMapper(587202588);
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
@@ -77,15 +75,6 @@ public class MainDatDeedsLoader
       // Description
       String description=DatUtils.getStringProperty(properties,"Quest_Description");
       deed.setDescription(description);
-      // Category
-      /*
-      Integer categoryId=((Integer)properties.getProperty("Accomplishment_Category"));
-      if (categoryId!=null)
-      {
-        String category=_category.getString(categoryId.intValue());
-        deed.setCategory(category);
-      }
-      */
       // UI Tab
       Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
       String uiTabName=_uiTab.getString(uiTab.intValue());
