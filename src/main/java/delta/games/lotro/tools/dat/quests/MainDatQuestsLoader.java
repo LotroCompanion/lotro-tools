@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
@@ -164,7 +165,9 @@ public class MainDatQuestsLoader
 
       // Rewards
       Rewards rewards=quest.getQuestRewards();
-      _rewardsLoader.fillRewards(properties,rewards);
+      ChallengeLevel challengeLevel=_rewardsLoader.fillRewards(properties,rewards);
+      // Challenge level
+      quest.setChallengeLevel(challengeLevel);
 
       // Quest Loot Table
       // (additional loot tables that are active when the quest is active)

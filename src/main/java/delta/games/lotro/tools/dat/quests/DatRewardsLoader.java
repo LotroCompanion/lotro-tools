@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
@@ -80,12 +81,13 @@ public class DatRewardsLoader
    * Fill rewards from DAT files data.
    * @param properties Quest/deed properties.
    * @param rewards Storage for loaded data.
+   * @return challenge level.
    */
-  public void fillRewards(PropertiesSet properties, Rewards rewards)
+  public ChallengeLevel fillRewards(PropertiesSet properties, Rewards rewards)
   {
     //System.out.println(properties.getPropertyNames());
     // Challenge level
-    Integer challengeLevel=findChallengeLevel(properties);
+    ChallengeLevel challengeLevel=findChallengeLevel(properties);
 
     // Find out reward level
     RewardsMap rewardLevel=findRewardsMap(challengeLevel, properties);
@@ -116,6 +118,7 @@ public class DatRewardsLoader
       getRewards(rewards,treasureId.intValue());
     }
     handleQuestRewards(rewards,properties,rewardLevel);
+    return challengeLevel;
   }
 
   private void getRewards(Rewards rewards, int questTreasureId)
@@ -464,7 +467,7 @@ public class DatRewardsLoader
     }
   }
 
-  private RewardsMap findRewardsMap(Integer challengeLevel, PropertiesSet properties)
+  private RewardsMap findRewardsMap(ChallengeLevel challengeLevel, PropertiesSet properties)
   {
     RewardsMap rewardsMap=null;
     Integer rewardLevelId=((Integer)properties.getProperty("Quest_RewardLevelDID"));
@@ -476,15 +479,10 @@ public class DatRewardsLoader
     else
     {
       // Generic one, based on the challenge level
-      int level;
-      if (challengeLevel!=null)
+      int level=challengeLevel.getEffectiveLevel();
+      if (level==0)
       {
-        level=challengeLevel.intValue();
-      }
-      else
-      {
-        LOGGER.warn("No challenge level and no reward map!");
-        level=1;
+        level=120; // TODO Use cap
       }
       rewardsMap=_defaultRewardMaps.get(Integer.valueOf(level));
     }
@@ -588,8 +586,9 @@ public class DatRewardsLoader
     */
   }
 
-  private Integer findChallengeLevel(PropertiesSet properties)
+  private ChallengeLevel findChallengeLevel(PropertiesSet properties)
   {
+    ChallengeLevel ret=ChallengeLevel.ONE;
     Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
     Integer challengeLevelOverrideProperty=(Integer)properties.getProperty("Quest_ChallengeLevelOverrideProperty");
     Integer ignoreDefaultChallengeLevel=(Integer)properties.getProperty("Quest_IgnoreDefaultChallengeLevel");
@@ -601,12 +600,12 @@ public class DatRewardsLoader
         if (challengeLevelOverrideProperty.intValue()==268439569)
         {
           System.out.println("Challenge level is character level");
-          challengeLevel=Integer.valueOf(120); // TODO tmp
+          ret=ChallengeLevel.CHARACTER_LEVEL;
         }
         else if (challengeLevelOverrideProperty.intValue()==268446666)
         {
           System.out.println("Challenge level is skirmish level");
-          challengeLevel=Integer.valueOf(120); // TODO tmp
+          ret=ChallengeLevel.SKIRMISH_LEVEL;
         }
         else
         {
@@ -627,7 +626,11 @@ public class DatRewardsLoader
     Quest_ChallengeLevelOverrideProperty: 268439569
     Quest_IgnoreDefaultChallengeLevel: 1
     */
-    return challengeLevel;
+    if (challengeLevel!=null)
+    {
+      ret=ChallengeLevel.getByCode(challengeLevel.byteValue());
+    }
+    return ret;
   }
 
   private RewardsMap getRewardsMap(int rewardLevelId)
