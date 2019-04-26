@@ -62,9 +62,9 @@ public class MainDatDeedsLoader
         //System.out.println("Ignored ID="+indexDataId+", name="+name);
         return null;
       }
-      System.out.println("************* "+indexDataId+" *****************");
       if (indexDataId==1879000000)
       {
+        System.out.println("************* "+indexDataId+" *****************");
         System.out.println(properties.dump());
       }
       deed=new DeedDescription();
@@ -73,7 +73,7 @@ public class MainDatDeedsLoader
       // Name
       String name=DatUtils.getStringProperty(properties,"Quest_Name");
       deed.setName(name);
-      System.out.println("ID: "+indexDataId+", name: "+name);
+      //System.out.println("ID: "+indexDataId+", name: "+name);
       // Description
       String description=DatUtils.getStringProperty(properties,"Quest_Description");
       deed.setDescription(description);
@@ -87,7 +87,7 @@ public class MainDatDeedsLoader
       // UI Tab
       Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
       String uiTabName=_uiTab.getString(uiTab.intValue());
-      System.out.println("UI tab: "+uiTabName);
+      //System.out.println("UI tab: "+uiTabName);
       // Deed type
       handleDeedType(deed,properties);
       // Min level
