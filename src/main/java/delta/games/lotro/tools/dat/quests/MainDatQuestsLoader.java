@@ -299,7 +299,7 @@ public class MainDatQuestsLoader
     if (permissions!=null)
     {
       Integer minLevel=(Integer)permissions.getProperty("Usage_MinLevel");
-      if ((minLevel!=null) && (minLevel.intValue()!=0))
+      if ((minLevel!=null) && (minLevel.intValue()>1))
       {
         quest.setMinimumLevel(minLevel);
       }
