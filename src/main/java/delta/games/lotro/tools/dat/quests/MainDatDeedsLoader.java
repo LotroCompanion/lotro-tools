@@ -78,16 +78,19 @@ public class MainDatDeedsLoader
       String description=DatUtils.getStringProperty(properties,"Quest_Description");
       deed.setDescription(description);
       // Category
+      /*
       Integer categoryId=((Integer)properties.getProperty("Accomplishment_Category"));
       if (categoryId!=null)
       {
         String category=_category.getString(categoryId.intValue());
         deed.setCategory(category);
       }
+      */
       // UI Tab
       Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
       String uiTabName=_uiTab.getString(uiTab.intValue());
       //System.out.println("UI tab: "+uiTabName);
+      deed.setCategory(uiTabName);
       // Deed type
       handleDeedType(deed,properties);
       // Min level
