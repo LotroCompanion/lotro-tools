@@ -41,6 +41,8 @@ public class MainDatQuestsLoader
 
   private static final int DEBUG_ID=1879000000;
 
+  private static final int HIDING_CONTENT_QUEST_ID=1879049597;
+
   private DataFacade _facade;
   private Map<Integer,QuestDescription> _quests;
   private EnumMapper _category;
@@ -97,7 +99,7 @@ public class MainDatQuestsLoader
         System.out.println(properties.dump());
       }
       // Check
-      boolean useIt=useIt(properties);
+      boolean useIt=useIt(indexDataId,properties);
       if (!useIt)
       {
         //System.out.println("Ignored ID="+indexDataId+", name="+name);
@@ -392,10 +394,13 @@ public class MainDatQuestsLoader
           int questStatus=((Integer)questRequirementProps.getProperty("Usage_QuestStatus")).intValue();
           if ((operator==3) && (questStatus==805306368))
           {
-            //System.out.println("Requires completed quest: "+questId);
-            Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
-            proxy.setId(questId);
-            quest.addPrerequisiteQuest(proxy);
+            if (questId!=HIDING_CONTENT_QUEST_ID)
+            {
+              //System.out.println("Requires completed quest: "+questId);
+              Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+              proxy.setId(questId);
+              quest.addPrerequisiteQuest(proxy);
+            }
           }
           else
           {
@@ -414,7 +419,26 @@ public class MainDatQuestsLoader
     */
   }
 
-  private boolean useIt(PropertiesSet properties)
+  /**
+   * Indicates if the given quest is obsolete/hidden or not.
+   * @param quest Quest to test.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  boolean isObsolete(QuestDescription quest)
+  {
+    for(Proxy<QuestDescription> prereqQuest : quest.getPrerequisiteQuests())
+    {
+      int questId=prereqQuest.getId();
+      // Id of quest 'Hiding Content'
+      if (questId==HIDING_CONTENT_QUEST_ID)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean useIt(int id, PropertiesSet properties)
   {
     boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
     if (!isQuest)
@@ -439,6 +463,14 @@ public class MainDatQuestsLoader
       return false;
     }
     if (name.contains("TBD"))
+    {
+      return false;
+    }
+    if (name.startsWith("HIDING CONTENT"))
+    {
+      return false;
+    }
+    if (id==HIDING_CONTENT_QUEST_ID)
     {
       return false;
     }
