@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.rewards.Rewards;
@@ -14,6 +15,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 
@@ -244,6 +246,9 @@ public class MainDatDeedsLoader
     DeedsWriter.writeSortedDeeds(_deeds,GeneratedFiles.DEEDS);
     System.out.println(_objectivesLoader.eventIds);
     //System.out.println("Places: "+PlaceLoader._names);
+    // Save traits
+    TraitsManager traitsMgr=TraitsManager.getInstance();
+    TraitLoader.saveTraits(traitsMgr);
   }
 
   void doIt2()
