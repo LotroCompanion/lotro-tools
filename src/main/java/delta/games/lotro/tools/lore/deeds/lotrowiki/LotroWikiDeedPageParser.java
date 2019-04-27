@@ -20,7 +20,6 @@ import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
 import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.Rewards;
-import delta.games.lotro.common.rewards.SkillReward;
 import delta.games.lotro.common.rewards.TitleReward;
 import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
@@ -527,8 +526,11 @@ public class LotroWikiDeedPageParser
 
   private void handleSkillReward(Rewards rewards, String skillStr)
   {
-    SkillReward skill=new SkillReward(skillStr);
-    rewards.addRewardElement(skill);
+    // In Lotro-wiki, skills are in fact... traits
+    Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();
+    proxy.setName(skillStr);
+    TraitReward traitReward=new TraitReward(proxy);
+    rewards.addRewardElement(traitReward);
   }
 
   private void handleItemRewards(DeedDescription deed, String[] itemRewards, Integer[] itemRewardCounts)
