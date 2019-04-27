@@ -2,7 +2,10 @@ package delta.games.lotro.tools.dat.quests;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -10,6 +13,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
@@ -38,7 +42,7 @@ public class MainDatQuestsLoader
   private static final int DEBUG_ID=1879000000;
 
   private DataFacade _facade;
-  private List<QuestDescription> _quests;
+  private Map<Integer,QuestDescription> _quests;
   private EnumMapper _category;
 
   private DatRewardsLoader _rewardsLoader;
@@ -52,7 +56,7 @@ public class MainDatQuestsLoader
   public MainDatQuestsLoader(DataFacade facade)
   {
     _facade=facade;
-    _quests=new ArrayList<QuestDescription>();
+    _quests=new HashMap<Integer,QuestDescription>();
     _category=_facade.getEnumsManager().getEnumMapper(587202585);
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
@@ -62,18 +66,24 @@ public class MainDatQuestsLoader
   private void handleArc(int arcId)
   {
     PropertiesSet arcProps=_facade.loadProperties(arcId+0x9000000);
-    //System.out.println(arcProps.dump());
     String arcName=DatUtils.getStringProperty(arcProps,"QuestArc_Name");
-    System.out.println("Arc name: "+arcName);
     Object[] list=(Object[])arcProps.getProperty("QuestArc_Quest_Array");
     for(Object obj : list)
     {
       Integer questId=(Integer)obj;
-      load(questId.intValue());
+      QuestDescription quest=_quests.get(questId);
+      if (quest!=null)
+      {
+        quest.setQuestArc(arcName);
+      }
+      else
+      {
+        LOGGER.warn("Quest "+questId+" not found for arc: "+arcName);
+      }
     }
   }
 
-  private QuestDescription load(int indexDataId)
+  private void load(int indexDataId)
   {
     QuestDescription quest=null;
     int dbPropertiesId=indexDataId+0x09000000;
@@ -91,7 +101,7 @@ public class MainDatQuestsLoader
       if (!useIt)
       {
         //System.out.println("Ignored ID="+indexDataId+", name="+name);
-        return null;
+        return;
       }
       quest=new QuestDescription();
       // ID
@@ -186,13 +196,12 @@ public class MainDatQuestsLoader
 
       // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
-      _quests.add(quest);
+      _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
     }
     else
     {
       LOGGER.warn("Could not handle quest ID="+indexDataId);
     }
-    return quest;
   }
 
   /*
@@ -438,22 +447,22 @@ public class MainDatQuestsLoader
 
   private void doIt()
   {
-    List<QuestDescription> quests=new ArrayList<QuestDescription>();
-
+    // Load quests
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
       boolean useIt=DatQuestDeedsUtils.isQuestOrDeedId(_facade,id);
       if (useIt)
       {
-        QuestDescription quest=load(id);
-        if (quest!=null)
-        {
-          //System.out.println("Quest: "+quest.dump());
-          quests.add(quest);
-        }
+        load(id);
       }
     }
+    // Add quest arcs
+   loadQuestArcs();
+    // Save quests
+    List<QuestDescription> quests=new ArrayList<QuestDescription>();
+    quests.addAll(_quests.values());
+    Collections.sort(quests,new IdentifiableComparator<QuestDescription>());
     System.out.println("Nb quests: "+quests.size());
     QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
     // Save traits
@@ -461,7 +470,7 @@ public class MainDatQuestsLoader
     TraitLoader.saveTraits(traitsMgr);
   }
 
-  void loadQuestArcs()
+  private void loadQuestArcs()
   {
     PropertiesSet questArcsDirectory=_facade.loadProperties(0x7900E36F);
     //System.out.println(questArcsDirectory.dump());
