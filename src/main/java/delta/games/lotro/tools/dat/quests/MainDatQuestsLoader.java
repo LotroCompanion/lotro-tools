@@ -155,7 +155,8 @@ public class MainDatQuestsLoader
       */
       // Chain
       // - previous
-      findPreviousQuests(quest,properties);
+      boolean obsolete=findPreviousQuests(quest,properties);
+      quest.setObsolete(obsolete);
       // - next
       Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
       if (nextQuestId!=null)
@@ -378,8 +379,9 @@ public class MainDatQuestsLoader
     */
   }
 
-  private void findPreviousQuests(QuestDescription quest, PropertiesSet properties)
+  private boolean findPreviousQuests(QuestDescription quest, PropertiesSet properties)
   {
+    boolean obsolete=false;
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
@@ -401,6 +403,10 @@ public class MainDatQuestsLoader
               proxy.setId(questId);
               quest.addPrerequisiteQuest(proxy);
             }
+            else
+            {
+              obsolete=true;
+            }
           }
           else
           {
@@ -417,25 +423,7 @@ public class MainDatQuestsLoader
           Usage_QuestID: 1879048439
           Usage_QuestStatus: 805306368
     */
-  }
-
-  /**
-   * Indicates if the given quest is obsolete/hidden or not.
-   * @param quest Quest to test.
-   * @return <code>true</code> if it is, <code>false</code> otherwise.
-   */
-  boolean isObsolete(QuestDescription quest)
-  {
-    for(Proxy<QuestDescription> prereqQuest : quest.getPrerequisiteQuests())
-    {
-      int questId=prereqQuest.getId();
-      // Id of quest 'Hiding Content'
-      if (questId==HIDING_CONTENT_QUEST_ID)
-      {
-        return true;
-      }
-    }
-    return false;
+    return obsolete;
   }
 
   private boolean useIt(int id, PropertiesSet properties)
