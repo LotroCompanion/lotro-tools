@@ -353,7 +353,7 @@ public class MainDatAchievablesLoader
     _rewardsLoader.fillRewards(properties,rewards);
 
     // Objectives
-    _objectivesLoader.handleObjectives(null,properties);
+    _objectivesLoader.handleObjectives(deed.getObjectives(),properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
@@ -654,9 +654,9 @@ public class MainDatAchievablesLoader
     // Use deeds index
     doIndex();
     // Add quest arcs
-   loadQuestArcs();
-   // Save
-   doSave();
+    loadQuestArcs();
+    // Save
+    doSave();
   }
 
   private void doScan()
