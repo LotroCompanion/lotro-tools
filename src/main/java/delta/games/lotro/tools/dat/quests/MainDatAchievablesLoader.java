@@ -22,6 +22,8 @@ import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
@@ -29,15 +31,16 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 import delta.games.lotro.utils.Proxy;
 
 /**
- * Get quests definitions from DAT files.
+ * Get quests/deeds definitions from DAT files.
  * @author DAM
  */
-public class MainDatQuestsLoader
+public class MainDatAchievablesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatQuestsLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(MainDatAchievablesLoader.class);
 
   private static final int DEBUG_ID=1879000000;
 
@@ -45,8 +48,9 @@ public class MainDatQuestsLoader
 
   private DataFacade _facade;
   private Map<Integer,QuestDescription> _quests;
-  private EnumMapper _category;
-
+  private Map<Integer,DeedDescription> _deeds;
+  private EnumMapper _questCategory;
+  private EnumMapper _deedUiTabName;
   private DatRewardsLoader _rewardsLoader;
   private DatObjectivesLoader _objectivesLoader;
   private DatRolesLoader _rolesLoader;
@@ -55,11 +59,13 @@ public class MainDatQuestsLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatQuestsLoader(DataFacade facade)
+  public MainDatAchievablesLoader(DataFacade facade)
   {
     _facade=facade;
     _quests=new HashMap<Integer,QuestDescription>();
-    _category=_facade.getEnumsManager().getEnumMapper(587202585);
+    _deeds=new HashMap<Integer,DeedDescription>();
+    _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
+    _deedUiTabName=_facade.getEnumsManager().getEnumMapper(587202588);
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
     _rolesLoader=new DatRolesLoader(facade);
@@ -87,124 +93,137 @@ public class MainDatQuestsLoader
 
   private void load(int indexDataId)
   {
-    QuestDescription quest=null;
     int dbPropertiesId=indexDataId+0x09000000;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      //System.out.println("************* "+indexDataId+" *****************");
+      // Debug
       if (indexDataId==DEBUG_ID)
       {
         FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
         System.out.println(properties.dump());
       }
-      // Check
-      boolean useIt=useIt(indexDataId,properties);
-      if (!useIt)
+      // Route: quest or deed?
+      boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
+      if (isQuest)
       {
-        //System.out.println("Ignored ID="+indexDataId+", name="+name);
-        return;
+        loadQuest(indexDataId,properties);
       }
-      quest=new QuestDescription();
-      // ID
-      quest.setIdentifier(indexDataId);
-      // Name
-      String name=DatUtils.getStringProperty(properties,"Quest_Name");
-      quest.setName(name);
-      // Description
-      String description=DatUtils.getStringProperty(properties,"Quest_Description");
-      quest.setDescription(description);
-      // Category
-      Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
-      if (categoryId!=null)
+      else
       {
-        String category=_category.getString(categoryId.intValue());
-        quest.setCategory(category);
+        loadDeed(indexDataId,properties);
       }
-      // Max times
-      Integer maxTimes=((Integer)properties.getProperty("Quest_MaxTimesCompletable"));
-      Repeatability repeatability=Repeatability.NOT_REPEATABLE;
-      if (maxTimes!=null)
-      {
-        repeatability=Repeatability.getByCode(maxTimes.byteValue());
-      }
-      quest.setRepeatability(repeatability);
-      // Scope
-      //handleScope(quest, properties);
-      // Monster play?
-      Integer isMonsterPlay=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
-      if ((isMonsterPlay!=null) && (isMonsterPlay.intValue()!=0))
-      {
-        quest.setFaction(FACTION.MONSTER_PLAY);
-      }
-      // Quests to complete (only for 'level up' quests)
-      /*
-      Object questsToComplete=properties.getProperty("Quest_QuestsToComplete");
-      if (questsToComplete!=null)
-      {
-        System.out.println(questsToComplete);
-      }
-      */
-      // Items given when the quest is bestowed
-      /*
-      Object givenItems=properties.getProperty("Quest_GiveItemArray");
-      if (givenItems!=null)
-      {
-        System.out.println(givenItems);
-      }
-      */
-      // Chain
-      // - previous
-      boolean obsolete=findPreviousQuests(quest,properties);
-      quest.setObsolete(obsolete);
-      // - next
-      Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
-      if (nextQuestId!=null)
-      {
-        Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
-        proxy.setId(nextQuestId.intValue());
-        quest.setNextQuest(proxy);
-        //System.out.println("Next quest: "+nextQuestId);
-      }
-      // Flags
-      handleFlags(quest,properties);
-      // Requirements
-      // - level
-      findLevelRequirements(quest,properties);
-      // - race
-      findRaceRequirements(quest,properties);
-      // - class
-      findClassRequirements(quest,properties);
-
-      // Rewards
-      Rewards rewards=quest.getRewards();
-      ChallengeLevel challengeLevel=_rewardsLoader.fillRewards(properties,rewards);
-      // Challenge level
-      quest.setChallengeLevel(challengeLevel);
-
-      // Quest Loot Table
-      // (additional loot tables that are active when the quest is active)
-      /*
-      Object lootTable=properties.getProperty("Quest_LootTable");
-      if (lootTable!=null)
-      {
-        // [{Quest_LootMonsterGenus_Array=[Ljava.lang.Object;@3d1cfad4, Quest_LootItemDID=1879051728, Quest_LootItemProbability=100}]
-        System.out.println("Loot table:" +lootTable);
-      }
-      */
-      _rolesLoader.loadRoles(quest,properties);
-
-      // Objectives
-      _objectivesLoader.handleObjectives(quest.getObjectives(),properties);
-
-      // Web Store (needed xpack/region): WebStoreAccountItem_DataID
-
-      _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
     }
     else
     {
-      LOGGER.warn("Could not handle quest ID="+indexDataId);
+      LOGGER.warn("Could not handle achievable ID="+indexDataId);
     }
+  }
+
+  private void loadQuest(int indexDataId, PropertiesSet properties)
+  {
+    // Check
+    boolean useIt=useQuest(indexDataId,properties);
+    if (!useIt)
+    {
+      //System.out.println("Ignored ID="+indexDataId+", name="+name);
+      return;
+    }
+    QuestDescription quest=new QuestDescription();
+    // ID
+    quest.setIdentifier(indexDataId);
+    // Name
+    String name=DatUtils.getStringProperty(properties,"Quest_Name");
+    quest.setName(name);
+    // Description
+    String description=DatUtils.getStringProperty(properties,"Quest_Description");
+    quest.setDescription(description);
+    // Category
+    Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
+    if (categoryId!=null)
+    {
+      String category=_questCategory.getString(categoryId.intValue());
+      quest.setCategory(category);
+    }
+    // Max times
+    Integer maxTimes=((Integer)properties.getProperty("Quest_MaxTimesCompletable"));
+    Repeatability repeatability=Repeatability.NOT_REPEATABLE;
+    if (maxTimes!=null)
+    {
+      repeatability=Repeatability.getByCode(maxTimes.byteValue());
+    }
+    quest.setRepeatability(repeatability);
+    // Scope
+    //handleScope(quest, properties);
+    // Monster play?
+    Integer isMonsterPlay=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
+    if ((isMonsterPlay!=null) && (isMonsterPlay.intValue()!=0))
+    {
+      quest.setFaction(FACTION.MONSTER_PLAY);
+    }
+    // Quests to complete (only for 'level up' quests)
+    /*
+    Object questsToComplete=properties.getProperty("Quest_QuestsToComplete");
+    if (questsToComplete!=null)
+    {
+      System.out.println(questsToComplete);
+    }
+    */
+    // Items given when the quest is bestowed
+    /*
+    Object givenItems=properties.getProperty("Quest_GiveItemArray");
+    if (givenItems!=null)
+    {
+      System.out.println(givenItems);
+    }
+    */
+    // Chain
+    // - previous
+    boolean obsolete=findPreviousQuests(quest,properties);
+    quest.setObsolete(obsolete);
+    // - next
+    Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
+    if (nextQuestId!=null)
+    {
+      Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+      proxy.setId(nextQuestId.intValue());
+      quest.setNextQuest(proxy);
+      //System.out.println("Next quest: "+nextQuestId);
+    }
+    // Flags
+    handleFlags(quest,properties);
+    // Requirements
+    // - level
+    findLevelRequirements(quest,properties);
+    // - race
+    findRaceRequirements(quest,properties);
+    // - class
+    findClassRequirements(quest,properties);
+
+    // Rewards
+    Rewards rewards=quest.getRewards();
+    ChallengeLevel challengeLevel=_rewardsLoader.fillRewards(properties,rewards);
+    // Challenge level
+    quest.setChallengeLevel(challengeLevel);
+
+    // Quest Loot Table
+    // (additional loot tables that are active when the quest is active)
+    /*
+    Object lootTable=properties.getProperty("Quest_LootTable");
+    if (lootTable!=null)
+    {
+      // [{Quest_LootMonsterGenus_Array=[Ljava.lang.Object;@3d1cfad4, Quest_LootItemDID=1879051728, Quest_LootItemProbability=100}]
+      System.out.println("Loot table:" +lootTable);
+    }
+    */
+    _rolesLoader.loadRoles(quest,properties);
+
+    // Objectives
+    _objectivesLoader.handleObjectives(quest.getObjectives(),properties);
+
+    // Web Store (needed xpack/region): WebStoreAccountItem_DataID
+
+    _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
   }
 
   /*
@@ -303,6 +322,159 @@ public class MainDatQuestsLoader
     // Unused:
     // Quest_IsSessionAccomplishment
     // Quest_IsHidden
+  }
+
+  private void loadDeed(int indexDataId, PropertiesSet properties)
+  {
+    DeedDescription deed=new DeedDescription();
+    // ID
+    deed.setIdentifier(indexDataId);
+    // Name
+    String name=DatUtils.getStringProperty(properties,"Quest_Name");
+    deed.setName(name);
+    // Description
+    String description=DatUtils.getStringProperty(properties,"Quest_Description");
+    deed.setDescription(description);
+    // UI Tab
+    Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
+    String uiTabName=_deedUiTabName.getString(uiTab.intValue());
+    deed.setCategory(uiTabName);
+    // Deed type
+    handleDeedType(deed,properties);
+    // Min level
+    Integer minLevel=((Integer)properties.getProperty("Accomplishment_MinLevelToStart"));
+    deed.setMinimumLevel(minLevel);
+    // Challenge level
+    //Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
+
+    // Rewards
+    Rewards rewards=deed.getRewards();
+    _rewardsLoader.fillRewards(properties,rewards);
+
+    // Objectives
+    _objectivesLoader.handleObjectives(null,properties);
+
+    // Web Store (needed xpack/region): WebStoreAccountItem_DataID
+
+    _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
+  }
+
+  private void handleDeedType(DeedDescription deed, PropertiesSet properties)
+  {
+    DeedType type=null;
+    Integer categoryId=((Integer)properties.getProperty("Accomplishment_Category"));
+    if (categoryId!=null)
+    {
+      int typeCode=categoryId.intValue();
+      if (typeCode==22)
+      {
+        type=DeedType.CLASS;
+      }
+      else if (typeCode==2)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.CAPTAIN);
+      }
+      else if (typeCode==3)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.GUARDIAN);
+      }
+      else if (typeCode==5)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.MINSTREL);
+      }
+      else if (typeCode==6)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.BURGLAR);
+      }
+      else if (typeCode==26)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.HUNTER);
+      }
+      else if (typeCode==28)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.CHAMPION);
+      }
+      else if (typeCode==30)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.LORE_MASTER);
+      }
+      else if (typeCode==35)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.WARDEN);
+      }
+      else if (typeCode==36)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.RUNE_KEEPER);
+      }
+      else if (typeCode==38)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.BEORNING);
+      }
+      else if (typeCode==34)
+      {
+        type=DeedType.EVENT;
+      }
+      else if (typeCode==1)
+      {
+        type=DeedType.EXPLORER;
+      }
+      else if (typeCode==33)
+      {
+        type=DeedType.LORE;
+      }
+      else if (typeCode==25)
+      {
+        type=DeedType.RACE;
+      }
+      else if (typeCode==13)
+      {
+        type=DeedType.RACE;
+        deed.setRequiredRace(Race.MAN);
+      }
+      else if (typeCode==21)
+      {
+        type=DeedType.RACE;
+        deed.setRequiredRace(Race.ELF);
+      }
+      else if (typeCode==27)
+      {
+        type=DeedType.RACE;
+        deed.setRequiredRace(Race.DWARF);
+      }
+      else if (typeCode==29)
+      {
+        type=DeedType.RACE;
+        deed.setRequiredRace(Race.HOBBIT);
+      }
+      else if (typeCode==37)
+      {
+        type=DeedType.RACE;
+        deed.setRequiredRace(Race.BEORNING);
+      }
+      else if (typeCode==11)
+      {
+        type=DeedType.REPUTATION;
+      }
+      else if (typeCode==20)
+      {
+        type=DeedType.SLAYER;
+      }
+      else
+      {
+        LOGGER.warn("Unmanaged type: "+typeCode);
+      }
+    }
+    deed.setType(type);
   }
 
   private void findLevelRequirements(QuestDescription quest, PropertiesSet properties)
@@ -426,13 +598,8 @@ public class MainDatQuestsLoader
     return obsolete;
   }
 
-  private boolean useIt(int id, PropertiesSet properties)
+  private boolean useQuest(int id, PropertiesSet properties)
   {
-    boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
-    if (!isQuest)
-    {
-      return false;
-    }
     // Ignore 'Test' quests
     Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
     if ((categoryId!=null) && (categoryId.intValue()==16))
@@ -467,7 +634,18 @@ public class MainDatQuestsLoader
 
   private void doIt()
   {
-    // Load quests
+    // Scan quests and deeds
+    doScan();
+    // Use deeds index
+    doIndex();
+    // Add quest arcs
+   loadQuestArcs();
+   // Save
+   doSave();
+  }
+
+  private void doScan()
+  {
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
@@ -477,17 +655,68 @@ public class MainDatQuestsLoader
         load(id);
       }
     }
-    // Add quest arcs
-   loadQuestArcs();
+  }
+
+  private void doSave()
+  {
     // Save quests
-    List<QuestDescription> quests=new ArrayList<QuestDescription>();
-    quests.addAll(_quests.values());
-    Collections.sort(quests,new IdentifiableComparator<QuestDescription>());
-    System.out.println("Nb quests: "+quests.size());
-    QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
+    {
+      List<QuestDescription> quests=new ArrayList<QuestDescription>();
+      quests.addAll(_quests.values());
+      Collections.sort(quests,new IdentifiableComparator<QuestDescription>());
+      System.out.println("Nb quests: "+quests.size());
+      // Write quests file
+      boolean ok=QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
+      if (ok)
+      {
+        System.out.println("Wrote quests file: "+GeneratedFiles.QUESTS);
+      }
+    }
+    // Save deeds
+    {
+      List<DeedDescription> deeds=new ArrayList<DeedDescription>();
+      deeds.addAll(_deeds.values());
+      int nbDeeds=_deeds.size();
+      System.out.println("Nb deeds: "+nbDeeds);
+      // Write deeds file
+      boolean ok=DeedsWriter.writeSortedDeeds(deeds,GeneratedFiles.DEEDS);
+      if (ok)
+      {
+        System.out.println("Wrote deeds file: "+GeneratedFiles.DEEDS);
+      }
+    }
     // Save traits
     TraitsManager traitsMgr=TraitsManager.getInstance();
     TraitLoader.saveTraits(traitsMgr);
+  }
+
+  void doIndex()
+  {
+    PropertiesSet deedsDirectory=_facade.loadProperties(0x79000255);
+    //System.out.println(deedsDirectory.dump());
+    Object[] list=(Object[])deedsDirectory.getProperty("Accomplishment_List");
+    for(Object obj : list)
+    {
+      if (obj instanceof Integer)
+      {
+        load(((Integer)obj).intValue());
+      }
+      else if (obj instanceof Object[])
+      {
+        Object[] objs=(Object[])obj;
+        for(Object obj2 : objs)
+        {
+          if (obj2 instanceof Integer)
+          {
+            load(((Integer)obj2).intValue());
+          }
+          else
+          {
+            System.out.println(obj.getClass());
+          }
+        }
+      }
+    }
   }
 
   private void loadQuestArcs()
@@ -509,7 +738,7 @@ public class MainDatQuestsLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatQuestsLoader(facade).doIt();
+    new MainDatAchievablesLoader(facade).doIt();
     facade.dispose();
   }
 }
