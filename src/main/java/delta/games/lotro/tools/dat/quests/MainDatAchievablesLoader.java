@@ -486,6 +486,9 @@ public class MainDatAchievablesLoader
     findRaceRequirements(achievable,properties);
     // - class
     findClassRequirements(achievable,properties);
+    // TODO: Usage_RequiredFaction
+    // TODO: Usage_WorldEvent_AllConditionList, Usage_WorldEvent_AnyConditionList
+    // TODO: Usage_RequiredAccountToken
   }
 
   private void findLevelRequirements(Achievable achievable, PropertiesSet properties)
@@ -504,6 +507,7 @@ public class MainDatAchievablesLoader
         achievable.setMaximumLevel(maxLevel);
       }
     }
+    // TODO: Usage_MinLevel_FloatToCap
   }
 
   private void findRaceRequirements(Achievable achievable, PropertiesSet properties)
