@@ -24,8 +24,9 @@ public class DeedsWriter
    * Write a XML file with a sorted list of deeds.
    * @param deeds Deeds to sort and write.
    * @param out Output file.
+   * @return <code>true</code> if it succeeds, <code>false</code> otherwise.
    */
-  public static void writeSortedDeeds(List<DeedDescription> deeds, File out)
+  public static boolean writeSortedDeeds(List<DeedDescription> deeds, File out)
   {
     List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
     comparators.add(new IdentifiableComparator<DeedDescription>());
@@ -34,6 +35,6 @@ public class DeedsWriter
     CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
     Collections.sort(deeds,comparator);
     DeedXMLWriter writer=new DeedXMLWriter();
-    writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
+    return writer.writeDeeds(out,deeds,EncodingNames.UTF_8);
   }
 }

@@ -1,10 +1,13 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
@@ -27,8 +30,10 @@ public class MainDatDeedsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatDeedsLoader.class);
 
+  private static final int DEBUG_ID=1879000000;
+
   private DataFacade _facade;
-  private List<DeedDescription> _deeds;
+  private Map<Integer,DeedDescription> _deeds;
   private EnumMapper _uiTab;
 
   private DatRewardsLoader _rewardsLoader;
@@ -41,14 +46,13 @@ public class MainDatDeedsLoader
   public MainDatDeedsLoader(DataFacade facade)
   {
     _facade=facade;
-    _deeds=new ArrayList<DeedDescription>();
+    _deeds=new HashMap<Integer,DeedDescription>();
     _uiTab=_facade.getEnumsManager().getEnumMapper(587202588);
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
   }
 
-  private int nb=0;
-  private DeedDescription load(int indexDataId)
+  private void load(int indexDataId)
   {
     DeedDescription deed=null;
     int dbPropertiesId=indexDataId+0x09000000;
@@ -59,12 +63,11 @@ public class MainDatDeedsLoader
       boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
       if (isQuest)
       {
-        //System.out.println("Ignored ID="+indexDataId+", name="+name);
-        return null;
+        return;
       }
-      if (indexDataId==1879000000)
+      if (indexDataId==DEBUG_ID)
       {
-        System.out.println("************* "+indexDataId+" *****************");
+        FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
         System.out.println(properties.dump());
       }
       deed=new DeedDescription();
@@ -73,14 +76,12 @@ public class MainDatDeedsLoader
       // Name
       String name=DatUtils.getStringProperty(properties,"Quest_Name");
       deed.setName(name);
-      //System.out.println("ID: "+indexDataId+", name: "+name);
       // Description
       String description=DatUtils.getStringProperty(properties,"Quest_Description");
       deed.setDescription(description);
       // UI Tab
       Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
       String uiTabName=_uiTab.getString(uiTab.intValue());
-      //System.out.println("UI tab: "+uiTabName);
       deed.setCategory(uiTabName);
       // Deed type
       handleDeedType(deed,properties);
@@ -96,15 +97,15 @@ public class MainDatDeedsLoader
 
       // Objectives
       _objectivesLoader.handleObjectives(null,properties);
+
       // Web Store (needed xpack/region): WebStoreAccountItem_DataID
-      nb++;
-      _deeds.add(deed);
+
+      _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
     }
     else
     {
       LOGGER.warn("Could not handle deed ID="+indexDataId);
     }
-    return deed;
   }
 
   private void handleDeedType(DeedDescription deed, PropertiesSet properties)
@@ -227,31 +228,39 @@ public class MainDatDeedsLoader
 
   private void doIt()
   {
-    List<DeedDescription> deeds=new ArrayList<DeedDescription>();
+    doScan();
+    doIndex();
+    doSave();
+  }
 
+  private void doScan()
+  {
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=DatQuestDeedsUtils.isQuestOrDeedId(_facade,id);
       if (useIt)
       {
-        DeedDescription deed=load(id);
-        if (deed!=null)
-        {
-          System.out.println("Deed: "+deed);
-          deeds.add(deed);
-        }
+        load(id);
       }
     }
-    System.out.println("Nb deeds: "+nb);
-    DeedsWriter.writeSortedDeeds(_deeds,GeneratedFiles.DEEDS);
-    System.out.println(_objectivesLoader.eventIds);
-    //System.out.println("Places: "+PlaceLoader._names);
+  }
+
+  private void doSave()
+  {
+    int nbDeeds=_deeds.size();
+    System.out.println("Nb deeds: "+nbDeeds);
+    // Write deeds file
+    boolean ok=DeedsWriter.writeSortedDeeds(new ArrayList<DeedDescription>(_deeds.values()),GeneratedFiles.DEEDS);
+    if (ok)
+    {
+      System.out.println("Wrote deeds file: "+GeneratedFiles.DEEDS);
+    }
     // Save traits
     TraitsManager traitsMgr=TraitsManager.getInstance();
     TraitLoader.saveTraits(traitsMgr);
   }
 
-  void doIt2()
+  void doIndex()
   {
     PropertiesSet deedsDirectory=_facade.loadProperties(0x79000255);
     //System.out.println(deedsDirectory.dump());
@@ -278,8 +287,6 @@ public class MainDatDeedsLoader
         }
       }
     }
-    System.out.println("Nb deeds: "+nb);
-    DeedsWriter.writeSortedDeeds(_deeds,GeneratedFiles.DEEDS);
   }
 
   /**

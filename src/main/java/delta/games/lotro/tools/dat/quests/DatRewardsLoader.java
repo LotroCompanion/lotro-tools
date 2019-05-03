@@ -25,7 +25,6 @@ import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
@@ -55,7 +54,7 @@ public class DatRewardsLoader
 
   private DataFacade _facade;
   private ItemsManager _itemsMgr;
-  private EnumMapper _billingGroup;
+  //private EnumMapper _billingGroup;
   private FactionsRegistry _factions;
   private Map<Integer,RewardsMap> _rewardLevels;
   private Map<Integer,RewardsMap> _defaultRewardMaps;
@@ -69,7 +68,7 @@ public class DatRewardsLoader
   {
     _facade=facade;
     _itemsMgr=ItemsManager.getInstance();
-    _billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
+    //_billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
     _factions=FactionsRegistry.getInstance();
     _rewardLevels=new HashMap<Integer,RewardsMap>();
     _defaultRewardMaps=new HashMap<Integer,RewardsMap>();
@@ -156,6 +155,7 @@ public class DatRewardsLoader
     // Skills? = traits?
 
     // Billing token
+    /*
     Object[] billingTokenArray=(Object[])props.getProperty("QuestTreasure_FixedBillingTokenArray");
     if (billingTokenArray!=null)
     {
@@ -166,6 +166,7 @@ public class DatRewardsLoader
         System.out.println("Billing token: "+billingTokenId+": "+key);
       }
     }
+    */
   }
 
   // Virtues
@@ -554,19 +555,21 @@ public class DatRewardsLoader
       }
     }
     // Mithril coins
-    // Do not use for deeds... seems to be the same value as LP
+    // Not used for deeds... seems to be the same value as LP
+    /*
     Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
     if (mcTier!=null)
     {
       Integer mithrilCoins=rewardsMap.getMithrilCoinsMap().getValue(mcTier.intValue());
       System.out.println("Mithril coin tier: "+mcTier+" => "+mithrilCoins);
     }
+    */
     // Turbine/Lotro points
     Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
     if (tpTier!=null)
     {
       Integer turbinePoints=rewardsMap.getTpMap().getValue(tpTier.intValue());
-      System.out.println("Turbine points tier: "+tpTier+" => "+turbinePoints);
+      //System.out.println("Turbine points tier: "+tpTier+" => "+turbinePoints);
       if (turbinePoints!=null)
       {
         rewards.setLotroPoints(turbinePoints.intValue());

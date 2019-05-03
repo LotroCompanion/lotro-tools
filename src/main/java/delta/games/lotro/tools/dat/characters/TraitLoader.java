@@ -98,12 +98,13 @@ public class TraitLoader
     List<TraitDescription> traits=traitsManager.getAll();
     int nbTraits=traits.size();
     LOGGER.info("Writing "+nbTraits+" traits");
+    // Write traits file
     boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
     if (ok)
     {
       System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
     }
-    // Write trait icons
+    // Write trait icons archive
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.TRAIT_ICONS,TRAIT_ICONS_DIR);
     if (ok)

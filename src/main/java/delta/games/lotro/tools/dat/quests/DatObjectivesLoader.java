@@ -1,8 +1,5 @@
 package delta.games.lotro.tools.dat.quests;
 
-import java.util.HashMap;
-
-import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -31,8 +28,6 @@ public class DatObjectivesLoader
   private EnumMapper _questEvent;
   private EnumMapper _questCategory;
   //private EnumMapper _deedCategory;
-
-  HashMap<Integer,IntegerHolder> eventIds=new HashMap<Integer,IntegerHolder>();
 
   /**
    * Constructor.
@@ -110,14 +105,7 @@ public class DatObjectivesLoader
 
   private void handleCompletionCondition(Objective objective, PropertiesSet properties)
   {
-    Integer questEventId=(Integer)properties.getProperty("QuestEvent_ID");
-    IntegerHolder holder=eventIds.get(questEventId);
-    if (holder==null)
-    {
-      holder=new IntegerHolder();
-      eventIds.put(questEventId,holder);
-    }
-    holder.increment();
+    int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
 
     /*
      * Shared condition attributes:
@@ -216,55 +204,55 @@ public class DatObjectivesLoader
  */
 
     ObjectiveCondition condition=null;
-    if (questEventId.intValue()==1)
+    if (questEventId==1)
     {
       handleEnterDetection(properties);
     }
-    else if (questEventId.intValue()==7)
+    else if (questEventId==7)
     {
       handleItemUsed(properties);
     }
-    else if (questEventId.intValue()==11)
+    else if (questEventId==11)
     {
       handleNpcTalk(properties);
     }
-    else if (questEventId.intValue()==21)
+    else if (questEventId==21)
     {
       handleLandmarkDetection(properties);
     }
-    else if (questEventId.intValue()==22)
+    else if (questEventId==22)
     {
       handleMonsterDieCondition(properties);
     }
-    else if (questEventId.intValue()==24)
+    else if (questEventId==24)
     {
       handleEmoteCondition(properties);
     }
-    else if (questEventId.intValue()==25)
+    else if (questEventId==25)
     {
       handlePlayerDied(properties);
     }
-    else if (questEventId.intValue()==26)
+    else if (questEventId==26)
     {
       handleSkillUsed(properties);
     }
-    else if (questEventId.intValue()==31)
+    else if (questEventId==31)
     {
       handleInventoryItem(properties);
     }
-    else if (questEventId.intValue()==32)
+    else if (questEventId==32)
     {
       condition=handleQuestComplete(properties);
     }
-    else if (questEventId.intValue()==34)
+    else if (questEventId==34)
     {
       handleWorldEventCondition(properties);
     }
-    else if (questEventId.intValue()==39)
+    else if (questEventId==39)
     {
       handleHobbyItem(properties);
     }
-    else if (questEventId.intValue()==45)
+    else if (questEventId==45)
     {
       handleFactionLevel(properties);
     }
