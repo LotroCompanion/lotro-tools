@@ -32,7 +32,7 @@ public class DeedObjectivesParser
    */
   public void doIt(DeedDescription deed)
   {
-    String objectives=deed.getObjectives();
+    String objectives=deed.getObjectivesString();
     String[] lines=objectives.split("\n");
     for(String line : lines)
     {

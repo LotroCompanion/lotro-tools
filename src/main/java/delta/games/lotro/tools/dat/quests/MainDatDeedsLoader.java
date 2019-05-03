@@ -87,7 +87,7 @@ public class MainDatDeedsLoader
       handleDeedType(deed,properties);
       // Min level
       Integer minLevel=((Integer)properties.getProperty("Accomplishment_MinLevelToStart"));
-      deed.setMinLevel(minLevel);
+      deed.setMinimumLevel(minLevel);
       // Challenge level
       //Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
 

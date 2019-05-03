@@ -177,7 +177,7 @@ public class MainDatQuestsLoader
       findClassRequirements(quest,properties);
 
       // Rewards
-      Rewards rewards=quest.getQuestRewards();
+      Rewards rewards=quest.getRewards();
       ChallengeLevel challengeLevel=_rewardsLoader.fillRewards(properties,rewards);
       // Challenge level
       quest.setChallengeLevel(challengeLevel);

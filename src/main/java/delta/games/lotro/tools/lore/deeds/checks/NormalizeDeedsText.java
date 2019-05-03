@@ -29,9 +29,9 @@ public class NormalizeDeedsText
     description=normalize(description);
     deed.setDescription(description);
     // Objectives
-    String objectives=deed.getObjectives();
+    String objectives=deed.getObjectivesString();
     objectives=normalize(objectives);
-    deed.setObjectives(objectives);
+    deed.setObjectivesString(objectives);
   }
 
   private String normalize(String input)

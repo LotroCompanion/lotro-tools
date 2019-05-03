@@ -58,7 +58,7 @@ public class DeedsInjector
       // Category
       deed.setCategory("Allegiance:"+allegianceName);
       // Required level
-      deed.setMinLevel(Integer.valueOf(110));
+      deed.setMinimumLevel(Integer.valueOf(110));
       // Rewards
       // Token of Service: 1879353887
       Rewards rewards=deed.getRewards();

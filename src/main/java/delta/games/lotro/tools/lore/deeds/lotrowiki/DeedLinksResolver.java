@@ -151,7 +151,7 @@ public class DeedLinksResolver
     // First line of base deed, replace (5) by (50)
     {
       String newObjectives="";
-      String objectives=baseDeed.getObjectives();
+      String objectives=baseDeed.getObjectivesString();
       int index=objectives.indexOf('\n');
       if (index!=-1)
       {
@@ -162,7 +162,7 @@ public class DeedLinksResolver
         newObjectives=objectives;
       }
       newObjectives=newObjectives.replace("(5)","(50)");
-      deed.setObjectives(newObjectives);
+      deed.setObjectivesString(newObjectives);
     }
     // Previous
     DeedProxy previous=new DeedProxy();

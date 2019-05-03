@@ -206,7 +206,7 @@ public class LotroWikiDeedPageParser
         }
         String objectives=sb.toString().trim();
         objectives=normalize(objectives);
-        deed.setObjectives(objectives);
+        deed.setObjectivesString(objectives);
       }
       else if ("Faction".equals(lineKey))
       {
@@ -336,7 +336,7 @@ public class LotroWikiDeedPageParser
           Integer level=NumericTools.parseInteger(levelStr,false);
           if (level!=null)
           {
-            deed.setMinLevel(level);
+            deed.setMinimumLevel(level);
           }
           else
           {
