@@ -24,6 +24,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
@@ -193,12 +194,7 @@ public class MainDatAchievablesLoader
     // Flags
     handleFlags(quest,properties);
     // Requirements
-    // - level
-    findLevelRequirements(quest,properties);
-    // - race
-    findRaceRequirements(quest,properties);
-    // - class
-    findClassRequirements(quest,properties);
+    findRequirements(quest,properties);
 
     // Rewards
     Rewards rewards=quest.getRewards();
@@ -341,11 +337,16 @@ public class MainDatAchievablesLoader
     deed.setCategory(uiTabName);
     // Deed type
     handleDeedType(deed,properties);
+
+    // Requirements
+    findRequirements(deed,properties);
     // Min level
-    Integer minLevel=((Integer)properties.getProperty("Accomplishment_MinLevelToStart"));
-    deed.setMinimumLevel(minLevel);
-    // Challenge level
-    //Integer challengeLevel=(Integer)properties.getProperty("Quest_ChallengeLevel");
+    Integer minLevel=deed.getMinimumLevel();
+    if (minLevel==null)
+    {
+      minLevel=((Integer)properties.getProperty("Accomplishment_MinLevelToStart"));
+      deed.setMinimumLevel(minLevel);
+    }
 
     // Rewards
     Rewards rewards=deed.getRewards();
@@ -477,7 +478,17 @@ public class MainDatAchievablesLoader
     deed.setType(type);
   }
 
-  private void findLevelRequirements(QuestDescription quest, PropertiesSet properties)
+  private void findRequirements(Achievable achievable, PropertiesSet properties)
+  {
+    // - level
+    findLevelRequirements(achievable,properties);
+    // - race
+    findRaceRequirements(achievable,properties);
+    // - class
+    findClassRequirements(achievable,properties);
+  }
+
+  private void findLevelRequirements(Achievable achievable, PropertiesSet properties)
   {
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
@@ -485,17 +496,17 @@ public class MainDatAchievablesLoader
       Integer minLevel=(Integer)permissions.getProperty("Usage_MinLevel");
       if ((minLevel!=null) && (minLevel.intValue()>1))
       {
-        quest.setMinimumLevel(minLevel);
+        achievable.setMinimumLevel(minLevel);
       }
       Integer maxLevel=(Integer)permissions.getProperty("Usage_MaxLevel");
       if ((maxLevel!=null) && (maxLevel.intValue()!=-1))
       {
-        quest.setMaximumLevel(maxLevel);
+        achievable.setMaximumLevel(maxLevel);
       }
     }
   }
 
-  private void findRaceRequirements(QuestDescription quest, PropertiesSet properties)
+  private void findRaceRequirements(Achievable achievable, PropertiesSet properties)
   {
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
@@ -503,7 +514,7 @@ public class MainDatAchievablesLoader
       Object[] raceIds=(Object[])permissions.getProperty("Usage_RequiredRaces");
       if (raceIds!=null)
       {
-        UsageRequirement requirements=quest.getUsageRequirement();
+        UsageRequirement requirements=achievable.getUsageRequirement();
         for(Object raceIdObj : raceIds)
         {
           Integer raceId=(Integer)raceIdObj;
@@ -524,7 +535,7 @@ public class MainDatAchievablesLoader
     */
   }
 
-  private void findClassRequirements(QuestDescription quest, PropertiesSet properties)
+  private void findClassRequirements(Achievable achievable, PropertiesSet properties)
   {
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
@@ -532,7 +543,7 @@ public class MainDatAchievablesLoader
       Object[] classIds=(Object[])permissions.getProperty("Usage_RequiredClassList");
       if (classIds!=null)
       {
-        UsageRequirement requirements=quest.getUsageRequirement();
+        UsageRequirement requirements=achievable.getUsageRequirement();
         for(Object classIdObj : classIds)
         {
           Integer classId=(Integer)classIdObj;
