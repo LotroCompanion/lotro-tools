@@ -187,7 +187,7 @@ public class MainDatAchievablesLoader
     Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
     if (nextQuestId!=null)
     {
-      Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+      Proxy<Achievable> proxy=new Proxy<Achievable>();
       proxy.setId(nextQuestId.intValue());
       quest.setNextQuest(proxy);
       //System.out.println("Next quest: "+nextQuestId);
@@ -587,9 +587,9 @@ public class MainDatAchievablesLoader
             if (questId!=HIDING_CONTENT_QUEST_ID)
             {
               //System.out.println("Requires completed quest: "+questId);
-              Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+              Proxy<Achievable> proxy=new Proxy<Achievable>();
               proxy.setId(questId);
-              quest.addPrerequisiteQuest(proxy);
+              quest.addPrerequisite(proxy);
             }
             else
             {
