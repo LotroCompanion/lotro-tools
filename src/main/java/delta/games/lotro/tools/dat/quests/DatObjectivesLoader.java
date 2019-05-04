@@ -3,8 +3,7 @@ package delta.games.lotro.tools.dat.quests;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
@@ -519,20 +518,9 @@ QuestEvent_MonsterGenus_Array:
       Boolean isQuest=DatQuestDeedsUtils.isQuestId(_facade,questId.intValue());
       if (isQuest!=null)
       {
-        if (isQuest.booleanValue())
-        {
-          //System.out.println("\t\tChild quest: "+questId);
-          Proxy<QuestDescription> questProxy=new Proxy<QuestDescription>();
-          questProxy.setId(questId.intValue());
-          ret.setQuest(questProxy);
-        }
-        else
-        {
-          //System.out.println("\t\tChild deed: "+questId);
-          Proxy<DeedDescription> deedProxy=new Proxy<DeedDescription>();
-          deedProxy.setId(questId.intValue());
-          ret.setDeed(deedProxy);
-        }
+        Proxy<Achievable> proxy=new Proxy<Achievable>();
+        proxy.setId(questId.intValue());
+        ret.setProxy(proxy);
       }
     }
     else

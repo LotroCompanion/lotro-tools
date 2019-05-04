@@ -25,6 +25,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
@@ -655,6 +656,8 @@ public class MainDatAchievablesLoader
     doIndex();
     // Add quest arcs
     loadQuestArcs();
+    // Resolve proxies
+    resolveProxies();
     // Save
     doSave();
   }
@@ -669,6 +672,15 @@ public class MainDatAchievablesLoader
       {
         load(id);
       }
+    }
+  }
+
+  private void resolveProxies()
+  {
+    AchievableProxiesResolver resolver=new AchievableProxiesResolver(_quests.values(),_deeds.values());
+    for(QuestDescription quest : _quests.values())
+    {
+      resolver.resolveQuest(quest);
     }
   }
 
@@ -705,7 +717,7 @@ public class MainDatAchievablesLoader
     TraitLoader.saveTraits(traitsMgr);
   }
 
-  void doIndex()
+  private void doIndex()
   {
     PropertiesSet deedsDirectory=_facade.loadProperties(0x79000255);
     //System.out.println(deedsDirectory.dump());
