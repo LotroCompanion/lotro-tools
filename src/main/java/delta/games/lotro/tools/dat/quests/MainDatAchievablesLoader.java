@@ -682,6 +682,10 @@ public class MainDatAchievablesLoader
     {
       resolver.resolveQuest(quest);
     }
+    for(DeedDescription deed : _deeds.values())
+    {
+      resolver.resolveDeed(deed);
+    }
   }
 
   private void doSave()
