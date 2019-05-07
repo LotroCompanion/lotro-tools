@@ -92,7 +92,14 @@ public class TraitKeyGenerator
   private void setup(String key, int identifier)
   {
     TraitDescription trait=_traitsManager.getTrait(identifier);
-    trait.setKey(key);
+    if (trait!=null)
+    {
+      trait.setKey(key);
+    }
+    else
+    {
+      LOGGER.warn("Trait not found: ID="+identifier);
+    }
   }
 
   private void setup(String key, String name)
