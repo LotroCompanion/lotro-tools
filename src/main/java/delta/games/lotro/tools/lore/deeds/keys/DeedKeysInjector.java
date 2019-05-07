@@ -107,7 +107,9 @@ public class DeedKeysInjector
     }
     if (nbNewDeeds>1)
     {
-      System.out.println("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      // TODO Handle these
+      //System.out.println("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      return newDeeds.get(0);
     }
     return null;
   }
@@ -115,12 +117,15 @@ public class DeedKeysInjector
   private DeedDescription handleBadName(DeedDescription deed)
   {
     String name=deed.getName();
+    if (name.startsWith("War-leader Slayer - T"))
+    {
+      name=name.replace("War-leader Slayer - T","Warleader-slayer -- T");
+    }
     if (name.contains(" - Tier"))
     {
       name=name.replace(" - Tier"," -- Tier");
-      return fetchByName(name);
     }
-    return null;
+    return fetchByName(name);
   }
 
   private DeedDescription handleClassDeed(DeedDescription deed)
