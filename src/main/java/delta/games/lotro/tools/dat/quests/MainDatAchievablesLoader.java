@@ -656,8 +656,9 @@ public class MainDatAchievablesLoader
     doIndex();
     // Add quest arcs
     loadQuestArcs();
-    // Add race requirements for deed
+    // Add race/class requirements for deed
     loadRaceRequirementsForDeeds();
+    loadClassRequirementsForDeeds();
     // Resolve proxies
     resolveProxies();
     // Save
@@ -792,6 +793,51 @@ public class MainDatAchievablesLoader
           }
         }
       }
+    }
+  }
+
+  private void loadClassRequirementsForDeeds()
+  {
+    PropertiesSet properties=_facade.loadProperties(0x7900020E);
+    Object[] raceIdsArray=(Object[])properties.getProperty("AdvTable_LevelTableList");
+    for(Object raceIdObj : raceIdsArray)
+    {
+      int raceId=((Integer)raceIdObj).intValue();
+      PropertiesSet raceProps=_facade.loadProperties(raceId+0x9000000);
+      PropertiesSet classInfo=(PropertiesSet)raceProps.getProperty("AdvTable_ClassInfo");
+      String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
+      CharacterClass characterClass=CharacterClass.getByName(className);
+      int accomplishmentDirectoryId=((Integer)raceProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
+      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+0x9000000);
+      Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
+      if (accomplishmentList!=null)
+      {
+        for(Object listItem : accomplishmentList)
+        {
+          if (listItem instanceof Integer)
+          {
+            Integer deedId=(Integer)listItem;
+            handleClassRequirementForDeed(deedId,characterClass);
+          }
+          else if (listItem instanceof Object[])
+          {
+            for(Object listItem2 : (Object[])listItem)
+            {
+              Integer deedId=(Integer)listItem2;
+              handleClassRequirementForDeed(deedId,characterClass);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private void handleClassRequirementForDeed(Integer deedId, CharacterClass characterClass)
+  {
+    DeedDescription deed=_deeds.get(deedId);
+    if (deed!=null)
+    {
+      deed.setRequiredClass(characterClass);
     }
   }
 
