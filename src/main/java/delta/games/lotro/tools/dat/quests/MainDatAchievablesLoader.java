@@ -656,6 +656,8 @@ public class MainDatAchievablesLoader
     doIndex();
     // Add quest arcs
     loadQuestArcs();
+    // Add race requirements for deed
+    loadRaceRequirementsForDeeds();
     // Resolve proxies
     resolveProxies();
     // Save
@@ -759,6 +761,37 @@ public class MainDatAchievablesLoader
     {
       Integer arcId=(Integer)obj;
       handleArc(arcId.intValue());
+    }
+  }
+
+  private void loadRaceRequirementsForDeeds()
+  {
+    PropertiesSet properties=_facade.loadProperties(0x7900020F);
+    Object[] raceIdsArray=(Object[])properties.getProperty("RaceTable_RaceTableList");
+    for(Object raceIdObj : raceIdsArray)
+    {
+      int raceId=((Integer)raceIdObj).intValue();
+      PropertiesSet raceProps=_facade.loadProperties(raceId+0x9000000);
+      int raceCode=((Integer)raceProps.getProperty("RaceTable_Race")).intValue();
+      Race race=DatEnumsUtils.getRaceFromRaceId(raceCode);
+      int accomplishmentDirectoryId=((Integer)raceProps.getProperty("RaceTable_AccomplishmentDirectory")).intValue();
+      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+0x9000000);
+      Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
+      if (accomplishmentList!=null)
+      {
+        for(Object accomplishmentListObj : accomplishmentList)
+        {
+          for(Object accomplishmentListObj2 : (Object[])accomplishmentListObj)
+          {
+            Integer deedId=(Integer)accomplishmentListObj2;
+            DeedDescription deed=_deeds.get(deedId);
+            if (deed!=null)
+            {
+              deed.setRequiredRace(race);
+            }
+          }
+        }
+      }
     }
   }
 
