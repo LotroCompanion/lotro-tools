@@ -148,6 +148,8 @@ public class MainLinksDecoder
     doFile(new File(meva,"EmbossedMantleOfBardsWill.txt")); // Mantle, with essences
     doFile(new File(meva,"RunedGlovesOfBardWill.txt")); // Gloves, with essences
     doFile(new File(meva,"old book.txt")); // old book, non imbued
+    doFile(new File(meva,"MasterCraftedCapOfBardsWill.txt")); // old book, non imbued
+
     // Giswald
     File giswald=new File(linksDir,"giswald");
     doFile(new File(giswald,"2h weapon.txt")); // LI weapon, non imbued
