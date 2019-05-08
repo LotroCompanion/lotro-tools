@@ -42,6 +42,7 @@ public class DeedKeysInjector
 
   private void resolveDeeds()
   {
+    manualResolution();
     for(DeedDescription deed : _old.getAll())
     {
       resolveDeed(deed);
@@ -50,7 +51,11 @@ public class DeedKeysInjector
 
   private void resolveDeed(DeedDescription deed)
   {
-    //String key=deed.getKey();
+    int oldId=deed.getIdentifier();
+    if (oldId!=0)
+    {
+      return;
+    }
     String name=deed.getName();
     //System.out.println("Handling deed: "+key+" -- "+name);
     List<DeedDescription> oldDeedsWithName=_old.getDeedsByName(name);
@@ -75,12 +80,16 @@ public class DeedKeysInjector
       }
       if (newDeed==null)
       {
+        //String key=deed.getKey();
+        //System.out.println("manualResolution(\""+key+"\",1234567);");
         System.out.println("\tDeed not resolved: name=["+name+"]");
         _nbFailures++;
       }
     }
     else
     {
+      //String key=deed.getKey();
+      //System.out.println("manualResolution(\""+key+"\",1234567);");
       System.out.println("\tSeveral old deeds with that name: "+name);
       _nbFailures++;
     }
@@ -211,6 +220,153 @@ public class DeedKeysInjector
       }
     }
     return null;
+  }
+
+  private void manualResolution()
+  {
+    manualResolution("Ally_to_the_Council_of_the_North",1879190367);
+    manualResolution("Alternative_Ending_(Deed)",1879278971);
+    manualResolution("Ann%C3%BAminas_--_Glinghant",1879188607);
+    manualResolution("Ann%C3%BAminas_--_Haudh_Valandil",1879188619);
+    manualResolution("Ann%C3%BAminas_--_Ost_Elendil",1879188613);
+
+    manualResolution("Battle_Royale",0);
+
+    manualResolution("Beast_Slayer_of_Ud%C3%BBn",1879354317);
+    manualResolution("Beast_Slayer_of_Ud%C3%BBn_(Advanced)",1879354320);
+    manualResolution("Commanders_of_Isengard_--_Tier_1",1879227844);
+    manualResolution("Commanders_of_Isengard_--_Tier_2",1879227846);
+    manualResolution("Commanders_of_the_Foundry_--_Tier_1",1879226083);
+    manualResolution("Commanders_of_the_Foundry_--_Tier_2",1879226101);
+    manualResolution("Dead-slayer_(Southern_Mirkwood)",1879155758);
+    manualResolution("Deed:_The_Vanished_Rider",1879229954);
+    manualResolution("Discovery:_Northcotton_Farms",1879205935);
+    manualResolution("Dual-slayer_of_North_Ithilien",1879338673);
+    manualResolution("Dual-slayer_of_North_Ithilien_(Advanced)",1879338672);
+    manualResolution("Enraged_Stone-crusher_Slayer",1879161132);
+    manualResolution("Enraged_Stone-crusher_Slayer_(Advanced)",1879161056);
+    manualResolution("Ered_Mithrin_Beast-slayer_(Advanced)",1879378528);
+    manualResolution("Explorer_of_Dor_Amarth",1879354878);
+    manualResolution("Explorer_of_Talath_%C3%9Arui",1879354859);
+    manualResolution("Foe-slayer_of_Towers_of_the_Teeth",1879342491);
+    manualResolution("Foe-slayer_of_Towers_of_the_Teeth_(Advanced)",1879342482);
+    manualResolution("Forgeworker_Slayer_of_Ud%C3%BBn",1879354251);
+    manualResolution("Forgeworker_Slayer_of_Ud%C3%BBn_(Advanced)",1879354253);
+    manualResolution("Forgeworks_of_Ud%C3%BBn",1879354281);
+    manualResolution("Friend_to_the_Council_of_the_North",1879190366);
+    manualResolution("Geneology_of_the_Beornings_(Beorning_Deed)",1879316233);
+    manualResolution("Gredbyg-slayer_of_Lhingris",1879356159);
+    manualResolution("Gredbyg-slayer_of_Lhingris_(Advanced)",1879356160);
+    manualResolution("Host_of_the_West_Armourer_(Faction)_(Deed)",1879341965);
+    manualResolution("Host_of_the_West_Armourer_(Advanced)(Faction)_(Deed)",1879341970);
+    manualResolution("Host_of_the_West_Armourer_(Final)(Faction)_(Deed)",1879341967);
+    manualResolution("Host_of_the_West_Armourer_(Intermediate)_(Faction)_(Deed)",1879341964);
+    manualResolution("Host_of_the_West_Provisioner_(Faction)_(Deed)",1879341968);
+    manualResolution("Host_of_the_West_Provisioner_(Advanced)(Faction)_(Deed)",1879341974);
+    manualResolution("Host_of_the_West_Provisioner_(Final)(Faction)_(Deed)",1879341959);
+    manualResolution("Host_of_the_West_Provisioner_(Intermediate)_(Faction)_(Deed)",1879341972);
+    manualResolution("Host_of_the_West_Weaponist_(Faction)_(Deed)",1879341969);
+    manualResolution("Host_of_the_West_Weaponist_(Advanced)_(Faction)_(Deed)",1879341973);
+    manualResolution("Host_of_the_West_Weaponist_(Final)_(Faction)_(Deed)",1879341971);
+    manualResolution("Host_of_the_West_Weaponist_(Intermediate)_(Faction)_(Deed)",1879341966);
+    manualResolution("Ironfold_Beast-slayer_(Advanced)",1879378537);
+    manualResolution("Kindred_to_the_Entwash_Vale",1879246628);
+    manualResolution("Kindred_with_the_Council_of_the_North",1879190368);
+    manualResolution("Known_to_the_Council_of_the_North",1879190365);
+    manualResolution("Master_of_Beasts_(Advanced)_(Sarn%C3%BAr)",1879093966);
+    manualResolution("Master_of_Beasts_(Sarn%C3%BAr)",1879093965);
+    manualResolution("Master_of_the_Forgotten_Lore",1879114138);
+    manualResolution("Maze_Wing",1879190318);
+    manualResolution("Not_the_Bees_(Beorning_Deed)",1879317518);
+    manualResolution("Quests_in_Nan_Curun%C3%ADr",1879220135);
+    manualResolution("Quests_of_Limlight_Gorge",1879231052);
+    manualResolution("Quests_of_Pelennor_(After_Battle)",1879338695);
+    manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
+    manualResolution("Quick_Wrist_(Captain)",1879277396);
+    manualResolution("Quick_Wrist_(Guardian)",1879277271);
+    manualResolution("Rune-keeper_Slayer3",1879145087);
+    manualResolution("Rune-keeper_Slayer4",1879145088);
+    manualResolution("Sambrog_Wing",1879190349);
+    manualResolution("Slay_Enemies_of_Angmar1",1879084394);
+    manualResolution("Slay_Enemies_of_Angmar2",1879084396);
+    manualResolution("Slay_Enemies_of_Angmar3",1879084398);
+    manualResolution("Slay_Enemies_of_Angmar4",1879084400);
+    manualResolution("Slay_Enemies_of_Angmar5",1879084402);
+    manualResolution("Slay_Enemies_of_Angmar6",1879084404);
+    manualResolution("Slay_Enemies_of_Angmar7",1879084406);
+    manualResolution("Strong_Voice_(Warden_Deed)",1879139064); // or 1879277308
+
+    manualResolution("Subtle_Command_(deed)",0); // 0bsolete
+
+    manualResolution("The_Blighted_Ones_(Advanced)",1879147184);
+    manualResolution("The_Gate_to_Sambrog",1879190166);
+    manualResolution("The_Line_of_Beorn:_Part_Four_(Beorning_Deed)",1879316455);
+    manualResolution("The_Line_of_Beorn:_Part_One_(Beorning_Deed)",1879316458);
+    manualResolution("The_Line_of_Beorn:_Part_Three_(Beorning_Deed)",1879316456);
+    manualResolution("The_Line_of_Beorn:_Part_Two_(Beorning_Deed)",1879316457);
+    manualResolution("The_Mead_Hall:_Inhabitants",1879238995);
+    manualResolution("The_Mead_Hall:_Interior_Enhancements",1879238988);
+    manualResolution("The_Mead_Hall:_Outdoor_Enhancements",1879238987);
+    manualResolution("The_Mines_of_Moria_(Burglar)",1879139434);
+    manualResolution("The_Mines_of_Moria_(Hunter)",1879139446);
+    manualResolution("The_Mines_of_Moria_(Quests_Deed)",1879152682);
+    manualResolution("The_Mines_of_Moria_(Rune-keeper)",1879139455);
+    manualResolution("The_Mines_of_Moria_(Warden)",1879139458);
+
+    manualResolution("The_Ranger%27s_Offensive:_Tier_Five",0);
+    manualResolution("The_Ranger%27s_Offensive:_Tier_Four",0);
+    manualResolution("The_Ranger%27s_Offensive:_Tier_One",0);
+    manualResolution("The_Ranger%27s_Offensive:_Tier_Three",0);
+    manualResolution("The_Ranger%27s_Offensive:_Tier_Two",0);
+
+    manualResolution("The_Ruins_of_Breeland",1879071672);
+    manualResolution("The_Townsfolk",1879239040);
+    manualResolution("Throne_of_the_Dread_Terror:_Enslaved_of_Minas_Morgul_--_Tier_1",1879334071);
+    manualResolution("Throne_of_the_Dread_Terror:_Enslaved_of_Minas_Morgul_--_Tier_2",1879334072);
+    manualResolution("Treating_With_Scoundrels_-_Distraction",1879332082);
+    manualResolution("Water_Wing",1879190348);
+    manualResolution("Wordsmith_(Deed)",1879278975);
+    // Old deeds with duplicate names
+    manualResolution("Captain%27s_Victory_(deed)",1879051858);
+    manualResolution("Captain%27s_Victory",1879277411);
+    manualResolution("Enmity_of_the_Orcs",1879073552);
+    manualResolution("Enmity_of_the_Orcs_(Beorning_Deed)",1879317091);
+    manualResolution("Enmity_of_the_Orcs_II_(Beorning_Deed)",1879317096);
+    manualResolution("Enmity_of_the_Orcs_II",1879073553);
+    manualResolution("Enmity_of_the_Spiders_(Beorning_Deed)",1879317092);
+    manualResolution("Enmity_of_the_Spiders",1879073463);
+    manualResolution("Enmity_of_the_Spiders_II_(Beorning_Deed)",1879317093);
+    manualResolution("Enmity_of_the_Spiders_II",1879073464);
+    manualResolution("Enmity_of_the_Spiders_III",1879073465);
+    manualResolution("Enmity_of_the_Spiders_III_(Beorning_Deed)",1879317095);
+    manualResolution("Expert_Attacks",1879277415);
+    manualResolution("Expert_Attacks_(deed)",1879051855);
+    manualResolution("Now_for_Wrath",1879277409);
+    manualResolution("Now_for_Wrath_(deed)",1879051860);
+    manualResolution("Renewed_Voice",1879277397);
+    manualResolution("Renewed_Voice_(deed)",1879051847);
+    manualResolution("Strong_Voice_(Deed)",1879277413);
+    manualResolution("Strong_Voice_(deed)",1879051852);
+    manualResolution("The_Best_Defence",1879060151);
+    manualResolution("The_Best_Defence_(Deed)",1879277264);
+  }
+
+  private void manualResolution(String key, int identifier)
+  {
+    if (identifier==0)
+    {
+      return;
+    }
+    DeedDescription oldDeed=_old.getDeedByKey(key);
+    if (oldDeed!=null)
+    {
+      oldDeed.setIdentifier(identifier);
+    }
+    DeedDescription newDeed=_new.getDeedById(identifier);
+    if (newDeed!=null)
+    {
+      newDeed.setKey(key);
+    }
   }
 
   private void doIt()

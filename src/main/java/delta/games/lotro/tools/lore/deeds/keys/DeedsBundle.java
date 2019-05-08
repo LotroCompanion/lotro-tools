@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.lore.deeds.DeedDescription;
 
 /**
@@ -19,8 +21,12 @@ import delta.games.lotro.lore.deeds.DeedDescription;
  */
 public class DeedsBundle
 {
+  private static final Logger LOGGER=Logger.getLogger(DeedsBundle.class);
+
   private List<DeedDescription> _deeds;
   private Map<String,List<DeedDescription>> _mapByName;
+  private Map<String,DeedDescription> _mapByKey;
+  private Map<Integer,DeedDescription> _mapById;
 
   /**
    * Constructor.
@@ -29,6 +35,8 @@ public class DeedsBundle
   {
     _deeds=new ArrayList<DeedDescription>();
     _mapByName=new HashMap<String,List<DeedDescription>>();
+    _mapByKey=new HashMap<String,DeedDescription>();
+    _mapById=new HashMap<Integer,DeedDescription>();
   }
 
   /**
@@ -57,9 +65,32 @@ public class DeedsBundle
   private void registerDeed(DeedDescription deed)
   {
     _deeds.add(deed);
-    String name=deed.getName();
+    String name=deed.getName().trim();
     registerByName(name,deed);
-    registerByName(name.toLowerCase(),deed);
+    String lowerCase=name.toLowerCase();
+    if (!name.equals(lowerCase))
+    {
+      registerByName(name.toLowerCase(),deed);
+    }
+    String key=deed.getKey();
+    if (key!=null)
+    {
+      DeedDescription old=_mapByKey.put(key,deed);
+      if (old!=null)
+      {
+        LOGGER.warn("Duplicate deed key: "+key);
+      }
+    }
+    int id=deed.getIdentifier();
+    if (id!=0)
+    {
+      Integer idKey=Integer.valueOf(id);
+      DeedDescription old=_mapById.put(idKey,deed);
+      if (old!=null)
+      {
+        LOGGER.warn("Duplicate deed ID: "+id);
+      }
+    }
   }
 
   private void registerByName(String name, DeedDescription deed)
@@ -71,6 +102,26 @@ public class DeedsBundle
       _mapByName.put(name,deeds);
     }
     deeds.add(deed);
+  }
+
+  /**
+   * Get a deed using its key.
+   * @param key Key to search.
+   * @return A deed or <code>null</code> if not found.
+   */
+  public DeedDescription getDeedByKey(String key)
+  {
+    return _mapByKey.get(key);
+  }
+
+  /**
+   * Get a deed using its identifier.
+   * @param id Identifier to search.
+   * @return A deed or <code>null</code> if not found.
+   */
+  public DeedDescription getDeedById(int id)
+  {
+    return _mapById.get(Integer.valueOf(id));
   }
 
   /**
