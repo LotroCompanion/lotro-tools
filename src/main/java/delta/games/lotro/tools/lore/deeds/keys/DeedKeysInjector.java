@@ -7,6 +7,7 @@ import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
@@ -51,6 +52,7 @@ public class DeedKeysInjector
 
   private void resolveDeed(DeedDescription deed)
   {
+    String key=deed.getKey();
     int oldId=deed.getIdentifier();
     if (oldId!=0)
     {
@@ -80,15 +82,17 @@ public class DeedKeysInjector
       }
       if (newDeed==null)
       {
-        //String key=deed.getKey();
         //System.out.println("manualResolution(\""+key+"\",1234567);");
         System.out.println("\tDeed not resolved: name=["+name+"]");
         _nbFailures++;
       }
+      else
+      {
+        resolution(deed,newDeed,key,newDeed.getIdentifier());
+      }
     }
     else
     {
-      //String key=deed.getKey();
       //System.out.println("manualResolution(\""+key+"\",1234567);");
       System.out.println("\tSeveral old deeds with that name: "+name);
       _nbFailures++;
@@ -358,21 +362,33 @@ public class DeedKeysInjector
       return;
     }
     DeedDescription oldDeed=_old.getDeedByKey(key);
+    DeedDescription newDeed=_new.getDeedById(identifier);
+    resolution(oldDeed,newDeed,key,identifier);
+  }
+
+  private void resolution(DeedDescription oldDeed, DeedDescription newDeed, String key, int identifier)
+  {
     if (oldDeed!=null)
     {
       oldDeed.setIdentifier(identifier);
     }
-    DeedDescription newDeed=_new.getDeedById(identifier);
     if (newDeed!=null)
     {
       newDeed.setKey(key);
     }
   }
 
+  private void saveDeeds()
+  {
+    DeedXMLWriter.writeDeedsFile(OLD_FILE,_old.getAll());
+    DeedXMLWriter.writeDeedsFile(NEW_FILE,_new.getAll());
+  }
+
   private void doIt()
   {
     loadDeeds();
     resolveDeeds();
+    saveDeeds();
     System.out.println("Number of failures: "+_nbFailures);
   }
 
