@@ -105,6 +105,42 @@ public class DeedsBundle
   }
 
   /**
+   * Remove a deed.
+   * @param deed Deed to remove.
+   */
+  public void removeDeed(DeedDescription deed)
+  {
+    // Remove from map by name
+    String name=deed.getName().trim();
+    List<DeedDescription> deeds=_mapByName.get(name);
+    if (deeds!=null)
+    {
+      deeds.remove(deed);
+    }
+    String lowerCase=name.toLowerCase();
+    if (!name.equals(lowerCase))
+    {
+      deeds=_mapByName.get(lowerCase);
+      if (deeds!=null)
+      {
+        deeds.remove(deed);
+      }
+    }
+    // Remove from map by key
+    String key=deed.getKey();
+    if (key!=null)
+    {
+      _mapByKey.remove(key);
+    }
+    // Remove from map by ID
+    int id=deed.getIdentifier();
+    if (id!=0)
+    {
+      _mapById.remove(Integer.valueOf(id));
+    }
+  }
+
+  /**
    * Get a deed using its key.
    * @param key Key to search.
    * @return A deed or <code>null</code> if not found.

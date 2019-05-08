@@ -83,7 +83,7 @@ public class DeedKeysInjector
       if (newDeed==null)
       {
         //System.out.println("manualResolution(\""+key+"\",1234567);");
-        System.out.println("\tDeed not resolved: name=["+name+"]");
+        System.out.println("\tDeed not resolved: key=["+key+"], name=["+name+"]");
         _nbFailures++;
       }
       else
@@ -121,7 +121,8 @@ public class DeedKeysInjector
     if (nbNewDeeds>1)
     {
       // TODO Handle these
-      //System.out.println("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      System.out.println("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      //return null;
       return newDeeds.get(0);
     }
     return null;
@@ -229,11 +230,14 @@ public class DeedKeysInjector
   private void manualResolution()
   {
     manualResolution("Ally_to_the_Council_of_the_North",1879190367);
-    manualResolution("Alternative_Ending_(Deed)",1879278971);
+    manualResolution("Alternate_Ending_(Deed)",1879278971);
+    // This one is the same as the previous one
+    //manualResolution("Alternative_Ending_(Deed)",1879278971);
     manualResolution("Ann%C3%BAminas_--_Glinghant",1879188607);
     manualResolution("Ann%C3%BAminas_--_Haudh_Valandil",1879188619);
     manualResolution("Ann%C3%BAminas_--_Ost_Elendil",1879188613);
 
+    // Not found
     manualResolution("Battle_Royale",0);
 
     manualResolution("Beast_Slayer_of_Ud%C3%BBn",1879354317);
@@ -285,7 +289,9 @@ public class DeedKeysInjector
     manualResolution("Quests_in_Nan_Curun%C3%ADr",1879220135);
     manualResolution("Quests_of_Limlight_Gorge",1879231052);
     manualResolution("Quests_of_Pelennor_(After_Battle)",1879338695);
-    manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
+    manualResolution("Quests_to_Restore_the_North",1879366147);
+    // This one is the same as the previous one
+    //manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
     manualResolution("Quick_Wrist_(Captain)",1879277396);
     manualResolution("Quick_Wrist_(Guardian)",1879277271);
     manualResolution("Rune-keeper_Slayer3",1879145087);
@@ -299,9 +305,8 @@ public class DeedKeysInjector
     manualResolution("Slay_Enemies_of_Angmar6",1879084404);
     manualResolution("Slay_Enemies_of_Angmar7",1879084406);
     manualResolution("Strong_Voice_(Warden_Deed)",1879139064); // or 1879277308
-
-    manualResolution("Subtle_Command_(deed)",0); // 0bsolete
-
+    // Not found, marked as obsolete in Lotro-wiki
+    manualResolution("Subtle_Command_(deed)",0);
     manualResolution("The_Blighted_Ones_(Advanced)",1879147184);
     manualResolution("The_Gate_to_Sambrog",1879190166);
     manualResolution("The_Line_of_Beorn:_Part_Four_(Beorning_Deed)",1879316455);
@@ -316,13 +321,12 @@ public class DeedKeysInjector
     manualResolution("The_Mines_of_Moria_(Quests_Deed)",1879152682);
     manualResolution("The_Mines_of_Moria_(Rune-keeper)",1879139455);
     manualResolution("The_Mines_of_Moria_(Warden)",1879139458);
-
+    // Those 5 are not found in the current deeds database
     manualResolution("The_Ranger%27s_Offensive:_Tier_Five",0);
     manualResolution("The_Ranger%27s_Offensive:_Tier_Four",0);
     manualResolution("The_Ranger%27s_Offensive:_Tier_One",0);
     manualResolution("The_Ranger%27s_Offensive:_Tier_Three",0);
     manualResolution("The_Ranger%27s_Offensive:_Tier_Two",0);
-
     manualResolution("The_Ruins_of_Breeland",1879071672);
     manualResolution("The_Townsfolk",1879239040);
     manualResolution("Throne_of_the_Dread_Terror:_Enslaved_of_Minas_Morgul_--_Tier_1",1879334071);
@@ -333,10 +337,15 @@ public class DeedKeysInjector
     // Old deeds with duplicate names
     manualResolution("Captain%27s_Victory_(deed)",1879051858);
     manualResolution("Captain%27s_Victory",1879277411);
+    manualResolution("Enmity_of_the_Dourhands",1879073586);
+    manualResolution("Enmity_of_the_Dourhands_II",1879073587);
+    manualResolution("Enmity_of_the_Goblins_II_(Beorning_Deed)",1879317098);
+    manualResolution("Enmity_of_the_Goblins_III_(Beorning_Deed)",1879317097);
     manualResolution("Enmity_of_the_Orcs",1879073552);
     manualResolution("Enmity_of_the_Orcs_(Beorning_Deed)",1879317091);
     manualResolution("Enmity_of_the_Orcs_II_(Beorning_Deed)",1879317096);
     manualResolution("Enmity_of_the_Orcs_II",1879073553);
+    manualResolution("Enmity_of_the_Orcs_III",1879073554);
     manualResolution("Enmity_of_the_Spiders_(Beorning_Deed)",1879317092);
     manualResolution("Enmity_of_the_Spiders",1879073463);
     manualResolution("Enmity_of_the_Spiders_II_(Beorning_Deed)",1879317093);
@@ -345,14 +354,22 @@ public class DeedKeysInjector
     manualResolution("Enmity_of_the_Spiders_III_(Beorning_Deed)",1879317095);
     manualResolution("Expert_Attacks",1879277415);
     manualResolution("Expert_Attacks_(deed)",1879051855);
+    manualResolution("Friend_to_the_Galadhrim",1879190386);
+    manualResolution("Nameless-slayer",1879147187);
+    manualResolution("Nameless-slayer_(Advanced)",1879147188);
     manualResolution("Now_for_Wrath",1879277409);
     manualResolution("Now_for_Wrath_(deed)",1879051860);
+    manualResolution("Of_Elendilmir",1879326531);
     manualResolution("Renewed_Voice",1879277397);
     manualResolution("Renewed_Voice_(deed)",1879051847);
     manualResolution("Strong_Voice_(Deed)",1879277413);
     manualResolution("Strong_Voice_(deed)",1879051852);
     manualResolution("The_Best_Defence",1879060151);
     manualResolution("The_Best_Defence_(Deed)",1879277264);
+
+    // Force some resolutions otherwise wrong with auto resolution
+    manualResolution("Enmity_of_the_Goblins_(Hobbit)",1879073466);
+    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
   }
 
   private void manualResolution(String key, int identifier)
@@ -364,6 +381,10 @@ public class DeedKeysInjector
     DeedDescription oldDeed=_old.getDeedByKey(key);
     DeedDescription newDeed=_new.getDeedById(identifier);
     resolution(oldDeed,newDeed,key,identifier);
+    if (newDeed!=null)
+    {
+      _new.removeDeed(newDeed);
+    }
   }
 
   private void resolution(DeedDescription oldDeed, DeedDescription newDeed, String key, int identifier)
