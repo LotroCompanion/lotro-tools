@@ -9,8 +9,7 @@ import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.tools.dat.others.LootLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -22,7 +21,7 @@ public class MainDatMobsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatMobsLoader.class);
 
   private DataFacade _facade;
-  private ItemsManager _items;
+  private LootLoader _lootLoader;
 
   /**
    * Constructor.
@@ -31,7 +30,7 @@ public class MainDatMobsLoader
   public MainDatMobsLoader(DataFacade facade)
   {
     _facade=facade;
-    _items=ItemsManager.getInstance();
+    _lootLoader=new LootLoader(facade);
   }
 
   private Object load(int indexDataId)
@@ -51,7 +50,7 @@ public class MainDatMobsLoader
       if (barterTrophyList!=0)
       {
         System.out.println("\tLootGen_BarterTrophyList="+barterTrophyList);
-        handleTrophyList(barterTrophyList);
+        _lootLoader.handleTrophyList(barterTrophyList);
       }
       /*
       int generatesTrophy=((Integer)properties.getProperty("LootGen_GeneratesTrophies")).intValue();
@@ -64,7 +63,7 @@ public class MainDatMobsLoader
       if (reputationTrophyList!=0)
       {
         System.out.println("\tLootGen_ReputationTrophyList="+reputationTrophyList);
-        handleTrophyList(reputationTrophyList);
+        _lootLoader.handleTrophyList(reputationTrophyList);
       }
       int treasureListOverride=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();
       if (treasureListOverride!=0)
@@ -75,7 +74,7 @@ public class MainDatMobsLoader
       if (trophyListOverride!=0)
       {
         System.out.println("\tLootGen_TrophyList_Override="+trophyListOverride);
-        handleTrophyList(trophyListOverride);
+        _lootLoader.handleTrophyList(trophyListOverride);
       }
       Integer isRemoteLootable=(Integer)properties.getProperty("Loot_IsRemoteLootable");
       if ((isRemoteLootable==null) || (isRemoteLootable.intValue()!=1))
@@ -104,65 +103,6 @@ Quest_MonsterDivision: 245 => HallOfMirror
       LOGGER.warn("Could not handle legendary title ID="+indexDataId);
     }
     return ret;
-  }
-
-  private void handleTrophyList(int id)
-  {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
-    //System.out.println(properties.dump());
-    Object[] trophyList=(Object[])properties.getProperty("LootGen_TrophyList");
-    for(Object trophyObj : trophyList)
-    {
-      PropertiesSet trophyProps=(PropertiesSet)trophyObj;
-      int frequency=((Integer)trophyProps.getProperty("LootGen_TrophyList_DropFrequency")).intValue();
-      int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
-      Integer quantity=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
-      Item item=_items.getItem(itemOrProfile);
-      if (item!=null)
-      {
-        System.out.println("\tFreq:"+frequency+", item="+item+", quantity="+quantity);
-      }
-      else
-      {
-        System.out.println("\tFreq:"+frequency+", quantity="+quantity);
-        handleTreasureGroupProfile(itemOrProfile);
-      }
-    }
-  }
-
-  private void handleTreasureGroupProfile(int id)
-  {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
-    Object[] trophyList=(Object[])properties.getProperty("TreasureGroupProfile_ItemTable");
-    if (trophyList!=null)
-    {
-      for(Object trophyObj : trophyList)
-      {
-        PropertiesSet trophyProps=(PropertiesSet)trophyObj;
-        int weight=((Integer)trophyProps.getProperty("TreasureGroupProfile_ItemTable_Weight")).intValue();
-        int itemOrProfile=((Integer)trophyProps.getProperty("TreasureGroupProfile_ItemTable_Item")).intValue();
-        Item item=_items.getItem(itemOrProfile);
-        System.out.println("\t\tWeight:"+weight+", item="+item);
-      }
-    }
-    Object[] treasureList=(Object[])properties.getProperty("LootGen_TreasureList");
-    if (treasureList!=null)
-    {
-      for(Object treasureObj : treasureList)
-      {
-        PropertiesSet treasureProps=(PropertiesSet)treasureObj;
-        Integer weight=(Integer)treasureProps.getProperty("TreasureGroupProfile_ItemTable_Weight");
-        int profile=((Integer)treasureProps.getProperty("LootGen_TreasureList_GroupProfile")).intValue();
-        System.out.println("\t\tWeight:"+weight);
-        handleTreasureGroupProfile(profile);
-      }
-    }
-    if ((trophyList==null) && (treasureList==null))
-    {
-      System.out.println("**********************");
-      System.out.println(properties.dump());
-      return;
-    }
   }
 
   private boolean useId(int id)
