@@ -351,7 +351,9 @@ public class MainDatAchievablesLoader
 
     // Rewards
     Rewards rewards=deed.getRewards();
-    _rewardsLoader.fillRewards(properties,rewards);
+    ChallengeLevel challengeLevel=_rewardsLoader.fillRewards(properties,rewards);
+    // Challenge level
+    deed.setChallengeLevel(challengeLevel);
 
     // Objectives
     _objectivesLoader.handleObjectives(deed.getObjectives(),properties);
@@ -667,6 +669,8 @@ public class MainDatAchievablesLoader
 
   private void doScan()
   {
+    //int[] IDS=new int[]{1879277326,1879139074};
+    //for(int id : IDS)
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
