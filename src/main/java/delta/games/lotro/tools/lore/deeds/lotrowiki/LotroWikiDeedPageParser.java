@@ -304,23 +304,6 @@ public class LotroWikiDeedPageParser
           handleSkillReward(rewards,skillStr);
         }
       }
-      else if ("DP-reward".equals(lineKey))
-      {
-        String destinyPointsStr=getLineValue(line);
-        if (!destinyPointsStr.isEmpty())
-        {
-          int destinyPoints;
-          if ("?".equals(destinyPointsStr))
-          {
-            destinyPoints=1;
-          }
-          else
-          {
-            destinyPoints=NumericTools.parseInt(destinyPointsStr,0);
-          }
-          rewards.setDestinyPoints(destinyPoints);
-        }
-      }
       else if ("Level".equals(lineKey))
       {
         String levelStr=getLineValue(line);
