@@ -181,7 +181,7 @@ public class MainDatAchievablesLoader
     */
     // Chain
     // - previous
-    boolean obsolete=findPreviousQuests(quest,properties);
+    boolean obsolete=findPrerequisites(quest,properties);
     quest.setObsolete(obsolete);
     // - next
     Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
@@ -338,6 +338,9 @@ public class MainDatAchievablesLoader
     deed.setCategory(uiTabName);
     // Deed type
     handleDeedType(deed,properties);
+
+    boolean obsolete=findPrerequisites(deed,properties);
+    deed.setObsolete(obsolete);
 
     // Requirements
     findRequirements(deed,properties);
@@ -569,7 +572,7 @@ public class MainDatAchievablesLoader
     */
   }
 
-  private boolean findPreviousQuests(QuestDescription quest, PropertiesSet properties)
+  private boolean findPrerequisites(Achievable achievable, PropertiesSet properties)
   {
     boolean obsolete=false;
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
@@ -591,7 +594,7 @@ public class MainDatAchievablesLoader
               //System.out.println("Requires completed quest: "+questId);
               Proxy<Achievable> proxy=new Proxy<Achievable>();
               proxy.setId(questId);
-              quest.addPrerequisite(proxy);
+              achievable.addPrerequisite(proxy);
             }
             else
             {
