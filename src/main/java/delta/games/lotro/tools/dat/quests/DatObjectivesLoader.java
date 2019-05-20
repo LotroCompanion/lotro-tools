@@ -85,6 +85,7 @@ public class DatObjectivesLoader
         objectivesManager.addObjective(objective);
       }
     }
+    objectivesManager.sort();
   }
 
   private void handleObjectiveItem(Objective objective, Object item)
