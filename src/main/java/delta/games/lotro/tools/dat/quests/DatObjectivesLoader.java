@@ -4,6 +4,8 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.objectives.ConditionType;
+import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
@@ -27,6 +29,8 @@ public class DatObjectivesLoader
   private EnumMapper _questEvent;
   private EnumMapper _questCategory;
   //private EnumMapper _deedCategory;
+
+  //public static HashSet<String> propNames=new HashSet<String>();
 
   /**
    * Constructor.
@@ -138,10 +142,6 @@ public class DatObjectivesLoader
     }
     // Progress override
     String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",Markers.CHARACTER);
-    if (progressOverride!=null)
-    {
-      System.out.println("\t\tProgress override: "+progressOverride);
-    }
     // Role constraint
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     if (roleConstraint!=null)
@@ -150,10 +150,6 @@ public class DatObjectivesLoader
     }
     // Lore info
     String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
-    if (loreInfo!=null)
-    {
-      System.out.println("\t\tLore info: "+loreInfo);
-    }
 
     // Deeds:
     // QuestEvent_ID: {32=3936, 22=1142, 1=889, 21=869, 26=611, 31=487, 45=411, 7=349, 25=116,
@@ -204,40 +200,50 @@ public class DatObjectivesLoader
  */
 
     ObjectiveCondition condition=null;
+    ConditionType type=null;
     if (questEventId==1)
     {
+      type=ConditionType.ENTER_DETECTION;
       handleEnterDetection(properties);
     }
     else if (questEventId==7)
     {
+      type=ConditionType.ITEM_USED;
       handleItemUsed(properties);
     }
     else if (questEventId==11)
     {
+      type=ConditionType.NPC_TALK;
       handleNpcTalk(properties);
     }
     else if (questEventId==21)
     {
+      type=ConditionType.LANDMARK_DETECTION;
       handleLandmarkDetection(properties);
     }
     else if (questEventId==22)
     {
+      type=ConditionType.MONSTER_DIED;
       handleMonsterDieCondition(properties);
     }
     else if (questEventId==24)
     {
+      type=ConditionType.EMOTE;
       handleEmoteCondition(properties);
     }
     else if (questEventId==25)
     {
+      type=ConditionType.PLAYER_DIED;
       handlePlayerDied(properties);
     }
     else if (questEventId==26)
     {
+      type=ConditionType.SKILL_USED;
       handleSkillUsed(properties);
     }
     else if (questEventId==31)
     {
+      type=ConditionType.INVENTORY_ITEM;
       handleInventoryItem(properties);
     }
     else if (questEventId==32)
@@ -246,24 +252,37 @@ public class DatObjectivesLoader
     }
     else if (questEventId==34)
     {
+      type=ConditionType.WORLD_EVENT_CONDITION;
       handleWorldEventCondition(properties);
     }
     else if (questEventId==39)
     {
+      type=ConditionType.HOBBY_ITEM;
       handleHobbyItem(properties);
     }
     else if (questEventId==45)
     {
+      type=ConditionType.FACTION_LEVEL;
       handleFactionLevel(properties);
     }
-    if (condition!=null)
+
+    if (condition==null)
     {
-      if (eventOrder!=null)
-      {
-        condition.setIndex(eventOrder.intValue());
-      }
-      objective.addCondition(condition);
+      condition=new DefaultObjectiveCondition(type);
     }
+    if (eventOrder!=null)
+    {
+      condition.setIndex(eventOrder.intValue());
+    }
+    if (loreInfo!=null)
+    {
+      condition.setLoreInfo(loreInfo);
+    }
+    if (progressOverride!=null)
+    {
+      condition.setProgressOverride(progressOverride);
+    }
+    objective.addCondition(condition);
   }
 
   private void handleEnterDetection(PropertiesSet properties)
@@ -295,12 +314,17 @@ public class DatObjectivesLoader
 
   private void handleNpcTalk(PropertiesSet properties)
   {
+    //propNames.addAll(properties.getPropertyNames());
     /*
      * QuestEvent_RoleConstraint: used 6 times for limlight spirits.
      * QuestEvent_NPCTalk: almost always (76/82). NPC ID?
      * Quest_Role: gives some text, sound ID... for the NPC... (50/82)
      * QuestEvent_CanTeleportToObjective: optional, used 12 times: Integer 0.
      * QuestEvent_Number: always 1.
+[QuestEvent_WaitForDrama, QuestEvent_DramaName, Quest_GiveItemArray, QuestEvent_ShowProgressText, QuestEvent_RoleConstraint,
+QuestEvent_ShowBillboardText, QuestEvent_ID, QuestEvent_ForceCheckContentLayer, QuestEvent_DramaProgressOverride,
+QuestEvent_ProgressOverride, QuestEvent_GiveItemsOnAdvance, QuestEvent_HideRadarIcon, Accomplishment_LoreInfo,
+QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, QuestEvent_IsRemote, QuestEvent_ItemDID, QuestEvent_RunDramaOnAdvance, QuestEvent_Locations_ForceFullLandblock, QuestEvent_LocationsAreOverrides, QuestEvent_Locations, QuestEvent_IsFellowUseShared, QuestEvent_ApplyEffectArray, Quest_Role]
      */
   }
 
