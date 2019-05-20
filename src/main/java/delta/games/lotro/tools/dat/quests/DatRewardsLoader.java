@@ -114,13 +114,13 @@ public class DatRewardsLoader
     Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
     if (treasureId!=null)
     {
-      getRewards(rewards,treasureId.intValue());
+      loadRewards(rewards,treasureId.intValue());
     }
-    handleQuestRewards(rewards,properties,rewardLevel);
+    loadScalableRewards(rewards,properties,rewardLevel);
     return challengeLevel;
   }
 
-  private void getRewards(Rewards rewards, int questTreasureId)
+  private void loadRewards(Rewards rewards, int questTreasureId)
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
 
@@ -490,7 +490,7 @@ public class DatRewardsLoader
     return rewardsMap;
   }
 
-  private void handleQuestRewards(Rewards rewards, PropertiesSet properties, RewardsMap rewardsMap)
+  private void loadScalableRewards(Rewards rewards, PropertiesSet properties, RewardsMap rewardsMap)
   {
     // Gold
     Integer goldTier=((Integer)properties.getProperty("Quest_GoldTier"));
