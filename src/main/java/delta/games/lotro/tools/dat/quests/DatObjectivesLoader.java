@@ -11,6 +11,7 @@ import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.MobLoader;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.utils.Proxy;
 
@@ -109,8 +110,6 @@ public class DatObjectivesLoader
 
   private void handleCompletionCondition(Objective objective, PropertiesSet properties)
   {
-    int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
-
     /*
      * Shared condition attributes:
      * Accomplishment_LoreInfo: verbose text about the condition (deeds only)
@@ -126,9 +125,9 @@ public class DatObjectivesLoader
     Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
     //System.out.println("\tEvent #"+eventOrder);
     // ID
-    Integer eventId=(Integer)properties.getProperty("QuestEvent_ID");
-    String eventMeaning=_questEvent.getString(eventId.intValue());
-    System.out.println("\t\tEvent ID: "+eventId+" ("+eventMeaning+")");
+    int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
+    String eventMeaning=_questEvent.getString(questEventId);
+    System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
     // Billboard
     Integer showBillboardText=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
     if ((showBillboardText!=null) && (showBillboardText.intValue()!=0))
@@ -371,7 +370,6 @@ QuestEvent_MonsterGenus_Array:
       {
         PropertiesSet mobRegionProps=(PropertiesSet)monsterGenusArray[i];
         // Where
-        
         Integer regionId=(Integer)mobRegionProps.getProperty("Quest_MonsterRegion");
         Integer mobDivision=(Integer)mobRegionProps.getProperty("Quest_MonsterDivision");
         Integer landmarkId=(Integer)mobRegionProps.getProperty("QuestEvent_LandmarkDID");
@@ -424,7 +422,8 @@ QuestEvent_MonsterGenus_Array:
       Integer mobId=(Integer)properties.getProperty("QuestEvent_MonsterDID");
       if (mobId!=null)
       {
-        String mobType="Mob:"+mobId;
+        String mobName=MobLoader.loadMob(_facade,mobId.intValue());
+        String mobType="Mob:"+mobName+"("+mobId+")";
         typesRegions=mobType;
       }
     }

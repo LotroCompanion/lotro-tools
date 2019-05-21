@@ -24,13 +24,11 @@ public class PlaceLoader
    */
   public static String loadPlace(DataFacade facade, int placeId)
   {
-    //TraitDescription ret=null;
-    String ret=null;
-    PropertiesSet placeProperties=facade.loadProperties(0x9000000+placeId);
-    if (placeProperties!=null)
+    String ret=_names.get(Integer.valueOf(placeId));
+    if (ret==null)
     {
-      ret=_names.get(Integer.valueOf(placeId));
-      if (ret==null)
+      PropertiesSet placeProperties=facade.loadProperties(0x9000000+placeId);
+      if (placeProperties!=null)
       {
         //System.out.println("*********** Place: "+placeId+" ****************");
         //System.out.println(placeProperties.dump());
@@ -62,12 +60,11 @@ public class PlaceLoader
    */
   public static String loadLandmark(DataFacade facade, int landmarkId)
   {
-    String ret=null;
-    PropertiesSet landmarkProperties=facade.loadProperties(0x9000000+landmarkId);
-    if (landmarkProperties!=null)
+    String ret=_names.get(Integer.valueOf(landmarkId));
+    if (ret==null)
     {
-      ret=_names.get(Integer.valueOf(landmarkId));
-      if (ret==null)
+      PropertiesSet landmarkProperties=facade.loadProperties(0x9000000+landmarkId);
+      if (landmarkProperties!=null)
       {
         //System.out.println("*********** Place: "+landmarkId+" ****************");
         //System.out.println(landmarkProperties.dump());
