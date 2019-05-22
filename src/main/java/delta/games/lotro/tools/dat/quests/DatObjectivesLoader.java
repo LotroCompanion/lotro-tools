@@ -6,6 +6,8 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
+import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
@@ -222,8 +224,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==22)
     {
-      type=ConditionType.MONSTER_DIED;
-      handleMonsterDieCondition(properties);
+      condition=handleMonsterDieCondition(properties);
     }
     else if (questEventId==24)
     {
@@ -344,7 +345,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     }
   }
 
-  private void handleMonsterDieCondition(PropertiesSet properties)
+  private MonsterDiedCondition handleMonsterDieCondition(PropertiesSet properties)
   {
     /*
 QuestEvent_MonsterGenus_Array: 
@@ -355,13 +356,8 @@ QuestEvent_Number: 1
 QuestEvent_ShowBillboardText: 0
      */
 
-    /*
-QuestEvent_MonsterGenus_Array: 
-  #1: 
-    Quest_MonsterRegion: 1879049792
-    Quest_MonsterSpecies: 57
-     */
-    String typesRegions="";
+    MonsterDiedCondition ret=new MonsterDiedCondition();
+
     Object[] monsterGenusArray=(Object[])properties.getProperty("QuestEvent_MonsterGenus_Array");
     if (monsterGenusArray!=null)
     {
@@ -398,23 +394,30 @@ QuestEvent_MonsterGenus_Array:
         if (subSpeciesId!=null)
         {
           String subSpeciesStr=_subSpecies.getString(subSpeciesId.intValue());
-          mobType=concat(mobType,"Subspecies:"+subSpeciesStr);
+          mobType=concat(mobType,/*"Subspecies:"+*/subSpeciesStr);
         }
         if (speciesId!=null)
         {
           String speciesStr=_species.getString(speciesId.intValue());
-          mobType=concat(mobType,"Species:"+speciesStr);
+          mobType=concat(mobType,/*"Species:"+*/speciesStr);
         }
         if (genusId!=null)
         {
           String genusStr=_genus.getString(genusId.intValue());
-          mobType=concat(mobType,"Genus:"+genusStr);
+          // Sometimes genudId is a bitset in the enum (values 8 (Spiders and Insects), 64 (Troll-kind), 8192 (Beast)
+          // 1024 => The Dead? weird in deed "Lore of the Enemy"... Correctly used in "Spirits Aiding Angmar"
+          // May be we can ignore if species/subspecies are not defined
+          mobType=concat(mobType,/*"Genus:"+*/genusStr);
         }
         if (mobId!=null)
         {
-          mobType=concat(mobType,"Mob:"+mobId);
+          String mobName=MobLoader.loadMob(_facade,mobId.intValue());
+          mobType=concat(mobType,/*"Mob:"+mobId*/mobName);
         }
-        typesRegions=mobType+((where!=null)?" in "+where:"");
+        MobSelection selection=new MobSelection();
+        selection.setWhere(where);
+        selection.setWhat(mobType);
+        ret.getMobSelections().add(selection);
       }
     }
     else
@@ -423,23 +426,15 @@ QuestEvent_MonsterGenus_Array:
       if (mobId!=null)
       {
         String mobName=MobLoader.loadMob(_facade,mobId.intValue());
-        String mobType="Mob:"+mobName+"("+mobId+")";
-        typesRegions=mobType;
+        //String mobType="Mob:"+mobName+"("+mobId+")";
+        ret.setMobId(mobId);
+        ret.setMobName(mobName);
       }
     }
     Integer nbTimes=(Integer)properties.getProperty("QuestEvent_Number");
-    String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
-    String progressOverride=DatUtils.getStringProperty(properties,"QuestEvent_ProgressOverride");
-    String text="*** Kill "+((nbTimes!=null)?nbTimes:"")+" monster(s):"+typesRegions;
-    System.out.println(text);
-    if (loreInfo!=null)
-    {
-      System.out.println(loreInfo);
-    }
-    if ((progressOverride!=null) && (!progressOverride.equals(loreInfo)))
-    {
-      System.out.println(progressOverride);
-    }
+    int count=(nbTimes!=null)?nbTimes.intValue():1;
+    ret.setCount(count);
+    return ret;
   }
 
   private void handleEmoteCondition(PropertiesSet properties)
