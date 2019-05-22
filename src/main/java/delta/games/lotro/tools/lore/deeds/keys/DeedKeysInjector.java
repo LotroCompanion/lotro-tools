@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.lore.deeds.keys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.common.CharacterClass;
@@ -17,6 +18,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 public class DeedKeysInjector
 {
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
+  private static final File OLD_FILE_NO_ID=new File("../lotro-deeds-db/deeds_no_id.xml").getAbsoluteFile();
   private static final File NEW_FILE=GeneratedFiles.DEEDS;
 
   private DeedsBundle _old;
@@ -401,8 +403,25 @@ public class DeedKeysInjector
 
   private void saveDeeds()
   {
-    DeedXMLWriter.writeDeedsFile(OLD_FILE,_old.getAll());
+    List<DeedDescription> oldDeeds=_old.getAll();
+    List<DeedDescription> oldNoId=getDeedsWithNoId(oldDeeds);
+    oldDeeds.removeAll(oldNoId);
+    DeedXMLWriter.writeDeedsFile(OLD_FILE,oldDeeds);
+    DeedXMLWriter.writeDeedsFile(OLD_FILE_NO_ID,oldNoId);
     DeedXMLWriter.writeDeedsFile(NEW_FILE,_new.getAll());
+  }
+
+  private List<DeedDescription> getDeedsWithNoId(List<DeedDescription> deeds)
+  {
+    List<DeedDescription> ret=new ArrayList<DeedDescription>();
+    for(DeedDescription deed : deeds)
+    {
+      if (deed.getIdentifier()==0)
+      {
+        ret.add(deed);
+      }
+    }
+    return ret;
   }
 
   private void doIt()
