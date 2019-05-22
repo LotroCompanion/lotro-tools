@@ -191,6 +191,8 @@ PackageItem_TrophyListTemplate: 0
     load(1879265139);
     // Coffer of Adventurer's Armour - Heavy (Incomparable: 1879378494)
     load(1879378494);
+    // Coffer of Adventurer's Jewellery - Might (Incomparable: 1879378473)
+    load(1879378473);
   }
 
   /**
