@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.quests;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
@@ -26,12 +27,11 @@ public class DatObjectivesLoader
   private DataFacade _facade;
 
   private EnumMapper _monsterDivision;
-  private EnumMapper _genus;
-  private EnumMapper _species;
-  private EnumMapper _subSpecies;
   private EnumMapper _questEvent;
   private EnumMapper _questCategory;
   //private EnumMapper _deedCategory;
+
+  private MobLoader _mobLoader;
 
   //public static HashSet<String> propNames=new HashSet<String>();
 
@@ -43,12 +43,10 @@ public class DatObjectivesLoader
   {
     _facade=facade;
     _monsterDivision=_facade.getEnumsManager().getEnumMapper(587202657);
-    _genus=_facade.getEnumsManager().getEnumMapper(587202570);
-    _species=_facade.getEnumsManager().getEnumMapper(587202571);
-    _subSpecies=_facade.getEnumsManager().getEnumMapper(587202572);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
     //_deedCategory=_facade.getEnumsManager().getEnumMapper(587202587);
+    _mobLoader=new MobLoader(facade);
   }
 
   /**
@@ -386,37 +384,11 @@ QuestEvent_ShowBillboardText: 0
           where=concat(where,landmarkName);
         }
         // What
-        Integer speciesId=(Integer)mobRegionProps.getProperty("Quest_MonsterSpecies");
-        Integer subSpeciesId=(Integer)mobRegionProps.getProperty("Quest_MonsterSubspecies");
-        Integer genusId=(Integer)mobRegionProps.getProperty("Quest_MonsterGenus");
-        Integer mobId=(Integer)mobRegionProps.getProperty("QuestEvent_MonsterDID");
-        String mobType=null;
-        if (subSpeciesId!=null)
-        {
-          String subSpeciesStr=_subSpecies.getString(subSpeciesId.intValue());
-          mobType=concat(mobType,/*"Subspecies:"+*/subSpeciesStr);
-        }
-        if (speciesId!=null)
-        {
-          String speciesStr=_species.getString(speciesId.intValue());
-          mobType=concat(mobType,/*"Species:"+*/speciesStr);
-        }
-        if (genusId!=null)
-        {
-          String genusStr=_genus.getString(genusId.intValue());
-          // Sometimes genudId is a bitset in the enum (values 8 (Spiders and Insects), 64 (Troll-kind), 8192 (Beast)
-          // 1024 => The Dead? weird in deed "Lore of the Enemy"... Correctly used in "Spirits Aiding Angmar"
-          // May be we can ignore if species/subspecies are not defined
-          mobType=concat(mobType,/*"Genus:"+*/genusStr);
-        }
-        if (mobId!=null)
-        {
-          String mobName=MobLoader.loadMob(_facade,mobId.intValue());
-          mobType=concat(mobType,/*"Mob:"+mobId*/mobName);
-        }
+        MobReference mobReference=_mobLoader.buildMobReference(mobRegionProps);
+        String what=(mobReference!=null)?mobReference.getLabel():null;
         MobSelection selection=new MobSelection();
         selection.setWhere(where);
-        selection.setWhat(mobType);
+        selection.setWhat(what);
         ret.getMobSelections().add(selection);
       }
     }
@@ -425,8 +397,7 @@ QuestEvent_ShowBillboardText: 0
       Integer mobId=(Integer)properties.getProperty("QuestEvent_MonsterDID");
       if (mobId!=null)
       {
-        String mobName=MobLoader.loadMob(_facade,mobId.intValue());
-        //String mobType="Mob:"+mobName+"("+mobId+")";
+        String mobName=_mobLoader.loadMob(mobId.intValue());
         ret.setMobId(mobId);
         ret.setMobName(mobName);
       }
