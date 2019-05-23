@@ -602,12 +602,10 @@ public class DatRewardsLoader
       {
         if (challengeLevelOverrideProperty.intValue()==268439569)
         {
-          System.out.println("Challenge level is character level");
           ret=ChallengeLevel.CHARACTER_LEVEL;
         }
         else if (challengeLevelOverrideProperty.intValue()==268446666)
         {
-          System.out.println("Challenge level is skirmish level");
           ret=ChallengeLevel.SKIRMISH_LEVEL;
         }
         else
