@@ -1,10 +1,10 @@
-  package delta.games.lotro.tools.dat.utils;
+package delta.games.lotro.tools.dat.utils;
 
-  import java.util.HashMap;
-  import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
 
-  import delta.games.lotro.dat.data.DataFacade;
-  import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
@@ -107,11 +107,45 @@ public class MobLoader
 
   private String getGenus(int genusId)
   {
-    String genusStr=_genus.getString(genusId);
-    // Sometimes genudId is a bitset in the enum (values 8 (Spiders and Insects), 64 (Troll-kind), 8192 (Beast)
-    // 1024 => The Dead? weird in deed "Lore of the Enemy"... Correctly used in "Spirits Aiding Angmar"
-    // May be we can ignore if species/subspecies are defined
-    // TODO Use bit set
-    return genusStr;
+    if (genusId==0)
+    {
+      return null;
+    }
+    // genusId is a bitset. Each bit set is to be interpreted using the GenusType enum
+    // 1 = 2^(1-1) = 1: Orc-kind
+    // 4 = 2^(3-1) => 3: Man
+    // 8 = 2^(4-1) => 4: Spiders and Insects
+    // 16 = 2^(5-1) => 5: Ancient Evil
+    // 64 = 2^(7-1) => 7: Troll-kind
+    // 1024 = 2^(11-1) => 11: The Dead (found in deed "Lore of the Enemy", weird. Otherwise OK, for instance in deed "Spirits Aiding Angmar")
+    // 2048 = 2^(12-1) => 12: Elf
+    // 8192 = 2^(14-1) => 14: Beast
+    // 16384 = 2^(15-1) => 15: Dwarf
+    // 32768 = 2^(16-1) => 16: Hobbit
+    return getGenusUsingBitSet(genusId);
+  }
+
+  private String getGenusUsingBitSet(int genusBitSet)
+  {
+    StringBuilder sb=new StringBuilder();
+    int mask=1;
+    for(int i=1;i<=16;i++)
+    {
+      if ((genusBitSet&mask)!=0)
+      {
+        String selectedGenus=_genus.getString(i);
+        if (sb.length()>0)
+        {
+          sb.append(",");
+        }
+        sb.append(selectedGenus);
+      }
+      mask<<=1;
+    }
+    if (sb.length()==0)
+    {
+      return null;
+    }
+    return sb.toString();
   }
 }
