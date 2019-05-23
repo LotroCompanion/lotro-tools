@@ -126,18 +126,17 @@ public class DatObjectivesLoader
     //System.out.println("\tEvent #"+eventOrder);
     // ID
     int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
-    String eventMeaning=_questEvent.getString(questEventId);
-    System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
+    //System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
     // Billboard
     Integer showBillboardText=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
     if ((showBillboardText!=null) && (showBillboardText.intValue()!=0))
     {
-      System.out.println("\t\tShow billboard text: "+showBillboardText);
+      //System.out.println("\t\tShow billboard text: "+showBillboardText);
     }
     String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",Markers.CHARACTER);
     if (billboardProgressOverride!=null)
     {
-      System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
+      //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
     }
     // Progress override
     String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",Markers.CHARACTER);
@@ -145,7 +144,7 @@ public class DatObjectivesLoader
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     if (roleConstraint!=null)
     {
-      System.out.println("\t\tRole constraint: "+roleConstraint);
+      //System.out.println("\t\tRole constraint: "+roleConstraint);
     }
     // Lore info
     String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
@@ -263,6 +262,11 @@ public class DatObjectivesLoader
       type=ConditionType.FACTION_LEVEL;
       handleFactionLevel(properties);
     }
+    else
+    {
+      //String eventMeaning=_questEvent.getString(questEventId);
+      //System.out.println("Unmanaged quest event: ID="+questEventId+", meaning="+eventMeaning);
+    }
 
     if (condition==null)
     {
@@ -338,8 +342,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer landmarkId=(Integer)properties.getProperty("QuestEvent_LandmarkDID");
     if (landmarkId!=null)
     {
-      String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
-      System.out.println("Landmark detection: ID="+landmarkId+", name="+landmarkName);
+      //String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
+      //System.out.println("Landmark detection: ID="+landmarkId+", name="+landmarkName);
     }
   }
 
@@ -422,14 +426,14 @@ QuestEvent_ShowBillboardText: 0
     {
       text=text+" (max "+maxTimesPerDay+" times/day)";
     }
-    System.out.println(text);
+    //System.out.println(text);
     if (loreInfo!=null)
     {
-      System.out.println(loreInfo);
+      //System.out.println(loreInfo);
     }
     if ((progressOverride!=null) && (!progressOverride.equals(loreInfo)))
     {
-      System.out.println(progressOverride);
+      //System.out.println(progressOverride);
     }
   }
 

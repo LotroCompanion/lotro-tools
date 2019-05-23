@@ -32,12 +32,14 @@ public class DatRolesLoader
    */
   public void loadRoles(QuestDescription quest, PropertiesSet properties)
   {
+    /*
     handleBestowalRoles(quest,properties);
     handleGlobalRoles(quest,properties);
-    privateHandleRoles(quest,properties);
+    handleRoles(quest,properties);
+    */
   }
 
-  private void handleBestowalRoles(QuestDescription quest, PropertiesSet properties)
+  void handleBestowalRoles(QuestDescription quest, PropertiesSet properties)
   {
     // Quest_BestowalRoles
     Object[] roles=(Object[])properties.getProperty("Quest_BestowalRoles");
@@ -113,7 +115,7 @@ public class DatRolesLoader
     }
   }
 
-  private void privateHandleRoles(QuestDescription quest, PropertiesSet properties)
+  void handleRoles(QuestDescription quest, PropertiesSet properties)
   {
     // Quest_RoleArray
     Object[] roles=(Object[])properties.getProperty("Quest_RoleArray");
