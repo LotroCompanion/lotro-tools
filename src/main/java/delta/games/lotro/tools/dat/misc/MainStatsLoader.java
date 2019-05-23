@@ -1,7 +1,7 @@
 package delta.games.lotro.tools.dat.misc;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatDescriptionComparator;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
@@ -84,10 +85,10 @@ public class MainStatsLoader
     StatMappings.setupMappings(_stats);
     // Add legacy data (name, index)
     addLegacyData();
-    // Filter stats to keep only legacy ones, ordered as before
-    filterStats();
-    // Save stats
+    // Sort stats
     List<StatDescription> stats=_stats.getAll();
+    Collections.sort(stats,new StatDescriptionComparator());
+    // Save stats
     int nbStats=stats.size();
     File toFile=GeneratedFiles.STATS;
     LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
@@ -209,45 +210,6 @@ public class MainStatsLoader
     addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR);
     // Add other stats
     addCustomStat(id--,"DPS","DPS",false);
-  }
-
-  /**
-   * Filter loaded stats to keep only previously known stats, ordered as previously.
-   */
-  void filterStats()
-  {
-    List<StatDescription> newList=new ArrayList<StatDescription>();
-    List<String> keys=getKeysOfStatsToKeep();
-    for(String key : keys)
-    {
-      StatDescription stat=_stats.getByKey(key);
-      if (stat!=null)
-      {
-        newList.add(stat);
-      }
-      else
-      {
-        LOGGER.warn("Stat not found: "+key);
-      }
-    }
-    _stats.clear();
-    for(StatDescription stat : newList)
-    {
-      _stats.addStat(stat);
-    }
-  }
-
-  private List<String> getKeysOfStatsToKeep()
-  {
-    List<String> keys=new ArrayList<String>();
-    for(OldStatEnum old : OldStatEnum.values())
-    {
-      String key=old.name();
-      keys.add(key);
-    }
-    keys.remove("BLADE_AOE_SKILLS_POWER_COST_PERCENTAGE");
-    keys.add("DPS");
-    return keys;
   }
 
   /**
