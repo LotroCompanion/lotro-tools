@@ -3,10 +3,12 @@ package delta.games.lotro.tools.dat.quests;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.Objective;
@@ -216,8 +218,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==21)
     {
-      type=ConditionType.LANDMARK_DETECTION;
-      handleLandmarkDetection(properties);
+      condition=handleLandmarkDetection(properties);
     }
     else if (questEventId==22)
     {
@@ -330,8 +331,9 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
      */
   }
 
-  private void handleLandmarkDetection(PropertiesSet properties)
+  private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties)
   {
+    LandmarkDetectionCondition ret=new LandmarkDetectionCondition();
     /*
     QuestEvent_ForceCheckContentLayer: optional, used 2 times: Integer 1
     QuestEvent_QuestComplete_SuppressQuestCountUpdate: optional, used once: Integer 1
@@ -342,9 +344,13 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer landmarkId=(Integer)properties.getProperty("QuestEvent_LandmarkDID");
     if (landmarkId!=null)
     {
-      //String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
-      //System.out.println("Landmark detection: ID="+landmarkId+", name="+landmarkName);
+      String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
+      Proxy<LandmarkDescription> landmark=new Proxy<LandmarkDescription>();
+      landmark.setId(landmarkId.intValue());
+      landmark.setName(landmarkName);
+      ret.setLandmarkProxy(landmark);
     }
+    return ret;
   }
 
   private MonsterDiedCondition handleMonsterDieCondition(PropertiesSet properties)
