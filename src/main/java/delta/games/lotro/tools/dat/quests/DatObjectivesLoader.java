@@ -1,13 +1,18 @@
 package delta.games.lotro.tools.dat.quests;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.geo.LandmarkDescription;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
@@ -26,6 +31,8 @@ import delta.games.lotro.utils.Proxy;
  */
 public class DatObjectivesLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
+
   private DataFacade _facade;
 
   private EnumMapper _monsterDivision;
@@ -241,8 +248,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==31)
     {
-      type=ConditionType.INVENTORY_ITEM;
-      handleInventoryItem(properties);
+      condition=handleInventoryItem(properties);
     }
     else if (questEventId==32)
     {
@@ -475,7 +481,7 @@ QuestEvent_ShowBillboardText: 0
     */
   }
 
-  private void handleInventoryItem(PropertiesSet properties)
+  private InventoryItemCondition handleInventoryItem(PropertiesSet properties)
   {
     /*
      * QuestEvent_ForceCheckContentLayer: optional, used once: Integer 1
@@ -485,6 +491,32 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_DestroyInventoryItems: optional, always 1 when present (398/488).
      *     Indicates if the item is destroyed when acquired or not.
      */
+    InventoryItemCondition ret=new InventoryItemCondition();
+
+    // Count
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    if (count!=null)
+    {
+      ret.setCount(count.intValue());
+    }
+    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    if (itemId!=null)
+    {
+      Item item=ItemsManager.getInstance().getItem(itemId.intValue());
+      if (item!=null)
+      {
+        String itemName=item.getName();
+        Proxy<Item> itemProxy=new Proxy<Item>();
+        itemProxy.setId(itemId.intValue());
+        itemProxy.setName(itemName);
+        ret.setProxy(itemProxy);
+      }
+      else
+      {
+        LOGGER.warn("Could not find item with ID="+itemId);
+      }
+    }
+    return ret;
   }
 
   private QuestCompleteCondition handleQuestComplete(PropertiesSet properties)
