@@ -12,10 +12,13 @@ import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
@@ -159,10 +162,10 @@ public class DatObjectivesLoader
     String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
 
     // Deeds:
-    // QuestEvent_ID: {32=3936, 22=1142, 1=889, 21=869, 26=611, 31=487, 45=411, 7=349, 25=116,
+    // QuestEvent_ID: {32=3936(done), 22=1142(done), 1=889, 21=869(done), 26=611, 31=487(done), 45=411, 7=349, 25=116,
     // 34=108, 11=82, 39=51, 4=41, 18=29, 24=22, 16=20, 6=15, 10=2, 58=2, 59=1}
     // Quests:
-    // QuestEvent_ID:  {11=11545, 7=3845, 22=3164, 1=2970, 32=1967, 34=1599, 10=1162, 31=831, 5=640, 21=425,
+    // QuestEvent_ID:  {11=11545, 7=3845, 22=3164(done), 1=2970, 32=1967(done), 34=1599, 10=1162, 31=831(done), 5=640, 21=425(done),
     // 24=301, 14=293, 19=210, 27=196, 13=187, 56=17320=144, 16=123, 37=97, 29=97, 33=72, 2=58, 59=50, 25=46,
     // 18=43, 26=39, 58=35, 57=35, 4=25, 46=16, 40=15, 39=14, 43=14, 30=12, 45=8, 38=5, 6=1, 9=1}
 
@@ -266,8 +269,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==45)
     {
-      type=ConditionType.FACTION_LEVEL;
-      handleFactionLevel(properties);
+      condition=handleFactionLevel(properties);
     }
     else
     {
@@ -609,13 +611,25 @@ QuestEvent_ShowBillboardText: 0
      */
   }
 
-  private void handleFactionLevel(PropertiesSet properties)
+  private FactionLevelCondition handleFactionLevel(PropertiesSet properties)
   {
     /*
      * Condition validated when the given faction tier is reached.
      * QuestEvent_FactionDID: always. Faction ID.
      * QuestEvent_ReputationTier: always. Faction tier: 1->7
      */
+
+    int factionId=((Integer)properties.getProperty("QuestEvent_FactionDID")).intValue();
+    int tier=((Integer)properties.getProperty("QuestEvent_ReputationTier")).intValue();
+    FactionLevelCondition ret=new FactionLevelCondition();
+    Proxy<Faction> factionProxy=new Proxy<Faction>();
+    factionProxy.setId(factionId);
+    Faction faction=FactionsRegistry.getInstance().getById(factionId);
+    String factionName=(faction!=null)?faction.getName():"?";
+    factionProxy.setName(factionName);
+    ret.setProxy(factionProxy);
+    ret.setTier(tier);
+    return ret;
   }
 
   private String concat(String base, String add)
