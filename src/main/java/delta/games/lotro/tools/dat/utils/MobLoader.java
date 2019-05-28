@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.utils;
 
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,25 +123,19 @@ public class MobLoader
     // 8192 = 2^(14-1) => 14: Beast
     // 16384 = 2^(15-1) => 15: Dwarf
     // 32768 = 2^(16-1) => 16: Hobbit
-    return getGenusUsingBitSet(genusId);
-  }
-
-  private String getGenusUsingBitSet(int genusBitSet)
-  {
+    BitSet bitset=BitSetUtils.getBitSetFromFlags(genusId);
     StringBuilder sb=new StringBuilder();
-    int mask=1;
-    for(int i=1;i<=16;i++)
+    for(int i=0;i<16;i++)
     {
-      if ((genusBitSet&mask)!=0)
+      if (bitset.get(i))
       {
-        String selectedGenus=_genus.getString(i);
+        String selectedGenus=_genus.getString(i+1);
         if (sb.length()>0)
         {
           sb.append(",");
         }
         sb.append(selectedGenus);
       }
-      mask<<=1;
     }
     if (sb.length()==0)
     {
