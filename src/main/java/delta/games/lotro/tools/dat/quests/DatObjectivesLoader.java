@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.quests;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -17,12 +18,13 @@ import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
-import delta.games.lotro.lore.reputation.Faction;
-import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.MobLoader;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
@@ -481,6 +483,33 @@ QuestEvent_ShowBillboardText: 0
     // QuestEvent_Skill_AttackResultArray: always, array of Integer (see Enum: CombatResultType, (id=587202602))
     //   9: Hit, 10: CriticalHit, 11: SuperCriticalHit
     */
+
+    Integer skillId=(Integer)properties.getProperty("QuestEvent_SkillDID");
+    if (skillId!=null)
+    {
+      SkillDescription skill=SkillLoader.getSkill(_facade,skillId.intValue());
+      Proxy<SkillDescription> proxy=null;
+      if (skill!=null)
+      {
+        proxy=new Proxy<SkillDescription>();
+        proxy.setId(skill.getIdentifier());
+        proxy.setName(skill.getName());
+        proxy.setObject(skill);
+      }
+      else
+      {
+        LOGGER.warn("Skill not found: "+skillId);
+      }
+    }
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    Integer dailyMaxIncrement=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
+    Long flags=(Long)properties.getProperty("QuestEvent_SkillQuestFlags");
+    if ((flags!=null) && (flags.longValue()!=0))
+    {
+      System.out.println("Flags: "+flags);
+    }
+    Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
+    //System.out.println(properties.dump());
   }
 
   private InventoryItemCondition handleInventoryItem(PropertiesSet properties)

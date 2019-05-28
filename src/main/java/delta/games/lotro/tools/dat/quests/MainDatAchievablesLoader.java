@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
@@ -30,6 +31,7 @@ import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -729,6 +731,9 @@ public class MainDatAchievablesLoader
     // Save traits
     TraitsManager traitsMgr=TraitsManager.getInstance();
     TraitLoader.saveTraits(traitsMgr);
+    // Save skills
+    SkillsManager skillsMgr=SkillsManager.getInstance();
+    SkillLoader.saveSkills(skillsMgr);
   }
 
   private void doIndex()
