@@ -76,7 +76,7 @@ public class SkillLoader
       String description=DatUtils.getStringProperty(skillProperties,"Skill_Desc");
       ret.setDescription(description);
       // Icon
-      int iconId=((Integer)skillProperties.getProperty("Skill_Icon")).intValue();
+      int iconId=((Integer)skillProperties.getProperty("Skill_SmallIcon")).intValue();
       ret.setIconId(iconId);
       // Category
       int categoryId=((Integer)skillProperties.getProperty("Skill_Category")).intValue();
