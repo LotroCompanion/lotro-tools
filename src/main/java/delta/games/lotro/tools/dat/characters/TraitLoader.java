@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
+import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
@@ -84,6 +85,21 @@ public class TraitLoader
           LOGGER.warn("Could not build trait icon: "+iconFilename);
         }
       }
+      // Skills
+      Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
+      if (skillArray!=null) 
+      {
+        for(Object skillIdObj : skillArray)
+        {
+          int skillId=((Integer)skillIdObj).intValue();
+          SkillDescription skill=SkillLoader.getSkill(facade,skillId);
+          if (skill!=null)
+          {
+            ret.addSkill(skill);
+          }
+        }
+      }
+      
     }
     return ret;
   }

@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -29,6 +30,9 @@ public class MainCharacterDataLoader
     DatStatUtils._statsUsageStatistics.showResults();
     // Save traits
     TraitLoader.saveTraits(traitsManager);
+    // Save skills
+    SkillsManager skillsManager=SkillsManager.getInstance();
+    SkillLoader.saveSkills(skillsManager);
 
     facade.dispose();
   }
