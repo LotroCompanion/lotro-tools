@@ -7,8 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
+import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
@@ -86,6 +88,7 @@ public class CharacterClassDataLoader
     loadInitialStats(characterClass,properties);
     loadStatDerivations(characterClass,properties);
     loadTraits(classDescription,properties);
+    loadSkills(classDescription,properties);
     // TODO loadSkills: AdvTable_AvailableSkillEntryList
     // TODO Initial gear:
     // AdvTable_StartingInventory_List: initial gear at level 1, ...
@@ -298,6 +301,33 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       _traitsManager.registerTrait(trait);
       ClassTrait classTrait=new ClassTrait(level,trait);
       description.addTrait(classTrait);
+    }
+  }
+
+  private void loadSkills(ClassDescription description, PropertiesSet properties)
+  {
+/*
+AdvTable_AvailableSkillEntryList: 
+  #1: 
+    AdvTable_AdvancedCharacterShortcutIndex: 1
+    AdvTable_Level: 1
+    AdvTable_PrerequisiteSkill: 0
+    AdvTable_Rank: 0
+    AdvTable_Skill: 1879064061
+    AdvTable_TrainingCost: 0
+ */
+    Object[] skillsProperties=(Object[])properties.getProperty("AdvTable_AvailableSkillEntryList");
+    for(Object skillPropertiesObj : skillsProperties)
+    {
+      PropertiesSet skillProperties=(PropertiesSet)skillPropertiesObj;
+      int level=((Integer)skillProperties.getProperty("AdvTable_Level")).intValue();
+      int skillId=((Integer)skillProperties.getProperty("AdvTable_Skill")).intValue();
+      SkillDescription skill=SkillLoader.getSkill(_facade,skillId);
+      if (skill!=null)
+      {
+        ClassSkill classSkill=new ClassSkill(level,skill);
+        description.addSkill(classSkill);
+      }
     }
   }
 
