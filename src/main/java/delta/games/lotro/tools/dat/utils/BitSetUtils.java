@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.utils;
 
 import java.util.BitSet;
 
+import delta.games.lotro.dat.data.enums.EnumMapper;
+
 /**
  * Utility methods related to bit sets.
  * @author DAM
@@ -46,5 +48,38 @@ public class BitSetUtils
       mask<<=1;
     }
     return ret;
+  }
+
+  /**
+   * Build a string from a bit set and an enum mapper.
+   * @param data Bit set.
+   * @param enumMapper Enum mapper.
+   * @param separator Separator to use.
+   * @return A string or <code>null</code> if no bit set.
+   */
+  public static String getStringFromBitSet(BitSet data, EnumMapper enumMapper, String separator)
+  {
+    int length=data.length();
+    if (length>0)
+    {
+      StringBuilder sb=new StringBuilder();
+      for(int i=0;i<length;i++)
+      {
+        if (data.get(i))
+        {
+          String itemStr=enumMapper.getString(i+1);
+          if (itemStr!=null)
+          {
+            if (sb.length()>0)
+            {
+              sb.append(separator);
+            }
+            sb.append(itemStr);
+          }
+        }
+      }
+      return sb.toString();
+    }
+    return null;
   }
 }

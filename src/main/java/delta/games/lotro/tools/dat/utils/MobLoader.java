@@ -124,23 +124,7 @@ public class MobLoader
     // 16384 = 2^(15-1) => 15: Dwarf
     // 32768 = 2^(16-1) => 16: Hobbit
     BitSet bitset=BitSetUtils.getBitSetFromFlags(genusId);
-    StringBuilder sb=new StringBuilder();
-    for(int i=0;i<16;i++)
-    {
-      if (bitset.get(i))
-      {
-        String selectedGenus=_genus.getString(i+1);
-        if (sb.length()>0)
-        {
-          sb.append(",");
-        }
-        sb.append(selectedGenus);
-      }
-    }
-    if (sb.length()==0)
-    {
-      return null;
-    }
-    return sb.toString();
+    String genus=BitSetUtils.getStringFromBitSet(bitset,_genus,",");
+    return genus;
   }
 }
