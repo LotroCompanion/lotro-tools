@@ -434,6 +434,8 @@ public class MainDatLegaciesLoader
   {
     NonImbuedLegacyTier legacyTier=null;
     Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
+    // Remove name: it is not interesting for non imbued legacies
+    effect.setName(null);
     StatDescription stat=getStat(effect);
     TieredNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
     if (legacy==null)
@@ -600,6 +602,8 @@ public class MainDatLegaciesLoader
       Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
       if (effect!=null)
       {
+        // Remove name: it is not interesting for non imbued legacies
+        effect.setName(null);
         legacy=new DefaultNonImbuedLegacy();
         legacy.setEffect(effect);
         legacy.setType(type);
