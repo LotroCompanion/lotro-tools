@@ -88,6 +88,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_LEGACIES=new File("data/progressions/tmp/progressions_legacies.xml").getAbsoluteFile();
   /**
+   * Progressions for achievables.
+   */
+  public static final File PROGRESSIONS_ACHIEVABLES=new File("data/progressions/tmp/progressions_achievables.xml").getAbsoluteFile();
+  /**
    * All progressions.
    */
   public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);

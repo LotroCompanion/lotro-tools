@@ -34,6 +34,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 import delta.games.lotro.utils.Proxy;
@@ -734,6 +735,8 @@ public class MainDatAchievablesLoader
     // Save skills
     SkillsManager skillsMgr=SkillsManager.getInstance();
     SkillLoader.saveSkills(skillsMgr);
+    // Save progressions
+    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
   }
 
   private void doIndex()

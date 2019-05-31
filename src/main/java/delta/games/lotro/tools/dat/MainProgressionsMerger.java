@@ -3,10 +3,10 @@ package delta.games.lotro.tools.dat;
 import delta.games.lotro.common.progression.ProgressionsManager;
 
 /**
- * Main entry for loading data from DAT files.
+ * Tool to merge progression files into a single file.
  * @author DAM
  */
-public class MainDatLoader
+public class MainProgressionsMerger
 {
   private void doIt()
   {
@@ -19,6 +19,7 @@ public class MainDatLoader
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
+    progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     progressions.writeToFile(GeneratedFiles.PROGRESSIONS);
   }
 
@@ -28,6 +29,6 @@ public class MainDatLoader
    */
   public static void main(String[] args)
   {
-    new MainDatLoader().doIt();
+    new MainProgressionsMerger().doIt();
   }
 }
