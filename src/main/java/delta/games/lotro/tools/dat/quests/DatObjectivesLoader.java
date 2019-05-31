@@ -17,6 +17,7 @@ import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
+import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
@@ -248,8 +249,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==26)
     {
-      type=ConditionType.SKILL_USED;
-      handleSkillUsed(properties);
+      condition=handleSkillUsed(properties);
     }
     else if (questEventId==31)
     {
@@ -473,7 +473,7 @@ QuestEvent_ShowBillboardText: 0
     */
   }
 
-  private void handleSkillUsed(PropertiesSet properties)
+  private SkillUsedCondition handleSkillUsed(PropertiesSet properties)
   {
     /*
     // QuestEvent_Number: number of time to use the skill
@@ -484,6 +484,7 @@ QuestEvent_ShowBillboardText: 0
     //   9: Hit, 10: CriticalHit, 11: SuperCriticalHit
     */
 
+    SkillUsedCondition ret=new SkillUsedCondition();
     Integer skillId=(Integer)properties.getProperty("QuestEvent_SkillDID");
     if (skillId!=null)
     {
@@ -495,14 +496,21 @@ QuestEvent_ShowBillboardText: 0
         proxy.setId(skill.getIdentifier());
         proxy.setName(skill.getName());
         proxy.setObject(skill);
+        ret.setProxy(proxy);
       }
       else
       {
         LOGGER.warn("Skill not found: "+skillId);
       }
     }
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    Integer countInt=(Integer)properties.getProperty("QuestEvent_Number");
+    int count=(countInt!=null)?countInt.intValue():1;
+    ret.setCount(count);
     Integer dailyMaxIncrement=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
+    if (dailyMaxIncrement!=null)
+    {
+      ret.setMaxPerDay(dailyMaxIncrement);
+    }
     Long flags=(Long)properties.getProperty("QuestEvent_SkillQuestFlags");
     if ((flags!=null) && (flags.longValue()!=0))
     {
@@ -510,6 +518,7 @@ QuestEvent_ShowBillboardText: 0
     }
     Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
     //System.out.println(properties.dump());
+    return ret;
   }
 
   private InventoryItemCondition handleInventoryItem(PropertiesSet properties)
