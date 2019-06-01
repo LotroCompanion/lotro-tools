@@ -10,6 +10,7 @@ import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.mobs.MobReference;
+import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
@@ -17,6 +18,7 @@ import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
+import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.Objective;
@@ -28,6 +30,7 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.MobLoader;
+import delta.games.lotro.tools.dat.utils.NpcLoader;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.utils.Proxy;
 
@@ -226,8 +229,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==11)
     {
-      type=ConditionType.NPC_TALK;
-      handleNpcTalk(properties);
+      condition=handleNpcTalk(properties);
     }
     else if (questEventId==21)
     {
@@ -325,9 +327,8 @@ public class DatObjectivesLoader
     //String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
   }
 
-  private void handleNpcTalk(PropertiesSet properties)
+  private NpcTalkCondition handleNpcTalk(PropertiesSet properties)
   {
-    //propNames.addAll(properties.getPropertyNames());
     /*
      * QuestEvent_RoleConstraint: used 6 times for limlight spirits.
      * QuestEvent_NPCTalk: almost always (76/82). NPC ID?
@@ -339,6 +340,18 @@ QuestEvent_ShowBillboardText, QuestEvent_ID, QuestEvent_ForceCheckContentLayer, 
 QuestEvent_ProgressOverride, QuestEvent_GiveItemsOnAdvance, QuestEvent_HideRadarIcon, Accomplishment_LoreInfo,
 QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, QuestEvent_IsRemote, QuestEvent_ItemDID, QuestEvent_RunDramaOnAdvance, QuestEvent_Locations_ForceFullLandblock, QuestEvent_LocationsAreOverrides, QuestEvent_Locations, QuestEvent_IsFellowUseShared, QuestEvent_ApplyEffectArray, Quest_Role]
      */
+
+    NpcTalkCondition ret=new NpcTalkCondition();
+    Integer npcId=(Integer)properties.getProperty("QuestEvent_NPCTalk");
+    if (npcId!=null)
+    {
+      String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
+      Proxy<NpcDescription> proxy=new Proxy<NpcDescription>();
+      proxy.setId(npcId.intValue());
+      proxy.setName(npcName);
+      ret.setProxy(proxy);
+    }
+    return ret;
   }
 
   private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties)
@@ -516,7 +529,7 @@ QuestEvent_ShowBillboardText: 0
     {
       System.out.println("Flags: "+flags);
     }
-    Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
+    //Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
     //System.out.println(properties.dump());
     return ret;
   }
