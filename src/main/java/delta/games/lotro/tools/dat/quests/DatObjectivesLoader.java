@@ -275,10 +275,34 @@ public class DatObjectivesLoader
     {
       condition=handleFactionLevel(properties);
     }
+    else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
+    else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
+    else if (questEventId==5) type=ConditionType.NPC_USED;
+    else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
+    else if (questEventId==9) type=ConditionType.DETECTING;
+    else if (questEventId==10) type=ConditionType.EXTERNAL_INVENTORY_ITEM;
+    else if (questEventId==13) type=ConditionType.CHANNELING;
+    else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
+    else if (questEventId==16) type=ConditionType.ITEM_TALK;
+    else if (questEventId==18) type=ConditionType.LEVEL;
+    else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
+    else if (questEventId==27) type=ConditionType.KUNG_FU;
+    else if (questEventId==29) type=ConditionType.ESCORT;
+    else if (questEventId==30) type=ConditionType.SELF_DIED;
+    else if (questEventId==33) type=ConditionType.CRAFT_RECIPE_EXECUTION;
+    else if (questEventId==37) type=ConditionType.SESSION_FINISHED;
+    else if (questEventId==38) type=ConditionType.RESOURCE_SET;
+    else if (questEventId==40) type=ConditionType.ITEM_ADVANCEMENT;
+    else if (questEventId==43) type=ConditionType.DISMOUNTED;
+    else if (questEventId==46) type=ConditionType.TELEPORTED;
+    else if (questEventId==56) type=ConditionType.ENTER_PLAYER_AOI;
+    else if (questEventId==57) type=ConditionType.CORPSE_USED;
+    else if (questEventId==58) type=ConditionType.SCRIPT_CALLBACK;
+    else if (questEventId==59) type=ConditionType.QUEST_BESTOWED;
     else
     {
-      //String eventMeaning=_questEvent.getString(questEventId);
-      //System.out.println("Unmanaged quest event: ID="+questEventId+", meaning="+eventMeaning);
+      String eventMeaning=_questEvent.getString(questEventId);
+      LOGGER.warn("Unmanaged quest event: ID="+questEventId+", meaning="+eventMeaning);
     }
 
     if (condition==null)
@@ -309,6 +333,9 @@ public class DatObjectivesLoader
      * QuestEvent_RoleConstraint seems to give the string ID of the thing to detect.
      * QuestEvent_ProgressOverride gives a useable text.
      */
+    Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    System.out.println("Enter detect: "+detect+", role="+roleConstraint);
   }
 
   private void handleItemUsed(PropertiesSet properties)
