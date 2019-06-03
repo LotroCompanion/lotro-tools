@@ -177,6 +177,7 @@ Mod_Array:
 
   private void doIt()
   {
+    DatStatUtils.doFilterStats=false;
     List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

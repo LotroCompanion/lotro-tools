@@ -63,6 +63,7 @@ public class MainDatLegaciesLoader
 
   private void doIt()
   {
+    DatStatUtils.doFilterStats=false;
     loadNonImbuedLegacies();
     doItWithScan();
     //doItFromIndex();

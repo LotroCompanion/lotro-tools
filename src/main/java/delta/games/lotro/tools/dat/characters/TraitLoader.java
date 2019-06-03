@@ -72,6 +72,7 @@ public class TraitLoader
       // See enum: SkillCharacteristicCategory (id=587202586). 93 = Discounts:
 
       // Stats
+      DatStatUtils.doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
       ret.setStatsProvider(statsProvider);
       // Build icon file

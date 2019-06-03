@@ -31,6 +31,11 @@ public class DatStatUtils
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
   /**
+   * Flaf to indicate if stats shall be filtered or not.
+   */
+  public static boolean doFilterStats=true;
+
+  /**
    * Progressions manager.
    */
   public static ProgressionsManager _progressions=new ProgressionsManager();
@@ -80,70 +85,73 @@ public class DatStatUtils
         PropertiesSet statProperties=(PropertiesSet)mods[i];
         Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
         PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
-        String statKey=def.getName();
-        boolean useStat=useStat(statKey);
-        if (!useStat) continue;
         StatDescription stat=getStatDescription(def);
+        if (stat==null)
+        {
+          LOGGER.warn("Stat not found: "+def.getName());
+          continue;
+        }
+        //String statKey=def.getName();
+        //boolean useStat=useStat(statKey);
+        boolean useStat=useStat(stat);
+        if (!useStat) continue;
         /*
         String descriptionOverride=getDescriptionOverride(statProperties);
         if (descriptionOverride!=null)
         {
-          //System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
+          System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
         }
         */
-        if (stat!=null)
+        _statsUsageStatistics.registerStatUsage(stat);
+        StatProvider provider=null;
+        Number value=null;
+        // Often 7 for "add"
+        Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
+        StatOperator operator=getOperator(modOp);
+        Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
+        if (progressId!=null)
         {
-          _statsUsageStatistics.registerStatUsage(stat);
-          StatProvider provider=null;
-          Number value=null;
-          // Often 7 for "add"
-          Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
-          StatOperator operator=getOperator(modOp);
-          Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
-          if (progressId!=null)
+          provider=buildStatProvider(facade,stat,progressId.intValue());
+        }
+        else
+        {
+          Object propValue=statProperties.getProperty(def.getName());
+          if (propValue instanceof Number)
           {
-            provider=buildStatProvider(facade,stat,progressId.intValue());
+            value=(Number)propValue;
+            float statValue=StatUtils.fixStatValue(stat,value.floatValue());
+            if (Math.abs(statValue)>0.001)
+            {
+              provider=new ConstantStatProvider(stat,statValue);
+            }
           }
           else
           {
-            Object propValue=statProperties.getProperty(def.getName());
-            if (propValue instanceof Number)
-            {
-              value=(Number)propValue;
-              float statValue=StatUtils.fixStatValue(stat,value.floatValue());
-              if (Math.abs(statValue)>0.001)
-              {
-                provider=new ConstantStatProvider(stat,statValue);
-              }
-            }
-            else
-            {
-              LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
-            }
+            LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
           }
-          if (provider!=null)
+        }
+        if (provider!=null)
+        {
+          Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
+          Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
+          if ((minLevel!=null) || (maxLevel!=null))
           {
-            Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
-            Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
-            if ((minLevel!=null) || (maxLevel!=null))
+            RangedStatProvider rangedProvider=null;
+            if (rangedStatProviders==null) rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
+            rangedProvider=rangedStatProviders.get(stat);
+            if (rangedProvider==null)
             {
-              RangedStatProvider rangedProvider=null;
-              if (rangedStatProviders==null) rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
-              rangedProvider=rangedStatProviders.get(stat);
-              if (rangedProvider==null)
-              {
-                rangedProvider=new RangedStatProvider(stat);
-                rangedStatProviders.put(stat,rangedProvider);
-                statsProvider.addStatProvider(rangedProvider);
-              }
-              rangedProvider.addRange(minLevel,maxLevel,provider);
+              rangedProvider=new RangedStatProvider(stat);
+              rangedStatProviders.put(stat,rangedProvider);
+              statsProvider.addStatProvider(rangedProvider);
             }
-            else
-            {
-              statsProvider.addStatProvider(provider);
-            }
-            provider.setOperator(operator);
+            rangedProvider.addRange(minLevel,maxLevel,provider);
           }
+          else
+          {
+            statsProvider.addStatProvider(provider);
+          }
+          provider.setOperator(operator);
         }
       }
     }
@@ -155,7 +163,7 @@ public class DatStatUtils
     String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
     if (descriptionOverride!=null)
     {
-      return Arrays.toString(descriptionOverride);
+      return descriptionOverride.length+": "+Arrays.toString(descriptionOverride);
       /*
       if ((descriptionOverride.length==2) && ("+".equals(descriptionOverride[0].trim())))
       {
@@ -260,7 +268,7 @@ public class DatStatUtils
    * @param propertyDefinition Property definition.
    * @return A stat description.
    */
-  public static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
+  private static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
   {
     StatDescription ret=null;
     StatsRegistry registry=StatsRegistry.getInstance();
@@ -280,21 +288,21 @@ public class DatStatUtils
       }
       ret=registry.getById(id);
     }
-    /*
-    if (ret==null)
-    {
-      String key=propertyDefinition.getName();
-      LOGGER.warn("Added missing stat: ID="+id+", key="+key);
-      StatDescription stat=new StatDescription(id);
-      stat.setKey(key);
-      registry.addStat(stat);
-      ret=stat;
-    }
-    */
     return ret;
   }
 
-  private static boolean useStat(String key)
+  private static boolean useStat(StatDescription stat)
+  {
+    if (doFilterStats)
+    {
+      Integer index=stat.getIndex();
+      return index!=null;
+    }
+    return true;
+  }
+
+  /*
+  private static boolean old_useStat(String key)
   {
     if ("AI_PetEffect_HeraldBaseWC_Override".equals(key)) return false;
     if ("AI_PetEffect_ArcherBaseWC_Override".equals(key)) return false;
@@ -320,6 +328,7 @@ public class DatStatUtils
 
     return true;
   }
+  */
 
   private static String fixStat(String key)
   {

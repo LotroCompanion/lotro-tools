@@ -215,6 +215,7 @@ public class MainDatItemsLoader
       // Class requirements
       item.setRequiredClass(getRequiredClass(properties));
       // Stats providers
+      DatStatUtils.doFilterStats=true;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       if (armorStatProvider!=null)
       {
@@ -243,6 +244,7 @@ public class MainDatItemsLoader
         loadWeaponSpecifics((Weapon)item,properties);
       }
       // Handle legendaries
+      DatStatUtils.doFilterStats=false;
       handleLegendaries(properties);
     }
     else
