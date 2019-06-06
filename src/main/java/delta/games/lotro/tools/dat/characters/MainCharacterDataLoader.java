@@ -22,7 +22,7 @@ public class MainCharacterDataLoader
     // Load character class data
     new CharacterClassDataLoader(facade,traitsManager).doIt();
     // Load virtues data
-    new VirtueDataLoader(facade,traitsManager).doIt();
+    new VirtueDataLoader(facade).doIt();
 
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);

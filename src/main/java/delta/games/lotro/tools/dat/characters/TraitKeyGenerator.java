@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.common.VirtueId;
 
 /**
  * Insert legacy keys into traits.
@@ -78,15 +77,6 @@ public class TraitKeyGenerator
     setup("DETERMINATION",1879270470);
     setup("LIGHT_ON_ONES_FEET","Light on One's Feet");
     setup("DELIBERATE_ADDRESS","Deliberate Address");
-
-    // Virtues
-    for(VirtueId virtue : VirtueId.values())
-    {
-      if (virtue==VirtueId.DETERMINATION) setup("Virtue:"+VirtueId.DETERMINATION.name(),1879072876);
-      else if (virtue==VirtueId.LOYALTY) setup("Virtue:"+VirtueId.LOYALTY.name(),1879072885);
-      else if (virtue==VirtueId.VALOUR) setup("Virtue:"+VirtueId.VALOUR.name(),1879072890);
-      else setup("Virtue:"+virtue.name(),virtue.getLabel());
-    }
   }
 
   private void setup(String key, int identifier)
