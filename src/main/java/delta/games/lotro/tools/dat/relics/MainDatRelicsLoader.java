@@ -142,9 +142,9 @@ public class MainDatRelicsLoader
   private void doIt()
   {
     _categories=_facade.getEnumsManager().getEnumMapper(587203232);
-    for(int i=1879114433;i<=1879368329;i++)
+    for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
-      byte[] data=_facade.loadData(i);
+      byte[] data=_facade.loadData(id);
       if (data!=null)
       {
         int did=BufferUtils.getDoubleWordAt(data,0);
@@ -161,11 +161,6 @@ public class MainDatRelicsLoader
     if (ok)
     {
       System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
-    }
-    ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS2);
-    if (ok)
-    {
-      System.out.println("Wrote relics file: "+GeneratedFiles.RELICS2);
     }
     // Write relic icons
     DirectoryArchiver archiver=new DirectoryArchiver();

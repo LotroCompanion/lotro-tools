@@ -11,7 +11,7 @@ public class GeneratedFiles
   /**
    * Classes.
    */
-  public static final File CLASSES=new File("../lotro-companion/data/lore/characters/classes.xml").getAbsoluteFile();
+  public static final File CLASSES=new File("../lotro-data/data/lore/characters/classes.xml").getAbsoluteFile();
   /**
    * Start stats.
    */
@@ -27,11 +27,7 @@ public class GeneratedFiles
   /**
    * Traits.
    */
-  public static final File TRAITS=new File("../lotro-companion/data/lore/characters/traits.xml").getAbsoluteFile();
-  /**
-   * Traits (2).
-   */
-  public static final File TRAITS2=new File("../lotro-data/traits/traits.xml").getAbsoluteFile();
+  public static final File TRAITS=new File("../lotro-data/traits/traits.xml").getAbsoluteFile();
   /**
    * Trait icons.
    */
@@ -39,11 +35,7 @@ public class GeneratedFiles
   /**
    * Titles.
    */
-  public static final File TITLES=new File("../lotro-companion/data/lore/titles.xml").getAbsoluteFile();
-  /**
-   * Titles (2).
-   */
-  public static final File TITLES2=new File("../lotro-data/titles/titles.xml").getAbsoluteFile();
+  public static final File TITLES=new File("../lotro-data/titles/titles.xml").getAbsoluteFile();
   /**
    * Title icons.
    */
@@ -51,11 +43,7 @@ public class GeneratedFiles
   /**
    * Emotes.
    */
-  public static final File EMOTES=new File("../lotro-companion/data/lore/emotes.xml").getAbsoluteFile();
-  /**
-   * Emotes (2).
-   */
-  public static final File EMOTES2=new File("../lotro-data/emotes/emotes.xml").getAbsoluteFile();
+  public static final File EMOTES=new File("../lotro-data/emotes/emotes.xml").getAbsoluteFile();
   /**
    * Emote icons.
    */
@@ -63,7 +51,7 @@ public class GeneratedFiles
   /**
    * Items.
    */
-  public static final File ITEMS=new File("../lotro-companion/data/lore/items.xml").getAbsoluteFile();
+  public static final File ITEMS=new File("../lotro-items-db/items.xml").getAbsoluteFile();
   /**
    * Item icons.
    */
@@ -79,23 +67,15 @@ public class GeneratedFiles
   /**
    * All progressions.
    */
-  public static final File PROGRESSIONS=new File("../lotro-companion/data/lore/progressions.xml").getAbsoluteFile();
+  public static final File PROGRESSIONS=new File("../lotro-data/common/progressions.xml").getAbsoluteFile();
   /**
    * Recipes.
    */
-  public static final File RECIPES=new File("../lotro-companion/data/lore/recipes.xml").getAbsoluteFile();
-  /**
-   * Recipes (2).
-   */
-  public static final File RECIPES2=new File("../lotro-data/recipes/recipes.xml").getAbsoluteFile();
+  public static final File RECIPES=new File("../lotro-data/recipes/recipes.xml").getAbsoluteFile();
   /**
    * Relics.
    */
-  public static final File RELICS=new File("../lotro-companion/data/lore/relics.xml").getAbsoluteFile();
-  /**
-   * Relics (2).
-   */
-  public static final File RELICS2=new File("../lotro-relics/relics.xml").getAbsoluteFile();
+  public static final File RELICS=new File("../lotro-relics/relics.xml").getAbsoluteFile();
   /**
    * Relic icons.
    */
