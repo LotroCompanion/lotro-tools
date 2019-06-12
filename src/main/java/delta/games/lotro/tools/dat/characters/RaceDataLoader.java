@@ -156,13 +156,16 @@ RaceTable_NationalityList:
       int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
       //System.out.println("Race: "+raceId);
       RaceDescription description=_racesById.get(Integer.valueOf(raceId));
-      Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
-      for(Object traitObj : traitsArray)
+      if (description!=null)
       {
-        int traitId=((Integer)traitObj).intValue();
-        TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-        _traitsManager.registerTrait(trait);
-        description.addEarnableTrait(trait);
+        Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
+        for(Object traitObj : traitsArray)
+        {
+          int traitId=((Integer)traitObj).intValue();
+          TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
+          _traitsManager.registerTrait(trait);
+          description.addEarnableTrait(trait);
+        }
       }
     }
   }
