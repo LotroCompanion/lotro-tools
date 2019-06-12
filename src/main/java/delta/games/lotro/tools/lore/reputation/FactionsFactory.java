@@ -154,6 +154,7 @@ public class FactionsFactory
     initFaction(category,"MEN_OF_DALE","Men of Dale",null,FactionLevelsTemplates.CLASSIC);
     initFaction(category,"DWARVES_OF_EREBOR","Dwarves of Erebor",null,FactionLevelsTemplates.CLASSIC);
     initFaction(category,"GREY_MOUNTAINS_EXPEDITION","Grey Mountains Expedition",null,FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"WILDERFOLK","Wilderfolk",null,FactionLevelsTemplates.CLASSIC);
     category="Dunland";
     Faction algraig=initFaction(category,"ALGRAIG","Algraig, Men of Enedwaith",new String[]{"Algraig"},FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,algraig);
