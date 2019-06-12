@@ -35,6 +35,8 @@ public class MainCharacterDataLoader
     // Additional progressions
     // - for virtues:
     DatStatUtils.getProgression(facade,1879383539);
+    // - for a trait
+    DatStatUtils.getProgression(facade,1879311673);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Save traits
