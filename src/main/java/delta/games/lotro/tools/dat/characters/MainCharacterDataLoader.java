@@ -34,7 +34,14 @@ public class MainCharacterDataLoader
 
     // Additional progressions
     // - for virtues:
-    DatStatUtils.getProgression(facade,1879383539);
+    int[] virtuesProgIds= {1879389521,1879389522,1879389523,1879389554,1879389555,
+        1879389639,
+        1879390231,1879390232,1879390233,1879390234,1879390235,1879390236,
+        1879387583,1879383539};
+    for(int virtuesProgId : virtuesProgIds)
+    {
+      DatStatUtils.getProgression(facade,virtuesProgId);
+    }
     // - for a trait
     DatStatUtils.getProgression(facade,1879311673);
     // Save progressions
