@@ -12,6 +12,7 @@ import java.util.Set;
 import delta.common.utils.files.TextFileWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.io.xml.ItemSaxParser;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Builds a LUA/Tulkas items database with one item associated
@@ -126,10 +127,7 @@ public class BuildItemsDbForIcons
 
   private void doIt()
   {
-    File oldFile=new File("data\\items\\items.old.xml").getAbsoluteFile();
-    oldFile=null;
-    File newFile=new File("data\\items\\items.xml").getAbsoluteFile();
-    HashMap<Integer,Item> items=loadItemsFile(oldFile,newFile);
+    HashMap<Integer,Item> items=loadItemsFile(null,GeneratedFiles.ITEMS);
     doIt(items);
     System.out.println("Total items count: "+items.size());
   }
