@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RaceGender;
 import delta.games.lotro.character.races.RaceTrait;
@@ -28,7 +30,7 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class RaceDataLoader
 {
-  //private static final Logger LOGGER=Logger.getLogger(MainRaceDataLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(RaceDataLoader.class);
 
   private DataFacade _facade;
   private TraitsManager _traitsManager;
@@ -146,13 +148,20 @@ RaceTable_NationalityList:
       int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
       //System.out.println("Race: "+raceId);
       RaceDescription description=_racesById.get(Integer.valueOf(raceId));
-      Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
-      for(Object traitObj : traitsArray)
+      if (description!=null)
       {
-        int traitId=((Integer)traitObj).intValue();
-        TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-        _traitsManager.registerTrait(trait);
-        description.addEarnableTrait(trait);
+        Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
+        for(Object traitObj : traitsArray)
+        {
+          int traitId=((Integer)traitObj).intValue();
+          TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
+          _traitsManager.registerTrait(trait);
+          description.addEarnableTrait(trait);
+        }
+      }
+      else
+      {
+        LOGGER.warn("Could not find race ID="+raceId);
       }
     }
   }
