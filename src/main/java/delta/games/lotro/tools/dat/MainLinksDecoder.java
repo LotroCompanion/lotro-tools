@@ -16,6 +16,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.plugins.LuaParser;
+import delta.games.lotro.plugins.LuaUtils;
 import delta.games.lotro.plugins.lotrocompanion.links.ChatItemLinksDecoder;
 
 /**
@@ -45,13 +46,21 @@ public class MainLinksDecoder
   {
     LuaParser parser=new LuaParser();
     Map<String,Object> data=parser.read(dataFile);
-    byte[] buffer=loadBuffer(data);
-    File bufferFile=new File(dataFile.getParentFile(),dataFile.getName()+".bin");
-    FileIO.writeFile(bufferFile,buffer);
-    ItemInstance<? extends Item> instance=_decoder.decodeBuffer(buffer);
-    System.out.println(instance.dump());
-    File to=new File(dataFile.getParentFile(),dataFile.getName()+".xml");
-    writeItemInstance(to,instance);
+    byte[] buffer=LuaUtils.loadBuffer(data,"rawData");
+    if (buffer!=null)
+    {
+      Dump.dump(buffer);
+      File bufferFile=new File(dataFile.getParentFile(),dataFile.getName()+".bin");
+      FileIO.writeFile(bufferFile,buffer);
+      ItemInstance<? extends Item> instance=_decoder.decodeBuffer(buffer);
+      System.out.println(instance.dump());
+      File to=new File(dataFile.getParentFile(),dataFile.getName()+".xml");
+      writeItemInstance(to,instance);
+    }
+    else
+    {
+      LOGGER.warn("Could not load data!");
+    }
   }
 
   private void writeItemInstance(File to, final ItemInstance<? extends Item> instance)
@@ -66,29 +75,6 @@ public class MainLinksDecoder
       }
     };
     helper.write(to,EncodingNames.UTF_8,writer);
-  }
-
-  @SuppressWarnings("unchecked")
-  private byte[] loadBuffer(Map<String,Object> data)
-  {
-    byte[] buffer=null;
-    Map<String,Double> rawData=(Map<String,Double>)data.get("rawData");
-    if (rawData!=null)
-    {
-      int nb=rawData.size();
-      buffer=new byte[nb];
-      for(int i=0;i<nb;i++)
-      {
-        String key=(i+1)+".0";
-        Double value=rawData.get(key);
-        if (value!=null)
-        {
-          buffer[i]=value.byteValue();
-        }
-      }
-      Dump.dump(buffer);
-    }
-    return buffer;
   }
 
   private static void doFile(File dataFile)
