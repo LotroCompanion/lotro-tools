@@ -104,11 +104,20 @@ public class VirtueDataLoader
         }
       }
       // Rank to level
+      // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
       Progression rankToLevel=DatStatUtils.getProgression(facade,1879387583);
-      if (rankToLevel!=null)
+      if (rankToLevel==null)
       {
         LOGGER.warn("Could not find progression rank->level for virtues");
       }
+      // Character level to max virtue rank:
+      int charLevelToMaxRankProgId=((Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression")).intValue();
+      Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId);
+      if (charLevelToMaxRankProg==null)
+      {
+        LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
+      }
+      ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
 
       // Passives
       Object[] passives=(Object[])virtueProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
