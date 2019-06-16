@@ -804,6 +804,10 @@ public class MainDatItemsLoader
       else if (overlay.intValue()==1091914766) category="Essence:Tier10";
       else if (overlay.intValue()==1092396132) category="Essence:Tier11";
       else if (overlay.intValue()==1092396316) category="Essence:Tier12";
+      else
+      {
+        LOGGER.warn("Unmanaged essence overlay: "+overlay+" for "+name);
+      }
     }
     if (category!=null)
     {
