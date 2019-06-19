@@ -140,6 +140,8 @@ public class MainDatAchievablesLoader
     // Name
     String name=DatUtils.getStringProperty(properties,"Quest_Name");
     quest.setName(name);
+    //DatObjectivesLoader.currentName=name;
+    //System.out.println("Quest name: "+name);
     // Description
     String description=DatUtils.getStringProperty(properties,"Quest_Description");
     quest.setDescription(description);
@@ -332,6 +334,8 @@ public class MainDatAchievablesLoader
     // Name
     String name=DatUtils.getStringProperty(properties,"Quest_Name");
     deed.setName(name);
+    //System.out.println("Deed name: "+name);
+    //DatObjectivesLoader.currentName=name;
     // Description
     String description=DatUtils.getStringProperty(properties,"Quest_Description");
     deed.setDescription(description);
@@ -671,6 +675,7 @@ public class MainDatAchievablesLoader
     resolveProxies();
     // Save
     doSave();
+    //System.out.println(DatObjectivesLoader._flagsToAchievables);
   }
 
   private void doScan()

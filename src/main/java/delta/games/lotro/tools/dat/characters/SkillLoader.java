@@ -94,6 +94,25 @@ public class SkillLoader
           LOGGER.warn("Could not build skill icon: "+iconFilename);
         }
       }
+      /*
+      // Skill type(s)
+      {
+        long typeFlags=((Long)skillProperties.getProperty("Skill_SkillType")).longValue();
+        EnumMapper skillType=facade.getEnumsManager().getEnumMapper(587203492);
+        BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags);
+        String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
+        System.out.println("Skill: "+skillName+", types="+types);
+      }
+      // Skill quest flags
+      {
+        Long skillQuestFlags=(Long)skillProperties.getProperty("Skill_QuestFlags");
+        if (skillQuestFlags!=null)
+        {
+          BitSet skillBitSet=BitSetUtils.getBitSetFromFlags(skillQuestFlags.longValue());
+          System.out.println("Skill: "+skillName+", flags="+skillBitSet);
+        }
+      }
+      */
     }
     return ret;
   }

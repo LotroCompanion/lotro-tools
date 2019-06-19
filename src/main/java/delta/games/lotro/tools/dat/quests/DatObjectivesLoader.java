@@ -18,13 +18,13 @@ import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
-import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
-import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
+import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
+import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
@@ -336,6 +336,36 @@ public class DatObjectivesLoader
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     System.out.println("Enter detect: "+detect+", role="+roleConstraint);
+    /*
+    if (detect!=null)
+    {
+      PropertiesSet props=_facade.loadProperties(detect.intValue()+0x9000000);
+      if (props!=null)
+      {
+        String npcName=DatUtils.getStringProperty(props,"Name");
+        if (npcName!=null)
+        {
+          System.out.println("\tNPC: "+npcName);
+        }
+        else
+        {
+          System.out.println("\tName not found!");
+        }
+      }
+      else
+      {
+        System.out.println("\tProps not found: "+detect);
+      }
+    }
+    else if (roleConstraint!=null)
+    {
+      System.out.println("\tRole:"+roleConstraint);
+    }
+    else
+    {
+      System.out.println("\tNo detect and no role constraint");
+    }
+    */
   }
 
   private void handleItemUsed(PropertiesSet properties)
@@ -513,6 +543,10 @@ QuestEvent_ShowBillboardText: 0
     */
   }
 
+  //public static String currentName="";
+
+  //public static HashMap<String,List<String>> _flagsToAchievables=new HashMap<String,List<String>>();
+
   private SkillUsedCondition handleSkillUsed(PropertiesSet properties)
   {
     /*
@@ -551,11 +585,23 @@ QuestEvent_ShowBillboardText: 0
     {
       ret.setMaxPerDay(dailyMaxIncrement);
     }
+    /*
     Long flags=(Long)properties.getProperty("QuestEvent_SkillQuestFlags");
     if ((flags!=null) && (flags.longValue()!=0))
     {
-      System.out.println("Flags: "+flags);
+      BitSet bits=BitSetUtils.getBitSetFromFlags(flags.longValue());
+      //System.out.println("Flags: "+flags+" => "+bits);
+      String key=bits.toString();
+      List<String> names=_flagsToAchievables.get(key);
+      if (names==null)
+      {
+        names=new ArrayList<String>();
+        _flagsToAchievables.put(key,names);
+      }
+      names.add(currentName);
+      Collections.sort(names);
     }
+    */
     //Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
     //System.out.println(properties.dump());
     return ret;
