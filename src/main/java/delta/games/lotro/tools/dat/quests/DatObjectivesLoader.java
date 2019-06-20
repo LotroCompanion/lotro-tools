@@ -1,11 +1,18 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.geo.AchievableGeoData;
+import delta.games.lotro.dat.data.geo.DidGeoData;
+import delta.games.lotro.dat.data.geo.GeoData;
+import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -16,6 +23,8 @@ import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
+import delta.games.lotro.lore.quests.objectives.ItemCondition;
+import delta.games.lotro.lore.quests.objectives.ItemUsedCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
@@ -50,8 +59,11 @@ public class DatObjectivesLoader
   //private EnumMapper _deedCategory;
 
   private MobLoader _mobLoader;
+  private GeoData _geoData;
 
   //public static HashSet<String> propNames=new HashSet<String>();
+
+  private Achievable _currentAchievable;
 
   /**
    * Constructor.
@@ -65,19 +77,22 @@ public class DatObjectivesLoader
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
     //_deedCategory=_facade.getEnumsManager().getEnumMapper(587202587);
     _mobLoader=new MobLoader(facade);
+    _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
   }
 
   /**
    * Load quest/deed objectives from DAT files data.
    * @param objectivesManager Objectives manager.
+   * @param achievable Parent achievable.
    * @param properties Quest/deed properties.
    */
-  public void handleObjectives(ObjectivesManager objectivesManager, PropertiesSet properties)
+  public void handleObjectives(ObjectivesManager objectivesManager, Achievable achievable, PropertiesSet properties)
   {
     if (objectivesManager==null)
     {
       return;
     }
+    _currentAchievable=achievable;
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
@@ -172,7 +187,7 @@ public class DatObjectivesLoader
     // 34=108, 11=82, 39=51, 4=41, 18=29, 24=22, 16=20, 6=15, 10=2, 58=2, 59=1}
     // Quests:
     // QuestEvent_ID:  {11=11545, 7=3845, 22=3164(done), 1=2970, 32=1967(done), 34=1599, 10=1162, 31=831(done), 5=640, 21=425(done),
-    // 24=301, 14=293, 19=210, 27=196, 13=187, 56=17320=144, 16=123, 37=97, 29=97, 33=72, 2=58, 59=50, 25=46,
+    // 24=301, 14=293, 19=210, 27=196, 13=187, 56=144, 16=123, 37=97, 29=97, 33=72, 2=58, 59=50, 25=46,
     // 18=43, 26=39, 58=35, 57=35, 4=25, 46=16, 40=15, 39=14, 43=14, 30=12, 45=8, 38=5, 6=1, 9=1}
 
     /*
@@ -220,20 +235,19 @@ public class DatObjectivesLoader
     if (questEventId==1)
     {
       type=ConditionType.ENTER_DETECTION;
-      handleEnterDetection(properties);
+      handleEnterDetection(properties,objective);
     }
     else if (questEventId==7)
     {
-      type=ConditionType.ITEM_USED;
-      handleItemUsed(properties);
+      condition=handleItemUsed(properties,objective);
     }
     else if (questEventId==11)
     {
-      condition=handleNpcTalk(properties);
+      condition=handleNpcTalk(properties,objective);
     }
     else if (questEventId==21)
     {
-      condition=handleLandmarkDetection(properties);
+      condition=handleLandmarkDetection(properties,objective);
     }
     else if (questEventId==22)
     {
@@ -324,7 +338,7 @@ public class DatObjectivesLoader
     objective.addCondition(condition);
   }
 
-  private void handleEnterDetection(PropertiesSet properties)
+  private void handleEnterDetection(PropertiesSet properties, Objective objective)
   {
     /*
      * QuestEvent_Detect: ID of NPC?, 20 times.
@@ -336,6 +350,7 @@ public class DatObjectivesLoader
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     System.out.println("Enter detect: "+detect+", role="+roleConstraint);
+    /*List<DatPosition> positions=*/getPositions(detect,roleConstraint,objective.getIndex());
     /*
     if (detect!=null)
     {
@@ -368,7 +383,7 @@ public class DatObjectivesLoader
     */
   }
 
-  private void handleItemUsed(PropertiesSet properties)
+  private ItemUsedCondition handleItemUsed(PropertiesSet properties, Objective objective)
   {
     /*
      * QuestEvent_AllowQuickslot: optional, found 22 times Integer 0.
@@ -380,11 +395,43 @@ public class DatObjectivesLoader
      * (sometimes both, never none)
      * QuestEvent_DestroyInventoryItems: optional, found 16 times Integer 0 or 1.
      */
-    //Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    //String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+
+    ItemUsedCondition ret=new ItemUsedCondition();
+    fillItemCondition(ret,itemId,count);
+    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    return ret;
   }
 
-  private NpcTalkCondition handleNpcTalk(PropertiesSet properties)
+  private void fillItemCondition(ItemCondition ret, Integer itemId, Integer count)
+  {
+    // Count
+    if (count!=null)
+    {
+      ret.setCount(count.intValue());
+    }
+    // Item ID
+    if (itemId!=null)
+    {
+      Item item=ItemsManager.getInstance().getItem(itemId.intValue());
+      if (item!=null)
+      {
+        String itemName=item.getName();
+        Proxy<Item> itemProxy=new Proxy<Item>();
+        itemProxy.setId(itemId.intValue());
+        itemProxy.setName(itemName);
+        ret.setProxy(itemProxy);
+      }
+      else
+      {
+        LOGGER.warn("Could not find item with ID="+itemId);
+      }
+    }
+  }
+
+  private NpcTalkCondition handleNpcTalk(PropertiesSet properties, Objective objective)
   {
     /*
      * QuestEvent_RoleConstraint: used 6 times for limlight spirits.
@@ -408,10 +455,12 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       proxy.setName(npcName);
       ret.setProxy(proxy);
     }
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    /*List<DatPosition> positions=*/getPositions(npcId,roleConstraint,objective.getIndex());
     return ret;
   }
 
-  private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties)
+  private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties, Objective objective)
   {
     LandmarkDetectionCondition ret=new LandmarkDetectionCondition();
     /*
@@ -430,6 +479,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       landmark.setName(landmarkName);
       ret.setLandmarkProxy(landmark);
     }
+    /*List<DatPosition> positions=*/getPositions(landmarkId,null,objective.getIndex());
     return ret;
   }
 
@@ -619,28 +669,15 @@ QuestEvent_ShowBillboardText: 0
      */
     InventoryItemCondition ret=new InventoryItemCondition();
 
-    // Count
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
-    if (count!=null)
-    {
-      ret.setCount(count.intValue());
-    }
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     if (itemId!=null)
     {
-      Item item=ItemsManager.getInstance().getItem(itemId.intValue());
-      if (item!=null)
-      {
-        String itemName=item.getName();
-        Proxy<Item> itemProxy=new Proxy<Item>();
-        itemProxy.setId(itemId.intValue());
-        itemProxy.setName(itemName);
-        ret.setProxy(itemProxy);
-      }
-      else
-      {
-        LOGGER.warn("Could not find item with ID="+itemId);
-      }
+      Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+      fillItemCondition(ret,itemId,count);
+    }
+    else
+    {
+      LOGGER.warn("No item ID in InventoryItem condition");
     }
     return ret;
   }
@@ -753,6 +790,35 @@ QuestEvent_ShowBillboardText: 0
     factionProxy.setName(factionName);
     ret.setProxy(factionProxy);
     ret.setTier(tier);
+    return ret;
+  }
+
+  private List<DatPosition> getPositions(Integer did, String roleConstraint, int index)
+  {
+    List<DatPosition> ret=null;
+    if (did!=null)
+    {
+      DidGeoData didGeoData=_geoData.getGeoData(did.intValue());
+      if (didGeoData!=null)
+      {
+        //System.out.println("\tPositions: "+didGeoData.getPositions());
+        ret=didGeoData.getPositions();
+      }
+    }
+    if ((ret==null) && (roleConstraint!=null))
+    {
+      int achievableId=_currentAchievable.getIdentifier();
+      AchievableGeoData achievableGeoData=_geoData.getGeoDataForAchievable(achievableId,index);
+      if (achievableGeoData!=null)
+      {
+        ret=achievableGeoData.getPositions(roleConstraint);
+        //System.out.println("\tPositions for key: "+positions+" ("+roleConstraint+")");
+      }
+    }
+    if (ret!=null)
+    {
+      System.out.println("\tPositions: "+ret);
+    }
     return ret;
   }
 

@@ -221,7 +221,7 @@ public class MainDatAchievablesLoader
     _rolesLoader.loadRoles(quest,properties);
 
     // Objectives
-    _objectivesLoader.handleObjectives(quest.getObjectives(),properties);
+    _objectivesLoader.handleObjectives(quest.getObjectives(),quest,properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
@@ -366,7 +366,7 @@ public class MainDatAchievablesLoader
     deed.setChallengeLevel(challengeLevel);
 
     // Objectives
-    _objectivesLoader.handleObjectives(deed.getObjectives(),properties);
+    _objectivesLoader.handleObjectives(deed.getObjectives(),deed,properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
