@@ -88,7 +88,6 @@ public class DatStatUtils
         StatDescription stat=getStatDescription(def);
         if (stat==null)
         {
-          LOGGER.warn("Stat not found: "+def.getName());
           continue;
         }
         //String statKey=def.getName();
@@ -287,6 +286,10 @@ public class DatStatUtils
         return null;
       }
       ret=registry.getById(id);
+    }
+    if (ret==null)
+    {
+      LOGGER.warn("Stat not found: "+propertyDefinition.getName());
     }
     return ret;
   }
