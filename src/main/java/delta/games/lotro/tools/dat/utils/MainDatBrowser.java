@@ -56,6 +56,7 @@ public class MainDatBrowser
 
   private void handleEntry(int id)
   {
+    if (id%1000000==0) System.out.println("ID: "+id);
     byte[] data=_facade.loadData(id);
     if (data!=null)
     {
@@ -89,7 +90,14 @@ public class MainDatBrowser
           int propsId=(id<0x78FFFFFF)?id+0x9000000:id;
           PropertiesSet props=_facade.loadProperties(propsId);
           System.out.println("*********** entry "+id+"******************");
-          System.out.println(props.dump());
+          if (props!=null)
+          {
+            System.out.println(props.dump());
+          }
+          else
+          {
+            System.out.println("props is null");
+          }
           ids.add(Integer.valueOf(id));
           /*
           Progression prog=ProgressionFactory.buildProgression(id,props);
@@ -130,7 +138,7 @@ public class MainDatBrowser
     }
     System.out.println("************** searching id=" + idToSearch + "******************");
     // Iterate on wstates
-    for(int id=0x70000000;id<=0x7FFFFFFF;id++)
+    for(int id=0x70000000;id<0x7FFFFFFF;id++)
     {
       handleEntry(id);
     }
@@ -149,7 +157,43 @@ public class MainDatBrowser
     //searchId(1879112405); // Item Boots of the Lady's Discernment
     //searchId(268438673); // Property: Item_QualityModLevel
     //searchId(268458123); // Property: LevelScalingControl_Quality_To_ItemLevelProgression_Hash
-    searchId(268457979); // Property: Examination_ItemLevel_Struct
+    //searchId(268457979); // Property: Examination_ItemLevel_Struct
+    // Deed "Enmity of the Dourhands" for high-elves
+    //searchId(1879346407);
+    // A table it is found in...
+    //searchId(1879346401);
+    // Anfalas Star-lit Crystal
+    //searchId(1879313853);
+    // Property: 268438022 Version_VersionNumberDataList
+    //searchId(268438022);
+
+    // Effect: 'In Defence of Middle-earth'
+    //searchId(1879053032);
+    // Effect: 'DNT - In Defence of Middle-earth'
+    //searchId(1879220578);
+    // Effect: 'DNT - Improved Motivating Speech'
+    //1879279091
+    // Skill: 'In Defence of Middle-earth'
+    //searchId(1879053069); // 0x7000130D
+    // Found in "Version_UntrainSkills_DataArray" (1879287393)
+    // searchId(1879287393);
+    // Found in "2030043677": Version_VersionNumberDataList #39 / Version_Number: 1203
+
+    //searchId(0x411BC61B); // = 1092339227 a interior map
+    // Found in 2013290723 // 0x780060E3
+    // searchId(0x780060E3);
+    // Found in 0x7904BA81
+    //searchId(0x7904BA81);
+
+    // Another one: 4119330B.jpg
+    // 4115B5CC.jpg a landscape
+    // 4116B614.jpg Middle Earth map
+
+    //searchId(0x410D9A54); // 1091410516 Map of the Bree-land Homesteads
+    //searchId(0x410E8708); // 1091471112 Map of Moria, found in 1092239022 = 411A3EAE
+
+    //searchId(268435789);
+    searchId(268444327);
 
     /*
     for(int id: IDS)
