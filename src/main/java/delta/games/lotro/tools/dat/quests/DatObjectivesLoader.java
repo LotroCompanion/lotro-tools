@@ -33,6 +33,7 @@ import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
+import delta.games.lotro.lore.quests.objectives.QuestBestowedCondition;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
 import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.reputation.Faction;
@@ -294,6 +295,10 @@ public class DatObjectivesLoader
     {
       condition=handleFactionLevel(properties);
     }
+    else if (questEventId==59)
+    {
+      condition=handleQuestBestowed(properties);
+    }
     else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
     else if (questEventId==5) type=ConditionType.NPC_USED;
@@ -316,7 +321,6 @@ public class DatObjectivesLoader
     else if (questEventId==56) type=ConditionType.ENTER_PLAYER_AOI;
     else if (questEventId==57) type=ConditionType.CORPSE_USED;
     else if (questEventId==58) type=ConditionType.SCRIPT_CALLBACK;
-    else if (questEventId==59) type=ConditionType.QUEST_BESTOWED;
     else
     {
       String eventMeaning=_questEvent.getString(questEventId);
@@ -464,7 +468,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     return ret;
   }
 
-  private ObjectiveCondition handleLevelCondition(PropertiesSet properties, Objective objective)
+  private LevelCondition handleLevelCondition(PropertiesSet properties, Objective objective)
   {
     LevelCondition ret=new LevelCondition();
     int level=((Integer)properties.getProperty("QuestEvent_PlayerLevel")).intValue();
@@ -802,6 +806,17 @@ QuestEvent_ShowBillboardText: 0
     factionProxy.setName(factionName);
     ret.setProxy(factionProxy);
     ret.setTier(tier);
+    return ret;
+  }
+
+  private QuestBestowedCondition handleQuestBestowed(PropertiesSet properties)
+  {
+    QuestBestowedCondition ret=new QuestBestowedCondition();
+    // Quest ID
+    int questId=((Integer)properties.getProperty("QuestEvent_BestowedQuestID")).intValue();
+    Proxy<Achievable> proxy=new Proxy<Achievable>();
+    proxy.setId(questId);
+    ret.setProxy(proxy);
     return ret;
   }
 
