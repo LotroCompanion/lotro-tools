@@ -26,6 +26,7 @@ import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemUsedCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
+import delta.games.lotro.lore.quests.objectives.LevelCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
@@ -245,6 +246,10 @@ public class DatObjectivesLoader
     {
       condition=handleNpcTalk(properties,objective);
     }
+    else if (questEventId==18)
+    {
+      condition=handleLevelCondition(properties,objective);
+    }
     else if (questEventId==21)
     {
       condition=handleLandmarkDetection(properties,objective);
@@ -298,7 +303,6 @@ public class DatObjectivesLoader
     else if (questEventId==13) type=ConditionType.CHANNELING;
     else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
     else if (questEventId==16) type=ConditionType.ITEM_TALK;
-    else if (questEventId==18) type=ConditionType.LEVEL;
     else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
     else if (questEventId==27) type=ConditionType.KUNG_FU;
     else if (questEventId==29) type=ConditionType.ESCORT;
@@ -457,6 +461,14 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     }
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     /*List<DatPosition> positions=*/getPositions(npcId,roleConstraint,objective.getIndex());
+    return ret;
+  }
+
+  private ObjectiveCondition handleLevelCondition(PropertiesSet properties, Objective objective)
+  {
+    LevelCondition ret=new LevelCondition();
+    int level=((Integer)properties.getProperty("QuestEvent_PlayerLevel")).intValue();
+    ret.setLevel(level);
     return ret;
   }
 
