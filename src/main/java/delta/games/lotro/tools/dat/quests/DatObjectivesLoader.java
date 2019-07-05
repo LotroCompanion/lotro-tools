@@ -21,6 +21,7 @@ import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.ExternalInventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemCondition;
@@ -243,6 +244,10 @@ public class DatObjectivesLoader
     {
       condition=handleItemUsed(properties,objective);
     }
+    else if (questEventId==10)
+    {
+      condition=handleExternalInventoryItemUsed(properties,objective);
+    }
     else if (questEventId==11)
     {
       condition=handleNpcTalk(properties,objective);
@@ -304,7 +309,6 @@ public class DatObjectivesLoader
     else if (questEventId==5) type=ConditionType.NPC_USED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
     else if (questEventId==9) type=ConditionType.DETECTING;
-    else if (questEventId==10) type=ConditionType.EXTERNAL_INVENTORY_ITEM;
     else if (questEventId==13) type=ConditionType.CHANNELING;
     else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
     else if (questEventId==16) type=ConditionType.ITEM_TALK;
@@ -408,6 +412,18 @@ public class DatObjectivesLoader
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemUsedCondition ret=new ItemUsedCondition();
+    fillItemCondition(ret,itemId,count);
+    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    return ret;
+  }
+
+  private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties, Objective objective)
+  {
+    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+
+    ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
     fillItemCondition(ret,itemId,count);
     /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
