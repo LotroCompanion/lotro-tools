@@ -25,6 +25,7 @@ import delta.games.lotro.lore.quests.objectives.ExternalInventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemCondition;
+import delta.games.lotro.lore.quests.objectives.ItemTalkCondition;
 import delta.games.lotro.lore.quests.objectives.ItemUsedCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.LevelCondition;
@@ -252,6 +253,10 @@ public class DatObjectivesLoader
     {
       condition=handleNpcTalk(properties,objective);
     }
+    else if (questEventId==16)
+    {
+      condition=handleItemTalk(properties,objective);
+    }
     else if (questEventId==18)
     {
       condition=handleLevelCondition(properties,objective);
@@ -311,7 +316,6 @@ public class DatObjectivesLoader
     else if (questEventId==9) type=ConditionType.DETECTING;
     else if (questEventId==13) type=ConditionType.CHANNELING;
     else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
-    else if (questEventId==16) type=ConditionType.ITEM_TALK;
     else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
     else if (questEventId==27) type=ConditionType.KUNG_FU;
     else if (questEventId==29) type=ConditionType.ESCORT;
@@ -424,6 +428,18 @@ public class DatObjectivesLoader
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
+    fillItemCondition(ret,itemId,count);
+    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    return ret;
+  }
+
+  private ItemTalkCondition handleItemTalk(PropertiesSet properties, Objective objective)
+  {
+    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+
+    ItemTalkCondition ret=new ItemTalkCondition();
     fillItemCondition(ret,itemId,count);
     /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
