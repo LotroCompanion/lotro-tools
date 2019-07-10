@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.ConstantStatProvider;
@@ -20,7 +19,6 @@ import delta.games.lotro.lore.consumables.io.xml.ConsumableXMLWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Loader for consumables.
@@ -161,22 +159,20 @@ public class ConsumablesLoader
         }
       }
       StatsProvider consumableStatsProvider=_currentConsumable.getProvider();
-      if (level!=0)
+      int nbStats=statsProvider.getNumberOfStatProviders();
+      for(int i=0;i<nbStats;i++)
       {
-        BasicStatsSet stats=statsProvider.getStats(1,level);
-        for(StatDescription stat : stats.getStats())
+        StatProvider provider=statsProvider.getStatProvider(i);
+        if (level!=0)
         {
-          FixedDecimalsInteger value=stats.getStat(stat);
-          StatProvider provider=new ConstantStatProvider(stat,value.floatValue());
-          consumableStatsProvider.addStatProvider(provider);
+          StatDescription stat=provider.getStat();
+          Float value=provider.getStatValue(1,level);
+          StatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
+          consumableProvider.setOperator(provider.getOperator());
+          consumableStatsProvider.addStatProvider(consumableProvider);
         }
-      }
-      else
-      {
-        int nbStats=statsProvider.getNumberOfStatProviders();
-        for(int i=0;i<nbStats;i++)
+        else
         {
-          StatProvider provider=statsProvider.getStatProvider(i);
           consumableStatsProvider.addStatProvider(provider);
         }
       }
