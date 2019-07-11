@@ -244,7 +244,7 @@ public class MainDatItemsLoader
       }
       // Handle legendaries
       DatStatUtils.doFilterStats=false;
-      handleLegendaries(properties);
+      handleLegendaries(indexDataId, properties);
     }
     else
     {
@@ -354,18 +354,18 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private void handleLegendaries(PropertiesSet properties)
+  private void handleLegendaries(int itemId, PropertiesSet properties)
   {
-    handleLegendaries(properties,"ItemAdvancement_StaticEffectGroupOverride");
-    handleLegendaries(properties,"ItemAdvancement_StaticEffectGroup2Override");
+    handleLegendaries(itemId, properties,"ItemAdvancement_StaticEffectGroupOverride");
+    handleLegendaries(itemId, properties,"ItemAdvancement_StaticEffectGroup2Override");
   }
 
-  private void handleLegendaries(PropertiesSet properties, String key)
+  private void handleLegendaries(int itemId, PropertiesSet properties, String key)
   {
     Integer staticEffectGroup=(Integer)(properties.getProperty(key));
     if (staticEffectGroup!=null)
     {
-      _passivesLoader.handleTable(staticEffectGroup.intValue());
+      _passivesLoader.handleTable(itemId, staticEffectGroup.intValue());
     }
   }
 

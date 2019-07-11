@@ -132,6 +132,10 @@ public class GeneratedFiles
    */
   public static final File PASSIVES=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES);
   /**
+   * Passives usage.
+   */
+  public static final File PASSIVES_USAGE=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES_USAGE);
+  /**
    * Consumables.
    */
   public static final File CONSUMABLES=LotroCoreConfig.getInstance().getFile(DataFiles.CONSUMABLES);
