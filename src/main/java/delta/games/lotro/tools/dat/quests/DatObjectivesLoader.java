@@ -31,7 +31,9 @@ import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.LevelCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
+import delta.games.lotro.lore.quests.objectives.NpcCondition;
 import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
+import delta.games.lotro.lore.quests.objectives.NpcUsedCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
@@ -241,6 +243,10 @@ public class DatObjectivesLoader
       type=ConditionType.ENTER_DETECTION;
       handleEnterDetection(properties,objective);
     }
+    else if (questEventId==5)
+    {
+      condition=handleNpcUsed(properties,objective);
+    }
     else if (questEventId==7)
     {
       condition=handleItemUsed(properties,objective);
@@ -311,7 +317,6 @@ public class DatObjectivesLoader
     }
     else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
-    else if (questEventId==5) type=ConditionType.NPC_USED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
     else if (questEventId==9) type=ConditionType.DETECTING;
     else if (questEventId==13) type=ConditionType.CHANNELING;
@@ -473,19 +478,32 @@ public class DatObjectivesLoader
 
   private NpcTalkCondition handleNpcTalk(PropertiesSet properties, Objective objective)
   {
+    NpcTalkCondition ret=new NpcTalkCondition();
+    handleNpcCondition(ret,properties,objective);
+    return ret;
+  }
+
+  private NpcUsedCondition handleNpcUsed(PropertiesSet properties, Objective objective)
+  {
+    NpcUsedCondition ret=new NpcUsedCondition();
+    handleNpcCondition(ret,properties,objective);
+    return ret;
+  }
+
+  private void handleNpcCondition(NpcCondition condition, PropertiesSet properties, Objective objective)
+  {
     /*
      * QuestEvent_RoleConstraint: used 6 times for limlight spirits.
      * QuestEvent_NPCTalk: almost always (76/82). NPC ID?
      * Quest_Role: gives some text, sound ID... for the NPC... (50/82)
      * QuestEvent_CanTeleportToObjective: optional, used 12 times: Integer 0.
-     * QuestEvent_Number: always 1.
+     * QuestEvent_Number: most of the time: 1, sometimes >1.
 [QuestEvent_WaitForDrama, QuestEvent_DramaName, Quest_GiveItemArray, QuestEvent_ShowProgressText, QuestEvent_RoleConstraint,
 QuestEvent_ShowBillboardText, QuestEvent_ID, QuestEvent_ForceCheckContentLayer, QuestEvent_DramaProgressOverride,
 QuestEvent_ProgressOverride, QuestEvent_GiveItemsOnAdvance, QuestEvent_HideRadarIcon, Accomplishment_LoreInfo,
 QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, QuestEvent_IsRemote, QuestEvent_ItemDID, QuestEvent_RunDramaOnAdvance, QuestEvent_Locations_ForceFullLandblock, QuestEvent_LocationsAreOverrides, QuestEvent_Locations, QuestEvent_IsFellowUseShared, QuestEvent_ApplyEffectArray, Quest_Role]
      */
 
-    NpcTalkCondition ret=new NpcTalkCondition();
     Integer npcId=(Integer)properties.getProperty("QuestEvent_NPCTalk");
     if (npcId!=null)
     {
@@ -493,11 +511,11 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       Proxy<NpcDescription> proxy=new Proxy<NpcDescription>();
       proxy.setId(npcId.intValue());
       proxy.setName(npcName);
-      ret.setProxy(proxy);
+      condition.setProxy(proxy);
     }
+    //Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     /*List<DatPosition> positions=*/getPositions(npcId,roleConstraint,objective.getIndex());
-    return ret;
   }
 
   private LevelCondition handleLevelCondition(PropertiesSet properties, Objective objective)
