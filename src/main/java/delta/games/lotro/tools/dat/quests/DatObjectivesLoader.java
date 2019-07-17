@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -12,15 +13,20 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.AchievableGeoData;
 import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
+import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.DetectingCondition;
+import delta.games.lotro.lore.quests.objectives.DetectionCondition;
+import delta.games.lotro.lore.quests.objectives.EnterDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.ExternalInventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
@@ -240,8 +246,7 @@ public class DatObjectivesLoader
     ConditionType type=null;
     if (questEventId==1)
     {
-      type=ConditionType.ENTER_DETECTION;
-      handleEnterDetection(properties,objective);
+      condition=handleEnterDetection(properties,objective);
     }
     else if (questEventId==5)
     {
@@ -250,6 +255,10 @@ public class DatObjectivesLoader
     else if (questEventId==7)
     {
       condition=handleItemUsed(properties,objective);
+    }
+    else if (questEventId==9)
+    {
+      condition=handleDetecting(properties,objective);
     }
     else if (questEventId==10)
     {
@@ -289,6 +298,12 @@ public class DatObjectivesLoader
     {
       condition=handleSkillUsed(properties);
     }
+    /*
+    else if (questEventId==27)
+    {
+      //handleKungFu(properties,objective);
+    }
+    */
     else if (questEventId==31)
     {
       condition=handleInventoryItem(properties);
@@ -318,10 +333,10 @@ public class DatObjectivesLoader
     else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
-    else if (questEventId==9) type=ConditionType.DETECTING;
     else if (questEventId==13) type=ConditionType.CHANNELING;
     else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
     else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
+    else if (questEventId==20) type=ConditionType.CHANNELING_FAILED;
     else if (questEventId==27) type=ConditionType.KUNG_FU;
     else if (questEventId==29) type=ConditionType.ESCORT;
     else if (questEventId==30) type=ConditionType.SELF_DIED;
@@ -359,50 +374,82 @@ public class DatObjectivesLoader
     objective.addCondition(condition);
   }
 
-  private void handleEnterDetection(PropertiesSet properties, Objective objective)
+  private DetectingCondition handleDetecting(PropertiesSet properties, Objective objective)
   {
-    /*
-     * QuestEvent_Detect: ID of NPC?, 20 times.
-     * QuestEvent_HideRadarIcon: optional, 5 times, always 1.
-     * QuestEvent_DramaProgressOverride: String[], 40 times, mainly for session play quests (chicken or horse)
-     * QuestEvent_RoleConstraint seems to give the string ID of the thing to detect.
-     * QuestEvent_ProgressOverride gives a useable text.
-     */
+    DetectingCondition ret=new DetectingCondition();
+    handleDetectionCondition(ret,properties,objective);
+    return ret;
+  }
+
+  private EnterDetectionCondition handleEnterDetection(PropertiesSet properties, Objective objective)
+  {
+    EnterDetectionCondition ret=new EnterDetectionCondition();
+    handleDetectionCondition(ret,properties,objective);
+    return ret;
+  }
+
+  private void handleDetectionCondition(DetectionCondition condition, PropertiesSet properties, Objective objective)
+  {
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    System.out.println("Enter detect: "+detect+", role="+roleConstraint);
-    /*List<DatPosition> positions=*/getPositions(detect,roleConstraint,objective.getIndex());
-    /*
+    //System.out.println("Enter detect: "+detect+", role="+roleConstraint);
     if (detect!=null)
     {
-      PropertiesSet props=_facade.loadProperties(detect.intValue()+0x9000000);
-      if (props!=null)
+      int wstateClass=LoaderUtils.getWStateClass(_facade,detect.intValue());
+      // Mostly 1723 (mob) or 1724 (NPC)
+      if (wstateClass==WStateClass.NPC)
       {
-        String npcName=DatUtils.getStringProperty(props,"Name");
-        if (npcName!=null)
-        {
-          System.out.println("\tNPC: "+npcName);
-        }
-        else
-        {
-          System.out.println("\tName not found!");
-        }
+        int npcId=detect.intValue();
+        String npcName=NpcLoader.loadNPC(_facade,npcId);
+        Proxy<NpcDescription> proxy=new Proxy<NpcDescription>();
+        proxy.setId(npcId);
+        proxy.setName(npcName);
+        condition.setNpcProxy(proxy);
+      }
+      else if (wstateClass==WStateClass.MOB)
+      {
+        int mobId=detect.intValue();
+        String mobName=_mobLoader.loadMob(mobId);
+        Proxy<MobDescription> proxy=new Proxy<MobDescription>();
+        proxy.setId(mobId);
+        proxy.setName(mobName);
+        condition.setMobProxy(proxy);
       }
       else
       {
-        System.out.println("\tProps not found: "+detect);
+        LOGGER.warn("Unmanaged detect element: "+detect+". WStateClass="+wstateClass);
       }
     }
     else if (roleConstraint!=null)
     {
-      System.out.println("\tRole:"+roleConstraint);
+      //System.out.println("\tRole:"+roleConstraint);
     }
     else
     {
-      System.out.println("\tNo detect and no role constraint");
+      LOGGER.warn("Detect condition: No detect and no role constraint");
+    }
+    /*
+    List<DatPosition> positions=getPositions(detect,roleConstraint,objective.getIndex());
+    if (positions!=null)
+    {
+      System.out.println("\tPositions: "+positions);
     }
     */
   }
+
+  /*
+  private static Set<String> _props=new HashSet<String>();
+
+  private void handleKungFu(PropertiesSet properties, Objective objective)
+  {
+    System.out.println("Kung Fu!");
+    _props.addAll(properties.getPropertyNames());
+    System.out.println(_props);
+    System.out.println(properties.dump());
+    // QuestEvent_RunKungFu is 0 or absent...
+    // QuestEvent_RoleConstraint: always set
+  }
+  */
 
   private ItemUsedCondition handleItemUsed(PropertiesSet properties, Objective objective)
   {
@@ -418,11 +465,12 @@ public class DatObjectivesLoader
      */
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     Integer count=(Integer)properties.getProperty("QuestEvent_Number");
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemUsedCondition ret=new ItemUsedCondition();
     fillItemCondition(ret,itemId,count);
-    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    /*List<DatPosition> positions=*/
+    //getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
@@ -513,9 +561,11 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       proxy.setName(npcName);
       condition.setProxy(proxy);
     }
+    // TODO
     //Integer count=(Integer)properties.getProperty("QuestEvent_Number");
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    /*List<DatPosition> positions=*/getPositions(npcId,roleConstraint,objective.getIndex());
+    //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    /*List<DatPosition> positions=*/
+    //getPositions(npcId,roleConstraint,objective.getIndex());
   }
 
   private LevelCondition handleLevelCondition(PropertiesSet properties, Objective objective)
@@ -545,7 +595,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       landmark.setName(landmarkName);
       ret.setLandmarkProxy(landmark);
     }
-    /*List<DatPosition> positions=*/getPositions(landmarkId,null,objective.getIndex());
+    /*List<DatPosition> positions=*/
+    //getPositions(landmarkId,null,objective.getIndex());
     return ret;
   }
 
@@ -825,6 +876,19 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_WorldEvent_Operator: always. Integer 3.
      * QuestEvent_Number: almost always. Integer 1 if set.
      */
+    /*
+    Integer value=(Integer)properties.getProperty("QuestEvent_WorldEvent_Value");
+    int id=((Integer)properties.getProperty("QuestEvent_WorldEvent")).intValue();
+    int operator=((Integer)properties.getProperty("QuestEvent_WorldEvent_Operator")).intValue();
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
+    String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    System.out.println("World event: ID="+id+", operator="+operator+", value="+value+", count="+count+", constraint="+constraint);
+    PropertiesSet worldEventProps=_facade.loadProperties(id+0x9000000);
+    int propId=((Integer)worldEventProps.getProperty("WorldEvent_WorldPropertyName")).intValue();
+    PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(propId);
+    System.out.println(propDef);
+    System.out.println(worldEventProps.dump());
+    */
   }
 
   private void handleHobbyItem(PropertiesSet properties)
@@ -894,7 +958,7 @@ QuestEvent_ShowBillboardText: 0
     }
     if (ret!=null)
     {
-      System.out.println("\tPositions: "+ret);
+      //System.out.println("\tPositions: "+ret);
     }
     return ret;
   }
