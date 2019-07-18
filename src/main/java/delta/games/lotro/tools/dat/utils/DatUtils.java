@@ -25,6 +25,10 @@ public class DatUtils
         ret=((String[])value)[0];
         ret=ret.replace("\\n","\n");
       }
+      else if (value instanceof String)
+      {
+        ret=(String)value;
+      }
     }
     return ret;
   }

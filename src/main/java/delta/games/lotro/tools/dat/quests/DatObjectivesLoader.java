@@ -15,6 +15,8 @@ import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
+import delta.games.lotro.lore.emotes.EmoteDescription;
+import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -22,10 +24,12 @@ import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.objectives.ConditionTarget;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.DetectingCondition;
 import delta.games.lotro.lore.quests.objectives.DetectionCondition;
+import delta.games.lotro.lore.quests.objectives.EmoteCondition;
 import delta.games.lotro.lore.quests.objectives.EnterDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.ExternalInventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
@@ -286,8 +290,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==24)
     {
-      type=ConditionType.EMOTE;
-      handleEmoteCondition(properties);
+      condition=handleEmoteCondition(properties);
     }
     else if (questEventId==25)
     {
@@ -390,35 +393,13 @@ public class DatObjectivesLoader
 
   private void handleDetectionCondition(DetectionCondition condition, PropertiesSet properties, Objective objective)
   {
+    ConditionTarget target=null;
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     //System.out.println("Enter detect: "+detect+", role="+roleConstraint);
     if (detect!=null)
     {
-      int wstateClass=LoaderUtils.getWStateClass(_facade,detect.intValue());
-      // Mostly 1723 (mob) or 1724 (NPC)
-      if (wstateClass==WStateClass.NPC)
-      {
-        int npcId=detect.intValue();
-        String npcName=NpcLoader.loadNPC(_facade,npcId);
-        Proxy<NpcDescription> proxy=new Proxy<NpcDescription>();
-        proxy.setId(npcId);
-        proxy.setName(npcName);
-        condition.setNpcProxy(proxy);
-      }
-      else if (wstateClass==WStateClass.MOB)
-      {
-        int mobId=detect.intValue();
-        String mobName=_mobLoader.loadMob(mobId);
-        Proxy<MobDescription> proxy=new Proxy<MobDescription>();
-        proxy.setId(mobId);
-        proxy.setName(mobName);
-        condition.setMobProxy(proxy);
-      }
-      else
-      {
-        LOGGER.warn("Unmanaged detect element: "+detect+". WStateClass="+wstateClass);
-      }
+      target=getTarget(detect);
     }
     else if (roleConstraint!=null)
     {
@@ -435,6 +416,7 @@ public class DatObjectivesLoader
       System.out.println("\tPositions: "+positions);
     }
     */
+    condition.setTarget(target);
   }
 
   /*
@@ -665,29 +647,43 @@ QuestEvent_ShowBillboardText: 0
     return ret;
   }
 
-  private void handleEmoteCondition(PropertiesSet properties)
+  private EmoteCondition handleEmoteCondition(PropertiesSet properties)
   {
+    EmoteCondition ret=new EmoteCondition();
+    // Emote ID
     int emoteId=((Integer)properties.getProperty("QuestEvent_EmoteDID")).intValue();
+    EmoteDescription emote=EmotesManager.getInstance().getEmote(emoteId);
+    if (emote!=null)
+    {
+      Proxy<EmoteDescription> emoteProxy=new Proxy<EmoteDescription>();
+      emoteProxy.setId(emoteId);
+      emoteProxy.setName(emote.getCommand());
+      emoteProxy.setObject(emote);
+      ret.setProxy(emoteProxy);
+    }
+    else
+    {
+      LOGGER.warn("Emote not found: "+emoteId);
+    }
+    // Target
+    Integer targetDID=(Integer)properties.getProperty("QuestEvent_EmoteTargetDID");
+    ConditionTarget target=null;
+    if (targetDID!=null)
+    {
+      target=getTarget(targetDID);
+    }
+    ret.setTarget(target);
+    // Number of times
     Integer nbTimesInt=(Integer)properties.getProperty("QuestEvent_Number");
-    Integer maxTimesPerDay=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
-    String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
-    String progressOverride=DatUtils.getStringProperty(properties,"QuestEvent_ProgressOverride");
-    String text="Perform emote "+emoteId;
     int nbTimes=(nbTimesInt!=null)?nbTimesInt.intValue():1;
-    if (nbTimes>1) text=text+" "+nbTimes+" times";
+    ret.setCount(nbTimes);
+    // Max daily
+    Integer maxTimesPerDay=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
     if (maxTimesPerDay!=null)
     {
-      text=text+" (max "+maxTimesPerDay+" times/day)";
+      ret.setMaxDaily(maxTimesPerDay);
     }
-    //System.out.println(text);
-    if (loreInfo!=null)
-    {
-      //System.out.println(loreInfo);
-    }
-    if ((progressOverride!=null) && (!progressOverride.equals(loreInfo)))
-    {
-      //System.out.println(progressOverride);
-    }
+    return ret;
   }
 
   private void handlePlayerDied(PropertiesSet properties)
@@ -961,6 +957,42 @@ QuestEvent_ShowBillboardText: 0
       //System.out.println("\tPositions: "+ret);
     }
     return ret;
+  }
+
+  private ConditionTarget getTarget(Integer id)
+  {
+    ConditionTarget target=null;
+    Proxy<NpcDescription> npcProxy=null;
+    Proxy<MobDescription> mobProxy=null;
+    int wstateClass=LoaderUtils.getWStateClass(_facade,id.intValue());
+    // Mostly 1723 (mob) or 1724 (NPC)
+    if (wstateClass==WStateClass.NPC)
+    {
+      int npcId=id.intValue();
+      String npcName=NpcLoader.loadNPC(_facade,npcId);
+      npcProxy=new Proxy<NpcDescription>();
+      npcProxy.setId(npcId);
+      npcProxy.setName(npcName);
+    }
+    else if (wstateClass==WStateClass.MOB)
+    {
+      int mobId=id.intValue();
+      String mobName=_mobLoader.loadMob(mobId);
+      mobProxy=new Proxy<MobDescription>();
+      mobProxy.setId(mobId);
+      mobProxy.setName(mobName);
+    }
+    else
+    {
+      LOGGER.warn("Unmanaged target element: "+id+". WStateClass="+wstateClass);
+    }
+    if ((npcProxy!=null) || (mobProxy!=null))
+    {
+      target=new ConditionTarget();
+      target.setNpcProxy(npcProxy);
+      target.setMobProxy(mobProxy);
+    }
+    return target;
   }
 
   private String concat(String base, String add)
