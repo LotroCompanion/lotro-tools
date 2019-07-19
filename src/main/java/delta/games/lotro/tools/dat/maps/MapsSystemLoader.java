@@ -169,7 +169,7 @@ public class MapsSystemLoader
       // OK for Bree, region 1
       // OK for East Rohan: the wold, region 2
       // OK for South Ithilien, region 3 (Y pixel offset is out of map!)
-      // OK for Argarnaith, region 4 (for Lhingris, both pixel offsets are out of map...)
+      // OK for Agarnaith, region 4 (for Lhingris, both pixel offsets are out of map...)
       System.out.println("\tPixel offset X/Y: "+pixelOffsetX+"/"+pixelOffsetY);
     }
     // Scale

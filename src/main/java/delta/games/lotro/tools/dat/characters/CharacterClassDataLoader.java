@@ -89,7 +89,6 @@ public class CharacterClassDataLoader
     loadStatDerivations(characterClass,properties);
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
-    // TODO loadSkills: AdvTable_AvailableSkillEntryList
     // TODO Initial gear:
     // AdvTable_StartingInventory_List: initial gear at level 1, ...
     /*

@@ -286,7 +286,7 @@ public class MainDatNpcLoader
         System.out.println("\tDiscount ID: "+discountId);
       }
     }
-    // Buys items?
+    // Sells wearable items?
     Integer sellsWearableItemsInt=(Integer)properties.getProperty("Vendor_SellsWearableItems");
     boolean sellsWearableItems=(sellsWearableItemsInt!=null)?(sellsWearableItemsInt.intValue()==1):false;
     if (sellsWearableItems)
