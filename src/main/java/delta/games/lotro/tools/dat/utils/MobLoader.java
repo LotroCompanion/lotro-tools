@@ -7,6 +7,7 @@ import java.util.Map;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.utils.Proxy;

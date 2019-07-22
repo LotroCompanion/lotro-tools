@@ -10,9 +10,9 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.PropertyUtils;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.StringUtils;
-import delta.games.lotro.tools.dat.utils.BitSetUtils;
 
 /**
  * Loader for map notes.
