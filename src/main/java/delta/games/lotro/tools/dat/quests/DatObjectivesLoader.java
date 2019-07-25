@@ -33,6 +33,7 @@ import delta.games.lotro.lore.quests.objectives.EmoteCondition;
 import delta.games.lotro.lore.quests.objectives.EnterDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.ExternalInventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
+import delta.games.lotro.lore.quests.objectives.HobbyCondition;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemCondition;
 import delta.games.lotro.lore.quests.objectives.ItemTalkCondition;
@@ -50,6 +51,7 @@ import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestBestowedCondition;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
 import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
+import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
@@ -272,6 +274,10 @@ public class DatObjectivesLoader
     {
       condition=handleNpcTalk(properties,objective);
     }
+    else if (questEventId==14)
+    {
+      condition=handleTimeExpired(properties,objective);
+    }
     else if (questEventId==16)
     {
       condition=handleItemTalk(properties,objective);
@@ -322,8 +328,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==39)
     {
-      type=ConditionType.HOBBY_ITEM;
-      handleHobbyItem(properties);
+      condition=handleHobbyItem(properties);
     }
     else if (questEventId==45)
     {
@@ -337,7 +342,6 @@ public class DatObjectivesLoader
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
     else if (questEventId==13) type=ConditionType.CHANNELING;
-    else if (questEventId==14) type=ConditionType.TIME_EXPIRED;
     else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
     else if (questEventId==20) type=ConditionType.CHANNELING_FAILED;
     else if (questEventId==27) type=ConditionType.KUNG_FU;
@@ -487,6 +491,13 @@ public class DatObjectivesLoader
     {
       ret.setCount(count.intValue());
     }
+    Proxy<Item> itemProxy=buildItemProxy(itemId);
+    ret.setProxy(itemProxy);
+  }
+
+  private Proxy<Item> buildItemProxy(Integer itemId)
+  {
+    Proxy<Item> itemProxy=null;
     // Item ID
     if (itemId!=null)
     {
@@ -494,16 +505,16 @@ public class DatObjectivesLoader
       if (item!=null)
       {
         String itemName=item.getName();
-        Proxy<Item> itemProxy=new Proxy<Item>();
+        itemProxy=new Proxy<Item>();
         itemProxy.setId(itemId.intValue());
         itemProxy.setName(itemName);
-        ret.setProxy(itemProxy);
       }
       else
       {
         LOGGER.warn("Could not find item with ID="+itemId);
       }
     }
+    return itemProxy;
   }
 
   private NpcTalkCondition handleNpcTalk(PropertiesSet properties, Objective objective)
@@ -887,15 +898,22 @@ QuestEvent_ShowBillboardText: 0
     */
   }
 
-  private void handleHobbyItem(PropertiesSet properties)
+  private HobbyCondition handleHobbyItem(PropertiesSet properties)
   {
-    //propNames.addAll(properties.getPropertyNames());
-    //System.out.println("Condition properties: "+properties.dump());
     /*
      * QuestEvent_HobbyDID: always. 51 times the same hobby ID (the only one: 1879109150).
      * QuestEvent_ItemDID: always. Item ID (probably all fishes).
      * QuestEvent_Number: set 40 times. Mostly Integer: 1, sometimes 10.
      */
+    //int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
+    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer countInt=(Integer)properties.getProperty("QuestEvent_Number");
+    int count=(countInt!=null)?countInt.intValue():1;
+    HobbyCondition ret=new HobbyCondition();
+    ret.setCount(count);
+    Proxy<Item> itemProxy=buildItemProxy(itemId);
+    ret.setProxy(itemProxy);
+    return ret;
   }
 
   private FactionLevelCondition handleFactionLevel(PropertiesSet properties)
@@ -927,6 +945,16 @@ QuestEvent_ShowBillboardText: 0
     Proxy<Achievable> proxy=new Proxy<Achievable>();
     proxy.setId(questId);
     ret.setProxy(proxy);
+    return ret;
+  }
+
+  
+  private TimeExpiredCondition handleTimeExpired(PropertiesSet properties, Objective objective)
+  {
+    Integer timeLimit=(Integer)properties.getProperty("QuestEvent_TimeLimit");
+    int duration=(timeLimit!=null)?timeLimit.intValue():0;
+    TimeExpiredCondition ret=new TimeExpiredCondition();
+    ret.setDuration(duration);
     return ret;
   }
 
