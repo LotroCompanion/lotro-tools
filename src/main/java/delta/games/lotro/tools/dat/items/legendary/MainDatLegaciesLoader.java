@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.items.legendary;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.constraints.ClassAndSlot;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
@@ -18,11 +20,11 @@ import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.WellKnownStat;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.legendary.AbstractLegacy;
@@ -50,6 +52,8 @@ public class MainDatLegaciesLoader
 
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
+  private LegaciesManager _imbuedLegaciesManager;
+  private EnumMapper _equipmentCategory;
 
   /**
    * Constructor.
@@ -59,15 +63,22 @@ public class MainDatLegaciesLoader
   {
     _facade=facade;
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
+    _imbuedLegaciesManager=new LegaciesManager();
+    _equipmentCategory=_facade.getEnumsManager().getEnumMapper(587202636);
   }
 
   private void doIt()
   {
     DatStatUtils.doFilterStats=false;
     loadNonImbuedLegacies();
-    doItWithScan();
-    //doItFromIndex();
+    //LegaciesManager legaciesMgr=doItWithScan();
+    doItFromIndex();
+    // Dump loaded data
     //showLegacies();
+    //System.out.println(_nonImbuedLegaciesManager.dump());
+    // Save legacies
+    save(_nonImbuedLegaciesManager);
+    save(_imbuedLegaciesManager);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
   }
@@ -95,8 +106,6 @@ public class MainDatLegaciesLoader
       }
     }
   }
-
-  //private Set<String> statNames=new HashSet<String>();
 
   private ImbuedLegacy loadLegacy(int id)
   {
@@ -198,39 +207,10 @@ public class MainDatLegaciesLoader
     return null;
   }
 
-  private boolean useId(int id)
+  private void doItFromIndex()
   {
-    byte[] data=_facade.loadData(id);
-    if (data!=null)
-    {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
-      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      //System.out.println(classDefIndex);
-      return ((classDefIndex==WStateClass.IMBUED_LEGACY) || (classDefIndex==WStateClass.IMBUED_LEGACY_DPS) || (classDefIndex==WStateClass.IMBUED_LEGACY_OTHER_MAIN));
-    }
-    return false;
-  }
-
-  void doItWithScan()
-  {
-    LegaciesManager legaciesMgr=new LegaciesManager();
-    for(int id=0x70000000;id<=0x77FFFFFF;id++)
-    {
-      boolean useIt=useId(id);
-      if (useIt)
-      {
-        ImbuedLegacy legacy=loadLegacy(id);
-        legaciesMgr.registerLegacy(legacy);
-      }
-    }
-    save(legaciesMgr);
-  }
-
-  void doItFromIndex()
-  {
-    LegaciesManager legaciesMgr=new LegaciesManager();
     PropertiesSet props=_facade.loadProperties(1879108262+0x9000000);
-    System.out.println(props.dump());
+    //System.out.println(props.dump());
 
     // Extract imbued class/stat legacies
     {
@@ -240,7 +220,7 @@ public class MainDatLegaciesLoader
         // 300+ items
         int id=((Integer)obj).intValue();
         ImbuedLegacy legacy=loadLegacy(id);
-        legaciesMgr.registerLegacy(legacy);
+        _imbuedLegaciesManager.registerLegacy(legacy);
       }
     }
 
@@ -251,10 +231,14 @@ public class MainDatLegaciesLoader
       {
         // 2 items
         PropertiesSet legacyProps=(PropertiesSet)obj;
+        //System.out.println(legacyProps.dump());
         int legacyId=((Integer)legacyProps.getProperty("ItemAdvancement_ImbuedDPSWidget")).intValue();
-        //int equipmentCategory=((Integer)legacyProps.getProperty("Item_EquipmentCategory")).intValue();
+        long equipmentCategory=((Long)legacyProps.getProperty("Item_EquipmentCategory")).longValue();
+        BitSet equipementBitSet=BitSetUtils.getBitSetFromFlags(equipmentCategory);
+        String allowedEquipementTypes=BitSetUtils.getStringFromBitSet(equipementBitSet,_equipmentCategory, ",");
+        System.out.println("Allowed equipment types:"+allowedEquipementTypes);
         ImbuedLegacy legacy=loadLegacy(legacyId);
-        legaciesMgr.registerLegacy(legacy);
+        _imbuedLegaciesManager.registerLegacy(legacy);
       }
     }
 
@@ -287,8 +271,6 @@ public class MainDatLegaciesLoader
     // ItemAdvancement_LegacyTypeName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Type
     // ItemAdvancement_LegacyLevelName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Level
     // ItemAdvancement_StaticEffectTypeName_Array: array of 14 property IDs: ItemAdvancement_StaticEffect[N]_Type
-
-    save(legaciesMgr);
   }
 
   private File getTierIconFile(boolean small, int tier) {
@@ -347,16 +329,14 @@ public class MainDatLegaciesLoader
     }
     // Load default legacies (CombatPropertyModControl)
     PropertiesSet combatPropertyProps=_facade.loadProperties(1879167147+0x9000000);
-    Object[] legacyPropsTable=(Object[])combatPropertyProps.getProperty("Item_CombatPropertyModArray");
-    for(Object legacyObj : legacyPropsTable)
+    Object[] combatPropertyModArray=(Object[])combatPropertyProps.getProperty("Item_CombatPropertyModArray");
+    for(Object combatPropertyModObj : combatPropertyModArray)
     {
-      PropertiesSet legacyProps=(PropertiesSet)legacyObj;
-      int effectsTableId=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
-      int combatPropertyType=((Integer)legacyProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
+      PropertiesSet combatPropertyModProps=(PropertiesSet)combatPropertyModObj;
+      int effectsTableId=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
+      int combatPropertyType=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
       loadLegaciesTable(effectsTableId,combatPropertyType);
     }
-    save(_nonImbuedLegaciesManager);
-    //System.out.println(_nonImbuedLegaciesManager.dump());
   }
 
   private void handleReforgeTable(int reforgeTableId, EquipmentLocation slot)
@@ -568,7 +548,18 @@ public class MainDatLegaciesLoader
     CharacterClass characterClass=getClassFromCombatPropertyType(combatPropertyType);
     EquipmentLocation slot=getSlotFromCombatPropertyType(combatPropertyType);
 
-    //int imbuedLegacyId=((Integer)props.getProperty("Item_CPM_IAImbuedCombatPropertyMod")).intValue();
+    // Imbued legacy
+    int imbuedLegacyId=((Integer)props.getProperty("Item_CPM_IAImbuedCombatPropertyMod")).intValue();
+    ImbuedLegacy imbuedLegacy=_imbuedLegaciesManager.getLegacy(imbuedLegacyId);
+    if (imbuedLegacy==null)
+    {
+      imbuedLegacy=loadLegacy(imbuedLegacyId);
+      _imbuedLegaciesManager.registerLegacy(imbuedLegacy);
+    }
+    ClassAndSlot spec=new ClassAndSlot(characterClass,slot);
+    imbuedLegacy.addAllowedClassAndSlot(spec);
+
+    // Default non-imbued legacies
     Object[] qualityArray=(Object[])props.getProperty("Item_QualityCombatPropertyModArray");
     for(Object qualityPropsObj : qualityArray)
     {
