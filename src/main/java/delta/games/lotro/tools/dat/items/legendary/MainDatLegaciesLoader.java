@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -27,6 +29,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.AbstractLegacy;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegacyType;
@@ -151,8 +154,6 @@ public class MainDatLegaciesLoader
     //int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
     //System.out.println("Level table: "+levelTable);
 
-    //System.out.println(ret);
-
     PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
     if (mutationProps!=null)
     {
@@ -233,11 +234,14 @@ public class MainDatLegaciesLoader
         PropertiesSet legacyProps=(PropertiesSet)obj;
         //System.out.println(legacyProps.dump());
         int legacyId=((Integer)legacyProps.getProperty("ItemAdvancement_ImbuedDPSWidget")).intValue();
-        long equipmentCategory=((Long)legacyProps.getProperty("Item_EquipmentCategory")).longValue();
-        BitSet equipementBitSet=BitSetUtils.getBitSetFromFlags(equipmentCategory);
-        String allowedEquipementTypes=BitSetUtils.getStringFromBitSet(equipementBitSet,_equipmentCategory, ",");
-        System.out.println("Allowed equipment types:"+allowedEquipementTypes);
         ImbuedLegacy legacy=loadLegacy(legacyId);
+        // Allowed equipment
+        long equipmentCategory=((Long)legacyProps.getProperty("Item_EquipmentCategory")).longValue();
+        Set<WeaponType> weaponTypes=getAllowedEquipment(equipmentCategory);
+        if (!weaponTypes.isEmpty())
+        {
+          legacy.setAllowedWeaponTypes(weaponTypes);
+        }
         _imbuedLegaciesManager.registerLegacy(legacy);
       }
     }
@@ -316,7 +320,7 @@ public class MainDatLegaciesLoader
   {
     // Load reforge table: value of ItemAdvancement_ReforgeTable from 1879134775 (NPC: Forge-master)
     PropertiesSet globalReforgeTableProps=_facade.loadProperties(1879138325+0x9000000);
-    //System.out.println(globalReforgeTableProps.dump());
+    //showProps(1879138325,"global",globalReforgeTableProps);
 
     Object[] reforgeTables=(Object[])globalReforgeTableProps.getProperty("ItemAdvancement_ReforgeSlotInfo_Array");
     for(Object reforgeTableObj : reforgeTables)
@@ -329,10 +333,12 @@ public class MainDatLegaciesLoader
     }
     // Load default legacies (CombatPropertyModControl)
     PropertiesSet combatPropertyProps=_facade.loadProperties(1879167147+0x9000000);
+    //showProps(1879167147,"combatPropertyProps",combatPropertyProps);
     Object[] combatPropertyModArray=(Object[])combatPropertyProps.getProperty("Item_CombatPropertyModArray");
     for(Object combatPropertyModObj : combatPropertyModArray)
     {
       PropertiesSet combatPropertyModProps=(PropertiesSet)combatPropertyModObj;
+      //showProps(0,"combatPropertyModProps",combatPropertyModProps);
       int effectsTableId=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
       int combatPropertyType=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
       loadLegaciesTable(effectsTableId,combatPropertyType);
@@ -540,9 +546,60 @@ public class MainDatLegaciesLoader
     return null;
   }
 
+  private Set<WeaponType> getAllowedEquipment(long equipmentCategory)
+  {
+    BitSet equipementBitSet=BitSetUtils.getBitSetFromFlags(equipmentCategory);
+    if (LOGGER.isDebugEnabled())
+    {
+      String allowedEquipementTypes=BitSetUtils.getStringFromBitSet(equipementBitSet,_equipmentCategory, ",");
+      LOGGER.debug("Allowed equipment types:"+allowedEquipementTypes);
+    }
+    Set<WeaponType> ret=new HashSet<WeaponType>();
+    for(int i=0;i<equipementBitSet.size();i++)
+    {
+      if (equipementBitSet.get(i))
+      {
+        WeaponType weaponType=getWeaponType(i+1);
+        if (ret!=null)
+        {
+          ret.add(weaponType);
+        }
+      }
+    }
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Decoded equipment types:"+ret);
+    }
+    return ret;
+  }
+
+  private WeaponType getWeaponType(int index)
+  {
+    if (index==3) return WeaponType.TWO_HANDED_SWORD;
+    if (index==4) return WeaponType.TWO_HANDED_CLUB;
+    if (index==6) return WeaponType.TWO_HANDED_AXE;
+    if (index==8) return WeaponType.BOW;
+    if (index==12) return WeaponType.ONE_HANDED_HAMMER;
+    if (index==13) return WeaponType.SPEAR;
+    if (index==14) return WeaponType.CROSSBOW;
+    if (index==15) return WeaponType.TWO_HANDED_HAMMER;
+    if (index==16) return WeaponType.HALBERD;
+    if (index==20) return WeaponType.DAGGER;
+    if (index==22) return WeaponType.STAFF;
+    if (index==24) return WeaponType.ONE_HANDED_AXE;
+    if (index==26) return WeaponType.ONE_HANDED_CLUB;
+    if (index==27) return WeaponType.ONE_HANDED_MACE;
+    if (index==28) return WeaponType.ONE_HANDED_SWORD;
+    if (index==39) return WeaponType.RUNE_STONE;
+    if (index==41) return WeaponType.JAVELIN;
+    //LOGGER.warn("Unmanaged weapon type: "+index);
+    return null;
+  }
+
   private void loadLegaciesTable(int tableId, int combatPropertyType)
   {
     PropertiesSet props=_facade.loadProperties(tableId+0x9000000);
+    //showProps(tableId,"legacies tables",props);
 
     LegacyType type=getLegacyTypeFromCombatPropertyType(combatPropertyType);
     CharacterClass characterClass=getClassFromCombatPropertyType(combatPropertyType);
@@ -564,9 +621,11 @@ public class MainDatLegaciesLoader
     for(Object qualityPropsObj : qualityArray)
     {
       PropertiesSet qualityProps=(PropertiesSet)qualityPropsObj;
+      //showProps(0,"quality props",qualityProps);
       int effectId=((Integer)qualityProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
       int quality=((Integer)qualityProps.getProperty("Item_Quality")).intValue();
 
+      //System.out.println("Quality: "+quality);
       if (effectId!=0)
       {
         buildDefaultLegacy(effectId,type,quality,characterClass,slot);
@@ -575,6 +634,7 @@ public class MainDatLegaciesLoader
       {
         int prog=((Integer)qualityProps.getProperty("Item_PropertyModProgression")).intValue();
         PropertiesSet progProps=_facade.loadProperties(prog+0x9000000);
+        //showProps(prog,"property mod progression",progProps);
         Object[] effectArray=(Object[])progProps.getProperty("DataIDProgression_Array");
         for(Object effectIdObj : effectArray)
         {
@@ -615,6 +675,12 @@ public class MainDatLegaciesLoader
     return ((description==WellKnownStat.MIGHT) || (description==WellKnownStat.AGILITY)
         || (description==WellKnownStat.WILL) || (description==WellKnownStat.VITALITY)
         || (description==WellKnownStat.FATE));
+  }
+
+  void showProps(int id, String meaning, PropertiesSet props)
+  {
+    System.out.println("ID: "+id+" -- "+meaning);
+    System.out.println(props.dump());
   }
 
   /**
