@@ -259,6 +259,7 @@ public class MainDatItemsLoader
     if (itemClassInt==null) return false;
     if (name.contains("TBD")) return false;
     if (name.contains("DNT")) return false;
+    if (name.contains("GNDN")) return false;
     if (name.contains("Tester")) return false;
     if (name.contains("Barter Test")) return false;
     if (name.startsWith("Test ")) return false;
