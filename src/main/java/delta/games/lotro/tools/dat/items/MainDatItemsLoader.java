@@ -29,6 +29,8 @@ import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
+import delta.games.lotro.lore.items.legendary.Legendary;
+import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
@@ -244,7 +246,7 @@ public class MainDatItemsLoader
       }
       // Handle legendaries
       DatStatUtils.doFilterStats=false;
-      handleLegendaries(indexDataId, properties);
+      handleLegendaries(item, properties);
     }
     else
     {
@@ -355,10 +357,22 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private void handleLegendaries(int itemId, PropertiesSet properties)
+  private void handleLegendaries(Item item, PropertiesSet properties)
   {
+    int itemId=item.getIdentifier();
     handleLegendaries(itemId, properties,"ItemAdvancement_StaticEffectGroupOverride");
     handleLegendaries(itemId, properties,"ItemAdvancement_StaticEffectGroup2Override");
+
+    if (item instanceof Legendary)
+    {
+      Legendary legendary=(Legendary)item;
+      Integer combatPropertyModDid=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModDID");
+      if (combatPropertyModDid!=null)
+      {
+        LegendaryAttrs attrs=legendary.getLegendaryAttrs();
+        attrs.setMainLegacyId(combatPropertyModDid);
+      }
+    }
   }
 
   private void handleLegendaries(int itemId, PropertiesSet properties, String key)
