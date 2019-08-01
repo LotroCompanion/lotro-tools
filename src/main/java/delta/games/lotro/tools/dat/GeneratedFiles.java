@@ -151,4 +151,8 @@ public class GeneratedFiles
    * Deeds.
    */
   public static final File DEEDS=LotroCoreConfig.getInstance().getFile(DataFiles.DEEDS);
+  /**
+   * Sets.
+   */
+  public static final File SETS=LotroCoreConfig.getInstance().getFile(DataFiles.SETS);
 }
