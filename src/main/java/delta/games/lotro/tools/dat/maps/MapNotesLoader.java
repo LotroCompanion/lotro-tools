@@ -72,7 +72,7 @@ public class MapNotesLoader
     if (peek!=0)
     {
       // Get content layers properties (Object[] with Integers)
-      /*Object content_layers_properties=*/propsLoader.decodeProperty(null,bis,false);
+      /*Object content_layers_properties=*/propsLoader.decodeProperty(bis,false);
       // The display text for the MapNote:
       stringinfo=PropertyUtils.readStringInfoProperty(bis,8);
       if (stringinfo instanceof String)
