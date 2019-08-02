@@ -49,20 +49,21 @@ import delta.games.lotro.utils.maths.Progression;
  * Get legacy descriptions from DAT files.
  * @author DAM
  */
-public class MainDatLegaciesLoader
+public class LegaciesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatLegaciesLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(LegaciesLoader.class);
 
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
   private LegaciesManager _imbuedLegaciesManager;
   private EnumMapper _equipmentCategory;
+  private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
 
   /**
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatLegaciesLoader(DataFacade facade)
+  public LegaciesLoader(DataFacade facade)
   {
     _facade=facade;
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
@@ -70,20 +71,23 @@ public class MainDatLegaciesLoader
     _equipmentCategory=_facade.getEnumsManager().getEnumMapper(587202636);
   }
 
-  private void doIt()
+  /**
+   * Load legacies.
+   */
+  public void loadLegacies()
   {
     DatStatUtils.doFilterStats=false;
     loadNonImbuedLegacies();
-    //LegaciesManager legaciesMgr=doItWithScan();
-    doItFromIndex();
-    // Dump loaded data
-    //showLegacies();
-    //System.out.println(_nonImbuedLegaciesManager.dump());
-    // Save legacies
+    loadImbuedLegacies();
+  }
+
+  /**
+   * Save legacies.
+   */
+  public void save()
+  {
     save(_nonImbuedLegaciesManager);
     save(_imbuedLegaciesManager);
-    // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
   }
 
   void showLegacies()
@@ -214,7 +218,7 @@ public class MainDatLegaciesLoader
     return null;
   }
 
-  private void doItFromIndex()
+  private void loadImbuedLegacies()
   {
     PropertiesSet props=_facade.loadProperties(1879108262+0x9000000);
     //System.out.println(props.dump());
@@ -226,8 +230,12 @@ public class MainDatLegaciesLoader
       {
         // 300+ items
         int id=((Integer)obj).intValue();
-        ImbuedLegacy legacy=loadImbuedLegacy(id);
-        _imbuedLegaciesManager.registerLegacy(legacy);
+        ImbuedLegacy legacy=_imbuedLegaciesManager.getLegacy(id);
+        if (legacy==null)
+        {
+          legacy=loadImbuedLegacy(id);
+          _imbuedLegaciesManager.registerLegacy(legacy);
+        }
       }
     }
 
@@ -294,8 +302,6 @@ public class MainDatLegaciesLoader
       System.out.println("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
     }
   }
-
-  private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
 
   private void loadNonImbuedLegacies()
   {
@@ -642,16 +648,5 @@ public class MainDatLegaciesLoader
   {
     System.out.println("ID: "+id+" -- "+meaning);
     System.out.println(props.dump());
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    new MainDatLegaciesLoader(facade).doIt();
-    facade.dispose();
   }
 }

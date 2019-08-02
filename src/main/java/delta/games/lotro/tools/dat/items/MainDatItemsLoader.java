@@ -35,6 +35,7 @@ import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -58,6 +59,7 @@ public class MainDatItemsLoader
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
   private ConsumablesLoader _consumablesLoader;
+  private LegaciesLoader _legaciesLoader;
 
   /**
    * Constructor.
@@ -68,6 +70,7 @@ public class MainDatItemsLoader
     _facade=facade;
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);
+    _legaciesLoader=new LegaciesLoader(_facade);
   }
 
   private boolean _debug=false;
@@ -367,10 +370,32 @@ public class MainDatItemsLoader
     {
       Legendary legendary=(Legendary)item;
       Integer combatPropertyModDid=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModDID");
+      Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
       if (combatPropertyModDid!=null)
       {
+        // Non-DPS main legacy
         LegendaryAttrs attrs=legendary.getLegendaryAttrs();
         attrs.setMainLegacyId(combatPropertyModDid);
+      }
+      else if (dpsLut!=null)
+      {
+        // DPS main legacy
+      }
+      else
+      {
+        LOGGER.warn("Legendary item with no main legacy (DPS or not): "+item);
+      }
+      //int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
+      //Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
+      //Integer combatPropertyModLevel=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
+      Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
+      if (icon!=null)
+      {
+        File to=new File("legacy-"+icon.intValue()+".png").getAbsoluteFile();
+        if (!to.exists())
+        {
+          DatIconsUtils.buildImageFile(_facade,icon.intValue(),to);
+        }
       }
     }
   }
@@ -849,6 +874,10 @@ public class MainDatItemsLoader
 
   private void doIt()
   {
+    // Legacies
+    _legaciesLoader.loadLegacies();
+
+    // Items
     List<Item> items=new ArrayList<Item>();
 
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
@@ -884,6 +913,8 @@ public class MainDatItemsLoader
     _passivesLoader.savePassives();
     // Save consumables
     _consumablesLoader.saveConsumables();
+    // Save legacies
+    _legaciesLoader.save();
   }
 
   /**

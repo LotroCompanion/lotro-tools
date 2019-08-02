@@ -31,7 +31,7 @@ public class DatStatUtils
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
   /**
-   * Flaf to indicate if stats shall be filtered or not.
+   * Flag to indicate if stats shall be filtered or not.
    */
   public static boolean doFilterStats=true;
 

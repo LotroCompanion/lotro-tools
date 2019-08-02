@@ -18,7 +18,6 @@ public class MainProgressionsMerger
     ProgressionsManager progressions=new ProgressionsManager();
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
-    progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_LEGACIES);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     progressions.writeToFile(GeneratedFiles.PROGRESSIONS);
   }
