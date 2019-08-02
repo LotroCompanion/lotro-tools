@@ -149,7 +149,13 @@ public class MainDatLegaciesLoader
       ret.setStatsProvider(provider);
     }
 
-    //int iconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
+    int iconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
+    ret.setIconId(iconId);
+    File iconFile=new File("legacy-"+iconId+".png").getAbsoluteFile();
+    if (!iconFile.exists())
+    {
+      DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
+    }
     //int smallIconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
     //int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
     //System.out.println("Level table: "+levelTable);
