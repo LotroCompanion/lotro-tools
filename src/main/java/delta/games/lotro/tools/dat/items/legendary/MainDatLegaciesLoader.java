@@ -110,7 +110,7 @@ public class MainDatLegaciesLoader
     }
   }
 
-  private ImbuedLegacy loadLegacy(int id)
+  private ImbuedLegacy loadImbuedLegacy(int id)
   {
     //System.out.println("**** ID="+id+" *****");
     PropertiesSet props=_facade.loadProperties(id+0x9000000);
@@ -220,7 +220,7 @@ public class MainDatLegaciesLoader
       {
         // 300+ items
         int id=((Integer)obj).intValue();
-        ImbuedLegacy legacy=loadLegacy(id);
+        ImbuedLegacy legacy=loadImbuedLegacy(id);
         _imbuedLegaciesManager.registerLegacy(legacy);
       }
     }
@@ -234,7 +234,7 @@ public class MainDatLegaciesLoader
         PropertiesSet legacyProps=(PropertiesSet)obj;
         //System.out.println(legacyProps.dump());
         int legacyId=((Integer)legacyProps.getProperty("ItemAdvancement_ImbuedDPSWidget")).intValue();
-        ImbuedLegacy legacy=loadLegacy(legacyId);
+        ImbuedLegacy legacy=loadImbuedLegacy(legacyId);
         // Allowed equipment
         long equipmentCategory=((Long)legacyProps.getProperty("Item_EquipmentCategory")).longValue();
         Set<WeaponType> weaponTypes=getAllowedEquipment(equipmentCategory);
@@ -277,7 +277,8 @@ public class MainDatLegaciesLoader
     // ItemAdvancement_StaticEffectTypeName_Array: array of 14 property IDs: ItemAdvancement_StaticEffect[N]_Type
   }
 
-  private File getTierIconFile(boolean small, int tier) {
+  private File getTierIconFile(boolean small, int tier)
+  {
     File rootDir=new File("../lotro-companion/src/main/java/resources/gui/legendary/tiers");
     String fileName="tier"+tier+(small?"-small":"-large")+".png";
     File iconFile=new File(rootDir,fileName).getAbsoluteFile();
@@ -486,26 +487,6 @@ public class MainDatLegaciesLoader
     return null;
   }
 
-  private LegacyType getLegacyTypeFromCombatPropertyType(int code)
-  {
-    if (code==3) return LegacyType.TACTICAL_DPS; // TacticalDPS
-    if (code==6) return LegacyType.TACTICAL_DPS; // Minstrel_TacticalDPS
-    if (code==22) return LegacyType.TACTICAL_DPS; // Loremaster_TacticalDPS
-    if (code==15) return LegacyType.TACTICAL_DPS; // Guardian_TacticalDPS
-    if (code==5) return LegacyType.TACTICAL_DPS; // Runekeeper_TacticalDPS
-    if (code==7) return LegacyType.OUTGOING_HEALING; // Minstrel_HealingPS
-    if (code==21) return LegacyType.OUTGOING_HEALING; // Loremaster_HealingPS
-    if (code==8) return LegacyType.OUTGOING_HEALING; // Captain_HealingPS
-    if (code==13) return LegacyType.OUTGOING_HEALING; // Runekeeper_HealingPS
-    if (code==16) return LegacyType.INCOMING_HEALING; // Champion_IncomingHealing
-    if (code==23) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing
-    if (code==25) return LegacyType.INCOMING_HEALING; // Champion_IncomingHealing_65
-    if (code==24) return LegacyType.INCOMING_HEALING; // Burglar_IncomingHealing_65
-    if (code==26) return LegacyType.FURY; // Mounted_MomentumMod
-    if (code==28) return LegacyType.OUTGOING_HEALING; // Beorning_HealingPS
-    return null;
-  }
-
   private CharacterClass getClassFromCombatPropertyType(int code)
   {
     if (code==3) return null; // TacticalDPS
@@ -601,7 +582,7 @@ public class MainDatLegaciesLoader
     PropertiesSet props=_facade.loadProperties(tableId+0x9000000);
     //showProps(tableId,"legacies tables",props);
 
-    LegacyType type=getLegacyTypeFromCombatPropertyType(combatPropertyType);
+    LegacyType type=DatLegendaryUtils.getLegacyTypeFromCombatPropertyType(combatPropertyType);
     CharacterClass characterClass=getClassFromCombatPropertyType(combatPropertyType);
     EquipmentLocation slot=getSlotFromCombatPropertyType(combatPropertyType);
 
@@ -610,7 +591,7 @@ public class MainDatLegaciesLoader
     ImbuedLegacy imbuedLegacy=_imbuedLegaciesManager.getLegacy(imbuedLegacyId);
     if (imbuedLegacy==null)
     {
-      imbuedLegacy=loadLegacy(imbuedLegacyId);
+      imbuedLegacy=loadImbuedLegacy(imbuedLegacyId);
       _imbuedLegaciesManager.registerLegacy(imbuedLegacy);
     }
     ClassAndSlot spec=new ClassAndSlot(characterClass,slot);
@@ -691,7 +672,6 @@ public class MainDatLegaciesLoader
   {
     DataFacade facade=new DataFacade();
     new MainDatLegaciesLoader(facade).doIt();
-    //DatIconsUtils.buildImageFile(facade,1090519170,new File("1090519170.png"));
     facade.dispose();
   }
 }
