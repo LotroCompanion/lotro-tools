@@ -124,6 +124,10 @@ public class GeneratedFiles
    */
   public static final File LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.LEGACIES);
   /**
+   * Default non-imbued legacies.
+   */
+  public static final File DEFAULT_NON_IMBUED_LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.DEFAULT_NON_IMBUED_LEGACIES);
+  /**
    * Non-imbued legacies.
    */
   public static final File NON_IMBUED_LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.NON_IMBUED_LEGACIES);
