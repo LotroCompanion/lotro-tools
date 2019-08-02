@@ -252,24 +252,6 @@ public class MainDatLegaciesLoader
       }
     }
 
-    // Tier icons
-    {
-      Object[] array=(Object[])props.getProperty("ItemAdvancement_ProgressionTierGroupToIcon_Array");
-      for(Object obj : array)
-      {
-        PropertiesSet legacyProps=(PropertiesSet)obj;
-        int tier=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionTierGroup")).intValue();
-        // - small icon
-        int smallIconId=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionIcon_Small")).intValue();
-        File smallIconFile=getTierIconFile(true,tier);
-        DatIconsUtils.buildImageFile(_facade,smallIconId,smallIconFile);
-        // - normal icon
-        int iconId=((Integer)legacyProps.getProperty("ItemAdvancement_ProgressionIcon")).intValue();
-        File iconFile=getTierIconFile(false,tier);
-        DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
-      }
-    }
-
     // ItemAdvancement_ClassAgnosticWidgetDID_Array: 5 stat legacies (already included in the previous array)
     // ItemAdvancement_BlankImbuedWidgetDID: blank legacy (useless)
     // ItemAdvancement_ReforgeLevel_AddLegacy_Array: levels with legacy addition (10, 20, 30)
@@ -281,14 +263,6 @@ public class MainDatLegaciesLoader
     // ItemAdvancement_LegacyTypeName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Type
     // ItemAdvancement_LegacyLevelName_Array: array of 9 property IDs: ItemAdvancement_Legacy[N]_Level
     // ItemAdvancement_StaticEffectTypeName_Array: array of 14 property IDs: ItemAdvancement_StaticEffect[N]_Type
-  }
-
-  private File getTierIconFile(boolean small, int tier)
-  {
-    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/legendary/tiers");
-    String fileName="tier"+tier+(small?"-small":"-large")+".png";
-    File iconFile=new File(rootDir,fileName).getAbsoluteFile();
-    return iconFile;
   }
 
   private void save(LegaciesManager legaciesMgr)
