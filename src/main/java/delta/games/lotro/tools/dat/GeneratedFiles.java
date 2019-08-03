@@ -128,6 +128,10 @@ public class GeneratedFiles
    */
   public static final File NON_IMBUED_LEGACIES=LotroCoreConfig.getInstance().getFile(DataFiles.NON_IMBUED_LEGACIES);
   /**
+   * Legacies icons.
+   */
+  public static final File LEGACIES_ICONS=new File("../lotro-data/legendary/legaciesIcons.zip").getAbsoluteFile();
+  /**
    * Passives.
    */
   public static final File PASSIVES=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES);
