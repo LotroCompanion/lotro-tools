@@ -388,15 +388,7 @@ public class MainDatItemsLoader
       //int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
       //Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
       //Integer combatPropertyModLevel=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
-      Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
-      if (icon!=null)
-      {
-        File to=new File("legacy-"+icon.intValue()+".png").getAbsoluteFile();
-        if (!to.exists())
-        {
-          DatIconsUtils.buildImageFile(_facade,icon.intValue(),to);
-        }
-      }
+      //Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
     }
   }
 

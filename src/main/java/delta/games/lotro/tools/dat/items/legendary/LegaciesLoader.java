@@ -155,11 +155,7 @@ public class LegaciesLoader
 
     int iconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
     ret.setIconId(iconId);
-    File iconFile=new File("legacy-"+iconId+".png").getAbsoluteFile();
-    if (!iconFile.exists())
-    {
-      DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
-    }
+    loadIcon(iconId);
     //int smallIconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
     //int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
     //System.out.println("Level table: "+levelTable);
@@ -583,6 +579,10 @@ public class LegaciesLoader
     ClassAndSlot spec=new ClassAndSlot(characterClass,slot);
     imbuedLegacy.addAllowedClassAndSlot(spec);
 
+    // Icon
+    int iconId=((Integer)props.getProperty("Item_CPM_LargeIcon")).intValue();
+    loadIcon(iconId);
+
     // Default non-imbued legacies
     Object[] qualityArray=(Object[])props.getProperty("Item_QualityCombatPropertyModArray");
     for(Object qualityPropsObj : qualityArray)
@@ -595,7 +595,8 @@ public class LegaciesLoader
       //System.out.println("Quality: "+quality);
       if (effectId!=0)
       {
-        buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+        DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+        legacy.setIconId(iconId);
       }
       else
       {
@@ -606,7 +607,8 @@ public class LegaciesLoader
         for(Object effectIdObj : effectArray)
         {
           effectId=((Integer)effectIdObj).intValue();
-          buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+          DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+          legacy.setIconId(iconId);
         }
       }
     }
@@ -642,6 +644,19 @@ public class LegaciesLoader
     return ((description==WellKnownStat.MIGHT) || (description==WellKnownStat.AGILITY)
         || (description==WellKnownStat.WILL) || (description==WellKnownStat.VITALITY)
         || (description==WellKnownStat.FATE));
+  }
+
+  /**
+   * Load an icon.
+   * @param iconId Icon identifier.
+   */
+  public void loadIcon(int iconId)
+  {
+    File to=new File("legacy-"+iconId+".png").getAbsoluteFile();
+    if (!to.exists())
+    {
+      DatIconsUtils.buildImageFile(_facade,iconId,to);
+    }
   }
 
   void showProps(int id, String meaning, PropertiesSet props)
