@@ -178,6 +178,7 @@ public class LegaciesLoader
           {
             ret.setType(oldLegacy.getType());
             ret.setClassAndSlotFilter(oldLegacy.getClassAndSlotFilter());
+            oldLegacy.setImbuedLegacyId(id);
           }
           else
           {
@@ -576,6 +577,7 @@ public class LegaciesLoader
       imbuedLegacy=loadImbuedLegacy(imbuedLegacyId);
       _imbuedLegaciesManager.registerLegacy(imbuedLegacy);
     }
+    
     ClassAndSlot spec=new ClassAndSlot(characterClass,slot);
     imbuedLegacy.addAllowedClassAndSlot(spec);
 
@@ -597,6 +599,7 @@ public class LegaciesLoader
       {
         DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
         legacy.setIconId(iconId);
+        legacy.setImbuedLegacyId(imbuedLegacyId);
       }
       else
       {
@@ -609,6 +612,7 @@ public class LegaciesLoader
           effectId=((Integer)effectIdObj).intValue();
           DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
           legacy.setIconId(iconId);
+          legacy.setImbuedLegacyId(imbuedLegacyId);
         }
       }
     }
