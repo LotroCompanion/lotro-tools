@@ -33,6 +33,7 @@ import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
@@ -371,15 +372,17 @@ public class MainDatItemsLoader
       Legendary legendary=(Legendary)item;
       Integer combatPropertyModDid=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModDID");
       Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
+      LegendaryAttrs attrs=legendary.getLegendaryAttrs();
       if (combatPropertyModDid!=null)
       {
         // Non-DPS main legacy
-        LegendaryAttrs attrs=legendary.getLegendaryAttrs();
         attrs.setMainLegacyId(combatPropertyModDid);
       }
       else if (dpsLut!=null)
       {
         // DPS main legacy
+        _legaciesLoader.getNonImbuedDpsLegacy(dpsLut.intValue());
+        attrs.setMainLegacyId(dpsLut);
       }
       else
       {

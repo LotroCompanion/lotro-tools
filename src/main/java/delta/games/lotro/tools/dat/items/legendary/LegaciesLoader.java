@@ -639,6 +639,28 @@ public class LegaciesLoader
     return legacy;
   }
 
+  /**
+   * Get a non-imbued DPS legacy.
+   * @param dpsLutId DPS table identifier.
+   * @return a legacy.
+   */
+  public DefaultNonImbuedLegacy getNonImbuedDpsLegacy(int dpsLutId)
+  {
+    DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(dpsLutId);
+    if (legacy==null)
+    {
+      legacy=new DefaultNonImbuedLegacy();
+      legacy.setType(LegacyType.DPS);
+      StatsProvider stats=loadDpsLut(dpsLutId);
+      Effect effect=new Effect();
+      effect.setId(dpsLutId);
+      effect.setStatsProvider(stats);
+      legacy.setEffect(effect);
+      _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
+    }
+    return legacy;
+  }
+
   private boolean isStatLegacy(StatDescription description)
   {
     return ((description==WellKnownStat.MIGHT) || (description==WellKnownStat.AGILITY)
