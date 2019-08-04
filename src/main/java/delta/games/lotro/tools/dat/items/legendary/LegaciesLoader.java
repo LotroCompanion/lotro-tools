@@ -678,6 +678,7 @@ public class LegaciesLoader
       effect.setId(dpsLutId);
       effect.setStatsProvider(stats);
       legacy.setEffect(effect);
+      legacy.setIconId(1091968768);
       _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
     }
     return legacy;
