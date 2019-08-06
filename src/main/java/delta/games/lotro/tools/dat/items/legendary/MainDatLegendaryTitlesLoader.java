@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
@@ -112,9 +114,8 @@ Mod_Array:
       Integer slayerGenusType=(Integer)properties.getProperty("ItemAdvancement_Title_SlayerGenusType");
       if ((slayerGenusType!=null) && (slayerGenusType.intValue()!=0))
       {
-        int genusType=slayerGenusType.intValue();
-        int indexGenus=getPower(genusType);
-        String genus=_genus.getString(indexGenus+1);
+        BitSet flags=BitSetUtils.getBitSetFromFlags(slayerGenusType.intValue());
+        String genus=BitSetUtils.getStringFromBitSet(flags,_genus,",");
         ret.setSlayerGenusType(genus);
       }
       // Stats
@@ -149,17 +150,6 @@ Mod_Array:
       LOGGER.warn("Could not handle legendary title ID="+indexDataId);
     }
     return ret;
-  }
-
-  private static int getPower(int value)
-  {
-    int test=1;
-    for(int n=0;n<15;n++)
-    {
-      if (value==test) return n;
-      test*=2;
-    }
-    return -1;
   }
 
   private boolean useId(int id)
