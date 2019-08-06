@@ -97,30 +97,6 @@ public class LegaciesLoader
     saveIcons();
   }
 
-  void showLegacies()
-  {
-    EquipmentLocation[] slots= { EquipmentLocation.MAIN_HAND, EquipmentLocation.RANGED_ITEM,
-        EquipmentLocation.CLASS_SLOT,EquipmentLocation.BRIDLE
-    };
-    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
-    {
-      for(EquipmentLocation slot : slots)
-      {
-        System.out.println("Class: "+characterClass+", slot: "+slot);
-        List<DefaultNonImbuedLegacy> legacies=_nonImbuedLegaciesManager.getDefaultLegacies(characterClass,slot);
-        for(DefaultNonImbuedLegacy legacy : legacies)
-        {
-          System.out.println("\t"+legacy);
-        }
-        List<TieredNonImbuedLegacy> tieredLegacies=_nonImbuedLegaciesManager.getTieredLegacies(characterClass,slot);
-        for(TieredNonImbuedLegacy legacy : tieredLegacies)
-        {
-          System.out.println("\t"+legacy);
-        }
-      }
-    }
-  }
-
   private ImbuedLegacy loadImbuedLegacy(int id)
   {
     //System.out.println("**** ID="+id+" *****");
