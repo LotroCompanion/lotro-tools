@@ -671,6 +671,7 @@ public class LegaciesLoader
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(dpsLutId);
     if (legacy==null)
     {
+      // Build a DPS legacy using the effect identifier as legacy identifier
       legacy=new DefaultNonImbuedLegacy();
       legacy.setType(LegacyType.DPS);
       StatsProvider stats=loadDpsLut(dpsLutId);
@@ -679,6 +680,12 @@ public class LegaciesLoader
       effect.setStatsProvider(stats);
       legacy.setEffect(effect);
       legacy.setIconId(1091968768);
+      // Manually setup link with imbued DPS legacies:
+      int imbuedDpsLegacyId=0;
+      if (dpsLutId==1879049506) imbuedDpsLegacyId=1879325265;
+      else if (dpsLutId==1879049778) imbuedDpsLegacyId=1879325264;
+      legacy.setImbuedLegacyId(imbuedDpsLegacyId);
+      // Register legacy
       _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
     }
     return legacy;
