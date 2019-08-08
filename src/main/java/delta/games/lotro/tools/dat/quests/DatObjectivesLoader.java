@@ -274,6 +274,10 @@ public class DatObjectivesLoader
     {
       condition=handleNpcTalk(properties,objective);
     }
+    else if (questEventId==13)
+    {
+      condition=handleChanneling(properties);
+    }
     else if (questEventId==14)
     {
       condition=handleTimeExpired(properties,objective);
@@ -285,6 +289,14 @@ public class DatObjectivesLoader
     else if (questEventId==18)
     {
       condition=handleLevelCondition(properties,objective);
+    }
+    else if (questEventId==19)
+    {
+      condition=handleClearCamp(properties);
+    }
+    else if (questEventId==20)
+    {
+      condition=handleChannelingFailed(properties);
     }
     else if (questEventId==21)
     {
@@ -313,6 +325,10 @@ public class DatObjectivesLoader
       //handleKungFu(properties,objective);
     }
     */
+    else if (questEventId==30)
+    {
+      condition=handleSelfDied(properties);
+    }
     else if (questEventId==31)
     {
       condition=handleInventoryItem(properties);
@@ -320,6 +336,10 @@ public class DatObjectivesLoader
     else if (questEventId==32)
     {
       condition=handleQuestComplete(properties);
+    }
+    else if (questEventId==33)
+    {
+      condition=handleCraftRecipeExecution(properties);
     }
     else if (questEventId==34)
     {
@@ -330,9 +350,17 @@ public class DatObjectivesLoader
     {
       condition=handleHobbyItem(properties);
     }
+    else if (questEventId==43)
+    {
+      condition=handleDismounted(properties);
+    }
     else if (questEventId==45)
     {
       condition=handleFactionLevel(properties);
+    }
+    else if (questEventId==46)
+    {
+      condition=handleTeleported(properties);
     }
     else if (questEventId==59)
     {
@@ -341,18 +369,11 @@ public class DatObjectivesLoader
     else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
-    else if (questEventId==13) type=ConditionType.CHANNELING;
-    else if (questEventId==19) type=ConditionType.CLEAR_CAMP;
-    else if (questEventId==20) type=ConditionType.CHANNELING_FAILED;
     else if (questEventId==27) type=ConditionType.KUNG_FU;
     else if (questEventId==29) type=ConditionType.ESCORT;
-    else if (questEventId==30) type=ConditionType.SELF_DIED;
-    else if (questEventId==33) type=ConditionType.CRAFT_RECIPE_EXECUTION;
     else if (questEventId==37) type=ConditionType.SESSION_FINISHED;
     else if (questEventId==38) type=ConditionType.RESOURCE_SET;
     else if (questEventId==40) type=ConditionType.ITEM_ADVANCEMENT;
-    else if (questEventId==43) type=ConditionType.DISMOUNTED;
-    else if (questEventId==46) type=ConditionType.TELEPORTED;
     else if (questEventId==56) type=ConditionType.ENTER_PLAYER_AOI;
     else if (questEventId==57) type=ConditionType.CORPSE_USED;
     else if (questEventId==58) type=ConditionType.SCRIPT_CALLBACK;
@@ -955,6 +976,151 @@ QuestEvent_ShowBillboardText: 0
     int duration=(timeLimit!=null)?timeLimit.intValue():0;
     TimeExpiredCondition ret=new TimeExpiredCondition();
     ret.setDuration(duration);
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleCraftRecipeExecution(PropertiesSet properties)
+  {
+    /*
+    System.out.println("Craft recipe execution");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CRAFT_RECIPE_EXECUTION);
+    // - count
+    // - recipe ID
+    // - (location)
+    /*
+Craft recipe execution
+QuestEvent_BillboardProgressOverride: 
+  #1: Seeds planted
+QuestEvent_Locations: 
+  #1: 
+    QuestEvent_Location_Position: R=1,I=0,bx=93,by=118,x=129.18,y=8.07,z=367.93
+QuestEvent_LocationsAreOverrides: 1
+QuestEvent_Number: 1
+QuestEvent_RecipeDID: 1879088560
+QuestEvent_ShowBillboardText: 1
+     */
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleDismounted(PropertiesSet properties)
+  {
+    /*
+    System.out.println("Dismounted!");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.DISMOUNTED);
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleTeleported(PropertiesSet properties)
+  {
+    /*
+    System.out.println("Teleported!");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.TELEPORTED);
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleChanneling(PropertiesSet properties)
+  {
+    /*
+Channeling!
+QuestEvent_BillboardProgressOverride: 
+  #1: You tip the slop into the bucket, and it makes a sickening sound
+QuestEvent_ChannelingRoleConstraint: role_slop_to_prisoner_bucket
+QuestEvent_ChannelingState: 1879210738
+QuestEvent_EventOrder: 0
+QuestEvent_FailedBillboardText: 
+  #1: You dropped the bucket and spilled the slop! Go get some more
+QuestEvent_ID: 13 (Channeling)
+QuestEvent_ItemDID: 1879209794
+QuestEvent_Number: 1
+QuestEvent_ProgressOverride: 
+  #1: Get some slop from the slop bucket in the kitchens
+QuestEvent_ShowBillboardText: 1
+QuestEvent_TappedProgressOverride: 
+  #1: Carry the slop to the bucket in the dungeons
+     */
+    /*
+    System.out.println("Channeling!");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CHANNELING);
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleChannelingFailed(PropertiesSet properties)
+  {
+    /*
+Channeling failed!
+QuestEvent_BillboardProgressOverride: 
+  #1: You have lost the race
+QuestEvent_ChannelingState: 1879162589
+QuestEvent_ID: 20 (ChannelingFailed)
+QuestEvent_Number: 1
+QuestEvent_ShowBillboardText: 1
+QuestEvent_ShowProgressText: 0
+     */
+    /*
+    System.out.println("Channeling failed!");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CHANNELING_FAILED);
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleClearCamp(PropertiesSet properties)
+  {
+    /*
+    System.out.println("Clear camp!");
+    System.out.println(properties.dump());
+    */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CLEAR_CAMP);
+    /*
+Clear camp!
+QuestEvent_BillboardProgressOverride: 
+  #1: You have successfully defended Tóki Whitebeard!
+QuestEvent_DramaName: drama_stolen_stones_ending
+QuestEvent_EventOrder: 0
+QuestEvent_FailQuestWhenEventFails: 1
+QuestEvent_FailedBillboardText: 
+  #1: Tóki Whitebeard has been defeated!
+QuestEvent_ID: 19 (ClearCamp)
+QuestEvent_KungFuDramaName: drama_stolen_stones_kungfu
+QuestEvent_Number: 1
+QuestEvent_ProgressOverride: 
+  #1: Search Ost Dúrgonn for the stolen stones
+QuestEvent_RoleConstraint: role_stolen_stones_dwarf
+QuestEvent_ShouldShowEscortVitals: 1
+QuestEvent_ShowBillboardText: 1
+QuestEvent_TappedProgressOverride: 
+  #1: Protect Tóki Whitebeard
+QuestEvent_WaitForDrama: 1
+Quest_Role: 
+  QuestDispenser_RoleSuccessText: 
+    #1: 'Are you...here to help? Be careful, friend! A mighty cave-claw has slain...the rest of my....'\n\nThe dwarf shudders with exhaustion.\n\n'This monstrous cave-claw...attacked us...after the trolls stole...the stones we...were bearing....'
+  QuestDispenser_StartScriptID: 0
+     */
+    return ret;
+  }
+
+  private DefaultObjectiveCondition handleSelfDied(PropertiesSet properties)
+  {
+    /*
+    System.out.println("Self died!");
+    System.out.println(properties.dump());
+    */
+    /*
+Self died!
+QuestEvent_ID: 30 (SelfDied)
+QuestEvent_Number: 1
+QuestEvent_ShowBillboardText: 0
+QuestEvent_ShowProgressText: 0
+     */
+    DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.SELF_DIED);
     return ret;
   }
 
