@@ -375,21 +375,37 @@ public class MainDatItemsLoader
       if (combatPropertyModDid!=null)
       {
         // Non-DPS main legacy
-        attrs.setMainLegacyId(combatPropertyModDid);
+        attrs.setMainLegacyId(combatPropertyModDid.intValue());
       }
       else if (dpsLut!=null)
       {
         // DPS main legacy
         _legaciesLoader.getNonImbuedDpsLegacy(dpsLut.intValue());
-        attrs.setMainLegacyId(dpsLut);
+        attrs.setMainLegacyId(dpsLut.intValue());
       }
       else
       {
         LOGGER.warn("Legendary item with no main legacy (DPS or not): "+item);
       }
       //int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
-      //Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
-      //Integer combatPropertyModLevel=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
+      // Seem that each legendary item (4764 occurrences) has either ItemAdvancement_CombatDPSLevel or ItemAdvancement_CombatPropertyModLevel
+      // depending on whether it has a DPS main legacy of a non-DPS main legacy
+      Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
+      Integer combatPropertyModLevel=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
+      if (combatDpsLevel!=null)
+      {
+        attrs.setMainLegacyBaseRank(combatDpsLevel.intValue());
+        //System.out.println("Found ItemAdvancement_CombatDPSLevel="+combatDpsLevel+" for "+item);
+      }
+      else if (combatPropertyModLevel!=null)
+      {
+        attrs.setMainLegacyBaseRank(combatPropertyModLevel.intValue());
+        //System.out.println("Found ItemAdvancement_CombatPropertyModLevel="+combatPropertyModLevel+" for "+item);
+      }
+      else
+      {
+        LOGGER.warn("Legendary item with no main legacy base rank: "+item);
+      }
       //Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
     }
   }
