@@ -177,7 +177,7 @@ public class MainDatItemsLoader
       Integer quality=(Integer)properties.getProperty("Item_Quality");
       if (quality!=null)
       {
-        item.setQuality(getQuality(quality.intValue()));
+        item.setQuality(DatEnumsUtils.getQuality(quality.intValue()));
       }
       // Category
       String category=_facade.getEnumsManager().resolveEnum(0x23000036,itemClass);
@@ -718,26 +718,8 @@ public class MainDatItemsLoader
   {
     Integer defaultSlotInt=(Integer)properties.getProperty("Inventory_DefaultSlot");
     int defaultSlot=(defaultSlotInt!=null)?defaultSlotInt.intValue():0;
-
-    if ((defaultSlot&1L<<1)!=0) return EquipmentLocation.HEAD;
-    if ((defaultSlot&1L<<2)!=0) return EquipmentLocation.CHEST;
-    if ((defaultSlot&1L<<3)!=0) return EquipmentLocation.LEGS;
-    if ((defaultSlot&1L<<4)!=0) return EquipmentLocation.HAND;
-    if ((defaultSlot&1L<<5)!=0) return EquipmentLocation.FEET;
-    if ((defaultSlot&1L<<6)!=0) return EquipmentLocation.SHOULDER;
-    if ((defaultSlot&1L<<7)!=0) return EquipmentLocation.BACK;
-    if (((defaultSlot&1L<<8)!=0) || ((defaultSlot&1L<<9)!=0)) return EquipmentLocation.WRIST;
-    if ((defaultSlot&1L<<10)!=0) return EquipmentLocation.NECK;
-    if (((defaultSlot&1L<<11)!=0) || ((defaultSlot&1L<<12)!=0)) return EquipmentLocation.FINGER;
-    if (((defaultSlot&1L<<13)!=0) || ((defaultSlot&1L<<14)!=0)) return EquipmentLocation.EAR;
-    if ((defaultSlot&1L<<15)!=0) return EquipmentLocation.POCKET;
-    if ((defaultSlot&1L<<16)!=0) return EquipmentLocation.MAIN_HAND;
-    if ((defaultSlot&1L<<17)!=0) return EquipmentLocation.OFF_HAND;
-    if ((defaultSlot&1L<<18)!=0) return EquipmentLocation.RANGED_ITEM;
-    if ((defaultSlot&1L<<19)!=0) return EquipmentLocation.TOOL;
-    if ((defaultSlot&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
-    if ((defaultSlot&1L<<21)!=0) return EquipmentLocation.BRIDLE;
-    return null;
+    EquipmentLocation slot=DatEnumsUtils.getSlot(defaultSlot);
+    return slot;
   }
 
   private CharacterClass getRequiredClass(PropertiesSet properties)
@@ -776,16 +758,6 @@ public class MainDatItemsLoader
       //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
       //System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
-  }
-
-  private ItemQuality getQuality(int qualityEnum)
-  {
-    if (qualityEnum==1) return ItemQuality.LEGENDARY;
-    if (qualityEnum==2) return ItemQuality.RARE;
-    if (qualityEnum==3) return ItemQuality.INCOMPARABLE;
-    if (qualityEnum==4) return ItemQuality.UNCOMMON;
-    if (qualityEnum==5) return ItemQuality.COMMON;
-    return null;
   }
 
   private int getQualityEnum(ItemQuality quality)

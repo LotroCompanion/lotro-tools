@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.ItemQuality;
 
 /**
  * Misc enum utils.
@@ -87,5 +89,46 @@ public class DatEnumsUtils
     return null;
   }
 
+  /**
+   * Get an item quality from a DAT enum code.
+   * @param qualityCode Input code.
+   * @return An item quality or <code>null</code> if not supported.
+   */
+  public static ItemQuality getQuality(int qualityCode)
+  {
+    if (qualityCode==1) return ItemQuality.LEGENDARY;
+    if (qualityCode==2) return ItemQuality.RARE;
+    if (qualityCode==3) return ItemQuality.INCOMPARABLE;
+    if (qualityCode==4) return ItemQuality.UNCOMMON;
+    if (qualityCode==5) return ItemQuality.COMMON;
+    return null;
+  }
 
+  /**
+   * Get a slot from a DAT enum code.
+   * @param slotCode Input code.
+   * @return A slot or <code>null</code> if not supported.
+   */
+  public static EquipmentLocation getSlot(int slotCode)
+  {
+    if ((slotCode&1L<<1)!=0) return EquipmentLocation.HEAD;
+    if ((slotCode&1L<<2)!=0) return EquipmentLocation.CHEST;
+    if ((slotCode&1L<<3)!=0) return EquipmentLocation.LEGS;
+    if ((slotCode&1L<<4)!=0) return EquipmentLocation.HAND;
+    if ((slotCode&1L<<5)!=0) return EquipmentLocation.FEET;
+    if ((slotCode&1L<<6)!=0) return EquipmentLocation.SHOULDER;
+    if ((slotCode&1L<<7)!=0) return EquipmentLocation.BACK;
+    if (((slotCode&1L<<8)!=0) || ((slotCode&1L<<9)!=0)) return EquipmentLocation.WRIST;
+    if ((slotCode&1L<<10)!=0) return EquipmentLocation.NECK;
+    if (((slotCode&1L<<11)!=0) || ((slotCode&1L<<12)!=0)) return EquipmentLocation.FINGER;
+    if (((slotCode&1L<<13)!=0) || ((slotCode&1L<<14)!=0)) return EquipmentLocation.EAR;
+    if ((slotCode&1L<<15)!=0) return EquipmentLocation.POCKET;
+    if ((slotCode&1L<<16)!=0) return EquipmentLocation.MAIN_HAND;
+    if ((slotCode&1L<<17)!=0) return EquipmentLocation.OFF_HAND;
+    if ((slotCode&1L<<18)!=0) return EquipmentLocation.RANGED_ITEM;
+    if ((slotCode&1L<<19)!=0) return EquipmentLocation.TOOL;
+    if ((slotCode&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
+    if ((slotCode&1L<<21)!=0) return EquipmentLocation.BRIDLE;
+    return null;
+  }
 }

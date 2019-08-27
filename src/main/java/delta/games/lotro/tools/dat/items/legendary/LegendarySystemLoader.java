@@ -1,16 +1,23 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
+import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.legendary.LegendaryConstants;
+import delta.games.lotro.lore.items.legendary.global.LegendaryData;
+import delta.games.lotro.lore.items.legendary.global.QualityBasedData;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
  * Loader for data related to the legendary items system.
@@ -18,8 +25,11 @@ import delta.games.lotro.lore.items.legendary.LegendaryConstants;
  */
 public class LegendarySystemLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(LegendarySystemLoader.class);
+
   private DataFacade _facade;
   private EnumMapper _slotMapper;
+  private LegendaryData _data;
 
   /**
    * Constructor.
@@ -29,12 +39,23 @@ public class LegendarySystemLoader
   {
     _facade=facade;
     _slotMapper=facade.getEnumsManager().getEnumMapper(587202798);
+    _data=new LegendaryData();
+    loadLegendaryData();
+  }
+
+  /**
+   * Get the loaded data.
+   * @return the loaded data.
+   */
+  public LegendaryData getData()
+  {
+    return _data;
   }
 
   /**
    * Load legendary data.
    */
-  public void loadLegendaryData()
+  private void loadLegendaryData()
   {
     // Load properties for ItemAdvancementControl (0x7900EAA6)
     PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
@@ -49,24 +70,26 @@ public class LegendarySystemLoader
         ItemAdvancement_Quality: 2
         ItemAdvancement_SpecialWidgetUnlocksAtImbuement: 0
        */
-      int quality=((Integer)itemInfoProps.getProperty("ItemAdvancement_Quality")).intValue();
-      System.out.println("Quality: "+quality);
+      int qualityCode=((Integer)itemInfoProps.getProperty("ItemAdvancement_Quality")).intValue();
+      ItemQuality quality=DatEnumsUtils.getQuality(qualityCode);
+      LOGGER.info("Quality: "+quality);
+      QualityBasedData qualityData=_data.getQualityData(quality);
       // - item level info
       int itemLevelInfoId=((Integer)itemInfoProps.getProperty("ItemAdvancement_ItemLevelInfo")).intValue();
-      handleItemLevelInfo(itemLevelInfoId);
+      handleItemLevelInfo(itemLevelInfoId,qualityData);
       // - legendary point info
       int legendaryPointInfoId=((Integer)itemInfoProps.getProperty("ItemAdvancement_LegendaryPointInfo")).intValue();
-      handleLegendaryPointInfo(legendaryPointInfoId);
+      handleLegendaryPointInfo(legendaryPointInfoId,qualityData);
       // - level table
       int levelTableId=((Integer)itemInfoProps.getProperty("ItemAdvancement_LevelTable")).intValue();
       int[] xpTable=handleLevelTable(levelTableId);
-      System.out.println("\tXP table: "+Arrays.toString(xpTable));
+      LOGGER.info("\tFound XP table: "+Arrays.toString(xpTable));
+      qualityData.setXpTable(xpTable);
     }
   }
 
-  private void handleItemLevelInfo(int itemLevelInfoId)
+  private void handleItemLevelInfo(int itemLevelInfoId, QualityBasedData qualityData)
   {
-    Map<Integer,Integer> levelToStartProgressionLevel=new HashMap<Integer,Integer>();
     PropertiesSet itemLevelInfoProps=_facade.loadProperties(itemLevelInfoId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(itemLevelInfoProps.dump());
     Object[] levelInfoTable=(Object[])itemLevelInfoProps.getProperty("ItemAdvancement_ItemLevelInfo_Array");
@@ -88,12 +111,11 @@ public class LegendarySystemLoader
        */
       Integer itemLevel=(Integer)levelInfoProps.getProperty("ItemAdvancement_ItemLevelInfo_ItemLevel");
       Integer startProgressionLevel=(Integer)levelInfoProps.getProperty("ItemAdvancement_ItemLevelInfo_StartingProgressionLevel");
-      levelToStartProgressionLevel.put(itemLevel,startProgressionLevel);
+      qualityData.addStartProgressionLevel(itemLevel.intValue(),startProgressionLevel.intValue());
     }
-    System.out.println("\tItem level to start progression level: "+levelToStartProgressionLevel);
   }
 
-  private void handleLegendaryPointInfo(int legendaryPointInfoId)
+  private void handleLegendaryPointInfo(int legendaryPointInfoId, QualityBasedData qualityData)
   {
     PropertiesSet legendaryPointInfoProps=_facade.loadProperties(legendaryPointInfoId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(legendaryPointInfoProps.dump());
@@ -107,12 +129,15 @@ public class LegendarySystemLoader
       PropertiesSet legendaryPointSlotInfoProps=(PropertiesSet)legendaryPointSlotInfoObj;
       // Slot
       int slotBits=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_Slot")).intValue();
-      String slots=BitSetUtils.getStringFromBitSet(BitSetUtils.getBitSetFromFlags(slotBits),_slotMapper,",");
-      System.out.println("\t\tSlots: "+slots);
+      BitSet slotsSet=BitSetUtils.getBitSetFromFlags(slotBits);
+      String slots=BitSetUtils.getStringFromBitSet(slotsSet,_slotMapper,",");
+      LOGGER.info("\t\tSlots: "+slots);
       // Legendary points table
       int legendaryPointsTableId=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_LegendaryPointsTable")).intValue();
       int[] pointsByLevel=getPointsByLevel(legendaryPointsTableId);
-      System.out.println("\t\tPoints by level: "+Arrays.toString(pointsByLevel));
+      LOGGER.info("\t\tPoints by level: "+Arrays.toString(pointsByLevel));
+      EquipmentLocation slot=DatEnumsUtils.getSlot(slotBits);
+      qualityData.setPointsTable(slot,pointsByLevel);
     }
   }
 
@@ -171,7 +196,16 @@ public class LegendarySystemLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new LegendarySystemLoader(facade).loadLegendaryData();
+    LegendarySystemLoader loader=new LegendarySystemLoader(facade);
+    LegendaryData data=loader.getData();
+    ItemQuality[] qualities={ItemQuality.RARE, ItemQuality.INCOMPARABLE, ItemQuality.LEGENDARY};
+    for(ItemQuality quality : qualities)
+    {
+      System.out.println("Quality: "+quality);
+      QualityBasedData legendaryData=data.getQualityData(quality);
+      int[] xpTable=legendaryData.getXpTable();
+      System.out.println(Arrays.toString(xpTable));
+    }
     facade.dispose();
   }
 }
