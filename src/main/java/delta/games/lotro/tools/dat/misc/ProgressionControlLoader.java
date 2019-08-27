@@ -46,7 +46,6 @@ public class ProgressionControlLoader
       int level=((Integer)startingLevelProps.getProperty("ProgressionControl_TypeStartingLevel_Level")).intValue();
       _startingLevels.put(Integer.valueOf(typeCode),Integer.valueOf(level));
     }
-    System.out.println(_startingLevels);
   }
 
   /**

@@ -41,6 +41,7 @@ import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManage
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
 import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacy;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.misc.ProgressionControlLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -64,6 +65,7 @@ public class LegaciesLoader
   private LegaciesManager _imbuedLegaciesManager;
   private EnumMapper _equipmentCategory;
   private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
+  private ProgressionControlLoader _progressionControl;
 
   /**
    * Constructor.
@@ -75,6 +77,8 @@ public class LegaciesLoader
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
     _imbuedLegaciesManager=new LegaciesManager();
     _equipmentCategory=_facade.getEnumsManager().getEnumMapper(587202636);
+    _progressionControl=new ProgressionControlLoader(_facade);
+    _progressionControl.loadProgressionData();
   }
 
   /**
@@ -431,10 +435,16 @@ public class LegaciesLoader
       Progression progression=scalableStatProvider.getProgression();
       int progressionId=progression.getIdentifier();
       PropertiesSet progressionProps=_facade.loadProperties(progressionId+0x9000000);
+      // Tier
       int pointTier=((Integer)progressionProps.getProperty("Progression_PointTier")).intValue();
       //Integer progType=(Integer)progressionProps.getProperty("Progression_Type");
       int tier=pointTier-1;
       legacyTier=legacy.addTier(tier,effect);
+      // Progression type
+      int typeCode=((Integer)progressionProps.getProperty("Progression_Type")).intValue();
+      Integer startLevel=_progressionControl.getStartingLevel(typeCode);
+      legacyTier.setStartRank(startLevel);
+      //System.out.println("Start level for "+stat+": "+startLevel);
     }
     else
     {
