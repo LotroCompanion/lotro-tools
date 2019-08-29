@@ -25,9 +25,9 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
  * Loader for data related to the legendary items system.
  * @author DAM
  */
-public class LegendarySystemLoader
+public class MainDatLegendarySystemLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(LegendarySystemLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(MainDatLegendarySystemLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _slotMapper;
@@ -37,10 +37,14 @@ public class LegendarySystemLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public LegendarySystemLoader(DataFacade facade)
+  public MainDatLegendarySystemLoader(DataFacade facade)
   {
     _facade=facade;
     _slotMapper=facade.getEnumsManager().getEnumMapper(587202798);
+  }
+
+  private void doIt()
+  {
     _data=new LegendaryData();
     loadLegendaryData();
     save();
@@ -76,7 +80,7 @@ public class LegendarySystemLoader
       int qualityCode=((Integer)itemInfoProps.getProperty("ItemAdvancement_Quality")).intValue();
       ItemQuality quality=DatEnumsUtils.getQuality(qualityCode);
       LOGGER.info("Quality: "+quality);
-      QualityBasedData qualityData=_data.getQualityData(quality);
+      QualityBasedData qualityData=_data.getQualityData(quality,true);
       // - item level info
       int itemLevelInfoId=((Integer)itemInfoProps.getProperty("ItemAdvancement_ItemLevelInfo")).intValue();
       handleItemLevelInfo(itemLevelInfoId,qualityData);
@@ -175,14 +179,9 @@ public class LegendarySystemLoader
 
   private int[] handleLevelTable(int levelTableId)
   {
+    // Load XP values for each legendary level
     // See: https://lotro-wiki.com/index.php/Legendary_Items for confirmation
-    //showProperties(_facade,levelTableId+OFFSET); // Nothing!
-    // The wstate below contains the Item XP value for levels 1-70 of 3rd age items
     List<Object> data=_facade.loadWState(levelTableId);
-    //WStateLoader.showDecodedData(xpData);
-    //Number of read classes: 2
-    //#0: Buffer of size: 4
-    //#1: (71): [0, 0, 100, 350, 850, 1700, 3000, 4850, 7718, 11130, 15435, 20738, 27143, 34755, 43680, 54023, 65888, 79380, 94605, 111668, 130673, 151725, 174930, 200393, 228218, 258510, 291375, 330031, 372200, 418068, 467828, 507828, 547828, 587828, 627828, 667828, 707828, 747828, 787828, 827828, 867828, 907828, 947828, 987828, 1027828, 1067828, 1107828, 1147828, 1187828, 1227828, 1267828, 1307828, 1347828, 1387828, 1427828, 1467828, 1507828, 1547828, 1587828, 1627828, 1667828, 1707828, 1747828, 1787828, 1827828, 1867828, 1907828, 1947828, 1987828, 2027828, 2067828]
     int[] ret=new int[LegendaryConstants.MAX_LEVEL+1];
     long[] data1=(long[])data.get(1);
     for(int i=0;i<=LegendaryConstants.MAX_LEVEL;i++)
@@ -204,16 +203,8 @@ public class LegendarySystemLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    LegendarySystemLoader loader=new LegendarySystemLoader(facade);
-    LegendaryData data=loader.getData();
-    ItemQuality[] qualities={ItemQuality.RARE, ItemQuality.INCOMPARABLE, ItemQuality.LEGENDARY};
-    for(ItemQuality quality : qualities)
-    {
-      System.out.println("Quality: "+quality);
-      QualityBasedData legendaryData=data.getQualityData(quality);
-      int[] xpTable=legendaryData.getXpTable();
-      System.out.println(Arrays.toString(xpTable));
-    }
+    MainDatLegendarySystemLoader loader=new MainDatLegendarySystemLoader(facade);
+    loader.doIt();
     facade.dispose();
   }
 }
