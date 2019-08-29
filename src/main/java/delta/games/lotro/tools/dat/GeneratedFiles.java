@@ -140,6 +140,10 @@ public class GeneratedFiles
    */
   public static final File PASSIVES_USAGE=LotroCoreConfig.getInstance().getFile(DataFiles.PASSIVES_USAGE);
   /**
+   * Data for the legendary system.
+   */
+  public static final File LEGENDARY_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_DATA);
+  /**
    * Consumables.
    */
   public static final File CONSUMABLES=LotroCoreConfig.getInstance().getFile(DataFiles.CONSUMABLES);

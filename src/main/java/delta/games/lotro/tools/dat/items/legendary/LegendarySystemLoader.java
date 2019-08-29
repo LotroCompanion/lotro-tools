@@ -17,6 +17,8 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.legendary.LegendaryConstants;
 import delta.games.lotro.lore.items.legendary.global.LegendaryData;
 import delta.games.lotro.lore.items.legendary.global.QualityBasedData;
+import delta.games.lotro.lore.items.legendary.global.io.xml.LegendaryDataXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
@@ -41,6 +43,7 @@ public class LegendarySystemLoader
     _slotMapper=facade.getEnumsManager().getEnumMapper(587202798);
     _data=new LegendaryData();
     loadLegendaryData();
+    save();
   }
 
   /**
@@ -187,6 +190,11 @@ public class LegendarySystemLoader
       ret[i]=(int)data1[i];
     }
     return ret;
+  }
+
+  private void save()
+  {
+    LegendaryDataXMLWriter.write(GeneratedFiles.LEGENDARY_DATA,_data);
   }
 
   /**
