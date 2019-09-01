@@ -64,6 +64,8 @@ public class MainDatLegendarySystemLoader
    */
   private void loadLegendaryData()
   {
+    // Is it defined somewhere in the DAT files?
+    _data.setMaxUiRank(9);
     // Load properties for ItemAdvancementControl (0x7900EAA6)
     PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
     Object[] itemInfoTable=(Object[])itemAdvancementControlProps.getProperty("ItemAdvancement_ItemInfoTable_Array");
