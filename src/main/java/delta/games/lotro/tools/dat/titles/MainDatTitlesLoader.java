@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.titles;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -75,12 +74,6 @@ Title_String:
       // Name
       String name=getName(properties);
       title.setName(name);
-      /*
-      if (name.contains("{"))
-      {
-        System.out.println("Name: "+name);
-      }
-      */
       // Category
       int categoryId=((Integer)properties.getProperty("Title_Category")).intValue();
       String category=_category.getString(categoryId);
@@ -110,45 +103,77 @@ Title_String:
     Object[] titleStrings=(Object[])properties.getProperty("Title_String");
     if (titleStrings!=null)
     {
-      int nbStrings=titleStrings.length;
-      if (nbStrings>=4)
+      StringBuilder sb=new StringBuilder();
+      for(Object titleString : titleStrings)
       {
-        String line1=(String)titleStrings[0];
-        if (!line1.equals("#1:"))
-        {
-          System.out.println("Unexpected line1: ["+line1+"]");
-        }
-        String line2=(String)titleStrings[1];
-        if (!line2.equals("#1:{ [E]}#2:"))
-        {
-          if ((line2.startsWith("#2:")) && (line2.endsWith("#2:")))
-          {
-            line2=line2.substring(3);
-            line2=line2.substring(0,line2.length()-3);
-            line2=line2.trim();
-          }
-          else
-          {
-            System.out.println("Unexpected line2: ["+line2+"]");
-          }
-        }
-        String line3=(String)titleStrings[2];
-        if ((!line3.equals("#3:{ [E]}#3:")) && (!line3.equals(" #3:")))
-        {
-          System.out.println("Unexpected line3: ["+line3+"]");
-        }
-        String line4=(String)titleStrings[3];
-        line4=line4.trim();
-        if (line4.startsWith(",")) line4=line4.substring(1);
-        line4=line4.trim();
-        ret=(line4.length()>0)?line4:line2;
+        String line=(String)titleString;
+        if (line.startsWith(", ")) line=line.substring(2);
+        sb.append(line);
       }
-      else
+      ret=cleanupLine(sb.toString());
+      ret=removeChoiceArtefacts(ret);
+    }
+    return ret;
+  }
+
+  private String cleanupLine(String line)
+  {
+    for(int i=0;i<2;i++)
+    {
+      line=line.trim();
+      line=line.replace("#1:","");
+      line=line.replace("#2:","");
+      line=line.replace("#3:","");
+      line=line.replace("#4:","");
+      line=line.replace("#-4:","");
+      line=line.replace("{ [E]}","");
+      line=line.replace("  "," ");
+      line=line.trim();
+    }
+    return line;
+  }
+
+  private String removeChoiceArtefacts(String line)
+  {
+    String ret=line;
+    int index=line.indexOf('{');
+    if (index!=-1)
+    {
+      int index2=line.indexOf('}',index+1);
+      if (index2!=-1)
       {
-        System.out.println("Unexpected title strings: "+Arrays.toString(titleStrings));
+        String choice=line.substring(index+1,index2);
+        choice=updateChoiceString(choice);
+        ret=line.substring(0,index)+choice+line.substring(index2+1);
       }
     }
     return ret;
+  }
+
+  private String updateChoiceString(String choice)
+  {
+    StringBuilder sb=new StringBuilder();
+    String[] items=choice.split("\\|");
+    for(String item : items)
+    {
+      item=item.trim();
+      int index=item.indexOf('[');
+      if (index!=-1)
+      {
+        int index2=item.indexOf(']',index+1);
+        if (index2!=-1)
+        {
+          item=item.substring(0,index)+item.substring(index2+1);
+          item=item.trim();
+        }
+      }
+      if (sb.length()>0)
+      {
+        sb.append(" / ");
+      }
+      sb.append(item);
+    }
+    return sb.toString();
   }
 
   private boolean useId(int id)
