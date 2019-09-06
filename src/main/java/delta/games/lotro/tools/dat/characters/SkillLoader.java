@@ -60,7 +60,7 @@ public class SkillLoader
    * @param skillId Skill identifier.
    * @return the loaded skill description.
    */
-  public static SkillDescription loadSkill(DataFacade facade, int skillId)
+  private static SkillDescription loadSkill(DataFacade facade, int skillId)
   {
     SkillDescription ret=null;
     PropertiesSet skillProperties=facade.loadProperties(0x9000000+skillId);
@@ -71,6 +71,7 @@ public class SkillLoader
       ret.setIdentifier(skillId);
       // Name
       String skillName=DatUtils.getStringProperty(skillProperties,"Skill_Name");
+      skillName=DatUtils.fixName(skillName);
       ret.setName(skillName);
       // Description
       String description=DatUtils.getStringProperty(skillProperties,"Skill_Desc");

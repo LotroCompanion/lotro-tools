@@ -56,6 +56,7 @@ public class MobLoader
       if (properties!=null)
       {
         ret=DatUtils.getStringProperty(properties,"Name");
+        ret=DatUtils.fixName(ret);
       }
     }
     return ret;

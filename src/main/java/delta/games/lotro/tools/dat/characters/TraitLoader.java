@@ -48,6 +48,7 @@ public class TraitLoader
       ret.setIdentifier(traitId);
       // Name
       String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
+      traitName=DatUtils.fixName(traitName);
       ret.setName(traitName);
       // Description
       String description=DatUtils.getStringProperty(traitProperties,"Trait_Description");
