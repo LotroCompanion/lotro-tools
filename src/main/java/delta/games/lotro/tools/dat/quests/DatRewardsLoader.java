@@ -120,7 +120,12 @@ public class DatRewardsLoader
     return challengeLevel;
   }
 
-  private void loadRewards(Rewards rewards, int questTreasureId)
+  /**
+   * Load rewards from a treasure identifier.
+   * @param rewards Storage.
+   * @param questTreasureId Treasure identifier.
+   */
+  public void loadRewards(Rewards rewards, int questTreasureId)
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
 

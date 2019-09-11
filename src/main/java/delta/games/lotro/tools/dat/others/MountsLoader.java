@@ -107,7 +107,7 @@ public class MountsLoader
           // Morale
           int morale=((Integer)effectProps.getProperty("Mount_Durability_Base_Max")).intValue();
           System.out.println("Morale: "+morale);
-          // TODO Speed
+          // Speed
           Float speed=null;
           Object[] mods=(Object[])effectProps.getProperty("Mod_Array");
           for(Object modObj : mods)

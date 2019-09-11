@@ -2,9 +2,11 @@ package delta.games.lotro.tools.dat.others;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -18,6 +20,7 @@ public class MainDatCollectionsLoader
   private DataFacade _facade;
   private MountsLoader _mountsLoader;
   private CosmeticPetLoader _cosmeticPetsLoader;
+  private DatRewardsLoader _rewardsLoader;
 
   /**
    * Constructor.
@@ -28,6 +31,7 @@ public class MainDatCollectionsLoader
     _facade=facade;
     _mountsLoader=new MountsLoader(facade);
     _cosmeticPetsLoader=new CosmeticPetLoader(facade);
+    _rewardsLoader=new DatRewardsLoader(facade);
   }
 
   private Object loadCollection(int collectionId)
@@ -51,8 +55,11 @@ public class MainDatCollectionsLoader
         int pieceId=((Integer)pieceObj).intValue();
         loadCollectionItem(pieceId,collectionCategory);
       }
-      // TODO Treasure
-      //int treasureId=((Integer)properties.getProperty("Collection_TreasureDID")).intValue();
+      // Treasure
+      int treasureId=((Integer)properties.getProperty("Collection_TreasureDID")).intValue();
+      Rewards rewards=new Rewards();
+      _rewardsLoader.loadRewards(rewards,treasureId);
+      System.out.println("Rewards: "+rewards.toString());
     }
     else
     {
