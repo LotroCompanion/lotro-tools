@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.others;
 
+import java.io.File;
 import java.util.BitSet;
 
 import org.apache.log4j.Logger;
@@ -9,15 +10,16 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get definition of mounts from DAT files.
  * @author DAM
  */
-public class MainDatMountsLoader
+public class MountsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatMountsLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(MountsLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _mountType;
@@ -28,7 +30,7 @@ public class MainDatMountsLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatMountsLoader(DataFacade facade)
+  public MountsLoader(DataFacade facade)
   {
     _facade=facade;
     _mountType=facade.getEnumsManager().getEnumMapper(587203200);
@@ -36,9 +38,12 @@ public class MainDatMountsLoader
     _subCategory=facade.getEnumsManager().getEnumMapper(587203478);
   }
 
-  private Object load(int indexDataId)
+  /**
+   * Load a mount definition.
+   * @param indexDataId Mount skill identifier.
+   */
+  public void load(int indexDataId)
   {
-    Object ret=null;
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
@@ -63,6 +68,10 @@ public class MainDatMountsLoader
       {
         LOGGER.warn("Icons mismatch: small="+smallIconId+"/regular="+iconId+"/large="+largeIconId);
       }
+      File collectionsDir=new File("collections");
+      File cosmeticPetsDir=new File(collectionsDir,"mounts");
+      File to=new File(cosmeticPetsDir,iconId+".png");
+      DatIconsUtils.buildImageFile(_facade,iconId,to);
       // Source description (null for war-steeds)
       String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
       System.out.println("Source description: "+sourceDescription);
@@ -118,7 +127,6 @@ public class MainDatMountsLoader
     {
       LOGGER.warn("Could not handle mount skill ID="+indexDataId);
     }
-    return ret;
   }
 
   private void doIt()
@@ -127,8 +135,8 @@ public class MainDatMountsLoader
     Object[] mountSkillsList=(Object[])mountsDirectoryProps.getProperty("Mount_SkillList");
     for(Object mountSkillObj : mountSkillsList)
     {
-      int moundSkillId=((Integer)mountSkillObj).intValue();
-      load(moundSkillId);
+      int mountSkillId=((Integer)mountSkillObj).intValue();
+      load(mountSkillId);
     }
   }
 
@@ -139,7 +147,7 @@ public class MainDatMountsLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatMountsLoader(facade).doIt();
+    new MountsLoader(facade).doIt();
     facade.dispose();
   }
 }
