@@ -1,10 +1,14 @@
 package delta.games.lotro.tools.dat.quests;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for roles data from DAT files.
@@ -32,39 +36,33 @@ public class DatRolesLoader
    */
   public void loadRoles(QuestDescription quest, PropertiesSet properties)
   {
-    /*
     handleBestowalRoles(quest,properties);
-    handleGlobalRoles(quest,properties);
-    handleRoles(quest,properties);
-    */
+    //handleGlobalRoles(quest,properties);
+    //handleRoles(quest,properties);
   }
 
-  void handleBestowalRoles(QuestDescription quest, PropertiesSet properties)
+  private void handleBestowalRoles(QuestDescription quest, PropertiesSet properties)
   {
     // Quest_BestowalRoles
     Object[] roles=(Object[])properties.getProperty("Quest_BestowalRoles");
     if (roles!=null)
     {
-      System.out.println("Roles (bestower):");
-      int index=0;
       for(Object roleObj : roles)
       {
-        System.out.println("Index: "+index);
+        DialogElement bestower=new DialogElement();
         PropertiesSet roleProps=(PropertiesSet)roleObj;
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
         {
           String npcName=getNpc(npcId.intValue());
-          System.out.println("\tNPC: "+npcName);
-        }
-        String dispenserText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_TextArray",Markers.CHARACTER);
-        if (dispenserText!=null)
-        {
-          System.out.println("\tDispenser text: "+dispenserText);
+          Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
+          npc.setId(npcId.intValue());
+          npc.setName(npcName);
+          bestower.setWho(npc);
         }
         String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
-        System.out.println("\tSuccess text: "+successText);
-        index++;
+        bestower.setWhat(successText);
+        quest.addBestower(bestower);
       }
     }
   }
@@ -85,7 +83,7 @@ public class DatRolesLoader
         if (dispenserAction!=null)
         {
           String action=_questRoleAction.getString(dispenserAction.intValue());
-          System.out.println("\tdispenserAction: " +action);
+          System.out.println("\tdispenserAction: " +action); // LeaveInstance
         }
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
@@ -103,11 +101,6 @@ public class DatRolesLoader
         {
           System.out.println("\tdispenserRole Constraint: " +dispenserRoleConstraint);
         }
-        String dispenserText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_TextArray",Markers.CHARACTER);
-        if (dispenserText!=null)
-        {
-          System.out.println("\tDispenser text: "+dispenserText);
-        }
         String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText","{***}");
         System.out.println("\tSuccess text: "+successText);
         index++;
@@ -121,13 +114,12 @@ public class DatRolesLoader
     Object[] roles=(Object[])properties.getProperty("Quest_RoleArray");
     if (roles!=null)
     {
-      System.out.println("Role3:");
+      System.out.println("Role array:");
       int index=0;
       for(Object roleObj : roles)
       {
         PropertiesSet roleProps=(PropertiesSet)roleObj;
         System.out.println("Index: "+index);
-        // [QuestDispenser_Action, QuestDispenser_RoleSuccessText, Quest_ObjectiveIndex, QuestDispenser_NPC, QuestDispenser_RoleName]
         Integer dispenserAction=(Integer)roleProps.getProperty("QuestDispenser_Action");
         if (dispenserAction!=null)
         {
@@ -152,6 +144,11 @@ public class DatRolesLoader
         }
         String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
         System.out.println("\tSuccess text: "+successText);
+        String failureText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleFailureText",Markers.CHARACTER);
+        if (failureText!=null)
+        {
+          System.out.println("\tFailure text: "+failureText);
+        }
         index++;
       }
     }
@@ -159,11 +156,12 @@ public class DatRolesLoader
 
   private String getNpc(int npcId)
   {
-    int dbPropertiesId=npcId+0x09000000;
+    int dbPropertiesId=npcId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
       String npcName=DatUtils.getStringProperty(properties,"Name");
+      npcName=DatUtils.fixName(npcName);
       return npcName;
     }
     return null;
