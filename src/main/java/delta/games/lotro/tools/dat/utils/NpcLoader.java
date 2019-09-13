@@ -3,6 +3,9 @@ package delta.games.lotro.tools.dat.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -12,7 +15,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class NpcLoader
 {
-  //private static final Logger LOGGER=Logger.getLogger(NpcLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(NpcLoader.class);
 
   private static Map<Integer,String> _names=new HashMap<Integer,String>();
 
@@ -27,7 +30,7 @@ public class NpcLoader
     String ret=_names.get(Integer.valueOf(npcId));
     if (ret==null)
     {
-      PropertiesSet npcProperties=facade.loadProperties(0x9000000+npcId);
+      PropertiesSet npcProperties=facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
       if (npcProperties!=null)
       {
         // Name
@@ -38,6 +41,10 @@ public class NpcLoader
           _names.put(Integer.valueOf(npcId),npcName);
         }
         ret=npcName;
+      }
+      else
+      {
+        LOGGER.warn("Could not load NPC "+npcId+" from properties!");
       }
     }
     return ret;

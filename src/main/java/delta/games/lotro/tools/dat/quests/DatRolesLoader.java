@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.quests;
 
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -8,6 +7,7 @@ import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.NpcLoader;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -36,35 +36,8 @@ public class DatRolesLoader
    */
   public void loadRoles(QuestDescription quest, PropertiesSet properties)
   {
-    handleBestowalRoles(quest,properties);
     //handleGlobalRoles(quest,properties);
-    //handleRoles(quest,properties);
-  }
-
-  private void handleBestowalRoles(QuestDescription quest, PropertiesSet properties)
-  {
-    // Quest_BestowalRoles
-    Object[] roles=(Object[])properties.getProperty("Quest_BestowalRoles");
-    if (roles!=null)
-    {
-      for(Object roleObj : roles)
-      {
-        DialogElement bestower=new DialogElement();
-        PropertiesSet roleProps=(PropertiesSet)roleObj;
-        Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
-        if (npcId!=null)
-        {
-          String npcName=getNpc(npcId.intValue());
-          Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
-          npc.setId(npcId.intValue());
-          npc.setName(npcName);
-          bestower.setWho(npc);
-        }
-        String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
-        bestower.setWhat(successText);
-        quest.addBestower(bestower);
-      }
-    }
+    handleRoles(quest,properties);
   }
 
   void handleGlobalRoles(QuestDescription quest, PropertiesSet properties)
@@ -88,7 +61,7 @@ public class DatRolesLoader
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
         {
-          String npcName=getNpc(npcId.intValue());
+          String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
           System.out.println("\tNPC: "+npcName);
         }
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
@@ -120,17 +93,11 @@ public class DatRolesLoader
       {
         PropertiesSet roleProps=(PropertiesSet)roleObj;
         System.out.println("Index: "+index);
-        Integer dispenserAction=(Integer)roleProps.getProperty("QuestDispenser_Action");
-        if (dispenserAction!=null)
-        {
-          String action=_questRoleAction.getString(dispenserAction.intValue());
-          System.out.println("\tdispenserAction: " +action);
-        }
+        int dispenserAction=((Integer)roleProps.getProperty("QuestDispenser_Action")).intValue();
+        String action=_questRoleAction.getString(dispenserAction);
+        System.out.println("\tdispenserAction: " +action);
         Integer objectiveIndex=(Integer)roleProps.getProperty("Quest_ObjectiveIndex");
-        if (objectiveIndex!=null)
-        {
-          System.out.println("\tobjectiveIndex: " +objectiveIndex);
-        }
+        System.out.println("\tobjectiveIndex: " +objectiveIndex);
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
         if (dispenserRoleName!=null)
         {
@@ -139,7 +106,7 @@ public class DatRolesLoader
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
         {
-          String npcName=getNpc(npcId.intValue());
+          String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
           System.out.println("\tNPC: "+npcName);
         }
         String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
@@ -149,21 +116,27 @@ public class DatRolesLoader
         {
           System.out.println("\tFailure text: "+failureText);
         }
+        if ((objectiveIndex!=null) && (objectiveIndex.intValue()==0) && (dispenserAction==6)) // Bestow
+        {
+          addBestower(quest,npcId,successText);
+        }
         index++;
       }
     }
   }
 
-  private String getNpc(int npcId)
+  private void addBestower(QuestDescription quest, Integer npcId, String successText)
   {
-    int dbPropertiesId=npcId+DATConstants.DBPROPERTIES_OFFSET;
-    PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    if (properties!=null)
+    DialogElement bestower=new DialogElement();
+    if (npcId!=null)
     {
-      String npcName=DatUtils.getStringProperty(properties,"Name");
-      npcName=DatUtils.fixName(npcName);
-      return npcName;
+      String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
+      Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
+      npc.setId(npcId.intValue());
+      npc.setName(npcName);
+      bestower.setWho(npc);
     }
-    return null;
+    bestower.setWhat(successText);
+    quest.addBestower(bestower);
   }
 }
