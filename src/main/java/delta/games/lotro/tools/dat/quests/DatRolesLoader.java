@@ -89,7 +89,7 @@ public class DatRolesLoader
     }
   }
 
-  void handleRoles(QuestDescription quest, PropertiesSet properties)
+  private void handleRoles(QuestDescription quest, PropertiesSet properties)
   {
     // Quest_RoleArray
     Object[] roles=(Object[])properties.getProperty("Quest_RoleArray");
@@ -103,11 +103,6 @@ public class DatRolesLoader
         Integer objectiveIndex=(Integer)roleProps.getProperty("Quest_ObjectiveIndex");
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
-        String npcName=null;
-        if (npcId!=null)
-        {
-          npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
-        }
         String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
         String failureText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleFailureText",Markers.CHARACTER);
         if ((objectiveIndex!=null) && (objectiveIndex.intValue()==0) && (dispenserAction==6)) // Bestow
@@ -136,22 +131,23 @@ public class DatRolesLoader
             LOGGER.warn("Found out of range objective index: "+objectiveIndex+". Max: "+objectives.size());
           }
         }
-        else
+        else if (dispenserAction==5) // LeaveInstance
         {
-          System.out.println("\tdispenserAction: " +action);
-          System.out.println("\tobjectiveIndex: " +objectiveIndex);
-          System.out.println("\tdispenserRolename: " +dispenserRoleName);
-          if (npcId!=null)
+          DialogElement dialog=buildDialog(npcId,successText);
+          if (dialog!=null)
           {
-            System.out.println("\tNPC: id="+npcId+", name="+npcName);
-          }
-          System.out.println("\tSuccess text: "+successText);
-          if (failureText!=null)
-          {
-            System.out.println("\tFailure text: "+failureText);
+            quest.addEndDialog(dialog);
           }
         }
+        else
+        {
+          LOGGER.warn("Role not used! Dispenser action="+action+", objectiveIndex="+objectiveIndex+", dispenserRolename="+dispenserRoleName+", NPC ID="+npcId+", text="+successText+", failure text="+failureText);
+        }
       }
+    }
+    else
+    {
+      LOGGER.warn("No role array");
     }
   }
 
