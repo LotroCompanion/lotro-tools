@@ -218,10 +218,12 @@ public class MainDatAchievablesLoader
       System.out.println("Loot table:" +lootTable);
     }
     */
-    _rolesLoader.loadRoles(quest,properties);
 
     // Objectives
     _objectivesLoader.handleObjectives(quest.getObjectives(),quest,properties);
+
+    // Dialogs
+    _rolesLoader.loadRoles(quest,properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
 
