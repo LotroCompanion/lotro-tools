@@ -12,6 +12,7 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.VirtueId;
+import delta.games.lotro.common.rewards.CraftingXpReward;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
 import delta.games.lotro.common.rewards.RelicReward;
@@ -25,6 +26,8 @@ import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.lore.crafting.CraftingLevel;
+import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
@@ -38,6 +41,7 @@ import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -107,7 +111,6 @@ public class DatRewardsLoader
     if (classPoints!=null)
     {
       rewards.setClassPoints(classPoints.intValue());
-      //System.out.println("Class points: "+classPoints);
     }
     // Item XP
     // Loot table (titles, emotes, items...)
@@ -228,7 +231,6 @@ public class DatRewardsLoader
 
   private void handleTitle(int titleId, List<RewardElement> rewards)
   {
-    //System.out.println("Title: "+titleId);
     TitlesManager titlesMgr=TitlesManager.getInstance();
     TitleDescription title=titlesMgr.getTitle(titleId);
     if (title!=null)
@@ -546,7 +548,18 @@ public class DatRewardsLoader
     if (craftXpTier!=null)
     {
       Integer craftXp=rewardsMap.getCraftXpMap().getValue(craftXpTier.intValue());
-      System.out.println("Craft XP tier: "+craftXpTier+" => "+craftXp); // Quest_CraftExpTier:6, Usage_RequiredCraftProfession:1879061252,Quest_CraftProfessionDID:1879061252
+      if (craftXp!=null)
+      {
+        int professionId=((Integer)properties.getProperty("Quest_CraftProfessionDID")).intValue();
+        Profession profession=DatEnumsUtils.getProfessionFromId(professionId);
+        int craftingTier=CraftingLevel.ARTISAN.getTier();
+        CraftingXpReward craftingXpReward=new CraftingXpReward(profession,craftingTier,craftXp.intValue());
+        rewards.addRewardElement(craftingXpReward);
+      }
+      else
+      {
+        LOGGER.warn("Could not find XP value for a crafting XP reward!");
+      }
     }
     // Glory (Renown or Infamy if MONSTER_PLAY)
     Integer gloryTier=((Integer)properties.getProperty("Quest_GloryTier"));

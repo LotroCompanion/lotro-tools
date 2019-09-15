@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemQuality;
@@ -129,6 +130,24 @@ public class DatEnumsUtils
     if ((slotCode&1L<<19)!=0) return EquipmentLocation.TOOL;
     if ((slotCode&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
     if ((slotCode&1L<<21)!=0) return EquipmentLocation.BRIDLE;
+    return null;
+  }
+
+  /**
+   * Get a profession from a profession identifier.
+   * @param professionId Profession identifier.
+   * @return A profession or <code>null</code> if not found.
+   */
+  public static Profession getProfessionFromId(int professionId)
+  {
+    if (professionId==1879054946) return Profession.SCHOLAR;
+    if (professionId==1879055079) return Profession.METALSMITH;
+    if (professionId==1879055299) return Profession.JEWELLER;
+    if (professionId==1879055477) return Profession.TAILOR;
+    if (professionId==1879055778) return Profession.WEAPONSMITH;
+    if (professionId==1879055941) return Profession.WOODWORKER;
+    if (professionId==1879061252) return Profession.COOK;
+    if (professionId==1879062816) return Profession.FARMER;
     return null;
   }
 }
