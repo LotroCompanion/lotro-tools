@@ -5,6 +5,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.files.FileCopy;
 
 /**
@@ -13,6 +15,8 @@ import delta.common.utils.files.FileCopy;
  */
 public class IconsDiffTool
 {
+  private static final Logger LOGGER=Logger.getLogger(IconsDiffTool.class);
+
   File root=new File("..\\lotro-item-icons-db");
   File oldDir=new File(root,"icons.old\\icons");
   File newDir=new File(root,"icons.new\\icons");
@@ -100,7 +104,7 @@ public class IconsDiffTool
       }
       catch (Throwable t)
       {
-        t.printStackTrace();
+        LOGGER.warn("Error in images comparison",t);
       }
     }
   }

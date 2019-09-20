@@ -55,7 +55,7 @@ public class MainMapsChecker
             }
             catch(Exception e)
             {
-              e.printStackTrace();
+              LOGGER.error("Could not open file: "+linksFile,e);
             }
             */
           }

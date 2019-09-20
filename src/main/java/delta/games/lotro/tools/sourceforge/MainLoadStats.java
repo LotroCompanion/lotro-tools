@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,6 +19,8 @@ import delta.downloads.Downloader;
  */
 public class MainLoadStats
 {
+  private static final Logger LOGGER=Logger.getLogger(MainLoadStats.class);
+
   private class Results
   {
     private HashMap<String,Integer> _countByCountries;
@@ -195,8 +198,7 @@ public class MainLoadStats
     }
     catch (Exception e)
     {
-      System.out.println("Got exception. JSON was ["+s+"]");
-      e.printStackTrace();
+      LOGGER.warn("Got exception. JSON was ["+s+"]", e);
     }
     // System.out.println("Results: "+results);
     return results;

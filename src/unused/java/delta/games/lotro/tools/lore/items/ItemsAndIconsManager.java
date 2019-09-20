@@ -22,7 +22,7 @@ import delta.games.lotro.utils.LotroLoggers;
  */
 public class ItemsAndIconsManager
 {
-  private static final Logger _logger=LotroLoggers.getLotroLogger();
+  private static final Logger LOGGER=LotroLoggers.getLotroLogger();
 
   private HashSet<String> _handledIcons=new HashSet<String>();
   private HashSet<String> _handledItems=new HashSet<String>();
@@ -102,8 +102,7 @@ public class ItemsAndIconsManager
       }
       catch(Throwable t)
       {
-        System.out.println("Error:");
-        t.printStackTrace(System.out);
+        LOGGER.error("Caught error", t);
       }
     }
   }
@@ -133,13 +132,13 @@ public class ItemsAndIconsManager
         }
         else
         {
-          _logger.warn("Item ["+key+"]: identifier=0!");
+          LOGGER.warn("Item ["+key+"]: identifier=0!");
         }
       }
     }
     else
     {
-      _logger.error("Cannot parse item ["+key+"] at URL ["+url+"]!");
+      LOGGER.error("Cannot parse item ["+key+"] at URL ["+url+"]!");
     }
   }
 
@@ -163,7 +162,7 @@ public class ItemsAndIconsManager
         catch(Throwable t)
         {
           System.out.println("Error:");
-          t.printStackTrace(System.out);
+          LOGGER.error("Caught error", t);
         }
       }
     }

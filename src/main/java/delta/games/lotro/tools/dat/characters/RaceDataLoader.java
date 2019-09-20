@@ -113,7 +113,8 @@ RaceTable_NationalityList:
     return gender;
   }
 
-  private File getIconFile(Race race, CharacterSex sex) {
+  private File getIconFile(Race race, CharacterSex sex)
+  {
     String raceIconPath=race.getIconPath();
     File rootDir=new File("../lotro-companion/src/main/java/resources/gui/races");
     File iconFile=new File(rootDir,raceIconPath+"_"+sex.getKey().toLowerCase()+".png").getAbsoluteFile();
