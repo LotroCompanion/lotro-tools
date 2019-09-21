@@ -424,7 +424,10 @@ public class DeedKeysInjector
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Perform deed keys injection.
+   */
+  public void doIt()
   {
     loadDeeds();
     resolveDeeds();

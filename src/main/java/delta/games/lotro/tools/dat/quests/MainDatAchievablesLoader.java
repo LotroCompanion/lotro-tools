@@ -37,6 +37,7 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
+import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -678,6 +679,10 @@ public class MainDatAchievablesLoader
     // Save
     doSave();
     //System.out.println(DatObjectivesLoader._flagsToAchievables);
+    // Post processings:
+    // - deed keys injection
+    DeedKeysInjector injector=new DeedKeysInjector();
+    injector.doIt();
   }
 
   private void doScan()
