@@ -1,15 +1,12 @@
 package delta.games.lotro.tools.lore.deeds.keys;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
-import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Tool for injection of legacy deed keys into the deeds database.
@@ -18,8 +15,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 public class DeedKeysInjector
 {
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
-  private static final File OLD_FILE_NO_ID=new File("../lotro-deeds-db/deeds_no_id.xml").getAbsoluteFile();
-  private static final File NEW_FILE=GeneratedFiles.DEEDS;
+  //private static final File OLD_FILE_NO_ID=new File("../lotro-deeds-db/deeds_no_id.xml").getAbsoluteFile();
 
   private DeedsBundle _old;
   private DeedsBundle _new;
@@ -34,13 +30,11 @@ public class DeedKeysInjector
     _new=new DeedsBundle();
   }
 
-  private void loadDeeds()
+  private void loadOldDeeds()
   {
     DeedXMLParser parser=new DeedXMLParser();
     List<DeedDescription> oldDeeds=parser.parseXML(OLD_FILE);
     _old.setDeeds(oldDeeds);
-    List<DeedDescription> newDeeds=parser.parseXML(NEW_FILE);
-    _new.setDeeds(newDeeds);
   }
 
   private void resolveDeeds()
@@ -291,7 +285,7 @@ public class DeedKeysInjector
     manualResolution("Quests_in_Nan_Curun%C3%ADr",1879220135);
     manualResolution("Quests_of_Limlight_Gorge",1879231052);
     manualResolution("Quests_of_Pelennor_(After_Battle)",1879338695);
-    manualResolution("Quests_to_Restore_the_North",1879366147);
+    manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
     // This one is the same as the previous one
     //manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
     manualResolution("Quick_Wrist_(Captain)",1879277396);
@@ -307,6 +301,7 @@ public class DeedKeysInjector
     manualResolution("Slay_Enemies_of_Angmar6",1879084404);
     manualResolution("Slay_Enemies_of_Angmar7",1879084406);
     manualResolution("Strong_Voice_(Warden_Deed)",1879139064); // or 1879277308
+    manualResolution("Surveyor_of_the_Dwarvish_Markers",1879366160);
     // Not found, marked as obsolete in Lotro-wiki
     manualResolution("Subtle_Command_(deed)",0);
     manualResolution("The_Blighted_Ones_(Advanced)",1879147184);
@@ -401,46 +396,15 @@ public class DeedKeysInjector
     }
   }
 
-  private void saveDeeds()
-  {
-    List<DeedDescription> oldDeeds=_old.getAll();
-    List<DeedDescription> oldNoId=getDeedsWithNoId(oldDeeds);
-    oldDeeds.removeAll(oldNoId);
-    DeedXMLWriter.writeDeedsFile(OLD_FILE,oldDeeds);
-    DeedXMLWriter.writeDeedsFile(OLD_FILE_NO_ID,oldNoId);
-    DeedXMLWriter.writeDeedsFile(NEW_FILE,_new.getAll());
-  }
-
-  private List<DeedDescription> getDeedsWithNoId(List<DeedDescription> deeds)
-  {
-    List<DeedDescription> ret=new ArrayList<DeedDescription>();
-    for(DeedDescription deed : deeds)
-    {
-      if (deed.getIdentifier()==0)
-      {
-        ret.add(deed);
-      }
-    }
-    return ret;
-  }
-
   /**
    * Perform deed keys injection.
+   * @param newDeeds Deeds to update.
    */
-  public void doIt()
+  public void doIt(List<DeedDescription> newDeeds)
   {
-    loadDeeds();
+    _new.setDeeds(newDeeds);
+    loadOldDeeds();
     resolveDeeds();
-    saveDeeds();
     System.out.println("Number of failures: "+_nbFailures);
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    new DeedKeysInjector().doIt();
   }
 }

@@ -3,12 +3,14 @@ package delta.games.lotro.tools.dat.quests;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitsManager;
@@ -25,6 +27,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
+import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
@@ -37,6 +41,7 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.deeds.DeedsWriter;
+import delta.games.lotro.tools.lore.deeds.geo.GeoDeedsDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
 
@@ -676,13 +681,21 @@ public class MainDatAchievablesLoader
     loadClassRequirementsForDeeds();
     // Resolve proxies
     resolveProxies();
-    // Save
-    doSave();
     //System.out.println(DatObjectivesLoader._flagsToAchievables);
+
     // Post processings:
+    List<DeedDescription> deeds=new ArrayList<DeedDescription>();
+    deeds.addAll(_deeds.values());
+    sortDeeds(deeds);
     // - deed keys injection
     DeedKeysInjector injector=new DeedKeysInjector();
-    injector.doIt();
+    injector.doIt(deeds);
+    // - geo data injection
+    GeoDeedsDataInjector geoInjector=new GeoDeedsDataInjector(deeds);
+    geoInjector.doIt();
+
+    // Save
+    doSave();
   }
 
   private void doScan()
@@ -749,6 +762,16 @@ public class MainDatAchievablesLoader
     SkillLoader.saveSkills(skillsMgr);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
+  }
+
+  private void sortDeeds(List<DeedDescription> deeds)
+  {
+    List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
+    comparators.add(new IdentifiableComparator<DeedDescription>());
+    comparators.add(new DeedNameComparator());
+    comparators.add(new DeedDescriptionComparator());
+    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
+    Collections.sort(deeds,comparator);
   }
 
   private void doIndex()

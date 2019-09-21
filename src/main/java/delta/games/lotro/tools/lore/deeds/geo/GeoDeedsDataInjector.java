@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.collections.filters.Filter;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.geo.DeedGeoData;
@@ -19,6 +21,8 @@ import delta.games.lotro.maps.data.MarkersManager;
  */
 public class GeoDeedsDataInjector
 {
+  private static final Logger LOGGER=Logger.getLogger(GeoDeedsDataInjector.class);
+
   private HashMap<String,DeedDescription> _deeds;
 
   /**
@@ -129,7 +133,7 @@ public class GeoDeedsDataInjector
     List<Marker> markersForgework=findMarkersInMap(mapKey,"Great forge-work");
     registerPoints("Forgeworks_of_Ud%C3%BBn",mapKey,markersForgework,17,16);
     List<Marker> markersForgefires=findMarkersInMap(mapKey,"Forging furnage");
-    registerPoints("Forge-fires_of_Ud%C3%BBn",mapKey,markersForgefires,18,15);
+    registerPoints("Forge-fires_of_Ud%C3%BBn",mapKey,markersForgefires,17,15);
   }
 
   private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount)
@@ -139,11 +143,11 @@ public class GeoDeedsDataInjector
 
   private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
   {
-    System.out.println("Geographic data injection for: "+deedKey);
+    LOGGER.info("Geographic data injection for: "+deedKey);
     DeedDescription deed=_deeds.get(deedKey);
     if (deed==null)
     {
-      System.out.println("Deed not found!");
+      LOGGER.warn("Deed not found!");
       return;
     }
     int nbPoints=markers.size();
@@ -155,12 +159,12 @@ public class GeoDeedsDataInjector
         DeedGeoPoint point=new DeedGeoPoint(mapKey,marker.getId());
         data.addPoint(point);
       }
-      System.out.println("Found "+markers.size()+" points");
+      LOGGER.info("Found "+markers.size()+" points");
       deed.setGeoData(data);
     }
     if ((nbPoints==0) || (nbPoints!=expectedPointsCount))
     {
-      System.out.println("Bad points count: "+nbPoints+". Expected: "+expectedPointsCount);
+      LOGGER.warn("Bad points count: "+nbPoints+". Expected: "+expectedPointsCount);
     }
   }
 
