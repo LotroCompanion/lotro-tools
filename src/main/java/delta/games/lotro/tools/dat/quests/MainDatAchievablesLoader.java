@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.io.FileIO;
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.ChallengeLevel;
@@ -29,6 +30,7 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
 import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
@@ -40,7 +42,6 @@ import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.lore.deeds.DeedsWriter;
 import delta.games.lotro.tools.lore.deeds.geo.GeoDeedsDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
@@ -748,7 +749,9 @@ public class MainDatAchievablesLoader
       int nbDeeds=_deeds.size();
       System.out.println("Nb deeds: "+nbDeeds);
       // Write deeds file
-      boolean ok=DeedsWriter.writeSortedDeeds(deeds,GeneratedFiles.DEEDS);
+      sortDeeds(deeds);
+      DeedXMLWriter writer=new DeedXMLWriter();
+      boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
       if (ok)
       {
         System.out.println("Wrote deeds file: "+GeneratedFiles.DEEDS);
