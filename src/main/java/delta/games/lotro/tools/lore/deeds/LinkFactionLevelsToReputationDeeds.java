@@ -3,11 +3,11 @@ package delta.games.lotro.tools.lore.deeds;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.DeedProxy;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
-import delta.games.lotro.lore.reputation.FactionLevel;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 
 /**
@@ -16,6 +16,8 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
  */
 public class LinkFactionLevelsToReputationDeeds
 {
+  private static final Logger LOGGER=Logger.getLogger(LinkFactionLevelsToReputationDeeds.class);
+
   private HashMap<String,DeedDescription> _deedsByKey;
 
   private void loadDeeds()
@@ -37,15 +39,17 @@ public class LinkFactionLevelsToReputationDeeds
       DeedDescription baseRepDeed=findKnownToFactionDeed(faction);
       if (baseRepDeed!=null)
       {
-        enhanceFactionWithDeeds(baseRepDeed,faction);
+        //enhanceFactionWithDeeds(baseRepDeed,faction);
       }
     }
   }
 
+  // TODO: otherwise
+  /*
   private void enhanceFactionWithDeeds(DeedDescription baseRepDeed, Faction faction)
   {
     String factionName=faction.getName();
-    System.out.println("Faction: "+factionName);
+    LOGGER.info("Faction: "+factionName);
     FactionLevel[] levels=faction.getLevels();
     int index=0;
     for(FactionLevel level : levels)
@@ -61,7 +65,7 @@ public class LinkFactionLevelsToReputationDeeds
     {
       FactionLevel level=levels[index];
       String deedName=currentDeed.getName();
-      System.out.println("\t"+level.getName()+" => "+deedName);
+      LOGGER.info("\t"+level.getName()+" => "+deedName);
       String deedKey=currentDeed.getKey();
       level.setDeedKey(deedKey);
       DeedProxy nextDeedProxy=currentDeed.getNextDeedProxy();
@@ -73,6 +77,7 @@ public class LinkFactionLevelsToReputationDeeds
       }
     }
   }
+  */
 
   private DeedDescription findKnownToFactionDeed(Faction faction)
   {
@@ -130,7 +135,7 @@ public class LinkFactionLevelsToReputationDeeds
     }
     if (deed==null)
     {
-      System.err.println("No reputation deed for faction: "+faction.getKey());
+      LOGGER.info("No reputation deed for faction: "+faction.getKey());
     }
     return deed;
   }
