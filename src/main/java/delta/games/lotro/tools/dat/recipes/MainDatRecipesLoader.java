@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -55,7 +56,7 @@ public class MainDatRecipesLoader
   private Recipe load(int indexDataId)
   {
     Recipe recipe=null;
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {

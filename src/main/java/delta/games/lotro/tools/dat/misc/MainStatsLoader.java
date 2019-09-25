@@ -13,6 +13,7 @@ import delta.games.lotro.common.stats.StatDescriptionComparator;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -48,7 +49,7 @@ public class MainStatsLoader
 
   private void load(int indexDataId)
   {
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
@@ -72,7 +73,7 @@ public class MainStatsLoader
 
   private void doIt()
   {
-    PropertiesSet indexProperties=_facade.loadProperties(1879048724+0x09000000);
+    PropertiesSet indexProperties=_facade.loadProperties(1879048724+DATConstants.DBPROPERTIES_OFFSET);
     Object[] idsArray=(Object[])indexProperties.getProperty("PropertyMetaData_PropertyMetaDataList");
     for(Object idObj : idsArray)
     {

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -87,7 +88,7 @@ Mod_Array:
   private LegendaryTitle load(int indexDataId)
   {
     LegendaryTitle ret=null;
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {

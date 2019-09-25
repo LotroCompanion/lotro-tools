@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.io.xml.ColorXMLWriter;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -34,7 +35,7 @@ public class MainDatColorLoader
   private void doIt()
   {
     // ItemMungingControl
-    int itemMungingPropsId=1879048786+0x09000000;
+    int itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(itemMungingPropsId);
     if (properties!=null)
     {

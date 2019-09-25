@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -68,7 +69,7 @@ public class MainDatTravelsLoader
     String nodeName=_nodes.get(Integer.valueOf(locationId));
     if (nodeName==null)
     {
-      PropertiesSet properties=_facade.loadProperties(locationId+0x09000000);
+      PropertiesSet properties=_facade.loadProperties(locationId+DATConstants.DBPROPERTIES_OFFSET);
       //System.out.println("************* "+locationId+" *****************");
       //System.out.println(properties.dump());
       //propNames.addAll(properties.getPropertyNames());
@@ -86,7 +87,7 @@ public class MainDatTravelsLoader
 
   private void loadTravelRoute(int travelRouteId)
   {
-    PropertiesSet properties=_facade.loadProperties(travelRouteId+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(travelRouteId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println("************* "+locationId+" *****************");
     //System.out.println(properties.dump());
     /*
@@ -153,7 +154,7 @@ Usage_RequiresSubscriberOrUnsub: 1
 
   private String loadTravelRouteAction(int routeActionId)
   {
-    PropertiesSet properties=_facade.loadProperties(routeActionId+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(routeActionId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println("************* "+routeActionId+" *****************");
     //System.out.println(properties.dump());
     String ret=(String)properties.getProperty("TravelSegment_HeadName");

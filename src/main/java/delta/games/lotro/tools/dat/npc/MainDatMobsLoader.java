@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -36,7 +37,7 @@ public class MainDatMobsLoader
   private Object load(int indexDataId)
   {
     Object ret=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       //ret=new LegendaryTitle();

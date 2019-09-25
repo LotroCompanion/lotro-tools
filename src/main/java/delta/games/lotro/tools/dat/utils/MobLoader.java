@@ -4,6 +4,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -52,7 +53,7 @@ public class MobLoader
     String ret=_names.get(Integer.valueOf(mobId));
     if (ret==null)
     {
-      PropertiesSet properties=_facade.loadProperties(mobId+0x09000000);
+      PropertiesSet properties=_facade.loadProperties(mobId+DATConstants.DBPROPERTIES_OFFSET);
       if (properties!=null)
       {
         ret=DatUtils.getStringProperty(properties,"Name");

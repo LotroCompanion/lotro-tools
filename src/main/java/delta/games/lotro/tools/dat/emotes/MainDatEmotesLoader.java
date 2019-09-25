@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -72,7 +73,7 @@ Emote_SourceText:
   private EmoteDescription load(int indexDataId)
   {
     EmoteDescription emote=null;
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {

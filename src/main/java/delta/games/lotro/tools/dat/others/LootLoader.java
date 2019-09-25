@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.others;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -34,7 +35,7 @@ public class LootLoader
    */
   public void handleWeightedTreasureTable(int id)
   {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     Object[] treasureTable=(Object[])properties.getProperty("LootGen_WeightedTreasureTable");
     for(Object treasureTableItem : treasureTable)
     {
@@ -52,7 +53,7 @@ public class LootLoader
    */
   public void handleTrophyList(int id)
   {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
     Object[] trophyList=(Object[])properties.getProperty("LootGen_TrophyList");
     for(Object trophyObj : trophyList)
@@ -78,7 +79,7 @@ public class LootLoader
 
   private void handleTreasureGroupProfile(int id)
   {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     Object[] trophyList=(Object[])properties.getProperty("TreasureGroupProfile_ItemTable");
     if (trophyList!=null)
     {

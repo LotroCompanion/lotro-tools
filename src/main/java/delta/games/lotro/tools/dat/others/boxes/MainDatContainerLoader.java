@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.others.boxes;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.others.LootLoader;
@@ -33,7 +34,7 @@ public class MainDatContainerLoader
   private Object load(int indexDataId)
   {
     Object ret=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       //System.out.println(properties.dump());
@@ -78,7 +79,7 @@ PackageItem_TrophyListTemplate: 0
 
   private void handleFilteredTrophyTable(int id)
   {
-    PropertiesSet properties=_facade.loadProperties(id+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       Object[] list=(Object[])properties.getProperty("LootGen_FilteredTreasureListArray");
@@ -172,11 +173,11 @@ PackageItem_TrophyListTemplate: 0
 
   private void handleEffect(int effectId)
   {
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x09000000);
+    PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     Integer treasureListTemplateId=(Integer)effectProps.getProperty("Effect_Lootgen_DiscoveryTreasureListTemplate");
     if (treasureListTemplateId!=null)
     {
-      PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+0x09000000);
+      PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
       _lootLoader.handleTreasureList(treasureListProps);
     }
   }

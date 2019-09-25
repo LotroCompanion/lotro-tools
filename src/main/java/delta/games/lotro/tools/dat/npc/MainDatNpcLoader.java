@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -52,7 +53,7 @@ public class MainDatNpcLoader
     {
       return;
     }
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
@@ -142,7 +143,7 @@ public class MainDatNpcLoader
       return;
     }
     _profileIds.add(Integer.valueOf(profileId));
-    int dbPropertiesId=profileId+0x09000000;
+    int dbPropertiesId=profileId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (npcId==0)
     {
@@ -325,7 +326,7 @@ public class MainDatNpcLoader
     }
     set=new HashSet<Integer>();
     _sellsListIds.put(Integer.valueOf(listId),set);
-    PropertiesSet properties=_facade.loadProperties(listId+0x09000000);
+    PropertiesSet properties=_facade.loadProperties(listId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] inventoryArray=(Object[])properties.getProperty("VendorInventory_Items");
     if (inventoryArray!=null)
     {
