@@ -87,6 +87,7 @@ public class DatEnumsUtils
     if (raceId==81) return Race.HOBBIT;
     if (raceId==114) return Race.BEORNING;
     if (raceId==117) return Race.HIGH_ELF;
+    if (raceId==120) return Race.STOUT_AXE_DWARF;
     return null;
   }
 
