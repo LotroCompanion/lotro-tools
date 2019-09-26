@@ -15,6 +15,7 @@ import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.data.DataFacade;
@@ -55,28 +56,21 @@ public class RaceDataLoader
     //System.out.println(raceId);
     Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
     RaceDescription raceDescription=new RaceDescription(race);
+    // Description
+    String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
+    description=description.trim();
+    raceDescription.setDescription(description);
     /*
-RaceTable_ClassList: 
-  #1: 40
-  #2: 24
-  #3: 172
-  #4: 23
-  #5: 162
-  #6: 185
-  #7: 31
-  #8: 194
-RaceTable_Description: 
-  #1: \nNot as long-lived as Elves, sturdy as dwarves, or resilient as hobbits, Men are renowned for their courage and resourcefulness.\n\n
 RaceTable_NationalityList: 
   #1: 17
   #2: 16
   #3: 6
   #4: 5
     */
-    //System.out.println(properties.dump());
 
     loadGenders(raceDescription,properties);
     loadCharacteristics(raceDescription,properties);
+    loadAllowedClasses(raceDescription,properties);
     _racesById.put(Integer.valueOf(raceId),raceDescription);
   }
 
@@ -135,6 +129,17 @@ RaceTable_NationalityList:
       _traitsManager.registerTrait(trait);
       RaceTrait raceTrait=new RaceTrait(level,trait);
       description.addTrait(raceTrait);
+    }
+  }
+
+  private void loadAllowedClasses(RaceDescription description, PropertiesSet properties)
+  {
+    Object[] classCodesArray=(Object[])properties.getProperty("RaceTable_ClassList");
+    for(Object classCodeObj : classCodesArray)
+    {
+      int classCode=((Integer)classCodeObj).intValue();
+      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
+      description.addAllowedClass(characterClass);
     }
   }
 
