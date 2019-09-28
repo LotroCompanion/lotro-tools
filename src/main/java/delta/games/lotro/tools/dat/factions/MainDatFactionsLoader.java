@@ -330,7 +330,7 @@ Reputation_LowestTier: 1
         DeedDescription deed=finder.findDeed(faction.getIdentifier(),level.getTier());
         if (deed!=null)
         {
-          level.setDeedKey(deed.getKey());
+          level.setDeedKey(deed.getIdentifyingKey());
           int lotroPoints=deed.getRewards().getLotroPoints();
           level.setLotroPoints(lotroPoints);
         }
