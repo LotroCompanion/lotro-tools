@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.lore.deeds.geo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class GeoDeedsDataInjector
   private static final Logger LOGGER=Logger.getLogger(GeoDeedsDataInjector.class);
 
   private HashMap<String,DeedDescription> _deeds;
+  private HashMap<Integer,DeedDescription> _deedsById;
 
   /**
    * Constructor.
@@ -35,6 +37,11 @@ public class GeoDeedsDataInjector
     for(DeedDescription deed : deeds)
     {
       _deeds.put(deed.getKey(),deed);
+    }
+    _deedsById=new HashMap<Integer,DeedDescription>();
+    for(DeedDescription deed : deeds)
+    {
+      _deedsById.put(Integer.valueOf(deed.getIdentifier()),deed);
     }
   }
 
@@ -57,6 +64,8 @@ public class GeoDeedsDataInjector
     doNorthernMirkwoodDwarfMarkers();
     // TODO: path of the company
     // Erebor: Old papers => not possible
+    // Dwarf-holds
+    doDwarfHolds();
   }
 
   private void doTreasureCaches()
@@ -83,21 +92,21 @@ public class GeoDeedsDataInjector
   private void doTreasureCaches(String deedKey,String mapKey,int expectedPointsCount)
   {
     List<Marker> markers=findMarkersInMap(mapKey,"Treasure cache");
-    registerPoints(deedKey,mapKey,markers,expectedPointsCount);
+    registerPointsByDeedKey(deedKey,mapKey,markers,expectedPointsCount,expectedPointsCount);
   }
 
   private void doRangerCaches()
   {
     String mapKey="post_pelennor_the_wastes";
     List<Marker> markers=findMarkersInMap(mapKey,"Ranger cache");
-    registerPoints("Forgotten_Caches",mapKey,markers,8);
+    registerPointsByDeedKey("Forgotten_Caches",mapKey,markers,8,8);
   }
 
   private void doAncientWeapons()
   {
     String mapKey="post_pelennor_the_wastes";
     List<Marker> markers=findMarkersInMap(mapKey,"Ancient weapon");
-    registerPoints("Relics_of_the_Last_Alliance",mapKey,markers,8);
+    registerPointsByDeedKey("Relics_of_the_Last_Alliance",mapKey,markers,8,8);
   }
 
   private void doMordorRareChests()
@@ -112,36 +121,86 @@ public class GeoDeedsDataInjector
   private void doMordorRareChestsForMap(String mapKey, String deedKey)
   {
     List<Marker> markers=findMarkersInMap(mapKey,"Rare Mordor chest");
-    registerPoints(deedKey,mapKey,markers,5);
+    registerPointsByDeedKey(deedKey,mapKey,markers,5,5);
   }
 
   private void doNorthernMirkwoodDwarfMarkers()
   {
     List<Marker> markers=findMarkersInMap("northern_mirkwood","Dwarf marker");
-    registerPoints("Surveyor_of_the_Dwarvish_Markers","northern_mirkwood",markers,16);
+    registerPointsByDeedKey("Surveyor_of_the_Dwarvish_Markers","northern_mirkwood",markers,16,16);
   }
 
   private void doPelennorHaradrimSupplies()
   {
     List<Marker> markers=findMarkersInMap("post_pelennor_march_of_the_king","Haradrim Supplies");
-    registerPoints("Haradrim_Remnants","post_pelennor_march_of_the_king",markers,6);
+    registerPointsByDeedKey("Haradrim_Remnants","post_pelennor_march_of_the_king",markers,6,6);
   }
 
   private void doUdunForges()
   {
     String mapKey="mordor_udun";
     List<Marker> markersForgework=findMarkersInMap(mapKey,"Great forge-work");
-    registerPoints("Forgeworks_of_Ud%C3%BBn",mapKey,markersForgework,17,16);
+    registerPointsByDeedKey("Forgeworks_of_Ud%C3%BBn",mapKey,markersForgework,17,16);
     List<Marker> markersForgefires=findMarkersInMap(mapKey,"Forging furnage");
-    registerPoints("Forge-fires_of_Ud%C3%BBn",mapKey,markersForgefires,17,15);
+    registerPointsByDeedKey("Forge-fires_of_Ud%C3%BBn",mapKey,markersForgefires,17,15);
   }
 
-  private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount)
+  private void doDwarfHolds()
   {
-    registerPoints(deedKey,mapKey,markers,expectedPointsCount,expectedPointsCount);
+    // Iron Hills
+    doIronHillsMiningCaches();
+    doIronHillsIronVeins();
+    // Ered Mithrin
+    doEredMithrinTreasureCaches();
+    // Both...
+    doSurveyMarkersOfTheDwarfHolds();
   }
 
-  private void registerPoints(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
+  private void doIronHillsMiningCaches()
+  {
+    List<Marker> markers=findMarkersInMap("iron_hills","Mining cache");
+    registerPointsByDeedId(1879378533,"iron_hills",markers,10);
+  }
+
+  private void doIronHillsIronVeins()
+  {
+    List<Marker> markers=findMarkersInMap("iron_hills","Rich iron vein");
+    registerPointsByDeedId(1879378529,"iron_hills",markers,10);
+  }
+
+  private void doEredMithrinTreasureCaches()
+  {
+    List<Marker> markers=findMarkersInMap("ered_mithrin","Treasure cache");
+    registerPointsByDeedId(1879378543,"ered_mithrin",markers,12);
+  }
+
+  private void doSurveyMarkersOfTheDwarfHolds()
+  {
+    List<Marker> markers1=findMarkersInMap("ered_mithrin","Dwarf-marker");
+    List<Marker> markers2=findMarkersInMap("iron_hills","Dwarf-marker");
+    String[] maps={"ered_mithrin","iron_hills"};
+    List<List<Marker>> markers=new ArrayList<List<Marker>>();
+    markers.add(markers1);
+    markers.add(markers2);
+    int[] expectedMarkersCount={6,6};
+    DeedDescription deed=_deedsById.get(Integer.valueOf(1879378540));
+    registerPointsOnMultipleMaps(deed,maps,markers,expectedMarkersCount,12);
+  }
+  
+
+  private void registerPointsByDeedId(int deedId, String mapKey, List<Marker> markers, int expectedPointsCount)
+  {
+    LOGGER.info("Geographic data injection for: "+deedId);
+    DeedDescription deed=_deedsById.get(Integer.valueOf(deedId));
+    if (deed==null)
+    {
+      LOGGER.warn("Deed not found!");
+      return;
+    }
+    registerPoints(deed,mapKey,markers,expectedPointsCount,expectedPointsCount);
+  }
+
+  private void registerPointsByDeedKey(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
   {
     LOGGER.info("Geographic data injection for: "+deedKey);
     DeedDescription deed=_deeds.get(deedKey);
@@ -150,6 +209,11 @@ public class GeoDeedsDataInjector
       LOGGER.warn("Deed not found!");
       return;
     }
+    registerPoints(deed,mapKey,markers,expectedPointsCount,requiredPointsCount);
+  }
+
+  private void registerPoints(DeedDescription deed, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
+  {
     int nbPoints=markers.size();
     if (nbPoints>0)
     {
@@ -166,6 +230,31 @@ public class GeoDeedsDataInjector
     {
       LOGGER.warn("Bad points count: "+nbPoints+". Expected: "+expectedPointsCount);
     }
+  }
+
+  private void registerPointsOnMultipleMaps(DeedDescription deed, String[] mapKey, List<List<Marker>> markers, int[] expectedPointsCount, int requiredPointsCount)
+  {
+    int nbMaps=mapKey.length;
+    DeedGeoData data=new DeedGeoData(requiredPointsCount);
+    int totalPoints=0;
+    for(int i=0;i<nbMaps;i++)
+    {
+      int nbPoints=0;
+      for(Marker marker : markers.get(i))
+      {
+        DeedGeoPoint point=new DeedGeoPoint(mapKey[i],marker.getId());
+        data.addPoint(point);
+        nbPoints++;
+      }
+      LOGGER.info("Found "+nbPoints+" points in map "+mapKey[i]);
+      if ((nbPoints==0) || (nbPoints!=expectedPointsCount[i]))
+      {
+        LOGGER.warn("Bad points count: "+nbPoints+". Expected: "+expectedPointsCount[i]);
+      }
+      totalPoints+=nbPoints;
+    }
+    deed.setGeoData(data);
+    LOGGER.info("Found "+totalPoints+" points");
   }
 
   private List<Marker> findMarkersInMap(String mapKey, final String name)
