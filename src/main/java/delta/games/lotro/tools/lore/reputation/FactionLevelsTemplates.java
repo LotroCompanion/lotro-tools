@@ -15,11 +15,11 @@ public class FactionLevelsTemplates
   /**
    * Enemy.
    */
-  public static final FactionLevel ENEMY=new FactionLevel("ENEMY","Enemy",-1,0,10000);
+  public static final FactionLevel ENEMY=new FactionLevel("ENEMY","Enemy",-2,0,10000);
   /**
    * Outsider.
    */
-  public static final FactionLevel OUTSIDER=new FactionLevel("OUTSIDER","Outsider",-1,0,0);
+  public static final FactionLevel OUTSIDER=new FactionLevel("OUTSIDER","Outsider",-1,0,10000);
   /**
    * Neutral.
    */
@@ -90,6 +90,10 @@ public class FactionLevelsTemplates
    */
   public static final String GORGOROTH="GORGOROTH";
   /**
+   * Extended-respected faction.
+   */
+  public static final String EXTENDED_RESPECTED="EXTENDED_RESPECTED";
+  /**
    * Extended-classic faction.
    */
   public static final String EXTENDED_CLASSIC="EXTENDED_CLASSIC";
@@ -121,6 +125,7 @@ public class FactionLevelsTemplates
     register(buildHostOfTheWest());
     register(buildCentralGondor());
     register(buildForochel());
+    register(buildRespected());
     register(buildExtendedClassic());
     register(buildGorgoroth());
     register(buildGuild());
@@ -160,6 +165,7 @@ public class FactionLevelsTemplates
   {
     List<FactionLevel> levels=new ArrayList<FactionLevel>();
     levels.add(ENEMY);
+    levels.add(OUTSIDER);
     levels.add(NEUTRAL);
     levels.add(new FactionLevel("ACQUAINTANCE","Acquaintance",1,0,10000));
     levels.add(new FactionLevel("FRIEND","Friend",2,0,20000));
@@ -189,6 +195,18 @@ public class FactionLevelsTemplates
     levels.add(ALLY);
     levels.add(KINDRED);
     return new FactionLevelsTemplate(FOROCHEL,levels);
+  }
+
+  private FactionLevelsTemplate buildRespected()
+  {
+    List<FactionLevel> levels=new ArrayList<FactionLevel>();
+    levels.add(NEUTRAL);
+    levels.add(ACQUAINTANCE);
+    levels.add(FRIEND);
+    levels.add(ALLY);
+    levels.add(KINDRED);
+    levels.add(RESPECTED);
+    return new FactionLevelsTemplate(EXTENDED_RESPECTED,levels);
   }
 
   private FactionLevelsTemplate buildExtendedClassic()
@@ -244,12 +262,11 @@ public class FactionLevelsTemplates
   private FactionLevelsTemplate buildHobnanigans()
   {
     List<FactionLevel> levels=new ArrayList<FactionLevel>();
-    levels.add(new FactionLevel("NONE","-",0,0,0));
-    levels.add(new FactionLevel("ROOKIE","Rookie",1,0,10000));
-    levels.add(new FactionLevel("LEAGUER","Minor Leaguer",2,0,20000));
-    levels.add(new FactionLevel("MAJOR_LEAGUER","Major Leaguer",3,0,25000));
-    levels.add(new FactionLevel("ALL_STAR","All-star",4,0,30000));
-    levels.add(new FactionLevel("HALL_OF_FAMER","Hall of Famer",5,0,45000));
+    levels.add(new FactionLevel("ROOKIE","Rookie",0,0,0));
+    levels.add(new FactionLevel("LEAGUER","Minor Leaguer",1,0,10000));
+    levels.add(new FactionLevel("MAJOR_LEAGUER","Major Leaguer",2,0,20000));
+    levels.add(new FactionLevel("ALL_STAR","All-star",3,0,25000));
+    levels.add(new FactionLevel("HALL_OF_FAMER","Hall of Famer",4,0,30000));
     return new FactionLevelsTemplate(HOBNANIGANS,levels);
   }
 }

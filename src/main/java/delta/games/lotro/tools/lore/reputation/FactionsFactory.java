@@ -114,14 +114,14 @@ public class FactionsFactory
 
     // ERIADOR
     String category="Eriador";
-    Faction shire=initFaction(category,"SHIRE","Mathom Society",FactionLevelsTemplates.CLASSIC);
+    Faction shire=initFaction(category,"SHIRE","The Mathom Society",FactionLevelsTemplates.CLASSIC);
     ReputationDeed wrDeed=setupDeedForFaction(worldRenowned,shire);
     wrDeed.setLotroPoints(50);
     Faction bree=initFaction(category,"BREE","Men of Bree",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,bree);
     Faction dwarves=initFaction(category,"DWARVES","Thorin's Hall",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,dwarves);
-    Faction eglain=initFaction(category,"EGLAIN","Eglain",FactionLevelsTemplates.CLASSIC);
+    Faction eglain=initFaction(category,"EGLAIN","The Eglain",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,eglain);
     Faction esteldin=initFaction(category,"ESTELDIN","Rangers of Esteldín",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,esteldin);
@@ -129,13 +129,13 @@ public class FactionsFactory
     setupDeedForFaction(worldRenowned,rivendell);
     ReputationDeed ambassadorDeed=setupDeedForFaction(ambassador,rivendell);
     ambassadorDeed.setLotroPoints(20);
-    Faction annuminas=initFaction(category,"ANNUMINAS","Wardens of Annúminas",FactionLevelsTemplates.CLASSIC);
+    Faction annuminas=initFaction(category,"ANNUMINAS","The Wardens of Annúminas",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,annuminas);
     Faction lossoth=initFaction(category,"LOSSOTH","Lossoth of Forochel",FactionLevelsTemplates.FOROCHEL);
     setupDeedForFaction(worldRenowned,lossoth);
     Faction angmar=initFaction(category,"COUNCIL_OF_THE_NORTH","Council of the North",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,angmar);
-    initFaction(category,"ELDGANG","Eldgang",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"ELDGANG","The Eldgang",FactionLevelsTemplates.CLASSIC);
     category="Rhovanion";
     initFaction(category,"MORIA_GUARDS","Iron Garrison Guards",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"MORIA_MINERS","Iron Garrison Miners",FactionLevelsTemplates.CLASSIC);
@@ -145,18 +145,18 @@ public class FactionsFactory
     setupDeedForFaction(ambassador,malledhrim);
     initFaction(category,"ELVES_OF_FELEGOTH","Elves of Felegoth",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"MEN_OF_DALE","Men of Dale",FactionLevelsTemplates.CLASSIC);
-    initFaction(category,"DWARVES_OF_EREBOR","Dwarves of Erebor",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"DWARVES_OF_EREBOR","Dwarves of Erebor",FactionLevelsTemplates.EXTENDED_RESPECTED);
     initFaction(category,"GREY_MOUNTAINS_EXPEDITION","Grey Mountains Expedition",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"WILDERFOLK","Wilderfolk",FactionLevelsTemplates.CLASSIC);
     category="Dunland";
     Faction algraig=initFaction(category,"ALGRAIG","Algraig, Men of Enedwaith",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,algraig);
-    Faction greyCompany=initFaction(category,"GREY_COMPANY","Grey Company",FactionLevelsTemplates.CLASSIC);
+    Faction greyCompany=initFaction(category,"GREY_COMPANY","The Grey Company",FactionLevelsTemplates.CLASSIC);
     setupDeedForFaction(worldRenowned,greyCompany);
     initFaction(category,"DUNLAND","Men of Dunland",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"THEODRED_RIDERS","Théodred's Riders",FactionLevelsTemplates.CLASSIC);
     category="Rohan";
-    initFaction(category,"STANGARD_RIDERS","Riders of Stangard",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"STANGARD_RIDERS","The Riders of Stangard",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"LIMLIGHT_GORGE","Heroes of Limlight Gorge",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"WOLD","Men of the Wold",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"NORCROFTS","Men of the Norcrofts",FactionLevelsTemplates.CLASSIC);
@@ -164,9 +164,9 @@ public class FactionsFactory
     initFaction(category,"SUTCROFTS","Men of the Sutcrofts",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"PEOPLE_WILDERMORE","People of Wildermore",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"SURVIVORS_WILDERMORE","Survivors of Wildermore",FactionLevelsTemplates.CLASSIC);
-    initFaction(category,"EORLINGAS","Eorlingas",FactionLevelsTemplates.CLASSIC);
-    initFaction(category,"HELMINGAS","Helmingas",FactionLevelsTemplates.CLASSIC);
-    initFaction(category,"FANGORN","Ents of Fangorn Forest",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"EORLINGAS","The Eorlingas",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"HELMINGAS","The Helmingas",FactionLevelsTemplates.CLASSIC);
+    initFaction(category,"FANGORN","The Ents of Fangorn Forest",FactionLevelsTemplates.CLASSIC);
     category="Dol Amroth";
     initFaction(category,"DOL_AMROTH","Dol Amroth",FactionLevelsTemplates.CLASSIC);
     initFaction(category,"DA_ARMOURY","Dol Amroth - Armoury",FactionLevelsTemplates.DOL_AMROTH);
@@ -193,10 +193,10 @@ public class FactionsFactory
     initFaction(category,"HOW_WEAPONS","Host of the West: Weapons",FactionLevelsTemplates.HOW);
     initFaction(category,"GORGOROTH","Conquest of Gorgoroth",FactionLevelsTemplates.GORGOROTH);
     category="Misc";
-    Faction aleAssociation=initFaction(category,"ALE_ASSOCIATION","Ale Association",FactionLevelsTemplates.ALE_INN);
-    aleAssociation.setInitialLevel(aleAssociation.getLevels()[1]);
-    Faction innLeague=initFaction(category,"INN_LEAGUE","Inn League",FactionLevelsTemplates.ALE_INN);
-    innLeague.setInitialLevel(innLeague.getLevels()[1]);
+    Faction aleAssociation=initFaction(category,"ALE_ASSOCIATION","The Ale Association",FactionLevelsTemplates.ALE_INN);
+    aleAssociation.setInitialLevel(aleAssociation.getLevels()[2]);
+    Faction innLeague=initFaction(category,"INN_LEAGUE","The Inn League",FactionLevelsTemplates.ALE_INN);
+    innLeague.setInitialLevel(innLeague.getLevels()[2]);
     initFaction(category,"HOBNANIGANS","Chicken Chasing League of Eriador",FactionLevelsTemplates.HOBNANIGANS);
     // Guild
     _guildFaction=buildFaction(null,"GUILD","Guild",FactionLevelsTemplates.GUILD);

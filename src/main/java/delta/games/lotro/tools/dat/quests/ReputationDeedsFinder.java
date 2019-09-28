@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.objectives.FactionLevelCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
@@ -23,6 +23,9 @@ public class ReputationDeedsFinder
 {
   private static final Logger LOGGER=Logger.getLogger(ReputationDeedsFinder.class);
 
+  /**
+   * Map faction identifiers to maps of tier to deed.
+   */
   private Map<Integer,Map<Integer,DeedDescription>> _storage;
 
   /**
@@ -34,14 +37,17 @@ public class ReputationDeedsFinder
   }
 
   /**
-   * Do it.
+   * Init with some deeds.
    * @param deeds Input deeds.
    */
-  public void doIt(List<DeedDescription> deeds)
+  public void init(List<DeedDescription> deeds)
   {
     for(DeedDescription deed : deeds)
     {
-      scanDeed(deed);
+      if (useDeed(deed))
+      {
+        scanDeed(deed);
+      }
     }
   }
 
@@ -71,7 +77,7 @@ public class ReputationDeedsFinder
     if (oldDeed==null)
     {
       deedsMap.put(tierKey,deed);
-      System.out.println("Found deed: "+deed+" for faction id="+factionId+", tier="+tier);
+      LOGGER.info("Found deed: "+deed+" for faction id="+factionId+", tier="+tier);
     }
     else
     {
@@ -127,14 +133,30 @@ public class ReputationDeedsFinder
     return ret;
   }
 
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
+  private boolean useDeed(DeedDescription deed)
   {
-    DeedsManager deedsMgr=DeedsManager.getInstance();
-    List<DeedDescription> deeds=deedsMgr.getAll();
-    new ReputationDeedsFinder().doIt(deeds);
+    RaceRequirement raceReq=deed.getUsageRequirement().getRaceRequirement();
+    if (raceReq!=null)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Find the deed for a given faction and reputation tier.
+   * @param factionId Faction identifier.
+   * @param tier Tier.
+   * @return A deed or <code>null</code> if not found.
+   */
+  public DeedDescription findDeed(int factionId, int tier)
+  {
+    DeedDescription ret=null;
+    Map<Integer,DeedDescription> deedsMap=_storage.get(Integer.valueOf(factionId));
+    if (deedsMap!=null)
+    {
+      ret=deedsMap.get(Integer.valueOf(tier));
+    }
+    return ret;
   }
 }
