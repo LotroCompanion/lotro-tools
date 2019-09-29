@@ -146,6 +146,14 @@ Reputation_LowestTier: 1
     long[] xpTable=(long[])table.get(1);
     LOGGER.info(Arrays.toString(xpTable));
 
+    if (factionId==1879305436)
+    {
+      FactionLevel level=new FactionLevel("NONE","-",0,0,0);
+      level.setTier(2);
+      faction.addFactionLevel(level);
+      defaultTier=2;
+      faction.setLowestTier(2);
+    }
     List<FactionLevel> levels=buildFactionLevels(tierNames,xpTable,lowestTier,highestTier);
     for(FactionLevel level : levels)
     {
@@ -161,7 +169,7 @@ Reputation_LowestTier: 1
   private boolean isNeutral(FactionLevel level)
   {
     if (FactionLevels.NEUTRAL.equals(level.getKey())) return true;
-    if ("ROOKIE".equals(level.getKey())) return true;
+    if ("NONE".equals(level.getKey())) return true;
     if ("Neutral".equals(level.getName())) return true;
     return false;
   }
@@ -416,6 +424,13 @@ Reputation_LowestTier: 1
 
   private void manualFixes(FactionsRegistry registry)
   {
+    // Hobnanigans
+    {
+      Faction hobnanigans=registry.getByKey("HOBNANIGANS");
+      hobnanigans.getLevelByKey("ROOKIE").setRequiredXp(0);
+      FactionLevel none=hobnanigans.getLevelByKey("NONE");
+      hobnanigans.setInitialLevel(none);
+    }
     // Lossoth
     {
       Faction lossoth=registry.getByKey("LOSSOTH");
