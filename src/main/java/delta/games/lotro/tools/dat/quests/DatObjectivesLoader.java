@@ -126,7 +126,7 @@ public class DatObjectivesLoader
         //System.out.println("Objective #"+objectiveIndex);
         objective.setIndex(objectiveIndex);
         // Description
-        String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription","{***}");
+        String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription",Markers.CHARACTER);
         //System.out.println("\tDescription: "+description);
         objective.setText(description);
         // Conditions (can have several conditions)

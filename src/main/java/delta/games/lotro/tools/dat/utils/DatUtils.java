@@ -42,24 +42,32 @@ public class DatUtils
    */
   public static String getFullStringProperty(PropertiesSet properties, String propertyName, String padding)
   {
-    String ret=null;
     Object value=properties.getProperty(propertyName);
+    return getFullString((String[])value,padding);
+  }
+
+  /**
+   * Get a full string from an array of strings.
+   * @param value Input string array.
+   * @param padding Padding between string items.
+   * @return the result string.
+   */
+  public static String getFullString(String[] value, String padding)
+  {
+    String ret=null;
     if (value!=null)
     {
-      if (value instanceof String[])
+      StringBuilder sb=new StringBuilder();
+      for(String line : value)
       {
-        StringBuilder sb=new StringBuilder();
-        for(String line : (String[])value)
+        line=line.replace("\\n","\n");
+        if (sb.length()>0)
         {
-          line=line.replace("\\n","\n");
-          if (sb.length()>0)
-          {
-            sb.append(padding);
-          }
-          sb.append(line);
+          sb.append(padding);
         }
-        ret=sb.toString().trim();
+        sb.append(line);
       }
+      ret=sb.toString().trim();
     }
     return ret;
   }

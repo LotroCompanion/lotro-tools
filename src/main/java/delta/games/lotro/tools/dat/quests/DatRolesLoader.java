@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -46,6 +47,7 @@ public class DatRolesLoader
   {
     //handleGlobalRoles(quest,properties);
     handleRoles(quest,properties);
+    handleCompletionComments(quest,properties);
   }
 
   void handleGlobalRoles(QuestDescription quest, PropertiesSet properties)
@@ -82,7 +84,7 @@ public class DatRolesLoader
         {
           System.out.println("\tdispenserRole Constraint: " +dispenserRoleConstraint);
         }
-        String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText","{***}");
+        String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
         System.out.println("\tSuccess text: "+successText);
         index++;
       }
@@ -151,6 +153,76 @@ public class DatRolesLoader
     }
   }
 
+  private void handleCompletionComments(QuestDescription quest, PropertiesSet properties)
+  {
+    Object[] commentsArray=(Object[])properties.getProperty("Quest_CompletionCommentArray");
+    if (commentsArray!=null)
+    {
+      for(Object commentsObj : commentsArray)
+      {
+        PropertiesSet commentsProps=(PropertiesSet)commentsObj;
+        handleCompletionCommentsForNpc(quest,commentsProps);
+      }
+    }
+  }
+
+  private void handleCompletionCommentsForNpc(QuestDescription quest, PropertiesSet properties)
+  {
+    List<Proxy<NpcDescription>> npcs=new ArrayList<Proxy<NpcDescription>>();
+    Object[] npcArray=(Object[])properties.getProperty("QuestDispenser_NPCArray");
+    for(Object npcObj : npcArray)
+    {
+      if (npcObj instanceof String)
+      {
+        String npcStr=(String)npcObj;
+        if ("QuestDispenser_NPC".equals(npcStr))
+        {
+          Proxy<NpcDescription> npc=getQuestBestower(quest);
+          if (npc!=null)
+          {
+            npcs.add(npc);
+            System.out.println("NPC ID: "+npc.getId()+", name="+npc.getName());
+          }
+        }
+        else if (("".equals(npcStr)) || ("QuestDispenser_TextArray".equals(npcStr)))
+        {
+          // Ignored
+        }
+        else
+        {
+          // Sometimes we find keys here, like: npc_eastangmar_golodir,color_commenter_buckland_partygoer_granny
+          LOGGER.warn("Unexpected string value: "+npcStr);
+        }
+      }
+      else
+      {
+        int npcId=((Integer)npcObj).intValue();
+        Proxy<NpcDescription> npc=buildNpcProxy(npcId);
+        npcs.add(npc);
+        System.out.println("NPC ID: "+npcId+", name="+npc.getName());
+      }
+    }
+
+    Object[] textArray=(Object[])properties.getProperty("QuestDispenser_TextArray");
+    for(Object textObj : textArray)
+    {
+      String[] comment=(String[])textObj;
+      String commentStr=DatUtils.getFullString(comment,Markers.CHARACTER);
+      System.out.println("\t"+commentStr);
+    }
+  }
+
+  private Proxy<NpcDescription> getQuestBestower(QuestDescription quest)
+  {
+    List<DialogElement> bestowers=quest.getBestowers();
+    if (bestowers.size()==1)
+    {
+      return bestowers.get(0).getWho();
+    }
+    LOGGER.warn("Bad bestowers size: "+bestowers.size());
+    return null;
+  }
+
   private DialogElement buildDialog(Integer npcId, String successText)
   {
     DialogElement ret=null;
@@ -159,14 +231,20 @@ public class DatRolesLoader
       ret=new DialogElement();
       if (npcId!=null)
       {
-        String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
-        Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
-        npc.setId(npcId.intValue());
-        npc.setName(npcName);
+        Proxy<NpcDescription> npc=buildNpcProxy(npcId.intValue());
         ret.setWho(npc);
       }
       ret.setWhat(successText);
     }
     return ret;
+  }
+
+  private Proxy<NpcDescription> buildNpcProxy(int npcId)
+  {
+    String npcName=NpcLoader.loadNPC(_facade,npcId);
+    Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
+    npc.setId(npcId);
+    npc.setName(npcName);
+    return npc;
   }
 }
