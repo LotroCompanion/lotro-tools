@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.quests;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +10,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.dialogs.DialogElement;
+import delta.games.lotro.lore.quests.dialogs.QuestCompletionComment;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -161,15 +161,28 @@ public class DatRolesLoader
       for(Object commentsObj : commentsArray)
       {
         PropertiesSet commentsProps=(PropertiesSet)commentsObj;
-        handleCompletionCommentsForNpc(quest,commentsProps);
+        QuestCompletionComment comment=handleCompletionCommentsForNpc(quest,commentsProps);
+        if (comment.isValid())
+        {
+          quest.addCompletionComment(comment);
+        }
       }
     }
   }
 
-  private void handleCompletionCommentsForNpc(QuestDescription quest, PropertiesSet properties)
+  private QuestCompletionComment handleCompletionCommentsForNpc(QuestDescription quest, PropertiesSet properties)
   {
-    List<Proxy<NpcDescription>> npcs=new ArrayList<Proxy<NpcDescription>>();
     Object[] npcArray=(Object[])properties.getProperty("QuestDispenser_NPCArray");
+    if (npcArray==null)
+    {
+      return null;
+    }
+    Object[] textArray=(Object[])properties.getProperty("QuestDispenser_TextArray");
+    if (textArray==null)
+    {
+      return null;
+    }
+    QuestCompletionComment ret=new QuestCompletionComment();
     for(Object npcObj : npcArray)
     {
       if (npcObj instanceof String)
@@ -180,8 +193,11 @@ public class DatRolesLoader
           Proxy<NpcDescription> npc=getQuestBestower(quest);
           if (npc!=null)
           {
-            npcs.add(npc);
-            System.out.println("NPC ID: "+npc.getId()+", name="+npc.getName());
+            ret.addWho(npc);
+          }
+          else
+          {
+            LOGGER.warn("No bestower found for quest: "+quest);
           }
         }
         else if (("".equals(npcStr)) || ("QuestDispenser_TextArray".equals(npcStr)))
@@ -198,18 +214,20 @@ public class DatRolesLoader
       {
         int npcId=((Integer)npcObj).intValue();
         Proxy<NpcDescription> npc=buildNpcProxy(npcId);
-        npcs.add(npc);
-        System.out.println("NPC ID: "+npcId+", name="+npc.getName());
+        if (npc.getName()!=null)
+        {
+          ret.addWho(npc);
+        }
       }
     }
 
-    Object[] textArray=(Object[])properties.getProperty("QuestDispenser_TextArray");
     for(Object textObj : textArray)
     {
       String[] comment=(String[])textObj;
       String commentStr=DatUtils.getFullString(comment,Markers.CHARACTER);
-      System.out.println("\t"+commentStr);
+      ret.addWhat(commentStr);
     }
+    return ret;
   }
 
   private Proxy<NpcDescription> getQuestBestower(QuestDescription quest)
