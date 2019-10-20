@@ -96,6 +96,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_ACHIEVABLES=new File("data/progressions/tmp/progressions_achievables.xml").getAbsoluteFile();
   /**
+   * Progressions for combat data.
+   */
+  public static final File PROGRESSIONS_COMBAT=new File("data/progressions/tmp/progressions_combat.xml").getAbsoluteFile();
+  /**
    * All progressions.
    */
   public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);
@@ -163,4 +167,8 @@ public class GeneratedFiles
    * Sets.
    */
   public static final File SETS=LotroCoreConfig.getInstance().getFile(DataFiles.SETS);
+  /**
+   * Data for the combat system.
+   */
+  public static final File COMBAT_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.COMBAT_DATA);
 }

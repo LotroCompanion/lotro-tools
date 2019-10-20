@@ -17,6 +17,7 @@ import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.TieredScalableStatProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -204,7 +205,7 @@ public class DatStatUtils
     Progression ret=_progressions.getProgression(progressId);
     if (ret==null)
     {
-      int progressPropertiesId=progressId+0x9000000;
+      int progressPropertiesId=progressId+DATConstants.DBPROPERTIES_OFFSET;
       PropertiesSet progressProperties=facade.loadProperties(progressPropertiesId);
       if (progressProperties!=null)
       {
