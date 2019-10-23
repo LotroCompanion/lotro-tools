@@ -490,7 +490,7 @@ public class DatRewardsLoader
       int level=challengeLevel.getEffectiveLevel();
       if (level==0)
       {
-        level=120; // TODO Use cap
+        level=130; // TODO Use cap
       }
       rewardsMap=_defaultRewardMaps.get(Integer.valueOf(level));
     }
@@ -649,7 +649,7 @@ public class DatRewardsLoader
     {
       if (challengeLevel!=null)
       {
-        ret=ChallengeLevel.getByCode(challengeLevel.byteValue());
+        ret=ChallengeLevel.getByCode(challengeLevel.intValue());
       }
       else
       {
