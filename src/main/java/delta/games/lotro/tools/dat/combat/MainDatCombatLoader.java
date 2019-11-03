@@ -5,8 +5,6 @@ import java.util.Objects;
 import delta.games.lotro.character.stats.ratings.ProgressionRatingCurveImpl;
 import delta.games.lotro.character.stats.ratings.RatingCurve;
 import delta.games.lotro.character.stats.ratings.RatingCurveId;
-import delta.games.lotro.character.stats.ratings.RatingsMgr;
-import delta.games.lotro.character.stats.ratings.update21.RatingsInitializerUpdate21;
 import delta.games.lotro.common.global.CombatData;
 import delta.games.lotro.common.global.io.xml.CombatDataXMLWriter;
 import delta.games.lotro.dat.DATConstants;
@@ -69,21 +67,23 @@ public class MainDatCombatLoader
 
       ProgressionRatingCurveImpl curve=new ProgressionRatingCurveImpl(hardCapProg,ratingProg,targetCapProg);
       _data.getRatingsMgr().setCurve(id,curve);
+      /*
       RatingsMgr mgr=new RatingsMgr();
       RatingsInitializerUpdate21.init(mgr);
       RatingCurve oldCurve=mgr.getCurve(id);
       compareCurves(id,curve,oldCurve);
+      */
     }
     else
     {
-      System.out.println("Type: "+calcType+" => "+_calcType.getString(calcType));
+      System.out.println("Unmanaged curve type: "+calcType+" => "+_calcType.getString(calcType));
       //System.out.println("Hard cap: "+hardCapProg);
       //System.out.println("Rating: "+ratingProg);
       //System.out.println("Target cap: "+targetCapProg);
     }
   }
 
-  private void compareCurves(RatingCurveId id, RatingCurve curve, RatingCurve oldCurve)
+  void compareCurves(RatingCurveId id, RatingCurve curve, RatingCurve oldCurve)
   {
     for(int level=1;level<=120;level++)
     {
@@ -110,7 +110,7 @@ public class MainDatCombatLoader
           {
             System.out.println("(2) "+id+": Bad point: level="+level+", rating="+rating);
           }
-          double delta=Math.abs(p1.doubleValue()*100-p2.doubleValue());
+          double delta=Math.abs(p1.doubleValue()-p2.doubleValue());
           if (delta>0.01)
           {
             System.out.println("(3) "+id+": Bad point: level="+level+", rating="+rating+", delta="+delta);
