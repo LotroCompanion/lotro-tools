@@ -442,9 +442,13 @@ public class LegaciesLoader
       legacyTier=legacy.addTier(tier,effect);
       // Progression type
       int typeCode=((Integer)progressionProps.getProperty("Progression_Type")).intValue();
+      // Start level
       Integer startLevel=_progressionControl.getStartingLevel(typeCode);
       legacyTier.setStartRank(startLevel);
       //System.out.println("Start level for "+stat+": "+startLevel);
+      // Multiplier
+      /*Float multiplier=*/_progressionControl.getMultiplier(typeCode);
+      //System.out.println("Multiplier for "+stat.getName()+" @tier"+tier+": "+multiplier);
     }
     else
     {

@@ -15,6 +15,7 @@ public class ProgressionControlLoader
 {
   private DataFacade _facade;
   private Map<Integer,Integer> _startingLevels;
+  private Map<Integer,Float> _multipliers;
 
   /**
    * Constructor.
@@ -24,6 +25,7 @@ public class ProgressionControlLoader
   {
     _facade=facade;
     _startingLevels=new HashMap<Integer,Integer>();
+    _multipliers=new HashMap<Integer,Float>();
   }
 
   /**
@@ -46,6 +48,19 @@ public class ProgressionControlLoader
       int level=((Integer)startingLevelProps.getProperty("ProgressionControl_TypeStartingLevel_Level")).intValue();
       _startingLevels.put(Integer.valueOf(typeCode),Integer.valueOf(level));
     }
+    // Multipliers
+    Object[] multipliersTable=(Object[])itemAdvancementControlProps.getProperty("ProgressionControl_TypeMultiplierTable");
+    for(Object multiplierObj : multipliersTable)
+    {
+      PropertiesSet multiplierProps=(PropertiesSet)multiplierObj;
+      /*
+        ProgressionControl_TypeMultiplierTable_Multiplier: 0.85
+        ProgressionControl_TypeMultiplierTable_Type: 2 (Type2)
+       */
+      int typeCode=((Integer)multiplierProps.getProperty("ProgressionControl_TypeMultiplierTable_Type")).intValue();
+      float multiplier=((Float)multiplierProps.getProperty("ProgressionControl_TypeMultiplierTable_Multiplier")).floatValue();
+      _multipliers.put(Integer.valueOf(typeCode),Float.valueOf(multiplier));
+    }
   }
 
   /**
@@ -56,6 +71,16 @@ public class ProgressionControlLoader
   public Integer getStartingLevel(int typeCode)
   {
     return _startingLevels.get(Integer.valueOf(typeCode));
+  }
+
+  /**
+   * Get the multiplier for a progression type.
+   * @param typeCode Code of the progression type.
+   * @return A multiplier or <code>null</code>.
+   */
+  public Float getMultiplier(int typeCode)
+  {
+    return _multipliers.get(Integer.valueOf(typeCode));
   }
 
   /**
