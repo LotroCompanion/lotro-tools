@@ -26,7 +26,6 @@ import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
@@ -55,6 +54,7 @@ public class DatRewardsLoader
   private static final int DEBUG_ID=1879000000;
 
   private static final String VIRTUE_SEED="Trait_Virtue_Rank_";
+  private static final int TIER_ARTISAN=4;
 
   private DataFacade _facade;
   private ItemsManager _itemsMgr;
@@ -552,7 +552,7 @@ public class DatRewardsLoader
       {
         int professionId=((Integer)properties.getProperty("Quest_CraftProfessionDID")).intValue();
         Profession profession=DatEnumsUtils.getProfessionFromId(professionId);
-        int craftingTier=CraftingLevel.ARTISAN.getTier();
+        int craftingTier=TIER_ARTISAN;
         CraftingXpReward craftingXpReward=new CraftingXpReward(profession,craftingTier,craftXp.intValue());
         rewards.addRewardElement(craftingXpReward);
       }

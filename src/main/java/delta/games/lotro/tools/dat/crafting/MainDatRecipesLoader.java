@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.recipes;
+package delta.games.lotro.tools.dat.crafting;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +13,10 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.crafting.CraftingData;
+import delta.games.lotro.lore.crafting.CraftingSystem;
+import delta.games.lotro.lore.crafting.Profession;
+import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
@@ -31,10 +35,6 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 public class MainDatRecipesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatRecipesLoader.class);
-
-  // Professions...
-  private static final String[] PROFESSIONS={"Cook","Farmer","Forester","Jeweller","Metalsmith","Prospector","Scholar","Tailor","Weaponsmith","Woodworker"};
-  private static final int[] INDEX={0x79003304,0x79003920,0x79003921,0x79001BC3,0x79001AE7,0x79003922,0x79001A62,0x79001C75,0x79001DA2,0x79001E45};
 
   private static final int CRAFTING_UI_CATEGORY=0x23000065;
 
@@ -148,8 +148,8 @@ public class MainDatRecipesLoader
       Integer professionId=(Integer)properties.getProperty("CraftRecipe_Profession");
       if (professionId!=null)
       {
-        String profession=getProfessionFromProfessionId(professionId.intValue());
-        recipe.setProfession(profession);
+        Profession profession=getProfessionFromProfessionId(professionId.intValue());
+        recipe.setProfession(profession.getName());
       }
       // Tier
       Integer tier=getTier(properties);
@@ -344,14 +344,12 @@ public class MainDatRecipesLoader
     return _facade.getEnumsManager().resolveEnum(CRAFTING_UI_CATEGORY,key);
   }
 
-  private String getProfessionFromProfessionId(int id)
+  private Profession getProfessionFromProfessionId(int id)
   {
-    int nbProfessions=PROFESSIONS.length;
-    for(int i=0;i<nbProfessions;i++)
-    {
-      if (INDEX[i]-0x9000000==id) return PROFESSIONS[i];
-    }
-    return null;
+    CraftingData crafting=CraftingSystem.getInstance().getData();
+    Professions professions=crafting.getProfessionsRegistry();
+    Profession profession=professions.getProfessionById(id);
+    return profession;
   }
 
   private void doIt()

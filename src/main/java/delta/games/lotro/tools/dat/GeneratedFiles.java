@@ -171,4 +171,8 @@ public class GeneratedFiles
    * Data for the combat system.
    */
   public static final File COMBAT_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.COMBAT_DATA);
+  /**
+   * Data for the crafting system.
+   */
+  public static final File CRAFTING_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.CRAFTING_DATA);
 }
