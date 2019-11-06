@@ -389,6 +389,7 @@ Reputation_LowestTier: 1
 
   private int fixLowestTier(int factionId)
   {
+    if (factionId==1879389872) return 1; // Reclamation of Minas Ithil
     if (hasOutsider(factionId)) return 2;
     if (!hasEnemyAndOutsider(factionId)) return 3;
     return 1;
@@ -473,6 +474,16 @@ Reputation_LowestTier: 1
       fushaumBalNorth.getLevelByKey("1").setRequiredXp(10000);
       fushaumBalNorth.getLevelByKey("2").setRequiredXp(0);
       fushaumBalNorth.getLevelByKey("3").setRequiredXp(10000);
+    }
+    // Minas Morgul reputations
+    {
+      String category="Mordor";
+      Faction whiteCompany=registry.getById(1879389868);
+      whiteCompany.setCategory(category);
+      Faction reclamationOfMinasIthil=registry.getById(1879389872);
+      reclamationOfMinasIthil.setCategory(category);
+      Faction greatAlliance=registry.getById(1879389871);
+      greatAlliance.setCategory(category);
     }
   }
 
