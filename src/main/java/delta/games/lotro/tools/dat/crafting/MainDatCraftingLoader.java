@@ -134,6 +134,10 @@ CraftVocation_LearnString:
       // - key
       String key=getProfessionKey(professionId);
       ret.setKey(key);
+      // - guild
+      boolean hasGuild=hasGuild(professionId);
+      ret.setHasGuild(hasGuild);
+      // Register profession
       professions.addProfession(ret);
     }
     return ret;
@@ -183,6 +187,21 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     if (vocationId==1879062814) return "WOODSMAN";
     if (vocationId==1879062815) return "HISTORIAN";
     return null;
+  }
+
+  private boolean hasGuild(int professionId)
+  {
+    if (professionId==1879054946) return true;
+    if (professionId==1879055079) return true;
+    if (professionId==1879055299) return true;
+    if (professionId==1879055477) return true;
+    if (professionId==1879055778) return true;
+    if (professionId==1879055941) return true;
+    if (professionId==1879061252) return true;
+    if (professionId==1879062816) return false;
+    if (professionId==1879062818) return false;
+    if (professionId==1879062817) return false;
+    return false;
   }
 
   private CraftingLevel buildBeginnerLevel()
