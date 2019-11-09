@@ -109,6 +109,8 @@ public class MainStatsLoader
         // Add legacy name
         String legacyName=oldStat.getName();
         stat.setLegacyName(legacyName);
+        // Set percentage
+        stat.setPercentage(oldStat.isPercentage());
         // Add index
         stat.setIndex(Integer.valueOf(index));
       }
