@@ -268,6 +268,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.PHYSICAL_MITIGATION,characterClass,new FixedDecimalsInteger(1));
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.TACTICAL_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    if (characterClass==CharacterClass.CHAMPION)
+    {
+      _derivatedStatsManager.setFactor(WellKnownStat.MIGHT,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+    }
     _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
     _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
   }
