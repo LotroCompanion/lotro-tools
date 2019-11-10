@@ -8,9 +8,11 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.text.EndOfLine;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatDescriptionComparator;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.common.stats.StatsSorter;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
 import delta.games.lotro.dat.DATConstants;
@@ -89,12 +91,16 @@ public class MainStatsLoader
     // Sort stats
     List<StatDescription> stats=_stats.getAll();
     Collections.sort(stats,new StatDescriptionComparator());
+    // Show results
+    //showResultStats();
     // Save stats
     int nbStats=stats.size();
     File toFile=GeneratedFiles.STATS;
     LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
     StatXMLWriter.write(toFile,stats);
-    showStats();
+    // Checks
+    checks();
+    checkNameDuplicates();
   }
 
   private void addLegacyData()
@@ -108,6 +114,11 @@ public class MainStatsLoader
       {
         // Add legacy name
         String legacyName=oldStat.getName();
+        String statName=stat.getName();
+        if (statName.equals(legacyName))
+        {
+          legacyName=null;
+        }
         stat.setLegacyName(legacyName);
         // Set percentage
         stat.setPercentage(oldStat.isPercentage());
@@ -118,7 +129,7 @@ public class MainStatsLoader
     }
   }
 
-  private void showStats()
+  private void checks()
   {
     // Old STATs
     Set<String> oldStatsKeys=new HashSet<String>();
@@ -171,6 +182,53 @@ public class MainStatsLoader
     }
   }
 
+  private void checkNameDuplicates()
+  {
+    Set<String> names=new HashSet<String>();
+    for(StatDescription stat : _stats.getAll())
+    {
+      Integer index=stat.getIndex();
+      if (index!=null)
+      {
+        String name=stat.getName();
+        boolean ok=names.add(name);
+        if (!ok)
+        {
+          System.out.println("Found duplicate stat name: "+name);
+        }
+      }
+    }
+  }
+
+  void showResultStats()
+  {
+    List<StatDescription> stats=_stats.getAll();
+    StatsSorter.sortStatsForUi(stats);
+    StringBuilder sb=new StringBuilder("ID\tIndex\tKey\tLegacy key\tPersistence key\tLegacy name\tInternal name\tName");
+    sb.append(EndOfLine.NATIVE_EOL);
+    for(StatDescription stat : stats)
+    {
+      int id=stat.getIdentifier();
+      sb.append(id).append('\t');
+      Integer index=stat.getIndex();
+      sb.append(index).append('\t');
+      String key=stat.getKey();
+      sb.append(key).append('\t');
+      String legacyKey=stat.getLegacyKey();
+      sb.append(legacyKey).append('\t');
+      String persistenceKey=stat.getPersistenceKey();
+      sb.append(persistenceKey).append('\t');
+      String legacyName=stat.getLegacyName();
+      sb.append(legacyName).append('\t');
+      String internalName=stat.getInternalName();
+      sb.append(internalName).append('\t');
+      String name=stat.getName();
+      sb.append(name).append(EndOfLine.NATIVE_EOL);
+    }
+    String result=sb.toString();
+    System.out.println(result);
+  }
+
   private void addDatStat(int id, String key, String name, boolean isPercentage)
   {
     StatDescription stat=new StatDescription(id);
@@ -185,6 +243,7 @@ public class MainStatsLoader
     String legacyKey=oldStat.name();
     boolean isPercentage=oldStat.isPercentage();
     String legacyName=oldStat.getName();
+    //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
     addCustomStat(id,legacyKey,legacyName,isPercentage);
   }
 
@@ -193,7 +252,7 @@ public class MainStatsLoader
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
-    stat.setLegacyName(legacyName);
+    stat.setInternalName(legacyName);
     stat.setPercentage(isPercentage);
     _stats.addStat(stat);
   }

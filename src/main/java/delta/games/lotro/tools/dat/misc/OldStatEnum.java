@@ -46,15 +46,15 @@ public enum OldStatEnum
   /**
    * Critical % (melee).
    */
-  CRITICAL_MELEE_PERCENTAGE("Critical chance (melee)",true),
+  CRITICAL_MELEE_PERCENTAGE(null,true),
   /**
    * Critical % (ranged).
    */
-  CRITICAL_RANGED_PERCENTAGE("Critical chance (ranged)",true),
+  CRITICAL_RANGED_PERCENTAGE(null,true),
   /**
    * Critical % (tactical).
    */
-  CRITICAL_TACTICAL_PERCENTAGE("Critical chance (tactical)",true),
+  CRITICAL_TACTICAL_PERCENTAGE(null,true),
   /**
    * Devastate % (melee).
    */
@@ -86,7 +86,7 @@ public enum OldStatEnum
   /**
    * Finesse %.
    */
-  FINESSE_PERCENTAGE("Finesse",true),
+  FINESSE_PERCENTAGE("Finesse (%)",true),
   /**
    * Physical Mastery.
    */
@@ -114,7 +114,7 @@ public enum OldStatEnum
   /**
    * Outgoing Healing %.
    */
-  OUTGOING_HEALING_PERCENTAGE("Outgoing Healing",true),
+  OUTGOING_HEALING_PERCENTAGE("Outgoing Healing (%)",true),
   // Defence
   /**
    * Resistance.
@@ -123,7 +123,7 @@ public enum OldStatEnum
   /**
    * Resistance %.
    */
-  RESISTANCE_PERCENTAGE("Resistance",true),
+  RESISTANCE_PERCENTAGE("Resistance (%)",true),
   /**
    * Melee Defence.
    */
@@ -143,19 +143,19 @@ public enum OldStatEnum
   /**
    * Critical Defence (melee/ranged/tactical).
    */
-  CRITICAL_DEFENCE_PERCENTAGE("Critical Defence",true),
+  CRITICAL_DEFENCE_PERCENTAGE("Critical Defence (%)",true),
   /**
    * Critical Defence % (melee).
    */
-  MELEE_CRITICAL_DEFENCE("Melee Critical Defence",true),
+  MELEE_CRITICAL_DEFENCE("Melee Critical Defence (%)",true),
   /**
    * Critical Defence % (ranged).
    */
-  RANGED_CRITICAL_DEFENCE("Ranged Critical Defence",true),
+  RANGED_CRITICAL_DEFENCE("Ranged Critical Defence (%)",true),
   /**
    * Critical Defence % (tactical).
    */
-  TACTICAL_CRITICAL_DEFENCE("Tactical Critical Defence",true),
+  TACTICAL_CRITICAL_DEFENCE("Tactical Critical Defence (%)",true),
   /**
    * Incoming Healing.
    */
@@ -163,7 +163,7 @@ public enum OldStatEnum
   /**
    * Incoming Healing percentage.
    */
-  INCOMING_HEALING_PERCENTAGE("Incoming Healing",true),
+  INCOMING_HEALING_PERCENTAGE("Incoming Healing (%)",true),
   // Avoidance
   /**
    * Block.
@@ -172,11 +172,11 @@ public enum OldStatEnum
   /**
    * Block (percentage).
    */
-  BLOCK_PERCENTAGE("Block",true),
+  BLOCK_PERCENTAGE(null,true),
   /**
    * Partial Block (percentage).
    */
-  PARTIAL_BLOCK_PERCENTAGE("Partial Block",true),
+  PARTIAL_BLOCK_PERCENTAGE(null,true),
   /**
    * Partial Block Mitigation (percentage).
    */
@@ -188,11 +188,11 @@ public enum OldStatEnum
   /**
    * Parry (percentage).
    */
-  PARRY_PERCENTAGE("Parry",true),
+  PARRY_PERCENTAGE(null,true),
   /**
    * Partial Parry (percentage).
    */
-  PARTIAL_PARRY_PERCENTAGE("Partial Parry",true),
+  PARTIAL_PARRY_PERCENTAGE(null,true),
   /**
    * Partial Parry Mitigation (percentage).
    */
@@ -204,11 +204,11 @@ public enum OldStatEnum
   /**
    * Evade (percentage).
    */
-  EVADE_PERCENTAGE("Evade",true),
+  EVADE_PERCENTAGE(null,true),
   /**
    * Partial Evade (percentage).
    */
-  PARTIAL_EVADE_PERCENTAGE("Partial Evade",true),
+  PARTIAL_EVADE_PERCENTAGE(null,true),
   /**
    * Partial Evade Mitigation (percentage).
    */
@@ -223,7 +223,7 @@ public enum OldStatEnum
   /**
    * Physical mitigation percentage.
    */
-  PHYSICAL_MITIGATION_PERCENTAGE("Physical Mitigation",true),
+  PHYSICAL_MITIGATION_PERCENTAGE("Physical Mitigation (%)",true),
   /**
    * Orc-craft and Fell-wrought mitigation.
    */
@@ -231,7 +231,7 @@ public enum OldStatEnum
   /**
    * Orc-craft and Fell-wrought mitigation percentage.
    */
-  OCFW_MITIGATION_PERCENTAGE("Orc-craft/Fell-wrought Mitigation",true),
+  OCFW_MITIGATION_PERCENTAGE("Orc-craft/Fell-wrought Mitigation (%)",true),
   /**
    * Tactical mitigation.
    */
@@ -239,7 +239,7 @@ public enum OldStatEnum
   /**
    * Tactical mitigation percentage.
    */
-  TACTICAL_MITIGATION_PERCENTAGE("Tactical Mitigation",true),
+  TACTICAL_MITIGATION_PERCENTAGE("Tactical Mitigation (%)",true),
   /**
    * Fire mitigation.
    */
@@ -247,7 +247,7 @@ public enum OldStatEnum
   /**
    * Fire mitigation percentage.
    */
-  FIRE_MITIGATION_PERCENTAGE("Fire Mitigation",true),
+  FIRE_MITIGATION_PERCENTAGE("Fire Mitigation (%)",true),
   /**
    * Lightning mitigation percentage.
    */
@@ -259,7 +259,7 @@ public enum OldStatEnum
   /**
    * Frost mitigation percentage.
    */
-  FROST_MITIGATION_PERCENTAGE("Frost Mitigation",true),
+  FROST_MITIGATION_PERCENTAGE("Frost Mitigation (%)",true),
   /**
    * Acid mitigation rating.
    */
@@ -267,7 +267,7 @@ public enum OldStatEnum
   /**
    * Acid mitigation percentage.
    */
-  ACID_MITIGATION_PERCENTAGE("Acid Mitigation",true),
+  ACID_MITIGATION_PERCENTAGE("Acid Mitigation (%)",true),
   /**
    * Shadow mitigation percentage.
    */
@@ -275,23 +275,23 @@ public enum OldStatEnum
   /**
    * Shadow mitigation percentage.
    */
-  SHADOW_MITIGATION_PERCENTAGE("Shadow Mitigation",true),
+  SHADOW_MITIGATION_PERCENTAGE("Shadow Mitigation (%)",true),
   /**
    * non-Combat Morale Regeneration.
    */
-  OCMR("Non-Combat Morale Regeneration"),
+  OCMR(),
   /**
    * In-Combat Morale Regeneration.
    */
-  ICMR("In-Combat Morale Regeneration"),
+  ICMR(),
   /**
    * non-Combat Power Regeneration.
    */
-  OCPR("Non-Combat Power Regeneration"),
+  OCPR(),
   /**
    * In-Combat Power Regeneration.
    */
-  ICPR("In-Combat Power Regeneration"),
+  ICPR(),
   /**
    * Item Wear Chance on Hit.
    */
@@ -315,19 +315,19 @@ public enum OldStatEnum
   /**
    * Melee Defence (%).
    */
-  MELEE_DEFENCE_PERCENTAGE("Melee Defence", true), // Incoming Melee Damage
+  MELEE_DEFENCE_PERCENTAGE(null, true), // Incoming Melee Damage
   /**
    * Tactical Defence (%).
    */
-  TACTICAL_DEFENCE_PERCENTAGE("Tactical Defence", true), // Incoming Tactical Damage
+  TACTICAL_DEFENCE_PERCENTAGE(null, true), // Incoming Tactical Damage
   /**
    * Ranged Defence (%).
    */
-  RANGED_DEFENCE_PERCENTAGE("Ranged Defence", true), // Incoming Ranged Damage
+  RANGED_DEFENCE_PERCENTAGE(null, true), // Incoming Ranged Damage
   /**
    * Critical chance of ranged auto-attack (percentage).
    */
-  RANGED_AUTO_ATTACKS_CRIT_CHANCE_PERCENTAGE("Ranged Auto-attacks Critical Chance %"),
+  RANGED_AUTO_ATTACKS_CRIT_CHANCE_PERCENTAGE(null, true),
   /**
    * Devastate magnitude (percentage).
    */
@@ -339,11 +339,11 @@ public enum OldStatEnum
   /**
    * Blade line AOE power cost (percentage).
    */
-  BLADE_LINE_AOE_POWER_COST_PERCENTAGE("Blade Line AOE Power Cost",true),
+  BLADE_LINE_AOE_POWER_COST_PERCENTAGE("Blade Line AoE Power Cost",true),
   /**
    * Strike skills power cost (percentage).
    */
-  STRIKE_SKILLS_POWER_COST_PERCENTAGE("Strike Skills Power Cost",true),
+  STRIKE_SKILLS_POWER_COST_PERCENTAGE("Strike Skill Power Cost",true),
   /**
    * Blade line AOE skills power cost (percentage).
    */
@@ -416,7 +416,7 @@ public enum OldStatEnum
   /**
    * All skill induction (%).
    */
-  ALL_SKILL_INDUCTION("All Skill Induction",true),
+  ALL_SKILL_INDUCTION("All Skill Inductions",true),
   /**
    * War-steed Endurance.
    */
@@ -436,6 +436,12 @@ public enum OldStatEnum
 
   private String _name;
   private boolean _isPercentage;
+
+  private OldStatEnum()
+  {
+    _name=null;
+    _isPercentage=false;
+  }
 
   private OldStatEnum(String name)
   {
