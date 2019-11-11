@@ -122,13 +122,13 @@ CraftVocation_LearnString:
       ret.setDescription(description);
       //System.out.println("\tDescription: "+description);
       // - tiers
-      CraftingLevel beginner=buildBeginnerLevel();
+      CraftingLevel beginner=buildBeginnerLevel(ret);
       ret.addLevel(beginner);
       Object[] tiersArray=(Object[])professionProps.getProperty("CraftProfession_TierArray");
       for(Object tierObj : tiersArray)
       {
         PropertiesSet tierProps=(PropertiesSet)tierObj;
-        CraftingLevel level=handleProfessionTier(tierProps);
+        CraftingLevel level=handleProfessionTier(ret,tierProps);
         ret.addLevel(level);
       }
       // - key
@@ -204,21 +204,21 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     return false;
   }
 
-  private CraftingLevel buildBeginnerLevel()
+  private CraftingLevel buildBeginnerLevel(Profession profession)
   {
-    CraftingLevel ret=new CraftingLevel(0);
+    CraftingLevel ret=new CraftingLevel(profession,0);
     ret.setName("Beginner");
     return ret;
   }
 
-  private CraftingLevel handleProfessionTier(PropertiesSet tierProps)
+  private CraftingLevel handleProfessionTier(Profession profession, PropertiesSet tierProps)
   {
     //System.out.println(tierProps.dump());
 
     // Tier
     int tier=((Integer)tierProps.getProperty("CraftProfession_Tier")).intValue();
 
-    CraftingLevel ret=new CraftingLevel(tier);
+    CraftingLevel ret=new CraftingLevel(profession,tier);
 
     String tierName=_tier.getString(tier);
     ret.setName(tierName);
