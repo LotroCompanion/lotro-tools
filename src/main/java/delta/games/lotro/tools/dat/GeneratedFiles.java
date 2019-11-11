@@ -175,4 +175,8 @@ public class GeneratedFiles
    * Data for the crafting system.
    */
   public static final File CRAFTING_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.CRAFTING_DATA);
+  /**
+   * Trait points.
+   */
+  public static final File TRAIT_POINTS=LotroCoreConfig.getInstance().getFile(DataFiles.TRAIT_POINTS);
 }

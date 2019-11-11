@@ -13,6 +13,7 @@ import delta.games.lotro.stats.traitPoints.TraitPointCategories;
 import delta.games.lotro.stats.traitPoints.TraitPointsRegistry;
 import delta.games.lotro.stats.traitPoints.comparators.TraitPointLabelComparator;
 import delta.games.lotro.stats.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Builder for the trait points registry.
@@ -46,7 +47,7 @@ public class TraitPointsRegistryBuilder
     buildRegistry();
     checks();
     // Target file
-    File toFile=new File("traitPoints.xml").getAbsoluteFile();
+    File toFile=GeneratedFiles.TRAIT_POINTS;
     TraitPointsRegistryXMLWriter writer=new TraitPointsRegistryXMLWriter();
     boolean ok=writer.write(toFile,_registry,EncodingNames.UTF_8);
     if (ok)
@@ -112,6 +113,8 @@ public class TraitPointsRegistryBuilder
     initPoint("BlackBookMordor5.5", category, "Complete The Black Book of Mordor, Chapter  5.5: The Walls Brought Down", null);
     initPoint("BlackBookMordor8.7", category, "Complete The Black Book of Mordor, Chapter  8.7: The First Promise", null);
     initPoint("BlackBookMordor10.7", category, "Complete The Black Book of Mordor, Chapter 10.7: The Arrival of the Wise", null);
+    initPoint("BlackBookMordor12.5", category, "Complete The Black Book of Mordor, Chapter 12.5: The End of the Tale", null);
+    initPoint("BlackBookMordor14.5", category, "Complete The Black Book of Mordor, Chapter 14.5: A Final Escape", null);
 
     category=TraitPointCategories.DEEDS;
     initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
