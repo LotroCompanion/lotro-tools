@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * NPC loader.
@@ -35,7 +36,7 @@ public class NpcLoader
       {
         // Name
         String npcName=DatUtils.getStringProperty(npcProperties,"Name");
-        npcName=DatUtils.fixName(npcName);
+        npcName=StringUtils.fixName(npcName);
         _names.put(Integer.valueOf(npcId),npcName);
         ret=npcName;
       }

@@ -25,6 +25,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get relic definitions from DAT files.
@@ -67,7 +68,7 @@ public class MainDatRelicsLoader
       }
       // Name
       String name=DatUtils.getStringProperty(properties,"Runic_Name");
-      name=DatUtils.fixName(name);
+      name=StringUtils.fixName(name);
       relic=new Relic(indexDataId,name);
       // Type
       int relicType=((Integer)properties.getProperty("Runic_Type")).intValue();

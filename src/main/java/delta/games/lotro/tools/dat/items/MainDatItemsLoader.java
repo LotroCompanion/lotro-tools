@@ -44,6 +44,7 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.lore.items.ConsistencyChecks;
 import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.tools.lore.items.complements.FactoryCommentsInjector;
+import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -92,7 +93,7 @@ public class MainDatItemsLoader
       }
       Integer itemClassInt=(Integer)properties.getProperty("Item_Class");
       String name=DatUtils.getStringProperty(properties,"Name");
-      name=DatUtils.fixName(name);
+      name=StringUtils.fixName(name);
       if (!useItem(name,itemClassInt)) return null;
       nb++;
       item=buildItem(properties);

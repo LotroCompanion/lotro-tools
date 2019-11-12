@@ -15,6 +15,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Skills loader.
@@ -71,7 +72,7 @@ public class SkillLoader
       ret.setIdentifier(skillId);
       // Name
       String skillName=DatUtils.getStringProperty(skillProperties,"Skill_Name");
-      skillName=DatUtils.fixName(skillName);
+      skillName=StringUtils.fixName(skillName);
       ret.setName(skillName);
       // Description
       String description=DatUtils.getStringProperty(skillProperties,"Skill_Desc");

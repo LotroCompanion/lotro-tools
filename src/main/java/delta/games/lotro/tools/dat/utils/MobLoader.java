@@ -12,6 +12,7 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.utils.Proxy;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Mobs loader.
@@ -57,7 +58,7 @@ public class MobLoader
       if (properties!=null)
       {
         ret=DatUtils.getStringProperty(properties,"Name");
-        ret=DatUtils.fixName(ret);
+        ret=StringUtils.fixName(ret);
       }
     }
     return ret;

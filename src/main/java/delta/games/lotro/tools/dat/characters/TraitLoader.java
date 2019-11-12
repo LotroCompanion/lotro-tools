@@ -17,6 +17,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Traits loader.
@@ -48,7 +49,7 @@ public class TraitLoader
       ret.setIdentifier(traitId);
       // Name
       String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
-      traitName=DatUtils.fixName(traitName);
+      traitName=StringUtils.fixName(traitName);
       ret.setName(traitName);
       // Description
       String description=DatUtils.getStringProperty(traitProperties,"Trait_Description");

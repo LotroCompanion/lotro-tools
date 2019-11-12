@@ -27,6 +27,7 @@ import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get recipe definitions from DAT files.
@@ -309,7 +310,7 @@ public class MainDatRecipesLoader
   {
     PropertiesSet properties=_facade.loadProperties(itemId+0x9000000);
     String name=DatUtils.getStringProperty(properties,"Name");
-    name=DatUtils.fixName(name);
+    name=StringUtils.fixName(name);
     Item item=new Item();
     item.setIdentifier(itemId);
     item.setName(name);
