@@ -1,23 +1,28 @@
 package delta.games.lotro.tools.dat.relics;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -63,23 +68,27 @@ public class MainDatRelicsLoader
       // Name
       String name=DatUtils.getStringProperty(properties,"Runic_Name");
       name=DatUtils.fixName(name);
+      relic=new Relic(indexDataId,name);
       // Type
-      Integer relicType=(Integer)properties.getProperty("Runic_Type");
-      RelicType type=getRelicType(name,relicType.intValue());
-      relic=new Relic(indexDataId,name,type,null);
-      // Bridle
-      int slots=((Integer)properties.getProperty("Relic_ValidContainerSlots")).intValue();
-      boolean isBridleRelic=(slots==2097152);
-      relic.setBridleRelic(isBridleRelic);
-      boolean useRelic=useRelic(type,isBridleRelic);
-      if (!useRelic)
+      int relicType=((Integer)properties.getProperty("Runic_Type")).intValue();
+      List<RelicType> types=getRelicTypes(relicType);
+      for(RelicType type : types)
       {
-        return;
+        relic.addType(type);
+      }
+      // Slots
+      int slotsCode=((Integer)properties.getProperty("Relic_ValidContainerSlots")).intValue();
+      List<EquipmentLocation> slots=getSlots(slotsCode);
+      for(EquipmentLocation slot : slots)
+      {
+        relic.addAllowedSlot(slot);
       }
       // Category
-      Integer categoryEnum=(Integer)properties.getProperty("Runic_Tier");
-      String categoryName=_categories.getString(categoryEnum.intValue());
-      RelicsCategory category=_relicsMgr.getRelicCategory(categoryName,true);
+      int categoryCode=((Integer)properties.getProperty("Runic_Tier")).intValue();
+      RelicsCategory category=_relicsMgr.getRelicCategory(categoryCode,true);
+      String categoryName=_categories.getString(categoryCode);
+      category.setName(categoryName);
+      relic.setCategory(category);
       // Level
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
@@ -96,6 +105,17 @@ public class MainDatRelicsLoader
       // Required level
       Integer requiredLevel=(Integer)properties.getProperty("Runic_RequiredItemLevel");
       relic.setRequiredLevel(requiredLevel);
+      // Required class
+      Object[] classIdObjArray=(Object[])properties.getProperty("Usage_RequiredClassList");
+      if (classIdObjArray!=null)
+      {
+        for(Object classIdObj : classIdObjArray)
+        {
+          int classId=((Integer)classIdObj).intValue();
+          CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+          relic.getUsageRequirement().addAllowedClass(characterClass);
+        }
+      }
       // Icons
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer imageIconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
@@ -123,14 +143,6 @@ public class MainDatRelicsLoader
     }
   }
 
-  private boolean useRelic(RelicType relicType, boolean isBridle)
-  {
-    if (relicType==RelicType.INSIGNIA) return false;
-    if (relicType==RelicType.CLASS_RELIC) return false;
-    if (isBridle) return false;
-    return true;
-  }
-
   private boolean checkRelic(RelicsCategory category, Relic relic)
   {
     String newRelicName=relic.getName();
@@ -146,23 +158,31 @@ public class MainDatRelicsLoader
     return true;
   }
 
-  private RelicType getRelicType(String name, int relicTypeEnum)
+  private List<RelicType> getRelicTypes(int relicTypeEnum)
   {
-    if (relicTypeEnum==1) return RelicType.RUNE;
-    if (relicTypeEnum==2) return RelicType.SETTING;
-    if (relicTypeEnum==4) return RelicType.GEM;
-    if (relicTypeEnum==8) return RelicType.CRAFTED_RELIC;
-    if (relicTypeEnum==7) return RelicType.CLASS_RELIC;
-    if (relicTypeEnum==15) return RelicType.INSIGNIA;
-    LOGGER.warn("Relic type not supported: name="+name+", type="+relicTypeEnum);
-    return null;
+    List<RelicType> types=new ArrayList<RelicType>();
+    if ((relicTypeEnum&1)!=0) types.add(RelicType.RUNE);
+    if ((relicTypeEnum&2)!=0) types.add(RelicType.SETTING);
+    if ((relicTypeEnum&4)!=0) types.add(RelicType.GEM);
+    if ((relicTypeEnum&8)!=0) types.add(RelicType.CRAFTED_RELIC);
+    return types;
+  }
+
+  private List<EquipmentLocation> getSlots(int slotsCode)
+  {
+    List<EquipmentLocation> slots=new ArrayList<EquipmentLocation>();
+    if ((slotsCode&1L<<16)!=0) slots.add(EquipmentLocation.MAIN_HAND);
+    if ((slotsCode&1L<<18)!=0) slots.add(EquipmentLocation.RANGED_ITEM);
+    if ((slotsCode&1L<<20)!=0) slots.add(EquipmentLocation.CLASS_SLOT);
+    if ((slotsCode&1L<<21)!=0) slots.add(EquipmentLocation.BRIDLE);
+    return slots;
   }
 
   private void doIt()
   {
+    DatStatUtils.doFilterStats=false;
     _categories=_facade.getEnumsManager().getEnumMapper(587203232);
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
-    //for(int i=1879114433;i<=1879368329;i++)
     {
       byte[] data=_facade.loadData(id);
       if (data!=null)
