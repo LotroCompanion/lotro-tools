@@ -10,7 +10,9 @@ import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
 import delta.games.lotro.common.VirtueId;
+import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -87,7 +89,10 @@ public class VirtueDataLoader
       // Icon
       int iconId=((Integer)virtueProperties.getProperty("Trait_Icon")).intValue();
       ret.setIconId(iconId);
-
+      // Rank stat key
+      int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
+      StatDescription stat=StatsRegistry.getInstance().getById(rankPropertyId);
+      ret.setRankStatKey(stat.getKey());
       // Stats
       DatStatUtils.doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
