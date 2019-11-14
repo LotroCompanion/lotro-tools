@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
-import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
@@ -146,16 +145,15 @@ public class VirtueDataLoader
       }
 
       // Virtue key
-      VirtueId virtueId=null;
-      if (id==1879072876) virtueId=VirtueId.DETERMINATION; 
-      else if (id==1879072876) virtueId=VirtueId.LOYALTY; 
-      else if (id==1879072876) virtueId=VirtueId.VALOUR;
+      String virtueKey=null;
+      if (id==1879072876) virtueKey="DETERMINATION"; 
+      else if (id==1879072876) virtueKey="LOYALTY"; 
+      else if (id==1879072876) virtueKey="VALOUR";
       else
       {
-        String virtueIdStr=ret.getName().toUpperCase();
-        virtueId=VirtueId.valueOf(virtueIdStr);
+        virtueKey=ret.getName().toUpperCase();
       }
-      ret.setKey(virtueId.name());
+      ret.setKey(virtueKey);
     }
     return ret;
   }

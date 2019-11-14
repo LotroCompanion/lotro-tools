@@ -10,8 +10,9 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.character.virtues.VirtueDescription;
+import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.common.ChallengeLevel;
-import delta.games.lotro.common.VirtueId;
 import delta.games.lotro.common.rewards.CraftingXpReward;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
@@ -23,9 +24,10 @@ import delta.games.lotro.common.rewards.SelectableRewardElement;
 import delta.games.lotro.common.rewards.TitleReward;
 import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
@@ -53,7 +55,6 @@ public class DatRewardsLoader
 
   private static final int DEBUG_ID=1879000000;
 
-  private static final String VIRTUE_SEED="Trait_Virtue_Rank_";
   private static final int TIER_ARTISAN=4;
 
   private DataFacade _facade;
@@ -186,19 +187,14 @@ public class DatRewardsLoader
       for(Object virtueObj : virtueArray)
       {
         PropertiesSet virtueProps=(PropertiesSet)virtueObj;
-        int virtueId=((Integer)virtueProps.getProperty("QuestTreasure_Virtue")).intValue();
+        int virtueStatId=((Integer)virtueProps.getProperty("QuestTreasure_Virtue")).intValue();
         Integer increment=(Integer)virtueProps.getProperty("QuestTreasure_Virtue_Increment");
-        //System.out.println("Virtue: "+virtueId+", quantity: "+increment);
-        String virtueName=getVirtue(virtueId);
+        VirtueDescription virtue=getVirtue(virtueStatId);
         int count=(increment!=null)?increment.intValue():1;
-        try
+        if (virtue!=null)
         {
-          VirtueReward virtue=new VirtueReward(VirtueId.valueOf(virtueName),count);
-          rewards.addRewardElement(virtue);
-        }
-        catch(Exception e)
-        {
-          LOGGER.warn("Unmanaged virtue: "+virtueName);
+          VirtueReward virtueReward=new VirtueReward(virtue,count);
+          rewards.addRewardElement(virtueReward);
         }
       }
     }
@@ -411,21 +407,25 @@ public class DatRewardsLoader
     }
   }
 
-  private String getVirtue(int virtueId)
+  private VirtueDescription getVirtue(int statId)
   {
-    PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(virtueId);
-    String propName=propDef.getName();
-    if (propName.startsWith(VIRTUE_SEED))
+    VirtueDescription ret=null;
+    StatDescription stat=StatsRegistry.getInstance().getById(statId);
+    String statKey=stat.getKey();
+    List<VirtueDescription> virtues=VirtuesManager.getInstance().getAll();
+    for(VirtueDescription virtue : virtues)
     {
-      String virtueName=propName.substring(VIRTUE_SEED.length()).toUpperCase();
-      if ("COMPASSIONATE".equals(virtueName)) virtueName="COMPASSION";
-      if ("TOLERANT".equals(virtueName)) virtueName="TOLERANCE";
-      if ("JUST".equals(virtueName)) virtueName="JUSTICE";
-      if ("VALOR".equals(virtueName)) virtueName="VALOUR";
-      if ("MERCIFUL".equals(virtueName)) virtueName="MERCY";
-      return virtueName;
+      if (virtue.getRankStatKey().equals(statKey))
+      {
+        ret=virtue;
+        break;
+      }
     }
-    return propName;
+    if (ret==null)
+    {
+      LOGGER.warn("Unmanaged virtue: "+statKey);
+    }
+    return ret;
   }
 
   private void getFaction(Rewards rewards, PropertiesSet props, RewardsMap rewardsMap)
