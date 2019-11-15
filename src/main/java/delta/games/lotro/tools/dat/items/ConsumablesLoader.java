@@ -137,6 +137,8 @@ public class ConsumablesLoader
     if (effect==null)
     {
       effect=DatEffectUtils.loadEffect(_facade,effectId);
+      // Remove icon: it is not interesting for consumable effects
+      effect.setIconId(null);
       _parsedEffects.put(key,effect);
     }
     StatsProvider statsProvider=effect.getStatsProvider();

@@ -82,6 +82,8 @@ public class PassivesLoader
           effect=DatEffectUtils.loadEffect(_facade,effectId.intValue());
           // Remove name: it is not interesting for passives
           effect.setName(null);
+          // Remove icon: it is not interesting for passives
+          effect.setIconId(null);
           _parsedEffects.put(effectId,effect);
           //System.out.println("\tLoaded effect: "+effect);
         }

@@ -404,8 +404,10 @@ public class LegaciesLoader
   {
     NonImbuedLegacyTier legacyTier=null;
     Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
-    // Remove name: it is not interesting for non imbued legacies
+    // Remove name: it is not interesting for tiered legacies
     effect.setName(null);
+    // Remove icon: it is not interesting for tiered legacies
+    effect.setIconId(null);
     StatDescription stat=getStat(effect);
     TieredNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
     if (legacy==null)
@@ -638,6 +640,8 @@ public class LegaciesLoader
       {
         // Remove name: it is not interesting for non imbued legacies
         effect.setName(null);
+        // Remove icon: it is not interesting for non imbued legacies
+        effect.setIconId(null);
         legacy=new DefaultNonImbuedLegacy();
         legacy.setEffect(effect);
         legacy.setType(type);
