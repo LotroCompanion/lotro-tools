@@ -9,6 +9,7 @@ import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -64,7 +65,7 @@ public class SkillLoader
   private static SkillDescription loadSkill(DataFacade facade, int skillId)
   {
     SkillDescription ret=null;
-    PropertiesSet skillProperties=facade.loadProperties(0x9000000+skillId);
+    PropertiesSet skillProperties=facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
     if (skillProperties!=null)
     {
       //System.out.println("*********** Skill: "+skillId+" ****************");

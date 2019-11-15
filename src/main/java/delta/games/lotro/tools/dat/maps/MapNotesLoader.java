@@ -43,13 +43,13 @@ public class MapNotesLoader
     int areaWStateID=BufferUtils.readUInt32(bis);
     if (areaWStateID!=0)
     {
-      //PropertiesSet areaProps=_facade.loadProperties(areaWStateID+0x9000000);
+      //PropertiesSet areaProps=_facade.loadProperties(areaWStateID+DATConstants.DBPROPERTIES_OFFSET);
       System.out.println("AreaID="+areaWStateID/*+" => "+areaProps.dump()*/);
     }
     int dungeonWStateID=BufferUtils.readUInt32(bis);
     if (dungeonWStateID!=0)
     {
-      //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+0x9000000);
+      //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+DATConstants.DBPROPERTIES_OFFSET);
       System.out.println("DungeonID="+dungeonWStateID/*+" => "+dungeonProps.dump()*/);
     }
     //System.out.println("dungeonWStateID="+dungeonWStateID);
@@ -58,7 +58,7 @@ public class MapNotesLoader
     int noteWState=BufferUtils.readUInt32(bis);
     if (noteWState!=0)
     {
-      //PropertiesSet noteProps=_facade.loadProperties(noteWState+0x9000000);
+      //PropertiesSet noteProps=_facade.loadProperties(noteWState+DATConstants.DBPROPERTIES_OFFSET);
       System.out.println("NoteId="+noteWState/*+" => "+noteProps.dump()*/); // Found a Door...
     }
 

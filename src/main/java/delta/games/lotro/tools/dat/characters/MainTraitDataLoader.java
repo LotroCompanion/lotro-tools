@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.characters;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -29,7 +30,7 @@ public class MainTraitDataLoader
   private void loadTrait(int indexDataId)
   {
     System.out.println(indexDataId);
-    PropertiesSet properties=_facade.loadProperties(indexDataId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       String name=DatUtils.getStringProperty(properties,"Trait_Name");

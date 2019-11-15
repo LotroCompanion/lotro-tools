@@ -308,7 +308,7 @@ public class MainDatRecipesLoader
 
   private Item resolveItem(int itemId)
   {
-    PropertiesSet properties=_facade.loadProperties(itemId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
     String name=DatUtils.getStringProperty(properties,"Name");
     name=StringUtils.fixName(name);
     Item item=new Item();

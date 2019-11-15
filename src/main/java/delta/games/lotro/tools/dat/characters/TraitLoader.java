@@ -11,6 +11,7 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -41,7 +42,7 @@ public class TraitLoader
   public static TraitDescription loadTrait(DataFacade facade, int traitId)
   {
     TraitDescription ret=null;
-    PropertiesSet traitProperties=facade.loadProperties(0x9000000+traitId);
+    PropertiesSet traitProperties=facade.loadProperties(traitId+DATConstants.DBPROPERTIES_OFFSET);
     if (traitProperties!=null)
     {
       //System.out.println("*********** Trait: "+traitId+" ****************");

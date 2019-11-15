@@ -12,6 +12,7 @@ import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.consumables.Consumable;
@@ -104,7 +105,7 @@ public class ConsumablesLoader
     Integer spellcraftCalculatorId=(Integer)properties.getProperty("SpellcraftCalculator");
     if (spellcraftCalculatorId!=null)
     {
-      PropertiesSet calculatorProps=_facade.loadProperties(spellcraftCalculatorId.intValue()+0x9000000);
+      PropertiesSet calculatorProps=_facade.loadProperties(spellcraftCalculatorId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
       propertyId=(Integer)calculatorProps.getProperty("Spellcraft_Driver_PropertyName");
     }
     return propertyId;
@@ -112,7 +113,7 @@ public class ConsumablesLoader
 
   private void handleOnUseEffects(Item item, int effectGeneratorId, Float spellcraft)
   {
-    PropertiesSet effectProps=_facade.loadProperties(effectGeneratorId+0x9000000);
+    PropertiesSet effectProps=_facade.loadProperties(effectGeneratorId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] effects=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
     if (effects!=null)
     {

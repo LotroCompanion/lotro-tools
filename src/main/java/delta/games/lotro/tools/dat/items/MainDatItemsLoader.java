@@ -349,7 +349,7 @@ public class MainDatItemsLoader
 
   private StatsProvider handleEffect(int effectId)
   {
-    PropertiesSet effectProps=_facade.loadProperties(effectId+0x9000000);
+    PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     Object probability=effectProps.getProperty("Effect_ConstantApplicationProbability");
     if ((probability!=null) && (probability.equals(Float.valueOf(1.0f))))
     {
@@ -474,7 +474,7 @@ public class MainDatItemsLoader
     Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
     if (dpsLut!=null)
     {
-      PropertiesSet dpsLutProperties=_facade.loadProperties(dpsLut.intValue()+0x9000000);
+      PropertiesSet dpsLutProperties=_facade.loadProperties(dpsLut.intValue()+DATConstants.DBPROPERTIES_OFFSET);
       Object[] dpsArray=(Object[])dpsLutProperties.getProperty("Combat_BaseDPSArray");
       float baseDPSFromTable=((Float)(dpsArray[itemLevel-1])).floatValue();
       Object[] qualityFactors=(Object[])dpsLutProperties.getProperty("Combat_QualityModArray");

@@ -911,7 +911,7 @@ QuestEvent_ShowBillboardText: 0
     Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     System.out.println("World event: ID="+id+", operator="+operator+", value="+value+", count="+count+", constraint="+constraint);
-    PropertiesSet worldEventProps=_facade.loadProperties(id+0x9000000);
+    PropertiesSet worldEventProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     int propId=((Integer)worldEventProps.getProperty("WorldEvent_WorldPropertyName")).intValue();
     PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(propId);
     System.out.println(propDef);

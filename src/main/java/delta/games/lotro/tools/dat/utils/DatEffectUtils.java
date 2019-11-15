@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -23,7 +24,7 @@ public class DatEffectUtils
    */
   public static StatsProvider loadEffectStats(DataFacade facade, int effectId)
   {
-    PropertiesSet effectProps=facade.loadProperties(effectId+0x9000000);
+    PropertiesSet effectProps=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,effectProps);
     return statsProvider;
   }
@@ -37,7 +38,7 @@ public class DatEffectUtils
   public static Effect loadEffect(DataFacade facade, int effectId)
   {
     Effect ret=null;
-    PropertiesSet effectProps=facade.loadProperties(effectId+0x9000000);
+    PropertiesSet effectProps=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     if (effectProps!=null)
     {
       ret=new Effect();

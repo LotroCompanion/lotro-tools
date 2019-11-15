@@ -11,6 +11,7 @@ import delta.games.lotro.character.classes.TraitTreeProgression;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -43,7 +44,7 @@ public class TraitTreesDataLoader
 
   private TraitTree handleTraitTree(CharacterClass characterClass, int traitTreeId)
   {
-    PropertiesSet properties=_facade.loadProperties(traitTreeId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
     // Branches
     /*
@@ -76,7 +77,7 @@ public class TraitTreesDataLoader
         tree.addBranch(branch);
         TraitTreeProgression progression=branch.getProgression();
         int progressionId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationProgression")).intValue();
-        PropertiesSet progressionProperties=_facade.loadProperties(progressionId+0x9000000);
+        PropertiesSet progressionProperties=_facade.loadProperties(progressionId+DATConstants.DBPROPERTIES_OFFSET);
         handleSpecializationProgression(progression,progressionProperties);
       }
     }

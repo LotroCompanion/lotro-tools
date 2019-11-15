@@ -18,6 +18,7 @@ import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -51,7 +52,7 @@ public class RaceDataLoader
 
   private void handleRace(int racePropertiesId)
   {
-    PropertiesSet properties=_facade.loadProperties(racePropertiesId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(racePropertiesId+DATConstants.DBPROPERTIES_OFFSET);
     int raceId=((Integer)properties.getProperty("RaceTable_Race")).intValue();
     //System.out.println(raceId);
     Race race=DatEnumsUtils.getRaceFromRaceId(raceId);

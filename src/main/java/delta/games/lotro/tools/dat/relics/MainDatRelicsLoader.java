@@ -11,6 +11,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -57,7 +58,7 @@ public class MainDatRelicsLoader
   {
     //System.out.println(indexDataId);
     Relic relic=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       _currentId=indexDataId;

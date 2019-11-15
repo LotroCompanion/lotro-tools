@@ -5,6 +5,7 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -61,7 +62,7 @@ public class MapsSystemLoader
 
   private void handleArea(int id)
   {
-    PropertiesSet areaProps=_facade.loadProperties(id+0x9000000);
+    PropertiesSet areaProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(areaProps.dump());
     // ID
     System.out.println("\tArea ID: "+id);
@@ -92,7 +93,7 @@ public class MapsSystemLoader
       for(Object sceneIdObj : scenes)
       {
         int sceneId=((Integer)sceneIdObj).intValue();
-        PropertiesSet sceneProps=_facade.loadProperties(sceneId+0x9000000);
+        PropertiesSet sceneProps=_facade.loadProperties(sceneId+DATConstants.DBPROPERTIES_OFFSET);
         System.out.println(sceneProps.dump());
       }
     }
@@ -101,7 +102,7 @@ public class MapsSystemLoader
 
   private void handleTerritory(int territoryId)
   {
-    PropertiesSet territoryProps=_facade.loadProperties(territoryId+0x9000000);
+    PropertiesSet territoryProps=_facade.loadProperties(territoryId+DATConstants.DBPROPERTIES_OFFSET);
     // ID
     System.out.println("\t\tTerritory ID: "+territoryId);
     // Name
@@ -114,7 +115,7 @@ public class MapsSystemLoader
 
   private void handleRegion(int regionId)
   {
-    PropertiesSet regionProps=_facade.loadProperties(regionId+0x9000000);
+    PropertiesSet regionProps=_facade.loadProperties(regionId+DATConstants.DBPROPERTIES_OFFSET);
     // ID
     System.out.println("\t\tRegion ID: "+regionId);
     // Name

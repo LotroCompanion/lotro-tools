@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.quests;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -38,7 +39,7 @@ public class DatQuestDeedsUtils
    */
   public static Boolean isQuestId(DataFacade facade, int id)
   {
-    PropertiesSet properties=facade.loadProperties(id+0x9000000);
+    PropertiesSet properties=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       return Boolean.valueOf(isQuest(properties));

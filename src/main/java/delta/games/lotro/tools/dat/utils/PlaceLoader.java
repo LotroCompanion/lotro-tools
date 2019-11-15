@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -27,7 +28,7 @@ public class PlaceLoader
     String ret=_names.get(Integer.valueOf(placeId));
     if (ret==null)
     {
-      PropertiesSet placeProperties=facade.loadProperties(0x9000000+placeId);
+      PropertiesSet placeProperties=facade.loadProperties(placeId+DATConstants.DBPROPERTIES_OFFSET);
       if (placeProperties!=null)
       {
         //System.out.println("*********** Place: "+placeId+" ****************");
@@ -63,7 +64,7 @@ public class PlaceLoader
     String ret=_names.get(Integer.valueOf(landmarkId));
     if (ret==null)
     {
-      PropertiesSet landmarkProperties=facade.loadProperties(0x9000000+landmarkId);
+      PropertiesSet landmarkProperties=facade.loadProperties(landmarkId+DATConstants.DBPROPERTIES_OFFSET);
       if (landmarkProperties!=null)
       {
         //System.out.println("*********** Place: "+landmarkId+" ****************");

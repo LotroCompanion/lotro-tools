@@ -86,7 +86,7 @@ public class MainDatAchievablesLoader
 
   private void handleArc(int arcId)
   {
-    PropertiesSet arcProps=_facade.loadProperties(arcId+0x9000000);
+    PropertiesSet arcProps=_facade.loadProperties(arcId+DATConstants.DBPROPERTIES_OFFSET);
     String arcName=DatUtils.getStringProperty(arcProps,"QuestArc_Name");
     Object[] list=(Object[])arcProps.getProperty("QuestArc_Quest_Array");
     for(Object obj : list)
@@ -826,11 +826,11 @@ public class MainDatAchievablesLoader
     for(Object raceIdObj : raceIdsArray)
     {
       int raceId=((Integer)raceIdObj).intValue();
-      PropertiesSet raceProps=_facade.loadProperties(raceId+0x9000000);
+      PropertiesSet raceProps=_facade.loadProperties(raceId+DATConstants.DBPROPERTIES_OFFSET);
       int raceCode=((Integer)raceProps.getProperty("RaceTable_Race")).intValue();
       Race race=DatEnumsUtils.getRaceFromRaceId(raceCode);
       int accomplishmentDirectoryId=((Integer)raceProps.getProperty("RaceTable_AccomplishmentDirectory")).intValue();
-      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+0x9000000);
+      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
       if (accomplishmentList!=null)
       {
@@ -857,12 +857,12 @@ public class MainDatAchievablesLoader
     for(Object raceIdObj : raceIdsArray)
     {
       int raceId=((Integer)raceIdObj).intValue();
-      PropertiesSet raceProps=_facade.loadProperties(raceId+0x9000000);
+      PropertiesSet raceProps=_facade.loadProperties(raceId+DATConstants.DBPROPERTIES_OFFSET);
       PropertiesSet classInfo=(PropertiesSet)raceProps.getProperty("AdvTable_ClassInfo");
       String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
       CharacterClass characterClass=CharacterClass.getByName(className);
       int accomplishmentDirectoryId=((Integer)raceProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
-      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+0x9000000);
+      PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
       if (accomplishmentList!=null)
       {

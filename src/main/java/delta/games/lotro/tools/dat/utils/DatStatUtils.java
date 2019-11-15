@@ -229,7 +229,7 @@ public class DatStatUtils
   public static StatProvider buildStatProvider(DataFacade facade, StatDescription stat, int progressId)
   {
     if (progressId==0) return null;
-    PropertiesSet properties=facade.loadProperties(progressId+0x9000000);
+    PropertiesSet properties=facade.loadProperties(progressId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
     if (progressionIds!=null)
     {

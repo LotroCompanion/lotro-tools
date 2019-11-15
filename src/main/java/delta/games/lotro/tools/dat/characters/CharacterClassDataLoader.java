@@ -21,6 +21,7 @@ import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.WellKnownStat;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -58,7 +59,7 @@ public class CharacterClassDataLoader
 
   private void handleClass(int classId)
   {
-    PropertiesSet properties=_facade.loadProperties(classId+0x9000000);
+    PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("AdvTable_ClassInfo");
     // Class name

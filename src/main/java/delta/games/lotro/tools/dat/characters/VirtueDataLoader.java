@@ -12,6 +12,7 @@ import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -74,7 +75,7 @@ public class VirtueDataLoader
   public static VirtueDescription loadVirtue(DataFacade facade, int id)
   {
     VirtueDescription ret=null;
-    PropertiesSet virtueProperties=facade.loadProperties(0x9000000+id);
+    PropertiesSet virtueProperties=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     if (virtueProperties!=null)
     {
       ret=new VirtueDescription();
@@ -160,7 +161,7 @@ public class VirtueDataLoader
 
   private static StatsProvider handleEffect(DataFacade facade, int effectId)
   {
-    PropertiesSet effectProperties=facade.loadProperties(0x9000000+effectId);
+    PropertiesSet effectProperties=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     StatsProvider provider=DatStatUtils.buildStatProviders(facade,effectProperties);
     return provider;
   }

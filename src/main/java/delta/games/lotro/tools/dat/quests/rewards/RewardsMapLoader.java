@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.quests.rewards;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -34,7 +35,7 @@ public class RewardsMapLoader
   {
     _rewardsMapId=rewardsMapId;
     RewardsMap rewardsMap=null;
-    PropertiesSet props=_facade.loadProperties(rewardsMapId+0x9000000);
+    PropertiesSet props=_facade.loadProperties(rewardsMapId+DATConstants.DBPROPERTIES_OFFSET);
     if (props!=null)
     {
       LOGGER.info("Loading map ID: "+rewardsMapId);

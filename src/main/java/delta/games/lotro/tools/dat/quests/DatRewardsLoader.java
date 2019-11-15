@@ -26,6 +26,7 @@ import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.crafting.Profession;
@@ -131,7 +132,7 @@ public class DatRewardsLoader
    */
   public void loadRewards(Rewards rewards, int questTreasureId)
   {
-    PropertiesSet props=_facade.loadProperties(questTreasureId+0x9000000);
+    PropertiesSet props=_facade.loadProperties(questTreasureId+DATConstants.DBPROPERTIES_OFFSET);
 
     if (questTreasureId==DEBUG_ID)
     {
@@ -674,7 +675,7 @@ public class DatRewardsLoader
   private void loadMainMaps()
   {
     // QuestControl
-    PropertiesSet questControlProps=_facade.loadProperties(1879048802+0x9000000);
+    PropertiesSet questControlProps=_facade.loadProperties(1879048802+DATConstants.DBPROPERTIES_OFFSET);
     Object[] rewardMaps=(Object[])questControlProps.getProperty("QuestControl_RewardLevelDIDArray");
     int index=1;
     for(Object rewardMapObj : rewardMaps)

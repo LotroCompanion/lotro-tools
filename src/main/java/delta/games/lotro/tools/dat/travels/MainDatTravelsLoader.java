@@ -173,7 +173,7 @@ Usage_RequiresSubscriberOrUnsub: 1
 
   private void doIt()
   {
-    PropertiesSet indexProperties=_facade.loadProperties(1879048794+0x9000000);
+    PropertiesSet indexProperties=_facade.loadProperties(1879048794+DATConstants.DBPROPERTIES_OFFSET);
     Object[] idsArray=(Object[])indexProperties.getProperty("TravelWebArray");
     for(Object idObj : idsArray)
     {

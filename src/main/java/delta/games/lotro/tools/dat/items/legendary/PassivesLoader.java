@@ -9,6 +9,7 @@ import java.util.Map;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.legendary.passives.PassivesGroup;
@@ -52,7 +53,7 @@ public class PassivesLoader
       _loadedGroups.put(Integer.valueOf(staticEffectGroupId),group);
 
       //System.out.println("Handle table: "+id);
-      PropertiesSet tableProps=_facade.loadProperties(staticEffectGroupId+0x9000000);
+      PropertiesSet tableProps=_facade.loadProperties(staticEffectGroupId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] listsArray=(Object[])tableProps.getProperty("ItemAdvancement_ProgressionListArray");
       for(Object listObj : listsArray)
       {
@@ -67,7 +68,7 @@ public class PassivesLoader
   private void handleList(int staticEffectGroupId, int effectsListId)
   {
     //System.out.println("Handle list: "+effectsListId);
-    PropertiesSet effectsProps=_facade.loadProperties(effectsListId+0x9000000);
+    PropertiesSet effectsProps=_facade.loadProperties(effectsListId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] effectsListArray=(Object[])effectsProps.getProperty("ItemAdvancement_Effect_Array");
     for(Object effectObj : effectsListArray)
     {
