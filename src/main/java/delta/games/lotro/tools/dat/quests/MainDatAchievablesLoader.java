@@ -460,31 +460,6 @@ public class MainDatAchievablesLoader
       {
         type=DeedType.RACE;
       }
-      else if (typeCode==13)
-      {
-        type=DeedType.RACE;
-        deed.setRequiredRace(Race.MAN);
-      }
-      else if (typeCode==21)
-      {
-        type=DeedType.RACE;
-        deed.setRequiredRace(Race.ELF);
-      }
-      else if (typeCode==27)
-      {
-        type=DeedType.RACE;
-        deed.setRequiredRace(Race.DWARF);
-      }
-      else if (typeCode==29)
-      {
-        type=DeedType.RACE;
-        deed.setRequiredRace(Race.HOBBIT);
-      }
-      else if (typeCode==37)
-      {
-        type=DeedType.RACE;
-        deed.setRequiredRace(Race.BEORNING);
-      }
       else if (typeCode==11)
       {
         type=DeedType.REPUTATION;
@@ -495,6 +470,14 @@ public class MainDatAchievablesLoader
       }
       else
       {
+        // 0 => Undef
+        // 13 => Man
+        // 21 => Elf
+        // 25 => Race
+        // 27 => Dwarf
+        // 29 => Hobbit
+        // 37 => Beorning
+        // 39 => Allegiance
         LOGGER.warn("Unmanaged type: "+typeCode);
       }
     }
