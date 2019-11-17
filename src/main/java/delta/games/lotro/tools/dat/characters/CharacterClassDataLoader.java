@@ -69,11 +69,11 @@ public class CharacterClassDataLoader
     LOGGER.info("Handling class: "+characterClass);
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
     LOGGER.info("Class abbreviation: "+classAbbreviation);
-    //classDescription.setAbbreviation(classAbbreviation);
+    classDescription.setAbbreviation(classAbbreviation);
     // Class description
     String description=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
     LOGGER.info("Class description: "+description);
-    //classDescription.setDescription(description);
+    classDescription.setDescription(description);
     // Icons
     // Normal size (48 pixels)
     int classIconId=((Integer)classInfo.getProperty("AdvTable_ClassIcon")).intValue();
@@ -85,6 +85,9 @@ public class CharacterClassDataLoader
     File smallClassIconFile=getIconFile(characterClass,"small");
     DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
     classDescription.setSmallIconId(classIconId);
+    // Tactical DPS name
+    String tacticalDpsName=DatUtils.getStringProperty(properties,"AdvTable_TacticalDPSName");
+    classDescription.setTacticalDpsStatName(tacticalDpsName);
 
     loadInitialStats(characterClass,properties);
     loadStatDerivations(characterClass,properties);
