@@ -299,8 +299,7 @@ public class DatStatUtils
   {
     if (doFilterStats)
     {
-      Integer index=stat.getIndex();
-      return index!=null;
+      return stat.isPremium();
     }
     return true;
   }

@@ -187,8 +187,7 @@ public class MainStatsLoader
     Set<String> names=new HashSet<String>();
     for(StatDescription stat : _stats.getAll())
     {
-      Integer index=stat.getIndex();
-      if (index!=null)
+      if (stat.isPremium())
       {
         String name=stat.getName();
         boolean ok=names.add(name);
