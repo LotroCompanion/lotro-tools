@@ -248,6 +248,7 @@ public class FactionLevelsTemplates
     levels.add(new FactionLevel("MASTER","Master of the Guild",5,0,45000));
     levels.add(new FactionLevel("EASTEMNET MASTER","Eastemnet Master of the Guild",6,0,60000));
     levels.add(new FactionLevel("WESTEMNET MASTER","Westemnet Master of the Guild",7,0,90000));
+    levels.add(new FactionLevel("MINAS ITHIL MASTER","Minas Ithil Master of the Guild",8,0,200000));
     return new FactionLevelsTemplate(GUILD,levels);
   }
 
