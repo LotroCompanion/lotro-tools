@@ -278,6 +278,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     }
     _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
     _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION_PERCENTAGE,WellKnownStat.OCFW_MITIGATION_PERCENTAGE,characterClass,new FixedDecimalsInteger(1));
   }
 
   private float fixStatValue(StatDescription stat, float value)
