@@ -857,7 +857,10 @@ public class MainDatItemsLoader
     return false;
   }
 
-  private void doIt()
+  /**
+   * Load items, legacies, passives, consumables.
+   */
+  public void doIt()
   {
     // Legacies
     _legaciesLoader.loadLegacies();

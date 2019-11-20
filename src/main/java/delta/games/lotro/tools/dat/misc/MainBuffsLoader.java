@@ -42,7 +42,10 @@ public class MainBuffsLoader
     _facade=facade;
   }
 
-  private void doIt()
+  /**
+   * Load specific buffs.
+   */
+  public void doIt()
   {
     List<EffectBuff> buffs=loadBuffs();
     save(buffs);

@@ -73,7 +73,10 @@ public class MainStatsLoader
     addDatStat(propertyId,propertyKey,propertyName,isPercentage);
   }
 
-  private void doIt()
+  /**
+   * Load stats.
+   */
+  public void doIt()
   {
     PropertiesSet indexProperties=_facade.loadProperties(1879048724+DATConstants.DBPROPERTIES_OFFSET);
     Object[] idsArray=(Object[])indexProperties.getProperty("PropertyMetaData_PropertyMetaDataList");

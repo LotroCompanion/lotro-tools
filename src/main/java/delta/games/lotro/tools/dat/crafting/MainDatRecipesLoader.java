@@ -353,7 +353,10 @@ public class MainDatRecipesLoader
     return profession;
   }
 
-  private void doIt()
+  /**
+   * Load recipes.
+   */
+  public void doIt()
   {
     // XP mapping
     _xpMapping=loadXpMapping();

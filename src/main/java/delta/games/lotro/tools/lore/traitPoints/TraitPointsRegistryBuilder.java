@@ -42,7 +42,10 @@ public class TraitPointsRegistryBuilder
     return _registry;
   }
 
-  private void doIt()
+  /**
+   * Build trait points registry.
+   */
+  public void doIt()
   {
     buildRegistry();
     checks();

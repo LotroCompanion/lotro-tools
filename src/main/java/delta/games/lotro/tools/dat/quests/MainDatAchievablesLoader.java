@@ -653,7 +653,10 @@ public class MainDatAchievablesLoader
     return true;
   }
 
-  private void doIt()
+  /**
+   * Load quests and deeds.
+   */
+  public void doIt()
   {
     // Scan quests and deeds
     doScan();

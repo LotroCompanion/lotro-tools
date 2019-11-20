@@ -59,7 +59,7 @@ public class LegaciesLoader
   /**
    * Directory for legacies icons.
    */
-  private static File LEGACIES_ICONS_DIR=new File("data\\legacies\\tmp").getAbsoluteFile();
+  public static File LEGACIES_ICONS_DIR=new File("data\\legacies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;

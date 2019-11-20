@@ -29,7 +29,7 @@ public class MainDatEmotesLoader
   /**
    * Directory for emote icons.
    */
-  private static File EMOTE_ICONS_DIR=new File("data\\emotes\\tmp").getAbsoluteFile();
+  public static File EMOTE_ICONS_DIR=new File("data\\emotes\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
 
@@ -79,8 +79,8 @@ Emote_SourceText:
     {
       emote=new EmoteDescription();
       emote.setIdentifier(indexDataId);
-      System.out.println("************* "+indexDataId+" *****************");
-      System.out.println(properties.dump());
+      //System.out.println("************* "+indexDataId+" *****************");
+      //System.out.println(properties.dump());
       // Command
       String command=DatUtils.getStringProperty(properties,"Emote_CommandString");
       emote.setCommand(command);
@@ -118,7 +118,10 @@ Emote_SourceText:
     return false;
   }
 
-  private void doIt()
+  /**
+   * Load emotes.
+   */
+  public void doIt()
   {
     List<EmoteDescription> emotes=new ArrayList<EmoteDescription>();
 
@@ -130,7 +133,7 @@ Emote_SourceText:
         EmoteDescription emote=load(id);
         if (emote!=null)
         {
-          System.out.println("Emote: "+emote);
+          //System.out.println("Emote: "+emote);
           emotes.add(emote);
         }
       }

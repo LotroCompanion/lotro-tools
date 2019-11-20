@@ -8,7 +8,10 @@ import delta.games.lotro.common.progression.ProgressionsManager;
  */
 public class MainProgressionsMerger
 {
-  private void doIt()
+  /**
+   * Perform merge.
+   */
+  public void doIt()
   {
     mergeProgressions();
   }

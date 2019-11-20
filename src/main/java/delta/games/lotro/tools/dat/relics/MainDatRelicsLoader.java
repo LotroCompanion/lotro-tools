@@ -12,6 +12,7 @@ import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -36,7 +37,10 @@ public class MainDatRelicsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
 
-  private static File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
+  /**
+   * Relic icons directory.
+   */
+  public static File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
   private DataFacade _facade;
   private RelicsManager _relicsMgr;
   private EnumMapper _categories;
@@ -180,7 +184,10 @@ public class MainDatRelicsLoader
     return slots;
   }
 
-  private void doIt()
+  /**
+   * Load relics.
+   */
+  public void doIt()
   {
     DatStatUtils.doFilterStats=false;
     _categories=_facade.getEnumsManager().getEnumMapper(587203232);
@@ -191,7 +198,7 @@ public class MainDatRelicsLoader
       {
         int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        if (classDefIndex==2219)
+        if (classDefIndex==WStateClass.RELIC)
         {
           // Relics
           loadRelic(did);

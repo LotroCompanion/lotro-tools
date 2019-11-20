@@ -166,7 +166,10 @@ Mod_Array:
     return false;
   }
 
-  private void doIt()
+  /**
+   * Load legendary titles.
+   */
+  public void doIt()
   {
     DatStatUtils.doFilterStats=false;
     List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();

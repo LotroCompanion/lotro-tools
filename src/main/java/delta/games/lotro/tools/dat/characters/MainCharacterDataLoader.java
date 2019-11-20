@@ -12,17 +12,30 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
  */
 public class MainCharacterDataLoader
 {
-  private void doIt()
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public MainCharacterDataLoader(DataFacade facade)
   {
-    DataFacade facade=new DataFacade();
+    _facade=facade;
+  }
+
+  /**
+   * Load character data.
+   */
+  public void doIt()
+  {
     TraitsManager traitsManager=new TraitsManager();
 
     // Load race data
-    new RaceDataLoader(facade,traitsManager).doIt();
+    new RaceDataLoader(_facade,traitsManager).doIt();
     // Load character class data
-    new CharacterClassDataLoader(facade,traitsManager).doIt();
+    new CharacterClassDataLoader(_facade,traitsManager).doIt();
     // Load virtues data
-    new VirtueDataLoader(facade).doIt();
+    new VirtueDataLoader(_facade).doIt();
 
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
@@ -33,8 +46,6 @@ public class MainCharacterDataLoader
     // Save skills
     SkillsManager skillsManager=SkillsManager.getInstance();
     SkillLoader.saveSkills(skillsManager);
-
-    facade.dispose();
   }
 
   /**
@@ -43,6 +54,8 @@ public class MainCharacterDataLoader
    */
   public static void main(String[] args)
   {
-    new MainCharacterDataLoader().doIt();
+    DataFacade facade=new DataFacade();
+    new MainCharacterDataLoader(facade).doIt();
+    facade.dispose();
   }
 }

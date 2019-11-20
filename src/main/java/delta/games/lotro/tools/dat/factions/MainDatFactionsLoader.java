@@ -208,7 +208,10 @@ Reputation_LowestTier: 1
     return factionLevels;
   }
 
-  private void doIt()
+  /**
+   * Load factions.
+   */
+  public void doIt()
   {
     List<Faction> factions=buildFactions();
     FactionsRegistry registry=mergeFactionsData(factions);
@@ -329,7 +332,8 @@ Reputation_LowestTier: 1
   private void associateDeeds(FactionsRegistry registry)
   {
     ReputationDeedsFinder finder=new ReputationDeedsFinder();
-    finder.init(DeedsManager.getInstance().getAll());
+    DeedsManager deedsManager=new DeedsManager();
+    finder.init(deedsManager.getAll());
     for(Faction faction : registry.getAll())
     {
       FactionLevel[] levels=faction.getLevels();

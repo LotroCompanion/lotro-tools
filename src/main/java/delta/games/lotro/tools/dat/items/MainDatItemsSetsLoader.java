@@ -78,8 +78,8 @@ Set_Name:
     {
       set=new ItemsSet();
       set.setIdentifier(indexDataId);
-      System.out.println("************* "+indexDataId+" *****************");
-      System.out.println(properties.dump());
+      //System.out.println("************* "+indexDataId+" *****************");
+      //System.out.println(properties.dump());
       // Name
       String name=DatUtils.getStringProperty(properties,"Set_Name");
       set.setName(name);
@@ -166,8 +166,12 @@ Set_Name:
     return false;
   }
 
-  private void doIt()
+  /**
+   * Load item sets.
+   */
+  public void doIt()
   {
+    DatStatUtils.doFilterStats=true;
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 
     for(int id=0x70000000;id<=0x77FFFFFF;id++)

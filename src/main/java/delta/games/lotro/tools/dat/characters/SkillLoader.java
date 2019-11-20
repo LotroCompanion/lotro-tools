@@ -29,7 +29,7 @@ public class SkillLoader
   /**
    * Directory for skill icons.
    */
-  private static File SKILL_ICONS_DIR=new File("data\\skills\\tmp").getAbsoluteFile();
+  public static File SKILL_ICONS_DIR=new File("data\\skills\\tmp").getAbsoluteFile();
 
   /**
    * Get a skill.

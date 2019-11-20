@@ -31,7 +31,7 @@ public class TraitLoader
   /**
    * Directory for trait icons.
    */
-  private static File TRAIT_ICONS_DIR=new File("data\\traits\\tmp").getAbsoluteFile();
+  public static File TRAIT_ICONS_DIR=new File("data\\traits\\tmp").getAbsoluteFile();
 
   /**
    * Load a trait.

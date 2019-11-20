@@ -36,7 +36,10 @@ public class MainDatCombatLoader
     _data=new CombatData();
   }
 
-  private void doIt()
+  /**
+   * Load combat data.
+   */
+  public void doIt()
   {
     // CombatControl
     PropertiesSet props=_facade.loadProperties(1879048757+DATConstants.DBPROPERTIES_OFFSET);

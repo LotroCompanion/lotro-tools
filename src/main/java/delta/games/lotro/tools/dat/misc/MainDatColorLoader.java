@@ -32,7 +32,10 @@ public class MainDatColorLoader
     _facade=facade;
   }
 
-  private void doIt()
+  /**
+   * Load colors.
+   */
+  public void doIt()
   {
     // ItemMungingControl
     int itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;

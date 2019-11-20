@@ -32,7 +32,7 @@ public class VirtueDataLoader
   /**
    * Directory for virtue icons.
    */
-  private static File VIRTUE_ICONS_DIR=new File("data\\virtues\\tmp").getAbsoluteFile();
+  public static File VIRTUE_ICONS_DIR=new File("data\\virtues\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
 

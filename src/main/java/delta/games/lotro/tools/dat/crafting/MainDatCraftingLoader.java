@@ -36,7 +36,10 @@ public class MainDatCraftingLoader
     _data=new CraftingData();
   }
 
-  private void doIt()
+  /**
+   * Load crafting system data.
+   */
+  public void doIt()
   {
     // CraftDirectory
     PropertiesSet props=_facade.loadProperties(1879048722+DATConstants.DBPROPERTIES_OFFSET);
