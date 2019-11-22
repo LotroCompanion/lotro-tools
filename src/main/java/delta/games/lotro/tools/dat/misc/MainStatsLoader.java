@@ -274,6 +274,7 @@ public class MainStatsLoader
     addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR);
     // Add other stats
     addCustomStat(id--,"DPS","DPS",false);
+    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1","Shield Use Rank",false);
   }
 
   /**

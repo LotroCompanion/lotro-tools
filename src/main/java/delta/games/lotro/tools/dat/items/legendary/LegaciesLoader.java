@@ -586,6 +586,8 @@ public class LegaciesLoader
     if (imbuedLegacy==null)
     {
       imbuedLegacy=loadImbuedLegacy(imbuedLegacyId);
+      // Patch stats for specific cases
+      patchStats(imbuedLegacy.getStatsProvider(),characterClass,slot);
       _imbuedLegaciesManager.registerLegacy(imbuedLegacy);
     }
     
@@ -645,6 +647,9 @@ public class LegaciesLoader
         legacy=new DefaultNonImbuedLegacy();
         legacy.setEffect(effect);
         legacy.setType(type);
+        // Patch stats for specific cases
+        patchStats(effect.getStatsProvider(),characterClass,slot);
+        // Register legacy
         _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
       }
     }
@@ -654,6 +659,18 @@ public class LegaciesLoader
       _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
     }
     return legacy;
+  }
+
+  private void patchStats(StatsProvider statsProvider, CharacterClass characterClass, EquipmentLocation slot)
+  {
+    // Guardian belts do have a special stat
+    if ((characterClass==CharacterClass.GUARDIAN) && (slot==EquipmentLocation.CLASS_SLOT))
+    {
+      StatProvider provider=statsProvider.getStatProvider(0);
+      StatsRegistry stats=StatsRegistry.getInstance();
+      StatDescription stat=stats.getByKey("Combat_TacticalDPS_Modifier#1");
+      provider.setStat(stat);
+    }
   }
 
   /**
