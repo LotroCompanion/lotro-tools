@@ -36,6 +36,8 @@ public class MainCharacterDataLoader
     new CharacterClassDataLoader(_facade,traitsManager).doIt();
     // Load virtues data
     new VirtueDataLoader(_facade).doIt();
+    // Load progression of class trait points with character level
+    DatStatUtils.getProgression(_facade,1879271247);
 
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
