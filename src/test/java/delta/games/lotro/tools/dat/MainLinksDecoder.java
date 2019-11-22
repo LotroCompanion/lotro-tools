@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.sax.TransformerHandler;
@@ -18,6 +19,7 @@ import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.plugins.LuaParser;
 import delta.games.lotro.plugins.LuaUtils;
 import delta.games.lotro.plugins.lotrocompanion.links.ChatItemLinksDecoder;
+import delta.games.lotro.plugins.lotrocompanion.links.ItemsFileParser;
 
 /**
  * Parser for the main data as found in LotroCompanion plugin data.
@@ -63,6 +65,44 @@ public class MainLinksDecoder
     }
   }
 
+  /**
+   * Parse/use data from the given file.
+   * @param dataFile Input file.
+   * @throws Exception If an error occurs.
+   */
+  public void doIt2(File dataFile) throws Exception
+  {
+    ItemsFileParser parser=new ItemsFileParser();
+    List<ItemInstance<? extends Item>> items=parser.doIt(dataFile);
+    for(ItemInstance<? extends Item> item : items)
+    {
+      System.out.println(item.dump());
+    }
+    File to=new File(dataFile.getParentFile(),dataFile.getName()+".xml");
+    writeItemInstances(to,items);
+  }
+
+  private void writeItemInstances(File to, final List<ItemInstance<? extends Item>> instances)
+  {
+    XmlFileWriterHelper helper=new XmlFileWriterHelper();
+    XmlWriter writer=new XmlWriter()
+    {
+      public void writeXml(TransformerHandler hd) throws Exception
+      {
+        ItemXMLWriter itemWriter=new ItemXMLWriter();
+        for(ItemInstance<? extends Item> instance : instances)
+        {
+          Item item=instance.getReference();
+          if (item!=null)
+          {
+            itemWriter.writeItemInstance(hd,instance);
+          }
+        }
+      }
+    };
+    helper.write(to,EncodingNames.UTF_8,writer);
+  }
+
   private void writeItemInstance(File to, final ItemInstance<? extends Item> instance)
   {
     XmlFileWriterHelper helper=new XmlFileWriterHelper();
@@ -95,18 +135,38 @@ public class MainLinksDecoder
     }
   }
 
+  private static void doFile2(File dataFile)
+  {
+    if (!dataFile.exists())
+    {
+      return;
+    }
+    try
+    {
+      System.out.println("File: "+dataFile);
+      MainLinksDecoder parser=new MainLinksDecoder();
+      parser.doIt2(dataFile);
+    }
+    catch(Exception e)
+    {
+      LOGGER.error("Error when loading link from file "+dataFile, e);
+    }
+  }
+
   /**
    * Main method for this test.
    * @param args Not used.
    */
   public static void main(String[] args)
   {
-    File linksDir=new File("D:\\shared\\damien\\dev\\lotrocompanion\\lua\\links");
+    File linksDir=new File("D:\\shared\\damien\\dev\\lotrocompanion\\dev\\chat links\\samples");
     // Ethell
     File ethell=new File(linksDir,"ethell");
     doFile(new File(ethell,"weapon.txt")); // Imbued
     doFile(new File(ethell,"emblem.txt")); // Non imbued
     doFile(new File(ethell,"supdoomfoldtstandardofwar.txt"));
+    doFile2(new File(ethell,"emblemReforge.txt"));
+
     // Lorewyne
     File lorewyne=new File(linksDir,"lorewyne");
     doFile(new File(lorewyne,"legendary book.plugindata")); // Imbued
@@ -119,6 +179,12 @@ public class MainLinksDecoder
     doFile(new File(glumlug,"axe.txt")); // Non imbued
     doFile(new File(glumlug,"oldbow.txt")); // Non imbued
     doFile(new File(glumlug,"3rdage axe.txt")); // Non imbued
+    doFile(new File(glumlug,"bridle100.txt"));
+    doFile(new File(glumlug,"xavier.txt"));
+    doFile2(new File(glumlug,"legacies.txt"));
+    doFile2(new File(glumlug,"dpsLegacies.txt"));
+    doFile2(new File(glumlug,"AoeMaxTargets.txt"));
+
     // Kargarth
     File kargarth=new File(linksDir,"kargarth");
     doFile(new File(kargarth,"belt.txt")); // Non imbued
