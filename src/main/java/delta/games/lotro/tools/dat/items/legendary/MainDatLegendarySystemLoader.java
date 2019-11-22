@@ -68,6 +68,12 @@ public class MainDatLegendarySystemLoader
     _data.setMaxUiRank(9);
     // Load properties for ItemAdvancementControl (0x7900EAA6)
     PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
+
+    // Max rank for main legacy
+    int maxMainLegacyRank=((Integer)itemAdvancementControlProps.getProperty("ItemAdvancement_CombatDPS_MaxRank")).intValue();
+    _data.setMaxMainLegacyRank(maxMainLegacyRank); // 7
+
+    // ItemInfoTable
     Object[] itemInfoTable=(Object[])itemAdvancementControlProps.getProperty("ItemAdvancement_ItemInfoTable_Array");
     for(Object itemInfoObj : itemInfoTable)
     {
