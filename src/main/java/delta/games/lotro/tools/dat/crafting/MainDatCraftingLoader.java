@@ -225,7 +225,6 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
 
     String tierName=_tier.getString(tier);
     ret.setName(tierName);
-    //System.out.println("Tier "+tier+": "+tierName);
 
     // Level cap gate (no more used?)
     //int levelCapGate=((Integer)tierProps.getProperty("CraftProfession_TierLevelCapGate")).intValue();
@@ -240,8 +239,6 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
       TitleDescription proficiencyTitle=new TitleDescription();
       proficiencyTitle.setIdentifier(proficiencyTitleId);
       proficiency.setTitle(proficiencyTitle);
-      //String proficiencyTitle=loadTitleLabel(proficiencyTitleId);
-      //System.out.println("Proficiency: XP="+proficiencyXp+", title="+proficiencyTitle);
     }
     // Mastery
     {
@@ -252,18 +249,18 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
       TitleDescription masteryTitle=new TitleDescription();
       masteryTitle.setIdentifier(masteryTitleId);
       mastery.setTitle(masteryTitle);
-      //String masteryTitle=loadTitleLabel(masteryTitleId);
-      //System.out.println("Mastery: XP="+masteryXp+", title="+masteryTitle);
     }
 
-    /*
+    // Recipes
     Object[] recipesArray=(Object[])tierProps.getProperty("CraftProfession_RecipeArray");
-    for(Object recipeObj : recipesArray)
+    if (recipesArray!=null)
     {
-      int recipeId=((Integer)recipeObj).intValue();
-      System.out.println("\t"+recipeId);
+      for(Object recipeObj : recipesArray)
+      {
+        int recipeId=((Integer)recipeObj).intValue();
+        ret.addRecipe(recipeId);
+      }
     }
-    */
 
     /*
     CraftProfession_AutoCompleteMastery: 1
