@@ -145,7 +145,7 @@ public class MountsLoader
 
   /**
    * Save the loaded mounts to a file.
-   * @param mounts Mount to save.
+   * @param mounts Mounts to save.
    */
   public void saveMounts(List<MountDescription> mounts)
   {
