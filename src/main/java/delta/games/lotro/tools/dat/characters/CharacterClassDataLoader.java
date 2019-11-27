@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassTrait;
+import delta.games.lotro.character.classes.InitialGearDefinition;
+import delta.games.lotro.character.classes.InitialGearElement;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.stats.BasicStatsSet;
@@ -19,6 +21,7 @@ import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.DATConstants;
@@ -26,6 +29,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 
@@ -93,8 +97,29 @@ public class CharacterClassDataLoader
     loadStatDerivations(characterClass,properties);
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
-    // TODO Initial gear:
-    // AdvTable_StartingInventory_List: initial gear at level 1, ...
+    // Initial gear:
+    InitialGearDefinition initialGear=classDescription.getInitialGear();
+    // AdvTable_StartingInventory_List: initial gear at level 1
+    Object[] inventory=(Object[])properties.getProperty("AdvTable_StartingInventory_List");
+    for(Object inventoryElement : inventory)
+    {
+      PropertiesSet inventoryElementProps=(PropertiesSet)inventoryElement;
+      int startsEquipped=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_StartsEquipped")).intValue();
+      int quantity=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_Quantity")).intValue();
+      if ((startsEquipped>0) && (quantity==1))
+      {
+        int itemId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_Item")).intValue();
+        InitialGearElement element=new InitialGearElement();
+        element.setItemId(itemId);
+        int raceId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_RequiredRace")).intValue();
+        if (raceId!=0)
+        {
+          Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
+          element.setRequiredRace(race);
+        }
+        initialGear.addGearElement(element);
+      }
+    }
     /*
 AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List: 
   #1: 

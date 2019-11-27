@@ -34,7 +34,6 @@ public class CosmeticPetLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
-  private EnumMapper _subCategory;
   //private EnumMapper _alignment;
   //private EnumMapper _class;
   private EnumMapper _genus;
@@ -49,7 +48,6 @@ public class CosmeticPetLoader
   {
     _facade=facade;
     _category=facade.getEnumsManager().getEnumMapper(587202586);
-    _subCategory=facade.getEnumsManager().getEnumMapper(587203478);
     //_alignment=facade.getEnumsManager().getEnumMapper(587202573);
     //_class=facade.getEnumsManager().getEnumMapper(587202574);
     _genus=facade.getEnumsManager().getEnumMapper(587202570);
