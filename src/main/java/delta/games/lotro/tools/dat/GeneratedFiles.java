@@ -191,4 +191,12 @@ public class GeneratedFiles
    * Effect icons.
    */
   public static final File EFFECT_ICONS=new File("../lotro-data/effects/effectIcons.zip").getAbsoluteFile();
+  /**
+   * Mounts.
+   */
+  public static final File MOUNTS=LotroCoreConfig.getInstance().getFile(DataFiles.MOUNTS);
+  /**
+   * Mount icons.
+   */
+  public static final File MOUNT_ICONS=new File("../lotro-data/mounts/mountIcons.zip").getAbsoluteFile();
 }
