@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -16,6 +17,8 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
+import delta.games.lotro.lore.collections.pets.io.xml.CosmeticPetXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
@@ -96,7 +99,7 @@ public class CosmeticPetLoader
       if (categoryCode!=145) // Cosmetic Pets
       {
         String category=_category.getString(categoryCode);
-        LOGGER.warn("Unexpected mount category: code="+categoryCode+", name="+category);
+        LOGGER.warn("Unexpected category: code="+categoryCode+", name="+category);
       }
       Object[] effectsList=(Object[])properties.getProperty("Skill_Toggle_Effect_List");
       if (effectsList!=null)
@@ -195,8 +198,7 @@ public class CosmeticPetLoader
   {
     // Data
     Collections.sort(pets,new IdentifiableComparator<CosmeticPetDescription>());
-    /*
-    MountXMLWriter.write(GeneratedFiles.PETS,pets);
+    CosmeticPetXMLWriter.write(GeneratedFiles.PETS,pets);
     // Icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     boolean ok=archiver.go(GeneratedFiles.PET_ICONS,PET_ICONS_DIR);
@@ -204,7 +206,6 @@ public class CosmeticPetLoader
     {
       System.out.println("Wrote pet icons archive: "+GeneratedFiles.PET_ICONS);
     }
-    */
   }
 
   private void doIt()

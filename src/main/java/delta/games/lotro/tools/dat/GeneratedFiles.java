@@ -199,4 +199,12 @@ public class GeneratedFiles
    * Mount icons.
    */
   public static final File MOUNT_ICONS=new File("../lotro-data/mounts/mountIcons.zip").getAbsoluteFile();
+  /**
+   * Cosmetic pets.
+   */
+  public static final File PETS=LotroCoreConfig.getInstance().getFile(DataFiles.PETS);
+  /**
+   * Pet icons.
+   */
+  public static final File PET_ICONS=new File("../lotro-data/pets/petIcons.zip").getAbsoluteFile();
 }
