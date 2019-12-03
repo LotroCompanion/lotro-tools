@@ -19,7 +19,18 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.comparators.ItemNameComparator;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.lore.trade.barter.BarterEntry;
+import delta.games.lotro.lore.trade.barter.BarterEntryElement;
+import delta.games.lotro.lore.trade.barter.BarterNpc;
+import delta.games.lotro.lore.trade.barter.BarterProfile;
+import delta.games.lotro.lore.trade.barter.ItemBarterEntryElement;
+import delta.games.lotro.lore.trade.barter.ReputationBarterEntryElement;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.Proxy;
+import delta.games.lotro.utils.maths.Progression;
 
 /**
  * Get NPC definitions from DAT files.
@@ -29,10 +40,11 @@ public class MainDatNpcLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatNpcLoader.class);
 
+  private static final int DEBUG_ID=0;
   private DataFacade _facade;
   private ItemsManager _itemsManager;
   private EnumMapper _characterClass;
-  private Set<Integer> _profileIds=new HashSet<Integer>();
+  private Map<Integer,BarterProfile> _profiles=new HashMap<Integer,BarterProfile>();
   private Map<Integer,Set<Integer>> _sellsListIds=new HashMap<Integer,Set<Integer>>();
 
   /**
@@ -57,15 +69,32 @@ public class MainDatNpcLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
+      if (indexDataId==DEBUG_ID)
+      {
+        System.out.println(properties.dump());
+      }
+      Object minUsageLevelForCost=properties.getProperty("Barter_ItemUsesMinUsageLevelForCost");
+      if (minUsageLevelForCost!=null)
+      {
+        System.out.println("Min usage level for cost: "+minUsageLevelForCost);
+      }
+      // Barter_Profile_UseTabs
+      Integer useTabs=(Integer)properties.getProperty("Barter_Profile_UseTabs");
+      if ((useTabs!=null) && (useTabs.intValue()!=0) && (useTabs.intValue()!=1))
+      {
+        System.out.println("Use tab: "+useTabs);
+      }
       // Profiles
       Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
       if (barterProfiles!=null)
       {
-        // Name / title
+        BarterNpc npc=new BarterNpc(indexDataId);
+        // Name
         String npcName=DatUtils.getStringProperty(properties,"Name");
+        npc.setNpcName(npcName);
+        // Title
         String title=DatUtils.getStringProperty(properties,"OccupationTitle");
-        title=((title!=null)?title:"no title/occupation");
-        System.out.println("NPC #"+indexDataId+": "+npcName+" ("+title+")");
+        npc.setNpcTitle(title);
         // Requirements
         loadClassRequirement(properties);
         loadReputationRequirement(properties);
@@ -74,17 +103,14 @@ public class MainDatNpcLoader
         for(Object barterProfileObj : barterProfiles)
         {
           int profileId=((Integer)barterProfileObj).intValue();
-          loadBarterProfile(indexDataId,profileId);
+          BarterProfile profile=loadBarterProfile(profileId);
+          npc.addBarterProfile(profile);
         }
-        // Vendor
-        loadVendorData(properties);
-        // TODO:
-        /*
-        Barter_ItemUsesMinUsageLevelForCost
-        WorldEvent_WorldEvent: 1879286443
-        */
-        //System.out.println(properties.dump());
+        // TODO: WorldEvent_WorldEvent: 1879286443
+        System.out.println(npc.dump());
       }
+      // Vendor
+      loadVendorData(properties);
     }
     else
     {
@@ -136,24 +162,21 @@ public class MainDatNpcLoader
     }
   }
 
-  private void loadBarterProfile(int npcId,int profileId)
+  private BarterProfile loadBarterProfile(int profileId)
   {
-    if (_profileIds.contains(Integer.valueOf(profileId)))
+    BarterProfile profile=_profiles.get(Integer.valueOf(profileId));
+    if (profile!=null)
     {
-      return;
-    }
-    _profileIds.add(Integer.valueOf(profileId));
-    int dbPropertiesId=profileId+DATConstants.DBPROPERTIES_OFFSET;
-    PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    if (npcId==0)
-    {
-      System.out.println(properties.dump());
+      return profile;
     }
 
+    int dbPropertiesId=profileId+DATConstants.DBPROPERTIES_OFFSET;
+    PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
+
+    profile=new BarterProfile(profileId);
     // Profile name
     String profileName=DatUtils.getStringProperty(properties,"Barter_Profile_Name");
-    profileName=((profileName!=null)?profileName:"none");
-    System.out.println("\tProfile: "+profileName);
+    profile.setName(profileName);
 
     PropertiesSet permissionsProps=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissionsProps!=null)
@@ -169,69 +192,115 @@ public class MainDatNpcLoader
     {
       for(Object barterEntryObj : barterList)
       {
-        Object[] barterEntry=(Object[])barterEntryObj;
-        int nbItems=barterEntry.length;
+        BarterEntry barterEntry=new BarterEntry();
+        Object[] barterEntryArray=(Object[])barterEntryObj;
+        int nbItems=barterEntryArray.length;
         int nbItemsToGive=nbItems-1;
+        Integer level=null;
+        // What to receive?
+        PropertiesSet toReceiveProps=(PropertiesSet)(barterEntryArray[nbItems-1]);
+        Integer useMinLevelInteger=(Integer)toReceiveProps.getProperty("Barter_ItemUsesMinUsageLevelForCost");
+        boolean useMinLevel=((useMinLevelInteger!=null)&&(useMinLevelInteger.intValue()!=0));
+        BarterEntryElement itemToReceive=handleItemToGiveOrReceive(toReceiveProps,level);
+        barterEntry.setElementToReceive(itemToReceive);
+        if (itemToReceive instanceof ItemBarterEntryElement)
+        {
+          ItemBarterEntryElement itemReward=(ItemBarterEntryElement)itemToReceive;
+          Item item=itemReward.getItemProxy().getObject();
+          Integer itemLevel=item.getItemLevel();
+          Integer minLevel=item.getMinLevel();
+          level=useMinLevel?minLevel:itemLevel;
+        }
         // What to give?
-        String itemsToGive="";
         for(int i=0;i<nbItemsToGive;i++)
         {
-          PropertiesSet toGiveProps=(PropertiesSet)(barterEntry[i]);
-          String toGive=handleItemToGiveOrReceive(toGiveProps);
-          if (toGive.length()>0)
+          PropertiesSet toGiveProps=(PropertiesSet)(barterEntryArray[i]);
+          BarterEntryElement toGive=handleItemToGiveOrReceive(toGiveProps,level);
+          if (toGive!=null)
           {
-            if (itemsToGive.length()>0) itemsToGive+=" / ";
-            itemsToGive+=toGive;
+            barterEntry.addElementToGive((ItemBarterEntryElement)toGive);
           }
         }
-        // What to receive?
-        PropertiesSet toReceiveProps=(PropertiesSet)(barterEntry[nbItems-1]);
-        String itemToReceive=handleItemToGiveOrReceive(toReceiveProps);
-        String label=itemsToGive+" => "+itemToReceive;
+        // Result
+        String label=barterEntry.getLabel();
         System.out.println("\t\t"+label);
+        profile.addEntry(barterEntry);
       }
     }
+    _profiles.put(Integer.valueOf(profileId),profile);
+    return profile;
   }
 
-  private String handleItemToGiveOrReceive(PropertiesSet itemProps)
+  private BarterEntryElement handleItemToGiveOrReceive(PropertiesSet itemProps, Integer level)
   {
+    BarterEntryElement ret=null;
     Integer itemId=(Integer)itemProps.getProperty("Barter_Item");
     Integer quantity=(Integer)itemProps.getProperty("Barter_ItemQuantity");
-    if ((itemId==null) && (quantity!=null))
-    {
-      return "";
-    }
-    Integer faction=(Integer)itemProps.getProperty("Barter_ReputationFaction");
+    Integer factionId=(Integer)itemProps.getProperty("Barter_ReputationFaction");
     Integer rewardTier=(Integer)itemProps.getProperty("Barter_ReputationRewardTier");
 
-    String label="";
+    if ((itemId==null) && (quantity!=null))
+    {
+      LOGGER.warn("No item, but found quantity: "+quantity);
+      return null;
+    }
+
     if (itemId!=null)
     {
+      // Item
       Item item=_itemsManager.getItem(itemId.intValue());
-      String itemName=(item!=null)?item.getName():"?";
-      if (quantity!=null)
-      {
-        label=quantity+" "+itemName;
-      }
-      else
-      {
-        int lookupTable=((Integer)itemProps.getProperty("Barter_ItemQuantity_LookupTable")).intValue();
-        label="(table:"+lookupTable+") "+itemName;
-      }
       if (item==null)
       {
-        System.out.println(itemProps.dump());
+        LOGGER.warn("Item not found: ID="+itemId);
+        return null;
+      }
+      if (quantity==null)
+      {
+        Integer lookupTableId=(Integer)itemProps.getProperty("Barter_ItemQuantity_LookupTable");
+        if (lookupTableId!=null)
+        {
+          Progression progression=DatStatUtils.getProgression(_facade,lookupTableId.intValue());
+          if (level!=null)
+          {
+            Float yValue=progression.getValue(level.intValue());
+            quantity=Integer.valueOf(yValue.intValue());
+          }
+        }
+      }
+      if (quantity!=null)
+      {
+        Proxy<Item> itemProxy=new Proxy<Item>();
+        itemProxy.setId(item.getIdentifier());
+        itemProxy.setName(item.getName());
+        itemProxy.setObject(item);
+        ret=new ItemBarterEntryElement(itemProxy,quantity.intValue());
+      }
+      {
+        LOGGER.warn("Quantity not found!");
       }
     }
-    else if ((faction!=null) && (rewardTier!=null))
+    else if ((factionId!=null) && (rewardTier!=null))
     {
-      label="NN (tier"+rewardTier+") reputation with faction "+faction;
+      // Reputation
+      Faction faction=FactionsRegistry.getInstance().getById(factionId.intValue());
+      // Amount
+      int amount=getAmountForTier(rewardTier.intValue());
+      // Result
+      ReputationBarterEntryElement repElement=new ReputationBarterEntryElement(faction);
+      repElement.setAmount(amount);
+      ret=repElement;
     }
     else
     {
-      System.out.println(itemProps.dump());
+      LOGGER.warn("Unmanaged barter entry element!");
     }
-    return label;
+    return ret;
+  }
+
+  private int getAmountForTier(int tier)
+  {
+    if (tier==5) return 1200;
+    return 0;
   }
 
   private void loadVendorData(PropertiesSet properties)
