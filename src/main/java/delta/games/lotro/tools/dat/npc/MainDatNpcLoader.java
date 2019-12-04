@@ -27,9 +27,12 @@ import delta.games.lotro.lore.trade.barter.BarterNpc;
 import delta.games.lotro.lore.trade.barter.BarterProfile;
 import delta.games.lotro.lore.trade.barter.ItemBarterEntryElement;
 import delta.games.lotro.lore.trade.barter.ReputationBarterEntryElement;
+import delta.games.lotro.lore.trade.barter.io.xml.BarterXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
+import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -58,13 +61,14 @@ public class MainDatNpcLoader
     _characterClass=facade.getEnumsManager().getEnumMapper(587202574);
   }
 
-  private void load(int indexDataId)
+  private BarterNpc load(int indexDataId)
   {
     // Ignore test NPC
     if (indexDataId==1879074078)
     {
-      return;
+      return null;
     }
+    BarterNpc npc=null;
     int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
@@ -73,24 +77,22 @@ public class MainDatNpcLoader
       {
         System.out.println(properties.dump());
       }
-      Object minUsageLevelForCost=properties.getProperty("Barter_ItemUsesMinUsageLevelForCost");
-      if (minUsageLevelForCost!=null)
-      {
-        System.out.println("Min usage level for cost: "+minUsageLevelForCost);
-      }
       // Barter_Profile_UseTabs
+      /*
       Integer useTabs=(Integer)properties.getProperty("Barter_Profile_UseTabs");
       if ((useTabs!=null) && (useTabs.intValue()!=0) && (useTabs.intValue()!=1))
       {
         System.out.println("Use tab: "+useTabs);
       }
+      */
       // Profiles
       Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
       if (barterProfiles!=null)
       {
-        BarterNpc npc=new BarterNpc(indexDataId);
+        npc=new BarterNpc(indexDataId);
         // Name
         String npcName=DatUtils.getStringProperty(properties,"Name");
+        npcName=StringUtils.fixName(npcName);
         npc.setNpcName(npcName);
         // Title
         String title=DatUtils.getStringProperty(properties,"OccupationTitle");
@@ -107,7 +109,6 @@ public class MainDatNpcLoader
           npc.addBarterProfile(profile);
         }
         // TODO: WorldEvent_WorldEvent: 1879286443
-        System.out.println(npc.dump());
       }
       // Vendor
       loadVendorData(properties);
@@ -116,6 +117,7 @@ public class MainDatNpcLoader
     {
       LOGGER.warn("Could not handle NPC ID="+indexDataId);
     }
+    return npc;
   }
 
   private void loadClassRequirement(PropertiesSet properties)
@@ -221,9 +223,7 @@ public class MainDatNpcLoader
             barterEntry.addElementToGive((ItemBarterEntryElement)toGive);
           }
         }
-        // Result
-        String label=barterEntry.getLabel();
-        System.out.println("\t\t"+label);
+        // Register entry
         profile.addEntry(barterEntry);
       }
     }
@@ -433,6 +433,7 @@ public class MainDatNpcLoader
 
   private void doIt()
   {
+    List<BarterNpc> barterers=new ArrayList<BarterNpc>();
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
@@ -443,10 +444,20 @@ public class MainDatNpcLoader
         //System.out.println(classDefIndex);
         if (classDefIndex==WStateClass.NPC)
         {
-          load(i);
+          BarterNpc barterer=load(i);
+          if (barterer!=null)
+          {
+            barterers.add(barterer);
+          }
         }
       }
     }
+    save(barterers);
+  }
+
+  private void save(List<BarterNpc> barterers)
+  {
+    BarterXMLWriter.writeBarterTablesFile(GeneratedFiles.BARTERS,barterers);
   }
 
   /**
