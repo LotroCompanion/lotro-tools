@@ -10,11 +10,14 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.requirements.ClassRequirement;
+import delta.games.lotro.common.requirements.FactionRequirement;
+import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -29,6 +32,7 @@ import delta.games.lotro.lore.trade.barter.ItemBarterEntryElement;
 import delta.games.lotro.lore.trade.barter.ReputationBarterEntryElement;
 import delta.games.lotro.lore.trade.barter.io.xml.BarterXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
@@ -46,7 +50,6 @@ public class MainDatNpcLoader
   private static final int DEBUG_ID=0;
   private DataFacade _facade;
   private ItemsManager _itemsManager;
-  private EnumMapper _characterClass;
   private Map<Integer,BarterProfile> _profiles=new HashMap<Integer,BarterProfile>();
   private Map<Integer,Set<Integer>> _sellsListIds=new HashMap<Integer,Set<Integer>>();
 
@@ -58,7 +61,6 @@ public class MainDatNpcLoader
   {
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
-    _characterClass=facade.getEnumsManager().getEnumMapper(587202574);
   }
 
   private BarterNpc load(int indexDataId)
@@ -98,9 +100,7 @@ public class MainDatNpcLoader
         String title=DatUtils.getStringProperty(properties,"OccupationTitle");
         npc.setNpcTitle(title);
         // Requirements
-        loadClassRequirement(properties);
-        loadReputationRequirement(properties);
-        loadQuestRequirements(properties);
+        loadRequirements(properties,npc.getRequirements());
         // Barter profiles
         for(Object barterProfileObj : barterProfiles)
         {
@@ -120,18 +120,41 @@ public class MainDatNpcLoader
     return npc;
   }
 
-  private void loadClassRequirement(PropertiesSet properties)
+  private void loadRequirements(PropertiesSet properties, UsageRequirement requirements)
   {
+    ClassRequirement classRequirement=loadClassRequirement(properties);
+    requirements.setClassRequirement(classRequirement);
+    FactionRequirement factionRequirement=loadReputationRequirement(properties);
+    requirements.setFactionRequirement(factionRequirement);
+    // TODO Quest requirements
+    loadQuestRequirements(properties);
+  }
+
+  private ClassRequirement loadClassRequirement(PropertiesSet properties)
+  {
+    ClassRequirement ret=null;
     Object[] requiredClassArray=(Object[])properties.getProperty("Usage_RequiredClassList");
     if (requiredClassArray!=null)
     {
       for(Object requiredClassObj : requiredClassArray)
       {
         Integer requiredClass=(Integer)requiredClassObj;
-        String className=_characterClass.getString(requiredClass.intValue());
-        System.out.println("\tRequired class:"+className);
+        CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(requiredClass.intValue());
+        if (characterClass!=null)
+        {
+          if (ret==null)
+          {
+            ret=new ClassRequirement();
+          }
+          ret.addAllowedClass(characterClass);
+        }
+        else
+        {
+          LOGGER.warn("Unsupported class: "+requiredClass);
+        }
       }
     }
+    return ret;
   }
 
   private void loadQuestRequirements(PropertiesSet properties)
@@ -147,21 +170,31 @@ public class MainDatNpcLoader
         int questStatus=((Integer)questReqProps.getProperty("Usage_QuestStatus")).intValue();
         Integer operator=(Integer)questReqProps.getProperty("Usage_Operator");
         System.out.println("\tQuest requirement: ID="+questId+", status="+questStatus+", operator="+operator);
+        if (questStatus!=805306368)
+        {
+          LOGGER.warn("Unmanaged quest status: "+questStatus+" for quest ID: "+questId);
+        }
       }
     }
   }
 
-  private void loadReputationRequirement(PropertiesSet properties)
+  private FactionRequirement loadReputationRequirement(PropertiesSet properties)
   {
+    FactionRequirement ret=null;
     Object requiredFactionObj=properties.getProperty("Usage_RequiredFaction");
     if (requiredFactionObj!=null)
     {
       //{Usage_RequiredFaction_Tier=4, Usage_RequiredFaction_DataID=1879097420}
       PropertiesSet factionReqProps=(PropertiesSet)requiredFactionObj;
       int factionId=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_DataID")).intValue();
-      int factionTier=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_Tier")).intValue();
-      System.out.println("\tFaction requirement: ID="+factionId+", tier="+factionTier);
+      Faction faction=FactionsRegistry.getInstance().getById(factionId);
+      if (faction!=null)
+      {
+        int factionTier=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_Tier")).intValue();
+        ret=new FactionRequirement(faction,factionTier);
+      }
     }
+    return ret;
   }
 
   private BarterProfile loadBarterProfile(int profileId)
@@ -179,15 +212,13 @@ public class MainDatNpcLoader
     // Profile name
     String profileName=DatUtils.getStringProperty(properties,"Barter_Profile_Name");
     profile.setName(profileName);
-
+    // Requirements
     PropertiesSet permissionsProps=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissionsProps!=null)
     {
-      loadClassRequirement(permissionsProps);
-      loadReputationRequirement(permissionsProps);
-      loadQuestRequirements(permissionsProps);
+      UsageRequirement requirements=profile.getRequirements();
+      loadRequirements(permissionsProps,requirements);
     }
-
     // Barter list
     Object[] barterList=(Object[])properties.getProperty("Barter_ItemListArray");
     if (barterList!=null)
@@ -275,6 +306,7 @@ public class MainDatNpcLoader
         itemProxy.setObject(item);
         ret=new ItemBarterEntryElement(itemProxy,quantity.intValue());
       }
+      else
       {
         LOGGER.warn("Quantity not found!");
       }
