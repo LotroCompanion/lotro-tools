@@ -11,6 +11,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
@@ -37,6 +38,8 @@ import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
@@ -225,6 +228,8 @@ public class MainDatItemsLoader
       getRequiredClasses(properties,item.getUsageRequirements());
       // - race
       getRequiredRaces(properties,item.getUsageRequirements());
+      // - faction
+      getRequiredFaction(properties,item.getUsageRequirements());
       // Stats providers
       DatStatUtils.doFilterStats=true;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
@@ -759,6 +764,26 @@ public class MainDatItemsLoader
         {
           requirements.addAllowedRace(race);
         }
+      }
+    }
+  }
+
+  private void getRequiredFaction(PropertiesSet properties, UsageRequirement requirements)
+  {
+    PropertiesSet factionReqProps=(PropertiesSet)properties.getProperty("Usage_RequiredFaction");
+    if (factionReqProps!=null)
+    {
+      int factionId=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_DataID")).intValue();
+      int tier=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_Tier")).intValue();
+      Faction faction=FactionsRegistry.getInstance().getById(factionId);
+      if (faction!=null)
+      {
+        FactionRequirement factionRequirement=new FactionRequirement(faction,tier);
+        requirements.setFactionRequirement(factionRequirement);
+      }
+      else
+      {
+        LOGGER.warn("Faction not found: "+factionId);
       }
     }
   }
