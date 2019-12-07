@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.Race;
+import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -218,8 +220,11 @@ public class MainDatItemsLoader
       {
         item.setDescription(description.trim());
       }
-      // Class requirements
-      item.setRequiredClass(getRequiredClass(properties));
+      // Requirements
+      // - class
+      getRequiredClasses(properties,item.getUsageRequirements());
+      // - race
+      getRequiredRaces(properties,item.getUsageRequirements());
       // Stats providers
       DatStatUtils.doFilterStats=true;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
@@ -724,16 +729,38 @@ public class MainDatItemsLoader
     return slot;
   }
 
-  private CharacterClass getRequiredClass(PropertiesSet properties)
+  private void getRequiredClasses(PropertiesSet properties, UsageRequirement requirements)
   {
     Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
     if (classReqs!=null)
     {
-      int characterClassId=((Integer)classReqs[0]).intValue();
-      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(characterClassId);
-      return characterClass;
+      for(Object classReq : classReqs)
+      {
+        int characterClassId=((Integer)classReq).intValue();
+        CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(characterClassId);
+        if (characterClass!=null)
+        {
+          requirements.addAllowedClass(characterClass);
+        }
+      }
     }
-    return null;
+  }
+
+  private void getRequiredRaces(PropertiesSet properties, UsageRequirement requirements)
+  {
+    Object[] raceReqs=(Object[])properties.getProperty("Usage_RequiredRaces");
+    if (raceReqs!=null)
+    {
+      for(Object raceReq : raceReqs)
+      {
+        int raceId=((Integer)raceReq).intValue();
+        Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
+        if (race!=null)
+        {
+          requirements.addAllowedRace(race);
+        }
+      }
+    }
   }
 
   private void handleMunging(PropertiesSet properties)
