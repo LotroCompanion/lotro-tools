@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
+import delta.games.lotro.common.requirements.QuestRequirement;
+import delta.games.lotro.common.requirements.QuestStatus;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -126,8 +128,8 @@ public class MainDatNpcLoader
     requirements.setClassRequirement(classRequirement);
     FactionRequirement factionRequirement=loadReputationRequirement(properties);
     requirements.setFactionRequirement(factionRequirement);
-    // TODO Quest requirements
-    loadQuestRequirements(properties);
+    QuestRequirement questRequirement=loadQuestRequirements(properties);
+    requirements.setQuestRequirement(questRequirement);
   }
 
   private ClassRequirement loadClassRequirement(PropertiesSet properties)
@@ -157,11 +159,16 @@ public class MainDatNpcLoader
     return ret;
   }
 
-  private void loadQuestRequirements(PropertiesSet properties)
+  private QuestRequirement loadQuestRequirements(PropertiesSet properties)
   {
+    QuestRequirement ret=null;
     Object[] questRequirements=(Object[])properties.getProperty("Usage_QuestRequirements");
     if (questRequirements!=null)
     {
+      if (questRequirements.length>1)
+      {
+        LOGGER.warn("Multiple quest requirements!");
+      }
       for(Object questRequirementObj : questRequirements)
       {
         // {Usage_QuestStatus=805306368, Usage_Operator=3, Usage_QuestID=1879093911}
@@ -169,13 +176,17 @@ public class MainDatNpcLoader
         int questId=((Integer)questReqProps.getProperty("Usage_QuestID")).intValue();
         int questStatus=((Integer)questReqProps.getProperty("Usage_QuestStatus")).intValue();
         Integer operator=(Integer)questReqProps.getProperty("Usage_Operator");
-        System.out.println("\tQuest requirement: ID="+questId+", status="+questStatus+", operator="+operator);
-        if (questStatus!=805306368)
+        if ((questStatus==805306368) && ((operator==null) || (operator.intValue()==3)))
         {
-          LOGGER.warn("Unmanaged quest status: "+questStatus+" for quest ID: "+questId);
+          ret=new QuestRequirement(questId,QuestStatus.COMPLETED);
+        }
+        else
+        {
+          LOGGER.warn("Unmanaged quest status:"+questStatus+/*"/operator:"+operator+*/" for quest ID: "+questId);
         }
       }
     }
+    return ret;
   }
 
   private FactionRequirement loadReputationRequirement(PropertiesSet properties)
