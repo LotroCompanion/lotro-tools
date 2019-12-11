@@ -211,4 +211,8 @@ public class GeneratedFiles
    * Barterers.
    */
   public static final File BARTERS=LotroCoreConfig.getInstance().getFile(DataFiles.BARTERS);
+  /**
+   * Vendors.
+   */
+  public static final File VENDORS=LotroCoreConfig.getInstance().getFile(DataFiles.VENDORS);
 }

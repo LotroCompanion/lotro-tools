@@ -1,7 +1,6 @@
 package delta.games.lotro.tools.dat.npc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +22,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.comparators.ItemNameComparator;
+import delta.games.lotro.lore.npc.NpcDescription;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.trade.barter.BarterEntry;
@@ -33,6 +32,9 @@ import delta.games.lotro.lore.trade.barter.BarterProfile;
 import delta.games.lotro.lore.trade.barter.ItemBarterEntryElement;
 import delta.games.lotro.lore.trade.barter.ReputationBarterEntryElement;
 import delta.games.lotro.lore.trade.barter.io.xml.BarterXMLWriter;
+import delta.games.lotro.lore.trade.vendor.SellList;
+import delta.games.lotro.lore.trade.vendor.VendorNpc;
+import delta.games.lotro.lore.trade.vendor.io.xml.VendorXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -52,8 +54,12 @@ public class MainDatNpcLoader
   private static final int DEBUG_ID=0;
   private DataFacade _facade;
   private ItemsManager _itemsManager;
-  private Map<Integer,BarterProfile> _profiles=new HashMap<Integer,BarterProfile>();
-  private Map<Integer,Set<Integer>> _sellsListIds=new HashMap<Integer,Set<Integer>>();
+  // Barterers
+  private List<BarterNpc> _barterers;
+  private Map<Integer,BarterProfile> _profiles;
+  // Vendors
+  private List<VendorNpc> _vendors;
+  private Map<Integer,SellList> _sells;
 
   /**
    * Constructor.
@@ -63,63 +69,74 @@ public class MainDatNpcLoader
   {
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
+    _barterers=new ArrayList<BarterNpc>();
+    _profiles=new HashMap<Integer,BarterProfile>();
+    _vendors=new ArrayList<VendorNpc>();
+    _sells=new HashMap<Integer,SellList>();
   }
 
-  private BarterNpc load(int indexDataId)
+  private void handleNpc(int npcId)
   {
     // Ignore test NPC
-    if (indexDataId==1879074078)
+    if (npcId==1879074078)
     {
-      return null;
+      return;
     }
-    BarterNpc npc=null;
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
-    PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
+    PropertiesSet properties=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      if (indexDataId==DEBUG_ID)
+      if (npcId==DEBUG_ID)
       {
         System.out.println(properties.dump());
       }
-      // Barter_Profile_UseTabs
-      /*
-      Integer useTabs=(Integer)properties.getProperty("Barter_Profile_UseTabs");
-      if ((useTabs!=null) && (useTabs.intValue()!=0) && (useTabs.intValue()!=1))
+      // Barter
+      BarterNpc barterer=loadBarterData(npcId,properties);
+      if (barterer!=null)
       {
-        System.out.println("Use tab: "+useTabs);
-      }
-      */
-      // Profiles
-      Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
-      if (barterProfiles!=null)
-      {
-        npc=new BarterNpc(indexDataId);
-        // Name
-        String npcName=DatUtils.getStringProperty(properties,"Name");
-        npcName=StringUtils.fixName(npcName);
-        npc.setNpcName(npcName);
-        // Title
-        String title=DatUtils.getStringProperty(properties,"OccupationTitle");
-        npc.setNpcTitle(title);
-        // Requirements
-        loadRequirements(properties,npc.getRequirements());
-        // Barter profiles
-        for(Object barterProfileObj : barterProfiles)
-        {
-          int profileId=((Integer)barterProfileObj).intValue();
-          BarterProfile profile=loadBarterProfile(profileId);
-          npc.addBarterProfile(profile);
-        }
-        // TODO: WorldEvent_WorldEvent: 1879286443
+        _barterers.add(barterer);
       }
       // Vendor
-      loadVendorData(properties);
+      VendorNpc vendor=loadVendorData(npcId,properties);
+      if (vendor!=null)
+      {
+        _vendors.add(vendor);
+      }
     }
     else
     {
-      LOGGER.warn("Could not handle NPC ID="+indexDataId);
+      LOGGER.warn("Could not handle NPC ID="+npcId);
     }
-    return npc;
+  }
+
+  private BarterNpc loadBarterData(int npcId, PropertiesSet properties)
+  {
+    BarterNpc barterer=null;
+    // Barter_Profile_UseTabs
+    /*
+    Integer useTabs=(Integer)properties.getProperty("Barter_Profile_UseTabs");
+    if ((useTabs!=null) && (useTabs.intValue()!=0) && (useTabs.intValue()!=1))
+    {
+      System.out.println("Use tab: "+useTabs);
+    }
+    */
+    // Profiles
+    Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
+    if (barterProfiles!=null)
+    {
+      NpcDescription npc=buildNpc(npcId,properties);
+      barterer=new BarterNpc(npc);
+      // Requirements
+      loadRequirements(properties,barterer.getRequirements());
+      // Barter profiles
+      for(Object barterProfileObj : barterProfiles)
+      {
+        int profileId=((Integer)barterProfileObj).intValue();
+        BarterProfile profile=loadBarterProfile(profileId);
+        barterer.addBarterProfile(profile);
+      }
+      // TODO: WorldEvent_WorldEvent: 1879286443
+    }
+    return barterer;
   }
 
   private void loadRequirements(PropertiesSet properties, UsageRequirement requirements)
@@ -346,8 +363,15 @@ public class MainDatNpcLoader
     return 0;
   }
 
-  private void loadVendorData(PropertiesSet properties)
+  private VendorNpc loadVendorData(int npcId, PropertiesSet properties)
   {
+    boolean hasVendorData=(properties.getProperty("Vendor_InventoryList")!=null);
+    if (!hasVendorData)
+    {
+      return null;
+    }
+    NpcDescription npc=buildNpc(npcId,properties);
+    VendorNpc ret=new VendorNpc(npc);
     // Sells lists
     Set<Integer> allSells=new HashSet<Integer>();
     Object[] inventoryArray=(Object[])properties.getProperty("Vendor_InventoryList");
@@ -355,40 +379,35 @@ public class MainDatNpcLoader
     {
       for(Object inventoryObj : inventoryArray)
       {
-        int itemId=((Integer)inventoryObj).intValue();
-        Set<Integer> itemsInSellsList=loadSellsList(itemId);
-        allSells.addAll(itemsInSellsList);
+        int sellListId=((Integer)inventoryObj).intValue();
+        SellList sellList=getSellsList(sellListId);
+        for(Proxy<Item> entry : sellList.getItems())
+        {
+          allSells.add(Integer.valueOf(entry.getId()));
+        }
+        ret.addSellList(sellList);
       }
     }
-    // Item sells
+    // Item sells (for check only)
     Set<Integer> itemSells=loadItemSells(properties);
-    Set<Integer> newItemSells=new HashSet<Integer>();
-    for(Integer itemSell : itemSells)
+    for(Integer itemId : itemSells)
     {
-      if (!allSells.contains(itemSell))
+      boolean alreadyKnown=ret.sells(itemId.intValue());
+      if (!alreadyKnown)
       {
-        System.out.println("Found new item in item sells: "+itemSell);
-        newItemSells.add(itemSell);
+        LOGGER.warn("Found new item in item sells: "+itemId);
       }
     }
     int nbItemSells=itemSells.size();
     int nbAllSells=allSells.size();
     if ((nbItemSells!=0) && (nbItemSells!=nbAllSells))
     {
-      System.out.println("Mismatch sells="+nbItemSells+" all sells="+nbAllSells);
-    }
-    if (newItemSells.size()>0)
-    {
-      System.out.println("Additional sells:");
-      displayItems(newItemSells);
+      LOGGER.warn("Mismatch sells="+nbItemSells+" all sells="+nbAllSells);
     }
     // Buys items?
     Integer buysItemsInt=(Integer)properties.getProperty("Vendor_BuysItems");
     boolean buysItems=(buysItemsInt!=null)?(buysItemsInt.intValue()==1):false;
-    if (buysItems)
-    {
-      System.out.println("\tBuys items");
-    }
+    ret.setBuys(buysItems);
     // Discount list
     Object[] discountArray=(Object[])properties.getProperty("Vendor_DiscountList");
     if (discountArray!=null)
@@ -396,22 +415,18 @@ public class MainDatNpcLoader
       for(Object discountIdObj : discountArray)
       {
         int discountId=((Integer)discountIdObj).intValue();
-        System.out.println("\tDiscount ID: "+discountId);
+        ret.addDiscount(discountId);
       }
     }
     // Sells wearable items?
     Integer sellsWearableItemsInt=(Integer)properties.getProperty("Vendor_SellsWearableItems");
     boolean sellsWearableItems=(sellsWearableItemsInt!=null)?(sellsWearableItemsInt.intValue()==1):false;
-    if (sellsWearableItems)
-    {
-      System.out.println("\tSells wearable items");
-    }
+    ret.setSellsWearableItems(sellsWearableItems);
     // Sell modifier
     Float sellFactor=(Float)properties.getProperty("Vendor_SellModifier");
-    if (sellFactor!=null)
-    {
-      System.out.println("\tSells factor: "+sellFactor);
-    }
+    float sellFactorValue=(sellFactor!=null)?sellFactor.floatValue():1;
+    ret.setSellFactor(sellFactorValue);
+    return ret;
   }
 
   private Set<Integer> loadItemSells(PropertiesSet properties)
@@ -429,78 +444,77 @@ public class MainDatNpcLoader
     return set;
   }
 
-  private Set<Integer> loadSellsList(int listId)
+  private SellList getSellsList(int listId)
   {
-    Set<Integer> set=_sellsListIds.get(Integer.valueOf(listId));
-    if (set!=null)
+    SellList ret=_sells.get(Integer.valueOf(listId));
+    if (ret!=null)
     {
-      return set;
+      return ret;
     }
-    set=new HashSet<Integer>();
-    _sellsListIds.put(Integer.valueOf(listId),set);
+    ret=new SellList(listId);
+    _sells.put(Integer.valueOf(listId),ret);
     PropertiesSet properties=_facade.loadProperties(listId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] inventoryArray=(Object[])properties.getProperty("VendorInventory_Items");
     if (inventoryArray!=null)
     {
-      System.out.println("Sells list ID="+listId);
       for(Object inventoryObj : inventoryArray)
       {
         Integer itemId=(Integer)inventoryObj;
-        set.add(itemId);
+        Item item=_itemsManager.getItem(itemId.intValue());
+        if (item!=null)
+        {
+          Proxy<Item> itemProxy=new Proxy<Item>();
+          itemProxy.setId(item.getIdentifier());
+          itemProxy.setName(item.getName());
+          itemProxy.setObject(item);
+          ret.addItem(itemProxy);
+        }
+        else
+        {
+          LOGGER.warn("Unknown item: "+itemId);
+        }
       }
-      displayItems(set);
     }
-    return set;
+    return ret;
   }
 
-  private void displayItems(Set<Integer> ids)
+  private NpcDescription buildNpc(int npcId, PropertiesSet properties)
   {
-    List<Item> items=new ArrayList<Item>();
-    for(Integer id : ids)
-    {
-      Item item=_itemsManager.getItem(id.intValue());
-      if (item!=null)
-      {
-        items.add(item);
-      }
-    }
-    Collections.sort(items,new ItemNameComparator());
-    int index=1;
-    for(Item item : items)
-    {
-      String itemName=item.getName();
-      System.out.println("\t#"+index+": "+itemName);
-      index++;
-    }
+    // Name
+    String npcName=DatUtils.getStringProperty(properties,"Name");
+    npcName=StringUtils.fixName(npcName);
+    NpcDescription npc=new NpcDescription(npcId,npcName);
+    // Title
+    String title=DatUtils.getStringProperty(properties,"OccupationTitle");
+    npc.setTitle(title);
+    return npc;
   }
 
   private void doIt()
   {
-    List<BarterNpc> barterers=new ArrayList<BarterNpc>();
+    // Scan for NPCs
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
       if (data!=null)
       {
-        //int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        //System.out.println(classDefIndex);
         if (classDefIndex==WStateClass.NPC)
         {
-          BarterNpc barterer=load(i);
-          if (barterer!=null)
-          {
-            barterers.add(barterer);
-          }
+          handleNpc(i);
         }
       }
     }
-    save(barterers);
+    // Save data
+    save();
   }
 
-  private void save(List<BarterNpc> barterers)
+  private void save()
   {
-    BarterXMLWriter.writeBarterTablesFile(GeneratedFiles.BARTERS,barterers);
+    // Barter tables
+    BarterXMLWriter.writeBarterTablesFile(GeneratedFiles.BARTERS,_barterers);
+    // Vendors
+    VendorXMLWriter.writeVendorsFile(GeneratedFiles.VENDORS,_vendors);
   }
 
   /**
