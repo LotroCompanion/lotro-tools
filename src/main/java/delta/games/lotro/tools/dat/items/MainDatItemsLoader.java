@@ -280,8 +280,8 @@ public class MainDatItemsLoader
     if (name.contains("Tester")) return false;
     if (name.contains("Barter Test")) return false;
     if (name.startsWith("Test ")) return false;
-    int itemClass=itemClassInt.intValue();
-    if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
+    //int itemClass=itemClassInt.intValue();
+    //if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
     return true;
   }
 
