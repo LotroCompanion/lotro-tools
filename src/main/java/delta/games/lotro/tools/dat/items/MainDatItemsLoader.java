@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +12,7 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.money.QualityBasedValueLookupTable;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.stats.ConstantStatProvider;
@@ -67,6 +69,7 @@ public class MainDatItemsLoader
   private PassivesLoader _passivesLoader;
   private ConsumablesLoader _consumablesLoader;
   private LegaciesLoader _legaciesLoader;
+  private ItemValueLoader _valueLoader;
 
   /**
    * Constructor.
@@ -78,6 +81,7 @@ public class MainDatItemsLoader
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
+    _valueLoader=new ItemValueLoader(_facade);
   }
 
   private boolean _debug=false;
@@ -262,12 +266,51 @@ public class MainDatItemsLoader
       // Handle legendaries
       DatStatUtils.doFilterStats=false;
       handleLegendaries(item, properties);
+      // Value
+      handleItemValue(item,properties);
     }
     else
     {
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
+  }
+
+  private void handleItemValue(Item item, PropertiesSet properties)
+  {
+    Integer itemValue=(Integer)properties.getProperty("Item_Value");
+    Integer itemValueFromTable=null;
+    Integer itemValueTableId=(Integer)properties.getProperty("Item_ValueLookupTable");
+    if (itemValueTableId!=null)
+    {
+      QualityBasedValueLookupTable table=_valueLoader.getTable(itemValueTableId.intValue());
+      if (table!=null)
+      {
+        ItemQuality quality=item.getQuality();
+        Integer itemLevel=item.getItemLevel();
+        if (itemLevel!=null)
+        {
+          Integer valueFromTable=table.getValue(quality,itemLevel.intValue());
+          if (valueFromTable!=null)
+          {
+            itemValueFromTable=Integer.valueOf(valueFromTable.intValue());
+          }
+          else
+          {
+            LOGGER.warn("Could not build item value from table!");
+          }
+        }
+        else
+        {
+          LOGGER.warn("Item level not found!");
+        }
+      }
+    }
+    if (!Objects.equals(itemValueFromTable,itemValueFromTable))
+    {
+      LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
+      LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
+    }
   }
 
   private boolean useItem(String name, Integer itemClassInt)

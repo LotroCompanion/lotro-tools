@@ -220,7 +220,6 @@ public class CosmeticPetLoader
       if (pet!=null)
       {
         pets.add(pet);
-        System.out.println(pet);
       }
     }
     System.out.println("Loaded "+pets.size()+" pets.");
