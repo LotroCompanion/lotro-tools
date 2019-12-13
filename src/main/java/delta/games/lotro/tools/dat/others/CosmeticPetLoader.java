@@ -208,7 +208,10 @@ public class CosmeticPetLoader
     }
   }
 
-  private void doIt()
+  /**
+   * Load cosmetic pets.
+   */
+  public void doIt()
   {
     List<CosmeticPetDescription> pets=new ArrayList<CosmeticPetDescription>();
     PropertiesSet cosmeticEntitiesDirectoryProps=_facade.loadProperties(0x7004832E+DATConstants.DBPROPERTIES_OFFSET);

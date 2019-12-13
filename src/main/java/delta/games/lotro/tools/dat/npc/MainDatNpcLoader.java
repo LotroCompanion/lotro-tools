@@ -490,7 +490,10 @@ public class MainDatNpcLoader
     return npc;
   }
 
-  private void doIt()
+  /**
+   * Load barter and vendor data.
+   */
+  public void doIt()
   {
     // Scan for NPCs
     for(int i=0x70000000;i<=0x77FFFFFF;i++)

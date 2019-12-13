@@ -22,6 +22,9 @@ import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
+import delta.games.lotro.tools.dat.npc.MainDatNpcLoader;
+import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
+import delta.games.lotro.tools.dat.others.MountsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
@@ -66,6 +69,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Titles
     new MainDatTitlesLoader(_facade).doIt();
+    // Factions
+    new MainDatFactionsLoader(_facade).doIt();
     // Items
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -81,8 +86,6 @@ public class MainDatLoader
     new MainDatRecipesLoader(_facade).doIt();
     // Emotes
     new MainDatEmotesLoader(_facade).doIt();
-    // Factions
-    new MainDatFactionsLoader(_facade).doIt();
     // Quests and deeds
     new MainDatAchievablesLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -92,6 +95,12 @@ public class MainDatLoader
     new MainBuffsLoader(_facade).doIt();
     // Trait points
     new TraitPointsRegistryBuilder().doIt();
+    // Mounts
+    new MountsLoader(_facade).doIt();
+    // Cosmetic pets
+    new CosmeticPetLoader(_facade).doIt();
+    // Vendors & barterers
+    new MainDatNpcLoader(_facade).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
   }
@@ -159,6 +168,18 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.BUFFS);
     // Trait points
     deleteFile(GeneratedFiles.TRAIT_POINTS);
+    // Mounts
+    deleteFile(GeneratedFiles.MOUNTS);
+    deleteFile(GeneratedFiles.MOUNT_ICONS);
+    deleteDirectory(MountsLoader.MOUNT_ICONS_DIR);
+    // Cosmetic pets
+    deleteFile(GeneratedFiles.PETS);
+    deleteFile(GeneratedFiles.PET_ICONS);
+    deleteDirectory(CosmeticPetLoader.PET_ICONS_DIR);
+    // Vendors
+    deleteFile(GeneratedFiles.VENDORS);
+    // Barterers
+    deleteFile(GeneratedFiles.BARTERS);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);

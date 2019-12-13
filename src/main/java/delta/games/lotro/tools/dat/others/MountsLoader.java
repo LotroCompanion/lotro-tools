@@ -161,7 +161,10 @@ public class MountsLoader
     }
   }
 
-  private void doIt()
+  /**
+   * Load mounts.
+   */
+  public void doIt()
   {
     List<MountDescription> mounts=new ArrayList<MountDescription>();
     PropertiesSet mountsDirectoryProps=_facade.loadProperties(0x70048B29+DATConstants.DBPROPERTIES_OFFSET);
