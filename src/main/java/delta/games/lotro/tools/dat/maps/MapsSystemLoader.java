@@ -1,18 +1,16 @@
 package delta.games.lotro.tools.dat.maps;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-
-import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.PositionDecoder;
-import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.tools.dat.misc.ui.UIElement;
+import delta.games.lotro.tools.dat.misc.ui.UILayout;
+import delta.games.lotro.tools.dat.misc.ui.UILayoutLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -21,8 +19,6 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class MapsSystemLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
-
   private DataFacade _facade;
   private EnumMapper _uiElementId;
 
@@ -43,19 +39,13 @@ public class MapsSystemLoader
   public PropertiesSet loadMapsSystemProperties()
   {
     PropertiesSet ret=null;
-    try
+    UILayout layout=new UILayoutLoader(_facade).loadUiLayout(0x22000041);
+    for(UIElement uiElement : layout.getUIElements())
     {
-      byte[] data=_facade.loadData(0x22000041);
-      ByteArrayInputStream bis=new ByteArrayInputStream(data);
-      BufferUtils.skip(bis,27499);
-      PropertiesSet properties=new PropertiesSet();
-      new DBPropertiesLoader(_facade).decodeProperties(bis,properties);
-      ret=properties;
-    }
-    catch(Exception e)
-    {
-      LOGGER.error("Could not load maps system properties!", e);
-      ret=null;
+      if (uiElement.getIdentifier()==268437543) // MapBackground
+      {
+        ret=uiElement.getProperties();
+      }
     }
     return ret;
   }

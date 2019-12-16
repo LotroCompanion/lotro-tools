@@ -45,8 +45,9 @@ public class UILayoutLoader
   /**
    * Load a UI layout.
    * @param layoutId Layout ID.
+   * @return the loaded UI layout.
    */
-  private void loadUiLayout(int layoutId)
+  public UILayout loadUiLayout(int layoutId)
   {
     byte[] data=_facade.loadData(layoutId);
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
@@ -55,25 +56,35 @@ public class UILayoutLoader
     {
       throw new IllegalArgumentException("Expected DID for UI layout: "+layoutId+". Found: "+did);
     }
+    UILayout ret=new UILayout(layoutId);
     int baseWidth=BufferUtils.readUInt32(bis);
     int baseHeight=BufferUtils.readUInt32(bis);
     int count=BufferUtils.readTSize(bis);
     for(int i=0;i<count;i++)
     {
-      loadUiElement(bis);
+      UIElement uiElement=loadUiElement(bis);
+      ret.addUIElement(uiElement);
     }
+    return ret;
   }
 
-  private void loadUiElement(ByteArrayInputStream bis)
+  /**
+   * Load a UI element from the given stream.
+   * @param bis Input stream.
+   * @return the loaded UI element.
+   */
+  public UIElement loadUiElement(ByteArrayInputStream bis)
   {
     int id=BufferUtils.readUInt32(bis); // From EnumMapper: UIElementID
     String elementId=_uiElementIdMapper.getString(id);
-    System.out.println(elementId);
+    System.out.println("**** UI element ID: "+elementId);
     int zero=BufferUtils.readUInt32(bis);
     if (zero!=0)
     {
       throw new IllegalArgumentException("Expected 0 here. Found: "+zero);
     }
+
+    UIElement ret=new UIElement(id);
     int unknown0=BufferUtils.readUInt8(bis); // 0, 1, 2, 3
 
     int x=BufferUtils.readUInt32(bis); // Relative to parent
@@ -85,12 +96,7 @@ public class UILayoutLoader
     boolean unknown1=BufferUtils.readBoolean(bis);
 
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
-    PropertiesSet properties=new PropertiesSet();
-    propsLoader.decodeProperties(bis,properties);
-    if (id==268437543) // MapBackground
-    {
-      System.out.println(properties.dump());
-    }
+    propsLoader.decodeProperties(bis,ret.getProperties());
 
     int count=BufferUtils.readUInt8(bis);
     for(int i=0;i<count;i++)
@@ -125,6 +131,7 @@ public class UILayoutLoader
     {
       loadUiElement(bis);
     }
+    return ret;
   }
 
   private void loadUiState(ByteArrayInputStream bis)
