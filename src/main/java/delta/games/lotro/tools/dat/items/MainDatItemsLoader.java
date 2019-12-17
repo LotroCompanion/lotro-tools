@@ -740,9 +740,13 @@ public class MainDatItemsLoader
       // War-steed Item
       //slot=EquipmentLocation.BRIDLE;
     }
+    else if (equipmentCategory==1L<<46)
+    {
+      // Weapon Aura
+    }
     else
     {
-      System.out.println("Unmanaged equipment category " + equipmentCategory+" for: "+_currentId);
+      LOGGER.warn("Unmanaged equipment category " + equipmentCategory+" for: "+_currentId);
     }
     // Legendary stuff?
     Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
