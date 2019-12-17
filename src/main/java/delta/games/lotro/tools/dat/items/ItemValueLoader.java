@@ -1,7 +1,11 @@
 package delta.games.lotro.tools.dat.items;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.money.QualityBasedValueLookupTable;
 import delta.games.lotro.dat.DATConstants;
@@ -16,6 +20,8 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
  */
 public class ItemValueLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(ItemValueLoader.class);
+
   private DataFacade _facade;
   private Map<Integer,QualityBasedValueLookupTable> _valueTables;
 
@@ -30,6 +36,15 @@ public class ItemValueLoader
   }
 
   /**
+   * Get all the loaded tables.
+   * @return an unsorted list of tables.
+   */
+  public List<QualityBasedValueLookupTable> getTables()
+  {
+    return new ArrayList<QualityBasedValueLookupTable>(_valueTables.values());
+  }
+
+  /**
    * Get an item value table.
    * @param tableId Table identifier.
    * @return the targeted table or <code>null</code> if not found.
@@ -41,6 +56,14 @@ public class ItemValueLoader
     if (ret==null)
     {
       ret=loadTable(tableId);
+      if (ret!=null)
+      {
+        _valueTables.put(key,ret);
+      }
+      else
+      {
+        LOGGER.warn("Failed to load value table: "+tableId);
+      }
     }
     return ret;
   }
@@ -52,6 +75,7 @@ public class ItemValueLoader
     if (properties!=null)
     {
       ret=new QualityBasedValueLookupTable();
+      ret.setIdentifier(tableId);
       // Qualities
       Object[] qualityArray=(Object[])properties.getProperty("Item_QualityArray");
       for(Object qualityObj : qualityArray)

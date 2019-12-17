@@ -13,6 +13,7 @@ import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.money.QualityBasedValueLookupTable;
+import delta.games.lotro.common.money.io.xml.ValueTablesXMLWriter;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.stats.ConstantStatProvider;
@@ -281,7 +282,7 @@ public class MainDatItemsLoader
     Integer itemValue=(Integer)properties.getProperty("Item_Value");
     Integer itemValueFromTable=null;
     Integer itemValueTableId=(Integer)properties.getProperty("Item_ValueLookupTable");
-    if (itemValueTableId!=null)
+    if ((itemValueTableId!=null) && (itemValueTableId.intValue()!=0))
     {
       QualityBasedValueLookupTable table=_valueLoader.getTable(itemValueTableId.intValue());
       if (table!=null)
@@ -304,6 +305,7 @@ public class MainDatItemsLoader
         {
           LOGGER.warn("Item level not found!");
         }
+        item.setValueTable(table);
       }
     }
     if (!Objects.equals(itemValueFromTable,itemValueFromTable))
@@ -1002,6 +1004,8 @@ public class MainDatItemsLoader
     _consumablesLoader.saveConsumables();
     // Save legacies
     _legaciesLoader.save();
+    // Save value tables
+    ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
   }
 
   /**
