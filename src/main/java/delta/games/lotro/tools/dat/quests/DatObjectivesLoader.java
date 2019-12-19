@@ -19,7 +19,6 @@ import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.mobs.MobDescription;
 import delta.games.lotro.lore.mobs.MobReference;
 import delta.games.lotro.lore.npc.NpcDescription;
@@ -59,6 +58,7 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.MobLoader;
 import delta.games.lotro.tools.dat.utils.NpcLoader;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
+import delta.games.lotro.tools.dat.utils.ProxyBuilder;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -512,30 +512,11 @@ public class DatObjectivesLoader
     {
       ret.setCount(count.intValue());
     }
-    Proxy<Item> itemProxy=buildItemProxy(itemId);
-    ret.setProxy(itemProxy);
-  }
-
-  private Proxy<Item> buildItemProxy(Integer itemId)
-  {
-    Proxy<Item> itemProxy=null;
-    // Item ID
     if (itemId!=null)
     {
-      Item item=ItemsManager.getInstance().getItem(itemId.intValue());
-      if (item!=null)
-      {
-        String itemName=item.getName();
-        itemProxy=new Proxy<Item>();
-        itemProxy.setId(itemId.intValue());
-        itemProxy.setName(itemName);
-      }
-      else
-      {
-        LOGGER.warn("Could not find item with ID="+itemId);
-      }
+      Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
+      ret.setProxy(itemProxy);
     }
-    return itemProxy;
   }
 
   private NpcTalkCondition handleNpcTalk(PropertiesSet properties, Objective objective)
@@ -932,7 +913,7 @@ QuestEvent_ShowBillboardText: 0
     int count=(countInt!=null)?countInt.intValue():1;
     HobbyCondition ret=new HobbyCondition();
     ret.setCount(count);
-    Proxy<Item> itemProxy=buildItemProxy(itemId);
+    Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
     ret.setProxy(itemProxy);
     return ret;
   }
