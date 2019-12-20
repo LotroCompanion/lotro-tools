@@ -2,12 +2,14 @@ package delta.games.lotro.tools.dat.others.boxes;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.treasure.FilteredTrophyTable;
+import delta.games.lotro.common.treasure.TreasureList;
+import delta.games.lotro.common.treasure.TrophyList;
+import delta.games.lotro.common.treasure.WeightedTreasureTable;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.others.LootLoader;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -38,48 +40,62 @@ public class MainDatContainerLoader
    */
   public Object load(int indexDataId)
   {
-    Object ret=null;
+    FilteredTrophyTable filteredTable=null;
+    WeightedTreasureTable weightedTable=null;
+    TrophyList trophyList=null;
+    TreasureList treasureList=null;
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      boolean used=false;
       // Filtered trophy table
       Integer filteredLootTableId=(Integer)properties.getProperty("PackageItem_FilteredTrophyTableTemplate");
       if (filteredLootTableId!=null)
       {
-        _lootLoader.handleFilteredTreasureList(filteredLootTableId.intValue());
-        used=true;
+        filteredTable=_lootLoader.handleFilteredTrophyTable(filteredLootTableId.intValue());
       }
       // Free-people weighted treasure table ID
       Integer freepWeightedTreasureTableId=(Integer)properties.getProperty("PackageItem_Freep_WeightedTreasureTableID");
       if ((freepWeightedTreasureTableId!=null) && (freepWeightedTreasureTableId.intValue()!=0))
       {
-        _lootLoader.handleWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
-        used=true;
+        weightedTable=_lootLoader.handleWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
       }
       // Trophy template
       Integer trophyTemplateId=(Integer)properties.getProperty("PackageItem_TrophyListTemplate");
       if ((trophyTemplateId!=null) && (trophyTemplateId.intValue()!=0))
       {
-        _lootLoader.handleTrophyList(trophyTemplateId.intValue());
-        used=true;
+        trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
       }
       // Effects (for scrolls)
-      boolean effectsUsed=handleEffects(properties);
-      if (effectsUsed)
-      {
-        used=true;
-      }
+      treasureList=handleEffects(properties);
 
-      if (used)
+      if ((filteredTable!=null) || (weightedTable!=null) || (trophyList!=null) || (treasureList!=null))
       {
         // Name
         String name=DatUtils.getStringProperty(properties,"Name");
         System.out.println("Container: "+name);
+        if (filteredTable!=null)
+        {
+          System.out.println(filteredTable);
+          //System.out.println("\tFound a filtered trophy table!");
+        }
+        if (weightedTable!=null)
+        {
+          System.out.println(weightedTable);
+          //System.out.println("\tFound a weighted treasure table!");
+        }
+        if (trophyList!=null)
+        {
+          System.out.println(trophyList);
+          //System.out.println("\tFound a trophy list!");
+        }
+        if (treasureList!=null)
+        {
+          System.out.println(treasureList);
+          //System.out.println("\tFound a treasure list!");
+        }
         //System.out.println(properties.dump());
       }
      /*
-PackageItem_Freep_WeightedTreasureTableID: 0
 PackageItem_IsPreviewable: 0
 PackageItem_BindAllItemsToAccount: 1
 PackageItem_UsePlayerAsContainerForMunging: 1
@@ -96,12 +112,12 @@ If PackageItem_IsPreviewable: 1
     {
       LOGGER.warn("Could not handle container item ID="+indexDataId);
     }
-    return ret;
+    return null;
   }
 
-  private boolean handleEffects(PropertiesSet properties)
+  private TreasureList handleEffects(PropertiesSet properties)
   {
-    boolean used=false;
+    TreasureList ret=null;
     Object[] effects=(Object[])properties.getProperty("EffectGenerator_UsageEffectList");
     if (effects!=null)
     {
@@ -111,29 +127,24 @@ If PackageItem_IsPreviewable: 1
         Integer effectId=(Integer)effectItemProps.getProperty("EffectGenerator_EffectID");
         if (effectId!=null)
         {
-          boolean effectUsed=handleEffect(effectId.intValue());
-          if (effectUsed)
-          {
-            used=true;
-          }
+          ret=handleEffect(effectId.intValue());
         }
       }
     }
-    return used;
+    return ret;
   }
 
-  private boolean handleEffect(int effectId)
+  private TreasureList handleEffect(int effectId)
   {
-    boolean used=false;
+    TreasureList ret=null;
     PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     Integer treasureListTemplateId=(Integer)effectProps.getProperty("Effect_Lootgen_DiscoveryTreasureListTemplate");
     if (treasureListTemplateId!=null)
     {
       PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      _lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
-      used=true;
+      ret=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
     }
-    return used;
+    return ret;
   }
 
   private void doIt()

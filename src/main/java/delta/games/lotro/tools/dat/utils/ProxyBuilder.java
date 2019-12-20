@@ -13,7 +13,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class ProxyBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(ProxyBuilder.class);
 
   /**
    * Build an item proxy.

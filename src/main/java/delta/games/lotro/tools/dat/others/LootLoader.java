@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.dat.others;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
@@ -35,6 +38,7 @@ public class LootLoader
 
   private DataFacade _facade;
   private EnumMapper _dropFrequency;
+  private Map<Integer,Float> _probabilities;
 
   /**
    * Constructor.
@@ -44,6 +48,23 @@ public class LootLoader
   {
     _facade=facade;
     _dropFrequency=facade.getEnumsManager().getEnumMapper(587202656);
+    _probabilities=new HashMap<Integer,Float>();
+    loadProbabilities();
+  }
+
+  private void loadProbabilities()
+  {
+    // LootGenControl:
+    PropertiesSet properties=_facade.loadProperties(1879076022+DATConstants.DBPROPERTIES_OFFSET);
+    Object[] tableArray=(Object[])properties.getProperty("LootGenControl_DropFrequencyTable");
+    for(Object tableEntryObj : tableArray)
+    {
+      PropertiesSet entryProps=(PropertiesSet)tableEntryObj;
+      float percentage=((Float)entryProps.getProperty("LootGenControl_DropFrequency_Percentage")).floatValue();
+      int code=((Integer)entryProps.getProperty("LootGenControl_DropFrequency_Label")).intValue();
+      _probabilities.put(Integer.valueOf(code),Float.valueOf(percentage));
+      System.out.println("Probability is "+percentage*100+" for "+_dropFrequency.getString(code));
+    }
   }
 
   /**
@@ -73,11 +94,11 @@ public class LootLoader
   }
 
   /**
-   * Handle a filtered treasure list.
+   * Handle a filtered trophy list list.
    * @param id Identifier.
    * @return a table.
    */
-  public FilteredTrophyTable handleFilteredTreasureList(int id)
+  public FilteredTrophyTable handleFilteredTrophyTable(int id)
   {
     FilteredTrophyTable ret=null;
     PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
@@ -108,23 +129,25 @@ public class LootLoader
     if (filterArray!=null)
     {
       int size=filterArray.length;
-      // Item #1: class filter?
-      if (size>=1)
+      for(Object filterEntry : filterArray)
       {
-        Object[] classIdsArray=(Object[])filterArray[0];
-        for(Object classIdObj : classIdsArray)
+        if (filterEntry instanceof PropertiesSet)
         {
-          int classId=((Integer)classIdObj).intValue();
-          CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
-          requirements.addAllowedClass(characterClass);
+          // Level filter
+          PropertiesSet levelProps=(PropertiesSet)filterEntry;
+          handleLevelFilter(levelProps,requirements);
         }
-      }
-      // Item #2: never used
-      // Item #3: level range
-      if (size>=3)
-      {
-        PropertiesSet levelProps=(PropertiesSet)filterArray[2];
-        handleLevelFilter(levelProps,requirements);
+        else
+        {
+          // Class filter
+          Object[] classIdsArray=(Object[])filterArray[0];
+          for(Object classIdObj : classIdsArray)
+          {
+            int classId=((Integer)classIdObj).intValue();
+            CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+            requirements.addAllowedClass(characterClass);
+          }
+        }
       }
       if (size>3)
       {
@@ -289,7 +312,7 @@ public class LootLoader
 
   private float getProbability(int frequencyCode)
   {
-    /*String frequencyStr=*/_dropFrequency.getString(frequencyCode);
-    return 1.0f;
+    Float probability=_probabilities.get(Integer.valueOf(frequencyCode));
+    return probability.floatValue();
   }
 }
