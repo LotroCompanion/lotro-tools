@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.DATFilesConstants;
 import delta.games.lotro.dat.archive.DATArchive;
 import delta.games.lotro.dat.archive.DatFilesManager;
-import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
@@ -74,7 +73,7 @@ public class LandblockInfoLoader
         throw new IllegalArgumentException("Expected DID for block map: "+landblockInfoDID);
       }
       int flags=BufferUtils.readUInt32(bis);
-      int sizeHint=BufferUtils.readUInt32(bis);
+      /*int sizeHint=*/BufferUtils.readUInt32(bis);
       // Cross links
       if ((flags & HAS_LINKS)!=0)
       {
@@ -146,7 +145,7 @@ public class LandblockInfoLoader
       int bytesAvailable=bis.available();
       if (bytesAvailable>0)
       {
-        int unknownFinal=BufferUtils.readUInt32(bis);
+        /*int unknownFinal=*/BufferUtils.readUInt32(bis);
       }
       bytesAvailable=bis.available();
       if (bytesAvailable>0)
@@ -158,19 +157,19 @@ public class LandblockInfoLoader
 
   private void loadCrossLink(ByteArrayInputStream bis)
   {
-    int fromIndex=BufferUtils.readUInt32(bis);
-    long fromLbiDID=BufferUtils.readUInt32AsLong(bis);
-    long toLbiDID=BufferUtils.readUInt32AsLong(bis);
+    /*int fromIndex=*/BufferUtils.readUInt32(bis);
+    /*long fromLbiDID=*/BufferUtils.readUInt32AsLong(bis);
+    /*long toLbiDID=*/BufferUtils.readUInt32AsLong(bis);
     // See EnumMapper: EntityLinkType
-    int type=BufferUtils.readUInt32(bis);
-    int toIndex=BufferUtils.readUInt32(bis);
-    int mask=BufferUtils.readUInt32(bis);
+    /*int type=*/BufferUtils.readUInt32(bis);
+    /*int toIndex=*/BufferUtils.readUInt32(bis);
+    /*int mask=*/BufferUtils.readUInt32(bis);
   }
 
   private void loadHeaderIndices(ByteArrayInputStream bis)
   {
-    int index=BufferUtils.readUInt16(bis);
-    int[] array=readIntegerArray(bis);
+    /*int index=*/BufferUtils.readUInt16(bis);
+    /*int[] array=*/readIntegerArray(bis);
     //System.out.println("Header: index="+index+", count="+array.length+" = >"+Arrays.toString(array));
   }
 
@@ -198,11 +197,11 @@ public class LandblockInfoLoader
 
   private void loadCells(ByteArrayInputStream bis)
   {
-    int index=BufferUtils.readUInt16(bis);
-    DatPosition position=GeoLoader.readPosition(bis);
+    /*int index=*/BufferUtils.readUInt16(bis);
+    /*DatPosition position=*/GeoLoader.readPosition(bis);
     //System.out.println("Position: "+position);
     int flags=BufferUtils.readUInt32(bis);
-    int cellMeshDID=BufferUtils.readUInt32(bis);
+    /*int cellMeshDID=*/BufferUtils.readUInt32(bis);
     int count=BufferUtils.readUInt32(bis);
     // Neighbours
     for(int i=0;i<count;i++)
@@ -211,15 +210,15 @@ public class LandblockInfoLoader
     }
     if ((flags&0x20)!=0)
     {
-      int thisIndex=BufferUtils.readUInt16(bis); // always equal to this.index
-      int[] cellIndices0=readIntegerArray(bis);
-      int[] cellIndices1=readIntegerArray(bis);
-      int unknown=BufferUtils.readUInt16(bis);
+      /*int thisIndex=*/BufferUtils.readUInt16(bis); // always equal to this.index
+      /*int[] cellIndices0=*/readIntegerArray(bis);
+      /*int[] cellIndices1=*/readIntegerArray(bis);
+      /*int unknown=*/BufferUtils.readUInt16(bis);
     }
     else
     {
-      int[] cellIndices0=readIntegerArray(bis);
-      int[] cellIndices1=readIntegerArray(bis);
+      /*int[] cellIndices0=*/readIntegerArray(bis);
+      /*int[] cellIndices1=*/readIntegerArray(bis);
     }
     if ((flags&0x4)!=0)
     {
@@ -237,11 +236,11 @@ public class LandblockInfoLoader
 
   private void loadNeighbours(ByteArrayInputStream bis)
   {
-    int index=BufferUtils.readUInt32(bis);
-    int cellIndex=BufferUtils.readUInt16(bis);
-    int neighbourIndex=BufferUtils.readUInt32(bis);
-    int[] unknown=readIntegerArray(bis);
-    boolean unknownBool=BufferUtils.readBoolean(bis);
+    /*int index=*/BufferUtils.readUInt32(bis);
+    /*int cellIndex=*/BufferUtils.readUInt16(bis);
+    /*int neighbourIndex=*/BufferUtils.readUInt32(bis);
+    /*int[] unknown=*/readIntegerArray(bis);
+    /*boolean unknownBool=*/BufferUtils.readBoolean(bis);
   }
 
   private void loadEntityDesc(ByteArrayInputStream bis)
@@ -249,26 +248,26 @@ public class LandblockInfoLoader
     int flags=BufferUtils.readUInt32(bis);
     if ((flags & DID) == DID)
     {
-      int did=BufferUtils.readUInt32(bis);
+      /*int did=*/BufferUtils.readUInt32(bis);
     }
     if ((flags & TYPE) == TYPE)
     {
-      int type=BufferUtils.readUInt32(bis);
+      /*int type=*/BufferUtils.readUInt32(bis);
     }
     if ((flags & INDEX) == INDEX)
     {
-      int index=BufferUtils.readUInt32(bis);
-      int blockAndType=BufferUtils.readUInt32(bis);
+      /*int index=*/BufferUtils.readUInt32(bis);
+      /*int blockAndType=*/BufferUtils.readUInt32(bis);
     }
     if ((flags & PHYS_OBJ) == PHYS_OBJ)
     {
-      int physObjDID=BufferUtils.readUInt32(bis);
+      /*int physObjDID=*/BufferUtils.readUInt32(bis);
     }
     if ((flags & POS) == POS)
     {
-      float x=BufferUtils.readFloat(bis);
-      float y=BufferUtils.readFloat(bis);
-      float z=BufferUtils.readFloat(bis);
+      /*float x=*/BufferUtils.readFloat(bis);
+      /*float y=*/BufferUtils.readFloat(bis);
+      /*float z=*/BufferUtils.readFloat(bis);
       /*float w=*/BufferUtils.readFloat(bis);
       /*float x=*/BufferUtils.readFloat(bis);
       /*float y=*/BufferUtils.readFloat(bis);
@@ -277,9 +276,9 @@ public class LandblockInfoLoader
     }
     if ((flags & UNK_VECTOR) == UNK_VECTOR) {
       // Unknown vector
-      float x=BufferUtils.readFloat(bis);
-      float y=BufferUtils.readFloat(bis);
-      float z=BufferUtils.readFloat(bis);
+      /*float x=*/BufferUtils.readFloat(bis);
+      /*float y=*/BufferUtils.readFloat(bis);
+      /*float z=*/BufferUtils.readFloat(bis);
     }
     if ((flags & PROPERTIES) == PROPERTIES)
     {
@@ -294,42 +293,42 @@ public class LandblockInfoLoader
     }
     if ((flags & UNK_HOOK) == UNK_HOOK)
     {
-      int unkHook=BufferUtils.readUInt32(bis);
+      /*int unkHook=*/BufferUtils.readUInt32(bis);
     }
     if ((flags & NAME) == NAME)
     {
-      String name=BufferUtils.readPascalString(bis);
+      /*String name=*/BufferUtils.readPascalString(bis);
       //System.out.println(name);
     }
   }
 
   private void loadEntityLinkDesc(ByteArrayInputStream bis)
   {
-    String worldBuilderName=BufferUtils.readPascalString(bis);
-    int id=BufferUtils.readUInt32(bis);
-    int blockAndTypeMask=BufferUtils.readUInt32(bis);
-    int toIndex=BufferUtils.readUInt32(bis);
-    int toBlockAndType=BufferUtils.readUInt32(bis);
-    int fromIndex=BufferUtils.readUInt32(bis);
-    int fromBlockAndType=BufferUtils.readUInt32(bis);
-    int type=BufferUtils.readUInt32(bis);
+    /*String worldBuilderName=*/BufferUtils.readPascalString(bis);
+    /*int id=*/BufferUtils.readUInt32(bis);
+    /*int blockAndTypeMask=*/BufferUtils.readUInt32(bis);
+    /*int toIndex=*/BufferUtils.readUInt32(bis);
+    /*int toBlockAndType=*/BufferUtils.readUInt32(bis);
+    /*int fromIndex=*/BufferUtils.readUInt32(bis);
+    /*int fromBlockAndType=*/BufferUtils.readUInt32(bis);
+    /*int type=*/BufferUtils.readUInt32(bis);
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     PropertiesSet props=new PropertiesSet();
     propsLoader.decodeProperties(bis,props);
     boolean isCrossLandblock=BufferUtils.readBoolean(bis);
     if (isCrossLandblock)
     {
-      int codaIndex0=BufferUtils.readUInt32(bis);
-      long codaLbiDID0=BufferUtils.readUInt32AsLong(bis);
-      long codaLbiDID1=BufferUtils.readUInt32AsLong(bis);
-      int codaIndex1=BufferUtils.readUInt32(bis);
+      /*int codaIndex0=*/BufferUtils.readUInt32(bis);
+      /*long codaLbiDID0=*/BufferUtils.readUInt32AsLong(bis);
+      /*long codaLbiDID1=*/BufferUtils.readUInt32AsLong(bis);
+      /*int codaIndex1=*/BufferUtils.readUInt32(bis);
     }
   }
 
   private void loadWeenie(ByteArrayInputStream bis)
   {
-    int index=BufferUtils.readUInt32(bis);
-    int blockAndType=BufferUtils.readUInt32(bis);
+    /*int index=*/BufferUtils.readUInt32(bis);
+    /*int blockAndType=*/BufferUtils.readUInt32(bis);
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     PropertiesSet props=new PropertiesSet();
     propsLoader.decodeProperties(bis,props);

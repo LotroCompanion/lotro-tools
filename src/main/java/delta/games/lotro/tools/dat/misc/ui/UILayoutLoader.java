@@ -57,8 +57,8 @@ public class UILayoutLoader
       throw new IllegalArgumentException("Expected DID for UI layout: "+layoutId+". Found: "+did);
     }
     UILayout ret=new UILayout(layoutId);
-    int baseWidth=BufferUtils.readUInt32(bis);
-    int baseHeight=BufferUtils.readUInt32(bis);
+    /*int baseWidth=*/BufferUtils.readUInt32(bis);
+    /*int baseHeight=*/BufferUtils.readUInt32(bis);
     int count=BufferUtils.readTSize(bis);
     for(int i=0;i<count;i++)
     {
@@ -76,8 +76,8 @@ public class UILayoutLoader
   public UIElement loadUiElement(ByteArrayInputStream bis)
   {
     int id=BufferUtils.readUInt32(bis); // From EnumMapper: UIElementID
-    String elementId=_uiElementIdMapper.getString(id);
-    System.out.println("**** UI element ID: "+elementId);
+    /*String elementId=*/_uiElementIdMapper.getString(id);
+    //System.out.println("**** UI element ID: "+elementId);
     int zero=BufferUtils.readUInt32(bis);
     if (zero!=0)
     {
@@ -85,15 +85,15 @@ public class UILayoutLoader
     }
 
     UIElement ret=new UIElement(id);
-    int unknown0=BufferUtils.readUInt8(bis); // 0, 1, 2, 3
+    /*int unknown0=*/BufferUtils.readUInt8(bis); // 0, 1, 2, 3
 
-    int x=BufferUtils.readUInt32(bis); // Relative to parent
-    int y=BufferUtils.readUInt32(bis);
-    int w=BufferUtils.readUInt32(bis);
-    int h=BufferUtils.readUInt32(bis);
+    /*int x=*/BufferUtils.readUInt32(bis); // Relative to parent
+    /*int y=*/BufferUtils.readUInt32(bis);
+    /*int w=*/BufferUtils.readUInt32(bis);
+    /*int h=*/BufferUtils.readUInt32(bis);
 
-    int argb=BufferUtils.readUInt32(bis);
-    boolean unknown1=BufferUtils.readBoolean(bis);
+    /*int argb=*/BufferUtils.readUInt32(bis);
+    /*boolean unknown1=*/BufferUtils.readBoolean(bis);
 
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     propsLoader.decodeProperties(bis,ret.getProperties());
@@ -104,12 +104,12 @@ public class UILayoutLoader
       loadUiData(bis);
     }
 
-    int index=BufferUtils.readUInt32(bis); // Within the parent's UIElement array
-    int elementID=BufferUtils.readUInt32(bis); // Matches id above
-    int typeID=BufferUtils.readUInt32(bis); // EnumMapper: UIElementType
-    int baseElementID=BufferUtils.readUInt32(bis); // if 0, so is baseLayoutDID, and vice versa
-    int baseLayoutDID=BufferUtils.readUInt32(bis); // another UILAYOUT file 0x22nnnnnn
-    int stateID=BufferUtils.readUInt32(bis); // EnumMapper: UIStateID
+    /*int index=*/BufferUtils.readUInt32(bis); // Within the parent's UIElement array
+    /*int elementID=*/BufferUtils.readUInt32(bis); // Matches id above
+    /*int typeID=*/BufferUtils.readUInt32(bis); // EnumMapper: UIElementType
+    /*int baseElementID=*/BufferUtils.readUInt32(bis); // if 0, so is baseLayoutDID, and vice versa
+    /*int baseLayoutDID=*/BufferUtils.readUInt32(bis); // another UILAYOUT file 0x22nnnnnn
+    /*int stateID=*/BufferUtils.readUInt32(bis); // EnumMapper: UIStateID
 
     int[] margins = new int[4]; // All values in the range 0..5
     for(int i=0;i<margins.length;i++)
@@ -136,9 +136,9 @@ public class UILayoutLoader
 
   private void loadUiState(ByteArrayInputStream bis)
   {
-    int stateID=BufferUtils.readUInt32(bis);
-    int echo=BufferUtils.readUInt32(bis); // Verify this == stateID
-    int unknown=BufferUtils.readUInt32(bis);
+    /*int stateID=*/BufferUtils.readUInt32(bis);
+    /*int echo=*/BufferUtils.readUInt32(bis); // Verify this == stateID
+    /*int unknown=*/BufferUtils.readUInt32(bis);
     BufferUtils.skip(bis,18); // All 0
    
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
@@ -156,67 +156,67 @@ public class UILayoutLoader
   private void loadUiData(ByteArrayInputStream bis)
   {
     int type=BufferUtils.readUInt32(bis);
-    int echo=BufferUtils.readUInt32(bis); // Verify echo == type
+    /*int echo=*/BufferUtils.readUInt32(bis); // Verify echo == type
 
     if (type==MOVIE)
     {
-      int alwaysZero=BufferUtils.readUInt32(bis);
-      String name=BufferUtils.readPascalString(bis);
-      int alwaysOne=BufferUtils.readUInt32(bis);
+      /*int alwaysZero=*/BufferUtils.readUInt32(bis);
+      /*String name=*/BufferUtils.readPascalString(bis);
+      /*int alwaysOne=*/BufferUtils.readUInt32(bis);
     }
     else if (type==IMAGE)
     {
-      int imageDID=BufferUtils.readUInt32(bis);
-      int unknown=BufferUtils.readUInt32(bis);
-      String filename=BufferUtils.readPascalString(bis);
+      /*int imageDID=*/BufferUtils.readUInt32(bis);
+      /*int unknown=*/BufferUtils.readUInt32(bis);
+      /*String filename=*/BufferUtils.readPascalString(bis);
     }
     else if (type==MESSAGE)
     {
-      int messageID=BufferUtils.readUInt32(bis);
-      float unknown=BufferUtils.readFloat(bis);
+      /*int messageID=*/BufferUtils.readUInt32(bis);
+      /*float unknown=*/BufferUtils.readFloat(bis);
     }
     else if (type==ANIMATE_VALUE)
     {
-      float startValue=BufferUtils.readFloat(bis);
-      float endValue=BufferUtils.readFloat(bis);
-      float duration=BufferUtils.readFloat(bis);
+      /*float startValue=*/BufferUtils.readFloat(bis);
+      /*float endValue=*/BufferUtils.readFloat(bis);
+      /*float duration=*/BufferUtils.readFloat(bis);
     }
     else if (type==ANIMATION)
     {
-      float unknown0=BufferUtils.readFloat(bis);
-      int unknown1=BufferUtils.readUInt32(bis);
-      boolean unknown2=BufferUtils.readBoolean(bis);
+      /*float unknown0=*/BufferUtils.readFloat(bis);
+      /*int unknown1=*/BufferUtils.readUInt32(bis);
+      /*boolean unknown2=*/BufferUtils.readBoolean(bis);
       int count=BufferUtils.readUInt32(bis);
       for(int i=0;i<count;i++)
       {
-        int imageDID=BufferUtils.readUInt32(bis);
+        /*int imageDID=*/BufferUtils.readUInt32(bis);
       }
     }
     else if (type==COLORED_IMAGE)
     {
-      int imageDID=BufferUtils.readUInt32(bis);
-      int unknown=BufferUtils.readUInt32(bis);
-      int argb=BufferUtils.readUInt32(bis);
+      /*int imageDID=*/BufferUtils.readUInt32(bis);
+      /*int unknown=*/BufferUtils.readUInt32(bis);
+      /*int argb=*/BufferUtils.readUInt32(bis);
     }
     else if (type==CURSOR)
     {
-      int imageDID=BufferUtils.readUInt32(bis);
-      int unknown0=BufferUtils.readUInt32(bis);
-      int unknown1=BufferUtils.readUInt32(bis);
+      /*int imageDID=*/BufferUtils.readUInt32(bis);
+      /*int unknown0=*/BufferUtils.readUInt32(bis);
+      /*int unknown1=*/BufferUtils.readUInt32(bis);
     }
     else if (type==SOUNDINFO)
     {
-      int did=BufferUtils.readUInt32(bis);
+      /*int did=*/BufferUtils.readUInt32(bis);
     }
     else if (type==STATE)
     {
-      int stateID=BufferUtils.readUInt32(bis);
-      float unknown=BufferUtils.readFloat(bis);
+      /*int stateID=*/BufferUtils.readUInt32(bis);
+      /*float unknown=*/BufferUtils.readFloat(bis);
     }
     else if (type==SCALE)
     {
-      float x=BufferUtils.readFloat(bis);
-      float y=BufferUtils.readFloat(bis);
+      /*float x=*/BufferUtils.readFloat(bis);
+      /*float y=*/BufferUtils.readFloat(bis);
     }
     else
     {

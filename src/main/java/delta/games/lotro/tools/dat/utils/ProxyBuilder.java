@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.tools.dat.quests.DatObjectivesLoader;
 import delta.games.lotro.utils.Proxy;
 
 /**
