@@ -839,15 +839,14 @@ public class MainDatAchievablesLoader
   private void loadClassRequirementsForDeeds()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900020E);
-    Object[] raceIdsArray=(Object[])properties.getProperty("AdvTable_LevelTableList");
-    for(Object raceIdObj : raceIdsArray)
+    Object[] classIdsArray=(Object[])properties.getProperty("AdvTable_LevelTableList");
+    for(Object classIdObj : classIdsArray)
     {
-      int raceId=((Integer)raceIdObj).intValue();
-      PropertiesSet raceProps=_facade.loadProperties(raceId+DATConstants.DBPROPERTIES_OFFSET);
-      PropertiesSet classInfo=(PropertiesSet)raceProps.getProperty("AdvTable_ClassInfo");
-      String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
-      CharacterClass characterClass=CharacterClass.getByName(className);
-      int accomplishmentDirectoryId=((Integer)raceProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
+      int classId=((Integer)classIdObj).intValue();
+      PropertiesSet classProps=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
+      int classCode=((Integer)classProps.getProperty("AdvTable_Class")).intValue();
+      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
+      int accomplishmentDirectoryId=((Integer)classProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
       PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
       if (accomplishmentList!=null)

@@ -66,9 +66,8 @@ public class CharacterClassDataLoader
     PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("AdvTable_ClassInfo");
-    // Class name
-    String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
-    CharacterClass characterClass=CharacterClass.getByName(className);
+    int classCode=((Integer)properties.getProperty("AdvTable_Class")).intValue();
+    CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
     ClassDescription classDescription=new ClassDescription(characterClass);
     LOGGER.info("Handling class: "+characterClass);
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
