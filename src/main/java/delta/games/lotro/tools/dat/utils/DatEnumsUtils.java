@@ -68,12 +68,12 @@ public class DatEnumsUtils
     if (id==193) return CharacterClass.RUNE_KEEPER;
     if (id==194) return CharacterClass.WARDEN;
     // Monster Play
-    if (id==71) return null; // Reaver
-    if (id==128) return null; // Defiler
-    if (id==127) return null; // Weaver
-    if (id==179) return null; // Blackarrow
-    if (id==52) return null; // Warleader
-    if (id==126) return null; // Stalker
+    if (id==71) return CharacterClass.REAVER;
+    if (id==128) return CharacterClass.DEFILER;
+    if (id==127) return CharacterClass.WEAVER;
+    if (id==179) return CharacterClass.BLACKARROW;
+    if (id==52) return CharacterClass.WARLEADER;
+    if (id==126) return CharacterClass.STALKER;
     return null;
   }
 
