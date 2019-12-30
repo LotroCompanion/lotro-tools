@@ -9,6 +9,8 @@ import delta.games.lotro.common.treasure.WeightedTreasureTable;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.others.LootLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -149,6 +151,13 @@ If PackageItem_IsPreviewable: 1
 
   private void doIt()
   {
+    ItemsManager itemsMgr=ItemsManager.getInstance();
+    for(Item item : itemsMgr.getAllItems())
+    {
+      load(item.getIdentifier());
+    }
+    // Test samples:
+    /*
     // Battle Gift Box
     load(1879303552);
     // Cosmetic Gift Box
@@ -159,6 +168,7 @@ If PackageItem_IsPreviewable: 1
     load(1879378494);
     // Coffer of Adventurer's Jewellery - Might (Incomparable: 1879378473)
     load(1879378473);
+    */
   }
 
   /**

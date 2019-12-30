@@ -46,7 +46,6 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
-import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -71,7 +70,6 @@ public class MainDatItemsLoader
   private PassivesLoader _passivesLoader;
   private ConsumablesLoader _consumablesLoader;
   private LegaciesLoader _legaciesLoader;
-  private MainDatContainerLoader _containersLoader;
   private ItemValueLoader _valueLoader;
 
   /**
@@ -84,7 +82,6 @@ public class MainDatItemsLoader
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
-    _containersLoader=new MainDatContainerLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
   }
 
@@ -270,8 +267,6 @@ public class MainDatItemsLoader
       // Handle legendaries
       DatStatUtils.doFilterStats=false;
       handleLegendaries(item, properties);
-      // Containers
-      _containersLoader.load(indexDataId);
       // Value
       handleItemValue(item,properties);
     }
