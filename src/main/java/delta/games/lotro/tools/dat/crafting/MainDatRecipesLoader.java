@@ -67,6 +67,7 @@ public class MainDatRecipesLoader
       recipe.setIdentifier(indexDataId);
       // Name
       String name=getStringProperty(properties,"CraftRecipe_Name");
+      name=StringUtils.fixName(name);
       recipe.setName(name);
       // Category
       Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
