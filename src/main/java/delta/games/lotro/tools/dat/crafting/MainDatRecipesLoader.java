@@ -363,7 +363,7 @@ public class MainDatRecipesLoader
     _xpMapping=loadXpMapping();
     // Cooldown mapping
     _cooldownMapping=loadCooldownMapping();
-    RecipesManager recipesManager=new RecipesManager();
+    RecipesManager recipesManager=new RecipesManager(false);
     //useIndexes(recipesManager);
     scanAll(recipesManager);
     int nbRecipes=recipesManager.getRecipesCount();
