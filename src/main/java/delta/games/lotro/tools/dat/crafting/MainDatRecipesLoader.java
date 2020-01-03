@@ -43,6 +43,7 @@ public class MainDatRecipesLoader
   private ItemsManager _itemsManager;
   private Map<Integer,Integer> _xpMapping;
   private Map<Integer,Float> _cooldownMapping;
+  private RecipeItemsLoader _recipeItemsLoader;
 
   /**
    * Constructor.
@@ -52,6 +53,7 @@ public class MainDatRecipesLoader
   {
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
+    _recipeItemsLoader=new RecipeItemsLoader(_facade);
   }
 
   private Recipe load(int indexDataId)
@@ -66,7 +68,7 @@ public class MainDatRecipesLoader
       // ID
       recipe.setIdentifier(indexDataId);
       // Name
-      String name=getStringProperty(properties,"CraftRecipe_Name");
+      String name=DatUtils.getStringProperty(properties,"CraftRecipe_Name");
       name=StringUtils.fixName(name);
       recipe.setName(name);
       // Category
@@ -166,10 +168,15 @@ public class MainDatRecipesLoader
         recipe.setName(name);
       }
       Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
+      // TODO Store guild ID here (faction)
       if ((guild!=null) && (guild.intValue()!=0))
       {
         recipe.setGuildRequired(true);
       }
+      // Other attributes
+      // CraftRecipe_NameItemOnNormalSuccess
+      // CraftRecipe_NameItemOnCriticalSuccess
+      // CraftRecipe_ExecutionTime
       checkRecipe(recipe);
     }
     else
@@ -284,7 +291,6 @@ public class MainDatRecipesLoader
   {
     Item item=_itemsManager.getItem(id);
     ItemProxy proxy=new ItemProxy();
-    proxy.setId(id);
     if (item==null)
     {
       item=resolveItem(id);
@@ -327,20 +333,6 @@ public class MainDatRecipesLoader
     }
   }
 
-  private String getStringProperty(PropertiesSet properties, String propertyName)
-  {
-    String ret=null;
-    Object value=properties.getProperty(propertyName);
-    if (value!=null)
-    {
-      if (value instanceof String[])
-      {
-        ret=((String[])value)[0];
-      }
-    }
-    return ret;
-  }
-
   private String getCategory(int key)
   {
     return _facade.getEnumsManager().resolveEnum(CRAFTING_UI_CATEGORY,key);
@@ -363,15 +355,18 @@ public class MainDatRecipesLoader
     _xpMapping=loadXpMapping();
     // Cooldown mapping
     _cooldownMapping=loadCooldownMapping();
+    // Load recipes
     RecipesManager recipesManager=new RecipesManager(false);
-    //useIndexes(recipesManager);
     scanAll(recipesManager);
     int nbRecipes=recipesManager.getRecipesCount();
-    System.out.println("Found: "+nbRecipes+" recipes.");
+    LOGGER.info("Found: "+nbRecipes+" recipes.");
+    // Load recipe->recipe item links
+    _recipeItemsLoader.loadRecipeItems(recipesManager);
+    // Save
     boolean ok=recipesManager.writeToFile(GeneratedFiles.RECIPES);
     if (ok)
     {
-      System.out.println("Wrote recipes file: "+GeneratedFiles.RECIPES);
+      LOGGER.info("Wrote recipes file: "+GeneratedFiles.RECIPES);
     }
   }
 
@@ -456,13 +451,13 @@ public class MainDatRecipesLoader
   {
     if (proxy==null)
     {
-      System.out.println(context+": missing proxy");
+      LOGGER.error(context+": missing proxy");
       return;
     }
     String icon=proxy.getIcon();
     if (icon==null)
     {
-      System.out.println(context+": missing icon");
+      LOGGER.warn(context+": missing icon");
       return;
     }
   }
