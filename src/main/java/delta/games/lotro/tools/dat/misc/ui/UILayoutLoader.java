@@ -101,7 +101,8 @@ public class UILayoutLoader
     int count=BufferUtils.readUInt8(bis);
     for(int i=0;i<count;i++)
     {
-      loadUiData(bis);
+      UIData data=loadUiData(bis);
+      ret.addData(data);
     }
 
     /*int index=*/BufferUtils.readUInt32(bis); // Within the parent's UIElement array
@@ -129,7 +130,8 @@ public class UILayoutLoader
     count=BufferUtils.readTSize(bis);
     for(int i=0;i<count;i++)
     {
-      loadUiElement(bis);
+      UIElement childElement=loadUiElement(bis);
+      ret.addChild(childElement);
     }
     return ret;
   }
@@ -153,8 +155,9 @@ public class UILayoutLoader
   }
 
   // UIData: A union of various effect types.
-  private void loadUiData(ByteArrayInputStream bis)
+  private UIData loadUiData(ByteArrayInputStream bis)
   {
+    UIData ret=null;
     int type=BufferUtils.readUInt32(bis);
     /*int echo=*/BufferUtils.readUInt32(bis); // Verify echo == type
 
@@ -166,9 +169,11 @@ public class UILayoutLoader
     }
     else if (type==IMAGE)
     {
-      /*int imageDID=*/BufferUtils.readUInt32(bis);
+      UIImage image=new UIImage();
+      image._imageDID=BufferUtils.readUInt32(bis);
       /*int unknown=*/BufferUtils.readUInt32(bis);
-      /*String filename=*/BufferUtils.readPascalString(bis);
+      image._filename=BufferUtils.readPascalString(bis);
+      ret=image;
     }
     else if (type==MESSAGE)
     {
@@ -222,6 +227,7 @@ public class UILayoutLoader
     {
       LOGGER.warn("Unsupported UI data type: "+type);
     }
+    return ret;
   }
 
   /**

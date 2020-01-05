@@ -7,7 +7,7 @@ import java.util.List;
  * UI layout.
  * @author DAM
  */
-public class UILayout
+public class UILayout implements UIContainer
 {
   private int _id;
   private List<UIElement> _uiElements;
@@ -35,7 +35,7 @@ public class UILayout
    * Get the associated properties.
    * @return a properties set.
    */
-  public List<UIElement> getUIElements()
+  public List<UIElement> getChildElements()
   {
     return _uiElements;
   }

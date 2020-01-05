@@ -40,7 +40,7 @@ public class MapsSystemLoader
   {
     PropertiesSet ret=null;
     UILayout layout=new UILayoutLoader(_facade).loadUiLayout(0x22000041);
-    for(UIElement uiElement : layout.getUIElements())
+    for(UIElement uiElement : layout.getChildElements())
     {
       if (uiElement.getIdentifier()==268437543) // MapBackground
       {
@@ -64,7 +64,10 @@ public class MapsSystemLoader
     if ((imageId!=null) && (imageId.intValue()>0))
     {
       File to=new File(imageId+".png");
-      DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);
+      if (!to.exists())
+      {
+        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);
+      }
     }
 
     // Territory
