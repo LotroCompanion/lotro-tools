@@ -134,11 +134,9 @@ public class DatEnumsUtils
     if ((slotCode&1L<<19)!=0) return EquipmentLocation.TOOL;
     if ((slotCode&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
     if ((slotCode&1L<<21)!=0) return EquipmentLocation.BRIDLE;
-    /*
     if ((slotCode&1L<<22)!=0) return EquipmentLocation.MAIN_HAND_AURA;
     if ((slotCode&1L<<23)!=0) return EquipmentLocation.OFF_HAND_AURA;
     if ((slotCode&1L<<24)!=0) return EquipmentLocation.RANGED_AURA;
-    */
 
     return null;
   }
