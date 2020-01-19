@@ -486,6 +486,7 @@ public class MainDatNpcLoader
     NpcDescription npc=new NpcDescription(npcId,npcName);
     // Title
     String title=DatUtils.getStringProperty(properties,"OccupationTitle");
+    title=StringUtils.fixName(title);
     npc.setTitle(title);
     return npc;
   }
