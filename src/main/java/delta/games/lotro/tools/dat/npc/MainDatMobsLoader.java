@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.treasure.LootsManager;
+import delta.games.lotro.common.treasure.TreasureList;
+import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
@@ -22,6 +25,7 @@ public class MainDatMobsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatMobsLoader.class);
 
   private DataFacade _facade;
+  private LootsManager _loots;
   private LootLoader _lootLoader;
 
   /**
@@ -31,7 +35,8 @@ public class MainDatMobsLoader
   public MainDatMobsLoader(DataFacade facade)
   {
     _facade=facade;
-    _lootLoader=new LootLoader(facade);
+    _loots=new LootsManager();
+    _lootLoader=new LootLoader(facade,_loots);
   }
 
   private Object load(int indexDataId)
@@ -50,8 +55,12 @@ public class MainDatMobsLoader
       int barterTrophyList=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
       if (barterTrophyList!=0)
       {
-        System.out.println("\tLootGen_BarterTrophyList="+barterTrophyList);
-        _lootLoader.handleTrophyList(barterTrophyList);
+        //System.out.println("\tLootGen_BarterTrophyList="+barterTrophyList);
+        TrophyList trophyList=_lootLoader.handleTrophyList(barterTrophyList);
+        if (trophyList!=null)
+        {
+          System.out.println(trophyList.toString());
+        }
       }
       /*
       int generatesTrophy=((Integer)properties.getProperty("LootGen_GeneratesTrophies")).intValue();
@@ -63,19 +72,33 @@ public class MainDatMobsLoader
       int reputationTrophyList=((Integer)properties.getProperty("LootGen_ReputationTrophyList")).intValue();
       if (reputationTrophyList!=0)
       {
-        System.out.println("\tLootGen_ReputationTrophyList="+reputationTrophyList);
-        _lootLoader.handleTrophyList(reputationTrophyList);
+        //System.out.println("\tLootGen_ReputationTrophyList="+reputationTrophyList);
+        TrophyList trophyList=_lootLoader.handleTrophyList(reputationTrophyList);
+        if (trophyList!=null)
+        {
+          System.out.println(trophyList.toString());
+        }
       }
       int treasureListOverride=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();
       if (treasureListOverride!=0)
       {
-        System.out.println("\tLootGen_TreasureList_Override="+treasureListOverride);
+        //System.out.println("\tLootGen_TreasureList_Override="+treasureListOverride);
+        PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverride+DATConstants.DBPROPERTIES_OFFSET);
+        TreasureList treasureList=_lootLoader.handleTreasureList(treasureListOverride,treasureListProps);
+        if (treasureList!=null)
+        {
+          System.out.println(treasureList.toString());
+        }
       }
       int trophyListOverride=((Integer)properties.getProperty("LootGen_TrophyList_Override")).intValue();
       if (trophyListOverride!=0)
       {
-        System.out.println("\tLootGen_TrophyList_Override="+trophyListOverride);
-        _lootLoader.handleTrophyList(trophyListOverride);
+        //System.out.println("\tLootGen_TrophyList_Override="+trophyListOverride);
+        TrophyList trophyList=_lootLoader.handleTrophyList(trophyListOverride);
+        if (trophyList!=null)
+        {
+          System.out.println(trophyList.toString());
+        }
       }
       Integer isRemoteLootable=(Integer)properties.getProperty("Loot_IsRemoteLootable");
       if ((isRemoteLootable==null) || (isRemoteLootable.intValue()!=1))

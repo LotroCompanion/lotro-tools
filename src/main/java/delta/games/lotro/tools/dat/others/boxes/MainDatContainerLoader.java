@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.others.boxes;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
+import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
@@ -24,6 +25,7 @@ public class MainDatContainerLoader
 
   private DataFacade _facade;
   private LootLoader _lootLoader;
+  private LootsManager _loots;
 
   /**
    * Constructor.
@@ -32,7 +34,8 @@ public class MainDatContainerLoader
   public MainDatContainerLoader(DataFacade facade)
   {
     _facade=facade;
-    _lootLoader=new LootLoader(facade);
+    _loots=new LootsManager();
+    _lootLoader=new LootLoader(facade,_loots);
   }
 
   /**
@@ -70,7 +73,9 @@ public class MainDatContainerLoader
       // Effects (for scrolls)
       treasureList=handleEffects(properties);
 
-      if ((filteredTable!=null) || (weightedTable!=null) || (trophyList!=null) || (treasureList!=null))
+      int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
+      if (count>1)
+      //if ((filteredTable!=null) || (weightedTable!=null) || (trophyList!=null) || (treasureList!=null))
       {
         // Name
         String name=DatUtils.getStringProperty(properties,"Name");
@@ -78,22 +83,22 @@ public class MainDatContainerLoader
         if (filteredTable!=null)
         {
           System.out.println(filteredTable);
-          //System.out.println("\tFound a filtered trophy table!");
+          System.out.println("\tFound a filtered trophy table!");
         }
         if (weightedTable!=null)
         {
           System.out.println(weightedTable);
-          //System.out.println("\tFound a weighted treasure table!");
+          System.out.println("\tFound a weighted treasure table!");
         }
         if (trophyList!=null)
         {
           System.out.println(trophyList);
-          //System.out.println("\tFound a trophy list!");
+          System.out.println("\tFound a trophy list!");
         }
         if (treasureList!=null)
         {
           System.out.println(treasureList);
-          //System.out.println("\tFound a treasure list!");
+          System.out.println("\tFound a treasure list!");
         }
         //System.out.println(properties.dump());
       }
@@ -156,6 +161,7 @@ If PackageItem_IsPreviewable: 1
     {
       load(item.getIdentifier());
     }
+    _loots.dump();
     // Test samples:
     /*
     // Battle Gift Box
