@@ -226,9 +226,7 @@ public class LootLoader
             itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
             if (itemProxy==null)
             {
-              itemProxy=new Proxy<Item>();
-              itemProxy.setId(itemOrProfile);
-              itemProxy.setName(itemName);
+              LOGGER.warn("Item not found: "+itemName);
             }
           }
           else
@@ -240,8 +238,11 @@ public class LootLoader
           {
             LOGGER.warn("Could not find item or treasure group for ID: "+itemOrProfile);
           }
-          TrophyListEntry entry=new TrophyListEntry(probability,itemProxy,treasureGroup,quantity);
-          ret.addEntry(entry);
+          else
+          {
+            TrophyListEntry entry=new TrophyListEntry(probability,itemProxy,treasureGroup,quantity);
+            ret.addEntry(entry);
+          }
         }
         _lootsMgr.getTrophyLists().add(ret);
       }
