@@ -62,7 +62,7 @@ public class MainDatItemsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsLoader.class);
 
-  private static final int[] TYPES={2097, 2814, 799, 798, 797, 796, 795, /*794,*/ 804, 805, 802, 3663, 803, 815, 1722, 3924 };
+  private static final int[] TYPES={2097, 2814, 799, 798, 797, 796, 795, /*794,*/ 804, 805, 802, 3663, 803, 815, 1722, 3924, 4178 };
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
