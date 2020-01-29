@@ -219,4 +219,8 @@ public class GeneratedFiles
    * Value tables.
    */
   public static final File VALUE_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.VALUE_TABLES);
+  /**
+   * Loots.
+   */
+  public static final File LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.LOOTS);
 }
