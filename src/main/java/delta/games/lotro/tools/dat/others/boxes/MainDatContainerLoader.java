@@ -7,11 +7,13 @@ import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
+import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.others.LootLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -70,6 +72,21 @@ public class MainDatContainerLoader
       {
         trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
       }
+      // Preview
+      /*
+      Integer preview=(Integer)properties.getProperty("PackageItem_IsPreviewable");
+      if ((preview!=null) && (preview.intValue()!=0))
+      {
+        System.out.println("Preview:");
+        Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
+        for(Object previewIdObj : previewList)
+        {
+          Integer previewId=(Integer)previewIdObj;
+          Item item=ItemsManager.getInstance().getItem(previewId.intValue());
+          System.out.println("\t"+item);
+        }
+      }
+      */
       // Effects (for scrolls)
       treasureList=handleEffects(properties);
 
@@ -162,6 +179,7 @@ If PackageItem_IsPreviewable: 1
       load(item.getIdentifier());
     }
     _loots.dump();
+    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
     // Test samples:
     /*
     // Battle Gift Box

@@ -155,7 +155,10 @@ public class LootLoader
           {
             int classId=((Integer)classIdObj).intValue();
             CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
-            requirements.addAllowedClass(characterClass);
+            if (characterClass!=null)
+            {
+              requirements.addAllowedClass(characterClass);
+            }
           }
         }
       }
@@ -259,20 +262,30 @@ public class LootLoader
 
   private TreasureGroupProfile handleTreasureGroupProfile(int id)
   {
-    TreasureGroupProfile ret=_lootsMgr.getTreasureGroupProfiles().getItem(id);
+    TreasureGroupProfile ret=_lootsMgr.getItemsTables().getItem(id);
+    if (ret==null)
+    {
+      ret=_lootsMgr.getTreasureLists().getItem(id);
+    }
     if (ret==null)
     {
       PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
       ItemsTable itemsTable=handleItemsTable(id,properties);
       TreasureList treasureList=handleTreasureList(id,properties);
-      if ((itemsTable==null) && (treasureList==null))
+      if (itemsTable!=null)
+      {
+        ret=itemsTable;
+      }
+      else if (treasureList!=null)
+      {
+        ret=treasureList;
+      }
+      else
       {
         System.out.println("**********************");
         System.out.println(properties.dump());
         // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
       }
-      ret=new TreasureGroupProfile(id,itemsTable,treasureList);
-      _lootsMgr.getTreasureGroupProfiles().add(ret);
     }
     return ret;
   }
