@@ -224,10 +224,6 @@ public class LootLoader
           {
             // Item
             itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
-            if (itemProxy==null)
-            {
-              LOGGER.warn("Item not found: "+itemName);
-            }
           }
           else
           {
