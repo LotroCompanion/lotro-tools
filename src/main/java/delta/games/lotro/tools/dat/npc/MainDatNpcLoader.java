@@ -253,7 +253,7 @@ public class MainDatNpcLoader
     {
       for(Object barterEntryObj : barterList)
       {
-        BarterEntry barterEntry=new BarterEntry();
+        BarterEntry barterEntry=new BarterEntry(profile);
         Object[] barterEntryArray=(Object[])barterEntryObj;
         int nbItems=barterEntryArray.length;
         int nbItemsToGive=nbItems-1;
