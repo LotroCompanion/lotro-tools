@@ -223,4 +223,8 @@ public class GeneratedFiles
    * Loots.
    */
   public static final File LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.LOOTS);
+  /**
+   * Containers.
+   */
+  public static final File CONTAINERS=LotroCoreConfig.getInstance().getFile(DataFiles.CONTAINERS);
 }

@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.dat.others.boxes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
@@ -11,11 +14,12 @@ import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.io.xml.ContainerXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.others.LootLoader;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get the contents of a container (box,chest,scrolls...) from DAT files.
@@ -45,8 +49,9 @@ public class MainDatContainerLoader
    * @param indexDataId Container item identifier.
    * @return the loaded container.
    */
-  public Object load(int indexDataId)
+  public Container load(int indexDataId)
   {
+    Container ret=null;
     FilteredTrophyTable filteredTable=null;
     WeightedTreasureTable weightedTable=null;
     TrophyList trophyList=null;
@@ -91,31 +96,24 @@ public class MainDatContainerLoader
       treasureList=handleEffects(properties);
 
       int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
-      if (count>1)
-      //if ((filteredTable!=null) || (weightedTable!=null) || (trophyList!=null) || (treasureList!=null))
+      if (count>=1)
       {
-        // Name
-        String name=DatUtils.getStringProperty(properties,"Name");
-        System.out.println("Container: "+name);
+        ret=new Container(indexDataId);
         if (filteredTable!=null)
         {
-          System.out.println(filteredTable);
-          System.out.println("\tFound a filtered trophy table!");
+          ret.setFilteredTable(filteredTable);
         }
         if (weightedTable!=null)
         {
-          System.out.println(weightedTable);
-          System.out.println("\tFound a weighted treasure table!");
+          ret.setWeightedTable(weightedTable);
         }
         if (trophyList!=null)
         {
-          System.out.println(trophyList);
-          System.out.println("\tFound a trophy list!");
+          ret.setTrophyList(trophyList);
         }
         if (treasureList!=null)
         {
-          System.out.println(treasureList);
-          System.out.println("\tFound a treasure list!");
+          ret.setTreasureList(treasureList);
         }
         //System.out.println(properties.dump());
       }
@@ -136,7 +134,7 @@ If PackageItem_IsPreviewable: 1
     {
       LOGGER.warn("Could not handle container item ID="+indexDataId);
     }
-    return null;
+    return ret;
   }
 
   private TreasureList handleEffects(PropertiesSet properties)
@@ -173,13 +171,22 @@ If PackageItem_IsPreviewable: 1
 
   private void doIt()
   {
+    List<Container> containers=new ArrayList<Container>();
     ItemsManager itemsMgr=ItemsManager.getInstance();
     for(Item item : itemsMgr.getAllItems())
     {
-      load(item.getIdentifier());
+      Container container=load(item.getIdentifier());
+      if (container!=null)
+      {
+        containers.add(container);
+      }
     }
+    // Dump some stats
     _loots.dump();
+    // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
+    // Write container data
+    ContainerXMLWriter.writeContainersFile(GeneratedFiles.CONTAINERS,containers);
     // Test samples:
     /*
     // Battle Gift Box
