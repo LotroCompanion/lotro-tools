@@ -227,4 +227,8 @@ public class GeneratedFiles
    * Containers.
    */
   public static final File CONTAINERS=LotroCoreConfig.getInstance().getFile(DataFiles.CONTAINERS);
+  /**
+   * Disenchantments.
+   */
+  public static final File DISENCHANTMENTS=LotroCoreConfig.getInstance().getFile(DataFiles.DISENCHANTMENTS);
 }
