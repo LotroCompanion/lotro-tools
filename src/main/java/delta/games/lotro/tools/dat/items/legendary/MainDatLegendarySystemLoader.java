@@ -43,7 +43,10 @@ public class MainDatLegendarySystemLoader
     _slotMapper=facade.getEnumsManager().getEnumMapper(587202798);
   }
 
-  private void doIt()
+  /**
+   * Load legendary system data.
+   */
+  public void doIt()
   {
     _data=new LegendaryData();
     loadLegendaryData();

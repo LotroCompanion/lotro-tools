@@ -169,7 +169,10 @@ If PackageItem_IsPreviewable: 1
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Load containers.
+   */
+  public void doIt()
   {
     List<Container> containers=new ArrayList<Container>();
     ItemsManager itemsMgr=ItemsManager.getInstance();

@@ -15,9 +15,11 @@ import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatRecipesLoader;
 import delta.games.lotro.tools.dat.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
+import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
+import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
@@ -25,6 +27,7 @@ import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.npc.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.others.MountsLoader;
+import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
@@ -76,6 +79,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade).doIt();
+    // Legendary data
+    new MainDatLegendarySystemLoader(_facade).doIt();
     // Legendary titles
     new MainDatLegendaryTitlesLoader(_facade).doIt();
     // Relics
@@ -101,6 +106,10 @@ public class MainDatLoader
     new CosmeticPetLoader(_facade).doIt();
     // Vendors & barterers
     new MainDatNpcLoader(_facade).doIt();
+    // Containers
+    new MainDatContainerLoader(_facade).doIt();
+    // Disenchantment
+    new MainDatDisenchantmentsLoader(_facade).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
   }
@@ -145,6 +154,8 @@ public class MainDatLoader
     deleteDirectory(LegaciesLoader.LEGACIES_ICONS_DIR);
     // Items sets
     deleteFile(GeneratedFiles.SETS);
+    // Legendary system
+    deleteFile(GeneratedFiles.LEGENDARY_DATA);
     // Legendary titles
     deleteFile(GeneratedFiles.LEGENDARY_TITLES);
     // Relics
@@ -180,6 +191,12 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.VENDORS);
     // Barterers
     deleteFile(GeneratedFiles.BARTERS);
+    // Containers
+    deleteFile(GeneratedFiles.CONTAINERS);
+    // Loot tables
+    deleteFile(GeneratedFiles.LOOTS);
+    // Disenchantment
+    deleteFile(GeneratedFiles.DISENCHANTMENTS);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);

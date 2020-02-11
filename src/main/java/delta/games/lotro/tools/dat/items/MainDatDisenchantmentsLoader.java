@@ -83,7 +83,10 @@ public class MainDatDisenchantmentsLoader
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Load disenchantment results.
+   */
+  public void doIt()
   {
     List<DisenchantmentResult> disenchantments=new ArrayList<DisenchantmentResult>();
     ItemsManager itemsMgr=ItemsManager.getInstance();
