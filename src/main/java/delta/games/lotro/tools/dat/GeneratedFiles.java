@@ -231,4 +231,8 @@ public class GeneratedFiles
    * Disenchantments.
    */
   public static final File DISENCHANTMENTS=LotroCoreConfig.getInstance().getFile(DataFiles.DISENCHANTMENTS);
+  /**
+   * Misc icons.
+   */
+  public static final File MISC_ICONS=new File("../lotro-data/misc/miscIcons.zip").getAbsoluteFile();
 }

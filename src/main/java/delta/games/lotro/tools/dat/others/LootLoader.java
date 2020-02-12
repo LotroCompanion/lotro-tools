@@ -26,6 +26,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProxyBuilder;
@@ -220,7 +221,8 @@ public class LootLoader
         if (imageDid!=null)
         {
           ret.setImageId(imageDid);
-          File to=new File(imageDid.toString()+".png");
+          File toDir=new File(MiscIconsManager.MISC_ICONS_DIR,"trophyListIcons");
+          File to=new File(toDir,imageDid.toString()+".png");
           if (!to.exists())
           {
             DatIconsUtils.buildImageFile(_facade,imageDid.intValue(),to);

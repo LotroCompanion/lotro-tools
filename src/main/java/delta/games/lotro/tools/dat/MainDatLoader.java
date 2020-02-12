@@ -24,6 +24,7 @@ import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
+import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.npc.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.others.MountsLoader;
@@ -197,6 +198,9 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.LOOTS);
     // Disenchantment
     deleteFile(GeneratedFiles.DISENCHANTMENTS);
+    // Misc icons
+    deleteFile(GeneratedFiles.MISC_ICONS);
+    deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
