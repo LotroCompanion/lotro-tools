@@ -13,6 +13,7 @@ import delta.games.lotro.character.reputation.FactionLevels;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
@@ -142,8 +143,8 @@ Reputation_LowestTier: 1
     // Here we find the total amount of reputation points for each tier
     int xpTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
     LOGGER.info("XP table: "+xpTableId);
-    List<Object> table=_facade.loadWState(xpTableId);
-    long[] xpTable=(long[])table.get(1);
+    WStateDataSet table=_facade.loadWState(xpTableId);
+    long[] xpTable=(long[])table.getValue(1);
     LOGGER.info(Arrays.toString(xpTable));
 
     if (factionId==1879305436)

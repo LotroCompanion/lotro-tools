@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.items.legendary;
 
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -11,6 +10,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemQuality;
@@ -164,14 +164,14 @@ public class MainDatLegendarySystemLoader
     // See: https://lotro-wiki.com/index.php/Legendary_Items for confirmation
     // The wstate below contains the 'increase of legacy points' for each level, for 3rd age items
     //PropertiesSet legendaryPointsTableProps=showProperties(_facade,legendaryPointsTableId+OFFSET); // Nothing!
-    List<Object> data=_facade.loadWState(legendaryPointsTableId);
+    WStateDataSet data=_facade.loadWState(legendaryPointsTableId);
     //WStateLoader.showDecodedData(data);
     //Number of read classes: 2
     //#0: Buffer of size: 4
     //#1: {1=0, 2=10, 3=10, 4=10, 5=10, 6=10, 7=10, 8=10, 9=10, 10=10, 11=12, 12=12, 13=12, 14=12, 15=12, 17=12, 16=12, 19=12, 18=12, 21=14, 20=12, 23=14, 22=14, 25=14, 24=14, 27=14, 26=14, 29=14, 28=14, 31=8, 30=14, 34=8, 35=8, 32=8, 33=8, 38=8, 39=8, 36=8, 37=8, 42=8, 43=8, 40=8, 41=8, 46=8, 47=8, 44=8, 45=8, 51=8, 50=8, 49=8, 48=8, 55=8, 54=8, 53=8, 52=8, 59=8, 58=8, 57=8, 56=8, 63=8, 62=8, 61=8, 60=8, 68=8, 69=8, 70=8, 64=8, 65=8, 66=8, 67=8}
     int[] ret=new int[LegendaryConstants.MAX_LEVEL+1];
     @SuppressWarnings("unchecked")
-    Map<Integer,Long> pointsMap=(Map<Integer,Long>)data.get(1);
+    Map<Integer,Long> pointsMap=(Map<Integer,Long>)data.getValue(1);
     for(Map.Entry<Integer,Long> entry : pointsMap.entrySet())
     {
       int level=entry.getKey().intValue();
@@ -192,9 +192,9 @@ public class MainDatLegendarySystemLoader
   {
     // Load XP values for each legendary level
     // See: https://lotro-wiki.com/index.php/Legendary_Items for confirmation
-    List<Object> data=_facade.loadWState(levelTableId);
+    WStateDataSet data=_facade.loadWState(levelTableId);
     int[] ret=new int[LegendaryConstants.MAX_LEVEL+1];
-    long[] data1=(long[])data.get(1);
+    long[] data1=(long[])data.getValue(1);
     for(int i=0;i<=LegendaryConstants.MAX_LEVEL;i++)
     {
       ret[i]=(int)data1[i];
