@@ -151,16 +151,6 @@ public class MainDatRelicsLoader
 
   private boolean checkRelic(RelicsCategory category, Relic relic)
   {
-    String newRelicName=relic.getName();
-    Relic oldRelic=category.getByName(newRelicName);
-    if (oldRelic!=null)
-    {
-      if (oldRelic.getStats().equals(relic.getStats()))
-      {
-        System.out.println("Duplicate relic:\n old="+oldRelic+"\n new="+relic);
-        return false;
-      }
-    }
     return true;
   }
 

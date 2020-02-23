@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
 import delta.games.lotro.common.treasure.LootsManager;
+import delta.games.lotro.common.treasure.RelicsList;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
@@ -16,8 +17,12 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsContainer;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.ContainerXMLWriter;
+import delta.games.lotro.lore.items.legendary.relics.Relic;
+import delta.games.lotro.lore.items.legendary.relics.RelicsContainer;
+import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.others.LootLoader;
 
@@ -98,24 +103,36 @@ public class MainDatContainerLoader
       int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
       if (count>=1)
       {
-        ret=new Container(indexDataId);
+        ItemsContainer itemsContainer=new ItemsContainer(indexDataId);
+        ret=itemsContainer;
         if (filteredTable!=null)
         {
-          ret.setFilteredTable(filteredTable);
+          itemsContainer.setFilteredTable(filteredTable);
         }
         if (weightedTable!=null)
         {
-          ret.setWeightedTable(weightedTable);
+          itemsContainer.setWeightedTable(weightedTable);
         }
         if (trophyList!=null)
         {
-          ret.setTrophyList(trophyList);
+          itemsContainer.setTrophyList(trophyList);
         }
         if (treasureList!=null)
         {
-          ret.setTreasureList(treasureList);
+          itemsContainer.setTreasureList(treasureList);
         }
         //System.out.println(properties.dump());
+      }
+
+      // Relics?
+      RelicsContainer relicsContainer=handleRelics(indexDataId,properties);
+      if (relicsContainer!=null)
+      {
+        if (ret!=null)
+        {
+          LOGGER.warn("Both containers (items+relics) for: "+indexDataId);
+        }
+        ret=relicsContainer;
       }
      /*
 PackageItem_IsPreviewable: 0
@@ -165,6 +182,36 @@ If PackageItem_IsPreviewable: 1
     {
       PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
       ret=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
+    }
+    return ret;
+  }
+
+  private RelicsContainer handleRelics(int containerId, PropertiesSet properties)
+  {
+    RelicsContainer ret=null;
+    Integer relicId=(Integer)properties.getProperty("ItemAdvancement_RunicToCreate");
+    if (relicId!=null)
+    {
+      RelicsManager relicsMgr=RelicsManager.getInstance();
+      Relic relic=relicsMgr.getById(relicId.intValue());
+      if (relic!=null)
+      {
+        ret=new RelicsContainer(containerId);
+        ret.setRelic(relic);
+      }
+      else
+      {
+        LOGGER.warn("Relic not found: "+relicId);
+      }
+    }
+
+    Integer runicLootListId=(Integer)properties.getProperty("ItemAdvancement_RunicLootListOverride");
+    if (runicLootListId!=null)
+    {
+      RelicsList list=_lootLoader.handleRelicsList(runicLootListId.intValue());
+      //System.out.println(list);
+      ret=new RelicsContainer(containerId);
+      ret.setRelicsList(list);
     }
     return ret;
   }

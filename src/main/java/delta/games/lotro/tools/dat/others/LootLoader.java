@@ -13,6 +13,10 @@ import delta.games.lotro.common.treasure.FilteredTrophyTableEntry;
 import delta.games.lotro.common.treasure.ItemsTable;
 import delta.games.lotro.common.treasure.ItemsTableEntry;
 import delta.games.lotro.common.treasure.LootsManager;
+import delta.games.lotro.common.treasure.RelicsList;
+import delta.games.lotro.common.treasure.RelicsListEntry;
+import delta.games.lotro.common.treasure.RelicsTreasureGroup;
+import delta.games.lotro.common.treasure.RelicsTreasureGroupEntry;
 import delta.games.lotro.common.treasure.TreasureGroupProfile;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TreasureListEntry;
@@ -26,6 +30,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.legendary.relics.Relic;
+import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -365,6 +371,106 @@ public class LootLoader
       }
     }
     return ret;
+  }
+
+  /**
+   * Handle a relics list.
+   * @param propertyId Identifier.
+   * @return A relics list or <code>null</code>.
+   */
+  public RelicsList handleRelicsList(int propertyId)
+  {
+    RelicsList ret=_lootsMgr.getRelicsLists().getItem(propertyId);
+    if (ret==null)
+    {
+      PropertiesSet properties=_facade.loadProperties(propertyId+DATConstants.DBPROPERTIES_OFFSET);
+      if (properties==null)
+      {
+        return null;
+      }
+      //System.out.println(properties.dump());
+      ret=new RelicsList(propertyId);
+      Object[] entriesArray=(Object[])properties.getProperty("RunicList_Array");
+      for(Object entryObj : entriesArray)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entryObj;
+        int frequencyCode=((Integer)entryProps.getProperty("RunicList_DropFrequency")).intValue();
+        float probability=getProbability(frequencyCode);
+        // id may be a Relic, or a runic loot table:
+        int id=((Integer)entryProps.getProperty("RunicList_RunicOrTreasureGroup")).intValue();
+        Relic relic=getRelic(id);
+        RelicsTreasureGroup treasureGroup=null;
+        if (relic==null)
+        {
+          treasureGroup=handleRelicsTreasureGroup(id);
+        }
+        if ((relic!=null) || (treasureGroup!=null))
+        {
+          RelicsListEntry entry=new RelicsListEntry(probability,relic,treasureGroup);
+          ret.addEntry(entry);
+        }
+      }
+      _lootsMgr.getRelicsLists().add(ret);
+    }
+    return ret;
+  }
+
+  private RelicsTreasureGroup handleRelicsTreasureGroup(int id)
+  {
+    RelicsTreasureGroup ret=_lootsMgr.getRelicsTreasureGroups().getItem(id);
+    if (ret==null)
+    {
+      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+      if (properties==null)
+      {
+        return null;
+      }
+      Object[] entriesArray=(Object[])properties.getProperty("RunicTreasureGroup_Array");
+      if (entriesArray==null)
+      {
+        return null;
+      }
+      ret=new RelicsTreasureGroup(id);
+      for(Object entryObj : entriesArray)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entryObj;
+        int relicId=((Integer)entryProps.getProperty("RunicTreasureGroup_Runic")).intValue();
+        int weight=((Integer)entryProps.getProperty("RunicTreasureGroup_Weight")).intValue();
+        Relic relic=getRelic(relicId);
+        if (relic!=null)
+        {
+          RelicsTreasureGroupEntry entry=new RelicsTreasureGroupEntry(weight,relic);
+          ret.addEntry(entry);
+        }
+        else
+        {
+          LOGGER.warn("Relic not found: "+relicId);
+        }
+      }
+      Object[] countsArray=(Object[])properties.getProperty("RunicTreasureGroup_PullCount_Array");
+      if (countsArray!=null)
+      {
+        for(Object entryObj : countsArray)
+        {
+          PropertiesSet entryProps=(PropertiesSet)entryObj;
+          int count=((Integer)entryProps.getProperty("RunicTreasureGroup_PullCount")).intValue();
+          int weight=((Integer)entryProps.getProperty("RunicTreasureGroup_Weight")).intValue();
+          if (weight>0)
+          {
+            ret.addCount(count,weight);
+          }
+        }
+      }
+      _lootsMgr.getRelicsTreasureGroups().add(ret);
+    }
+    return ret;
+  }
+
+  private Relic getRelic(int relicId)
+  {
+    RelicsManager relicsMgr=RelicsManager.getInstance();
+    Relic relic=relicsMgr.getById(relicId);
+    return relic;
   }
 
   private float getProbability(int frequencyCode)
