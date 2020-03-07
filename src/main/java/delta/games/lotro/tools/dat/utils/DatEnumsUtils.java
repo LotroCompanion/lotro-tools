@@ -57,24 +57,7 @@ public class DatEnumsUtils
    */
   public static CharacterClass getCharacterClassFromId(int id)
   {
-    if (id==214) return CharacterClass.BEORNING;
-    if (id==40) return CharacterClass.BURGLAR;
-    if (id==24) return CharacterClass.CAPTAIN;
-    if (id==172) return CharacterClass.CHAMPION;
-    if (id==23) return CharacterClass.GUARDIAN;
-    if (id==162) return CharacterClass.HUNTER;
-    if (id==185) return CharacterClass.LORE_MASTER;
-    if (id==31) return CharacterClass.MINSTREL;
-    if (id==193) return CharacterClass.RUNE_KEEPER;
-    if (id==194) return CharacterClass.WARDEN;
-    // Monster Play
-    if (id==71) return CharacterClass.REAVER;
-    if (id==128) return CharacterClass.DEFILER;
-    if (id==127) return CharacterClass.WEAVER;
-    if (id==179) return CharacterClass.BLACKARROW;
-    if (id==52) return CharacterClass.WARLEADER;
-    if (id==126) return CharacterClass.STALKER;
-    return null;
+    return delta.games.lotro.utils.dat.DatEnumsUtils.getCharacterClassFromId(id);
   }
 
   /**
@@ -84,14 +67,7 @@ public class DatEnumsUtils
    */
   public static Race getRaceFromRaceId(int raceId)
   {
-    if (raceId==23) return Race.MAN;
-    if (raceId==65) return Race.ELF;
-    if (raceId==73) return Race.DWARF;
-    if (raceId==81) return Race.HOBBIT;
-    if (raceId==114) return Race.BEORNING;
-    if (raceId==117) return Race.HIGH_ELF;
-    if (raceId==120) return Race.STOUT_AXE_DWARF;
-    return null;
+    return delta.games.lotro.utils.dat.DatEnumsUtils.getRaceFromRaceId(raceId);
   }
 
   /**
