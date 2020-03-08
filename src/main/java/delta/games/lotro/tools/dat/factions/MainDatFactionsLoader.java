@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -107,13 +108,15 @@ Reputation_LowestTier: 1
     faction.setInitialTier(defaultTier);
     LOGGER.info("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
 
-    /*
     // Property names
     PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
     int currentTierPropId=((Integer)properties.getProperty("Reputation_Faction_CurrentTier_PropertyName")).intValue();
-    System.out.println("Current tier property: "+propsRegistry.getPropertyDef(currentTierPropId));
+    String currentTierPropertyName=propsRegistry.getPropertyDef(currentTierPropId).getName();
+    faction.setCurrentTierPropertyName(currentTierPropertyName);
     int earnedRepPropId=((Integer)properties.getProperty("Reputation_Faction_EarnedReputation_PropertyName")).intValue();
-    System.out.println("Earned rep property: "+propsRegistry.getPropertyDef(earnedRepPropId));
+    String earnedRepPropertyName=propsRegistry.getPropertyDef(earnedRepPropId).getName();
+    faction.setCurrentReputationPropertyName(earnedRepPropertyName);
+    /*
     int globalCapPropId=((Integer)properties.getProperty("Reputation_Faction_GlobalCap_PropertyName")).intValue();
     System.out.println("Global cap property: "+propsRegistry.getPropertyDef(globalCapPropId));
 
