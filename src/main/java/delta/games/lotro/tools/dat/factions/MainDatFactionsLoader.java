@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.reputation.FactionLevels;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -19,12 +18,10 @@ import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionLevel;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
-import delta.games.lotro.lore.reputation.ReputationDeed;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.ReputationDeedsFinder;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.lore.reputation.FactionsFactory;
 
 /**
  * Get faction definitions from DAT files.
@@ -83,11 +80,13 @@ Reputation_LowestTier: 1
       return null;
     }
 
-    Faction faction=new Faction();
-    // Identifier
-    faction.setIdentifier(factionId);
+    Faction faction=new Faction(factionId);
     faction.setName(name);
     LOGGER.info("ID: "+factionId+" => "+name);
+
+    // Category
+    String category=getCategory(factionId);
+    faction.setCategory(category);
 
     // Description
     String description=DatUtils.getStringProperty(properties,"Reputation_Faction_Description");
@@ -101,7 +100,6 @@ Reputation_LowestTier: 1
 
     // Lowest/initial/highest tiers
     int lowestTier=((Integer)properties.getProperty("Reputation_LowestTier")).intValue();
-    lowestTier=fixLowestTier(factionId);
     faction.setLowestTier(lowestTier);
     int highestTier=((Integer)properties.getProperty("Reputation_HighestTier")).intValue();
     faction.setHighestTier(highestTier);
@@ -147,14 +145,6 @@ Reputation_LowestTier: 1
     long[] xpTable=(long[])table.getValue(1);
     LOGGER.info(Arrays.toString(xpTable));
 
-    if (factionId==1879305436)
-    {
-      FactionLevel level=new FactionLevel("NONE","-",0,0,0);
-      level.setTier(2);
-      faction.addFactionLevel(level);
-      defaultTier=2;
-      faction.setLowestTier(2);
-    }
     List<FactionLevel> levels=buildFactionLevels(tierNames,xpTable,lowestTier,highestTier);
     for(FactionLevel level : levels)
     {
@@ -165,14 +155,6 @@ Reputation_LowestTier: 1
       }
     }
     return faction;
-  }
-
-  private boolean isNeutral(FactionLevel level)
-  {
-    if (FactionLevels.NEUTRAL.equals(level.getKey())) return true;
-    if ("NONE".equals(level.getKey())) return true;
-    if ("Neutral".equals(level.getName())) return true;
-    return false;
   }
 
   private Map<Integer,String> getTierNames(int tableId)
@@ -201,9 +183,7 @@ Reputation_LowestTier: 1
       long xp=xpTable[tier];
       long previousXp=xpTable[tier-1];
       int xpDiff=(int)(xp-previousXp);
-      String key=String.valueOf(tier);
-      FactionLevel factionLevel=new FactionLevel(key,tierName,0,0,xpDiff);
-      factionLevel.setTier(tier);
+      FactionLevel factionLevel=new FactionLevel(tier,tierName,0,xpDiff);
       factionLevels.add(factionLevel);
     }
     return factionLevels;
@@ -215,10 +195,12 @@ Reputation_LowestTier: 1
   public void doIt()
   {
     List<Faction> factions=buildFactions();
-    FactionsRegistry registry=mergeFactionsData(factions);
-    cleanupFactionsData(registry);
+    FactionsRegistry registry=new FactionsRegistry();
+    for(Faction faction : factions)
+    {
+      registry.registerFaction(faction);
+    }
     associateDeeds(registry);
-    manualFixes(registry);
     save(registry);
   }
 
@@ -237,97 +219,6 @@ Reputation_LowestTier: 1
       }
     }
     return ret;
-  }
-
-  private FactionsRegistry mergeFactionsData(List<Faction> datFactions)
-  {
-    FactionsRegistry registry=new FactionsRegistry();
-    FactionsFactory factory=new FactionsFactory();
-    // Categories
-    List<String> categories=factory.getCategories();
-    for(String category : categories)
-    {
-      List<Faction> factions=factory.getByCategory(category);
-      for(Faction faction : factions)
-      {
-        String factionName=faction.getName();
-        Faction datFaction=getFactionByName(datFactions,factionName);
-        if (datFaction!=null)
-        {
-          Faction newFaction=mergeFactionData(faction,datFaction);
-          registry.registerFaction(newFaction);
-          datFactions.remove(datFaction);
-        }
-      }
-    }
-    // Register missing factions
-    for(Faction datFaction : datFactions)
-    {
-      if (!isGuildFaction(datFaction.getIdentifier()))
-      {
-        registry.registerFaction(datFaction);
-      }
-    }
-    // Guild faction
-    Faction guildFaction=factory.getGuildFaction();
-    registry.registerFaction(guildFaction);
-    // Deeds
-    for(ReputationDeed deed : factory.getDeeds())
-    {
-      registry.addDeed(deed);
-    }
-    return registry;
-  }
-
-  private Faction mergeFactionData(Faction oldFaction, Faction datFaction)
-  {
-    LOGGER.debug("Merge faction data for: "+datFaction.getName());
-    datFaction.setKey(oldFaction.getKey());
-    datFaction.setCategory(oldFaction.getCategory());
-    // Merge levels
-    FactionLevel[] oldLevels=oldFaction.getLevels();
-    FactionLevel[] datLevels=datFaction.getLevels();
-    if (oldLevels.length==datLevels.length)
-    {
-      for(int i=0;i<oldLevels.length;i++)
-      {
-        datLevels[i].setKey(oldLevels[i].getKey());
-      }
-    }
-    else
-    {
-      LOGGER.warn("Levels count mismatch for faction "+oldFaction.getName()+": "+oldLevels.length+"!="+datLevels.length);
-    }
-    return datFaction;
-  }
-
-  private void cleanupFactionsData(FactionsRegistry registry)
-  {
-    for(Faction faction : registry.getAll())
-    {
-      cleanupFactionLevels(faction);
-    }
-  }
-
-  private void cleanupFactionLevels(Faction faction)
-  {
-    LOGGER.debug("Cleanup faction data for: "+faction.getName());
-    int neutralTier=0;
-    for(FactionLevel level : faction.getLevels())
-    {
-      if (isNeutral(level))
-      {
-        neutralTier=level.getTier();
-        level.setRequiredXp(0);
-        LOGGER.debug("Neutral tier is: "+level);
-      }
-    }
-    // Setup code/value
-    for(FactionLevel level : faction.getLevels())
-    {
-      int code=level.getTier()-neutralTier;
-      level.setValue(code);
-    }
   }
 
   private void associateDeeds(FactionsRegistry registry)
@@ -351,24 +242,6 @@ Reputation_LowestTier: 1
     }
   }
 
-  private Faction getFactionByName(List<Faction> factions, String factionName)
-  {
-    Faction ret=null;
-    for(Faction faction : factions)
-    {
-      String currentFactionName=faction.getName();
-      if (currentFactionName.equals(factionName))
-      {
-        ret=faction;
-      }
-    }
-    if (ret==null)
-    {
-      LOGGER.warn("No faction with name '"+factionName+"'!");
-    }
-    return ret;
-  }
-
   private void save(FactionsRegistry factions)
   {
     File toFile=GeneratedFiles.FACTIONS;
@@ -388,35 +261,10 @@ Reputation_LowestTier: 1
     if (id==1879090244) return false; // Zombie Pirates of Evendim
     if (id==1879090243) return false; // Hobbit Ninjas of The Shire
     if (id==1879345133) return false; // Enmity of Ungol
-    
     return true;
   }
 
-  private int fixLowestTier(int factionId)
-  {
-    if (factionId==1879389872) return 1; // Reclamation of Minas Ithil
-    if (hasOutsider(factionId)) return 2;
-    if (!hasEnemyAndOutsider(factionId)) return 3;
-    return 1;
-  }
-
-  private boolean hasOutsider(int factionId)
-  {
-    if (factionId==1879103954) return true; // Lossoth
-    if (factionId==1879345132) return true; // Red Sky Clan
-    return false;
-  }
-
-  private boolean hasEnemyAndOutsider(int factionId)
-  {
-    if (factionId==1879345134) return true; // Enmity of Fushaum Bal south
-    if (factionId==1879345135) return true; // Enmity of Fushaum Bal north
-    if (factionId==1879182957) return true; // The Ale Association
-    if (factionId==1879103953) return true; // The Inn League
-    return false;
-  }
-
-  private boolean isGuildFaction(int factionId)
+  boolean isGuildFaction(int factionId)
   {
     if (factionId==1879124448) return true; // Cook's Guild
     if (factionId==1879124449) return true; // Jeweller's Guild
@@ -428,68 +276,86 @@ Reputation_LowestTier: 1
     return false;
   }
 
-  private void manualFixes(FactionsRegistry registry)
+  private String getCategory(int factionId)
   {
-    // Hobnanigans
-    {
-      Faction hobnanigans=registry.getByKey("HOBNANIGANS");
-      hobnanigans.getLevelByKey("ROOKIE").setRequiredXp(0);
-      FactionLevel none=hobnanigans.getLevelByKey("NONE");
-      hobnanigans.setInitialLevel(none);
-    }
-    // Lossoth
-    {
-      Faction lossoth=registry.getByKey("LOSSOTH");
-      lossoth.getLevelByKey("OUTSIDER").setRequiredXp(0);
-      lossoth.getLevelByKey("NEUTRAL").setRequiredXp(10000);
-    }
-    // Grey company
-    {
-      Faction greyCompany=registry.getByKey("GREY_COMPANY");
-      FactionLevel neutral=greyCompany.getLevelByKey("NEUTRAL");
-      greyCompany.setInitialLevel(neutral);
-    }
-    // Ale Association
-    {
-      Faction aleAssociation=registry.getByKey("ALE_ASSOCIATION");
-      aleAssociation.getLevelByKey("ENEMY").setRequiredXp(10000);
-    }
-    // Inn League
-    {
-      Faction aleAssociation=registry.getByKey("INN_LEAGUE");
-      aleAssociation.getLevelByKey("ENEMY").setRequiredXp(10000);
-    }
-    // Mordor reputations
-    {
-      String category="Mordor";
-      // Red Sky Clan
-      Faction redSkyClan=registry.getById(1879345132);
-      redSkyClan.setCategory(category);
-      redSkyClan.getLevelByKey("2").setRequiredXp(0);
-      redSkyClan.getLevelByKey("3").setRequiredXp(10000);
-      // Enmity of Fushaum Bal south
-      Faction fushaumBalSouth=registry.getById(1879345134);
-      fushaumBalSouth.setCategory(category);
-      fushaumBalSouth.getLevelByKey("1").setRequiredXp(10000);
-      fushaumBalSouth.getLevelByKey("2").setRequiredXp(0);
-      fushaumBalSouth.getLevelByKey("3").setRequiredXp(10000);
-      // Enmity of Fushaum Bal north
-      Faction fushaumBalNorth=registry.getById(1879345135);
-      fushaumBalNorth.setCategory(category);
-      fushaumBalNorth.getLevelByKey("1").setRequiredXp(10000);
-      fushaumBalNorth.getLevelByKey("2").setRequiredXp(0);
-      fushaumBalNorth.getLevelByKey("3").setRequiredXp(10000);
-    }
-    // Minas Morgul reputations
-    {
-      String category="Mordor";
-      Faction whiteCompany=registry.getById(1879389868);
-      whiteCompany.setCategory(category);
-      Faction reclamationOfMinasIthil=registry.getById(1879389872);
-      reclamationOfMinasIthil.setCategory(category);
-      Faction greatAlliance=registry.getById(1879389871);
-      greatAlliance.setCategory(category);
-    }
+    String category="Eriador";
+    if (factionId==1879091345) return category; // Shire
+    if (factionId==1879091340) return category; // Bree
+    if (factionId==1879091408) return category; // Thorin's Hall
+    if (factionId==1879161272) return category; // The Eglain
+    if (factionId==1879091344) return category; // The Rangers of Esteldín
+    if (factionId==1879091346) return category; // Elves of Rivendell
+    if (factionId==1879091343) return category; // The Wardens of Annúminas
+    if (factionId==1879103954) return category; // Lossoth of Forochel
+    if (factionId==1879091341) return category; // Council of the North
+    if (factionId==1879097420) return category; // The Eldgang
+    category="Rhovanion";
+    if (factionId==1879143761) return category; // Iron Garrison Guards
+    if (factionId==1879143766) return category; // Iron Garrison Miners
+    if (factionId==1879150133) return category; // Galadhrim
+    if (factionId==1879154438) return category; // Malledhrim
+    if (factionId==1879362403) return category; // Elves of Felegoth
+    if (factionId==1879362405) return category; // Men of Dale
+    if (factionId==1879363082) return category; // Dwarves of Erebor
+    if (factionId==1879368441) return category; // Grey Mountains Expedition
+    if (factionId==1879386002) return category; // Wilderfolk
+    category="Dunland";
+    if (factionId==1879181920) return category; // Algraig, Men of Enedwaith
+    if (factionId==1879181919) return category; // The Grey Company
+    if (factionId==1879202077) return category; // Men of Dunland
+    if (factionId==1879202078) return category; // Théodred's Riders
+    category="Rohan";
+    if (factionId==1879227796) return category; // The Riders of Stangard
+    if (factionId==1879230121) return category; // Heroes of Limlight Gorge
+    if (factionId==1879237312) return category; // Men of the Wold
+    if (factionId==1879237304) return category; // Men of the Norcrofts
+    if (factionId==1879237267) return category; // Men of the Entwash Vale
+    if (factionId==1879237243) return category; // Men of the Sutcrofts
+    if (factionId==1879259430) return category; // People of Wildermore
+    if (factionId==1879259431) return category; // Survivors of Wildermore
+    if (factionId==1879271130) return category; // The Eorlingas
+    if (factionId==1879271131) return category; // The Helmingas
+    if (factionId==1879303012) return category; // The Ents of Fangorn Forest
+    category="Dol Amroth";
+    if (factionId==1879306071) return category; // Dol Amroth
+    if (factionId==1879308442) return category; // Dol Amroth - Armoury
+    if (factionId==1879308438) return category; // Dol Amroth - Bank
+    if (factionId==1879308441) return category; // Dol Amroth - Docks
+    if (factionId==1879308436) return category; // Dol Amroth - Great Hall
+    if (factionId==1879308443) return category; // Dol Amroth - Library
+    if (factionId==1879308440) return category; // Dol Amroth - Mason
+    if (factionId==1879308439) return category; // Dol Amroth - Swan-knights
+    if (factionId==1879308437) return category; // Dol Amroth - Warehouse
+    category="Gondor";
+    if (factionId==1879315479) return category; // Men of Ringló Vale
+    if (factionId==1879315480) return category; // Men of Dor-en-Ernil
+    if (factionId==1879315481) return category; // Men of Lebennin
+    if (factionId==1879314940) return category; // Pelargir
+    if (factionId==1879322612) return category; // Rangers of Ithilien
+    if (factionId==1879326961) return category; // Defenders of Minas Tirith
+    if (factionId==1879330539) return category; // Riders of Rohan
+    category="Mordor";
+    if (factionId==1879334719) return category; // Host of the West
+    if (factionId==1879341949) return category; // Host of the West: Armour
+    if (factionId==1879341953) return category; // Host of the West: Provisions
+    if (factionId==1879341952) return category; // Host of the West: Weapons
+    if (factionId==1879345132) return category; // Red Sky Clan
+    if (factionId==1879345136) return category; // Conquest of Gorgoroth
+    if (factionId==1879345134) return category; // Enmity of Fushaum Bal south
+    if (factionId==1879345135) return category; // Enmity of Fushaum Bal north
+    if (factionId==1879389868) return category; // The White Company
+    if (factionId==1879389872) return category; // Reclamation of Minas Ithil
+    if (factionId==1879389871) return category; // The Great Alliance
+    category="Misc";
+    if (factionId==1879182957) return category; // The Ale Association
+    if (factionId==1879103953) return category; // The Inn League
+    if (factionId==1879305436) return category; // Chicken Chasing League of Eriador
+    category="";
+    if (factionId==1879400830) return category; // Townsfolk of the Kingstead
+    if (factionId==1879400827) return category; // Townsfolk of the Eastfold
+
+    if (isGuildFaction(factionId)) return "Guild";
+    return "???";
   }
 
   /**
