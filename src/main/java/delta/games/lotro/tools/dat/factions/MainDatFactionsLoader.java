@@ -196,6 +196,7 @@ Reputation_LowestTier: 1
   public void doIt()
   {
     List<Faction> factions=buildFactions();
+    factions=sortFactions(factions);
     FactionsRegistry registry=new FactionsRegistry();
     for(Faction faction : factions)
     {
@@ -218,6 +219,33 @@ Reputation_LowestTier: 1
       {
         ret.add(faction);
       }
+    }
+    return ret;
+  }
+
+  private List<Faction> sortFactions(List<Faction> factions)
+  {
+    List<Faction> ret=new ArrayList<Faction>();
+    int[] factionIds=getLegacyFactionOrder();
+    for(int factionId : factionIds)
+    {
+      Faction foundFaction=null;
+      for(Faction faction : factions)
+      {
+        if (faction.getIdentifier()==factionId)
+        {
+          foundFaction=faction;
+          break;
+        }
+      }
+      if (foundFaction!=null)
+      {
+        factions.remove(foundFaction);
+        ret.add(foundFaction);
+      }
+    }
+    if (factions.size()>0) {
+      LOGGER.warn("Sort order not specified for some factions: "+factions);
     }
     return ret;
   }
@@ -357,6 +385,33 @@ Reputation_LowestTier: 1
 
     if (isGuildFaction(factionId)) return "Guild";
     return "???";
+  }
+
+  private int[] getLegacyFactionOrder()
+  {
+    int[] ret=new int[] {
+      // Eriador
+      1879091345,1879091340,1879091408,1879161272,1879091344,1879091346,1879091343,1879103954,1879091341,1879097420,
+      // Rhovanion
+      1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,
+      // Dunland
+      1879181920,1879181919,1879202077,1879202078,1879227796,1879230121,
+      // Rohan
+      1879237312,1879237304,1879237267,1879237243,1879259430,1879259431,1879271130,1879271131,1879303012,
+      // Dol Amroth
+      1879306071,1879308442,1879308438,1879308441,1879308436,1879308443,1879308440,1879308439,1879308437,
+      // Gondor
+      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,
+      // Mordor
+      1879334719,1879341949,1879341953,1879341952,1879345136,
+      // Misc
+      1879182957,1879103953,1879305436,
+      // Mordor again
+      1879345132,1879345134,1879345135,1879389868,1879389872,1879389871,
+      // Empty
+      1879400830,1879400827
+    };
+    return ret;
   }
 
   /**
