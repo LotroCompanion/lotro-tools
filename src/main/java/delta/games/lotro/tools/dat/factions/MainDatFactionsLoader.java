@@ -142,13 +142,13 @@ Reputation_LowestTier: 1
 
     // Faction advancement table
     // Here we find the total amount of reputation points for each tier
-    int xpTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
-    LOGGER.info("XP table: "+xpTableId);
-    WStateDataSet table=_facade.loadWState(xpTableId);
-    long[] xpTable=(long[])table.getValue(1);
-    LOGGER.info(Arrays.toString(xpTable));
+    int reputationTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
+    LOGGER.info("Reputation table: "+reputationTableId);
+    WStateDataSet table=_facade.loadWState(reputationTableId);
+    long[] reputationTable=(long[])table.getValue(1);
+    LOGGER.info(Arrays.toString(reputationTable));
 
-    List<FactionLevel> levels=buildFactionLevels(tierNames,xpTable,lowestTier,highestTier);
+    List<FactionLevel> levels=buildFactionLevels(tierNames,reputationTable,lowestTier,highestTier);
     for(FactionLevel level : levels)
     {
       faction.addFactionLevel(level);
@@ -177,16 +177,14 @@ Reputation_LowestTier: 1
     return ret;
   }
 
-  private List<FactionLevel> buildFactionLevels(Map<Integer,String> tierNames, long[] xpTable, int lowestTier, int highestTier)
+  private List<FactionLevel> buildFactionLevels(Map<Integer,String> tierNames, long[] reputationTable, int lowestTier, int highestTier)
   {
     List<FactionLevel> factionLevels=new ArrayList<FactionLevel>();
     for(int tier=lowestTier;tier<=highestTier;tier++)
     {
       String tierName=tierNames.get(Integer.valueOf(tier));
-      long xp=xpTable[tier];
-      long previousXp=xpTable[tier-1];
-      int xpDiff=(int)(xp-previousXp);
-      FactionLevel factionLevel=new FactionLevel(tier,tierName,0,xpDiff);
+      long reputation=reputationTable[tier];
+      FactionLevel factionLevel=new FactionLevel(tier,tierName,0,(int)reputation);
       factionLevels.add(factionLevel);
     }
     return factionLevels;
