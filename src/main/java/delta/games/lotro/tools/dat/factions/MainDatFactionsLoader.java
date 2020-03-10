@@ -108,6 +108,9 @@ Reputation_LowestTier: 1
     faction.setInitialTier(defaultTier);
     LOGGER.info("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
 
+    // Guild?
+    boolean isGuild=isGuildFaction(factionId);
+    faction.setIsGuildFaction(isGuild);
     // Property names
     PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
     int currentTierPropId=((Integer)properties.getProperty("Reputation_Faction_CurrentTier_PropertyName")).intValue();
@@ -152,10 +155,6 @@ Reputation_LowestTier: 1
     for(FactionLevel level : levels)
     {
       faction.addFactionLevel(level);
-      if (level.getTier()==defaultTier)
-      {
-        faction.setInitialLevel(level);
-      }
     }
     return faction;
   }
@@ -408,6 +407,8 @@ Reputation_LowestTier: 1
       1879182957,1879103953,1879305436,
       // Mordor again
       1879345132,1879345134,1879345135,1879389868,1879389872,1879389871,
+      // Guilds
+      1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
       // Empty
       1879400830,1879400827
     };
