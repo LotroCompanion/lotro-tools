@@ -19,6 +19,7 @@ import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionLevel;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.lore.reputation.ReputationDeed;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.ReputationDeedsFinder;
@@ -201,6 +202,7 @@ Reputation_LowestTier: 1
     {
       registry.registerFaction(faction);
     }
+    buildFactionDeeds(registry);
     associateDeeds(registry);
     save(registry);
   }
@@ -384,6 +386,31 @@ Reputation_LowestTier: 1
 
     if (isGuildFaction(factionId)) return "Guild";
     return "???";
+  }
+
+  private void buildFactionDeeds(FactionsRegistry registry)
+  {
+    ReputationDeed wrDeed=new ReputationDeed("World Renowned");
+    wrDeed.setLotroPoints(50);
+    wrDeed.addFaction(registry.getById(1879091345)); // Shire
+    wrDeed.addFaction(registry.getById(1879091340)); // Bree
+    wrDeed.addFaction(registry.getById(1879091408)); // Thorin's Hall
+    wrDeed.addFaction(registry.getById(1879161272)); // Eglain
+    wrDeed.addFaction(registry.getById(1879091344)); // Esteldin
+    wrDeed.addFaction(registry.getById(1879091346)); // Rivendell
+    wrDeed.addFaction(registry.getById(1879091343)); // Annuminas
+    wrDeed.addFaction(registry.getById(1879103954)); // Lossoth
+    wrDeed.addFaction(registry.getById(1879091341)); // Angmar
+    wrDeed.addFaction(registry.getById(1879181920)); // Algraig
+    wrDeed.addFaction(registry.getById(1879181919)); // Grey company
+    registry.addDeed(wrDeed);
+
+    ReputationDeed ambassadorDeed=new ReputationDeed("Ambassador of the Elves");
+    ambassadorDeed.setLotroPoints(20);
+    ambassadorDeed.addFaction(registry.getById(1879091346)); // Rivendell
+    ambassadorDeed.addFaction(registry.getById(1879150133)); // Galadhrim
+    ambassadorDeed.addFaction(registry.getById(1879154438)); // Malledhrim
+    registry.addDeed(ambassadorDeed);
   }
 
   private int[] getLegacyFactionOrder()
