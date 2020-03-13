@@ -9,11 +9,10 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
-import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
-import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -90,9 +89,14 @@ public class VirtueDataLoader
       int iconId=((Integer)virtueProperties.getProperty("Trait_Icon")).intValue();
       ret.setIconId(iconId);
       // Rank stat key
+      PropertiesRegistry propsRegistry=facade.getPropertiesRegistry();
       int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
-      StatDescription stat=StatsRegistry.getInstance().getById(rankPropertyId);
-      ret.setRankStatKey(stat.getKey());
+      String rankPropertyName=propsRegistry.getPropertyDef(rankPropertyId).getName();
+      ret.setRankStatKey(rankPropertyName);
+      // XP stat key
+      int xpPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_XP_PropertyName")).intValue();
+      String xpPropertyName=propsRegistry.getPropertyDef(xpPropertyId).getName();
+      ret.setXpPropertyName(xpPropertyName);
       // Stats
       DatStatUtils.doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
