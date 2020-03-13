@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.crafting;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.crafting.CraftingData;
@@ -140,6 +141,26 @@ CraftVocation_LearnString:
       // - guild
       boolean hasGuild=hasGuild(professionId);
       ret.setHasGuild(hasGuild);
+
+      // Property names
+      PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
+      // - enabled
+      int enabledPropertyId=((Integer)professionProps.getProperty("CraftProfession_Enabled_PropertyName")).intValue();
+      String enabledPropertyName=propsRegistry.getPropertyDef(enabledPropertyId).getName();
+      // - mastery level
+      int masteryLevelPropertyId=((Integer)professionProps.getProperty("CraftProfession_MasteryLevel_PropertyName")).intValue();
+      String masteryLevelPropertyName=propsRegistry.getPropertyDef(masteryLevelPropertyId).getName();
+      // - mastery XP
+      int masteryXpPropertyId=((Integer)professionProps.getProperty("CraftProfession_MasteryXP_PropertyName")).intValue();
+      String masteryXpPropertyName=propsRegistry.getPropertyDef(masteryXpPropertyId).getName();
+      // - proficiency level
+      int proficiencyLevelPropertyId=((Integer)professionProps.getProperty("CraftProfession_ProficiencyLevel_PropertyName")).intValue();
+      String proficiencyLevelPropertyName=propsRegistry.getPropertyDef(proficiencyLevelPropertyId).getName();
+      // - proficiency XP
+      int proficiencyXpPropertyId=((Integer)professionProps.getProperty("CraftProfession_ProficiencyXP_PropertyName")).intValue();
+      String proficiencyXpPropertyName=propsRegistry.getPropertyDef(proficiencyXpPropertyId).getName();
+      ret.setPropertyNames(enabledPropertyName,masteryLevelPropertyName,masteryXpPropertyName,proficiencyLevelPropertyName,proficiencyXpPropertyName);
+
       // Register profession
       professions.addProfession(ret);
     }
@@ -151,13 +172,8 @@ CraftProfession_Characteristic: 0
 CraftProfession_CompletedMasteryLevel_PropertyName: 268436939 (Craft_Weaponsmith_CompletedMasteryLevel)
 CraftProfession_CompletedProficiencyLevel_PropertyName: 268439502 (Craft_Weaponsmith_CompletedProficiencyLevel)
 CraftProfession_CriticalChanceAddModifier_PropertyName: 268436462 (Craft_Weaponsmith_CriticalChanceAddModifier)
-CraftProfession_Enabled_PropertyName: 268435997 (Craft_Weaponsmith_Enabled)
 CraftProfession_ExtraRecipeArray_PropertyName: 268439738 (Craft_Weaponsmith_ExtraRecipeArray)
-CraftProfession_MasteryLevel_PropertyName: 268437879 (Craft_Weaponsmith_MasteryLevel)
-CraftProfession_MasteryXP_PropertyName: 268438517 (Craft_Weaponsmith_MasteryXP)
 CraftProfession_OpenLevel_PropertyName: 268445421 (Craft_Weaponsmith_OpenLevel)
-CraftProfession_ProficiencyLevel_PropertyName: 268435526 (Craft_Weaponsmith_ProficiencyLevel)
-CraftProfession_ProficiencyXP_PropertyName: 268435525 (Craft_Weaponsmith_ProficiencyXP)
 CraftProfession_RecipeWebStoreCategory: 19 (CraftRecipe_Weaponsmith)
 CraftProfession_RequiredTool: 128 (Smithing Hammer)
 CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
