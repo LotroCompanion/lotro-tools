@@ -14,6 +14,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -49,6 +50,10 @@ public class VirtueDataLoader
     List<VirtueDescription> virtues=new ArrayList<VirtueDescription>();
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
+
+    int xpTableId=((Integer)properties.getProperty("Trait_Control_VirtueTierToExperience_AdvancementTable")).intValue();
+    WStateDataSet xpTableData=_facade.loadWState(xpTableId);
+    long[] xpTable=(long[])xpTableData.getValue(1);
     Object[] freepTraitsArray=(Object[])properties.getProperty("Trait_Control_FreepTraits");
     for(Object freepTraitObj : freepTraitsArray)
     {
@@ -61,6 +66,11 @@ public class VirtueDataLoader
       VirtueDescription virtue=loadVirtue(_facade,traitId);
       virtues.add(virtue);
       //System.out.println("Virtue: "+traitId+" - "+trait.getName());
+      // Set XP table
+      for(int i=0;i<xpTable.length;i++)
+      {
+        virtue.setXpForTier(i,(int)xpTable[i]);
+      }
     }
     saveVirtues(virtues);
   }
