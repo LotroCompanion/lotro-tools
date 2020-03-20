@@ -12,6 +12,8 @@ import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.crafting.Vocation;
 import delta.games.lotro.lore.crafting.io.xml.CraftingXMLWriter;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -52,14 +54,12 @@ public class MainDatCraftingLoader
       handleVocation(vocationId);
     }
     // - guilds
-    /*
     Object[] guildArray=(Object[])props.getProperty("CraftDirectory_CraftGuildArray");
     for(Object guildObj : guildArray)
     {
       int guildId=((Integer)guildObj).intValue();
       handleGuild(guildId);
     }
-    */
     // Icons
     RecipeIconsInitializer.setupRecipeIcons(_data);
     save();
@@ -73,17 +73,14 @@ public class MainDatCraftingLoader
     // - name
     String name=DatUtils.getStringProperty(vocationProps,"CraftVocation_Name");
     ret.setName(name);
-    System.out.println("Vocation: "+name);
     // - description
     String description=DatUtils.getStringProperty(vocationProps,"CraftVocation_Description");
     ret.setDescription(description);
-    System.out.println("\tDescription: "+description);
     // - professions
     Object[] professionsArray=(Object[])vocationProps.getProperty("CraftVocation_ProfessionArray");
     for(Object professionObj : professionsArray)
     {
       int professionId=((Integer)professionObj).intValue();
-      System.out.println("\tProfession: "+professionId);
       Profession profession=handleProfession(professionId);
       if (profession!=null)
       {
@@ -120,11 +117,9 @@ CraftVocation_LearnString:
       // - name
       String name=DatUtils.getStringProperty(professionProps,"CraftProfession_Name");
       ret.setName(name);
-      //System.out.println("Profession: "+name);
       // - description
       String description=DatUtils.getStringProperty(professionProps,"CraftProfession_Description");
       ret.setDescription(description);
-      //System.out.println("\tDescription: "+description);
       // - tiers
       CraftingLevel beginner=buildBeginnerLevel(ret);
       ret.addLevel(beginner);
@@ -138,9 +133,6 @@ CraftVocation_LearnString:
       // - key
       String key=getProfessionKey(professionId);
       ret.setKey(key);
-      // - guild
-      boolean hasGuild=hasGuild(professionId);
-      ret.setHasGuild(hasGuild);
 
       // Property names
       PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
@@ -206,21 +198,6 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     if (vocationId==1879062814) return "WOODSMAN";
     if (vocationId==1879062815) return "HISTORIAN";
     return null;
-  }
-
-  private boolean hasGuild(int professionId)
-  {
-    if (professionId==1879054946) return true;
-    if (professionId==1879055079) return true;
-    if (professionId==1879055299) return true;
-    if (professionId==1879055477) return true;
-    if (professionId==1879055778) return true;
-    if (professionId==1879055941) return true;
-    if (professionId==1879061252) return true;
-    if (professionId==1879062816) return false;
-    if (professionId==1879062818) return false;
-    if (professionId==1879062817) return false;
-    return false;
   }
 
   private CraftingLevel buildBeginnerLevel(Profession profession)
@@ -289,6 +266,26 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     CraftProfession_TierOpeningCharacteristic: 1879272071
      */
     return ret;
+  }
+
+  private void handleGuild(int guildId)
+  {
+    PropertiesSet guildProps=_facade.loadProperties(guildId+DATConstants.DBPROPERTIES_OFFSET);
+    int factionId=((Integer)guildProps.getProperty("CraftGuild_Faction")).intValue();
+    int professionId=((Integer)guildProps.getProperty("CraftGuild_Profession")).intValue();
+    Professions professions=_data.getProfessionsRegistry();
+    Profession profession=professions.getProfessionById(professionId);
+    Faction faction=FactionsRegistry.getInstance().getById(factionId);
+    profession.setGuildFaction(faction);
+    /*
+    ******** Properties: 1879124441
+    CraftGuild_Faction: 1879124448
+    CraftGuild_LearnString: 
+      #1: Do you want to join the Cook's Guild?
+    CraftGuild_Profession: 1879061252
+    CraftGuild_QuestCategory: 94 (Crafting Guild: Cook)
+    CraftGuild_RequiredCraftTier: 2 (Journeyman)
+    */
   }
 
   /**

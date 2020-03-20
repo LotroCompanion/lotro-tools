@@ -61,7 +61,6 @@ Reputation_HighestTier: 7
 Reputation_LowestTier: 1
   */
 
-  //private Set<String> propNames=new HashSet<String>();
   private Faction load(int factionId)
   {
     if (!useFaction(factionId))
@@ -296,6 +295,7 @@ Reputation_LowestTier: 1
 
   boolean isGuildFaction(int factionId)
   {
+    // May be loaded from CraftDirectory/CraftDirectory_CraftGuildArray...
     if (factionId==1879124448) return true; // Cook's Guild
     if (factionId==1879124449) return true; // Jeweller's Guild
     if (factionId==1879124450) return true; // Metalsmith's Guild
