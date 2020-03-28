@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
+import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.characters.VirtueDataLoader;
@@ -68,6 +69,8 @@ public class MainDatLoader
     // Combat data
     new MainDatCombatLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
+    // Traits
+    new MainTraitDataLoader(_facade).doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -239,5 +242,4 @@ public class MainDatLoader
     new MainDatLoader(facade).doIt();
     facade.dispose();
   }
-
 }

@@ -1,7 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
 import delta.games.lotro.character.skills.SkillsManager;
-import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
@@ -29,12 +28,10 @@ public class MainCharacterDataLoader
    */
   public void doIt()
   {
-    TraitsManager traitsManager=new TraitsManager();
-
     // Load race data
-    new RaceDataLoader(_facade,traitsManager).doIt();
+    new RaceDataLoader(_facade).doIt();
     // Load character class data
-    new CharacterClassDataLoader(_facade,traitsManager).doIt();
+    new CharacterClassDataLoader(_facade).doIt();
     // Load virtues data
     new VirtueDataLoader(_facade).doIt();
     // Load progression of class trait points with character level
@@ -44,8 +41,6 @@ public class MainCharacterDataLoader
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Stats usage statistics
     DatStatUtils._statsUsageStatistics.showResults();
-    // Save traits
-    TraitLoader.saveTraits(traitsManager);
     // Save skills
     SkillsManager skillsManager=SkillsManager.getInstance();
     SkillLoader.saveSkills(skillsManager);

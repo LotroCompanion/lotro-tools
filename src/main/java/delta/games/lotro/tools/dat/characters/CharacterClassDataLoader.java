@@ -19,7 +19,6 @@ import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.stats.StatDescription;
@@ -45,20 +44,17 @@ public class CharacterClassDataLoader
   private List<ClassDescription> _classes;
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
-  private TraitsManager _traitsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param traitsManager Traits manager.
    */
-  public CharacterClassDataLoader(DataFacade facade, TraitsManager traitsManager)
+  public CharacterClassDataLoader(DataFacade facade)
   {
     _facade=facade;
     _classes=new ArrayList<ClassDescription>();
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
-    _traitsManager=traitsManager;
   }
 
   private void handleClass(int classId)
@@ -329,8 +325,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       LOGGER.info("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
-      TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-      _traitsManager.registerTrait(trait);
+      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
       ClassTrait classTrait=new ClassTrait(level,trait);
       description.addTrait(classTrait);
     }
@@ -428,7 +423,7 @@ AdvTable_AvailableSkillEntryList:
       handleClass(((Integer)classId).intValue());
     }
     // Load trait trees
-    new TraitTreesDataLoader(_facade,_traitsManager).doIt(_classes);
+    new TraitTreesDataLoader(_facade).doIt(_classes);
 
     // Save start stats
     StartStatsXMLWriter.write(GeneratedFiles.START_STATS,_startStatsManager);

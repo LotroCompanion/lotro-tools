@@ -1,12 +1,9 @@
 package delta.games.lotro.tools.dat.characters;
 
-import org.apache.log4j.Logger;
-
-import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get trait definitions from DAT files.
@@ -14,8 +11,6 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class MainTraitDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainTraitDataLoader.class);
-
   private DataFacade _facade;
 
   /**
@@ -27,25 +22,13 @@ public class MainTraitDataLoader
     _facade=facade;
   }
 
-  private void loadTrait(int indexDataId)
+  /**
+   * Load trait data.
+   */
+  public void doIt()
   {
-    System.out.println(indexDataId);
-    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
-    if (properties!=null)
-    {
-      String name=DatUtils.getStringProperty(properties,"Trait_Name");
-      System.out.println(indexDataId+": "+name);
-      //String description=DatUtils.getStringProperty(properties,"Trait_Description");
-      //System.out.println(properties.dump());
-    }
-    else
-    {
-      LOGGER.warn("Could not handle trait ID="+indexDataId);
-    }
-  }
+    TraitsManager traitsMgr=TraitsManager.getInstance();
 
-  private void doIt()
-  {
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
@@ -54,13 +37,19 @@ public class MainTraitDataLoader
         int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
         //System.out.println(classDefIndex);
-        if (classDefIndex==1477)
+        if ((classDefIndex==1477) || (classDefIndex==1478) || (classDefIndex==1483) ||
+            (classDefIndex==1494) || (classDefIndex==2525) || (classDefIndex==3438) || (classDefIndex==3509))
         {
           // Traits
-          loadTrait(did);
+          TraitDescription trait=TraitLoader.loadTrait(_facade,did);
+          if (trait!=null)
+          {
+            traitsMgr.registerTrait(trait);
+          }
         }
       }
     }
+    TraitLoader.saveTraits();
   }
 
   /**

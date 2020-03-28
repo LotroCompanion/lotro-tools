@@ -34,86 +34,108 @@ public class TraitLoader
   public static File TRAIT_ICONS_DIR=new File("data\\traits\\tmp").getAbsoluteFile();
 
   /**
+   * Get a trait.
+   * @param facade Data facade.
+   * @param traitId Trait identifier.
+   * @return the trait description or <code>null</code> if not found/loaded.
+   */
+  public static TraitDescription getTrait(DataFacade facade, int traitId)
+  {
+    TraitsManager traitsMgr=TraitsManager.getInstance();
+    TraitDescription trait=traitsMgr.getTrait(traitId);
+    if (trait==null)
+    {
+      LOGGER.warn("Could not find trait ID="+traitId);
+    }
+    return trait;
+  }
+
+  /**
    * Load a trait.
    * @param facade Data facade.
    * @param traitId Trait identifier.
-   * @return the loaded trait description.
+   * @return the loaded trait description or <code>null</code> if not found.
    */
   public static TraitDescription loadTrait(DataFacade facade, int traitId)
   {
-    TraitDescription ret=null;
     PropertiesSet traitProperties=facade.loadProperties(traitId+DATConstants.DBPROPERTIES_OFFSET);
-    if (traitProperties!=null)
+    if (traitProperties==null)
     {
-      //System.out.println("*********** Trait: "+traitId+" ****************");
-      ret=new TraitDescription();
-      ret.setIdentifier(traitId);
-      // Name
-      String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
-      traitName=StringUtils.fixName(traitName);
-      ret.setName(traitName);
-      // Description
-      String description=DatUtils.getStringProperty(traitProperties,"Trait_Description");
-      ret.setDescription(description);
-      // Icon
-      int iconId=((Integer)traitProperties.getProperty("Trait_Icon")).intValue();
-      ret.setIconId(iconId);
-      // Min level
-      Integer minLevelInt=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
-      int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
-      ret.setMinLevel(minLevel);
-      // Tier
-      //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();
-      Integer maxTier=(Integer)traitProperties.getProperty("Trait_Virtue_Maximum_Rank");
-      if ((maxTier!=null) && (maxTier.intValue()>1))
-      {
-        ret.setTiersCount(maxTier.intValue());
-      }
-      //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
+      return null;
+    }
+    //System.out.println("*********** Trait: "+traitId+" ****************");
+    TraitDescription ret=new TraitDescription();
+    ret.setIdentifier(traitId);
+    // Name
+    String traitName=DatUtils.getStringProperty(traitProperties,"Trait_Name");
+    traitName=StringUtils.fixName(traitName);
+    ret.setName(traitName);
+    // Description
+    String description=DatUtils.getStringProperty(traitProperties,"Trait_Description");
+    ret.setDescription(description);
+    // Icon
+    Integer iconId=(Integer)traitProperties.getProperty("Trait_Icon");
+    if (iconId!=null)
+    {
+      ret.setIconId(iconId.intValue());
+    }
+    // Min level
+    Integer minLevelInt=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
+    int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
+    ret.setMinLevel(minLevel);
+    // Tier
+    //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();
+    Integer maxTier=(Integer)traitProperties.getProperty("Trait_Virtue_Maximum_Rank");
+    if ((maxTier!=null) && (maxTier.intValue()>1))
+    {
+      ret.setTiersCount(maxTier.intValue());
+    }
+    //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
 
-      // Category
-      // See enum: SkillCharacteristicCategory (id=587202586). 93 = Discounts:
+    // Category
+    // See enum: SkillCharacteristicCategory (id=587202586). 93 = Discounts:
 
-      // Stats
-      DatStatUtils.doFilterStats=false;
-      StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
-      ret.setStatsProvider(statsProvider);
-      // Build icon file
+    // Stats
+    DatStatUtils.doFilterStats=false;
+    StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
+    ret.setStatsProvider(statsProvider);
+    // Build icon file
+    if (iconId!=null)
+    {
       String iconFilename=iconId+".png";
       File to=new File(TRAIT_ICONS_DIR,"traitIcons/"+iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
-        boolean ok=DatIconsUtils.buildImageFile(facade,iconId,to);
+        boolean ok=DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
         if (!ok)
         {
           LOGGER.warn("Could not build trait icon: "+iconFilename);
         }
       }
-      // Skills
-      Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
-      if (skillArray!=null) 
+    }
+    // Skills
+    Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
+    if (skillArray!=null) 
+    {
+      for(Object skillIdObj : skillArray)
       {
-        for(Object skillIdObj : skillArray)
+        int skillId=((Integer)skillIdObj).intValue();
+        SkillDescription skill=SkillLoader.getSkill(facade,skillId);
+        if (skill!=null)
         {
-          int skillId=((Integer)skillIdObj).intValue();
-          SkillDescription skill=SkillLoader.getSkill(facade,skillId);
-          if (skill!=null)
-          {
-            ret.addSkill(skill);
-          }
+          ret.addSkill(skill);
         }
       }
-      
     }
     return ret;
   }
 
   /**
    * Save traits to disk.
-   * @param traitsManager Traits manager.
    */
-  public static void saveTraits(TraitsManager traitsManager)
+  public static void saveTraits()
   {
+    TraitsManager traitsManager=TraitsManager.getInstance();
     new TraitKeyGenerator(traitsManager).setup();
     List<TraitDescription> traits=traitsManager.getAll();
     int nbTraits=traits.size();

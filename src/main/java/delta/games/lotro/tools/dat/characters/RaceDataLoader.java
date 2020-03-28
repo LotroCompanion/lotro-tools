@@ -14,7 +14,6 @@ import delta.games.lotro.character.races.RaceGender;
 import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
@@ -35,18 +34,15 @@ public class RaceDataLoader
   private static final Logger LOGGER=Logger.getLogger(RaceDataLoader.class);
 
   private DataFacade _facade;
-  private TraitsManager _traitsManager;
   private Map<Integer,RaceDescription> _racesById;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param traitsManager Traits manager.
    */
-  public RaceDataLoader(DataFacade facade, TraitsManager traitsManager)
+  public RaceDataLoader(DataFacade facade)
   {
     _facade=facade;
-    _traitsManager=traitsManager;
     _racesById=new HashMap<Integer,RaceDescription>();
   }
 
@@ -126,8 +122,7 @@ RaceTable_NationalityList:
       //Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       //System.out.println("Level: "+level+" (rank="+rank+")");
-      TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-      _traitsManager.registerTrait(trait);
+      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
       RaceTrait raceTrait=new RaceTrait(level,trait);
       description.addTrait(raceTrait);
     }
@@ -161,8 +156,7 @@ RaceTable_NationalityList:
         for(Object traitObj : traitsArray)
         {
           int traitId=((Integer)traitObj).intValue();
-          TraitDescription trait=TraitLoader.loadTrait(_facade,traitId);
-          _traitsManager.registerTrait(trait);
+          TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
           description.addEarnableTrait(trait);
         }
       }

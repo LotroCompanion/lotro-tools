@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.common.ChallengeLevel;
@@ -306,13 +305,7 @@ public class DatRewardsLoader
   private void handleTrait(int traitId, List<RewardElement> rewards)
   {
     //System.out.println("Trait: "+traitId);
-    TraitsManager traitsMgr=TraitsManager.getInstance();
-    TraitDescription trait=traitsMgr.getTrait(traitId);
-    if (trait==null)
-    {
-      trait=TraitLoader.loadTrait(_facade,traitId);
-      traitsMgr.registerTrait(trait);
-    }
+    TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
     if (trait!=null)
     {
       Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();

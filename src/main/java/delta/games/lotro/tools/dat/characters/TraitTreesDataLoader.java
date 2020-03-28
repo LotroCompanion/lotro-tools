@@ -9,7 +9,6 @@ import delta.games.lotro.character.classes.TraitTree;
 import delta.games.lotro.character.classes.TraitTreeBranch;
 import delta.games.lotro.character.classes.TraitTreeProgression;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -27,19 +26,16 @@ public class TraitTreesDataLoader
   private DataFacade _facade;
   private EnumMapper _traitTreeBranch;
   private EnumMapper _traitCell;
-  private TraitsManager _traitsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param traitsManager Traits manager.
    */
-  public TraitTreesDataLoader(DataFacade facade, TraitsManager traitsManager)
+  public TraitTreesDataLoader(DataFacade facade)
   {
     _facade=facade;
     _traitTreeBranch=_facade.getEnumsManager().getEnumMapper(0x230003A1);
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
-    _traitsManager=traitsManager;
   }
 
   private TraitTree handleTraitTree(CharacterClass characterClass, int traitTreeId)
@@ -92,8 +88,7 @@ public class TraitTreesDataLoader
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
       String cell=_traitCell.getString(traitLocation);
       //System.out.println("Cell: "+cell);
-      TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traitsManager.registerTrait(description);
+      TraitDescription description=TraitLoader.getTrait(_facade,traitId);
       branch.setCell(cell,description);
     }
     return tree;
@@ -110,8 +105,7 @@ public class TraitTreesDataLoader
       int nbPoints=nbPointsValue.intValue();
       //System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
-      TraitDescription description=TraitLoader.loadTrait(_facade,traitId);
-      _traitsManager.registerTrait(description);
+      TraitDescription description=TraitLoader.getTrait(_facade,traitId);
       progression.addStep(nbPoints,description);
     }
   }
