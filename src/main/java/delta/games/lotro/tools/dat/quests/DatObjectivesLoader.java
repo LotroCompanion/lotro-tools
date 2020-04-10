@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
@@ -53,7 +54,6 @@ import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
-import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.MobLoader;
 import delta.games.lotro.tools.dat.utils.NpcLoader;
@@ -738,7 +738,8 @@ QuestEvent_ShowBillboardText: 0
     Integer skillId=(Integer)properties.getProperty("QuestEvent_SkillDID");
     if (skillId!=null)
     {
-      SkillDescription skill=SkillLoader.getSkill(_facade,skillId.intValue());
+      SkillsManager skillsMgr=SkillsManager.getInstance();
+      SkillDescription skill=skillsMgr.getSkill(skillId.intValue());
       Proxy<SkillDescription> proxy=null;
       if (skill!=null)
       {

@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.io.FileIO;
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -37,7 +36,6 @@ import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -742,9 +740,6 @@ public class MainDatAchievablesLoader
         System.out.println("Wrote deeds file: "+GeneratedFiles.DEEDS);
       }
     }
-    // Save skills
-    SkillsManager skillsMgr=SkillsManager.getInstance();
-    SkillLoader.saveSkills(skillsMgr);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
   }

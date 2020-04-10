@@ -7,6 +7,9 @@ MainDatColorLoader
 MainDatCombatLoader
 	=> combat.xml
 	=> progressions_combat.xml
+MainSkillDataLoader
+	=> skills.xml
+	=> skillIcons.zip
 MainTraitDataLoader
 	=> traits.xml
 	=> traitIcons.zip
@@ -16,7 +19,6 @@ MainCharacterDataLoader
 	=> classes.xml
 	=> virtues.xml, virtueIcons.zip
 	=> races.xml, race icons in lotro-companion
-	=> skills.xml, skillIcons.zip (partial)
 	=> progressions_characters.xml
 MainDatTitlesLoader
 	=> titles.xml, titleIcons.zip
@@ -45,7 +47,6 @@ MainDatFactionsLoader
 MainDatAchievablesLoader
 	=> deeds.xml
 	=> quests.xml
-	=> skills.xml, skillIcons.zip (partial)
 	=> progressions_achievables.xml
 MainDatFactionsLoader (again)
 	=> updated factions.xml with deeds and lotro points rewards

@@ -32,37 +32,12 @@ public class SkillLoader
   public static File SKILL_ICONS_DIR=new File("data\\skills\\tmp").getAbsoluteFile();
 
   /**
-   * Get a skill.
-   * @param facade Data facade.
-   * @param skillId Skill identifier.
-   * @return a skill description or <code>null</code> if not found.
-   */
-  public static SkillDescription getSkill(DataFacade facade, int skillId)
-  {
-    SkillsManager skillsMgr=SkillsManager.getInstance();
-    SkillDescription skill=skillsMgr.getSkill(skillId);
-    if (skill==null)
-    {
-      skill=loadSkill(facade,skillId);
-      if (skill!=null)
-      {
-        skillsMgr.registerSkill(skill);
-      }
-    }
-    if (skill==null)
-    {
-      LOGGER.warn("Skill not found: "+skillId);
-    }
-    return skill;
-  }
-
-  /**
    * Load a skill.
    * @param facade Data facade.
    * @param skillId Skill identifier.
    * @return the loaded skill description.
    */
-  private static SkillDescription loadSkill(DataFacade facade, int skillId)
+  public static SkillDescription loadSkill(DataFacade facade, int skillId)
   {
     SkillDescription ret=null;
     PropertiesSet skillProperties=facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
@@ -82,10 +57,13 @@ public class SkillLoader
       int iconId=((Integer)skillProperties.getProperty("Skill_SmallIcon")).intValue();
       ret.setIconId(iconId);
       // Category
-      int categoryId=((Integer)skillProperties.getProperty("Skill_Category")).intValue();
-      EnumMapper categoryMapper=facade.getEnumsManager().getEnumMapper(587202586);
-      String category=categoryMapper.getString(categoryId);
-      ret.setCategory(category);
+      Integer categoryId=(Integer)skillProperties.getProperty("Skill_Category");
+      if (categoryId!=null)
+      {
+        EnumMapper categoryMapper=facade.getEnumsManager().getEnumMapper(587202586);
+        String category=categoryMapper.getString(categoryId.intValue());
+        ret.setCategory(category);
+      }
       // Build icon file
       String iconFilename=iconId+".png";
       File to=new File(SKILL_ICONS_DIR,"skillIcons/"+iconFilename).getAbsoluteFile();

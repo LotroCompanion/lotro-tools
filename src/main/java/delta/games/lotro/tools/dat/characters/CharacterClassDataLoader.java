@@ -13,6 +13,7 @@ import delta.games.lotro.character.classes.InitialGearDefinition;
 import delta.games.lotro.character.classes.InitialGearElement;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
@@ -343,13 +344,14 @@ AdvTable_AvailableSkillEntryList:
     AdvTable_Skill: 1879064061
     AdvTable_TrainingCost: 0
  */
+    SkillsManager skillsMgr=SkillsManager.getInstance();
     Object[] skillsProperties=(Object[])properties.getProperty("AdvTable_AvailableSkillEntryList");
     for(Object skillPropertiesObj : skillsProperties)
     {
       PropertiesSet skillProperties=(PropertiesSet)skillPropertiesObj;
       int level=((Integer)skillProperties.getProperty("AdvTable_Level")).intValue();
       int skillId=((Integer)skillProperties.getProperty("AdvTable_Skill")).intValue();
-      SkillDescription skill=SkillLoader.getSkill(_facade,skillId);
+      SkillDescription skill=skillsMgr.getSkill(skillId);
       if (skill!=null)
       {
         ClassSkill classSkill=new ClassSkill(level,skill);

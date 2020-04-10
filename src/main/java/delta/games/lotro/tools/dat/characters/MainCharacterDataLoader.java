@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.characters;
 
-import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
@@ -41,9 +40,6 @@ public class MainCharacterDataLoader
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Stats usage statistics
     DatStatUtils._statsUsageStatistics.showResults();
-    // Save skills
-    SkillsManager skillsManager=SkillsManager.getInstance();
-    SkillLoader.saveSkills(skillsManager);
     // Load gear icons
     new SlotIconsLoader(_facade).doIt();
   }

@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
@@ -117,10 +118,11 @@ public class TraitLoader
     Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
     if (skillArray!=null) 
     {
+      SkillsManager skillsMgr=SkillsManager.getInstance();
       for(Object skillIdObj : skillArray)
       {
         int skillId=((Integer)skillIdObj).intValue();
-        SkillDescription skill=SkillLoader.getSkill(facade,skillId);
+        SkillDescription skill=skillsMgr.getSkill(skillId);
         if (skill!=null)
         {
           ret.addSkill(skill);
