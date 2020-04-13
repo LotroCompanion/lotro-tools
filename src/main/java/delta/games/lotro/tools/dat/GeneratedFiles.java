@@ -40,6 +40,10 @@ public class GeneratedFiles
    */
   public static final File TRAIT_ICONS=new File("../lotro-data/traits/traitIcons.zip").getAbsoluteFile();
   /**
+   * Stat tomes.
+   */
+  public static final File STAT_TOMES=LotroCoreConfig.getInstance().getFile(DataFiles.STAT_TOMES);
+  /**
    * Virtues.
    */
   public static final File VIRTUES=LotroCoreConfig.getInstance().getFile(DataFiles.VIRTUES);

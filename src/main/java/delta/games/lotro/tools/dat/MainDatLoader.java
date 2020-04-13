@@ -8,6 +8,7 @@ import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
+import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
@@ -74,6 +75,8 @@ public class MainDatLoader
     new MainSkillDataLoader(_facade).doIt();
     // Traits
     new MainTraitDataLoader(_facade).doIt();
+    // Stat tomes
+    new MainStatTomesLoader(_facade).doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -144,6 +147,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.TRAITS);
     deleteFile(GeneratedFiles.TRAIT_ICONS);
     deleteDirectory(TraitLoader.TRAIT_ICONS_DIR);
+    // - stat tomes
+    deleteFile(GeneratedFiles.STAT_TOMES);
     // Titles
     deleteFile(GeneratedFiles.TITLES);
     deleteFile(GeneratedFiles.TITLE_ICONS);
