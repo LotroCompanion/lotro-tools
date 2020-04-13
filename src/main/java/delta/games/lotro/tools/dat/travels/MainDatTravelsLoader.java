@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -35,7 +36,7 @@ public class MainDatTravelsLoader
 
   private void load(int indexDataId)
   {
-    int dbPropertiesId=indexDataId+0x09000000;
+    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
@@ -171,7 +172,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     return ret;
   }
 
-  private void doIt()
+  void doItWithIndex()
   {
     PropertiesSet indexProperties=_facade.loadProperties(1879048794+DATConstants.DBPROPERTIES_OFFSET);
     Object[] idsArray=(Object[])indexProperties.getProperty("TravelWebArray");
@@ -182,6 +183,24 @@ Usage_RequiresSubscriberOrUnsub: 1
     }
   }
 
+  private void doItWithScan()
+  {
+    for(int i=0x70000000;i<=0x77FFFFFF;i++)
+    {
+      byte[] data=_facade.loadData(i);
+      if (data!=null)
+      {
+        int did=BufferUtils.getDoubleWordAt(data,0);
+        int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
+        //System.out.println(classDefIndex);
+        if (classDefIndex==1508)
+        {
+          load(did);
+        }
+      }
+    }
+  }
+
   /**
    * Main method for this tool.
    * @param args Not used.
@@ -189,7 +208,7 @@ Usage_RequiresSubscriberOrUnsub: 1
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatTravelsLoader(facade).doIt();
+    new MainDatTravelsLoader(facade).doItWithScan();
     facade.dispose();
   }
 }
