@@ -40,7 +40,7 @@ public class MainDatRelicsLoader
   /**
    * Relic icons directory.
    */
-  public static File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
+  public static final File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
   private DataFacade _facade;
   private RelicsManager _relicsMgr;
   private EnumMapper _categories;

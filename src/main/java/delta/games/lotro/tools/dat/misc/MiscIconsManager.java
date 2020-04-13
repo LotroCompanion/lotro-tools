@@ -14,7 +14,7 @@ public class MiscIconsManager
   /**
    * Directory for misc icons.
    */
-  public static File MISC_ICONS_DIR=new File("data\\misc\\tmp").getAbsoluteFile();
+  public static final File MISC_ICONS_DIR=new File("data\\misc\\tmp").getAbsoluteFile();
 
   /**
    * Write misc icons file.

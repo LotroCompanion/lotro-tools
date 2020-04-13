@@ -29,7 +29,7 @@ public class MainDatEmotesLoader
   /**
    * Directory for emote icons.
    */
-  public static File EMOTE_ICONS_DIR=new File("data\\emotes\\tmp").getAbsoluteFile();
+  public static final File EMOTE_ICONS_DIR=new File("data\\emotes\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
 

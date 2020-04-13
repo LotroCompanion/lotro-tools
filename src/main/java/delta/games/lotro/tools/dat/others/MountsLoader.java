@@ -33,7 +33,7 @@ public class MountsLoader
   /**
    * Directory for mount icons.
    */
-  public static File MOUNT_ICONS_DIR=new File("data\\mounts\\tmp").getAbsoluteFile();
+  public static final File MOUNT_ICONS_DIR=new File("data\\mounts\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _mountType;

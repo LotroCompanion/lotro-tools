@@ -30,7 +30,7 @@ public class MainDatTitlesLoader
   /**
    * Directory for title icons.
    */
-  public static File TITLE_ICONS_DIR=new File("data\\titles\\tmp").getAbsoluteFile();
+  public static final File TITLE_ICONS_DIR=new File("data\\titles\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _category;

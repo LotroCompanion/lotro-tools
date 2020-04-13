@@ -33,7 +33,7 @@ public class CosmeticPetLoader
   /**
    * Directory for pet icons.
    */
-  public static File PET_ICONS_DIR=new File("data\\pets\\tmp").getAbsoluteFile();
+  public static final File PET_ICONS_DIR=new File("data\\pets\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _category;
