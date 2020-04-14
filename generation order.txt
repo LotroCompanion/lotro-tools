@@ -13,6 +13,8 @@ MainSkillDataLoader
 MainTraitDataLoader
 	=> traits.xml
 	=> traitIcons.zip
+MainStatTomesLoader
+	=> statTomes.xml
 MainCharacterDataLoader
 	=> statsContribs.xml
 	=> startStats.xml
