@@ -15,7 +15,6 @@ import delta.games.lotro.common.stats.StatOperator;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.StatsProvider;
-import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.TieredScalableStatProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -107,7 +106,7 @@ public class DatStatUtils
         Number value=null;
         // Often 7 for "add"
         Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
-        StatOperator operator=getOperator(modOp);
+        StatOperator operator=delta.games.lotro.utils.dat.DatStatUtils.getOperator(modOp);
         Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
         if (progressId!=null)
         {
@@ -179,18 +178,6 @@ public class DatStatUtils
       }
       */
     }
-    return null;
-  }
-
-  private static StatOperator getOperator(Integer modOpInteger)
-  {
-    if (modOpInteger==null) return StatOperator.ADD;
-    int modOp=modOpInteger.intValue();
-    if (modOp==5) return StatOperator.SET;
-    if (modOp==6) return StatOperator.SUBSTRACT;
-    if (modOp==7) return StatOperator.ADD;
-    if (modOp==8) return StatOperator.MULTIPLY;
-    LOGGER.warn("Unmanaged operator: "+modOp);
     return null;
   }
 
@@ -268,31 +255,9 @@ public class DatStatUtils
    * @param propertyDefinition Property definition.
    * @return A stat description.
    */
-  private static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
+  public static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
   {
-    StatDescription ret=null;
-    StatsRegistry registry=StatsRegistry.getInstance();
-
-    String statKey=propertyDefinition.getName();
-    String fixedStatKey=fixStat(statKey);
-    if (fixedStatKey!=null)
-    {
-      ret=registry.getByKey(fixedStatKey);
-    }
-    else
-    {
-      int id=propertyDefinition.getPropertyId();
-      if (id==0)
-      {
-        return null;
-      }
-      ret=registry.getById(id);
-    }
-    if (ret==null)
-    {
-      LOGGER.warn("Stat not found: "+propertyDefinition.getName());
-    }
-    return ret;
+    return delta.games.lotro.utils.dat.DatStatUtils.getStatDescription(propertyDefinition.getPropertyId(),propertyDefinition.getName());
   }
 
   private static boolean useStat(StatDescription stat)
@@ -332,13 +297,4 @@ public class DatStatUtils
     return true;
   }
   */
-
-  private static String fixStat(String key)
-  {
-    if ("Combat_Agent_Armor_Value_Float".equals(key)) return "ARMOUR";
-    if ("Combat_MitigationPercentage_Common".equals(key)) return "PHYSICAL_MITIGATION_PERCENTAGE";
-    if ("Combat_Class_PhysicalMastery_Unified".equals(key)) return "PHYSICAL_MASTERY";
-    if ("Combat_Class_TacticalMastery_Unified".equals(key)) return "TACTICAL_MASTERY";
-    return null;
-  }
 }
