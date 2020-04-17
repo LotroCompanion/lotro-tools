@@ -48,8 +48,6 @@ public class TraitKeyGenerator
     setup("THOSE_WHO_REMAIN","Those Who Remain");
 
     // Captain
-    //setup("IN_DEFENCE_OF_MIDDLE_EARTH","In Defence of Middle-Earth");
-    //setup("MOTIVATED","Motivated");
     setup("ARTERIAL_STRIKES","Arterial Strikes");
     setup("MARTIAL_PROWESS","Martial Prowess");
     setup("STEELED_RESOLVE","Steeled Resolve");

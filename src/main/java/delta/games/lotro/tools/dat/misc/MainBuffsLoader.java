@@ -54,11 +54,19 @@ public class MainBuffsLoader
   private List<EffectBuff> loadBuffs()
   {
     List<EffectBuff> buffs=new ArrayList<EffectBuff>();
+    // In Defence of Middle Earth
     EffectBuff idome=loadBuff(1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH");
     if (idome!=null)
     {
       buffs.add(idome);
     }
+    // Motivated
+    EffectBuff motivated=loadBuff(1879073072,"MOTIVATED");
+    if (motivated!=null)
+    {
+      buffs.add(motivated);
+    }
+    
     return buffs;
   }
 
