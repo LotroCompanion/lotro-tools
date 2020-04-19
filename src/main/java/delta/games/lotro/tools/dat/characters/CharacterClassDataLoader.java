@@ -23,6 +23,7 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -265,7 +266,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
             if (targetStatId.intValue()<=27) // Ignore war-steed related stats
             {
               StatDescription targetStat=getDerivedStat(targetStatId.intValue());
-              value=fixStatValue(targetStat,value);
+              value=StatUtils.fixStatValue(targetStat,value);
               Integer sourceStatId=(Integer)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Stat");
               StatDescription sourceStat=getStatFromStatType(sourceStatId.intValue());
               if (sourceStat!=null)
@@ -300,19 +301,6 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
     _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
     _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION_PERCENTAGE,WellKnownStat.OCFW_MITIGATION_PERCENTAGE,characterClass,new FixedDecimalsInteger(1));
-  }
-
-  private float fixStatValue(StatDescription stat, float value)
-  {
-    if (stat.isPercentage())
-    {
-      value=value*100;
-    }
-    if ((stat==WellKnownStat.ICMR) || (stat==WellKnownStat.ICPR) || (stat==WellKnownStat.OCMR) || (stat==WellKnownStat.OCPR))
-    {
-      value=value*60;
-    }
-    return value;
   }
 
   private void loadTraits(ClassDescription description, PropertiesSet properties)
