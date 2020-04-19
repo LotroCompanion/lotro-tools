@@ -19,6 +19,8 @@ import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
+import delta.games.lotro.character.stats.buffs.BuffInstance;
+import delta.games.lotro.character.stats.buffs.BuffRegistry;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
@@ -116,6 +118,15 @@ public class CharacterClassDataLoader
         }
         initialGear.addGearElement(element);
       }
+    }
+    // Default buffs
+    if (characterClass==CharacterClass.CAPTAIN)
+    {
+      BuffRegistry buffsRegistry=BuffRegistry.getInstance();
+      BuffInstance idome=buffsRegistry.newBuffInstance("IN_DEFENCE_OF_MIDDLE_EARTH");
+      classDescription.addDefaultBuff(idome);
+      BuffInstance motivated=buffsRegistry.newBuffInstance("MOTIVATED");
+      classDescription.addDefaultBuff(motivated);
     }
     /*
 AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List: 
