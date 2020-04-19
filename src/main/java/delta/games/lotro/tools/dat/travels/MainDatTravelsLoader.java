@@ -1,16 +1,19 @@
 package delta.games.lotro.tools.dat.travels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.money.Money;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.travels.TravelDestination;
+import delta.games.lotro.lore.travels.TravelNode;
+import delta.games.lotro.lore.travels.TravelRoute;
+import delta.games.lotro.lore.travels.TravelRouteInstance;
+import delta.games.lotro.lore.travels.TravelsManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -22,7 +25,7 @@ public class MainDatTravelsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatTravelsLoader.class);
 
   private DataFacade _facade;
-  private Map<Integer,String> _nodes;
+  private TravelsManager _travelsMgr;
 
   /**
    * Constructor.
@@ -31,62 +34,86 @@ public class MainDatTravelsLoader
   public MainDatTravelsLoader(DataFacade facade)
   {
     _facade=facade;
-    _nodes=new HashMap<Integer,String>();
+    _travelsMgr=new TravelsManager();
   }
 
-  private void load(int indexDataId)
+  private TravelNode load(int indexDataId)
   {
+    TravelNode node=new TravelNode(indexDataId);
     int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      //System.out.println("************* "+indexDataId+" *****************");
+      //System.out.println("************* NODE "+indexDataId+" *****************");
       //System.out.println(properties.dump());
       //propNames.addAll(properties.getPropertyNames());
     }
     else
     {
-      LOGGER.warn("Could not handle travel ID="+indexDataId);
+      LOGGER.warn("Could not handle travel node ID="+indexDataId);
+      return null;
     }
     // Home location
     int homeLocationId=((Integer)properties.getProperty("TravelHomeLocation")).intValue();
-    String nodeName=loadTravelNode(homeLocationId);
-    System.out.println("Node: "+nodeName);
+    TravelDestination homeLocation=getTravelDestination(homeLocationId);
+    node.addLocation(homeLocation);
+    // Other locations
+    Object[] otherLocationsArray=(Object[])properties.getProperty("TravelHomeLocationsArray");
+    if (otherLocationsArray!=null)
+    {
+      for(Object otherLocationObj : otherLocationsArray)
+      {
+        int otherLocationid=((Integer)otherLocationObj).intValue();
+        TravelDestination otherLocation=getTravelDestination(otherLocationid);
+        if (otherLocation!=null)
+        {
+          node.addLocation(otherLocation);
+        }
+      }
+    }
 
-    // Destinations
+    // Routes
     Object[] routesArray=(Object[])properties.getProperty("TravelDestinationRecordArray");
     for(Object routeObj : routesArray)
     {
       PropertiesSet routeProps = (PropertiesSet)routeObj;
-      @SuppressWarnings("unused")
       int routeCost=((Integer)routeProps.getProperty("TravelDestinationCost")).intValue();
-      int destinationId=((Integer)routeProps.getProperty("TravelDestinationRoute")).intValue();
-      loadTravelRoute(destinationId);
+      int routeId=((Integer)routeProps.getProperty("TravelDestinationRoute")).intValue();
+      TravelRoute route=loadTravelRoute(routeId);
+      TravelRouteInstance routeInstance=new TravelRouteInstance(routeCost,route);
+      node.addRoute(routeInstance);
     }
+
+    // Register node
+    _travelsMgr.addNode(node);
+    return node;
   }
 
-  private String loadTravelNode(int locationId)
+  private TravelDestination getTravelDestination(int locationId)
   {
-    String nodeName=_nodes.get(Integer.valueOf(locationId));
-    if (nodeName==null)
+    TravelDestination destination=_travelsMgr.getDestination(locationId);
+    if (destination==null)
     {
       PropertiesSet properties=_facade.loadProperties(locationId+DATConstants.DBPROPERTIES_OFFSET);
       //System.out.println("************* "+locationId+" *****************");
       //System.out.println(properties.dump());
-      //propNames.addAll(properties.getPropertyNames());
       // Name
-      nodeName=DatUtils.getStringProperty(properties,"TravelDisplayName");
+      String name=DatUtils.getStringProperty(properties,"TravelDisplayName");
+      if (name==null)
+      {
+        // Sometimes location IDs refer to routes, not destinations... skip them!
+        return null;
+      }
       // Swift travel?
       Integer swiftTravelInt=(Integer)properties.getProperty("TravelDestinationIsSwiftTravel");
-      @SuppressWarnings("unused")
       boolean isSwiftTravel=((swiftTravelInt!=null) && (swiftTravelInt.intValue()==1));
-      //System.out.println("Loaded Node ID: "+locationId+", name: "+nodeName + " (swift travel="+isSwiftTravel+")");
-      _nodes.put(Integer.valueOf(locationId),nodeName);
+      destination=new TravelDestination(locationId,name,isSwiftTravel);
+      _travelsMgr.addDestination(destination);
     }
-    return nodeName;
+    return destination;
   }
 
-  private void loadTravelRoute(int travelRouteId)
+  private TravelRoute loadTravelRoute(int travelRouteId)
   {
     PropertiesSet properties=_facade.loadProperties(travelRouteId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println("************* "+locationId+" *****************");
@@ -101,12 +128,7 @@ TravelRoute_ActionArray:
   #3: 1879103929
 TravelRoute_Destination: 1879103928
 TravelRoute_TravelMode: 1879106525
-UI_Examination_Tooltip_0Click_Element: 268441090   ==> ignored
-UI_Examination_Tooltip_0Click_Layout: 570425344   ==> ignored
-UI_Examination_Tooltip_1Click_Element: 268441090   ==> ignored
-UI_Examination_Tooltip_1Click_Layout: 570425344   ==> ignored
 Usage_AllowedWhileMounted: 1   ==> always 1
-Usage_Permission: 1879049255
 Usage_QuestRequirements: 
   #1: 
     Usage_Operator: 3
@@ -117,12 +139,11 @@ Usage_RequiredFaction:
   Usage_RequiredFaction_Tier: 4
 Usage_RequiresSubscriberOrUnsub: 1
      */
-    //propNames.addAll(properties.getPropertyNames());
     // Name
     String routeName=DatUtils.getStringProperty(properties,"Name");
     // Destination
     int destinationId=((Integer)properties.getProperty("TravelRoute_Destination")).intValue();
-    String destinationName=loadTravelNode(destinationId);
+    TravelDestination destination=getTravelDestination(destinationId);
     // Min level
     Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
 
@@ -132,13 +153,8 @@ Usage_RequiresSubscriberOrUnsub: 1
     // 1879159548=boat
     // 1879137174, 1879106525, 1879108779 => effect 1879048717
     //loadTravelMode(travelModeId);
-    String label = "\tRoute ID: "+travelRouteId+", name: "+routeName + " to " + destinationName;
-    if (minLevel!=null)
-    {
-      label=label+" (min level="+minLevel+")";
-    }
-    System.out.println(label);
-    List<String> segments=new ArrayList<String>();
+    TravelRoute route=new TravelRoute(travelRouteId,routeName,destination,minLevel);
+
     // Route actions
     Object[] routeActionsArray=(Object[])properties.getProperty("TravelRoute_ActionArray");
     for(Object routeActionObj : routeActionsArray)
@@ -147,10 +163,10 @@ Usage_RequiresSubscriberOrUnsub: 1
       String segmentKey=loadTravelRouteAction(routeActionId);
       if (segmentKey!=null)
       {
-        segments.add(segmentKey);
+        route.addRouteAction(segmentKey);
       }
     }
-    System.out.println("\t"+segments);
+    return route;
   }
 
   private String loadTravelRouteAction(int routeActionId)
@@ -196,6 +212,34 @@ Usage_RequiresSubscriberOrUnsub: 1
         if (classDefIndex==1508)
         {
           load(did);
+        }
+      }
+    }
+    dumpTravels();
+  }
+
+  private void dumpTravels()
+  {
+    List<TravelNode> nodes=_travelsMgr.getNodes();
+    for(TravelNode node : nodes)
+    {
+      System.out.println("Node: ID="+node.getIdentifier()/*+", name="+node.getName()*/);
+      for(TravelDestination location : node.getLocations())
+      {
+        System.out.println("\tAssociated location: ID="+location.getIdentifier()+", name="+location.getName());
+      }
+      List<TravelRouteInstance> routeInstances=node.getRoutes();
+      for(TravelRouteInstance routeInstance : routeInstances)
+      {
+        TravelRoute route=routeInstance.getRoute();
+        Money cost=routeInstance.getCost();
+        System.out.println("\tRoute: ID="+route.getIdentifier()+", name="+route.getName());
+        System.out.println("\t\tCost: "+cost);
+        System.out.println("\t\t"+route.getDestination());
+        Integer minLevel=route.getMinLevel();
+        if (minLevel!=null)
+        {
+          System.out.println("\t\tRequired level: "+minLevel);
         }
       }
     }
