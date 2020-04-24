@@ -6,11 +6,11 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.ui.UIElement;
+import delta.games.lotro.dat.data.ui.UILayout;
+import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.DatIconsUtils;
-import delta.games.lotro.tools.dat.misc.ui.UIElement;
-import delta.games.lotro.tools.dat.misc.ui.UILayout;
-import delta.games.lotro.tools.dat.misc.ui.UILayoutLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
