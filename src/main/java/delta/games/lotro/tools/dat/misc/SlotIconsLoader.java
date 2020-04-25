@@ -16,13 +16,13 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.ui.UIData;
+import delta.games.lotro.dat.data.ui.UIElement;
+import delta.games.lotro.dat.data.ui.UIFinder;
+import delta.games.lotro.dat.data.ui.UIImage;
+import delta.games.lotro.dat.data.ui.UILayout;
+import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
-import delta.games.lotro.tools.dat.misc.ui.UIData;
-import delta.games.lotro.tools.dat.misc.ui.UIElement;
-import delta.games.lotro.tools.dat.misc.ui.UIFinder;
-import delta.games.lotro.tools.dat.misc.ui.UIImage;
-import delta.games.lotro.tools.dat.misc.ui.UILayout;
-import delta.games.lotro.tools.dat.misc.ui.UILayoutLoader;
 
 /**
  * Loader for equipment slot icons.
