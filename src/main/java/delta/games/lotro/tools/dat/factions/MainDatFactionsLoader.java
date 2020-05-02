@@ -329,6 +329,7 @@ Reputation_LowestTier: 1
     if (factionId==1879363082) return category; // Dwarves of Erebor
     if (factionId==1879368441) return category; // Grey Mountains Expedition
     if (factionId==1879386002) return category; // Wilderfolk
+    if (factionId==1879403792) return category; // Protectors of Wilderland
     category="Dunland";
     if (factionId==1879181920) return category; // Algraig, Men of Enedwaith
     if (factionId==1879181919) return category; // The Grey Company
@@ -346,6 +347,8 @@ Reputation_LowestTier: 1
     if (factionId==1879271130) return category; // The Eorlingas
     if (factionId==1879271131) return category; // The Helmingas
     if (factionId==1879303012) return category; // The Ents of Fangorn Forest
+    if (factionId==1879400830) return category; // Townsfolk of the Kingstead
+    if (factionId==1879400827) return category; // Townsfolk of the Eastfold
     category="Dol Amroth";
     if (factionId==1879306071) return category; // Dol Amroth
     if (factionId==1879308442) return category; // Dol Amroth - Armoury
@@ -419,11 +422,11 @@ Reputation_LowestTier: 1
       // Eriador
       1879091345,1879091340,1879091408,1879161272,1879091344,1879091346,1879091343,1879103954,1879091341,1879097420,
       // Rhovanion
-      1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,
+      1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,1879403792,
       // Dunland
       1879181920,1879181919,1879202077,1879202078,1879227796,1879230121,
       // Rohan
-      1879237312,1879237304,1879237267,1879237243,1879259430,1879259431,1879271130,1879271131,1879303012,
+      1879237312,1879237304,1879237267,1879237243,1879259430,1879259431,1879271130,1879271131,1879303012,1879400830,1879400827,
       // Dol Amroth
       1879306071,1879308442,1879308438,1879308441,1879308436,1879308443,1879308440,1879308439,1879308437,
       // Gondor
@@ -433,11 +436,10 @@ Reputation_LowestTier: 1
       // Misc
       1879182957,1879103953,1879305436,
       // Mordor again
-      1879345132,1879345134,1879345135,1879389868,1879389872,1879389871,
+      1879345134,1879345135,1879345132,1879389871,1879389868,1879389872,
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
-      // Empty
-      1879400830,1879400827
+      
     };
     return ret;
   }
