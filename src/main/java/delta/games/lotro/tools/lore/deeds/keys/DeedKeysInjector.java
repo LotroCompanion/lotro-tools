@@ -359,6 +359,7 @@ public class DeedKeysInjector
     manualResolution("Of_Elendilmir",1879326531);
     manualResolution("Renewed_Voice",1879277397);
     manualResolution("Renewed_Voice_(deed)",1879051847);
+    manualResolution("Skillful_Blocking_(Deed)",1879139084);
     manualResolution("Strong_Voice_(Deed)",1879277413);
     manualResolution("Strong_Voice_(deed)",1879051852);
     manualResolution("The_Best_Defence",1879060151);
