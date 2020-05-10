@@ -3,6 +3,8 @@ package delta.games.lotro.tools.lore.maps.dynmap;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextUtils;
 import delta.games.lotro.maps.data.CategoriesManager;
@@ -19,6 +21,8 @@ import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
  */
 public class MainDynMapLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MainDynMapLoader.class);
+
   private File _outDir;
 
   /**
@@ -50,11 +54,26 @@ public class MainDynMapLoader
     for(MapBundle map: maps)
     {
       String key=map.getKey();
+      map.getData().clear();
       // JS
       String jsUrl=DynMapConstants.BASE_URL+"/data/"+key+".js";
       File js=dynMap.download(jsUrl,key+".js");
-      map.getData().clear();
-      loadMapData(map,js,categories);
+      if (useJson(key))
+      {
+        File jsonFile=new File("../lotro-maps/data/"+key+".json");
+        if (jsonFile.exists())
+        {
+          loadMapDataFromJson(map,jsonFile);
+        }
+        else
+        {
+          LOGGER.warn("Could not find file: "+jsonFile);
+        }
+      }
+      else
+      {
+        loadMapDataFromJavascript(map,js);
+      }
       // Inspect
       MarkersManager markers=map.getData();
       for(Category category : categories.getAllSortedByCode())
@@ -101,10 +120,25 @@ public class MainDynMapLoader
     }
   }
 
-  private void loadMapData(MapBundle map, File js, CategoriesManager categories)
+  private boolean useJson(String key)
+  {
+    if ("wells_of_langflood".equals(key))
+    {
+      return true;
+    }
+    return false;
+  }
+
+  private void loadMapDataFromJavascript(MapBundle map, File js)
   {
     MapPageParser parser=new MapPageParser();
     parser.parse(map,js);
+  }
+
+  private void loadMapDataFromJson(MapBundle map, File jsonFile)
+  {
+    MapJsonParser parser=new MapJsonParser();
+    parser.parse(map,jsonFile);
   }
 
   /**

@@ -9,7 +9,7 @@ public class DynMapConstants
   /**
    * Base URL for the dynmap site.
    */
-  public static String BASE_URL="http://dynmap.ruslotro.com/";
+  public static String BASE_URL="https://dynmap.ruslotro.com/";
 
   /**
    * URL of the localization page.

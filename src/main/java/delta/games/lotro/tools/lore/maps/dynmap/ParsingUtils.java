@@ -23,17 +23,35 @@ public class ParsingUtils
     // {en: "Eastern Gondor", de: "Ost-Gondor", fr: "L'Est Du Gondor"}
     try
     {
-      JSONObject o=new JSONObject(labels);
-      String[] localeKeys=JSONObject.getNames(o);
+      JSONObject json=new JSONObject(labels);
+      parseLabels(labelsManager,json);
+    }
+    catch(Exception e)
+    {
+      _logger.error("Bad labels: ["+labels+"]",e);
+    }
+  }
+
+  /**
+   * Parse a labels structure.
+   * @param labelsManager Storage for extracted data.
+   * @param json Input labels definitions in JSON.
+   */
+  public static void parseLabels(Labels labelsManager, JSONObject json)
+  {
+    // {en: "Eastern Gondor", de: "Ost-Gondor", fr: "L'Est Du Gondor"}
+    try
+    {
+      String[] localeKeys=JSONObject.getNames(json);
       for(String localeKey : localeKeys)
       {
-        String value=o.getString(localeKey);
+        String value=json.getString(localeKey);
         labelsManager.putLabel(localeKey,value);
       }
     }
     catch(Exception e)
     {
-      _logger.error("Bad labels: ["+labels+"]",e);
+      _logger.error("Bad labels: ["+json+"]",e);
     }
   }
 }
