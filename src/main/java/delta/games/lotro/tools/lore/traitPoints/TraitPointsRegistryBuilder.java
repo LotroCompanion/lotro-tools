@@ -118,6 +118,7 @@ public class TraitPointsRegistryBuilder
     initPoint("BlackBookMordor10.7", category, "Complete The Black Book of Mordor, Chapter 10.7: The Arrival of the Wise", null);
     initPoint("BlackBookMordor12.5", category, "Complete The Black Book of Mordor, Chapter 12.5: The End of the Tale", null);
     initPoint("BlackBookMordor14.5", category, "Complete The Black Book of Mordor, Chapter 14.5: A Final Escape", null);
+    initPoint("Durin2.7", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 2.7: A Thirst for Blood", null);
 
     category=TraitPointCategories.DEEDS;
     initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
