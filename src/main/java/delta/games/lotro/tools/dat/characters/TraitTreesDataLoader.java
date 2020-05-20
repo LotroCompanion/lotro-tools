@@ -50,9 +50,9 @@ public class TraitTreesDataLoader
       PropertiesSet branchDescriptionProps=(PropertiesSet)branchDescriptionObj;
       int branchId=((Integer)branchDescriptionProps.getProperty("Trait_TraitTree_Branch")).intValue();
       String branchName=_traitTreeBranch.getString(branchId);
-      System.out.println("branch name: "+branchName);
-      //String branchDescription=DatUtils.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
-      //System.out.println("branch description: "+branchDescription);
+      System.out.println("Branch name: "+branchName);
+      String branchDescription=DatUtils.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
+      System.out.println("Branch description: "+branchDescription);
     }
     */
     TraitTree tree=new TraitTree();
@@ -67,8 +67,8 @@ public class TraitTreesDataLoader
         PropertiesSet specializationProps=(PropertiesSet)specializationObj;
         int branchId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationBranch")).intValue();
         String branchName=_traitTreeBranch.getString(branchId);
-        //System.out.println("branch name: "+branchName);
-        TraitTreeBranch branch=new TraitTreeBranch(branchName);
+        //System.out.println("Branch name: "+branchName);
+        TraitTreeBranch branch=new TraitTreeBranch(branchId,branchName);
         branchesById.put(Integer.valueOf(branchId),branch);
         tree.addBranch(branch);
         TraitTreeProgression progression=branch.getProgression();
