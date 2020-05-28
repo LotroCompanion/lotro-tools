@@ -151,7 +151,10 @@ CraftVocation_LearnString:
       // - proficiency XP
       int proficiencyXpPropertyId=((Integer)professionProps.getProperty("CraftProfession_ProficiencyXP_PropertyName")).intValue();
       String proficiencyXpPropertyName=propsRegistry.getPropertyDef(proficiencyXpPropertyId).getName();
-      ret.setPropertyNames(enabledPropertyName,masteryLevelPropertyName,masteryXpPropertyName,proficiencyLevelPropertyName,proficiencyXpPropertyName);
+      // Extra recipes
+      int extraRecipesPropertyId=((Integer)professionProps.getProperty("CraftProfession_ExtraRecipeArray_PropertyName")).intValue();
+      String extraRecipesPropertyName=propsRegistry.getPropertyDef(extraRecipesPropertyId).getName();
+      ret.setPropertyNames(enabledPropertyName,masteryLevelPropertyName,masteryXpPropertyName,proficiencyLevelPropertyName,proficiencyXpPropertyName,extraRecipesPropertyName);
 
       // Register profession
       professions.addProfession(ret);
