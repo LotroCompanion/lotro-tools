@@ -58,7 +58,7 @@ public class MainDatBrowser
   {
     if (id%1000000==0) System.out.println("ID: "+id);
     byte[] data=_facade.loadData(id);
-    if (data!=null)
+    if ((data!=null) && (data.length>=8))
     {
       int type=getType(data);
       Integer typeKey=Integer.valueOf(type);

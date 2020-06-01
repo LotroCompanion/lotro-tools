@@ -89,11 +89,11 @@ public class RecipeItemsLoader
     _unknownRecipes.removeAll(autobestowed);
     if (_unknownRecipes.size()>0)
     {
-      LOGGER.info("There are "+_unknownRecipes.size()+" recipe with unknown source:");
+      LOGGER.warn("There are "+_unknownRecipes.size()+" recipe with unknown source:");
       for(Integer unknownRecipeId : _unknownRecipes)
       {
         Recipe unknownRecipe=recipesManager.getRecipeById(unknownRecipeId.intValue());
-        LOGGER.info("\t"+unknownRecipe+"\t"+unknownRecipe.getTier());
+        LOGGER.warn("\t"+unknownRecipe+"\t"+unknownRecipe.getTier());
       }
     }
   }

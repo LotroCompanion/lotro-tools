@@ -164,10 +164,7 @@ CraftVocation_LearnString:
     /*
 CraftProfession_AllowsXPAcceleration: 1
 CraftProfession_Characteristic: 0
-CraftProfession_CompletedMasteryLevel_PropertyName: 268436939 (Craft_Weaponsmith_CompletedMasteryLevel)
-CraftProfession_CompletedProficiencyLevel_PropertyName: 268439502 (Craft_Weaponsmith_CompletedProficiencyLevel)
 CraftProfession_CriticalChanceAddModifier_PropertyName: 268436462 (Craft_Weaponsmith_CriticalChanceAddModifier)
-CraftProfession_ExtraRecipeArray_PropertyName: 268439738 (Craft_Weaponsmith_ExtraRecipeArray)
 CraftProfession_OpenLevel_PropertyName: 268445421 (Craft_Weaponsmith_OpenLevel)
 CraftProfession_RecipeWebStoreCategory: 19 (CraftRecipe_Weaponsmith)
 CraftProfession_RequiredTool: 128 (Smithing Hammer)
