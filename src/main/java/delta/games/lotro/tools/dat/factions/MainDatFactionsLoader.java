@@ -34,6 +34,7 @@ public class MainDatFactionsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatFactionsLoader.class);
 
   private DataFacade _facade;
+  private FactionLevelTemplates _templates;
 
   /**
    * Constructor.
@@ -42,6 +43,7 @@ public class MainDatFactionsLoader
   public MainDatFactionsLoader(DataFacade facade)
   {
     _facade=facade;
+    _templates=new FactionLevelTemplates();
   }
 
   /*
@@ -86,8 +88,14 @@ Reputation_LowestTier: 1
     LOGGER.info("ID: "+factionId+" => "+name);
 
     // Category
-    String category=getCategory(factionId);
+    String[] factionDescription=getCategory(factionId);
+    String category=factionDescription[0];
     faction.setCategory(category);
+    String key=factionDescription[1];
+    if (key!=null)
+    {
+      faction.setLegacyKey(key);
+    }
 
     // Description
     String description=DatUtils.getStringProperty(properties,"Reputation_Faction_Description");
@@ -155,6 +163,28 @@ Reputation_LowestTier: 1
     for(FactionLevel level : levels)
     {
       faction.addFactionLevel(level);
+    }
+    String template=factionDescription[2];
+    if (template!=null)
+    {
+      List<String> levelKeys=_templates.getByKey(template);
+      if (levelKeys!=null)
+      {
+        if (levelKeys.size()!=levels.size())
+        {
+          LOGGER.warn("Size mismatch for faction "+faction.getName());
+        }
+        else
+        {
+          int index=0;
+          for(FactionLevel level : levels)
+          {
+            String levelKey=levelKeys.get(index);
+            level.setLegacyKey(levelKey);
+            index++;
+          }
+        }
+      }
     }
     return faction;
   }
@@ -306,89 +336,92 @@ Reputation_LowestTier: 1
     return false;
   }
 
-  private String getCategory(int factionId)
+  private String[] getCategory(int factionId)
   {
     String category="Eriador";
-    if (factionId==1879091345) return category; // Shire
-    if (factionId==1879091340) return category; // Bree
-    if (factionId==1879091408) return category; // Thorin's Hall
-    if (factionId==1879161272) return category; // The Eglain
-    if (factionId==1879091344) return category; // The Rangers of Esteldín
-    if (factionId==1879091346) return category; // Elves of Rivendell
-    if (factionId==1879091343) return category; // The Wardens of Annúminas
-    if (factionId==1879103954) return category; // Lossoth of Forochel
-    if (factionId==1879091341) return category; // Council of the North
-    if (factionId==1879097420) return category; // The Eldgang
+    if (factionId==1879091345) return new String[]{category,"SHIRE",FactionLevelTemplates.CLASSIC}; // Shire
+    if (factionId==1879091340) return new String[]{category,"BREE",FactionLevelTemplates.CLASSIC}; // Bree
+    if (factionId==1879091408) return new String[]{category,"DWARVES",FactionLevelTemplates.CLASSIC}; // Thorin's Hall
+    if (factionId==1879161272) return new String[]{category,"EGLAIN",FactionLevelTemplates.CLASSIC}; // The Eglain
+    if (factionId==1879091344) return new String[]{category,"ESTELDIN",FactionLevelTemplates.CLASSIC}; // The Rangers of Esteldín
+    if (factionId==1879091346) return new String[]{category,"RIVENDELL",FactionLevelTemplates.CLASSIC}; // Elves of Rivendell
+    if (factionId==1879091343) return new String[]{category,"ANNUMINAS",FactionLevelTemplates.CLASSIC}; // The Wardens of Annúminas
+    if (factionId==1879103954) return new String[]{category,"LOSSOTH",FactionLevelTemplates.CLASSIC}; // Lossoth of Forochel
+    if (factionId==1879091341) return new String[]{category,"COUNCIL_OF_THE_NORTH",FactionLevelTemplates.CLASSIC}; // Council of the North
+    if (factionId==1879097420) return new String[]{category,"ELDGANG",FactionLevelTemplates.CLASSIC}; // The Eldgang
     category="Rhovanion";
-    if (factionId==1879143761) return category; // Iron Garrison Guards
-    if (factionId==1879143766) return category; // Iron Garrison Miners
-    if (factionId==1879150133) return category; // Galadhrim
-    if (factionId==1879154438) return category; // Malledhrim
-    if (factionId==1879362403) return category; // Elves of Felegoth
-    if (factionId==1879362405) return category; // Men of Dale
-    if (factionId==1879363082) return category; // Dwarves of Erebor
-    if (factionId==1879368441) return category; // Grey Mountains Expedition
-    if (factionId==1879386002) return category; // Wilderfolk
-    if (factionId==1879403792) return category; // Protectors of Wilderland
+    if (factionId==1879143761) return new String[]{category,"MORIA_GUARDS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Guards
+    if (factionId==1879143766) return new String[]{category,"MORIA_MINERS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Miners
+    if (factionId==1879150133) return new String[]{category,"GALADHRIM",FactionLevelTemplates.CLASSIC}; // Galadhrim
+    if (factionId==1879154438) return new String[]{category,"MALLEDHRIM",FactionLevelTemplates.CLASSIC}; // Malledhrim
+    if (factionId==1879362403) return new String[]{category,"ELVES_OF_FELEGOTH",FactionLevelTemplates.CLASSIC}; // Elves of Felegoth
+    if (factionId==1879362405) return new String[]{category,"MEN_OF_DALE",FactionLevelTemplates.CLASSIC}; // Men of Dale
+    if (factionId==1879363082) return new String[]{category,"DWARVES_OF_EREBOR",FactionLevelTemplates.EXTENDED_RESPECTED}; // Dwarves of Erebor
+    if (factionId==1879368441) return new String[]{category,"GREY_MOUNTAINS_EXPEDITION",FactionLevelTemplates.CLASSIC}; // Grey Mountains Expedition
+    if (factionId==1879386002) return new String[]{category,"WILDERFOLK",FactionLevelTemplates.CLASSIC}; // Wilderfolk
+    if (factionId==1879403792) return new String[]{category,null,null}; // Protectors of Wilderland
     category="Dunland";
-    if (factionId==1879181920) return category; // Algraig, Men of Enedwaith
-    if (factionId==1879181919) return category; // The Grey Company
-    if (factionId==1879202077) return category; // Men of Dunland
-    if (factionId==1879202078) return category; // Théodred's Riders
+    if (factionId==1879181920) return new String[]{category,"ALGRAIG",FactionLevelTemplates.CLASSIC}; // Algraig, Men of Enedwaith
+    if (factionId==1879181919) return new String[]{category,"GREY_COMPANY",FactionLevelTemplates.CLASSIC}; // The Grey Company
+    if (factionId==1879202077) return new String[]{category,"DUNLAND",FactionLevelTemplates.CLASSIC}; // Men of Dunland
+    if (factionId==1879202078) return new String[]{category,"THEODRED_RIDERS",FactionLevelTemplates.CLASSIC}; // Théodred's Riders
     category="Rohan";
-    if (factionId==1879227796) return category; // The Riders of Stangard
-    if (factionId==1879230121) return category; // Heroes of Limlight Gorge
-    if (factionId==1879237312) return category; // Men of the Wold
-    if (factionId==1879237304) return category; // Men of the Norcrofts
-    if (factionId==1879237267) return category; // Men of the Entwash Vale
-    if (factionId==1879237243) return category; // Men of the Sutcrofts
-    if (factionId==1879259430) return category; // People of Wildermore
-    if (factionId==1879259431) return category; // Survivors of Wildermore
-    if (factionId==1879271130) return category; // The Eorlingas
-    if (factionId==1879271131) return category; // The Helmingas
-    if (factionId==1879303012) return category; // The Ents of Fangorn Forest
-    if (factionId==1879400830) return category; // Townsfolk of the Kingstead
-    if (factionId==1879400827) return category; // Townsfolk of the Eastfold
+    if (factionId==1879227796) return new String[]{category,"STANGARD_RIDERS",FactionLevelTemplates.CLASSIC}; // The Riders of Stangard
+    if (factionId==1879230121) return new String[]{category,"LIMLIGHT_GORGE",FactionLevelTemplates.CLASSIC}; // Heroes of Limlight Gorge
+    if (factionId==1879237312) return new String[]{category,"WOLD",FactionLevelTemplates.CLASSIC}; // Men of the Wold
+    if (factionId==1879237304) return new String[]{category,"NORCROFTS",FactionLevelTemplates.CLASSIC}; // Men of the Norcrofts
+    if (factionId==1879237267) return new String[]{category,"ENTWASH_VALE",FactionLevelTemplates.CLASSIC}; // Men of the Entwash Vale
+    if (factionId==1879237243) return new String[]{category,"SUTCROFTS",FactionLevelTemplates.CLASSIC}; // Men of the Sutcrofts
+    if (factionId==1879259430) return new String[]{category,"PEOPLE_WILDERMORE",FactionLevelTemplates.CLASSIC}; // People of Wildermore
+    if (factionId==1879259431) return new String[]{category,"SURVIVORS_WILDERMORE",FactionLevelTemplates.CLASSIC}; // Survivors of Wildermore
+    if (factionId==1879271130) return new String[]{category,"EORLINGAS",FactionLevelTemplates.CLASSIC}; // The Eorlingas
+    if (factionId==1879271131) return new String[]{category,"HELMINGAS",FactionLevelTemplates.CLASSIC}; // The Helmingas
+    if (factionId==1879303012) return new String[]{category,"FANGORN",FactionLevelTemplates.CLASSIC}; // The Ents of Fangorn Forest
+    if (factionId==1879400830) return new String[]{category,null,null}; // Townsfolk of the Kingstead
+    if (factionId==1879400827) return new String[]{category,null,null}; // Townsfolk of the Eastfold
     category="Dol Amroth";
-    if (factionId==1879306071) return category; // Dol Amroth
-    if (factionId==1879308442) return category; // Dol Amroth - Armoury
-    if (factionId==1879308438) return category; // Dol Amroth - Bank
-    if (factionId==1879308441) return category; // Dol Amroth - Docks
-    if (factionId==1879308436) return category; // Dol Amroth - Great Hall
-    if (factionId==1879308443) return category; // Dol Amroth - Library
-    if (factionId==1879308440) return category; // Dol Amroth - Mason
-    if (factionId==1879308439) return category; // Dol Amroth - Swan-knights
-    if (factionId==1879308437) return category; // Dol Amroth - Warehouse
+    if (factionId==1879306071) return new String[]{category,FactionLevelTemplates.DOL_AMROTH,FactionLevelTemplates.CLASSIC}; // Dol Amroth
+    if (factionId==1879308442) return new String[]{category,"DA_ARMOURY",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Armoury
+    if (factionId==1879308438) return new String[]{category,"DA_BANK",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Bank
+    if (factionId==1879308441) return new String[]{category,"DA_DOCKS",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Docks
+    if (factionId==1879308436) return new String[]{category,"DA_GREAT_HALL",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Great Hall
+    if (factionId==1879308443) return new String[]{category,"DA_LIBRARY",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Library
+    if (factionId==1879308440) return new String[]{category,"DA_MASON",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Mason
+    if (factionId==1879308439) return new String[]{category,"DA_SWAN_KNIGHTS",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Swan-knights
+    if (factionId==1879308437) return new String[]{category,"DA_WAREHOUSE",FactionLevelTemplates.DOL_AMROTH}; // Dol Amroth - Warehouse
     category="Gondor";
-    if (factionId==1879315479) return category; // Men of Ringló Vale
-    if (factionId==1879315480) return category; // Men of Dor-en-Ernil
-    if (factionId==1879315481) return category; // Men of Lebennin
-    if (factionId==1879314940) return category; // Pelargir
-    if (factionId==1879322612) return category; // Rangers of Ithilien
-    if (factionId==1879326961) return category; // Defenders of Minas Tirith
-    if (factionId==1879330539) return category; // Riders of Rohan
+    if (factionId==1879315479) return new String[]{category,"RINGLO_VALE",FactionLevelTemplates.CLASSIC}; // Men of Ringló Vale
+    if (factionId==1879315480) return new String[]{category,"DOR_EN_ERNIL",FactionLevelTemplates.CLASSIC}; // Men of Dor-en-Ernil
+    if (factionId==1879315481) return new String[]{category,"LEBENNIN",FactionLevelTemplates.CLASSIC}; // Men of Lebennin
+    if (factionId==1879314940) return new String[]{category,"PELARGIR",FactionLevelTemplates.CLASSIC}; // Pelargir
+    if (factionId==1879322612) return new String[]{category,"RANGERS_ITHILIEN",FactionLevelTemplates.CLASSIC}; // Rangers of Ithilien
+    if (factionId==1879326961) return new String[]{category,"MINAS_TIRITH",FactionLevelTemplates.EXTENDED_CLASSIC}; // Defenders of Minas Tirith
+    if (factionId==1879330539) return new String[]{category,"RIDERS_ROHAN",FactionLevelTemplates.CLASSIC}; // Riders of Rohan
     category="Mordor";
-    if (factionId==1879334719) return category; // Host of the West
-    if (factionId==1879341949) return category; // Host of the West: Armour
-    if (factionId==1879341953) return category; // Host of the West: Provisions
-    if (factionId==1879341952) return category; // Host of the West: Weapons
-    if (factionId==1879345132) return category; // Red Sky Clan
-    if (factionId==1879345136) return category; // Conquest of Gorgoroth
-    if (factionId==1879345134) return category; // Enmity of Fushaum Bal south
-    if (factionId==1879345135) return category; // Enmity of Fushaum Bal north
-    if (factionId==1879389868) return category; // The White Company
-    if (factionId==1879389872) return category; // Reclamation of Minas Ithil
-    if (factionId==1879389871) return category; // The Great Alliance
+    if (factionId==1879334719) return new String[]{category,"HOST_OF_THE_WEST",FactionLevelTemplates.EXTENDED_CLASSIC}; // Host of the West
+    if (factionId==1879341949) return new String[]{category,"HOW_ARMOUR",FactionLevelTemplates.HOW}; // Host of the West: Armour
+    if (factionId==1879341953) return new String[]{category,"HOW_PROVISIONS",FactionLevelTemplates.HOW}; // Host of the West: Provisions
+    if (factionId==1879341952) return new String[]{category,"HOW_WEAPONS",FactionLevelTemplates.HOW}; // Host of the West: Weapons
+    if (factionId==1879345132) return new String[]{category,null,null}; // Red Sky Clan
+    if (factionId==1879345136) return new String[]{category,"GORGOROTH",FactionLevelTemplates.GORGOROTH}; // Conquest of Gorgoroth
+    if (factionId==1879345134) return new String[]{category,null,null}; // Enmity of Fushaum Bal south
+    if (factionId==1879345135) return new String[]{category,null,null}; // Enmity of Fushaum Bal north
+    if (factionId==1879389868) return new String[]{category,null,null}; // The White Company
+    if (factionId==1879389872) return new String[]{category,null,null}; // Reclamation of Minas Ithil
+    if (factionId==1879389871) return new String[]{category,null,null}; // The Great Alliance
     category="Misc";
-    if (factionId==1879182957) return category; // The Ale Association
-    if (factionId==1879103953) return category; // The Inn League
-    if (factionId==1879305436) return category; // Chicken Chasing League of Eriador
-    category="";
-    if (factionId==1879400830) return category; // Townsfolk of the Kingstead
-    if (factionId==1879400827) return category; // Townsfolk of the Eastfold
-
-    if (isGuildFaction(factionId)) return "Guild";
-    return "???";
+    if (factionId==1879182957) return new String[]{category,"ALE_ASSOCIATION",FactionLevelTemplates.CLASSIC}; // The Ale Association
+    if (factionId==1879103953) return new String[]{category,"INN_LEAGUE",FactionLevelTemplates.CLASSIC}; // The Inn League
+    if (factionId==1879305436) return new String[]{category,"HOBNANIGANS",FactionLevelTemplates.HOBNANIGANS}; // Chicken Chasing League of Eriador
+    category="Guild";
+    if (factionId==1879124448) return new String[]{category,"GUILD_COOK",FactionLevelTemplates.GUILD}; // Cook's Guild
+    if (factionId==1879124449) return new String[]{category,"GUILD_JEWELLER",FactionLevelTemplates.GUILD}; // Jeweller's Guild
+    if (factionId==1879124450) return new String[]{category,"GUILD_METALSMITH",FactionLevelTemplates.GUILD}; // Metalsmith's Guild
+    if (factionId==1879124451) return new String[]{category,"GUILD_SCHOLAR",FactionLevelTemplates.GUILD}; // Scholar's Guild
+    if (factionId==1879124452) return new String[]{category,"GUILD_TAILOR",FactionLevelTemplates.GUILD}; // Tailor's Guild
+    if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
+    if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
+    return null;
   }
 
   private void buildFactionDeeds(FactionsRegistry registry)
