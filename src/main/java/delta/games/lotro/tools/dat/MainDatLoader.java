@@ -35,6 +35,7 @@ import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
+import delta.games.lotro.tools.lore.MainServersBuilder;
 import delta.games.lotro.tools.lore.traitPoints.TraitPointsRegistryBuilder;
 
 /**
@@ -64,6 +65,8 @@ public class MainDatLoader
 
   private void load()
   {
+    // Servers
+    new MainServersBuilder().doIt();
     // Stats
     new MainStatsLoader(_facade).doIt();
     // Colors

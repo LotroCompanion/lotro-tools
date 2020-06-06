@@ -239,4 +239,8 @@ public class GeneratedFiles
    * Misc icons.
    */
   public static final File MISC_ICONS=new File("../lotro-data/misc/miscIcons.zip").getAbsoluteFile();
+  /**
+   * Servers.
+   */
+  public static final File SERVERS=LotroCoreConfig.getInstance().getFile(DataFiles.SERVERS_DESCRIPTION);
 }
