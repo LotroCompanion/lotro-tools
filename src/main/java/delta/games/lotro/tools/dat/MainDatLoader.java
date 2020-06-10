@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.tools.ReferenceDataGenerator;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
@@ -125,6 +126,8 @@ public class MainDatLoader
     new MainDatDisenchantmentsLoader(_facade).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
+    // Reference data
+    new ReferenceDataGenerator().doIt();
   }
 
   private void cleanup()
