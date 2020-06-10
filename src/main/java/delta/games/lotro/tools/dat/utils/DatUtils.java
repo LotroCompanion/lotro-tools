@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.utils;
 
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.DatStringUtils;
 
 /**
  * Utility methods related to DAT parsing.
@@ -16,21 +17,7 @@ public class DatUtils
    */
   public static String getStringProperty(PropertiesSet properties, String propertyName)
   {
-    String ret=null;
-    Object value=properties.getProperty(propertyName);
-    if (value!=null)
-    {
-      if (value instanceof String[])
-      {
-        ret=((String[])value)[0];
-        ret=ret.replace("\\n","\n");
-      }
-      else if (value instanceof String)
-      {
-        ret=(String)value;
-      }
-    }
-    return ret;
+    return DatStringUtils.getStringProperty(properties,propertyName);
   }
 
   /**
