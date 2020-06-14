@@ -55,18 +55,21 @@ public class MainBuffsLoader
   {
     List<EffectBuff> buffs=new ArrayList<EffectBuff>();
     // In Defence of Middle Earth
-    EffectBuff idome=loadBuff(1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH");
-    if (idome!=null)
-    {
-      buffs.add(idome);
-    }
+    buffs.add(loadBuff(1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH"));
     // Motivated
-    EffectBuff motivated=loadBuff(1879073072,"MOTIVATED");
-    if (motivated!=null)
-    {
-      buffs.add(motivated);
-    }
-    
+    buffs.add(loadBuff(1879073072,"MOTIVATED"));
+    // Dissonance
+    buffs.add(loadBuff(1879095617,null));
+    // Resonance
+    buffs.add(loadBuff(1879217087,null));
+    // Enhanced Abilities
+    buffs.add(loadBuff(1879145605,null));
+    // Peace and Quiet
+    //buffs.add(loadBuff(1879145606,null));
+    // A Quiet Calm (I)
+    buffs.add(loadBuff(1879145414,null));
+    // A Quiet Calm (II)
+    buffs.add(loadBuff(1879239303,null));
     return buffs;
   }
 
@@ -78,7 +81,10 @@ public class MainBuffsLoader
     {
       buff=new EffectBuff();
       buff.setEffect(effect);
-      buff.setKey(key);
+      if (key!=null)
+      {
+        buff.setKey(key);
+      }
 
       // Build icon file
       Integer iconId=effect.getIconId();
