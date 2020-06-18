@@ -8,6 +8,13 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.requirements.ClassRequirement;
+import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedsManager;
+import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.stats.traitPoints.TraitPoint;
 import delta.games.lotro.stats.traitPoints.TraitPointCategories;
 import delta.games.lotro.stats.traitPoints.TraitPointsRegistry;
@@ -72,7 +79,7 @@ public class TraitPointsRegistryBuilder
       System.out.println(cClass+":"+points.size());
       for(TraitPoint point : points)
       {
-        System.out.println("\t"+point.getLabel()+" -- "+point.getId());
+        System.out.println("\t"+point.getAchievableId()+" - "+point.getLabel()+" -- "+point.getId());
       }
     }
     List<TraitPoint> all=_registry.getAll();
@@ -88,48 +95,56 @@ public class TraitPointsRegistryBuilder
 
   private void buildGenericPoints()
   {
-    String category=TraitPointCategories.EPIC;
-    initPoint("Epic Battles 1", category, "Earn 100 Promotion Points", null);
-    initPoint("Epic Battles 2", category, "Earn 200 Promotion Points", null);
-
-    category=TraitPointCategories.QUESTS;
-    initPoint("West Rohan:Kingstead", category, "West Rohan: complete Kingstead quest chain", null);
-    initPoint("West Rohan:Eastfold", category, "West Rohan: complete Eastfold quest chain", null);
-    initPoint("West Rohan:Broadacres", category, "West Rohan: complete Broadacres quest chain", null);
-    initPoint("West Rohan:Stonedeans", category, "West Rohan: complete Stonedeans quest chain", null);
-    initPoint("West Rohan:Westfold", category, "West Rohan: complete Westfold quest chain", null);
-
-    initPoint("Central Gondor:Ringló Vale", category, "Central Gondor: complete Ringló Vale quest chain", null);
-    initPoint("Central Gondor:Dor-en-Ernil", category, "Central Gondor: complete Dor-en-Ernil quest chain", null);
-    initPoint("Central Gondor:Lebennin", category, "Central Gondor: complete Lebennin quest chain", null);
-    initPoint("Central Gondor:Pelargir", category, "Central Gondor: complete Pelargir quest chain", null);
-
-    initPoint("Eastern Gondor:AshesAndStars", category, "Osgiliath: complete Ashes and Stars, Chapter 4", null);
-
+    // Moria
+    TraitPoint epicVol2Book6=initPoint("EpicVol2Book6", TraitPointCategories.EPIC, "Complete Volume II, Book 6 (Moria)", null);
+    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
+    {
+      if (characterClass!=CharacterClass.BEORNING)
+      {
+        epicVol2Book6.addRequiredClass(characterClass);
+      }
+    }
+    // Rohan quest chains
+    String category=TraitPointCategories.QUESTS;
+    initPoint("West Rohan:Kingstead", category, "West Rohan: complete Kingstead quest chain", null, "The Road to Dunharrow");
+    initPoint("West Rohan:Eastfold", category, "West Rohan: complete Eastfold quest chain", null, "All Roads Lead Back to Aldburg");
+    initPoint("West Rohan:Broadacres", category, "West Rohan: complete Broadacres quest chain", null, "The Broadacres Betrayed");
+    initPoint("West Rohan:Stonedeans", category, "West Rohan: complete Stonedeans quest chain", null, "Woodhurst Has Fallen");
+    initPoint("West Rohan:Westfold", category, "West Rohan: complete Westfold quest chain", null, "To Helm's Deep");
+    // Central Gondor quest chain
+    initPoint("Central Gondor:Ringló Vale", category, "Central Gondor: complete Ringló Vale quest chain", null, "A Ruthless End");
+    initPoint("Central Gondor:Dor-en-Ernil", category, "Central Gondor: complete Dor-en-Ernil quest chain", null, "Blood for Blood");
+    initPoint("Central Gondor:Lebennin", category, "Central Gondor: complete Lebennin quest chain", null, "Sons of the Usurper");
+    initPoint("Central Gondor:Pelargir", category, "Central Gondor: complete Pelargir quest chain", null, "Faltharan's Confrontation");
+    // Eastern Gondor quest chain
+    initPoint("Eastern Gondor:AshesAndStars", category, "Osgiliath: complete Ashes and Stars, Chapter 4", null, "Ashes and Stars, Chapter 4");
+    // Epic quests
     category=TraitPointCategories.EPIC;
-    initPoint("EpicVol4Book2", category, "Complete Volume IV, Book 2: The Dawnless Day", null);
-    initPoint("EpicVol4Book4Chapter10", category, "Complete Volume IV, Book 4, Chapter 10: The Defence of Minas Tirith", null);
-    initPoint("EpicVol4Book4Chapter11", category, "Complete Volume IV, Book 4, Chapter 11: Hammer of the Underworld", null);
-    initPoint("EpicVol4Book8Chapter7", category, "Complete Volume IV, Book 8, Chapter 7: Mordor Triumphant", null);
-    initPoint("EpicVol4Book9Chapter5", category, "Complete Volume IV, Book 9, Chapter 5: The Next Adventure", null);
-    initPoint("BlackBookMordor4.4", category, "Complete The Black Book of Mordor, Chapter  4.4: Union of Evil", null);
-    initPoint("BlackBookMordor5.5", category, "Complete The Black Book of Mordor, Chapter  5.5: The Walls Brought Down", null);
-    initPoint("BlackBookMordor8.7", category, "Complete The Black Book of Mordor, Chapter  8.7: The First Promise", null);
-    initPoint("BlackBookMordor10.7", category, "Complete The Black Book of Mordor, Chapter 10.7: The Arrival of the Wise", null);
-    initPoint("BlackBookMordor12.5", category, "Complete The Black Book of Mordor, Chapter 12.5: The End of the Tale", null);
-    initPoint("BlackBookMordor14.5", category, "Complete The Black Book of Mordor, Chapter 14.5: A Final Escape", null);
-    initPoint("Durin2.7", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 2.7: A Thirst for Blood", null);
+    initPoint("EpicVol4Book2", category, "Complete Volume IV, Book 2: The Dawnless Day", null, "Book 2, Chapter 9: Even In Darkness");
+    initPoint("EpicVol4Book4Chapter10", category, "Complete Volume IV, Book 4, Chapter 10: The Defence of Minas Tirith", null, "Book 4, Chapter 10: The Defence of Minas Tirith");
+    initPoint("EpicVol4Book4Chapter11", category, "Complete Volume IV, Book 4, Chapter 11: Hammer of the Underworld", null, "Book 4, Chapter 11: Hammer of the Underworld");
+    initPoint("EpicVol4Book8Chapter7", category, "Complete Volume IV, Book 8, Chapter 7: Mordor Triumphant", null, "Book 8, Chapter 7: Mordor Triumphant");
+    initPoint("EpicVol4Book9Chapter5", category, "Complete Volume IV, Book 9, Chapter 5: The Next Adventure", null, "Book 9, Chapter 5: The Next Adventure");
+    initPoint("BlackBookMordor4.4", category, "Complete The Black Book of Mordor, Chapter  4.4: Union of Evil", null, "Chapter 4.4: Union of Evil");
+    initPoint("BlackBookMordor5.5", category, "Complete The Black Book of Mordor, Chapter  5.5: The Walls Brought Down", null, "Chapter 5.5: The Walls Brought Down");
+    initPoint("BlackBookMordor8.7", category, "Complete The Black Book of Mordor, Chapter  8.7: The First Promise", null, "Chapter 8.7: The First Promise");
+    initPoint("BlackBookMordor10.7", category, "Complete The Black Book of Mordor, Chapter 10.7: The Arrival of the Wise", null, "Chapter 10.7: The Arrival of the Wise");
+    initPoint("BlackBookMordor12.5", category, "Complete The Black Book of Mordor, Chapter 12.5: The End of the Tale", null, "Chapter 12.5: The End of the Tale");
+    initPoint("BlackBookMordor14.5", category, "Complete The Black Book of Mordor, Chapter 14.5: A Final Escape", null, "Chapter 14.5: A Final Escape");
+    initPoint("Durin2.7", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 2.7: A Thirst for Blood", null, "Chapter 2.7: A Thirst for Blood");
 
     category=TraitPointCategories.DEEDS;
-    initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null);
-    initPoint("OldAnórienDeeds", category, "Old Anórien: complete Deed 'Deeds of Old Anórien'", null);
+    initPoint("Epic Battles 1", category, "Earn 100 Promotion Points", null, "Promotion Points 1");
+    initPoint("Epic Battles 2", category, "Earn 200 Promotion Points", null, "Promotion Points 2");
+    initPoint("OldAnórienQuests", category, "Old Anórien: complete Deed 'Quests of Old Anórien'", null, "Quests of Old Anórien");
+    initPoint("OldAnórienDeeds", category, "Old Anórien: complete Deed 'Deeds of Old Anórien'", null, "Deeds of Old Anórien");
   }
 
   private static String[][] BOOK_NAMES=
   {
-    {"A Hobbit's Holiday","A Study of the Skin-changer","Geneology of the Beornings"},
+    {"A Hobbit's Holiday","A Study of the Skin-changer","Genealogy of the Beornings"},
     {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
-    {"The Candle's Flame","Treatise of Valour","The Book of Oaths"},
+    {"The Candle's Flame","The Treatise of Valour","The Book of Oaths"},
     {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
     {"The Best Defence","A Shield-maiden's Song","The Final Word"},
     {"A Shot in the Dark","The Way of the Hunter","The Furthest Charge"},
@@ -139,18 +154,18 @@ public class TraitPointsRegistryBuilder
     {"The Watch Against the Night","Chieftains of the Dúnedain","Bullroarer's Boy"}
   };
 
-  private static String[][] CLASS_QUESTS_CHAIN_NAMES=
+  private static String[][] CLASS_ACHIEVABLES_NAMES=
   {
     {"Grimbeorn's Challenge", "The Path Homeward" },
-    {"The Truest Course", "The Path of the Mischief-maker"},
-    {"The Noblest Path", "The Path of the Healing Hands"},
-    {"The Boldest Road", "Path of the Martial Champion"},
-    {"The Bravest Deed", "The Path of the Defender of the Free"},
-    {"The Swiftest Arrow", "The Path of the Foe-trapper"},
-    {"The Wisest Way", "The Path of the Ancient Master Quests"},
-    {"The Verses of the North", "The Path of the Resolve-watcher"},
-    {"Learned in Letters", "The Path of the Restoring Rune"},
-    {"A Strong Shield", "The Path of the Masterful Fist"}
+    {"A Lesson from Bilbo Baggins", "The Path of the Mischief-maker"},
+    {"A Lesson from Boromir", "The Path of the Healing Hands"},
+    {"A Lesson from Gimli", "The Path of the Martial Champion"},
+    {"A Lesson from Samwise Gamgee", "The Path of Freedom's Defender"},
+    {"A Lesson from Legolas", "The Path of the Foe-trapper"},
+    {"A Lesson from Lord Elrond", "The Path of the Ancient Master"},
+    {"A Lesson from Lindir", "The Path of the Resolve-watcher"},
+    {"Deep Secrets of Rune-craft", "The Path of the Restoring Rune"},
+    {"Wisdom of the Wardens", "The Path of the Masterful Fist"}
   };
 
   private static String[] IRON_GARNISON_GUARDS_BOOKS=
@@ -174,36 +189,50 @@ public class TraitPointsRegistryBuilder
     {
       String category=TraitPointCategories.CLASS;
       String key=cClass.getKey();
-      String book1=BOOK_NAMES[classIndex][0];
-      initPoint(key+":LegendaryBook1", category, "Complete Legendary Book Pages '"+book1+"'", cClass);
-      String book2=BOOK_NAMES[classIndex][1];
-      initPoint(key+":LegendaryBook2", category, "Complete Legendary Book Pages '"+book2+"'", cClass);
-      String book3=BOOK_NAMES[classIndex][2];
-      initPoint(key+":LegendaryBook3", category, "Complete Legendary Book Pages '"+book3+"'", cClass);
-      String chain1=CLASS_QUESTS_CHAIN_NAMES[classIndex][0];
-      initPoint(key+":ClassQuests50", category, "Complete the Level 50 Class Quest Chain '" + chain1 + "'", cClass);
-      String chain2=CLASS_QUESTS_CHAIN_NAMES[classIndex][1];
-      initPoint(key+":ClassQuests58", category, "Complete the Level 58 Class Quest Chain '" + chain2 + "'", cClass);
+      // Legendary Books
+      for(int i=0;i<3;i++)
+      {
+        String book=BOOK_NAMES[classIndex][i];
+        String pointId=key+":LegendaryBook"+(i+1);
+        Achievable achievable=findAchievableByNameAndClass(book,cClass);
+        int id=(achievable!=null)?achievable.getIdentifier():0;
+        initPoint(pointId, category, "Complete Legendary Book Pages '"+book+"'", cClass, id);
+      }
+      // Class quest chains
+      for(int i=0;i<2;i++)
+      {
+        int level=(i==0)?50:58;
+        String name=CLASS_ACHIEVABLES_NAMES[classIndex][i];
+        String pointId=key+":ClassQuests"+level;
+        Achievable achievable=findAchievableByNameAndClass(name,cClass);
+        int id=(achievable!=null)?achievable.getIdentifier():0;
+        String type=(achievable instanceof QuestDescription)?"Quest":"Deed";
+        String label="Complete the Level "+level+" "+type+" '" + name + "'";
+        initPoint(pointId, category, label, cClass, id);
+      }
       if (cClass!=CharacterClass.BEORNING)
       {
         String dwarfBook=IRON_GARNISON_GUARDS_BOOKS[classIndex];
-        initPoint(key+":ReadGuardsBook", category, "Read book of Iron Garrison Guards: '" + dwarfBook +"'", cClass);
+        Achievable achievable=findAchievableByNameAndClass(dwarfBook,cClass);
+        int id=(achievable!=null)?achievable.getIdentifier():0;
+        initPoint(key+":ReadGuardsBook", category, "Read book of Iron Garrison Guards: '" + dwarfBook +"'", cClass, id);
       }
       classIndex++;
     }
-    // Epic
-    TraitPoint epicVol2Book6=initPoint("EpicVol2Book6", TraitPointCategories.EPIC, "Complete Volume II, Book 6 (Moria)", null);
-    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
-    {
-      if (characterClass!=CharacterClass.BEORNING)
-      {
-        epicVol2Book6.addRequiredClass(characterClass);
-      }
-    }
 
     // Add Beorning specifics
-    initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest Chain 'The Speech of Animals'", CharacterClass.BEORNING);
-    initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest Chain 'Hatred of Bear and Man'", CharacterClass.BEORNING);
+    {
+      String name="The Speech of Animals";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
+    }
+    {
+      String name="Hatred of Bear and Man";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
+    }
   }
 
   private void buildClassDeeds()
@@ -214,12 +243,27 @@ public class TraitPointsRegistryBuilder
       String key=cClass.getKey();
       for(int i=1;i<=8;i++)
       {
-        initPoint(key+":ClassDeed"+i, category, "Class Deeds - Tier "+i, cClass);
+        String name="Class Deeds - Tier "+i;
+        Achievable achievable=findAchievableByNameAndClass(name,cClass);
+        int id=(achievable!=null)?achievable.getIdentifier():0;
+        initPoint(key+":ClassDeed"+i, category, name, cClass, id);
       }
     }
   }
 
   private TraitPoint initPoint(String id, String category, String label, CharacterClass requiredCharacterClass)
+  {
+    return initPoint(id,category,label,requiredCharacterClass,0);
+  }
+
+  private TraitPoint initPoint(String pointId, String category, String label, CharacterClass requiredCharacterClass, String achievableName)
+  {
+    Achievable achievable=findAchievableByNameAndClass(achievableName,null);
+    int id=(achievable!=null)?achievable.getIdentifier():0;
+    return initPoint(pointId,category,label,requiredCharacterClass,id);
+  }
+
+  private TraitPoint initPoint(String id, String category, String label, CharacterClass requiredCharacterClass, int achievableId)
   {
     TraitPoint point=new TraitPoint(id);
     point.setLabel(label);
@@ -228,8 +272,51 @@ public class TraitPointsRegistryBuilder
     {
       point.addRequiredClass(requiredCharacterClass);
     }
+    point.setAchievableId(achievableId);
     _registry.registerTraitPoint(point);
     return point;
+  }
+
+  private boolean checkClassRequirement(Achievable achievable, CharacterClass characterClass)
+  {
+    if (characterClass==null)
+    {
+      return true;
+    }
+    UsageRequirement requirements=achievable.getUsageRequirement();
+    ClassRequirement classRequirement=requirements.getClassRequirement();
+    if (classRequirement==null)
+    {
+      return false;
+    }
+    return classRequirement.accept(characterClass);
+  }
+
+  private Achievable findAchievableByNameAndClass(String name, CharacterClass characterClass)
+  {
+    QuestsManager questsMgr=QuestsManager.getInstance();
+    for(QuestDescription quest : questsMgr.getAll())
+    {
+      if (name.equals(quest.getName()))
+      {
+        if (checkClassRequirement(quest,characterClass))
+        {
+          return quest;
+        }
+      }
+    }
+    DeedsManager deedsMgr=DeedsManager.getInstance();
+    for(DeedDescription deed : deedsMgr.getAll())
+    {
+      if (name.equals(deed.getName()))
+      {
+        if (checkClassRequirement(deed,characterClass))
+        {
+          return deed;
+        }
+      }
+    }
+    return null;
   }
 
   /**
