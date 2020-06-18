@@ -96,14 +96,7 @@ public class TraitPointsRegistryBuilder
   private void buildGenericPoints()
   {
     // Moria
-    TraitPoint epicVol2Book6=initPoint("EpicVol2Book6", TraitPointCategories.EPIC, "Complete Volume II, Book 6 (Moria)", null);
-    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
-    {
-      if (characterClass!=CharacterClass.BEORNING)
-      {
-        epicVol2Book6.addRequiredClass(characterClass);
-      }
-    }
+    initPoints("EpicVol2Book6", TraitPointCategories.EPIC, "Complete Volume II, Book 6 (Moria)", "The Mines of Moria");
     // Rohan quest chains
     String category=TraitPointCategories.QUESTS;
     initPoint("West Rohan:Kingstead", category, "West Rohan: complete Kingstead quest chain", null, "The Road to Dunharrow");
@@ -254,6 +247,25 @@ public class TraitPointsRegistryBuilder
   private TraitPoint initPoint(String id, String category, String label, CharacterClass requiredCharacterClass)
   {
     return initPoint(id,category,label,requiredCharacterClass,0);
+  }
+
+  private void initPoints(String pointId, String category, String label, String name)
+  {
+    DeedsManager deedsMgr=DeedsManager.getInstance();
+    for(DeedDescription deed : deedsMgr.getAll())
+    {
+      if (name.equals(deed.getName()))
+      {
+        UsageRequirement requirements=deed.getUsageRequirement();
+        ClassRequirement classRequirement=requirements.getClassRequirement();
+        if (classRequirement!=null)
+        {
+          CharacterClass requiredClass=classRequirement.getAllowedClasses().get(0);
+          initPoint(pointId,category,label,requiredClass,deed.getIdentifier());
+        }
+      }
+    }
+
   }
 
   private TraitPoint initPoint(String pointId, String category, String label, CharacterClass requiredCharacterClass, String achievableName)
