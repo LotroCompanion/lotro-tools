@@ -7,6 +7,8 @@ import java.util.Map;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.TraitTree;
 import delta.games.lotro.character.classes.TraitTreeBranch;
+import delta.games.lotro.character.classes.TraitTreeCell;
+import delta.games.lotro.character.classes.TraitTreeCellDependency;
 import delta.games.lotro.character.classes.TraitTreeProgression;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
@@ -56,6 +58,7 @@ public class TraitTreesDataLoader
     }
     */
     TraitTree tree=new TraitTree();
+    System.out.println("Class: "+characterClass);
     //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
@@ -86,10 +89,26 @@ public class TraitTreesDataLoader
       TraitTreeBranch branch=branchesById.get(Integer.valueOf(branchId));
       int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
-      String cell=_traitCell.getString(traitLocation);
+      String cellId=_traitCell.getString(traitLocation);
       //System.out.println("Cell: "+cell);
-      TraitDescription description=TraitLoader.getTrait(_facade,traitId);
-      branch.setCell(cell,description);
+      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+      TraitTreeCell cell=new TraitTreeCell(cellId,trait);
+      // Dependencies
+      Object[] depArray=(Object[])traitProps.getProperty("Trait_TraitTree_TraitDependencyArray");
+      if (depArray!=null)
+      {
+        for(Object depObj : depArray)
+        {
+          PropertiesSet depProps=(PropertiesSet)depObj;
+          int depTraitLocation=((Integer)depProps.getProperty("Trait_TraitTree_TraitDependency")).intValue();
+          String depCellId=_traitCell.getString(depTraitLocation);
+          int depRank=((Integer)depProps.getProperty("Trait_TraitTree_TraitDependencyRank")).intValue();
+          //System.out.println("Cell "+cell+" depends on cell "+depCellId+" at rank: "+depRank);
+          TraitTreeCellDependency cellDependency=new TraitTreeCellDependency(depCellId,depRank);
+          cell.addDependency(cellDependency);
+        }
+      }
+      branch.setCell(cellId,cell);
     }
     return tree;
   }
