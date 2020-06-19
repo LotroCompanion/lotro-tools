@@ -2,7 +2,9 @@ package delta.games.lotro.tools.lore.traitPoints;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -10,6 +12,7 @@ import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.Achievable;
@@ -72,6 +75,12 @@ public class TraitPointsRegistryBuilder
 
   private void checks()
   {
+    showTraitPointsPerClass();
+    checkAvailableTraitPoints();
+  }
+
+  private void showTraitPointsPerClass()
+  {
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
       List<TraitPoint> points=_registry.getPointsForClass(cClass);
@@ -84,6 +93,58 @@ public class TraitPointsRegistryBuilder
     }
     List<TraitPoint> all=_registry.getAll();
     System.out.println("All:"+all.size());
+  }
+
+  private void checkAvailableTraitPoints()
+  {
+    Map<Integer,Achievable> achievables=getAchievablesWithTraitPointsRewards();
+    List<TraitPoint> points=_registry.getAll();
+    for(TraitPoint point : points)
+    {
+      int achievableId=point.getAchievableId();
+      achievables.remove(Integer.valueOf(achievableId));
+    }
+    if (achievables.size()>0)
+    {
+      for(Achievable achievable : achievables.values())
+      {
+        LOGGER.warn("Unmanaged achievable: "+achievable);
+      }
+    }
+  }
+
+  private Map<Integer,Achievable> getAchievablesWithTraitPointsRewards()
+  {
+    Map<Integer,Achievable> ret=new HashMap<Integer,Achievable>();
+    QuestsManager questsMgr=QuestsManager.getInstance();
+    for(QuestDescription quest : questsMgr.getAll())
+    {
+      Rewards rewards=quest.getRewards();
+      int classPoints=rewards.getClassPoints();
+      if (classPoints==1)
+      {
+        ret.put(Integer.valueOf(quest.getIdentifier()),quest);
+      }
+      if (classPoints>1)
+      {
+        LOGGER.warn("More than 1 point for: "+quest);
+      }
+    }
+    DeedsManager deedsMgr=DeedsManager.getInstance();
+    for(DeedDescription deed : deedsMgr.getAll())
+    {
+      Rewards rewards=deed.getRewards();
+      int classPoints=rewards.getClassPoints();
+      if (classPoints==1)
+      {
+        ret.put(Integer.valueOf(deed.getIdentifier()),deed);
+      }
+      if (classPoints>1)
+      {
+        LOGGER.warn("More than 1 point for: "+deed);
+      }
+    }
+    return ret;
   }
 
   private void buildRegistry()
@@ -177,6 +238,20 @@ public class TraitPointsRegistryBuilder
 
   private void buildClassPoints()
   {
+    // Add Beorning specifics
+    {
+      String name="The Speech of Animals";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
+    }
+    {
+      String name="Hatred of Bear and Man";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
+    }
+
     int classIndex=0;
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
@@ -212,20 +287,6 @@ public class TraitPointsRegistryBuilder
       }
       classIndex++;
     }
-
-    // Add Beorning specifics
-    {
-      String name="The Speech of Animals";
-      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
-      int id=(achievable!=null)?achievable.getIdentifier():0;
-      initPoint("Beorning:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
-    }
-    {
-      String name="Hatred of Bear and Man";
-      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
-      int id=(achievable!=null)?achievable.getIdentifier():0;
-      initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
-    }
   }
 
   private void buildClassDeeds()
@@ -242,11 +303,6 @@ public class TraitPointsRegistryBuilder
         initPoint(key+":ClassDeed"+i, category, name, cClass, id);
       }
     }
-  }
-
-  private TraitPoint initPoint(String id, String category, String label, CharacterClass requiredCharacterClass)
-  {
-    return initPoint(id,category,label,requiredCharacterClass,0);
   }
 
   private void initPoints(String pointId, String category, String label, String name)
