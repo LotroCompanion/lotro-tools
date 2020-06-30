@@ -186,6 +186,7 @@ public class TraitPointsRegistryBuilder
     initPoint("BlackBookMordor12.5", category, "Complete The Black Book of Mordor, Chapter 12.5: The End of the Tale", null, "Chapter 12.5: The End of the Tale");
     initPoint("BlackBookMordor14.5", category, "Complete The Black Book of Mordor, Chapter 14.5: A Final Escape", null, "Chapter 14.5: A Final Escape");
     initPoint("Durin2.7", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 2.7: A Thirst for Blood", null, "Chapter 2.7: A Thirst for Blood");
+    initPoint("Wedding", category, "Complete Volume V, Book 1, Chapter 8: The Wedding Banquet", null, "Book 1, Chapter 8: The Wedding Banquet");
 
     category=TraitPointCategories.DEEDS;
     initPoint("Epic Battles 1", category, "Earn 100 Promotion Points", null, "Promotion Points 1");
