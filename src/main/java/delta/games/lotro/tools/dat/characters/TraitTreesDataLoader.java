@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.TraitTree;
-import delta.games.lotro.character.classes.TraitTreeBranch;
-import delta.games.lotro.character.classes.TraitTreeCell;
-import delta.games.lotro.character.classes.TraitTreeCellDependency;
-import delta.games.lotro.character.classes.TraitTreeProgression;
+import delta.games.lotro.character.classes.traitTree.TraitTree;
+import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
+import delta.games.lotro.character.classes.traitTree.TraitTreeCell;
+import delta.games.lotro.character.classes.traitTree.TraitTreeCellDependency;
+import delta.games.lotro.character.classes.traitTree.TraitTreeProgression;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.DATConstants;
@@ -57,7 +57,7 @@ public class TraitTreesDataLoader
       System.out.println("Branch description: "+branchDescription);
     }
     */
-    TraitTree tree=new TraitTree();
+    TraitTree tree=new TraitTree(characterClass);
     System.out.println("Class: "+characterClass);
     //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
