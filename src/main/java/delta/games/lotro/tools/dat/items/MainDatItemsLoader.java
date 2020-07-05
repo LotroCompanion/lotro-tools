@@ -62,7 +62,27 @@ public class MainDatItemsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsLoader.class);
 
-  private static final int[] TYPES={2097, 2814, 799, 798, 797, 796, 795, /*794,*/ 804, 805, 802, 3663, 803, 815, 1722, 3924, 4178 };
+  private static final int[] TYPES=
+  {
+    2097, // Activator (in-world items that activate things when clicked on)
+    2814, // PackageItem
+    799, // IWeapon
+    798, // ITextItem (scrolls, misc. papers)
+    797, // IShield
+    796, // IItem
+    795, // IClothing
+    //794, // GameplayContainer (chests, fields, resource nodes)
+    804, // Milestone (in-world milestones, camp site fires)
+    805, // RecipeItem
+    802, // Jewelry
+    3663, // ? (recipe books)
+    803, // Key (keys, and by extension items that allow opening things)
+    815, // Waypoint (doors, horse, misc items used to zone)
+    1722, // DoorTemplate (doors, misc similar items)
+    3924, // ? (epic battles promotion points bestowers)
+    4178 // Carry-alls
+  };
+
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
