@@ -82,6 +82,26 @@ public class MainDatContainerLoader
       {
         trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
       }
+      // Other filtered trophy table
+      Integer filteredTrophyTableId=(Integer)properties.getProperty("LootGen_FilteredTrophyTable");
+      if (filteredTrophyTableId!=null)
+      {
+        if (filteredTable!=null)
+        {
+          LOGGER.warn("Filtered table override");
+        }
+        filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTableId.intValue());
+      }
+      // Trophy list override
+      Integer trophyListOverrideId=(Integer)properties.getProperty("LootGen_TrophyList_Override");
+      if ((trophyListOverrideId!=null) && (trophyListOverrideId.intValue()!=0))
+      {
+        if (trophyList!=null)
+        {
+          LOGGER.warn("Trophy list override");
+        }
+        trophyList=_lootLoader.handleTrophyList(trophyListOverrideId.intValue());
+      }
       // Preview
       /*
       Integer preview=(Integer)properties.getProperty("PackageItem_IsPreviewable");
@@ -99,6 +119,23 @@ public class MainDatContainerLoader
       */
       // Effects (for scrolls)
       treasureList=handleEffects(properties);
+      // Treasure list override
+      Integer treasureListOverrideId=(Integer)properties.getProperty("LootGen_TreasureList_Override");
+      if ((treasureListOverrideId!=null) && (treasureListOverrideId.intValue()!=0))
+      {
+        if (treasureList!=null)
+        {
+          LOGGER.warn("Treasure list override");
+        }
+        PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverrideId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+        treasureList=_lootLoader.handleTreasureList(treasureListOverrideId.intValue(),treasureListProps);
+      }
+      Integer reputationTrophyList=(Integer)properties.getProperty("LootGen_ReputationTrophyList");
+      if ((reputationTrophyList!=null) && (reputationTrophyList.intValue()!=0))
+      {
+        // Never happens
+        LOGGER.warn("Reputation trophy override - should never happen");
+      }
 
       int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
       if (count>=1)
