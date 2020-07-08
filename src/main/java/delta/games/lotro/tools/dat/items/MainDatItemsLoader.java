@@ -71,7 +71,7 @@ public class MainDatItemsLoader
     797, // IShield
     796, // IItem
     795, // IClothing
-    //794, // GameplayContainer (chests, fields, resource nodes)
+    794, // GameplayContainer (chests, fields, resource nodes)
     804, // Milestone (in-world milestones, camp site fires)
     805, // RecipeItem
     802, // Jewelry
