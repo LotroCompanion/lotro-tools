@@ -66,6 +66,7 @@ public class RewardsMapLoader
     fillList(props,"QuestReward_RepEntryList","QuestReward_RepAmount",storage.getReputationMap());
     fillList(props,"QuestReward_TurbinePointEntryList","QuestReward_TurbinePointAmount",storage.getTpMap());
     fillList(props,"QuestReward_SessionPointsEntryList","QuestReward_SessionPointsAmount",storage.getDestinyPointsMap());
+    fillList(props,"QuestReward_VirtueExpEntryList","QuestReward_ExpAmount",storage.getVirtueXpMap());
   }
 
   private <T extends Number> void fillList(PropertiesSet props, String listPropName, String entryPropName, RewardLevelEntryList<T> storage)

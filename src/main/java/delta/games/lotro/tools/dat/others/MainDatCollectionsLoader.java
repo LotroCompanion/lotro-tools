@@ -58,7 +58,7 @@ public class MainDatCollectionsLoader
       // Treasure
       int treasureId=((Integer)properties.getProperty("Collection_TreasureDID")).intValue();
       Rewards rewards=new Rewards();
-      _rewardsLoader.loadRewards(rewards,treasureId);
+      _rewardsLoader.loadRewards(rewards,treasureId,null);
       System.out.println("Rewards: "+rewards.toString());
     }
     else

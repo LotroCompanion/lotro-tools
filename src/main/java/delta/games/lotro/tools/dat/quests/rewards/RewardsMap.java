@@ -20,6 +20,7 @@ public class RewardsMap
   private RewardLevelEntryList<Integer> _reputation;
   private RewardLevelEntryList<Integer> _tp;
   private RewardLevelEntryList<Integer> _destinyPoints;
+  private RewardLevelEntryList<Integer> _virtueXp;
 
   /**
    * Constructor.
@@ -40,6 +41,7 @@ public class RewardsMap
     _reputation=new RewardLevelEntryList<Integer>();
     _tp=new RewardLevelEntryList<Integer>();
     _destinyPoints=new RewardLevelEntryList<Integer>();
+    _virtueXp=new RewardLevelEntryList<Integer>();
   }
 
   /**
@@ -166,5 +168,14 @@ public class RewardsMap
   public RewardLevelEntryList<Integer> getDestinyPointsMap()
   {
     return _destinyPoints;
+  }
+
+  /**
+   * Get the virtue XP map.
+   * @return the virtue XP map.
+   */
+  public RewardLevelEntryList<Integer> getVirtueXpMap()
+  {
+    return _virtueXp;
   }
 }

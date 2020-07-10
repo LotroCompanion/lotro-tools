@@ -94,10 +94,10 @@ public class DatRewardsLoader
     ChallengeLevel challengeLevel=findChallengeLevel(properties);
 
     // Find out reward level
-    RewardsMap rewardLevel=findRewardsMap(challengeLevel, properties);
+    RewardsMap rewardsMap=findRewardsMap(challengeLevel, properties);
 
     // Faction
-    getFaction(rewards,properties,rewardLevel);
+    getFaction(rewards,properties,rewardsMap);
     // Destiny points: Quest_SessionPointsTier
     /* Disabled - found weird values.
     Integer destinyPointsTier=((Integer)properties.getProperty("Quest_SessionPointsTier"));
@@ -118,9 +118,9 @@ public class DatRewardsLoader
     Integer treasureId=((Integer)properties.getProperty("Quest_QuestTreasureDID"));
     if (treasureId!=null)
     {
-      loadRewards(rewards,treasureId.intValue());
+      loadRewards(rewards,treasureId.intValue(),rewardsMap);
     }
-    loadScalableRewards(rewards,properties,rewardLevel);
+    loadScalableRewards(rewards,properties,rewardsMap);
     return challengeLevel;
   }
 
@@ -128,8 +128,9 @@ public class DatRewardsLoader
    * Load rewards from a treasure identifier.
    * @param rewards Storage.
    * @param questTreasureId Treasure identifier.
+   * @param rewardsMap Rewards map.
    */
-  public void loadRewards(Rewards rewards, int questTreasureId)
+  public void loadRewards(Rewards rewards, int questTreasureId, RewardsMap rewardsMap)
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+DATConstants.DBPROPERTIES_OFFSET);
 
@@ -145,6 +146,21 @@ public class DatRewardsLoader
     handleTitles(rewards,props);
     // Virtues
     handleVirtues(rewards,props);
+    // Virtue XP
+    Integer virtueXpTier=((Integer)props.getProperty("QuestTreasure_Virtue_XP_Tier"));
+    if ((virtueXpTier!=null) && (virtueXpTier.intValue()>0))
+    {
+      if (rewardsMap==null)
+      {
+        LOGGER.warn("No rewards map. Using a default rewards map.");
+        rewardsMap=_defaultRewardMaps.get(Integer.valueOf(1));
+      }
+      Integer virtueXp=rewardsMap.getVirtueXpMap().getValue(virtueXpTier.intValue());
+      if (virtueXp!=null)
+      {
+        rewards.setVirtueXp(virtueXp.intValue());
+      }
+    }
     // Emotes
     handleEmotes(rewards,props);
     // Items
@@ -580,11 +596,10 @@ public class DatRewardsLoader
     Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
     if (tpTier!=null)
     {
-      Integer turbinePoints=rewardsMap.getTpMap().getValue(tpTier.intValue());
-      //System.out.println("Turbine points tier: "+tpTier+" => "+turbinePoints);
-      if (turbinePoints!=null)
+      Integer lotroPoints=rewardsMap.getTpMap().getValue(tpTier.intValue());
+      if (lotroPoints!=null)
       {
-        rewards.setLotroPoints(turbinePoints.intValue());
+        rewards.setLotroPoints(lotroPoints.intValue());
       }
     }
 
