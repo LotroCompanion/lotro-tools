@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.loaders.GeoLoader;
@@ -13,6 +15,8 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class PlacesLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(PlacesLoader.class);
+
   private static final int PLACES_DID=0x0E000004;
 
   private DataFacade _facade;
@@ -62,11 +66,16 @@ public class PlacesLoader
     {
       throw new IllegalArgumentException("Expected DID for places: "+PLACES_DID);
     }
-    int count=BufferUtils.readTSize(bis);
+    int count=BufferUtils.readTSize(bis); // > 6k places
     System.out.println(count+" places to load!");
     for(int i=0;i<count;i++)
     {
       loadPlace(bis);
+    }
+    int available=bis.available();
+    if (available>0)
+    {
+      LOGGER.warn("Available bytes: "+available);
     }
   }
 

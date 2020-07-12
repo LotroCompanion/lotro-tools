@@ -3,6 +3,8 @@ package delta.games.lotro.tools.dat.maps;
 import java.io.ByteArrayInputStream;
 import java.util.BitSet;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -10,6 +12,7 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
+import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.PropertyUtils;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -21,6 +24,8 @@ import delta.games.lotro.dat.utils.StringUtils;
  */
 public class MapNotesLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MapNotesLoader.class);
+
   private static final int MAP_NOTES_DID=0x0E000006;
 
   private DataFacade _facade;
@@ -57,7 +62,7 @@ public class MapNotesLoader
     }
 
     // Various depending on what the MapNote represents
-    int noteDID=BufferUtils.readUInt32(bis);
+    int noteDID=BufferUtils.readUInt32(bis); // Vendor NPC, Item (Invisible Collision Waypoint), Landmark...
     if (noteDID!=0)
     {
       //PropertiesSet noteProps=_facade.loadProperties(noteWState+DATConstants.DBPROPERTIES_OFFSET);
@@ -85,19 +90,19 @@ public class MapNotesLoader
     {
       System.out.println("Text: "+text);
     }
+    // Icon
     int iconId=BufferUtils.readUInt32(bis);
     if (iconId!=0)
     {
       System.out.println("IconID: "+iconId);
     }
+    // Level
     int level=BufferUtils.readUInt32(bis);
     System.out.println("Level: "+level); // 0, 65536 (0x10000), 131072 (0x20000) or 983040 (0xF0000) => flags?
+    // Type
     long type=BufferUtils.readLong64(bis);
-    int pad=BufferUtils.readUInt8(bis);
-    if (pad!=0)
-    {
-      throw new IllegalArgumentException("Expected 0 here. Got "+pad);
-    }
+    // (padding)
+    LoaderUtils.readAssert8(bis,0);
     BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
     if (type==1)
     {
@@ -113,7 +118,7 @@ public class MapNotesLoader
       // Dest note
       int destNoteId=BufferUtils.readUInt32(bis);
       System.out.println("Dest note ID: "+destNoteId);
-      BufferUtils.skip(bis,6);
+      BufferUtils.skip(bis,6); // Always 0
     }
     else
     {
@@ -143,17 +148,22 @@ public class MapNotesLoader
    */
   private void loadMapNotes()
   {
-    byte[] data=_facade.loadData(MAP_NOTES_DID);
+    byte[] data=_facade.loadData(MAP_NOTES_DID); // > 1Mb
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     int did=BufferUtils.readUInt32(bis);
     if (did!=MAP_NOTES_DID)
     {
       throw new IllegalArgumentException("Expected DID for map notes: "+MAP_NOTES_DID);
     }
-    int count=BufferUtils.readUInt32(bis);
+    int count=BufferUtils.readUInt32(bis); // > 10k
     for(int i=0;i<count;i++)
     {
       loadMapNote(bis);
+    }
+    int available=bis.available();
+    if (available>0)
+    {
+      LOGGER.warn("Available bytes: "+available);
     }
   }
 
