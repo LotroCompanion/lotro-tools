@@ -30,6 +30,7 @@ public class MapNotesLoader
 
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
+  private EnumMapper _mapLevel;
 
   /**
    * Constructor.
@@ -39,6 +40,7 @@ public class MapNotesLoader
   {
     _facade=facade;
     _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
+    _mapLevel=facade.getEnumsManager().getEnumMapper(587202774);
   }
 
   private void loadMapNote(ByteArrayInputStream bis)
@@ -82,7 +84,7 @@ public class MapNotesLoader
       }
     }
     // The display text for the MapNote:
-    Object stringinfo=PropertyUtils.readStringInfoProperty(bis,8);
+    Object stringinfo=PropertyUtils.readStringInfoProperty(bis);
     int[] key=(int[])stringinfo;
     String[] labelArray=_facade.getStringsManager().resolveStringInfo(key[0],key[1]);
     String text=StringUtils.stringArrayToString(labelArray);
@@ -97,13 +99,13 @@ public class MapNotesLoader
       System.out.println("IconID: "+iconId);
     }
     // Level
-    int level=BufferUtils.readUInt32(bis);
-    System.out.println("Level: "+level); // 0, 65536 (0x10000), 131072 (0x20000) or 983040 (0xF0000) => flags?
+    int levelCode=BufferUtils.readUInt32(bis);
+    BitSet levelsSet=BitSetUtils.getBitSetFromFlags(levelCode);
+    System.out.println("Levels: "+levelCode+" => "+BitSetUtils.getStringFromBitSet(levelsSet,_mapLevel," / "));
     // Type
     long type=BufferUtils.readLong64(bis);
     // (padding)
     LoaderUtils.readAssert8(bis,0);
-    BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
     if (type==1)
     {
       // Link
@@ -122,6 +124,7 @@ public class MapNotesLoader
     }
     else
     {
+      BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
       System.out.println("Type: "+type+" => "+BitSetUtils.getStringFromBitSet(typeSet,_mapNoteType," / "));
       float minRange=BufferUtils.readFloat(bis);
       float maxRange=BufferUtils.readFloat(bis);
