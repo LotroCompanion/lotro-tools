@@ -27,6 +27,7 @@ public class PropertyDescLoader
     _facade=facade;
   }
 
+  @SuppressWarnings("unused")
   private void loadPropertyDescEntr(ByteArrayInputStream bis, int propertyDescId)
   {
     System.out.println("****** Property descriptor entry:");
@@ -42,28 +43,14 @@ public class PropertyDescLoader
     // Block map key
     int blockMapKey=BufferUtils.readUInt32(bis);
     System.out.println("Block map key: "+blockMapKey);
-    /*int unknown=*/BufferUtils.readUInt8(bis); // 0 or 1
+    int unknown=BufferUtils.readUInt8(bis); // 0 or 1
     int count=BufferUtils.readUInt32(bis);
     System.out.println(count+" properties to load!");
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     for(int i=0;i<count;i++)
     {
       PropertyValue propertyValue=propsLoader.decodeProperty(bis,false);
-      Object value=propertyValue.getValue();
-      if (value instanceof Integer)
-      {
-        int intValue=((Integer)value).intValue();
-        System.out.println(intValue);
-      }
-      else if (value instanceof Float)
-      {
-        float floatValue=((Float)value).floatValue();
-        System.out.println(floatValue);
-      }
-      else
-      {
-        System.out.println("Unmanaged value type: "+value.getClass());
-      }
+      System.out.println(propertyValue);
     }
   }
 

@@ -1,18 +1,25 @@
 package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
-import java.util.Arrays;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATFilesConstants;
 import delta.games.lotro.dat.archive.DATArchive;
 import delta.games.lotro.dat.archive.DatFilesManager;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
+import delta.games.lotro.dat.loaders.EntityDescLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
+import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
+import delta.games.lotro.tools.dat.maps.data.LbiLink;
+import delta.games.lotro.tools.dat.maps.data.Weenie;
 
 /**
  * Loader for landblock infos.
@@ -27,19 +34,8 @@ public class LandblockInfoLoader
   private static final int HAS_LINKS = 2;
   private static final int HAS_INDICES = 4;
 
-  // Flags indicating the presence of optional fields.
-  private static final int DID = 1;
-  private static final int TYPE = 2;
-  private static final int INDEX = 4;
-  private static final int PHYS_OBJ = 8;
-  private static final int POS = 16;
-  private static final int UNK_VECTOR = 32;
-  private static final int UNK_HOOK = 64;
-  private static final int PROPERTIES = 128;
-  private static final int NAME = 256;
-  private static final int PROPERTY_DIDS = 512;
-
   private DataFacade _facade;
+  private GeneratorLoader _generatorLoader;
 
   /**
    * Constructor.
@@ -48,6 +44,7 @@ public class LandblockInfoLoader
   public LandblockInfoLoader(DataFacade facade)
   {
     _facade=facade;
+    _generatorLoader=new GeneratorLoader(facade);
   }
 
   /**
@@ -55,121 +52,134 @@ public class LandblockInfoLoader
    * @param region Region identifier.
    * @param blockX Block coordinate (horizontal).
    * @param blockY Block coordinate (vertical).
+   * @return <code>true</code> if the landblock info exists, <code>false</code> otherwise.
    */
-  private void loadLandblockInfo(int region, int blockX, int blockY)
+  private LandBlockInfo loadLandblockInfo(int region, int blockX, int blockY)
   {
     long landblockInfoDID=0x80200000L+(region*0x10000)+(blockX*0x100)+blockY;
 
     DatFilesManager datFilesMgr=_facade.getDatFilesManager();
     DATArchive cell=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
     byte[] data=cell.loadEntry(landblockInfoDID);
-    if (data!=null)
+    if (data==null)
     {
-      //System.out.println("*** Landblock info: region="+region+", blockX="+blockX+", blockY="+blockY);
-      ByteArrayInputStream bis=new ByteArrayInputStream(data);
-      long did=BufferUtils.readUInt32AsLong(bis);
-      if (did!=landblockInfoDID)
+      return null;
+    }
+    //System.out.println("*** Landblock info: region="+region+", blockX="+blockX+", blockY="+blockY);
+    ByteArrayInputStream bis=new ByteArrayInputStream(data);
+    long did=BufferUtils.readUInt32AsLong(bis);
+    if (did!=landblockInfoDID)
+    {
+      throw new IllegalArgumentException("Expected DID for block map: "+landblockInfoDID);
+    }
+    LandBlockInfo ret=new LandBlockInfo(landblockInfoDID);
+    int flags=BufferUtils.readUInt32(bis);
+    /*int sizeHint=*/BufferUtils.readUInt32(bis);
+    // Cross links
+    if ((flags & HAS_LINKS)!=0)
+    {
+      int count=BufferUtils.readTSize(bis);
+      for(int i=0;i<count;i++)
       {
-        throw new IllegalArgumentException("Expected DID for block map: "+landblockInfoDID);
-      }
-      int flags=BufferUtils.readUInt32(bis);
-      /*int sizeHint=*/BufferUtils.readUInt32(bis);
-      // Cross links
-      if ((flags & HAS_LINKS)!=0)
-      {
-        int count=BufferUtils.readTSize(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadCrossLink(bis);
-        }
-      }
-      // Header Indices
-      if ((flags & HAS_INDICES)!=0)
-      {
-        int count=BufferUtils.readTSize(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadHeaderIndices(bis);
-        }
-      }
-      // Cells
-      if ((flags & HAS_CELLS)!=0)
-      {
-        int count=BufferUtils.readTSize(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadCells(bis);
-        }
-      }
-      int zero=BufferUtils.readUInt32(bis);
-      if (zero!=0)
-      {
-        throw new IllegalArgumentException("Expected 0 here. Found: "+zero);
-      }
-      // Static entities
-      {
-        int count=BufferUtils.readUInt32(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadEntityDesc(bis);
-        }
-      }
-      // Links
-      {
-        int count=BufferUtils.readUInt32(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadEntityLinkDesc(bis);
-        }
-      }
-      // Properties
-      DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
-      PropertiesSet props=new PropertiesSet();
-      propsLoader.decodeProperties(bis,props);
-
-      zero=BufferUtils.readUInt32(bis);
-      if (zero!=0)
-      {
-        throw new IllegalArgumentException("Expected 0 here. Found: "+zero);
-      }
-
-      // Weenies
-      {
-        int count=BufferUtils.readTSize(bis);
-        for(int i=0;i<count;i++)
-        {
-          loadWeenie(bis);
-        }
-      }
-      // End of data
-      int bytesAvailable=bis.available();
-      if (bytesAvailable>0)
-      {
-        /*int unknownFinal=*/BufferUtils.readUInt32(bis);
-      }
-      bytesAvailable=bis.available();
-      if (bytesAvailable>0)
-      {
-        LOGGER.warn("Bytes lefts: "+bytesAvailable);
+        loadCrossLink(bis);
       }
     }
+    // Header Indices
+    if ((flags & HAS_INDICES)!=0)
+    {
+      int count=BufferUtils.readTSize(bis);
+      for(int i=0;i<count;i++)
+      {
+        loadHeaderIndices(bis);
+      }
+    }
+    // Cells
+    if ((flags & HAS_CELLS)!=0)
+    {
+      int count=BufferUtils.readTSize(bis);
+      //System.out.println("Cells count: "+count);
+      for(int i=0;i<count;i++)
+      {
+        loadCell(bis);
+      }
+    }
+    LoaderUtils.readAssert(bis,0);
+    // Static entities
+    {
+      int count=BufferUtils.readUInt32(bis);
+      //System.out.println("Entity count: "+count);
+      for(int i=0;i<count;i++)
+      {
+        //System.out.println("Entity desc index: "+i);
+        EntityDescriptor entity=loadStaticEntity(bis);
+        ret.addEntity(entity);
+      }
+    }
+    // Links
+    {
+      int count=BufferUtils.readUInt32(bis);
+      //System.out.println("Links count: "+count);
+      for(int i=0;i<count;i++)
+      {
+        //System.out.println("Link index: "+i);
+        LbiLink link=loadLink(bis);
+        ret.addLink(link);
+      }
+    }
+    // Properties
+    DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
+    PropertiesSet props=new PropertiesSet();
+    propsLoader.decodeProperties(bis,props);
+
+    LoaderUtils.readAssert(bis,0);
+
+    // Weenies
+    {
+      int count=BufferUtils.readTSize(bis);
+      //System.out.println("Weenies count: "+count);
+      for(int i=0;i<count;i++)
+      {
+        //System.out.println("Weenie index: "+i);
+        Weenie weenie=loadWeenie(bis);
+        ret.addWeenie(weenie);
+      }
+    }
+    // End of data
+    int bytesAvailable=bis.available();
+    if (bytesAvailable>0)
+    {
+      /*int unknownFinal=*/BufferUtils.readUInt32(bis);
+    }
+    bytesAvailable=bis.available();
+    if (bytesAvailable>0)
+    {
+      LOGGER.warn("Bytes lefts: "+bytesAvailable);
+    }
+    return ret;
   }
 
+  @SuppressWarnings("unused")
   private void loadCrossLink(ByteArrayInputStream bis)
   {
-    /*int fromIndex=*/BufferUtils.readUInt32(bis);
-    /*long fromLbiDID=*/BufferUtils.readUInt32AsLong(bis);
-    /*long toLbiDID=*/BufferUtils.readUInt32AsLong(bis);
+    int fromIndex=BufferUtils.readUInt32(bis);
+    long fromLbiDID=BufferUtils.readUInt32AsLong(bis);
+    long toLbiDID=BufferUtils.readUInt32AsLong(bis);
     // See EnumMapper: EntityLinkType
-    /*int type=*/BufferUtils.readUInt32(bis);
-    /*int toIndex=*/BufferUtils.readUInt32(bis);
-    /*int mask=*/BufferUtils.readUInt32(bis);
+    int type=BufferUtils.readUInt32(bis);
+    String typeStr=getLinkLabelFromCode(type);
+    int toIndex=BufferUtils.readUInt32(bis);
+    int mask=BufferUtils.readUInt32(bis);
+    /*
+    System.out.println("Cross link: "+typeStr+" - from: "+String.format("%04X",Long.valueOf(fromLbiDID))+"/"+fromIndex+
+        " ; to:"+String.format("%04X",Long.valueOf(toLbiDID))+"/"+toIndex+", mask="+mask);
+        */
   }
 
+  @SuppressWarnings("unused")
   private void loadHeaderIndices(ByteArrayInputStream bis)
   {
-    /*int index=*/BufferUtils.readUInt16(bis);
-    /*int[] array=*/readIntegerArray(bis);
+    int index=BufferUtils.readUInt16(bis);
+    int[] array=readIntegerArray(bis);
     //System.out.println("Header: index="+index+", count="+array.length+" = >"+Arrays.toString(array));
   }
 
@@ -184,165 +194,207 @@ public class LandblockInfoLoader
     return ret;
   }
 
-  private int[] readShortIntegerArray(ByteArrayInputStream bis)
+  @SuppressWarnings("unused")
+  private void loadCell(ByteArrayInputStream bis)
   {
-    int count=BufferUtils.readUInt8(bis);
-    int[] ret=new int[count];
-    for(int i=0;i<count;i++)
-    {
-      ret[i]=BufferUtils.readUInt32(bis);
-    }
-    return ret;
-  }
-
-  private void loadCells(ByteArrayInputStream bis)
-  {
-    /*int index=*/BufferUtils.readUInt16(bis);
-    /*DatPosition position=*/GeoLoader.readPosition(bis);
-    //System.out.println("Position: "+position);
+    int index=BufferUtils.readUInt16(bis);
+    //System.out.println("Cell index: "+index);
+    DatPosition position=GeoLoader.readPosition(bis); // position.cell=index
+    //System.out.println("\tPosition: "+position);
     int flags=BufferUtils.readUInt32(bis);
-    /*int cellMeshDID=*/BufferUtils.readUInt32(bis);
+    int cellMeshDID=BufferUtils.readUInt32(bis);
     int count=BufferUtils.readUInt32(bis);
     // Neighbours
     for(int i=0;i<count;i++)
     {
-      loadNeighbours(bis);
+      loadNeighbours(i,bis);
     }
     if ((flags&0x20)!=0)
     {
-      /*int thisIndex=*/BufferUtils.readUInt16(bis); // always equal to this.index
-      /*int[] cellIndices0=*/readIntegerArray(bis);
-      /*int[] cellIndices1=*/readIntegerArray(bis);
-      /*int unknown=*/BufferUtils.readUInt16(bis);
+      int thisIndex=BufferUtils.readUInt16(bis); // always equal to this.index
+      if (thisIndex!=index)
+      {
+        throw new IllegalStateException("thisIndex="+thisIndex+", expected="+index);
+      }
+      int[] cellIndices0=readIntegerArray(bis);
+      int[] cellIndices1=readIntegerArray(bis);
+      int unknown=BufferUtils.readUInt16(bis);
     }
     else
     {
-      /*int[] cellIndices0=*/readIntegerArray(bis);
-      /*int[] cellIndices1=*/readIntegerArray(bis);
+      int[] cellIndices0=readIntegerArray(bis);
+      int[] cellIndices1=readIntegerArray(bis);
     }
     if ((flags&0x4)!=0)
     {
       DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
       PropertiesSet props=new PropertiesSet();
       propsLoader.decodeProperties(bis,props);
-      /*
       if (props.getPropertyNames().size()>0)
       {
-        System.out.println("Cell props: "+props.dump());
+        //System.out.println("Cell props: "+props.dump());
+        /* {
+         * Physics_AdjustableScale=null (vector),
+         * Render_AdjustableScale=null (vector),
+         * Appearance_InstanceList=#1:
+         *    Appearance_AprFile: 536870912
+         *    Appearance_Key: 268438298 (Dng_DolGuldur_Isengard_Pristine)
+         *    Appearance_Modifier: 0.0
+         * }
+         */
       }
-      */
     }
   }
 
-  private void loadNeighbours(ByteArrayInputStream bis)
+  @SuppressWarnings("unused")
+  private void loadNeighbours(int expectedIndex, ByteArrayInputStream bis)
   {
-    /*int index=*/BufferUtils.readUInt32(bis);
-    /*int cellIndex=*/BufferUtils.readUInt16(bis);
-    /*int neighbourIndex=*/BufferUtils.readUInt32(bis);
-    /*int[] unknown=*/readIntegerArray(bis);
-    /*boolean unknownBool=*/BufferUtils.readBoolean(bis);
+    int index=BufferUtils.readUInt32(bis); // Neighbour index
+    if (index!=expectedIndex)
+    {
+      throw new IllegalStateException("thisIndex="+index+", expected="+expectedIndex);
+    }
+    int cellIndex=BufferUtils.readUInt16(bis);
+    int neighbourIndex=BufferUtils.readUInt16(bis);
+    //System.out.println("Neighbour #"+index+" is cell #"+cellIndex);
+    LoaderUtils.readAssert16(bis,0);
+    LoaderUtils.readAssert16(bis,0);
+    LoaderUtils.readAssert16(bis,0);
+    boolean unknownBool=BufferUtils.readBoolean(bis);
   }
 
-  private void loadEntityDesc(ByteArrayInputStream bis)
+  private EntityDescriptor loadStaticEntity(ByteArrayInputStream bis)
   {
-    int flags=BufferUtils.readUInt32(bis);
-    if ((flags & DID) == DID)
+    EntityDescriptor entity=EntityDescLoader.decodeEntityDesc(_facade,bis,false);
+    //System.out.println("Loaded entity: "+entity);
+    /*
+    int physObjDid=entity.getPhysObjDid();
+    if ((physObjDid>=0x47000000) && (physObjDid<=0x47FFFFFF))
     {
-      /*int did=*/BufferUtils.readUInt32(bis);
+      byte[] data=_facade.loadData(physObjDid);
+      ByteArrayInputStream bis2=new ByteArrayInputStream(data);
+      loadStaticEntity(bis2);
     }
-    if ((flags & TYPE) == TYPE)
+    if ((physObjDid>=0x1F000000) && (physObjDid<=0x1FFFFFFF))
     {
-      /*int type=*/BufferUtils.readUInt32(bis);
+      // Visual descriptor
+      byte[] data=_facade.loadData(physObjDid);
+      ByteArrayInputStream bis2=new ByteArrayInputStream(data);
+      VisualDescriptorLoader.readNetworkVisualDesc(bis2);
     }
-    if ((flags & INDEX) == INDEX)
-    {
-      /*int index=*/BufferUtils.readUInt32(bis);
-      /*int blockAndType=*/BufferUtils.readUInt32(bis);
-    }
-    if ((flags & PHYS_OBJ) == PHYS_OBJ)
-    {
-      /*int physObjDID=*/BufferUtils.readUInt32(bis);
-    }
-    if ((flags & POS) == POS)
-    {
-      /*float x=*/BufferUtils.readFloat(bis);
-      /*float y=*/BufferUtils.readFloat(bis);
-      /*float z=*/BufferUtils.readFloat(bis);
-      /*float w=*/BufferUtils.readFloat(bis);
-      /*float x=*/BufferUtils.readFloat(bis);
-      /*float y=*/BufferUtils.readFloat(bis);
-      /*float z=*/BufferUtils.readFloat(bis);
-      //if (verbose) System.out.println("\tRot: w="+w+",x="+x+",y="+y+",z="+z);
-    }
-    if ((flags & UNK_VECTOR) == UNK_VECTOR) {
-      // Unknown vector
-      /*float x=*/BufferUtils.readFloat(bis);
-      /*float y=*/BufferUtils.readFloat(bis);
-      /*float z=*/BufferUtils.readFloat(bis);
-    }
-    if ((flags & PROPERTIES) == PROPERTIES)
-    {
-      DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
-      PropertiesSet props=new PropertiesSet();
-      propsLoader.decodeProperties(bis,props);
-    }
-    if ((flags & PROPERTY_DIDS) == PROPERTY_DIDS)
-    {
-      int[] dids=readShortIntegerArray(bis);
-      System.out.println("Property DIDs: "+Arrays.toString(dids));
-    }
-    if ((flags & UNK_HOOK) == UNK_HOOK)
-    {
-      /*int unkHook=*/BufferUtils.readUInt32(bis);
-    }
-    if ((flags & NAME) == NAME)
-    {
-      /*String name=*/BufferUtils.readPascalString(bis);
-      //System.out.println(name);
-    }
+    */
+    return entity;
   }
 
-  private void loadEntityLinkDesc(ByteArrayInputStream bis)
+  @SuppressWarnings("unused")
+  private LbiLink loadLink(ByteArrayInputStream bis)
   {
-    /*String worldBuilderName=*/BufferUtils.readPascalString(bis);
-    /*int id=*/BufferUtils.readUInt32(bis);
-    /*int blockAndTypeMask=*/BufferUtils.readUInt32(bis);
-    /*int toIndex=*/BufferUtils.readUInt32(bis);
-    /*int toBlockAndType=*/BufferUtils.readUInt32(bis);
-    /*int fromIndex=*/BufferUtils.readUInt32(bis);
-    /*int fromBlockAndType=*/BufferUtils.readUInt32(bis);
-    /*int type=*/BufferUtils.readUInt32(bis);
+    LbiLink link=new LbiLink();
+    String worldBuilderName=BufferUtils.readPascalString(bis);
+    link.setName(worldBuilderName);
+    long iid=BufferUtils.readLong64(bis);
+    link.setIid(iid);
+    long toEntityId=BufferUtils.readLong64(bis);
+    link.setToIid(toEntityId);
+    long fromEntityId=BufferUtils.readLong64(bis);
+    link.setFromIid(fromEntityId);
+    int entityLinkType=BufferUtils.readUInt32(bis);
+    String linkTypeStr=getLinkLabelFromCode(entityLinkType);
+    link.setType(linkTypeStr);
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     PropertiesSet props=new PropertiesSet();
     propsLoader.decodeProperties(bis,props);
+    link.setProps(props);
+    //System.out.println("Loaded link: "+link);
     boolean isCrossLandblock=BufferUtils.readBoolean(bis);
     if (isCrossLandblock)
     {
-      /*int codaIndex0=*/BufferUtils.readUInt32(bis);
-      /*long codaLbiDID0=*/BufferUtils.readUInt32AsLong(bis);
-      /*long codaLbiDID1=*/BufferUtils.readUInt32AsLong(bis);
-      /*int codaIndex1=*/BufferUtils.readUInt32(bis);
+      int codaIndex0=BufferUtils.readUInt32(bis);
+      long codaLbiDID0=BufferUtils.readUInt32AsLong(bis);
+      long codaLbiDID1=BufferUtils.readUInt32AsLong(bis);
+      int codaIndex1=BufferUtils.readUInt32(bis);
+      /*
+      System.out.println("\tCrossLBI: index0="+codaIndex0+
+          ", LBI0="+String.format("%04X",Long.valueOf(codaLbiDID0))+
+          ", LBI1="+String.format("%04X",Long.valueOf(codaLbiDID1))+
+          ", index1="+codaIndex1);
+          */
     }
+    return link;
   }
 
-  private void loadWeenie(ByteArrayInputStream bis)
+  private Weenie loadWeenie(ByteArrayInputStream bis)
   {
-    /*int index=*/BufferUtils.readUInt32(bis);
-    /*int blockAndType=*/BufferUtils.readUInt32(bis);
+    Weenie weenie=new Weenie();
+    long weenieIid=BufferUtils.readLong64(bis);
+    weenie.setIid(weenieIid);
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     PropertiesSet props=new PropertiesSet();
     propsLoader.decodeProperties(bis,props);
+    weenie.setProps(props);
+    Set<Integer> ids=_generatorLoader.handleGenerator(props);
+    if ((ids!=null) && (ids.size()>0))
+    {
+      weenie.setGeneratorDids(ids);
+    }
+    //System.out.println("Loaded weenie: "+weenie);
+    return weenie;
+  }
+
+  private static String getLinkLabelFromCode(int code)
+  {
+    if (code==0) return "Undefined";
+    if (code==0x01) return "PatrolOnce";
+    if (code==0x02) return "Patrol";
+    if (code==0x07) return "Generator_PositionSet";
+    if (code==0x08) return "Generator";
+    if (code==0x09) return "Segment";
+    if (code==0x0B) return "FlyingPatrol";
+    if (code==0x0C) return "Script";
+    if (code==0x10) return "Path";
+    if (code==0x13) return "AIRemoteDetector";
+    if (code==0x17) return "SegmentBridge";
+    if (code==0x1000000B) return "House_Permission";
+    if (code==0x1000000C) return "House_Decoration";
+    if (code==0x1000000D) return "House_Landmark";
+    if (code==0x1000000F) return "House_ForSaleSign";
+    if (code==0x10000010) return "House_Storage1";
+    if (code==0x10000011) return "House_Storage2";
+    if (code==0x10000012) return "House_Storage3";
+    if (code==0x10000013) return "House_PropertyDriver";
+    if (code==0x10000019) return "Phasing";
+
+    LOGGER.warn("Unmanaged link code: "+code);
+    return "? "+code+" ?";
+  }
+
+  private void handleLandBlock(int region, int blockX, int blockY)
+  {
+    //System.out.println("Using region "+region+", block X="+blockX+",Y="+blockY);
+    LandBlockInfo lbi=loadLandblockInfo(region,blockX,blockY);
+    if (lbi!=null)
+    {
+      //LbiInspector resolver=new LbiInspector();
+      //resolver.handleLbi(lbi);
+    }
   }
 
   private void doIt()
   {
+    /*
+    handleLandBlock(1,1,208);
+    handleLandBlock(2,0x6D,0x9A);
+    handleLandBlock(1,122,117);
+    handleLandBlock(1,5,250);
+    handleLandBlock(1,6,250);
+    */
     for(int region=1;region<=4;region++)
     {
       for(int blockX=0;blockX<=0xFE;blockX++)
       {
         for(int blockY=0;blockY<=0xFE;blockY++)
         {
-          loadLandblockInfo(region,blockX,blockY);
+          handleLandBlock(region,blockX,blockY);
         }
       }
     }
