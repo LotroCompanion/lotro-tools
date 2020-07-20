@@ -100,8 +100,11 @@ public class MapNotesLoader
     }
     // Level
     int levelCode=BufferUtils.readUInt32(bis);
-    BitSet levelsSet=BitSetUtils.getBitSetFromFlags(levelCode);
-    System.out.println("Levels: "+levelCode+" => "+BitSetUtils.getStringFromBitSet(levelsSet,_mapLevel," / "));
+    if (levelCode!=0)
+    {
+      BitSet levelsSet=BitSetUtils.getBitSetFromFlags(levelCode);
+      System.out.println("Levels: "+levelCode+" => "+BitSetUtils.getStringFromBitSet(levelsSet,_mapLevel," / "));
+    }
     // Type
     long type=BufferUtils.readLong64(bis);
     // (padding)
@@ -116,10 +119,16 @@ public class MapNotesLoader
       System.out.println("Dest area ID: "+destAreaId);
       // Dest dungeon
       int destDungeonId=BufferUtils.readUInt32(bis);
-      System.out.println("Dest dungeon ID: "+destDungeonId);
+      if (destDungeonId!=0) // Always 0
+      {
+        System.out.println("Dest dungeon ID: "+destDungeonId);
+      }
       // Dest note
       int destNoteId=BufferUtils.readUInt32(bis);
-      System.out.println("Dest note ID: "+destNoteId);
+      if (destNoteId!=0) // Always 0
+      {
+        System.out.println("Dest note ID: "+destNoteId);
+      }
       BufferUtils.skip(bis,6); // Always 0
     }
     else
@@ -159,6 +168,7 @@ public class MapNotesLoader
       throw new IllegalArgumentException("Expected DID for map notes: "+MAP_NOTES_DID);
     }
     int count=BufferUtils.readUInt32(bis); // > 10k
+    System.out.println("Number of map notes: "+count);
     for(int i=0;i<count;i++)
     {
       loadMapNote(bis);

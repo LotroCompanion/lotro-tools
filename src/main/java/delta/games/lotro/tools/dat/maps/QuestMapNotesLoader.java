@@ -90,6 +90,7 @@ public class QuestMapNotesLoader
       throw new IllegalArgumentException("Expected DID for quest map notes: "+QUEST_MAP_NOTES_DID);
     }
     int count=BufferUtils.readUInt32(bis);
+    System.out.println("Number of quest map notes: "+count);
     for(int i=0;i<count;i++)
     {
       loadQuestMapNote(bis);

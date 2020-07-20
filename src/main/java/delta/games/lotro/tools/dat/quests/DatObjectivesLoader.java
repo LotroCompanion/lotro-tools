@@ -614,11 +614,11 @@ QuestEvent_ShowBillboardText: 0
       int nbMonsterGenus=monsterGenusArray.length;
       for(int i=0;i<nbMonsterGenus;i++)
       {
-        PropertiesSet mobRegionProps=(PropertiesSet)monsterGenusArray[i];
+        PropertiesSet monsterGenusProps=(PropertiesSet)monsterGenusArray[i];
         // Where
-        Integer regionId=(Integer)mobRegionProps.getProperty("Quest_MonsterRegion");
-        Integer mobDivision=(Integer)mobRegionProps.getProperty("Quest_MonsterDivision");
-        Integer landmarkId=(Integer)mobRegionProps.getProperty("QuestEvent_LandmarkDID");
+        Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
+        Integer mobDivision=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
+        Integer landmarkId=(Integer)monsterGenusProps.getProperty("QuestEvent_LandmarkDID");
         String where=null;
         if (mobDivision!=null)
         {
@@ -636,7 +636,7 @@ QuestEvent_ShowBillboardText: 0
           where=concat(where,landmarkName);
         }
         // What
-        MobReference mobReference=_mobLoader.buildMobReference(mobRegionProps);
+        MobReference mobReference=_mobLoader.buildMobReference(monsterGenusProps);
         String what=(mobReference!=null)?mobReference.getLabel():null;
         MobSelection selection=new MobSelection();
         selection.setWhere(where);
