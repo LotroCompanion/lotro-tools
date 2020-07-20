@@ -1,6 +1,9 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.awt.geom.Rectangle2D;
 import java.io.File;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -19,6 +22,8 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class MapsSystemLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
+
   private DataFacade _facade;
   private EnumMapper _uiElementId;
 
@@ -142,37 +147,18 @@ public class MapsSystemLoader
     // Region ID
     Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
     System.out.println("\tRegion: "+regionId);
-    // Block
-    Integer blockX=(Integer)props.getProperty("UI_Map_BlockOffsetX");
-    Integer blockY=(Integer)props.getProperty("UI_Map_BlockOffsetY");
-    if ((blockX!=null) && (blockY!=null))
-    {
-      System.out.println("\tBlock X/Y: "+blockX+"/"+blockY);
-      float[] pos=PositionDecoder.decodePosition(blockX.intValue(),blockY.intValue(),0,0);
-      float longitude=pos[0];
-      float latitude=pos[1];
-      System.out.println("Lat: "+latitude+", Lon: "+longitude);
-    }
-    // Pixel
-    Integer pixelOffsetX=(Integer)props.getProperty("UI_Map_PixelOffsetX");
-    Integer pixelOffsetY=(Integer)props.getProperty("UI_Map_PixelOffsetY");
-    if ((pixelOffsetX!=null) && (pixelOffsetY!=null))
-    {
-      // Pixel offset from the top/left of the map
-      // Matches the position blockX/blockY/ox=0/oy=0
-      // OK for Bree, region 1
-      // OK for East Rohan: the wold, region 2
-      // OK for South Ithilien, region 3 (Y pixel offset is out of map!)
-      // OK for Agarnaith, region 4 (for Lhingris, both pixel offsets are out of map...)
-      System.out.println("\tPixel offset X/Y: "+pixelOffsetX+"/"+pixelOffsetY);
-    }
+
     // Scale
-    float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
-    System.out.println("\tScale: "+scale);
-    // Scale decrease with high level maps:
+    // Scale decreases with high level maps:
     // - Mordor/Agarnaith: 0.2375
     // - Mordor: 0.03644
     // - Middle-earth: 0.0173184
+    float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
+    System.out.println("\tScale: "+scale);
+
+    // Bounds
+    Rectangle2D.Float bounds=getBounds(activeElementName,scale,props);
+    System.out.println("\tBounds: "+bounds);
 
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
@@ -194,6 +180,76 @@ public class MapsSystemLoader
         handleMapProps(subMapProps);
       }
     }
+  }
+
+  private Rectangle2D.Float getBounds(String activeElementName, float scale, PropertiesSet props)
+  {
+    Integer guideDisabled=(Integer)props.getProperty("UI_Map_QuestGuideDisabled");
+    if ((guideDisabled!=null) && (guideDisabled.intValue()>0))
+    {
+      return null;
+    }
+    // Block
+    Integer blockX=(Integer)props.getProperty("UI_Map_BlockOffsetX");
+    Integer blockY=(Integer)props.getProperty("UI_Map_BlockOffsetY");
+    float longitude=0;
+    float latitude=0;
+    if ((blockX!=null) && (blockY!=null))
+    {
+      System.out.println("\tBlock X/Y: "+blockX+"/"+blockY);
+      float[] pos=PositionDecoder.decodePosition(blockX.intValue(),blockY.intValue(),0,0);
+      longitude=pos[0];
+      latitude=pos[1];
+      System.out.println("\tLat: "+latitude+", Lon: "+longitude);
+    }
+    else
+    {
+      LOGGER.warn("No block data for: "+activeElementName+"!");
+      return null;
+    }
+    // Pixel
+    Integer pixelOffsetX=(Integer)props.getProperty("UI_Map_PixelOffsetX");
+    Integer pixelOffsetY=(Integer)props.getProperty("UI_Map_PixelOffsetY");
+    if ((pixelOffsetX!=null) && (pixelOffsetY!=null))
+    {
+      // Pixel offset from the top/left of the map
+      // Matches the position blockX/blockY/ox=0/oy=0
+      System.out.println("\tPixel offset X/Y: "+pixelOffsetX+"/"+pixelOffsetY);
+    }
+    else
+    {
+      LOGGER.warn("No pixel data for: "+activeElementName+"!");
+      return null;
+    }
+    Integer width=(Integer)props.getProperty("UI_Map_PixelWidth");
+    Integer height=(Integer)props.getProperty("UI_Map_PixelHeight");
+    if ((width!=null) && (height!=null))
+    {
+      System.out.println("\tWidth/height: "+width+"/"+height);
+    }
+    else
+    {
+      LOGGER.warn("No size data for: "+activeElementName+"!");
+      return null;
+    }
+
+    float internalX=((0-pixelOffsetX.intValue())/scale)+(160*blockX.intValue());
+    float longitude0=(1468-(internalX/20))/10;
+    float internalY=((pixelOffsetY.intValue()-0)/scale)+(160*blockY.intValue());
+    float latitude0=(1244-(internalY/20))/10;
+    //System.out.println("\tOrigin: Lat: "+latitude0+", Lon: "+longitude0);
+
+    float internalWidth=((width.intValue()-pixelOffsetX.intValue())/scale)+(160*blockX.intValue());
+    float longitudeWidth=(1468-(internalWidth/20))/10;
+    float internalHeight=((pixelOffsetY.intValue()-height.intValue())/scale)+(160*blockY.intValue());
+    float latitudeHeight=(1244-(internalHeight/20))/10;
+    //System.out.println("\tMax: Lat: "+latitudeHeight+", Lon: "+longitudeWidth);
+
+    Rectangle2D.Float r=new Rectangle2D.Float();
+    float deltaLat=latitudeHeight-latitude0;
+    float deltaLong=longitude0-longitudeWidth;
+    r.setRect(longitudeWidth,latitude0,deltaLong,deltaLat);
+    return r;
   }
 
   private void doIt()
