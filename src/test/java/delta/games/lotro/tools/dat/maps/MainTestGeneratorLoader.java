@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.tools.dat.utils.DidNamesUtils;
+import delta.games.lotro.dat.utils.DataIdentificationTools;
 
 /**
  * Test class for the GeneratorLoader.
@@ -23,7 +23,7 @@ public class MainTestGeneratorLoader
     Set<Integer> filter=new HashSet<Integer>();
     filter.add(Integer.valueOf(165)); // resource_scholar
     Set<Integer> ids=new GeneratorLoader(facade).handleGeneratorProfile(1879078543,filter);
-    List<String> names=DidNamesUtils.getNamesForIds(facade,ids);
+    List<String> names=DataIdentificationTools.getNamesForIds(facade,ids);
     for(String name : names)
     {
       System.out.println(name);
