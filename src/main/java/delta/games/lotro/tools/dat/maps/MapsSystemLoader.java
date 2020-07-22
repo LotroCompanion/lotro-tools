@@ -5,7 +5,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -26,6 +25,7 @@ public class MapsSystemLoader
 
   private DataFacade _facade;
   private EnumMapper _uiElementId;
+  private GeoAreasLoader _geoLoader;
 
   /**
    * Constructor.
@@ -35,6 +35,7 @@ public class MapsSystemLoader
   {
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
+    _geoLoader=new GeoAreasLoader(_facade);
   }
 
   /**
@@ -53,75 +54,6 @@ public class MapsSystemLoader
       }
     }
     return ret;
-  }
-
-  private void handleArea(int id)
-  {
-    PropertiesSet areaProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(areaProps.dump());
-    // ID
-    System.out.println("\tArea ID: "+id);
-    // Name
-    String areaName=DatUtils.getStringProperty(areaProps,"Area_Name");
-    System.out.println("\tArea name: "+areaName);
-    // Icon
-    Integer imageId=(Integer)areaProps.getProperty("Area_Icon");
-    if ((imageId!=null) && (imageId.intValue()>0))
-    {
-      File to=new File(imageId+".png");
-      if (!to.exists())
-      {
-        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);
-      }
-    }
-
-    // Territory
-    Integer territoryId=(Integer)areaProps.getProperty("Area_Territory");
-    if (territoryId!=null)
-    {
-      handleTerritory(territoryId.intValue());
-    }
-
-    // Scenes
-    // Scenes are not interesting
-    /*
-    Object[] scenes=(Object[])areaProps.getProperty("Area_SceneArray");
-    if (scenes!=null)
-    {
-      for(Object sceneIdObj : scenes)
-      {
-        int sceneId=((Integer)sceneIdObj).intValue();
-        PropertiesSet sceneProps=_facade.loadProperties(sceneId+DATConstants.DBPROPERTIES_OFFSET);
-        System.out.println(sceneProps.dump());
-      }
-    }
-    */
-  }
-
-  private void handleTerritory(int territoryId)
-  {
-    PropertiesSet territoryProps=_facade.loadProperties(territoryId+DATConstants.DBPROPERTIES_OFFSET);
-    // ID
-    System.out.println("\t\tTerritory ID: "+territoryId);
-    // Name
-    String areaName=DatUtils.getStringProperty(territoryProps,"Area_Name");
-    System.out.println("\t\t\tName: "+areaName);
-    // Region ID
-    int regionId=((Integer)territoryProps.getProperty("Area_Region")).intValue();
-    handleRegion(regionId);
-  }
-
-  private void handleRegion(int regionId)
-  {
-    PropertiesSet regionProps=_facade.loadProperties(regionId+DATConstants.DBPROPERTIES_OFFSET);
-    // ID
-    System.out.println("\t\tRegion ID: "+regionId);
-    // Name
-    String areaName=DatUtils.getStringProperty(regionProps,"Area_Name");
-    System.out.println("\t\t\tName: "+areaName);
-    // Region code
-    Integer regionCode=(Integer)regionProps.getProperty("Area_RegionID");
-    System.out.println("\t\t\tCode: "+regionCode);
   }
 
   private void handleMapProps(PropertiesSet props)
@@ -167,7 +99,7 @@ public class MapsSystemLoader
       for(Object areaIdObj : areas)
       {
         int areaId=((Integer)areaIdObj).intValue();
-        handleArea(areaId);
+        _geoLoader.getArea(areaId);
       }
     }
     // Sub maps
@@ -260,6 +192,7 @@ public class MapsSystemLoader
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
       handleMapProps(areaProps);
     }
+    _geoLoader.getGeoManager().dump();
   }
 
   /**
