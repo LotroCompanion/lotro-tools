@@ -1,7 +1,9 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +15,7 @@ import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -24,6 +27,7 @@ public class MapsSystemLoader
   private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
 
   private DataFacade _facade;
+  private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
 
@@ -44,16 +48,38 @@ public class MapsSystemLoader
    */
   public PropertiesSet loadMapsSystemProperties()
   {
-    PropertiesSet ret=null;
+    _uiLayout=buildLayout();
+    UIElement mapBackgroundElement=getUIElementById(268437543);
+    return mapBackgroundElement.getProperties();
+  }
+
+  private UILayout buildLayout()
+  {
     UILayout layout=new UILayoutLoader(_facade).loadUiLayout(0x22000041);
-    for(UIElement uiElement : layout.getChildElements())
+    return layout;
+  }
+
+  private UIElement getUIElementById(int id)
+  {
+    return getUIElementById(id,_uiLayout.getChildElements());
+  }
+
+  private UIElement getUIElementById(int id, List<UIElement> elements)
+  {
+    for(UIElement uiElement : elements)
     {
-      if (uiElement.getIdentifier()==268437543) // MapBackground
+      int uiElementId=uiElement.getIdentifier();
+      if (uiElementId==id)
       {
-        ret=uiElement.getProperties();
+        return uiElement;
+      }
+      UIElement foundElement=getUIElementById(id,uiElement.getChildElements());
+      if (foundElement!=null)
+      {
+        return foundElement;
       }
     }
-    return ret;
+    return null;
   }
 
   private void handleMapProps(PropertiesSet props)
@@ -76,6 +102,32 @@ public class MapsSystemLoader
     int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
     String activeElementName=_uiElementId.getString(activeElementId);
     System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
+
+    UIElement uiElement=getUIElementById(activeElementId);
+    if (uiElement!=null)
+    {
+      for(UIElement childElement : uiElement.getChildElements())
+      {
+        //int childId=childElement.getIdentifier();
+        int childBaseId=childElement.getBaseElementId();
+        //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
+        UIElement baseElement=getUIElementById(childBaseId);
+        if (baseElement!=null)
+        {
+          PropertiesSet childProps=baseElement.getProperties();
+          Integer childMapUI=(Integer)childProps.getProperty("UI_Map_Child_Map");
+          if (childMapUI!=null)
+          {
+            System.out.println("\t\tChild map: "+childMapUI);
+            String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
+            System.out.println("\t\tTooltip: "+tooltip);
+            Point location=childElement.getRelativeBounds().getLocation();
+            System.out.println("\t\tLocation: "+location);
+          }
+        }
+      }
+    }
+
     // Region ID
     Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
     System.out.println("\tRegion: "+regionId);
