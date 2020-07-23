@@ -18,6 +18,11 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class GeoAreasLoader
 {
+  /**
+   * Directory for area icons.
+   */
+  public static final File AREA_ICONS_DIR=new File("data\\maps\\areas\\tmp").getAbsoluteFile();
+
   private DataFacade _facade;
   private GeoAreasManager _geoMgr;
 
@@ -67,7 +72,8 @@ public class GeoAreasLoader
     Integer imageId=(Integer)areaProps.getProperty("Area_Icon");
     if ((imageId!=null) && (imageId.intValue()>0))
     {
-      File to=new File(imageId+".png");
+      File toDir=new File(AREA_ICONS_DIR,"areaIcons");
+      File to=new File(toDir,imageId+".png");
       if (!to.exists())
       {
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);

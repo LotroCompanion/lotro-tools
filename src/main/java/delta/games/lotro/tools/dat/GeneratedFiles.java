@@ -243,4 +243,12 @@ public class GeneratedFiles
    * Servers.
    */
   public static final File SERVERS=LotroCoreConfig.getInstance().getFile(DataFiles.SERVERS_DESCRIPTION);
+  /**
+   * Geographic areas.
+   */
+  public static final File GEO_AREAS=LotroCoreConfig.getInstance().getFile(DataFiles.GEO_AREAS);
+  /**
+   * Area icons.
+   */
+  public static final File AREA_ICONS=new File("../lotro-data/maps/areaIcons.zip").getAbsoluteFile();
 }
