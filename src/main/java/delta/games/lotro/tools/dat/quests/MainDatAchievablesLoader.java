@@ -16,6 +16,7 @@ import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
@@ -164,6 +165,20 @@ public class MainDatAchievablesLoader
       repeatability=Repeatability.getByCode(maxTimes.byteValue());
     }
     quest.setRepeatability(repeatability);
+    // Cooldowns/locks
+    LockType lockType=null;
+    Integer lockTypeCode=((Integer)properties.getProperty("Quest_LockType"));
+    if (lockTypeCode!=null)
+    {
+      if (lockTypeCode.intValue()==1) lockType=LockType.BIWEEKLY;
+      else if (lockTypeCode.intValue()==2) lockType=LockType.DAILY;
+      else if (lockTypeCode.intValue()==3) lockType=LockType.WEEKLY;
+      else
+      {
+        LOGGER.warn("Unmanaged lock type: "+lockTypeCode);
+      }
+    }
+    quest.setLockType(lockType);
     // Scope
     //handleScope(quest, properties);
     // Monster play?
