@@ -51,7 +51,11 @@ public class QuestMapNotesLoader
     int areaDID=BufferUtils.readUInt32(bis);
     if (areaDID!=0)
     {
-      Identifiable where=getAreaOrDungeon(areaDID);
+      Identifiable where=getAreaOrDungeon(areaDID); // Area or dungeon
+      if (where==null)
+      {
+        LOGGER.warn("Area/dungeon not found: "+areaDID);
+      }
       System.out.println("AreaID="+areaDID+" => "+where);
     }
     // Dungeon ID
@@ -59,6 +63,10 @@ public class QuestMapNotesLoader
     if (dungeonDID!=0)
     {
       Dungeon dungeon=_dungeonLoader.getDungeon(dungeonDID);
+      if (dungeon==null)
+      {
+        LOGGER.warn("Dungeon not found: "+dungeonDID);
+      }
       //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+DATConstants.DBPROPERTIES_OFFSET);
       System.out.println("DungeonID="+dungeonDID+" => "+dungeon.getName());
     }
@@ -69,6 +77,10 @@ public class QuestMapNotesLoader
     {
       DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
       System.out.println("Note: "+dataId);
+    }
+    else
+    {
+      LOGGER.warn("No note DID for a quest map note!");
     }
 
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
