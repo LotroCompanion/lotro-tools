@@ -10,7 +10,6 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.games.lotro.maps.data.CategoriesManager;
 import delta.games.lotro.maps.data.Category;
-import delta.games.lotro.maps.data.Labels;
 import delta.games.lotro.maps.data.MapBundle;
 
 /**
@@ -101,8 +100,8 @@ public class MapsPageParser
         {
           labels=labels.substring(0,labels.length()-3).trim();
         }
-        Labels labelsManager=map.getMap().getLabels();
-        ParsingUtils.parseLabels(labelsManager,labels);
+        String mapName=ParsingUtils.parseLabel(labels);
+        map.getMap().setName(mapName);
       }
     }
     catch(Exception e)

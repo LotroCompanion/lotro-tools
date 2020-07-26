@@ -105,7 +105,7 @@ public class MapsSystemLoader
       mapName="?";
     }
     //System.out.println("Map name: "+mapName);
-    map.getLabels().putLabel(LOCALE,mapName);
+    map.setName(mapName);
 
     // Map image
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");

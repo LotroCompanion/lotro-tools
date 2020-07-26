@@ -69,7 +69,7 @@ public class MainMapsCleaner
     {
       IntegerHolder counter=markersByCategory.get(code);
       Category category=categoriesManager.getByCode(code.intValue());
-      System.out.println(category.getLabel()+": "+counter);
+      System.out.println(category.getName()+": "+counter);
       total+=counter.getInt();
     }
     System.out.println("Total: "+total);
@@ -87,7 +87,7 @@ public class MainMapsCleaner
     // Perform cleanup
     for(Integer code : codes2Remove)
     {
-      System.out.println("Removing category: "+categoriesManager.getByCode(code.intValue()).getLabel());
+      System.out.println("Removing category: "+categoriesManager.getByCode(code.intValue()).getName());
       categoriesManager.removeCategory(code.intValue());
     }
     mapsManager.saveCategories();

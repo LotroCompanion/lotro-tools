@@ -14,7 +14,6 @@ import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.Labels;
 import delta.games.lotro.maps.data.Map;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.Marker;
@@ -65,9 +64,9 @@ public class MapJsonParser
       map.setGeoReference(reference);
       map.setLastUpdate(date);
 
-      Labels labelsManager=map.getLabels();
       JSONObject nameJson=o.getJSONObject("Name");
-      ParsingUtils.parseLabels(labelsManager,nameJson);
+      String mapName=ParsingUtils.parseLabel(nameJson);
+      map.setName(mapName);
     }
     catch(Exception e)
     {
@@ -102,7 +101,8 @@ public class MapJsonParser
     try
     {
       JSONObject nameJson=line.getJSONObject("Name");
-      ParsingUtils.parseLabels(marker.getLabels(),nameJson);
+      String label=ParsingUtils.parseLabel(nameJson);
+      marker.setLabel(label);
       double latitude=line.getDouble("Y");
       double longitude=line.getDouble("X");
       int categoryCode=line.getInt("Type");

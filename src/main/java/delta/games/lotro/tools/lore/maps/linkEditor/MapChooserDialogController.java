@@ -50,7 +50,7 @@ public class MapChooserDialogController extends DefaultFormDialogController<MapB
     List<MapBundle> bundles=_manager.getMaps();
     for(MapBundle bundle : bundles)
     {
-      controller.addItem(bundle,bundle.getLabel());
+      controller.addItem(bundle,bundle.getName());
     }
     return controller;
   }

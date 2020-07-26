@@ -159,7 +159,7 @@ Dungeon_ParentDungeon: 0
     }
     // Map
     delta.games.lotro.maps.data.Map map=mapBundle.getMap();
-    map.getLabels().putLabel(LOCALE,name);
+    map.setName(name);
 
     float scale=((Float)mapUiProps.getProperty("UI_Map_Scale")).floatValue();
     //System.out.println("\tScale: "+scale);

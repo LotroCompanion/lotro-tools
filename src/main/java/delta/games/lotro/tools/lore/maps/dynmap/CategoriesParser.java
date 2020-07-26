@@ -5,7 +5,6 @@ import java.util.List;
 import delta.common.utils.NumericTools;
 import delta.games.lotro.maps.data.CategoriesManager;
 import delta.games.lotro.maps.data.Category;
-import delta.games.lotro.maps.data.Labels;
 
 /**
  * Parser for categories definitions.
@@ -41,10 +40,10 @@ public class CategoriesParser
           if (categoryCode!=null)
           {
             Category category=new Category(categoryCode.intValue());
-            Labels labelsManager=category.getLabels();
             String labels=line.substring(index+1).trim();
             if (labels.endsWith(",")) labels=labels.substring(0,labels.length()-1);
-            ParsingUtils.parseLabels(labelsManager,labels);
+            String categoryName=ParsingUtils.parseLabel(labels);
+            category.setName(categoryName);
             manager.addCategory(category);
           }
         }

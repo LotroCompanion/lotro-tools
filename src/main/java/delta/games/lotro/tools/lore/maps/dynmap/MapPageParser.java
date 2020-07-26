@@ -131,7 +131,8 @@ public class MapPageParser
     String part1=findBefore(line,"{");
     String labels=TextTools.findBetween(line,"{","}");
     String part3=TextTools.findAfter(line,"}");
-    ParsingUtils.parseLabels(marker.getLabels(),"{"+labels+"}");
+    String label=ParsingUtils.parseLabel("{"+labels+"}");
+    marker.setLabel(label);
     Float latitude=null;
     Float longitude=null;
     String[] posItems=part1.split(",");
@@ -146,12 +147,6 @@ public class MapPageParser
     {
       categoryCode=NumericTools.parseInteger(categoryItems[1]);
     }
-    String comment=null;
-    if (categoryItems.length>=4)
-    {
-      comment=TextTools.findBetween(categoryItems[3],"\"","\"");
-    }
-    marker.setComment(comment);
     if ((latitude!=null) && (longitude!=null) && (categoryCode!=null))
     {
       GeoPoint position=new GeoPoint(longitude.floatValue(),latitude.floatValue());

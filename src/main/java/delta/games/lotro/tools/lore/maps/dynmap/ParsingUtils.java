@@ -3,41 +3,40 @@ package delta.games.lotro.tools.lore.maps.dynmap;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-import delta.games.lotro.maps.data.Labels;
-
 /**
  * Utility methods used for parsing dynmap data.
  * @author DAM
  */
 public class ParsingUtils
 {
-  private static final Logger _logger=Logger.getLogger(ParsingUtils.class);
+  private static final Logger LOGGER=Logger.getLogger(ParsingUtils.class);
 
   /**
    * Parse a labels structure.
-   * @param labelsManager Storage for extracted data.
    * @param labels Input labels definitions in JSON.
+   * @return the label for the default locale ("en").
    */
-  public static void parseLabels(Labels labelsManager, String labels)
+  public static String parseLabel(String labels)
   {
     // {en: "Eastern Gondor", de: "Ost-Gondor", fr: "L'Est Du Gondor"}
     try
     {
       JSONObject json=new JSONObject(labels);
-      parseLabels(labelsManager,json);
+      return parseLabel(json);
     }
     catch(Exception e)
     {
-      _logger.error("Bad labels: ["+labels+"]",e);
+      LOGGER.error("Bad labels: ["+labels+"]",e);
     }
+    return "";
   }
 
   /**
    * Parse a labels structure.
-   * @param labelsManager Storage for extracted data.
    * @param json Input labels definitions in JSON.
+   * @return the label for the default locale ("en").
    */
-  public static void parseLabels(Labels labelsManager, JSONObject json)
+  public static String parseLabel(JSONObject json)
   {
     // {en: "Eastern Gondor", de: "Ost-Gondor", fr: "L'Est Du Gondor"}
     try
@@ -45,13 +44,17 @@ public class ParsingUtils
       String[] localeKeys=JSONObject.getNames(json);
       for(String localeKey : localeKeys)
       {
-        String value=json.getString(localeKey);
-        labelsManager.putLabel(localeKey,value);
+        if ("en".equals(localeKey))
+        {
+          String value=json.getString(localeKey);
+          return value;
+        }
       }
     }
     catch(Exception e)
     {
-      _logger.error("Bad labels: ["+json+"]",e);
+      LOGGER.error("Bad labels: ["+json+"]",e);
     }
+    return "";
   }
 }

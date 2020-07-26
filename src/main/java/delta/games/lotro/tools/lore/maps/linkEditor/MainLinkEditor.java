@@ -37,7 +37,7 @@ public class MainLinkEditor
       {
         MapBundle map=mapsManager.getMapByKey(key);
         navigationManager.setMap(map);
-        String title=map.getLabel();
+        String title=map.getName();
         _frame.setTitle(title);
       }
     };
@@ -48,7 +48,7 @@ public class MainLinkEditor
     navigationManager.setMap(bundle);
     JFrame f=new JFrame();
     _frame=f;
-    String title=bundle.getLabel();
+    String title=bundle.getName();
     f.setTitle(title);
     f.getContentPane().add(canvas);
     f.pack();
