@@ -2,13 +2,20 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
 
+import org.apache.log4j.Logger;
+
+import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DataIdentificationTools;
+import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.Dungeon;
 
 /**
  * Loader for quest map notes.
@@ -16,9 +23,13 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class QuestMapNotesLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MapNotesLoader.class);
+
   private static final int QUEST_MAP_NOTES_DID=0x0E400000;
 
   private DataFacade _facade;
+  private DungeonLoader _dungeonLoader;
+  private GeoAreasLoader _geoAreasLoader;
 
   /**
    * Constructor.
@@ -27,6 +38,8 @@ public class QuestMapNotesLoader
   public QuestMapNotesLoader(DataFacade facade)
   {
     _facade=facade;
+    _dungeonLoader=new DungeonLoader(facade);
+    _geoAreasLoader=new GeoAreasLoader(facade);
   }
 
   private void loadQuestMapNote(ByteArrayInputStream bis)
@@ -38,23 +51,24 @@ public class QuestMapNotesLoader
     int areaDID=BufferUtils.readUInt32(bis);
     if (areaDID!=0)
     {
-      //PropertiesSet areaProps=_facade.loadProperties(areaWStateID+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println("AreaID="+areaDID/*+" => "+areaProps.dump()*/);
+      Identifiable where=getAreaOrDungeon(areaDID);
+      System.out.println("AreaID="+areaDID+" => "+where);
     }
     // Dungeon ID
     int dungeonDID=BufferUtils.readUInt32(bis);
     if (dungeonDID!=0)
     {
+      Dungeon dungeon=_dungeonLoader.getDungeon(dungeonDID);
       //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println("DungeonID="+dungeonDID/*+" => "+dungeonProps.dump()*/);
+      System.out.println("DungeonID="+dungeonDID+" => "+dungeon.getName());
     }
 
     // Various depending on what the MapNote represents
     int noteDID=BufferUtils.readUInt32(bis);
     if (noteDID!=0)
     {
-      //PropertiesSet noteProps=_facade.loadProperties(noteWState+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println("NoteId="+noteDID/*+" => "+noteProps.dump()*/); // Found a Door...
+      DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
+      System.out.println("Note: "+dataId);
     }
 
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
@@ -75,6 +89,22 @@ public class QuestMapNotesLoader
     {
       System.out.println("Quest dispenser info: "+questDispenserInfo.dump());
     }
+  }
+
+  private Identifiable getAreaOrDungeon(int id)
+  {
+    Dungeon dungeon=_dungeonLoader.getDungeon(id);
+    if (dungeon!=null)
+    {
+      return dungeon;
+    }
+    Area area=_geoAreasLoader.getArea(id);
+    if (area!=null)
+    {
+      return area;
+    }
+    LOGGER.warn("Unidentified geo entity: "+id);
+    return null;
   }
 
   /**

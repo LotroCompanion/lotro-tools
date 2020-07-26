@@ -2,11 +2,8 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DataFacade;
@@ -15,7 +12,6 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
-import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
@@ -31,8 +27,6 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class MapsSystemLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
-
   private static final String LOCALE="en";
   private DataFacade _facade;
   private UILayout _uiLayout;
@@ -97,7 +91,7 @@ public class MapsSystemLoader
     // ActiveElement
     int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
     String activeElementName=_uiElementId.getString(activeElementId);
-    System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
+    //System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
 
     String key=String.valueOf(activeElementId);
     File rootDir=new File(new File(_rootDir,"maps"),key);
@@ -110,7 +104,7 @@ public class MapsSystemLoader
     {
       mapName="?";
     }
-    System.out.println("Map name: "+mapName);
+    //System.out.println("Map name: "+mapName);
     map.getLabels().putLabel(LOCALE,mapName);
 
     // Map image
@@ -126,8 +120,8 @@ public class MapsSystemLoader
     }
 
     // Region ID
-    Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
-    System.out.println("\tRegion: "+regionId);
+    //Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
+    //System.out.println("\tRegion: "+regionId);
 
     // Scale
     // Scale decreases with high level maps:
@@ -135,16 +129,14 @@ public class MapsSystemLoader
     // - Mordor: 0.03644
     // - Middle-earth: 0.0173184
     float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
-    System.out.println("\tScale: "+scale);
+    //System.out.println("\tScale: "+scale);
 
-    GeoPoint origin;
     float geo2pixel;
-    // Bounds
-    Rectangle2D.Float bounds=getBounds(activeElementName,scale,props);
-    System.out.println("\tBounds: "+bounds);
-    if (bounds!=null)
+    // Origin
+    GeoPoint origin=MapUtils.getOrigin(activeElementName,scale,props);
+    //System.out.println("\tOrigin: "+origin);
+    if (origin!=null)
     {
-      origin=new GeoPoint(bounds.x,bounds.y+bounds.height);
       geo2pixel=scale*20;
     }
     else
@@ -211,74 +203,6 @@ public class MapsSystemLoader
         handleMapProps(subMapProps);
       }
     }
-  }
-
-  private Rectangle2D.Float getBounds(String activeElementName, float scale, PropertiesSet props)
-  {
-    Integer guideDisabled=(Integer)props.getProperty("UI_Map_QuestGuideDisabled");
-    if ((guideDisabled!=null) && (guideDisabled.intValue()>0))
-    {
-      return null;
-    }
-    // Block
-    Integer blockX=(Integer)props.getProperty("UI_Map_BlockOffsetX");
-    Integer blockY=(Integer)props.getProperty("UI_Map_BlockOffsetY");
-    float longitude=0;
-    float latitude=0;
-    if ((blockX!=null) && (blockY!=null))
-    {
-      System.out.println("\tBlock X/Y: "+blockX+"/"+blockY);
-      float[] pos=PositionDecoder.decodePosition(blockX.intValue(),blockY.intValue(),0,0);
-      longitude=pos[0];
-      latitude=pos[1];
-      System.out.println("\tLat: "+latitude+", Lon: "+longitude);
-    }
-    else
-    {
-      LOGGER.warn("No block data for: "+activeElementName+"!");
-      return null;
-    }
-    // Pixel
-    Integer pixelOffsetX=(Integer)props.getProperty("UI_Map_PixelOffsetX");
-    Integer pixelOffsetY=(Integer)props.getProperty("UI_Map_PixelOffsetY");
-    if ((pixelOffsetX!=null) && (pixelOffsetY!=null))
-    {
-      // Pixel offset from the top/left of the map
-      // Matches the position blockX/blockY/ox=0/oy=0
-      System.out.println("\tPixel offset X/Y: "+pixelOffsetX+"/"+pixelOffsetY);
-    }
-    else
-    {
-      LOGGER.warn("No pixel data for: "+activeElementName+"!");
-      return null;
-    }
-    Integer width=(Integer)props.getProperty("UI_Map_PixelWidth");
-    Integer height=(Integer)props.getProperty("UI_Map_PixelHeight");
-    if ((width!=null) && (height!=null))
-    {
-      System.out.println("\tWidth/height: "+width+"/"+height);
-    }
-    else
-    {
-      LOGGER.warn("No size data for: "+activeElementName+"!");
-      return null;
-    }
-
-    float internalX0=((0-pixelOffsetX.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockX.intValue());
-    float internalY0=((pixelOffsetY.intValue()-0)/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockY.intValue());
-    float[] lonLat0=PositionDecoder.decodePosition(internalX0,internalY0);
-    //System.out.println("\tOrigin: Lat: "+latitude0+", Lon: "+longitude0);
-
-    float internalWidth=((width.intValue()-pixelOffsetX.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockX.intValue());
-    float internalHeight=((pixelOffsetY.intValue()-height.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockY.intValue());
-    float[] lonLatMax=PositionDecoder.decodePosition(internalWidth,internalHeight);
-    //System.out.println("\tMax: Lat: "+latitudeHeight+", Lon: "+longitudeWidth);
-
-    Rectangle2D.Float r=new Rectangle2D.Float();
-    float deltaLat=lonLat0[1]-lonLatMax[1];
-    float deltaLong=lonLatMax[0]-lonLat0[0];
-    r.setRect(lonLat0[0],lonLatMax[1],deltaLong,deltaLat);
-    return r;
   }
 
   private void doIt()

@@ -56,7 +56,10 @@ public class GeoAreasLoader
     if (area==null)
     {
       area=handleArea(areaId);
-      _geoMgr.addArea(area);
+      if (area!=null)
+      {
+        _geoMgr.addArea(area);
+      }
     }
     return area;
   }
@@ -64,6 +67,10 @@ public class GeoAreasLoader
   private Area handleArea(int areaId)
   {
     PropertiesSet areaProps=_facade.loadProperties(areaId+DATConstants.DBPROPERTIES_OFFSET);
+    if (areaProps==null)
+    {
+      return null;
+    }
     //System.out.println(areaProps.dump());
     // Name
     String areaName=DatUtils.getStringProperty(areaProps,"Area_Name");
