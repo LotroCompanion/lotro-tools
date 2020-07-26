@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -15,7 +17,12 @@ import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.DatIconsUtils;
-import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.maps.data.GeoPoint;
+import delta.games.lotro.maps.data.GeoReference;
+import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.MapBundle;
+import delta.games.lotro.maps.data.MapLink;
+import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -26,10 +33,12 @@ public class MapsSystemLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
 
+  private static final String LOCALE="en";
   private DataFacade _facade;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
+  private File _rootDir;
 
   /**
    * Constructor.
@@ -40,6 +49,7 @@ public class MapsSystemLoader
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
+    _rootDir=new File(new File("data","maps"),"output2");
   }
 
   /**
@@ -84,47 +94,34 @@ public class MapsSystemLoader
 
   private void handleMapProps(PropertiesSet props)
   {
-    // Map name
-    String mapName=DatUtils.getStringProperty(props,"UI_Map_MenuName");
-    System.out.println("Map name: "+mapName);
-    // Map image
-    Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
-    if (imageId!=null)
-    {
-      File to=new File(mapName+".png");
-      if (!to.exists())
-      {
-        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);
-      }
-    }
-
     // ActiveElement
     int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
     String activeElementName=_uiElementId.getString(activeElementId);
     System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
 
-    UIElement uiElement=getUIElementById(activeElementId);
-    if (uiElement!=null)
+    String key=String.valueOf(activeElementId);
+    File rootDir=new File(new File(_rootDir,"maps"),key);
+    MapBundle mapBundle=new MapBundle(key,rootDir);
+    Map map=mapBundle.getMap();
+
+    // Map name
+    String mapName=DatUtils.getStringProperty(props,"UI_Map_MenuName");
+    if (mapName==null)
     {
-      for(UIElement childElement : uiElement.getChildElements())
+      mapName="?";
+    }
+    System.out.println("Map name: "+mapName);
+    map.getLabels().putLabel(LOCALE,mapName);
+
+    // Map image
+    Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
+    if (imageId!=null)
+    {
+      File mapRootDir=mapBundle.getRootDir();
+      File mapImageFile=new File(mapRootDir,"map_"+LOCALE+".png");
+      if (!mapImageFile.exists())
       {
-        //int childId=childElement.getIdentifier();
-        int childBaseId=childElement.getBaseElementId();
-        //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
-        UIElement baseElement=getUIElementById(childBaseId);
-        if (baseElement!=null)
-        {
-          PropertiesSet childProps=baseElement.getProperties();
-          Integer childMapUI=(Integer)childProps.getProperty("UI_Map_Child_Map");
-          if (childMapUI!=null)
-          {
-            System.out.println("\t\tChild map: "+childMapUI);
-            String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
-            System.out.println("\t\tTooltip: "+tooltip);
-            Point location=childElement.getRelativeBounds().getLocation();
-            System.out.println("\t\tLocation: "+location);
-          }
-        }
+        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),mapImageFile);
       }
     }
 
@@ -140,9 +137,59 @@ public class MapsSystemLoader
     float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
     System.out.println("\tScale: "+scale);
 
+    GeoPoint origin;
+    float geo2pixel;
     // Bounds
     Rectangle2D.Float bounds=getBounds(activeElementName,scale,props);
     System.out.println("\tBounds: "+bounds);
+    if (bounds!=null)
+    {
+      origin=new GeoPoint(bounds.x,bounds.y+bounds.height);
+      geo2pixel=scale*20;
+    }
+    else
+    {
+      origin=new GeoPoint(0,0);
+      geo2pixel=1;
+    }
+    GeoReference geoReference=new GeoReference(origin,geo2pixel);
+    map.setGeoReference(geoReference);
+
+    // Links
+    UIElement uiElement=getUIElementById(activeElementId);
+    if (uiElement!=null)
+    {
+      for(UIElement childElement : uiElement.getChildElements())
+      {
+        //int childId=childElement.getIdentifier();
+        int childBaseId=childElement.getBaseElementId();
+        //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
+        UIElement baseElement=getUIElementById(childBaseId);
+        if (baseElement!=null)
+        {
+          PropertiesSet childProps=baseElement.getProperties();
+          Integer childMapUI=(Integer)childProps.getProperty("UI_Map_Child_Map");
+          if (childMapUI!=null)
+          {
+            //System.out.println("\t\tChild map: "+childMapUI);
+            //String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
+            //System.out.println("\t\tTooltip: "+tooltip);
+            Point location=childElement.getRelativeBounds().getLocation();
+            //System.out.println("\t\tLocation: "+location);
+
+            // Add link
+            String target=childMapUI.toString();
+            GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(location.x+32,location.y+32));
+            MapLink link=new MapLink(target,hotPoint);
+            mapBundle.getLinks().add(link);
+          }
+        }
+      }
+    }
+
+    // Write file
+    MapXMLWriter writer=new MapXMLWriter();
+    writer.writeMapFiles(mapBundle,EncodingNames.UTF_8);
 
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
@@ -217,22 +264,20 @@ public class MapsSystemLoader
       return null;
     }
 
-    float internalX=((0-pixelOffsetX.intValue())/scale)+(160*blockX.intValue());
-    float longitude0=(1468-(internalX/20))/10;
-    float internalY=((pixelOffsetY.intValue()-0)/scale)+(160*blockY.intValue());
-    float latitude0=(1244-(internalY/20))/10;
+    float internalX0=((0-pixelOffsetX.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockX.intValue());
+    float internalY0=((pixelOffsetY.intValue()-0)/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockY.intValue());
+    float[] lonLat0=PositionDecoder.decodePosition(internalX0,internalY0);
     //System.out.println("\tOrigin: Lat: "+latitude0+", Lon: "+longitude0);
 
-    float internalWidth=((width.intValue()-pixelOffsetX.intValue())/scale)+(160*blockX.intValue());
-    float longitudeWidth=(1468-(internalWidth/20))/10;
-    float internalHeight=((pixelOffsetY.intValue()-height.intValue())/scale)+(160*blockY.intValue());
-    float latitudeHeight=(1244-(internalHeight/20))/10;
+    float internalWidth=((width.intValue()-pixelOffsetX.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockX.intValue());
+    float internalHeight=((pixelOffsetY.intValue()-height.intValue())/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockY.intValue());
+    float[] lonLatMax=PositionDecoder.decodePosition(internalWidth,internalHeight);
     //System.out.println("\tMax: Lat: "+latitudeHeight+", Lon: "+longitudeWidth);
 
     Rectangle2D.Float r=new Rectangle2D.Float();
-    float deltaLat=latitudeHeight-latitude0;
-    float deltaLong=longitude0-longitudeWidth;
-    r.setRect(longitudeWidth,latitude0,deltaLong,deltaLat);
+    float deltaLat=lonLat0[1]-lonLatMax[1];
+    float deltaLong=lonLatMax[0]-lonLat0[0];
+    r.setRect(lonLat0[0],lonLatMax[1],deltaLong,deltaLat);
     return r;
   }
 
