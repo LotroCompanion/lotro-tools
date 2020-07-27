@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -19,7 +18,7 @@ import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.MapBundle;
-import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
+import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -32,24 +31,20 @@ public class DungeonLoader
 
   private static final String LOCALE="en";
 
-  /**
-   * Directory for area icons.
-   */
-  public static final File DUNGEON_IMAGES_DIR=new File("data\\maps\\dungeons\\tmp").getAbsoluteFile();
-
   private DataFacade _facade;
   private Map<Integer,Dungeon> _data;
-  private File _rootDir;
+  private MapsManager _mapsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param mapsManager Maps manager.
    */
-  public DungeonLoader(DataFacade facade)
+  public DungeonLoader(DataFacade facade, MapsManager mapsManager)
   {
     _facade=facade;
     _data=new HashMap<Integer,Dungeon>();
-    _rootDir=new File(new File("data","maps"),"output2");
+    _mapsManager=mapsManager;
   }
 
   /**
@@ -116,8 +111,9 @@ Dungeon_ParentDungeon: 0
 
     // Map
     String key=String.valueOf(dungeonId);
-    File rootDir=new File(new File(_rootDir,"maps"),key);
+    File rootDir=_mapsManager.getMapDir(key);
     MapBundle mapBundle=new MapBundle(key,rootDir);
+    mapBundle.getData().clear();
 
     // Image
     int imagePropsId=((Integer)dungeonProps.getProperty("Dungeon_MapData")).intValue();
@@ -167,10 +163,21 @@ Dungeon_ParentDungeon: 0
     float geo2pixel=scale*20;
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
     map.setGeoReference(geoReference);
-    // Write file
-    MapXMLWriter writer=new MapXMLWriter();
-    writer.writeMapFiles(mapBundle,EncodingNames.UTF_8);
+    _mapsManager.addMap(mapBundle);
 
     return dungeon;
+  }
+
+  /**
+   * Show loaded dungeons on the console.
+   */
+  public void showDungeons()
+  {
+    List<Dungeon> dungeons=getDungeons();
+    System.out.println("Found "+dungeons.size()+" dungeons");
+    for(Dungeon dungeon : dungeons)
+    {
+      System.out.println(dungeon);
+    }
   }
 }
