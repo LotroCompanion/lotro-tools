@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import delta.games.lotro.maps.data.GeoPoint;
-import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
@@ -52,7 +52,7 @@ public class LinkCreationInterator
   private void doLink(MapBundle bundle, int x, int y)
   {
     MapBundle currentMap=_canvas.getCurrentMap();
-    Map map=currentMap.getMap();
+    GeoreferencedBasemap map=currentMap.getMap();
     String target=bundle.getKey();
     GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
     MapLink link=new MapLink(target,hotPoint);

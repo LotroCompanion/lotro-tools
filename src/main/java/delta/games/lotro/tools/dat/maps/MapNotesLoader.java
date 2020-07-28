@@ -3,7 +3,6 @@ package delta.games.lotro.tools.dat.maps;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.BitSet;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 

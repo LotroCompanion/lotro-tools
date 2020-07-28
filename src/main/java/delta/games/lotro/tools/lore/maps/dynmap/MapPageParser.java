@@ -1,9 +1,6 @@
 package delta.games.lotro.tools.lore.maps.dynmap;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,7 +10,7 @@ import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.MarkersManager;
@@ -29,7 +26,6 @@ public class MapPageParser
   private static final String STARTX_SEED="map.StartX = ";
   private static final String STARTY_SEED="map.StartY = ";
   private static final String SCALE2MAP_SEED="map.ScaleToMap = ";
-  private static final String MODIFIED_SEED="map.Modified = ";
 
   /**
    * Parse map data.
@@ -42,7 +38,6 @@ public class MapPageParser
     Float startX=null;
     Float startY=null;
     Float scale=null;
-    Date date=null;
     MarkersManager markers=mapBundle.getData();
     int markerId=1;
     for(String line : lines)
@@ -63,11 +58,6 @@ public class MapPageParser
         scale=getValue(SCALE2MAP_SEED,line);
       }
       //map.ScaleToIg = 0.285807;
-      else if (line.startsWith(MODIFIED_SEED))
-      {
-        //map.Modified = "07/12/2015";
-        date=getDate(MODIFIED_SEED,line);
-      }
       else if (line.startsWith("["))
       {
         Marker marker=parseItemLine(line);
@@ -79,14 +69,13 @@ public class MapPageParser
         }
       }
     }
-    Map map=mapBundle.getMap();
+    GeoreferencedBasemap map=mapBundle.getMap();
     if ((startX!=null) && (startY!=null) && (scale!=null))
     {
       GeoPoint start=new GeoPoint(startX.floatValue(),startY.floatValue());
       GeoReference reference=new GeoReference(start,scale.floatValue());
       map.setGeoReference(reference);
     }
-    map.setLastUpdate(date);
   }
 
   private Float getValue(String seed, String line)
@@ -94,31 +83,6 @@ public class MapPageParser
     line=line.substring(seed.length()).trim();
     if (line.endsWith(";")) line=line.substring(0,line.length()-1);
     return NumericTools.parseFloat(line);
-  }
-
-  private Date getDate(String seed, String line)
-  {
-    Date ret=null;
-    line=line.substring(seed.length()).trim();
-    if (line.endsWith(";")) line=line.substring(0,line.length()-1);
-    if (line.endsWith("\"")) line=line.substring(0,line.length()-1);
-    if (line.startsWith("\"")) line=line.substring(1);
-    String[] dateComponents=line.split("/");
-    if (dateComponents.length==3)
-    {
-      Integer day=NumericTools.parseInteger(dateComponents[1]);
-      Integer month=NumericTools.parseInteger(dateComponents[0]);
-      Integer year=NumericTools.parseInteger(dateComponents[2]);
-      if ((day!=null) && (month!=null) && (year!=null))
-      {
-        Calendar c=GregorianCalendar.getInstance();
-        c.set(year.intValue(),month.intValue()-1,day.intValue(),0,0);
-        c.set(GregorianCalendar.SECOND,0);
-        c.set(GregorianCalendar.MILLISECOND,0);
-        ret=c.getTime();
-      }
-    }
-    return ret;
   }
 
   private Marker parseItemLine(String line)

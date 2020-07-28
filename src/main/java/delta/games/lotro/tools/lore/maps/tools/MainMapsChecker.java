@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
@@ -34,7 +34,7 @@ public class MainMapsChecker
     List<MapBundle> maps=mapsManager.getMaps();
     for(MapBundle mapBundle : maps)
     {
-      Map map=mapBundle.getMap();
+      GeoreferencedBasemap map=mapBundle.getMap();
       String mapKey=map.getKey();
       List<MapLink> links=mapBundle.getLinks();
       int nbErrorsInMap=0;
@@ -82,7 +82,7 @@ public class MainMapsChecker
     for(MapBundle mapBundle : maps)
     {
       //int nbErrorsInMap=0;
-      Map map=mapBundle.getMap();
+      GeoreferencedBasemap map=mapBundle.getMap();
       String mapKey=map.getKey();
       Set<Integer> foundIds=new HashSet<Integer>();
       for(Marker marker : mapBundle.getData().getAllMarkers())

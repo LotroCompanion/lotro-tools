@@ -15,7 +15,7 @@ import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
@@ -96,7 +96,7 @@ public class MapsSystemLoader
     String key=String.valueOf(activeElementId);
     File rootDir=new File(new File(_rootDir,"maps"),key);
     MapBundle mapBundle=new MapBundle(key,rootDir);
-    Map map=mapBundle.getMap();
+    GeoreferencedBasemap map=mapBundle.getMap();
 
     // Map name
     String mapName=DatUtils.getStringProperty(props,"UI_Map_MenuName");

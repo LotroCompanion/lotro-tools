@@ -1,20 +1,16 @@
 package delta.games.lotro.tools.lore.maps.dynmap;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import delta.common.utils.NumericTools;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.Map;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.MarkersManager;
@@ -41,8 +37,6 @@ public class MapJsonParser
       double startX=o.getDouble("StartX");
       double startY=o.getDouble("StartY");
       double scale=o.getDouble("ScaleToMap");
-      String dateStr=o.getString("Modified");
-      Date date=getDate(dateStr);
 
       // Markers
       MarkersManager markers=mapBundle.getData();
@@ -58,11 +52,10 @@ public class MapJsonParser
         markers.addMarker(marker);
       }
       // Setup map
-      Map map=mapBundle.getMap();
+      GeoreferencedBasemap map=mapBundle.getMap();
       GeoPoint start=new GeoPoint((float)startX,(float)startY);
       GeoReference reference=new GeoReference(start,(float)scale);
       map.setGeoReference(reference);
-      map.setLastUpdate(date);
 
       JSONObject nameJson=o.getJSONObject("Name");
       String mapName=ParsingUtils.parseLabel(nameJson);
@@ -72,27 +65,6 @@ public class MapJsonParser
     {
       LOGGER.error("Caught error when loading a map from JSON file: "+input,e);
     }
-  }
-
-  private Date getDate(String dateStr)
-  {
-    Date ret=null;
-    String[] dateComponents=dateStr.split("/");
-    if (dateComponents.length==3)
-    {
-      Integer day=NumericTools.parseInteger(dateComponents[1]);
-      Integer month=NumericTools.parseInteger(dateComponents[0]);
-      Integer year=NumericTools.parseInteger(dateComponents[2]);
-      if ((day!=null) && (month!=null) && (year!=null))
-      {
-        Calendar c=GregorianCalendar.getInstance();
-        c.set(year.intValue(),month.intValue()-1,day.intValue(),0,0);
-        c.set(GregorianCalendar.SECOND,0);
-        c.set(GregorianCalendar.MILLISECOND,0);
-        ret=c.getTime();
-      }
-    }
-    return ret;
   }
 
   private Marker parseJsonMarker(JSONObject line)

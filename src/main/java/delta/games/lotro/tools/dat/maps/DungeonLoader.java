@@ -17,6 +17,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
+import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -154,7 +155,7 @@ Dungeon_ParentDungeon: 0
       */
     }
     // Map
-    delta.games.lotro.maps.data.Map map=mapBundle.getMap();
+    GeoreferencedBasemap map=mapBundle.getMap();
     map.setName(name);
 
     float scale=((Float)mapUiProps.getProperty("UI_Map_Scale")).floatValue();
