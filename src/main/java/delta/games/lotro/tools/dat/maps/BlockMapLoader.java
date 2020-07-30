@@ -87,6 +87,11 @@ public class BlockMapLoader
       }
       //System.out.println("Mapping key="+key+" to index="+index);
     }
+    Integer areaDID=(Integer)props.getProperty("Area_DID");
+    if (areaDID==null)
+    {
+      LOGGER.warn("No area DID for land block: "+blockMapDID);
+    }
     int available=bis.available();
     if (available>0)
     {
