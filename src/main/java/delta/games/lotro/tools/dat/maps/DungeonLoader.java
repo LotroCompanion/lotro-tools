@@ -18,8 +18,6 @@ import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
-import delta.games.lotro.maps.data.MapBundle;
-import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -30,27 +28,22 @@ public class DungeonLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DungeonLoader.class);
 
-  private static final String LOCALE="en";
-
   private DataFacade _facade;
   private Map<Integer,Dungeon> _data;
-  private MapsManager _mapsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param mapsManager Maps manager.
    */
-  public DungeonLoader(DataFacade facade, MapsManager mapsManager)
+  public DungeonLoader(DataFacade facade)
   {
     _facade=facade;
     _data=new HashMap<Integer,Dungeon>();
-    _mapsManager=mapsManager;
   }
 
   /**
    * Get the loaded dungeons.
-   * @return the loadeddungeons.
+   * @return the loaded dungeons.
    */
   public List<Dungeon> getDungeons()
   {
@@ -110,12 +103,6 @@ Dungeon_ParentDungeon: 0
       return null;
     }
 
-    // Map
-    String key=String.valueOf(dungeonId);
-    File rootDir=_mapsManager.getMapDir(key);
-    MapBundle mapBundle=new MapBundle(key,rootDir);
-    mapBundle.getData().clear();
-
     // Image
     int imagePropsId=((Integer)dungeonProps.getProperty("Dungeon_MapData")).intValue();
     PropertiesSet imageProps=_facade.loadProperties(imagePropsId);
@@ -134,14 +121,12 @@ Dungeon_ParentDungeon: 0
   UI_Map_PixelOffsetY: 254
   UI_Map_Scale: 3.0000002} 
      */
+    String key=String.valueOf(dungeonId);
     int imageId=((Integer)mapUiProps.getProperty("UI_Map_MapImage")).intValue();
-    File mapRootDir=mapBundle.getRootDir();
-    File to=new File(mapRootDir,"map_"+LOCALE+".png");
-    //File toDir=new File(DUNGEON_IMAGES_DIR,"dungeonImages");
-    //File to=new File(toDir,imageId+".png");
-    if (!to.exists())
+    File imageFile=BasemapUtils.getBasemapImageFile(key);
+    if (!imageFile.exists())
     {
-      DatIconsUtils.buildImageFile(_facade,imageId,to);
+      DatIconsUtils.buildImageFile(_facade,imageId,imageFile);
     }
     Dungeon dungeon=new Dungeon(dungeonId,name,imageId);
     // Parent
@@ -154,18 +139,16 @@ Dungeon_ParentDungeon: 0
       dungeon.setParentDungeon(parentDungeon);
       */
     }
-    // Map
-    GeoreferencedBasemap map=mapBundle.getMap();
-    map.setName(name);
 
     float scale=((Float)mapUiProps.getProperty("UI_Map_Scale")).floatValue();
     //System.out.println("\tScale: "+scale);
     GeoPoint origin=MapUtils.getOrigin(name,scale,mapUiProps);
-    float geo2pixel=scale*20;
+    float geo2pixel=scale*200;
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    map.setGeoReference(geoReference);
-    _mapsManager.addMap(mapBundle);
-
+    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key);
+    basemap.setGeoReference(geoReference);
+    basemap.setName(name);
+    BasemapUtils.saveBaseMap(basemap);
     return dungeon;
   }
 

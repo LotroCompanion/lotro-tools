@@ -73,7 +73,7 @@ public class MapPageParser
     if ((startX!=null) && (startY!=null) && (scale!=null))
     {
       GeoPoint start=new GeoPoint(startX.floatValue(),startY.floatValue());
-      GeoReference reference=new GeoReference(start,scale.floatValue());
+      GeoReference reference=new GeoReference(start,scale.floatValue()*10);
       map.setGeoReference(reference);
     }
   }

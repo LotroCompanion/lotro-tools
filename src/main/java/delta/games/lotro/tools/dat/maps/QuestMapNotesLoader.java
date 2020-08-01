@@ -38,7 +38,7 @@ public class QuestMapNotesLoader
   public QuestMapNotesLoader(DataFacade facade)
   {
     _facade=facade;
-    _dungeonLoader=new DungeonLoader(facade,null);
+    _dungeonLoader=new DungeonLoader(facade);
     _geoAreasLoader=new GeoAreasLoader(facade);
   }
 

@@ -1,7 +1,6 @@
 package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.BitSet;
 
 import org.apache.log4j.Logger;
@@ -22,8 +21,6 @@ import delta.games.lotro.dat.utils.StringUtils;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
-import delta.games.lotro.maps.data.MapBundle;
-import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 
 /**
@@ -35,28 +32,29 @@ public class MapNotesLoader
   private static final Logger LOGGER=Logger.getLogger(MapNotesLoader.class);
 
   private static final int MAP_NOTES_DID=0x0E000006;
-  private static int _counter=1;
 
   private DataFacade _facade;
   //private EnumMapper _mapNoteType;
   //private EnumMapper _mapLevel;
   private DungeonLoader _dungeonLoader;
   private GeoAreasLoader _geoAreasLoader;
-  private MapsManager _mapsManager;
+  private MapsDataManager _mapsDataManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param mapsDataManager Maps data manager.
+   * @param dungeonLoader Loader for dungeons.
+   * @param geoAreasLoader Loader for geographic areas.
    */
-  public MapNotesLoader(DataFacade facade)
+  public MapNotesLoader(DataFacade facade, MapsDataManager mapsDataManager, DungeonLoader dungeonLoader, GeoAreasLoader geoAreasLoader)
   {
     _facade=facade;
+    _mapsDataManager=mapsDataManager;
     //_mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     //_mapLevel=facade.getEnumsManager().getEnumMapper(587202774);
-    File rootDir=new File(new File("data","maps"),"output2");
-    _mapsManager=new MapsManager(rootDir);
-    _dungeonLoader=new DungeonLoader(facade,_mapsManager);
-    _geoAreasLoader=new GeoAreasLoader(facade);
+    _dungeonLoader=dungeonLoader;
+    _geoAreasLoader=geoAreasLoader;
   }
 
   @SuppressWarnings("unused")
@@ -72,7 +70,6 @@ public class MapNotesLoader
       /*Identifiable where=*/getAreaOrDungeon(areaDID);
       //System.out.println("AreaID="+areaDID+" => "+where);
     }
-    MapBundle mapBundle=null;
     // Dungeon ID
     int dungeonDID=BufferUtils.readUInt32(bis);
     if (dungeonDID!=0)
@@ -80,7 +77,6 @@ public class MapNotesLoader
       /*Dungeon dungeon=*/_dungeonLoader.getDungeon(dungeonDID);
       //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+DATConstants.DBPROPERTIES_OFFSET);
       //System.out.println("DungeonID="+dungeonDID+" => "+dungeon.getName());
-      mapBundle=_mapsManager.getMapByKey(String.valueOf(dungeonDID));
     }
 
     // Various depending on what the MapNote represents
@@ -194,19 +190,14 @@ public class MapNotesLoader
         System.out.println("Game specific props: "+gameSpecificProps.dump());
       }
       */
-      if (mapBundle!=null)
-      {
-        Marker marker=new Marker();
-        marker.setId(_counter);
-        _counter++;
-        float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
-        GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
-        marker.setPosition(geoPoint);
-        marker.setLabel(text);
-        int code=typeSet.nextSetBit(0)+1;
-        marker.setCategoryCode(code);
-        mapBundle.getData().addMarker(marker);
-      }
+      Marker marker=new Marker();
+      float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
+      GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
+      marker.setPosition(geoPoint);
+      marker.setLabel(text);
+      int code=typeSet.nextSetBit(0)+1;
+      marker.setCategoryCode(code);
+      _mapsDataManager.registerMarker(dungeonDID,marker);
     }
   }
 
@@ -251,14 +242,12 @@ public class MapNotesLoader
     }
   }
 
-  private void doIt()
+  /**
+   * Do load map notes.
+   */
+  public void doIt()
   {
-    MapCategoriesBuilder builder=new MapCategoriesBuilder(_facade);
-    builder.doIt(_mapsManager);
-    _mapsManager.saveCategories();
     loadMapNotes();
-    _mapsManager.saveMaps();
-    //showDungeons();
   }
 
   /**
@@ -268,7 +257,10 @@ public class MapNotesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    MapNotesLoader loader=new MapNotesLoader(facade);
+    MapsDataManager mapsDataManager=new MapsDataManager();
+    DungeonLoader dungeonLoader=new DungeonLoader(facade);
+    GeoAreasLoader geoAreasLoader=new GeoAreasLoader(facade);
+    MapNotesLoader loader=new MapNotesLoader(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
     loader.doIt();
   }
 }

@@ -54,7 +54,7 @@ public class MapJsonParser
       // Setup map
       GeoreferencedBasemap map=mapBundle.getMap();
       GeoPoint start=new GeoPoint((float)startX,(float)startY);
-      GeoReference reference=new GeoReference(start,(float)scale);
+      GeoReference reference=new GeoReference(start,(float)scale*10);
       map.setGeoReference(reference);
 
       JSONObject nameJson=o.getJSONObject("Name");

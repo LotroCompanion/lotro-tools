@@ -99,8 +99,7 @@ public class MainDynMapLoader
       }
       System.out.println(map.getMap());
       // Write file
-      MapXMLWriter writer=new MapXMLWriter();
-      writer.writeMapFiles(map,EncodingNames.UTF_8);
+      MapXMLWriter.writeMapFiles(map,EncodingNames.UTF_8);
     }
 
     // Write categories file

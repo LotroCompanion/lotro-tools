@@ -3,9 +3,11 @@ package delta.games.lotro.tools.dat.maps;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import delta.common.utils.text.EncodingNames;
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -16,9 +18,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
-import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
-import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -27,12 +27,12 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
  */
 public class MapsSystemLoader
 {
-  private static final String LOCALE="en";
+  private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
+
   private DataFacade _facade;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
-  private File _rootDir;
 
   /**
    * Constructor.
@@ -43,7 +43,6 @@ public class MapsSystemLoader
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
-    _rootDir=new File(new File("data","maps"),"output2");
   }
 
   /**
@@ -86,17 +85,12 @@ public class MapsSystemLoader
     return null;
   }
 
-  private void handleMapProps(PropertiesSet props)
+  private void handleMapProps(PropertiesSet props, int level)
   {
     // ActiveElement
     int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
     String activeElementName=_uiElementId.getString(activeElementId);
     //System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
-
-    String key=String.valueOf(activeElementId);
-    File rootDir=new File(new File(_rootDir,"maps"),key);
-    MapBundle mapBundle=new MapBundle(key,rootDir);
-    GeoreferencedBasemap map=mapBundle.getMap();
 
     // Map name
     String mapName=DatUtils.getStringProperty(props,"UI_Map_MenuName");
@@ -105,18 +99,23 @@ public class MapsSystemLoader
       mapName="?";
     }
     //System.out.println("Map name: "+mapName);
-    map.setName(mapName);
+    for(int i=0;i<level;i++) System.out.print("\t");
+    System.out.println(mapName);
 
+    String key=String.valueOf(activeElementId);
     // Map image
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
     if (imageId!=null)
     {
-      File mapRootDir=mapBundle.getRootDir();
-      File mapImageFile=new File(mapRootDir,"map_"+LOCALE+".png");
-      if (!mapImageFile.exists())
+      File imageFile=BasemapUtils.getBasemapImageFile(key);
+      if (!imageFile.exists())
       {
-        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),mapImageFile);
+        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
       }
+    }
+    else
+    {
+      LOGGER.warn("No map image!");
     }
 
     // Region ID
@@ -137,7 +136,7 @@ public class MapsSystemLoader
     //System.out.println("\tOrigin: "+origin);
     if (origin!=null)
     {
-      geo2pixel=scale*20;
+      geo2pixel=scale*200;
     }
     else
     {
@@ -145,9 +144,13 @@ public class MapsSystemLoader
       geo2pixel=1;
     }
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    map.setGeoReference(geoReference);
+    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key);
+    basemap.setGeoReference(geoReference);
+    basemap.setName(mapName);
+    BasemapUtils.saveBaseMap(basemap);
 
     // Links
+    List<MapLink> links=new ArrayList<MapLink>();
     UIElement uiElement=getUIElementById(activeElementId);
     if (uiElement!=null)
     {
@@ -171,17 +174,14 @@ public class MapsSystemLoader
 
             // Add link
             String target=childMapUI.toString();
-            GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(location.x+32,location.y+32));
+            GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
             MapLink link=new MapLink(target,hotPoint);
-            mapBundle.getLinks().add(link);
+            links.add(link);
           }
         }
       }
     }
-
-    // Write file
-    MapXMLWriter writer=new MapXMLWriter();
-    writer.writeMapFiles(mapBundle,EncodingNames.UTF_8);
+    BasemapUtils.saveLinks(basemap.getKey(),links);
 
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
@@ -200,7 +200,7 @@ public class MapsSystemLoader
       for(Object subMapObj : subMaps)
       {
         PropertiesSet subMapProps=(PropertiesSet)subMapObj;
-        handleMapProps(subMapProps);
+        handleMapProps(subMapProps,level+1);
       }
     }
   }
@@ -211,7 +211,7 @@ public class MapsSystemLoader
     if (props!=null)
     {
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
-      handleMapProps(areaProps);
+      handleMapProps(areaProps,0);
     }
     _geoLoader.getGeoManager().dump();
   }
