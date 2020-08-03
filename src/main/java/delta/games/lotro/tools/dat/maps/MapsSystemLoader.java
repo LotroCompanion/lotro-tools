@@ -156,28 +156,20 @@ public class MapsSystemLoader
     {
       for(UIElement childElement : uiElement.getChildElements())
       {
-        //int childId=childElement.getIdentifier();
-        int childBaseId=childElement.getBaseElementId();
-        //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
-        UIElement baseElement=getUIElementById(childBaseId);
-        if (baseElement!=null)
+        Integer childMapUI=findChildMap(childElement);
+        if (childMapUI!=null)
         {
-          PropertiesSet childProps=baseElement.getProperties();
-          Integer childMapUI=(Integer)childProps.getProperty("UI_Map_Child_Map");
-          if (childMapUI!=null)
-          {
-            //System.out.println("\t\tChild map: "+childMapUI);
-            //String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
-            //System.out.println("\t\tTooltip: "+tooltip);
-            Point location=childElement.getRelativeBounds().getLocation();
-            //System.out.println("\t\tLocation: "+location);
+          //System.out.println("\t\tChild map: "+childMapUI);
+          //String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
+          //System.out.println("\t\tTooltip: "+tooltip);
+          Point location=childElement.getRelativeBounds().getLocation();
+          //System.out.println("\t\tLocation: "+location);
 
-            // Add link
-            String target=childMapUI.toString();
-            GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
-            MapLink link=new MapLink(target,hotPoint);
-            links.add(link);
-          }
+          // Add link
+          String target=childMapUI.toString();
+          GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
+          MapLink link=new MapLink(target,hotPoint);
+          links.add(link);
         }
       }
     }
@@ -203,6 +195,29 @@ public class MapsSystemLoader
         handleMapProps(subMapProps,level+1);
       }
     }
+  }
+
+  private Integer findChildMap(UIElement childElement)
+  {
+    PropertiesSet props=childElement.getProperties();
+    Integer childMapUI=(Integer)props.getProperty("UI_Map_Child_Map");
+    if (childMapUI!=null)
+    {
+      return childMapUI;
+    }
+    //int childId=childElement.getIdentifier();
+    int childBaseId=childElement.getBaseElementId();
+    if (childBaseId==0)
+    {
+      return null;
+    }
+    //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
+    UIElement baseElement=getUIElementById(childBaseId);
+    if (baseElement!=null)
+    {
+      return findChildMap(baseElement);
+    }
+    return null;
   }
 
   private void doIt()
