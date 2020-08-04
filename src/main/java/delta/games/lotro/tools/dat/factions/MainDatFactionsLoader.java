@@ -361,6 +361,7 @@ Reputation_LowestTier: 1
     if (factionId==1879386002) return new String[]{category,"WILDERFOLK",FactionLevelTemplates.CLASSIC}; // Wilderfolk
     if (factionId==1879403792) return new String[]{category,null,null}; // Protectors of Wilderland
     if (factionId==1879407816) return new String[]{category,null,null}; // March on Gundabad
+    if (factionId==1879408300) return new String[]{category,null,null}; // The War Effort
     category="Dunland";
     if (factionId==1879181920) return new String[]{category,"ALGRAIG",FactionLevelTemplates.CLASSIC}; // Algraig, Men of Enedwaith
     if (factionId==1879181919) return new String[]{category,"GREY_COMPANY",FactionLevelTemplates.CLASSIC}; // The Grey Company
@@ -457,7 +458,7 @@ Reputation_LowestTier: 1
       // Eriador
       1879091345,1879091340,1879091408,1879161272,1879091344,1879091346,1879091343,1879103954,1879091341,1879097420,
       // Rhovanion
-      1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,1879403792,1879407816,
+      1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,1879403792,1879407816,1879408300,
       // Dunland
       1879181920,1879181919,1879202077,1879202078,1879227796,1879230121,
       // Rohan
