@@ -247,7 +247,7 @@ public class MapNotesLoader
       marker.setLabel(text);
       int code=typeSet.nextSetBit(0)+1;
       marker.setCategoryCode(code);
-      _mapsDataManager.registerMarker(dungeonDID,marker);
+      _mapsDataManager.registerDidMarker(dungeonDID,marker);
     }
     if (where==null)
     {

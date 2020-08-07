@@ -12,6 +12,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.AchievableGeoData;
+import delta.games.lotro.dat.data.geo.ContentLayerGeoData;
 import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
@@ -1111,7 +1112,8 @@ QuestEvent_ShowProgressText: 0
     List<DatPosition> ret=null;
     if (did!=null)
     {
-      DidGeoData didGeoData=_geoData.getGeoData(did.intValue());
+      ContentLayerGeoData worldData=_geoData.getWorldGeoData();
+      DidGeoData didGeoData=worldData.getGeoData(did.intValue());
       if (didGeoData!=null)
       {
         //System.out.println("\tPositions: "+didGeoData.getPositions());
