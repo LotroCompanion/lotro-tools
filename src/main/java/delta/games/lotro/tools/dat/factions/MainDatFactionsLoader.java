@@ -88,10 +88,10 @@ Reputation_LowestTier: 1
     LOGGER.info("ID: "+factionId+" => "+name);
 
     // Category
-    String[] factionDescription=getCategory(factionId);
-    String category=factionDescription[0];
+    String[] factionDescription=getFactionDescription(factionId);
+    String category=(factionDescription!=null)?factionDescription[0]:"?";
     faction.setCategory(category);
-    String key=factionDescription[1];
+    String key=(factionDescription!=null)?factionDescription[1]:null;
     if (key!=null)
     {
       faction.setLegacyKey(key);
@@ -164,7 +164,7 @@ Reputation_LowestTier: 1
     {
       faction.addFactionLevel(level);
     }
-    String template=factionDescription[2];
+    String template=(factionDescription!=null)?factionDescription[2]:null;
     if (template!=null)
     {
       List<String> levelKeys=_templates.getByKey(template);
@@ -336,7 +336,7 @@ Reputation_LowestTier: 1
     return false;
   }
 
-  private String[] getCategory(int factionId)
+  private String[] getFactionDescription(int factionId)
   {
     String category="Eriador";
     if (factionId==1879091345) return new String[]{category,"SHIRE",FactionLevelTemplates.CLASSIC}; // Shire
