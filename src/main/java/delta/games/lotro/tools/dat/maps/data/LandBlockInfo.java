@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import delta.games.lotro.dat.data.EntityDescriptor;
+import delta.games.lotro.dat.data.PropertiesSet;
 
 /**
  * Land-block info.
@@ -15,6 +16,8 @@ import delta.games.lotro.dat.data.EntityDescriptor;
 public class LandBlockInfo
 {
   private long _id;
+  private PropertiesSet _props;
+  private List<Cell> _cells;
   private Map<Long,EntityDescriptor> _entities;
   private Map<Long,Weenie> _weenies;
   private Map<Long,LbiLink> _links;
@@ -26,6 +29,8 @@ public class LandBlockInfo
   public LandBlockInfo(long id)
   {
     _id=id;
+    _props=new PropertiesSet();
+    _cells=new ArrayList<Cell>();
     _entities=new HashMap<Long,EntityDescriptor>();
     _weenies=new HashMap<Long,Weenie>();
     _links=new HashMap<Long,LbiLink>();
@@ -38,6 +43,33 @@ public class LandBlockInfo
   public long getId()
   {
     return _id;
+  }
+
+  /**
+   * Get the landblock properties.
+   * @return the landblock properties.
+   */
+  public PropertiesSet getProps()
+  {
+    return _props;
+  }
+
+  /**
+   * Add a cell.
+   * @param cell Cell to add.
+   */
+  public void addCell(Cell cell)
+  {
+    _cells.add(cell);
+  }
+
+  /**
+   * Get all cells.
+   * @return A list of managed cells.
+   */
+  public List<Cell> getCells()
+  {
+    return new ArrayList<Cell>(_cells);
   }
 
   /**

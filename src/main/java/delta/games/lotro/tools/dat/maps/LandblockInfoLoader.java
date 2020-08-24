@@ -17,6 +17,7 @@ import delta.games.lotro.dat.loaders.EntityDescLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.tools.dat.maps.data.Cell;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 import delta.games.lotro.tools.dat.maps.data.LbiLink;
 import delta.games.lotro.tools.dat.maps.data.Weenie;
@@ -54,18 +55,19 @@ public class LandblockInfoLoader
    * @param blockY Block coordinate (vertical).
    * @return <code>true</code> if the landblock info exists, <code>false</code> otherwise.
    */
-  private LandBlockInfo loadLandblockInfo(int region, int blockX, int blockY)
+  public LandBlockInfo loadLandblockInfo(int region, int blockX, int blockY)
   {
     long landblockInfoDID=0x80200000L+(region*0x10000)+(blockX*0x100)+blockY;
 
     DatFilesManager datFilesMgr=_facade.getDatFilesManager();
-    DATArchive cell=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
-    byte[] data=cell.loadEntry(landblockInfoDID);
+    DATArchive cellArchive=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
+    byte[] data=cellArchive.loadEntry(landblockInfoDID);
     if (data==null)
     {
       return null;
     }
     //System.out.println("*** Landblock info: region="+region+", blockX="+blockX+", blockY="+blockY);
+    //System.out.println("LBI data length: "+data.length);
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     long did=BufferUtils.readUInt32AsLong(bis);
     if (did!=landblockInfoDID)
@@ -100,7 +102,11 @@ public class LandblockInfoLoader
       //System.out.println("Cells count: "+count);
       for(int i=0;i<count;i++)
       {
-        loadCell(bis);
+        Cell cell=loadCell(bis);
+        if (cell!=null)
+        {
+          ret.addCell(cell);
+        }
       }
     }
     LoaderUtils.readAssert(bis,0);
@@ -128,8 +134,9 @@ public class LandblockInfoLoader
     }
     // Properties
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
-    PropertiesSet props=new PropertiesSet();
+    PropertiesSet props=ret.getProps();
     propsLoader.decodeProperties(bis,props);
+    // No area ID. It is in the LandBlockProperties
 
     LoaderUtils.readAssert(bis,0);
 
@@ -195,7 +202,7 @@ public class LandblockInfoLoader
   }
 
   @SuppressWarnings("unused")
-  private void loadCell(ByteArrayInputStream bis)
+  private Cell loadCell(ByteArrayInputStream bis)
   {
     int index=BufferUtils.readUInt16(bis);
     //System.out.println("Cell index: "+index);
@@ -203,9 +210,9 @@ public class LandblockInfoLoader
     //System.out.println("\tPosition: "+position);
     int flags=BufferUtils.readUInt32(bis);
     int cellMeshDID=BufferUtils.readUInt32(bis);
-    int count=BufferUtils.readUInt32(bis);
+    int neighboursCount=BufferUtils.readUInt32(bis);
     // Neighbours
-    for(int i=0;i<count;i++)
+    for(int i=0;i<neighboursCount;i++)
     {
       loadNeighbours(i,bis);
     }
@@ -225,6 +232,7 @@ public class LandblockInfoLoader
       int[] cellIndices0=readIntegerArray(bis);
       int[] cellIndices1=readIntegerArray(bis);
     }
+    Integer dungeonId=null;
     if ((flags&0x4)!=0)
     {
       DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
@@ -232,6 +240,13 @@ public class LandblockInfoLoader
       propsLoader.decodeProperties(bis,props);
       if (props.getPropertyNames().size()>0)
       {
+        dungeonId=(Integer)props.getProperty("Dungeon_DID");
+        /*
+        if ((dungeonDID!=null) && (dungeonDID.intValue()>0))
+        {
+          System.out.println("Found Dungeon ID: "+dungeonDID+" for cell "+index);
+        }
+        */
         //System.out.println("Cell props: "+props.dump());
         /* {
          * Physics_AdjustableScale=null (vector),
@@ -244,6 +259,11 @@ public class LandblockInfoLoader
          */
       }
     }
+    if (dungeonId!=null)
+    {
+      return new Cell(index,dungeonId.intValue());
+    }
+    return null;
   }
 
   @SuppressWarnings("unused")
