@@ -61,6 +61,10 @@ public class LandblockInfoLoader
 
     DatFilesManager datFilesMgr=_facade.getDatFilesManager();
     DATArchive cellArchive=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
+    if (cellArchive==null)
+    {
+      return null;
+    }
     byte[] data=cellArchive.loadEntry(landblockInfoDID);
     if (data==null)
     {

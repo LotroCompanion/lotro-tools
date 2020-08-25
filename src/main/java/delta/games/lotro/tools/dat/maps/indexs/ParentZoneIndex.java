@@ -12,13 +12,16 @@ import delta.games.lotro.dat.data.DatPosition;
  */
 public class ParentZoneIndex
 {
+  private ParentZonesLoader _loader;
   private Map<String,ParentZoneLandblockData> _index;
 
   /**
    * Constructor.
+   * @param loader Optional loader.
    */
-  public ParentZoneIndex()
+  public ParentZoneIndex(ParentZonesLoader loader)
   {
+    _loader=loader;
     _index=new HashMap<String,ParentZoneLandblockData>();
   }
 
@@ -34,10 +37,22 @@ public class ParentZoneIndex
    * @param blockY Block Y.
    * @return A data storage or <code>null</code>.
    */
-  public ParentZoneLandblockData getLbiData(int region, int blockX, int blockY)
+  public ParentZoneLandblockData getLandblockData(int region, int blockX, int blockY)
   {
     String key=getKey(region,blockX,blockY);
-    return _index.get(key);
+    ParentZoneLandblockData data=_index.get(key);
+    if (data==null)
+    {
+      if (_loader!=null)
+      {
+        data=_loader.buildLandblockData(region,blockX,blockY);
+        if (data!=null)
+        {
+          _index.put(key,data);
+        }
+      }
+    }
+    return data;
   }
 
   /**
@@ -63,24 +78,11 @@ public class ParentZoneIndex
     int region=position.getRegion();
     int blockX=position.getBlockX();
     int blockY=position.getBlockY();
-    ParentZoneLandblockData data=getLbiData(region,blockX,blockY);
-    if (data==null)
-    {
-      return null;
-    }
+    ParentZoneLandblockData data=getLandblockData(region,blockX,blockY);
     Integer ret=null;
-    int cell=position.getCell();
-    if (cell>0)
+    if (data!=null)
     {
-      ret=data.getCellDungeon(cell);
-    }
-    if (ret==null)
-    {
-      ret=data.getParentDungeon();
-    }
-    if (ret==null)
-    {
-      ret=data.getParentArea();
+      ret=data.getParentData(position.getCell());
     }
     return ret;
   }

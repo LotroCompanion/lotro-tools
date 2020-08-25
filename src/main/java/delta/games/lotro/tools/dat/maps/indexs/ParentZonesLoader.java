@@ -32,7 +32,7 @@ public class ParentZonesLoader
    */
   public ParentZoneIndex buildIndex()
   {
-    ParentZoneIndex index=new ParentZoneIndex();
+    ParentZoneIndex index=new ParentZoneIndex(this);
     int nbBlocks=0;
     for(int region=1;region<=4;region++)
     {
@@ -40,11 +40,9 @@ public class ParentZonesLoader
       {
         for(int blockY=0;blockY<=0xFE;blockY++)
         {
-          ParentZoneLandblockData data=buildLandblockData(region,blockX,blockY);
+          ParentZoneLandblockData data=index.getLandblockData(region,blockX,blockY);
           if (data!=null)
           {
-            index.registerLandblockData(region,blockX,blockY,data);
-            //System.out.println("R="+region+", bx="+blockX+", by="+blockY+" => "+zoneData);
             nbBlocks++;
           }
         }

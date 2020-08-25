@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +29,9 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
  * Loader for map notes.
@@ -45,6 +49,7 @@ public class MapNotesLoader
   private EnumMapper _mapLevel;
   private DungeonLoader _dungeonLoader;
   private GeoAreasLoader _geoAreasLoader;
+  private ParentZoneIndex _parentZonesIndex;
   private MapsDataManager _mapsDataManager;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
 
@@ -63,6 +68,8 @@ public class MapNotesLoader
     _mapLevel=facade.getEnumsManager().getEnumMapper(587202774);
     _dungeonLoader=dungeonLoader;
     _geoAreasLoader=geoAreasLoader;
+    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
+    _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
   }
 
   private void loadMapNote(ByteArrayInputStream bis)
@@ -124,6 +131,7 @@ public class MapNotesLoader
     int[] key=(int[])stringinfo;
     String[] labelArray=_facade.getStringsManager().resolveStringInfo(key[0],key[1]);
     String text=StringUtils.stringArrayToString(labelArray);
+    text=delta.games.lotro.utils.StringUtils.fixName(text);
     // Icon
     int iconId=BufferUtils.readUInt32(bis);
     // Level
@@ -224,19 +232,35 @@ public class MapNotesLoader
       if ((region<1) || (region>4))
       {
         LOGGER.warn("Weird region value: "+region);
+        return;
       }
       int instance=position.getInstance();
       if (instance!=0)
       {
         LOGGER.warn("Instance is not 0 for position: "+position);
       }
+      if (where==null)
+      {
+        LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
+      }
       int cell=position.getCell();
+      ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
+      if (parentData==null)
+      {
+        LOGGER.warn("No parent data for: "+position);
+      }
       if (cell!=0)
       {
         if (!(where instanceof Dungeon))
         {
           //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
         }
+      }
+      Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
+      Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
+      if (!Objects.equals(whereId,parentArea))
+      {
+        LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
       }
       // Build marker
       Marker marker=new Marker();
@@ -248,10 +272,7 @@ public class MapNotesLoader
       int code=typeSet.nextSetBit(0)+1;
       marker.setCategoryCode(code);
       _mapsDataManager.registerDidMarker(dungeonDID,marker);
-    }
-    if (where==null)
-    {
-      LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
+      _mapsDataManager.registerWorldMarker(position.getRegion(),marker);
     }
   }
 

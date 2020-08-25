@@ -77,6 +77,29 @@ public class ParentZoneLandblockData
     _parentArea=Integer.valueOf(areaId);
   }
 
+  /**
+   * Get the parent zone identifier.
+   * @param cell Cell index to use.
+   * @return A parent zone identifier or <code>null</code>.
+   */
+  public Integer getParentData(int cell)
+  {
+    Integer ret=null;
+    if (cell>0)
+    {
+      ret=getCellDungeon(cell);
+      if (ret==null)
+      {
+        ret=getParentDungeon();
+      }
+    }
+    if (ret==null)
+    {
+      ret=getParentArea();
+    }
+    return ret;
+  }
+
   @Override
   public String toString()
   {
