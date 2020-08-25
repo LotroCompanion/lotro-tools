@@ -14,6 +14,9 @@ import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
  * Loader for maps data.
@@ -28,6 +31,7 @@ public class MapsDataLoader
   // Loaders
   private DungeonLoader _dungeonLoader;
   private GeoAreasLoader _geoAreasLoader;
+  private ParentZoneIndex _parentZonesIndex;
 
   /**
    * Constructor.
@@ -39,6 +43,8 @@ public class MapsDataLoader
     _mapsDataMgr=new MapsDataManager();
     _dungeonLoader=new DungeonLoader(facade);
     _geoAreasLoader=new GeoAreasLoader(facade);
+    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
+    _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
   }
 
   /**
@@ -56,7 +62,7 @@ public class MapsDataLoader
     GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
     loadPositions(data);
     // Save markers
-    _mapsDataMgr.writeMarkers();
+    _mapsDataMgr.write();
   }
 
   private void initCategories(MapsManager mapsManager)
@@ -97,25 +103,29 @@ public class MapsDataLoader
         {
           continue;
         }
-        if (marker!=null)
+        int region=position.getRegion();
+        if ((region<1) || (region>4))
         {
-          int region=position.getRegion();
-          if ((region>=1) && (region<=4))
-          {
-            if (layerId==0)
-            {
-              _mapsDataMgr.registerWorldMarker(region,marker);
-            }
-            else
-            {
-              _mapsDataMgr.registerContentLayerMarker(layerId,marker);
-            }
-          }
-          else
-          {
-            LOGGER.warn("Found unsupported region: "+region);
-          }
+          LOGGER.warn("Found unsupported region: "+region);
+          continue;
         }
+        ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
+        if (parentData==null)
+        {
+          LOGGER.warn("No parent data for: "+position);
+          continue;
+        }
+        _mapsDataMgr.registerMarker(marker);
+        // Indexs
+        // - parent zone
+        int cell=position.getCell();
+        Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
+        if (parentArea!=null)
+        {
+          _mapsDataMgr.registerDidMarker(parentArea.intValue(),marker);
+        }
+        // - content layer
+        _mapsDataMgr.registerContentLayerMarker(layerId,marker);
       }
     }
   }

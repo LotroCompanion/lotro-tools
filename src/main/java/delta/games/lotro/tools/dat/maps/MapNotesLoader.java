@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -29,9 +28,6 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
  * Loader for map notes.
@@ -49,7 +45,7 @@ public class MapNotesLoader
   private EnumMapper _mapLevel;
   private DungeonLoader _dungeonLoader;
   private GeoAreasLoader _geoAreasLoader;
-  private ParentZoneIndex _parentZonesIndex;
+  //private ParentZoneIndex _parentZonesIndex;
   private MapsDataManager _mapsDataManager;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
 
@@ -68,8 +64,10 @@ public class MapNotesLoader
     _mapLevel=facade.getEnumsManager().getEnumMapper(587202774);
     _dungeonLoader=dungeonLoader;
     _geoAreasLoader=geoAreasLoader;
+    /*
     ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
     _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
+    */
   }
 
   private void loadMapNote(ByteArrayInputStream bis)
@@ -242,26 +240,29 @@ public class MapNotesLoader
       if (where==null)
       {
         LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
+        return;
       }
       int cell=position.getCell();
+      /*
       ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
       if (parentData==null)
       {
         LOGGER.warn("No parent data for: "+position);
       }
-      if (cell!=0)
+      */
+      if ((cell!=0) && (!(where instanceof Dungeon)))
       {
-        if (!(where instanceof Dungeon))
-        {
-          //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
-        }
+        // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
+        //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
       }
+      /*
       Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
       Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
       if (!Objects.equals(whereId,parentArea))
       {
         LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
       }
+      */
       // Build marker
       Marker marker=new Marker();
       float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
@@ -271,8 +272,25 @@ public class MapNotesLoader
       marker.setLabel(text);
       int code=typeSet.nextSetBit(0)+1;
       marker.setCategoryCode(code);
-      _mapsDataManager.registerDidMarker(dungeonDID,marker);
-      _mapsDataManager.registerWorldMarker(position.getRegion(),marker);
+      // Register this marker
+      _mapsDataManager.registerMarker(marker);
+      // Indexs
+      // - parent zone
+      _mapsDataManager.registerDidMarker(where.getIdentifier(),marker);
+      // - content layer
+      if ((contentLayersArray!=null) && (contentLayersArray.length>0))
+      {
+        for(Object contentLayerObj : contentLayersArray)
+        {
+          int layerId=((Integer)contentLayerObj).intValue();
+          _mapsDataManager.registerContentLayerMarker(layerId,marker);
+        }
+      }
+      else
+      {
+        // World
+        _mapsDataManager.registerContentLayerMarker(0,marker);
+      }
     }
   }
 
@@ -314,6 +332,7 @@ public class MapNotesLoader
     {
       LOGGER.warn("Available bytes: "+available);
     }
+    _mapsDataManager.write();
   }
 
   /**
