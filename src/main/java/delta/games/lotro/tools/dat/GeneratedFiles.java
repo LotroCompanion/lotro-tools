@@ -251,4 +251,8 @@ public class GeneratedFiles
    * Area icons.
    */
   public static final File AREA_ICONS=new File("../lotro-data/maps/areaIcons.zip").getAbsoluteFile();
+  /**
+   * Parchment maps.
+   */
+  public static final File PARCHMENT_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.PARCHMENT_MAPS);
 }

@@ -134,10 +134,6 @@ Dungeon_ParentDungeon: 0
     if ((parentDungeonId!=null) && (parentDungeonId.intValue()!=0))
     {
       LOGGER.warn("Dungeon "+dungeonId+" HAS a parent dungeon: "+parentDungeonId+"!");
-      /*
-      Dungeon parentDungeon=getDungeon(parentDungeonId.intValue());
-      dungeon.setParentDungeon(parentDungeon);
-      */
     }
 
     float scale=((Float)mapUiProps.getProperty("UI_Map_Scale")).floatValue();

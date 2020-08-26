@@ -74,6 +74,10 @@ public class GeoAreasLoader
     //System.out.println(areaProps.dump());
     // Name
     String areaName=DatUtils.getStringProperty(areaProps,"Area_Name");
+    if (areaName==null)
+    {
+      return null;
+    }
     //System.out.println("\tArea name: "+areaName);
     // Icon
     Integer imageId=(Integer)areaProps.getProperty("Area_Icon");

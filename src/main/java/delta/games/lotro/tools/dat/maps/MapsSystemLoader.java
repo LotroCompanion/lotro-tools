@@ -15,10 +15,14 @@ import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.ParchmentMap;
+import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapLink;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -33,6 +37,7 @@ public class MapsSystemLoader
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
+  private List<ParchmentMap> _maps;
 
   /**
    * Constructor.
@@ -43,6 +48,7 @@ public class MapsSystemLoader
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
+    _maps=new ArrayList<ParchmentMap>();
   }
 
   /**
@@ -175,6 +181,8 @@ public class MapsSystemLoader
     }
     BasemapUtils.saveLinks(basemap.getKey(),links);
 
+    ParchmentMap parchmentMap=new ParchmentMap(activeElementId,mapName);
+    _maps.add(parchmentMap);
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
     if (areas!=null)
@@ -182,7 +190,11 @@ public class MapsSystemLoader
       for(Object areaIdObj : areas)
       {
         int areaId=((Integer)areaIdObj).intValue();
-        _geoLoader.getArea(areaId);
+        Area area=_geoLoader.getArea(areaId);
+        if (area!=null)
+        {
+          parchmentMap.addArea(area);
+        }
       }
     }
     // Sub maps
@@ -228,7 +240,13 @@ public class MapsSystemLoader
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
       handleMapProps(areaProps,0);
     }
-    _geoLoader.getGeoManager().dump();
+    // Save parchment maps
+    boolean ok=ParchmentMapsXMLWriter.writeParchmentMapsFile(GeneratedFiles.PARCHMENT_MAPS,_maps);
+    if (ok)
+    {
+      System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
+    }
+    //_geoLoader.getGeoManager().dump();
   }
 
   /**
