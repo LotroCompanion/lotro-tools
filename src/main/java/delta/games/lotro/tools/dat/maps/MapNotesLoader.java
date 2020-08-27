@@ -11,23 +11,16 @@ import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.LoaderUtils;
-import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.loaders.PropertyUtils;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.dat.utils.StringUtils;
-import delta.games.lotro.lore.maps.Area;
-import delta.games.lotro.lore.maps.Dungeon;
-import delta.games.lotro.maps.data.GeoPoint;
-import delta.games.lotro.maps.data.Marker;
 
 /**
  * Loader for map notes.
@@ -41,78 +34,33 @@ public class MapNotesLoader
   private static final int MAP_NOTES_DID=0x0E000006;
 
   private DataFacade _facade;
-  private EnumMapper _mapNoteType;
   private EnumMapper _mapLevel;
-  private DungeonLoader _dungeonLoader;
-  private GeoAreasLoader _geoAreasLoader;
-  //private ParentZoneIndex _parentZonesIndex;
-  private MapsDataManager _mapsDataManager;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
+  private MarkersLoadingUtils _markersUtils;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param mapsDataManager Maps data manager.
-   * @param dungeonLoader Loader for dungeons.
-   * @param geoAreasLoader Loader for geographic areas.
+   * @param markersUtils Markers utils.
    */
-  public MapNotesLoader(DataFacade facade, MapsDataManager mapsDataManager, DungeonLoader dungeonLoader, GeoAreasLoader geoAreasLoader)
+  public MapNotesLoader(DataFacade facade, MarkersLoadingUtils markersUtils)
   {
     _facade=facade;
-    _mapsDataManager=mapsDataManager;
-    _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     _mapLevel=facade.getEnumsManager().getEnumMapper(587202774);
-    _dungeonLoader=dungeonLoader;
-    _geoAreasLoader=geoAreasLoader;
-    /*
-    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
-    _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
-    */
+    _markersUtils=markersUtils;
   }
 
   private void loadMapNote(ByteArrayInputStream bis)
   {
+    // Position
     DatPosition position=GeoLoader.readPosition(bis);
-    Identifiable where=null;
     // Area ID
     int areaDID=BufferUtils.readUInt32(bis);
-    Identifiable area=null;
-    if (areaDID!=0)
-    {
-      where=getAreaOrDungeon(areaDID);
-      area=where;
-    }
-    if (area==null)
-    {
-      LOGGER.warn("Area is null: ID="+areaDID);
-    }
     // Dungeon ID
     int dungeonDID=BufferUtils.readUInt32(bis);
-    Identifiable dungeon=null;
-    if (dungeonDID!=0)
-    {
-      where=_dungeonLoader.getDungeon(dungeonDID);
-      dungeon=where;
-    }
 
     // Associated data ID
     int noteDID=BufferUtils.readUInt32(bis);
-    DataIdentification dataId=null;
-    if (noteDID!=0)
-    {
-      // {Milestone=327, Landmark=2459, Waypoint=1308, DoorTemplate=874, IItem=857, Hotspot=267, NPCTemplate=4273}
-      dataId=DataIdentificationTools.identify(_facade,noteDID);
-      if (VERBOSE)
-      {
-        IntegerHolder counter=_typesCount.get(dataId.getWClassName());
-        if (counter==null)
-        {
-          counter=new IntegerHolder();
-          _typesCount.put(dataId.getWClassName(),counter);
-        }
-        counter.increment();
-      }
-    }
 
     // Properties
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
@@ -142,21 +90,7 @@ public class MapNotesLoader
     if (VERBOSE)
     {
       System.out.println("****** Map note:");
-      System.out.println("Position: "+position);
-      System.out.println("Area: "+area);
-      if (dungeon!=null)
-      {
-        System.out.println("Dungeon: "+dungeon);
-      }
-      System.out.println("Data ID: "+dataId);
-      if ((contentLayersArray!=null) && (contentLayersArray.length>0))
-      {
-        System.out.println("Content layers properties: "+contentLayersProperties);
-      }
-      if ((text!=null) && (text.length()>0))
-      {
-        System.out.println("Text: "+text);
-      }
+      _markersUtils.log(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
       if (iconId!=0)
       {
         System.out.println("IconID: "+iconId);
@@ -174,7 +108,7 @@ public class MapNotesLoader
       DatPosition destPosition=GeoLoader.readPosition(bis);
       // Dest area: is a Dungeon (most of the time) or an Area
       int destAreaId=BufferUtils.readUInt32(bis);
-      Identifiable destArea=getAreaOrDungeon(destAreaId);
+      Identifiable destArea=_markersUtils.getAreaOrDungeon(destAreaId);
       if (destArea==null)
       {
         LOGGER.warn("Destination area not found: "+destAreaId);
@@ -200,7 +134,6 @@ public class MapNotesLoader
     }
     else
     {
-      BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
       float minRange=BufferUtils.readFloat(bis);
       float maxRange=BufferUtils.readFloat(bis);
       int discoverableMapNoteIndex=BufferUtils.readUInt32(bis);
@@ -209,8 +142,6 @@ public class MapNotesLoader
 
       if (VERBOSE)
       {
-        String typeStr=BitSetUtils.getStringFromBitSet(typeSet,_mapNoteType," / ");
-        System.out.println("Type: "+type+" => "+typeStr);
         if ((minRange>0) || (maxRange>0))
         {
           System.out.println("Range: min="+minRange+", max="+maxRange);
@@ -224,89 +155,8 @@ public class MapNotesLoader
           System.out.println("Game specific props: "+gameSpecificProps.dump());
         }
       }
-
-      // Checks
-      int region=position.getRegion();
-      if ((region<1) || (region>4))
-      {
-        LOGGER.warn("Weird region value: "+region);
-        return;
-      }
-      int instance=position.getInstance();
-      if (instance!=0)
-      {
-        LOGGER.warn("Instance is not 0 for position: "+position);
-      }
-      if (where==null)
-      {
-        LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
-        return;
-      }
-      int cell=position.getCell();
-      /*
-      ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
-      if (parentData==null)
-      {
-        LOGGER.warn("No parent data for: "+position);
-      }
-      */
-      if ((cell!=0) && (!(where instanceof Dungeon)))
-      {
-        // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
-        //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
-      }
-      /*
-      Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
-      Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
-      if (!Objects.equals(whereId,parentArea))
-      {
-        LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
-      }
-      */
-      // Build marker
-      Marker marker=new Marker();
-      float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
-      GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
-      marker.setDid(noteDID);
-      marker.setPosition(geoPoint);
-      marker.setLabel(text);
-      int code=typeSet.nextSetBit(0)+1;
-      marker.setCategoryCode(code);
-      // Register this marker
-      _mapsDataManager.registerMarker(marker);
-      // Indexs
-      // - parent zone
-      _mapsDataManager.registerDidMarker(where.getIdentifier(),marker);
-      // - content layer
-      if ((contentLayersArray!=null) && (contentLayersArray.length>0))
-      {
-        for(Object contentLayerObj : contentLayersArray)
-        {
-          int layerId=((Integer)contentLayerObj).intValue();
-          _mapsDataManager.registerContentLayerMarker(layerId,marker);
-        }
-      }
-      else
-      {
-        // World
-        _mapsDataManager.registerContentLayerMarker(0,marker);
-      }
+      _markersUtils.loadMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
     }
-  }
-
-  private Identifiable getAreaOrDungeon(int id)
-  {
-    Dungeon dungeon=_dungeonLoader.getDungeon(id);
-    if (dungeon!=null)
-    {
-      return dungeon;
-    }
-    Area area=_geoAreasLoader.getArea(id);
-    if (area!=null)
-    {
-      return area;
-    }
-    return null;
   }
 
   /**
@@ -332,7 +182,6 @@ public class MapNotesLoader
     {
       LOGGER.warn("Available bytes: "+available);
     }
-    _mapsDataManager.write();
   }
 
   /**
@@ -354,7 +203,9 @@ public class MapNotesLoader
     MapsDataManager mapsDataManager=new MapsDataManager();
     DungeonLoader dungeonLoader=new DungeonLoader(facade);
     GeoAreasLoader geoAreasLoader=new GeoAreasLoader(facade);
-    MapNotesLoader loader=new MapNotesLoader(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
+    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
+    MapNotesLoader loader=new MapNotesLoader(facade,markersUtils);
     loader.doIt();
+    mapsDataManager.write();
   }
 }

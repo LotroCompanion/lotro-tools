@@ -55,12 +55,16 @@ public class MapsDataLoader
     // Categories
     MapsManager mapsManager=_mapsDataMgr.getMapsManager();
     initCategories(mapsManager);
+    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,_dungeonLoader,_geoAreasLoader);
     // Map notes
-    MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,_mapsDataMgr,_dungeonLoader,_geoAreasLoader);
+    MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,markersUtils);
     mapNotesLoader.doIt();
     // Quest Event Target Locations
     GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
     loadPositions(data);
+    // Quest map notes
+    QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,markersUtils);
+    questMapNotesLoader.doIt();
     // Save markers
     _mapsDataMgr.write();
   }

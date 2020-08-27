@@ -2,20 +2,13 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.log4j.Logger;
-
-import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.dat.utils.DataIdentificationTools;
-import delta.games.lotro.lore.maps.Area;
-import delta.games.lotro.lore.maps.Dungeon;
 
 /**
  * Loader for quest map notes.
@@ -23,100 +16,59 @@ import delta.games.lotro.lore.maps.Dungeon;
  */
 public class QuestMapNotesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MapNotesLoader.class);
-
+  private static final boolean VERBOSE=false;
   private static final int QUEST_MAP_NOTES_DID=0x0E400000;
 
   private DataFacade _facade;
-  private DungeonLoader _dungeonLoader;
-  private GeoAreasLoader _geoAreasLoader;
+  private MarkersLoadingUtils _markersUtils;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param markersUtils Markers utils.
    */
-  public QuestMapNotesLoader(DataFacade facade)
+  public QuestMapNotesLoader(DataFacade facade, MarkersLoadingUtils markersUtils)
   {
     _facade=facade;
-    _dungeonLoader=new DungeonLoader(facade);
-    _geoAreasLoader=new GeoAreasLoader(facade);
+    _markersUtils=markersUtils;
   }
 
   private void loadQuestMapNote(ByteArrayInputStream bis)
   {
-    System.out.println("****** Quest map note:");
+    // Position
     DatPosition position=GeoLoader.readPosition(bis);
-    System.out.println("Position: "+position);
     // Area ID
     int areaDID=BufferUtils.readUInt32(bis);
-    if (areaDID!=0)
-    {
-      Identifiable where=getAreaOrDungeon(areaDID); // Area or dungeon
-      if (where==null)
-      {
-        LOGGER.warn("Area/dungeon not found: "+areaDID);
-      }
-      System.out.println("AreaID="+areaDID+" => "+where);
-    }
     // Dungeon ID
     int dungeonDID=BufferUtils.readUInt32(bis);
-    if (dungeonDID!=0)
-    {
-      Dungeon dungeon=_dungeonLoader.getDungeon(dungeonDID);
-      if (dungeon==null)
-      {
-        LOGGER.warn("Dungeon not found: "+dungeonDID);
-      }
-      //PropertiesSet dungeonProps=_facade.loadProperties(dungeonWStateID+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println("DungeonID="+dungeonDID+" => "+dungeon.getName());
-    }
 
-    // Various depending on what the MapNote represents
+    // Associated data ID
     int noteDID=BufferUtils.readUInt32(bis);
-    if (noteDID!=0)
-    {
-      DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
-      System.out.println("Note: "+dataId);
-    }
-    else
-    {
-      LOGGER.warn("No note DID for a quest map note!");
-    }
 
+    // Properties
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
 
     // Get content layers properties (Object[] with Integers)
+    Object[] contentLayersArray=null;
     PropertyValue contentLayersProperties=propsLoader.decodeProperty(bis,false);
     if (contentLayersProperties!=null)
     {
-      Object[] contentLayersArray=(Object[])contentLayersProperties.getValue();
-      if (contentLayersArray.length>0)
-      {
-        System.out.println("Content layers properties: "+contentLayersProperties);
-      }
+      contentLayersArray=(Object[])contentLayersProperties.getValue();
     }
+
     PropertiesSet questDispenserInfo=new PropertiesSet();
     propsLoader.decodeProperties(bis,questDispenserInfo);
-    if (questDispenserInfo.getPropertyNames().size()>0)
-    {
-      System.out.println("Quest dispenser info: "+questDispenserInfo.dump());
-    }
-  }
 
-  private Identifiable getAreaOrDungeon(int id)
-  {
-    Dungeon dungeon=_dungeonLoader.getDungeon(id);
-    if (dungeon!=null)
+    if (VERBOSE)
     {
-      return dungeon;
+      System.out.println("****** Quest map note:");
+      _markersUtils.log(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
+      if (questDispenserInfo.getPropertyNames().size()>0)
+      {
+        System.out.println("Quest dispenser info: "+questDispenserInfo.dump());
+      }
     }
-    Area area=_geoAreasLoader.getArea(id);
-    if (area!=null)
-    {
-      return area;
-    }
-    LOGGER.warn("Unidentified geo entity: "+id);
-    return null;
+    _markersUtils.loadMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
   }
 
   /**
@@ -139,7 +91,10 @@ public class QuestMapNotesLoader
     }
   }
 
-  private void doIt()
+  /**
+   * Do load quest map notes.
+   */
+  public void doIt()
   {
     loadQuestMapNotes();
   }
@@ -151,7 +106,12 @@ public class QuestMapNotesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    QuestMapNotesLoader loader=new QuestMapNotesLoader(facade);
+    MapsDataManager mapsDataManager=new MapsDataManager();
+    DungeonLoader dungeonLoader=new DungeonLoader(facade);
+    GeoAreasLoader geoAreasLoader=new GeoAreasLoader(facade);
+    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
+    QuestMapNotesLoader loader=new QuestMapNotesLoader(facade,markersUtils);
     loader.doIt();
+    mapsDataManager.write();
   }
 }
