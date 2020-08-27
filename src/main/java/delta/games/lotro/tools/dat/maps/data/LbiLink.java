@@ -128,7 +128,7 @@ public class LbiLink
     }
     if (_name!=null)
     {
-      sb.append(" name=").append(_name);
+      sb.append(" name='").append(_name).append('\'');
     }
     if (_fromIid!=0)
     {

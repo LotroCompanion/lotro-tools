@@ -28,6 +28,35 @@ public class LbiInspector
     checkOrphanWeenies(lbi);
   }
 
+  /**
+   * Dump the contents of a landblock.
+   * @param lbi Landblock info.
+   */
+  public void dump(LandBlockInfo lbi)
+  {
+    // Entities
+    List<EntityDescriptor> entities=lbi.getEntities();
+    System.out.println("Entities:");
+    for(EntityDescriptor entity : entities)
+    {
+      System.out.println("\t"+entity);
+    }
+    // Links
+    List<LbiLink> links=lbi.getLinks();
+    System.out.println("Links:");
+    for(LbiLink link : links)
+    {
+      System.out.println("\t"+link);
+    }
+    // Weenies
+    List<Weenie> weenies=lbi.getWeenies();
+    System.out.println("Weenies:");
+    for(Weenie weenie : weenies)
+    {
+      System.out.println("\t"+weenie);
+    }
+  }
+
   private void checkEntities(LandBlockInfo lbi)
   {
     // Iterate on entities

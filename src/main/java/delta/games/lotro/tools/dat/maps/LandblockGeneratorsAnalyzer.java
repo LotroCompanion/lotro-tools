@@ -1,0 +1,93 @@
+package delta.games.lotro.tools.dat.maps;
+
+import java.util.Set;
+
+import delta.games.lotro.dat.data.DatPosition;
+import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.DataIdentification;
+import delta.games.lotro.dat.data.EntityDescriptor;
+import delta.games.lotro.dat.data.Vector3D;
+import delta.games.lotro.dat.utils.DataIdentificationTools;
+import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
+import delta.games.lotro.tools.dat.maps.data.LbiLink;
+import delta.games.lotro.tools.dat.maps.data.Weenie;
+
+/**
+ * Analyzer for generators found in a landblock.
+ * @author DAM
+ */
+public class LandblockGeneratorsAnalyzer
+{
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public LandblockGeneratorsAnalyzer(DataFacade facade)
+  {
+    _facade=facade;
+  }
+
+  /**
+   * Handle a landblock.
+   * @param lbi Landblock to use.
+   */
+  public void handleLandblock(LandBlockInfo lbi)
+  {
+    for(EntityDescriptor entity : lbi.getEntities())
+    {
+      if ("GeneratorPoint".equals(entity.getType()))
+      {
+        handleEntity(entity,lbi);
+      }
+    }
+  }
+
+  private void handleEntity(EntityDescriptor entity, LandBlockInfo lbi)
+  {
+    long entityId=entity.getIid();
+    // Find link with type "Generator_PositionSet" and "To"=entityId
+    for(LbiLink link : lbi.getLinks())
+    {
+      if ((link.getToIid()==entityId) && ("Generator_PositionSet".equals(link.getType())))
+      {
+        long from=link.getFromIid();
+        // Search weenie:
+        Weenie weenie=lbi.getWeenieByIid(from);
+        if (weenie!=null)
+        {
+          Set<Integer> dids=weenie.getGeneratorDids();
+          if ((dids!=null) && (dids.size()>0))
+          {
+            for(Integer did : dids)
+            {
+              buildMarker(lbi,entity,did.intValue());
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private DatPosition buildPosition(LandBlockInfo lbi, EntityDescriptor entity)
+  {
+    int region=lbi.getRegion();
+    int blockX=lbi.getBlockX();
+    int blockY=lbi.getBlockY();
+    DatPosition position=new DatPosition();
+    position.setRegion(region);
+    position.setBlock(blockX,blockY);
+    Vector3D pos=entity.getPosition();
+    position.setPosition(pos.getX(),pos.getY(),pos.getZ());
+    // Cell?
+    return position;
+  }
+
+  private void buildMarker(LandBlockInfo lbi, EntityDescriptor entity, int did)
+  {
+    DatPosition position=buildPosition(lbi,entity);
+    DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
+    System.out.println("Found "+dataId+" at "+position);
+  }
+}

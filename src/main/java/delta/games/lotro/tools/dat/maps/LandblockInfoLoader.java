@@ -290,7 +290,6 @@ public class LandblockInfoLoader
   private EntityDescriptor loadStaticEntity(ByteArrayInputStream bis)
   {
     EntityDescriptor entity=EntityDescLoader.decodeEntityDesc(_facade,bis,false);
-    //System.out.println("Loaded entity: "+entity);
     /*
     int physObjDid=entity.getPhysObjDid();
     if ((physObjDid>=0x47000000) && (physObjDid<=0x47FFFFFF))
@@ -329,7 +328,6 @@ public class LandblockInfoLoader
     PropertiesSet props=new PropertiesSet();
     propsLoader.decodeProperties(bis,props);
     link.setProps(props);
-    //System.out.println("Loaded link: "+link);
     boolean isCrossLandblock=BufferUtils.readBoolean(bis);
     if (isCrossLandblock)
     {
@@ -361,7 +359,6 @@ public class LandblockInfoLoader
     {
       weenie.setGeneratorDids(ids);
     }
-    //System.out.println("Loaded weenie: "+weenie);
     return weenie;
   }
 
@@ -390,48 +387,5 @@ public class LandblockInfoLoader
 
     LOGGER.warn("Unmanaged link code: "+code);
     return "? "+code+" ?";
-  }
-
-  private void handleLandBlock(int region, int blockX, int blockY)
-  {
-    //System.out.println("Using region "+region+", block X="+blockX+",Y="+blockY);
-    LandBlockInfo lbi=loadLandblockInfo(region,blockX,blockY);
-    if (lbi!=null)
-    {
-      //LbiInspector resolver=new LbiInspector();
-      //resolver.handleLbi(lbi);
-    }
-  }
-
-  private void doIt()
-  {
-    /*
-    handleLandBlock(1,1,208);
-    handleLandBlock(2,0x6D,0x9A);
-    handleLandBlock(1,122,117);
-    handleLandBlock(1,5,250);
-    handleLandBlock(1,6,250);
-    */
-    for(int region=1;region<=4;region++)
-    {
-      for(int blockX=0;blockX<=0xFE;blockX++)
-      {
-        for(int blockY=0;blockY<=0xFE;blockY++)
-        {
-          handleLandBlock(region,blockX,blockY);
-        }
-      }
-    }
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    LandblockInfoLoader loader=new LandblockInfoLoader(facade);
-    loader.doIt();
   }
 }

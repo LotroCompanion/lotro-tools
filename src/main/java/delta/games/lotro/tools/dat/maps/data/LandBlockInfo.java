@@ -46,6 +46,33 @@ public class LandBlockInfo
   }
 
   /**
+   * Get the region of this landblock.
+   * @return a region code.
+   */
+  public int getRegion()
+  {
+    return (int)(_id&0xF0000)>>16;
+  }
+
+  /**
+   * Get the X-block for this landblock.
+   * @return a X block value.
+   */
+  public int getBlockX()
+  {
+    return (int)(_id&0xFF00)>>8;
+  }
+
+  /**
+   * Get the Y-block for this landblock.
+   * @return a Y block value.
+   */
+  public int getBlockY()
+  {
+    return (int)(_id&0xFF);
+  }
+
+  /**
    * Get the landblock properties.
    * @return the landblock properties.
    */
