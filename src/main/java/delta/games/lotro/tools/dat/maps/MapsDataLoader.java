@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
+import delta.games.lotro.dat.data.geo.AchievableGeoData;
+import delta.games.lotro.dat.data.geo.AchievableGeoDataItem;
 import delta.games.lotro.dat.data.geo.ContentLayerGeoData;
 import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
@@ -78,13 +80,21 @@ public class MapsDataLoader
 
   private void loadPositions(GeoData data)
   {
+    // Word geo data
     ContentLayerGeoData worldGeoData=data.getWorldGeoData();
     loadPositions(worldGeoData);
+    // Content layers geo data
     List<Integer> contentLayers=data.getContentLayers();
     for(Integer contentLayer : contentLayers)
     {
       ContentLayerGeoData contentLayerGeoData=data.getContentLayerGeoData(contentLayer.intValue());
       loadPositions(contentLayerGeoData);
+    }
+    // Achievables geo data
+    List<AchievableGeoData> achievableGeoDatas=data.getAllAchievableGeoData();
+    for(AchievableGeoData achievableGeoData : achievableGeoDatas)
+    {
+      loadAchievableGeoData(achievableGeoData);
     }
   }
 
@@ -102,36 +112,56 @@ public class MapsDataLoader
       List<DatPosition> positions=didData.getPositions();
       for(DatPosition position : positions)
       {
-        Marker marker=MarkerUtils.buildMarker(position,dataId);
-        if (marker==null)
-        {
-          continue;
-        }
-        int region=position.getRegion();
-        if ((region<1) || (region>4))
-        {
-          LOGGER.warn("Found unsupported region: "+region);
-          continue;
-        }
-        ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
-        if (parentData==null)
-        {
-          LOGGER.warn("No parent data for: "+position);
-          continue;
-        }
-        _mapsDataMgr.registerMarker(marker);
-        // Indexs
-        // - parent zone
-        int cell=position.getCell();
-        Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
-        if (parentArea!=null)
-        {
-          _mapsDataMgr.registerDidMarker(parentArea.intValue(),marker);
-        }
-        // - content layer
-        _mapsDataMgr.registerContentLayerMarker(layerId,marker);
+        buildMarker(position,dataId,layerId);
       }
     }
+  }
+
+  private void loadAchievableGeoData(AchievableGeoData achievableGeoData)
+  {
+    for(AchievableGeoDataItem dataItem : achievableGeoData.getItems())
+    {
+      int itemId=dataItem.getDid();
+      if (itemId==0)
+      {
+        continue;
+      }
+      DataIdentification dataId=DataIdentificationTools.identify(_facade,itemId);
+      DatPosition position=dataItem.getPosition();
+      buildMarker(position,dataId,0); // Assume world marker!
+    }
+  }
+
+  private void buildMarker(DatPosition position, DataIdentification dataId, int layerId)
+  {
+    Marker marker=MarkerUtils.buildMarker(position,dataId);
+    if (marker==null)
+    {
+      return;
+    }
+    int region=position.getRegion();
+    if ((region<1) || (region>4))
+    {
+      LOGGER.warn("Found unsupported region: "+region);
+      return;
+    }
+    ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
+    if (parentData==null)
+    {
+      LOGGER.warn("No parent data for: "+position);
+      return;
+    }
+    _mapsDataMgr.registerMarker(marker);
+    // Indexs
+    // - parent zone
+    int cell=position.getCell();
+    Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
+    if (parentArea!=null)
+    {
+      _mapsDataMgr.registerDidMarker(parentArea.intValue(),marker);
+    }
+    // - content layer
+    _mapsDataMgr.registerContentLayerMarker(layerId,marker);
   }
 
   /**

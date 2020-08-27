@@ -190,7 +190,10 @@ public class MapNotesLoader
   public void doIt()
   {
     loadMapNotes();
-    System.out.println(_typesCount);
+    if (VERBOSE)
+    {
+      System.out.println(_typesCount);
+    }
   }
 
   /**

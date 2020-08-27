@@ -1,19 +1,13 @@
 package delta.games.lotro.tools.dat.quests;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.dat.WStateClass;
-import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.data.geo.AchievableGeoData;
-import delta.games.lotro.dat.data.geo.ContentLayerGeoData;
-import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
@@ -78,11 +72,12 @@ public class DatObjectivesLoader
   //private EnumMapper _deedCategory;
 
   private MobLoader _mobLoader;
+  @SuppressWarnings("unused")
   private GeoData _geoData;
 
   //public static HashSet<String> propNames=new HashSet<String>();
 
-  private Achievable _currentAchievable;
+  //private Achievable _currentAchievable;
 
   /**
    * Constructor.
@@ -111,7 +106,7 @@ public class DatObjectivesLoader
     {
       return;
     }
-    _currentAchievable=achievable;
+    //_currentAchievable=achievable;
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
@@ -482,6 +477,7 @@ public class DatObjectivesLoader
     return ret;
   }
 
+  @SuppressWarnings("unused")
   private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties, Objective objective)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
@@ -490,10 +486,11 @@ public class DatObjectivesLoader
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
     fillItemCondition(ret,itemId,count);
-    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
+  @SuppressWarnings("unused")
   private ItemTalkCondition handleItemTalk(PropertiesSet properties, Objective objective)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
@@ -502,7 +499,7 @@ public class DatObjectivesLoader
 
     ItemTalkCondition ret=new ItemTalkCondition();
     fillItemCondition(ret,itemId,count);
-    /*List<DatPosition> positions=*/getPositions(itemId,roleConstraint,objective.getIndex());
+    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
@@ -1107,6 +1104,7 @@ QuestEvent_ShowProgressText: 0
     return ret;
   }
 
+  /*
   private List<DatPosition> getPositions(Integer did, String roleConstraint, int index)
   {
     List<DatPosition> ret=null;
@@ -1136,6 +1134,7 @@ QuestEvent_ShowProgressText: 0
     }
     return ret;
   }
+  */
 
   private ConditionTarget getTarget(Integer id)
   {
