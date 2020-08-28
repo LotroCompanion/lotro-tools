@@ -6,6 +6,7 @@ import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.EntityDescriptor;
+import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.Vector3D;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
@@ -19,14 +20,17 @@ import delta.games.lotro.tools.dat.maps.data.Weenie;
 public class LandblockGeneratorsAnalyzer
 {
   private DataFacade _facade;
+  private MarkersLoadingUtils _markerUtils;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param markerUtils Marker utils.
    */
-  public LandblockGeneratorsAnalyzer(DataFacade facade)
+  public LandblockGeneratorsAnalyzer(DataFacade facade, MarkersLoadingUtils markerUtils)
   {
     _facade=facade;
+    _markerUtils=markerUtils;
   }
 
   /**
@@ -57,17 +61,36 @@ public class LandblockGeneratorsAnalyzer
         Weenie weenie=lbi.getWeenieByIid(from);
         if (weenie!=null)
         {
+          int[] contentLayers=initContentLayers(weenie);
           Set<Integer> dids=weenie.getGeneratorDids();
           if ((dids!=null) && (dids.size()>0))
           {
             for(Integer did : dids)
             {
-              buildMarker(lbi,entity,did.intValue());
+              buildMarker(lbi,entity,did.intValue(),contentLayers);
             }
           }
         }
       }
     }
+  }
+
+  private int[] initContentLayers(Weenie weenie)
+  {
+    int[] ids=null;
+    PropertiesSet props=weenie.getProps();
+    Object[] contentLayersArray=(Object[])props.getProperty("Entity_ContentLayers");
+    if ((contentLayersArray!=null) && (contentLayersArray.length>0))
+    {
+      ids=new int[contentLayersArray.length];
+      int index=0;
+      for(Object contentLayerObj : contentLayersArray)
+      {
+        ids[index]=((Integer)contentLayerObj).intValue();
+        index++;
+      }
+    }
+    return ids;
   }
 
   private DatPosition buildPosition(LandBlockInfo lbi, EntityDescriptor entity)
@@ -84,10 +107,23 @@ public class LandblockGeneratorsAnalyzer
     return position;
   }
 
-  private void buildMarker(LandBlockInfo lbi, EntityDescriptor entity, int did)
+  private void buildMarker(LandBlockInfo lbi, EntityDescriptor entity, int did, int[] contentLayers)
   {
-    DatPosition position=buildPosition(lbi,entity);
-    DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
-    System.out.println("Found "+dataId+" at "+position);
+    if (_markerUtils!=null)
+    {
+      DatPosition position=buildPosition(lbi,entity);
+      DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
+      if (contentLayers==null)
+      {
+        _markerUtils.buildMarker(position,dataId,0);
+      }
+      else
+      {
+        for(int contentLayerId : contentLayers)
+        {
+          _markerUtils.buildMarker(position,dataId,contentLayerId);
+        }
+      }
+    }
   }
 }

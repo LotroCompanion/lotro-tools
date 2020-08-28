@@ -16,7 +16,7 @@ public class MainTestLandblockLoader
   {
     DataFacade facade=new DataFacade();
     _loader=new LandblockInfoLoader(facade);
-    _analyzer=new LandblockGeneratorsAnalyzer(facade);
+    _analyzer=new LandblockGeneratorsAnalyzer(facade,null);
   }
 
   void handleLandBlock(LandBlockInfo lbi)
@@ -41,25 +41,34 @@ public class MainTestLandblockLoader
 
   void analyzeBlock(LandBlockInfo lbi)
   {
-    _analyzer.handleLandblock(lbi);
+    if (lbi!=null)
+    {
+      _analyzer.handleLandblock(lbi);
+    }
   }
 
   private void doIt()
   {
+    long now=System.currentTimeMillis();
+    /*
     LandBlockInfo lbi=_loader.loadLandblockInfo(1,779/8,1338/8);
     analyzeBlock(lbi); // Itä-mâ (r1 lx779 ly1338 ox69.00 oy59.60 oz434.04 h296.7)
-    /*
-    for(int region=1;region<=4;region++)
+    */
+    for(int region=1;region<=1;region++)
     {
+      System.out.println("Region "+region);
       for(int blockX=0;blockX<=0xFE;blockX++)
       {
+        System.out.println("X="+blockX);
         for(int blockY=0;blockY<=0xFE;blockY++)
         {
-          handleLandBlock(region,blockX,blockY);
+          LandBlockInfo lbi=_loader.loadLandblockInfo(region,blockX,blockY);
+          analyzeBlock(lbi);
         }
       }
     }
-    */
+    long now2=System.currentTimeMillis();
+    System.out.println("Done in "+(now2-now)+"ms");
   }
 
   /**

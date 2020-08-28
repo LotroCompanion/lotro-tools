@@ -2,8 +2,6 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
@@ -15,10 +13,7 @@ import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
-import delta.games.lotro.maps.data.Marker;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
+import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
  * Loader for maps data.
@@ -26,14 +21,9 @@ import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
  */
 public class MapsDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MapsDataLoader.class);
-
   private DataFacade _facade;
   private MapsDataManager _mapsDataMgr;
-  // Loaders
-  private DungeonLoader _dungeonLoader;
-  private GeoAreasLoader _geoAreasLoader;
-  private ParentZoneIndex _parentZonesIndex;
+  private MarkersLoadingUtils _markerUtils;
 
   /**
    * Constructor.
@@ -43,10 +33,6 @@ public class MapsDataLoader
   {
     _facade=facade;
     _mapsDataMgr=new MapsDataManager();
-    _dungeonLoader=new DungeonLoader(facade);
-    _geoAreasLoader=new GeoAreasLoader(facade);
-    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
-    _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
   }
 
   /**
@@ -57,16 +43,20 @@ public class MapsDataLoader
     // Categories
     MapsManager mapsManager=_mapsDataMgr.getMapsManager();
     initCategories(mapsManager);
-    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,_dungeonLoader,_geoAreasLoader);
+    DungeonLoader dungeonLoader=new DungeonLoader(_facade);
+    GeoAreasLoader geoAreasLoader=new GeoAreasLoader(_facade);
+    _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,dungeonLoader,geoAreasLoader);
     // Map notes
-    MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,markersUtils);
+    MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,_markerUtils);
     mapNotesLoader.doIt();
     // Quest Event Target Locations
     GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
     loadPositions(data);
     // Quest map notes
-    QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,markersUtils);
+    QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,_markerUtils);
     questMapNotesLoader.doIt();
+    // Landblock analyser
+    analyzeLandblocks();
     // Save markers
     _mapsDataMgr.write();
   }
@@ -76,6 +66,28 @@ public class MapsDataLoader
     MapCategoriesBuilder builder=new MapCategoriesBuilder(_facade);
     builder.doIt(mapsManager);
     mapsManager.saveCategories();
+  }
+
+  private void analyzeLandblocks()
+  {
+    LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
+    LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
+    for(int region=1;region<=4;region++)
+    {
+      //System.out.println("Region "+region);
+      for(int blockX=0;blockX<=0xFE;blockX++)
+      {
+        //System.out.println("X="+blockX);
+        for(int blockY=0;blockY<=0xFE;blockY++)
+        {
+          LandBlockInfo lbi=lbiLoader.loadLandblockInfo(region,blockX,blockY);
+          if (lbi!=null)
+          {
+            analyzer.handleLandblock(lbi);
+          }
+        }
+      }
+    }
   }
 
   private void loadPositions(GeoData data)
@@ -112,7 +124,7 @@ public class MapsDataLoader
       List<DatPosition> positions=didData.getPositions();
       for(DatPosition position : positions)
       {
-        buildMarker(position,dataId,layerId);
+        _markerUtils.buildMarker(position,dataId,layerId);
       }
     }
   }
@@ -128,40 +140,8 @@ public class MapsDataLoader
       }
       DataIdentification dataId=DataIdentificationTools.identify(_facade,itemId);
       DatPosition position=dataItem.getPosition();
-      buildMarker(position,dataId,0); // Assume world marker!
+      _markerUtils.buildMarker(position,dataId,0); // Assume world marker!
     }
-  }
-
-  private void buildMarker(DatPosition position, DataIdentification dataId, int layerId)
-  {
-    Marker marker=MarkerUtils.buildMarker(position,dataId);
-    if (marker==null)
-    {
-      return;
-    }
-    int region=position.getRegion();
-    if ((region<1) || (region>4))
-    {
-      LOGGER.warn("Found unsupported region: "+region);
-      return;
-    }
-    ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
-    if (parentData==null)
-    {
-      LOGGER.warn("No parent data for: "+position);
-      return;
-    }
-    _mapsDataMgr.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
-    // Indexs
-    // - parent zone
-    int cell=position.getCell();
-    Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
-    if (parentArea!=null)
-    {
-      _mapsDataMgr.registerDidMarker(parentArea.intValue(),marker);
-    }
-    // - content layer
-    _mapsDataMgr.registerContentLayerMarker(layerId,marker);
   }
 
   /**

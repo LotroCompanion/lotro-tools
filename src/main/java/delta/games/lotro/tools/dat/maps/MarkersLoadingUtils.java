@@ -18,6 +18,9 @@ import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
  * Marker loading utilities.
@@ -32,6 +35,7 @@ public class MarkersLoadingUtils
   private DungeonLoader _dungeonLoader;
   private GeoAreasLoader _geoAreasLoader;
   private MapsDataManager _mapsDataManager;
+  private ParentZoneIndex _parentZonesIndex;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
 
   /**
@@ -48,10 +52,8 @@ public class MarkersLoadingUtils
     _mapsDataManager=mapsDataManager;
     _dungeonLoader=dungeonLoader;
     _geoAreasLoader=geoAreasLoader;
-    /*
     ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
     _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
-    */
   }
 
   /**
@@ -93,6 +95,44 @@ public class MarkersLoadingUtils
     BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
     String typeStr=BitSetUtils.getStringFromBitSet(typeSet,_mapNoteType," / ");
     System.out.println("Type: "+type+" => "+typeStr);
+  }
+
+  /**
+   * Build a marker.
+   * @param position Position.
+   * @param dataId Data identifier.
+   * @param layerId Content layer identifier.
+   */
+  public void buildMarker(DatPosition position, DataIdentification dataId, int layerId)
+  {
+    Marker marker=MarkerUtils.buildMarker(position,dataId);
+    if (marker==null)
+    {
+      return;
+    }
+    int region=position.getRegion();
+    if ((region<1) || (region>4))
+    {
+      LOGGER.warn("Found unsupported region: "+region);
+      return;
+    }
+    ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
+    if (parentData==null)
+    {
+      LOGGER.warn("No parent data for: "+position);
+      return;
+    }
+    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
+    // Indexs
+    // - parent zone
+    int cell=position.getCell();
+    Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
+    if (parentArea!=null)
+    {
+      _mapsDataManager.registerDidMarker(parentArea.intValue(),marker);
+    }
+    // - content layer
+    _mapsDataManager.registerContentLayerMarker(layerId,marker);
   }
 
   /**
