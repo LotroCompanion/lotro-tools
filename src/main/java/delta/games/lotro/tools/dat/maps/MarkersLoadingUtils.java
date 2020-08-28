@@ -190,7 +190,7 @@ public class MarkersLoadingUtils
       marker.setCategoryCode(code);
     }
     // Register this marker
-    _mapsDataManager.registerMarker(marker);
+    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
     // Indexs
     // - parent zone
     _mapsDataManager.registerDidMarker(where.getIdentifier(),marker);

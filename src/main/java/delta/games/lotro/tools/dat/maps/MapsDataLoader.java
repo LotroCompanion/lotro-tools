@@ -151,7 +151,7 @@ public class MapsDataLoader
       LOGGER.warn("No parent data for: "+position);
       return;
     }
-    _mapsDataMgr.registerMarker(marker);
+    _mapsDataMgr.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
     // Indexs
     // - parent zone
     int cell=position.getCell();

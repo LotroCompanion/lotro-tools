@@ -15,7 +15,6 @@ public class MapsDataManager
 {
   private MapsManager _mapsManager;
   private MarkersIndexesManager _index;
-  private int _counter;
 
   /**
    * Constructor.
@@ -39,12 +38,13 @@ public class MapsDataManager
   /**
    * Register a marker.
    * @param marker Marker to register.
+   * @param region Region.
+   * @param blockX Block X.
+   * @param blockY Block Y.
    */
-  public void registerMarker(Marker marker)
+  public void registerMarker(Marker marker, int region, int blockX, int blockY)
   {
-    marker.setId(_counter);
-    _counter++;
-    _mapsManager.getMarkersManager().registerMarker(marker);
+    _mapsManager.getMarkersManager().registerMarker(marker,region,blockX,blockY);
   }
 
   /**
