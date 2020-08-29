@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
@@ -19,6 +21,8 @@ import delta.games.lotro.tools.dat.maps.data.Weenie;
  */
 public class LandblockGeneratorsAnalyzer
 {
+  private static final Logger LOGGER=Logger.getLogger(LandblockGeneratorsAnalyzer.class);
+
   private DataFacade _facade;
   private MarkersLoadingUtils _markerUtils;
 
@@ -121,6 +125,10 @@ public class LandblockGeneratorsAnalyzer
       {
         for(int contentLayerId : contentLayers)
         {
+          if (contentLayerId==0)
+          {
+            LOGGER.warn("Found CL 0!");
+          }
           _markerUtils.buildMarker(position,dataId,contentLayerId);
         }
       }

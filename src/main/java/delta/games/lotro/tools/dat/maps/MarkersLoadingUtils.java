@@ -240,6 +240,10 @@ public class MarkersLoadingUtils
       for(Object contentLayerObj : contentLayersArray)
       {
         int layerId=((Integer)contentLayerObj).intValue();
+        if (layerId==0)
+        {
+          LOGGER.warn("Found CL 0!");
+        }
         _mapsDataManager.registerContentLayerMarker(layerId,marker);
       }
     }

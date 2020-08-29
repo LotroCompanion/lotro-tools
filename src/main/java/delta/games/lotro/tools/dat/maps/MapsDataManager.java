@@ -65,6 +65,11 @@ public class MapsDataManager
    */
   public void registerContentLayerMarker(int layerId, Marker marker)
   {
+    // Merge layer 1 "InstanceZero" with world
+    if (layerId==1)
+    {
+      layerId=0;
+    }
     MarkersIndex index=_index.getContentLayerIndex(layerId,true);
     index.addMarker(marker.getId());
   }
