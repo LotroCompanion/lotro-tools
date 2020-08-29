@@ -47,16 +47,40 @@ public class MapsDataLoader
     GeoAreasLoader geoAreasLoader=new GeoAreasLoader(_facade);
     _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,dungeonLoader,geoAreasLoader);
     // Map notes
-    MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,_markerUtils);
-    mapNotesLoader.doIt();
-    // Quest Event Target Locations
-    GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
-    loadPositions(data);
+    {
+      long now1=System.currentTimeMillis();
+      System.out.println("Loading map notes...");
+      MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,_markerUtils);
+      mapNotesLoader.doIt();
+      long now2=System.currentTimeMillis();
+      System.out.println("Map notes took: "+(now2-now1)+"ms");
+    }
     // Quest map notes
-    QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,_markerUtils);
-    questMapNotesLoader.doIt();
+    {
+      long now1=System.currentTimeMillis();
+      System.out.println("Loading quest map notes...");
+      QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,_markerUtils);
+      questMapNotesLoader.doIt();
+      long now2=System.currentTimeMillis();
+      System.out.println("Quest map notes took: "+(now2-now1)+"ms");
+    }
+    // Quest Event Target Locations
+    {
+      long now1=System.currentTimeMillis();
+      System.out.println("Loading quest event target locations...");
+      GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
+      loadPositions(data);
+      long now2=System.currentTimeMillis();
+      System.out.println("QETL took: "+(now2-now1)+"ms");
+    }
     // Landblock analyser
-    analyzeLandblocks();
+    {
+      System.out.println("Loading landblock locations...");
+      long now1=System.currentTimeMillis();
+      analyzeLandblocks();
+      long now2=System.currentTimeMillis();
+      System.out.println("Landblocks took: "+(now2-now1)+"ms");
+    }
     // Save markers
     _mapsDataMgr.write();
   }
