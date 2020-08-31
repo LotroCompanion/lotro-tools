@@ -49,8 +49,6 @@ import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.lore.items.ConsistencyChecks;
-import delta.games.lotro.tools.lore.items.ItemStatistics;
 import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 

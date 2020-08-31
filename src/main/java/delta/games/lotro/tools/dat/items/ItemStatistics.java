@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.items;
+package delta.games.lotro.tools.dat.items;
 
 import java.util.ArrayList;
 import java.util.Collections;

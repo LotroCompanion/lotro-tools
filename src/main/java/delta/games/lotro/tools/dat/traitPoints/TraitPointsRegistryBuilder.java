@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.traitPoints;
+package delta.games.lotro.tools.dat.traitPoints;
 
 import java.io.File;
 import java.util.Collections;

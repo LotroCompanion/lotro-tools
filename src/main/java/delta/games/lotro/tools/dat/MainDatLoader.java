@@ -36,8 +36,8 @@ import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
+import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
-import delta.games.lotro.tools.lore.traitPoints.TraitPointsRegistryBuilder;
 
 /**
  * Global procedure to load data from DAT files.
