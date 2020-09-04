@@ -58,7 +58,7 @@ public class LinkCreationInterator
     GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
     MapLink link=new MapLink(target,hotPoint);
     currentMap.getLinks().add(link);
-    MapXMLWriter.writeLinkFiles(bundle);
+    MapXMLWriter.writeLinkFiles(currentMap);
     _canvas.repaint();
   }
 

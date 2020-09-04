@@ -28,14 +28,19 @@ public class MainLinkEditor
     final MapsManager mapsManager=new MapsManager(rootDir);
     mapsManager.load();
 
-    MapBundle bundle=mapsManager.getMapByKey("breeland");
-    MapCanvas canvas=new MapCanvas(mapsManager);
+    MapBundle bundle=mapsManager.getMapByKey("268437653");
+    final MapCanvas canvas=new MapCanvas(mapsManager);
     final NavigationManager navigationManager=new NavigationManager(canvas);
     NavigationListener listener=new NavigationListener()
     {
       public void mapChangeRequest(String key)
       {
         MapBundle map=mapsManager.getMapByKey(key);
+        if (map==null)
+        {
+          return;
+        }
+        canvas.setMap(key);
         navigationManager.setMap(map);
         String title=map.getName();
         _frame.setTitle(title);
