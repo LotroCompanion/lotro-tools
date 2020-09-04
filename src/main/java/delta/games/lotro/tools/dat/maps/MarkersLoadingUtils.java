@@ -144,15 +144,16 @@ public class MarkersLoadingUtils
    * @param contentLayersArray Content layers.
    * @param text Text override.
    * @param type Type override.
+   * @return the generated marker or <code>null</code>.
    */
-  public void loadMarker(DatPosition position, int areaDID, int dungeonDID, int noteDID, Object[] contentLayersArray, String text, long type)
+  public Marker loadMarker(DatPosition position, int areaDID, int dungeonDID, int noteDID, Object[] contentLayersArray, String text, long type)
   {
     // Checks
     int region=position.getRegion();
     if ((region<1) || (region>4))
     {
       LOGGER.warn("Weird region value: "+region);
-      return;
+      return null;
     }
     int instance=position.getInstance();
     if (instance!=0)
@@ -184,7 +185,7 @@ public class MarkersLoadingUtils
     if (where==null)
     {
       LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
-      return;
+      return null;
     }
     /*
     ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
@@ -210,13 +211,13 @@ public class MarkersLoadingUtils
     DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
     if (dataId==null)
     {
-      return;
+      return null;
     }
     // Build marker
     Marker marker=MarkerUtils.buildMarker(position,dataId);
     if (marker==null)
     {
-      return;
+      return null;
     }
     // Patch marker
     if (text!=null)
@@ -252,6 +253,7 @@ public class MarkersLoadingUtils
       // World
       _mapsDataManager.registerContentLayerMarker(0,marker);
     }
+    return marker;
   }
 
   /**
