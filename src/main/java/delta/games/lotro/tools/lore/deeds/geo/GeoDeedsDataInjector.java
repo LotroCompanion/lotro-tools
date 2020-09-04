@@ -18,8 +18,8 @@ import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
-import delta.games.lotro.maps.data.MarkersManager;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
+import delta.games.lotro.maps.data.markers.MarkersUtils;
 
 /**
  * Injector for geographic data in deeds.
@@ -302,7 +302,7 @@ public class GeoDeedsDataInjector
         return false;
       }
     };
-    ret=MarkersManager.getFilteredMarkers(filter,mapMarkers);
+    ret=MarkersUtils.getFilteredMarkers(filter,mapMarkers);
     return ret;
   }
 
