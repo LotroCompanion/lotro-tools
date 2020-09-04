@@ -11,6 +11,7 @@ import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
 import delta.games.lotro.maps.ui.MapCanvas;
 
 /**
@@ -57,7 +58,7 @@ public class LinkCreationInterator
     GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
     MapLink link=new MapLink(target,hotPoint);
     currentMap.getLinks().add(link);
-    _manager.saveMap(map.getKey());
+    MapXMLWriter.writeLinkFiles(bundle);
     _canvas.repaint();
   }
 

@@ -57,6 +57,6 @@ public class BasemapUtils
   {
     File dir=getBasemapDir(key);
     File linksFile=new File(dir,"links.xml");
-    MapXMLWriter.writeLinksFile(linksFile,links,EncodingNames.UTF_8);
+    MapXMLWriter.writeLinksFile(linksFile,links);
   }
 }

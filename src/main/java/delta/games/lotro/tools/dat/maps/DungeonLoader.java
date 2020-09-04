@@ -54,7 +54,7 @@ public class DungeonLoader
 
   /**
    * Get a dungeon using its identifier.
-   * @param dungeonId Dungeo identifier.
+   * @param dungeonId Dungeon identifier.
    * @return A dungeon (<code>null</code> if an error occurs).
    */
   public Dungeon getDungeon(int dungeonId)
