@@ -7,14 +7,19 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.NumericTools;
 import delta.common.utils.collections.filters.Filter;
 import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.deeds.geo.DeedGeoData;
 import delta.games.lotro.lore.deeds.geo.DeedGeoPoint;
-import delta.games.lotro.maps.data.MapBundle;
+import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.ParchmentMap;
+import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.MarkersManager;
+import delta.games.lotro.maps.data.markers.MarkersFinder;
 
 /**
  * Injector for geographic data in deeds.
@@ -26,6 +31,7 @@ public class GeoDeedsDataInjector
 
   private HashMap<String,DeedDescription> _deeds;
   private HashMap<Integer,DeedDescription> _deedsById;
+  private MarkersFinder _finder;
 
   /**
    * Constructor.
@@ -33,6 +39,7 @@ public class GeoDeedsDataInjector
    */
   public GeoDeedsDataInjector(List<DeedDescription> deeds)
   {
+    // Deeds maps
     _deeds=new HashMap<String,DeedDescription>();
     for(DeedDescription deed : deeds)
     {
@@ -43,6 +50,10 @@ public class GeoDeedsDataInjector
     {
       _deedsById.put(Integer.valueOf(deed.getIdentifier()),deed);
     }
+    // Maps manager
+    File rootDir=new File("../lotro-maps-db");
+    MapsManager mapsManager=new MapsManager(rootDir);
+    _finder=mapsManager.getMarkersFinder();
   }
 
   /**
@@ -70,7 +81,7 @@ public class GeoDeedsDataInjector
 
   private void doTreasureCaches()
   {
-    doTreasureCaches("Treasure_of_Angmar","angmar",12);
+    doTreasureCaches("Treasure_of_Angmar","268437615",12);
     doTreasureCaches("Treasure_of_Evendim","evendim",12);
     doTreasureCaches("Treasure_of_Forochel","forochel",12);
     doTreasureCaches("Treasure_of_the_Misty_Mountains","misty_mountains",12);
@@ -91,7 +102,7 @@ public class GeoDeedsDataInjector
 
   private void doTreasureCaches(String deedKey,String mapKey,int expectedPointsCount)
   {
-    List<Marker> markers=findMarkersInMap(mapKey,"Treasure cache");
+    List<Marker> markers=findMarkersInMap(mapKey,"Treasure Cache");
     registerPointsByDeedKey(deedKey,mapKey,markers,expectedPointsCount,expectedPointsCount);
   }
 
@@ -259,14 +270,28 @@ public class GeoDeedsDataInjector
 
   private List<Marker> findMarkersInMap(String mapKey, final String name)
   {
-   File rootDir=new File("../lotro-maps-db");
-    MapsManager mapsManager=new MapsManager(rootDir);
-    mapsManager.load();
-
-    MapBundle map=mapsManager.getMapByKey(mapKey);
-    MarkersManager markers=map.getData();
-    Filter<Marker> filter=new Filter<Marker>() {
-
+    List<Marker> ret=new ArrayList<Marker>();
+    Integer mapId=NumericTools.parseInteger(mapKey);
+    if (mapId==null)
+    {
+      return ret;
+    }
+    ParchmentMapsManager parchmentMapsMgr=ParchmentMapsManager.getInstance();
+    ParchmentMap parchmentMap=parchmentMapsMgr.getMapById(mapId.intValue());
+    if (parchmentMap==null)
+    {
+      return ret;
+    }
+    List<Marker> mapMarkers=new ArrayList<Marker>();
+    List<Area> areas=parchmentMap.getAreas();
+    for(Area area : areas)
+    {
+      int areaId=area.getIdentifier();
+      List<Marker> areaMarkers=_finder.findMarkers(areaId,0);
+      mapMarkers.addAll(areaMarkers);
+    }
+    Filter<Marker> filter=new Filter<Marker>()
+    {
       public boolean accept(Marker item)
       {
         String label=item.getLabel();
@@ -277,7 +302,19 @@ public class GeoDeedsDataInjector
         return false;
       }
     };
-    List<Marker> ret=markers.getMarkers(filter);
+    ret=MarkersManager.getFilteredMarkers(filter,mapMarkers);
     return ret;
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DeedsManager deedsMgr=DeedsManager.getInstance();
+    List<DeedDescription> deeds=deedsMgr.getAll();
+    GeoDeedsDataInjector geoInjector=new GeoDeedsDataInjector(deeds);
+    geoInjector.doIt();
   }
 }
