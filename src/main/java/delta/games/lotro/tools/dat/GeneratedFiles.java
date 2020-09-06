@@ -255,4 +255,8 @@ public class GeneratedFiles
    * Parchment maps.
    */
   public static final File PARCHMENT_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.PARCHMENT_MAPS);
+  /**
+   * Dungeons.
+   */
+  public static final File DUNGEONS=LotroCoreConfig.getInstance().getFile(DataFiles.DUNGEONS);
 }

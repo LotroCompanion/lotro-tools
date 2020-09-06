@@ -15,9 +15,11 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.lore.maps.io.xml.DungeonXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -123,10 +125,10 @@ Dungeon_ParentDungeon: 0
      */
     String key=String.valueOf(dungeonId);
     int imageId=((Integer)mapUiProps.getProperty("UI_Map_MapImage")).intValue();
-    File imageFile=BasemapUtils.getBasemapImageFile(key);
-    if (!imageFile.exists())
+    File basemapImageFile=BasemapUtils.getBasemapImageFile(key);
+    if (!basemapImageFile.exists())
     {
-      DatIconsUtils.buildImageFile(_facade,imageId,imageFile);
+      DatIconsUtils.buildImageFile(_facade,imageId,basemapImageFile);
     }
     Dungeon dungeon=new Dungeon(dungeonId,name,imageId);
     // Parent
@@ -158,6 +160,21 @@ Dungeon_ParentDungeon: 0
     for(Dungeon dungeon : dungeons)
     {
       System.out.println(dungeon);
+    }
+  }
+
+  /**
+   * Write dungeons file.
+   */
+  public void save()
+  {
+    // Save dungeons
+    List<Dungeon> dungeons=new ArrayList<Dungeon>(_data.values());
+    Collections.sort(dungeons,new IdentifiableComparator<Dungeon>());
+    boolean ok=DungeonXMLWriter.writeDungeonsFile(GeneratedFiles.DUNGEONS,dungeons);
+    if (ok)
+    {
+      System.out.println("Wrote dungeons file: "+GeneratedFiles.DUNGEONS);
     }
   }
 }

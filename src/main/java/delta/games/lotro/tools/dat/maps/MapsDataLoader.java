@@ -81,8 +81,11 @@ public class MapsDataLoader
       long now2=System.currentTimeMillis();
       System.out.println("Landblocks took: "+(now2-now1)+"ms");
     }
-    // Save markers
+    // Save...
+    // - markers
     _mapsDataMgr.write();
+    // - dungeons
+    dungeonLoader.save();
   }
 
   private void initCategories(MapsManager mapsManager)
