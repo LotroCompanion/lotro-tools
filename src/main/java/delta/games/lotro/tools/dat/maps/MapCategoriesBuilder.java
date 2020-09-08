@@ -1,12 +1,12 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.io.File;
 import java.util.List;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.maps.data.CategoriesManager;
-import delta.games.lotro.maps.data.Category;
-import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.categories.CategoriesManager;
+import delta.games.lotro.maps.data.categories.Category;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -32,12 +32,12 @@ public class MapCategoriesBuilder
 
   /**
    * Do it.
-   * @param mapsManager Maps managee to use.
+   * @param categoriesManager Categories manager to use.
    */
-  public void doIt(MapsManager mapsManager)
+  public void doIt(CategoriesManager categoriesManager)
   {
-    _iconsLoader.doIt(mapsManager.getRootDir());
-    CategoriesManager categoriesMgr=mapsManager.getCategories();
+    File categoriesDir=categoriesManager.getCategoriesDir();
+    _iconsLoader.doIt(categoriesDir);
     List<Integer> tokens=_mapNoteType.getTokens();
     for(Integer token : tokens)
     {
@@ -46,7 +46,21 @@ public class MapCategoriesBuilder
       Category category=new Category(token.intValue());
       category.setIcon(token.toString());
       category.setName(meaning);
-      categoriesMgr.addCategory(category);
+      categoriesManager.addCategory(category);
     }
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=new DataFacade();
+    MapCategoriesBuilder loader=new MapCategoriesBuilder(facade);
+    File categoriesDir=new File("../lotro-maps-db/categories");
+    CategoriesManager categoriesManager=new CategoriesManager(categoriesDir);
+    loader.doIt(categoriesManager);
+    categoriesManager.save();
   }
 }

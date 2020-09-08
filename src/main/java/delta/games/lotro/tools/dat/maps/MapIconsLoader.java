@@ -27,9 +27,9 @@ public class MapIconsLoader
 
   /**
    * Do it.
-   * @param rootDir Maps manager root directory.
+   * @param imagesDir Images directory.
    */
-  public void doIt(File rootDir)
+  public void doIt(File imagesDir)
   {
     /*
 UI_Map_MapNoteTypeArray: 
@@ -52,7 +52,6 @@ UI_Map_MapNoteTypeArray:
     PropertiesSet props=_facade.loadProperties(0x78000001); // UNIQUEDB/UI_MapNoteIcons_Map
     //System.out.println(props.dump());
 
-    File imagesDir=new File(rootDir,"images");
     Object[] mapNoteTypePropsArray=(Object[])props.getProperty("UI_Map_MapNoteTypeArray");
     for(Object mapNoteTypeObj : mapNoteTypePropsArray)
     {
