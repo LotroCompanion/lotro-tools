@@ -92,7 +92,7 @@ public class MapsDataLoader
   {
     MapCategoriesBuilder builder=new MapCategoriesBuilder(_facade);
     builder.doIt(mapsManager);
-    mapsManager.saveCategories();
+    mapsManager.getCategories().save();
   }
 
   private void analyzeLandblocks()
