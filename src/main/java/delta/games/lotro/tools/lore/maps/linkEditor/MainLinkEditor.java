@@ -38,7 +38,7 @@ public class MainLinkEditor
     linksLayer.setLinks(bundle.getLinks());
     canvas.addLayer(linksLayer);
 
-    ViewInputsManager inputsMgr=new ViewInputsManager(canvas);
+    ViewInputsManager inputsMgr=canvas.getInputsManager();
     final NavigationController navigationController=new NavigationController(canvas,navigationManager);
     inputsMgr.addInputController(navigationController);
     navigationController.setLinks(bundle.getLinks());
