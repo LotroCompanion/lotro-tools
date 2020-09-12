@@ -7,11 +7,8 @@ import javax.swing.JFrame;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.ui.MapCanvas;
-import delta.games.lotro.maps.ui.NavigationListener;
-import delta.games.lotro.maps.ui.NavigationManager;
-import delta.games.lotro.maps.ui.controllers.NavigationController;
-import delta.games.lotro.maps.ui.controllers.ViewInputsManager;
-import delta.games.lotro.maps.ui.layers.LinksLayer;
+import delta.games.lotro.maps.ui.navigation.NavigationListener;
+import delta.games.lotro.maps.ui.navigation.NavigationSupport;
 
 /**
  * Link editor for maps.
@@ -33,16 +30,7 @@ public class MainLinkEditor
 
     MapBundle bundle=mapsManager.getMapByKey("268437653");
     final MapCanvas canvas=new MapCanvas(mapsManager);
-    final NavigationManager navigationManager=new NavigationManager();
-    final LinksLayer linksLayer=new LinksLayer(canvas);
-    linksLayer.setLinks(bundle.getLinks());
-    canvas.addLayer(linksLayer);
-
-    ViewInputsManager inputsMgr=canvas.getInputsManager();
-    final NavigationController navigationController=new NavigationController(canvas,navigationManager);
-    inputsMgr.addInputController(navigationController);
-    navigationController.setLinks(bundle.getLinks());
-
+    NavigationSupport navSupport=new NavigationSupport(canvas);
     NavigationListener listener=new NavigationListener()
     {
       public void mapChangeRequest(String key)
@@ -53,23 +41,19 @@ public class MainLinkEditor
           return;
         }
         canvas.setMap(key);
-        navigationManager.setMap(map);
-        navigationController.setLinks(map.getLinks());
-        linksLayer.setLinks(map.getLinks());
         String title=map.getName();
         _frame.setTitle(title);
       }
     };
-    navigationManager.getNavigationListeners().addListener(listener);
+    navSupport.getNavigationListeners().addListener(listener);
     /*LinkCreationInterator interactor=*/new LinkCreationInterator(mapsManager,canvas);
     String key=bundle.getKey();
-    canvas.setMap(key);
-    navigationManager.setMap(bundle);
     JFrame f=new JFrame();
     _frame=f;
     String title=bundle.getName();
     f.setTitle(title);
     f.getContentPane().add(canvas);
+    navSupport.requestMap(key);
     f.pack();
     f.setVisible(true);
     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
