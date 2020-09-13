@@ -54,7 +54,7 @@ public class MapsDataManager
    */
   public void registerDidMarker(int did, Marker marker)
   {
-    MarkersIndex index=_index.getDidIndex(did,true);
+    MarkersIndex index=_index.getDidIndex(did);
     index.addMarker(marker.getId());
   }
 
@@ -70,7 +70,7 @@ public class MapsDataManager
     {
       layerId=0;
     }
-    MarkersIndex index=_index.getContentLayerIndex(layerId,true);
+    MarkersIndex index=_index.getContentLayerIndex(layerId);
     index.addMarker(marker.getId());
   }
 
