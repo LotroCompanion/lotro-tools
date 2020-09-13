@@ -32,7 +32,7 @@ public class MainLinkEditor
     MapBundle bundle=mapsManager.getMapByKey("268437653");
     final MapPanelController mapPanelCtrl=new MapPanelController(mapsManager);
     MapCanvas canvas=mapPanelCtrl.getCanvas();
-    NavigationSupport navSupport=new NavigationSupport(canvas);
+    final NavigationSupport navSupport=new NavigationSupport(canvas);
     NavigationListener listener=new NavigationListener()
     {
       public void mapChangeRequest(String key)
@@ -42,9 +42,13 @@ public class MainLinkEditor
         {
           return;
         }
+        // Set map
         mapPanelCtrl.setMap(key);
+        // Set title
         String title=map.getName();
         _frame.setTitle(title);
+        // Set links
+        navSupport.setLinks(map.getLinks());
       }
     };
     navSupport.getNavigationListeners().addListener(listener);
