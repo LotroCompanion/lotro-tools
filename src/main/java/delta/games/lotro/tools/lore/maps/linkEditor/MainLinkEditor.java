@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.ui.MapCanvas;
+import delta.games.lotro.maps.ui.MapPanelController;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
 import delta.games.lotro.maps.ui.navigation.NavigationSupport;
 
@@ -29,7 +30,8 @@ public class MainLinkEditor
     mapsManager.load();
 
     MapBundle bundle=mapsManager.getMapByKey("268437653");
-    final MapCanvas canvas=new MapCanvas(mapsManager);
+    final MapPanelController mapPanelCtrl=new MapPanelController(mapsManager);
+    MapCanvas canvas=mapPanelCtrl.getCanvas();
     NavigationSupport navSupport=new NavigationSupport(canvas);
     NavigationListener listener=new NavigationListener()
     {
@@ -40,7 +42,7 @@ public class MainLinkEditor
         {
           return;
         }
-        canvas.setMap(key);
+        mapPanelCtrl.setMap(key);
         String title=map.getName();
         _frame.setTitle(title);
       }
@@ -52,7 +54,7 @@ public class MainLinkEditor
     _frame=f;
     String title=bundle.getName();
     f.setTitle(title);
-    f.getContentPane().add(canvas);
+    f.getContentPane().add(mapPanelCtrl.getLayers());
     navSupport.requestMap(key);
     f.pack();
     f.setVisible(true);
