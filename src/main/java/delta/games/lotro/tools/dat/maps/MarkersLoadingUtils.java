@@ -102,25 +102,26 @@ public class MarkersLoadingUtils
    * @param position Position.
    * @param dataId Data identifier.
    * @param layerId Content layer identifier.
+   * @return the generated marker or <code>null</code>.
    */
-  public void buildMarker(DatPosition position, DataIdentification dataId, int layerId)
+  public Marker buildMarker(DatPosition position, DataIdentification dataId, int layerId)
   {
     Marker marker=MarkerUtils.buildMarker(position,dataId);
     if (marker==null)
     {
-      return;
+      return null;
     }
     int region=position.getRegion();
     if ((region<1) || (region>4))
     {
       LOGGER.warn("Found unsupported region: "+region);
-      return;
+      return null;
     }
     ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
     if (parentData==null)
     {
       LOGGER.warn("No parent data for: "+position);
-      return;
+      return null;
     }
     _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
     // Indexs
@@ -133,6 +134,7 @@ public class MarkersLoadingUtils
     }
     // - content layer
     _mapsDataManager.registerContentLayerMarker(layerId,marker);
+    return marker;
   }
 
   /**

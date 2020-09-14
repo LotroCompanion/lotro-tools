@@ -123,7 +123,7 @@ Dungeon_ParentDungeon: 0
   UI_Map_PixelOffsetY: 254
   UI_Map_Scale: 3.0000002} 
      */
-    String key=String.valueOf(dungeonId);
+    int key=dungeonId;
     int imageId=((Integer)mapUiProps.getProperty("UI_Map_MapImage")).intValue();
     File basemapImageFile=BasemapUtils.getBasemapImageFile(key);
     if (!basemapImageFile.exists())

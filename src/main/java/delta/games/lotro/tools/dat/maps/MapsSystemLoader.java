@@ -21,7 +21,8 @@ import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
-import delta.games.lotro.maps.data.MapLink;
+import delta.games.lotro.maps.data.links.MapLink;
+import delta.games.lotro.maps.data.links.io.xml.LinksXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -32,12 +33,14 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 public class MapsSystemLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
+  private static File LINKS_FILE=new File("../lotro-maps-db/links.xml");
 
   private DataFacade _facade;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
   private List<ParchmentMap> _maps;
+  private List<MapLink> _links;
 
   /**
    * Constructor.
@@ -49,6 +52,7 @@ public class MapsSystemLoader
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
     _maps=new ArrayList<ParchmentMap>();
+    _links=new ArrayList<MapLink>();
   }
 
   /**
@@ -108,7 +112,7 @@ public class MapsSystemLoader
     for(int i=0;i<level;i++) System.out.print("\t");
     System.out.println(mapName);
 
-    String key=String.valueOf(activeElementId);
+    int key=activeElementId;
     // Map image
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
     if (imageId!=null)
@@ -156,7 +160,6 @@ public class MapsSystemLoader
     BasemapUtils.saveBaseMap(basemap);
 
     // Links
-    List<MapLink> links=new ArrayList<MapLink>();
     UIElement uiElement=getUIElementById(activeElementId);
     if (uiElement!=null)
     {
@@ -172,14 +175,13 @@ public class MapsSystemLoader
           //System.out.println("\t\tLocation: "+location);
 
           // Add link
-          String target=childMapUI.toString();
+          int target=childMapUI.intValue();
           GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
-          MapLink link=new MapLink(target,hotPoint);
-          links.add(link);
+          MapLink link=new MapLink(activeElementId,0,target,hotPoint);
+          _links.add(link);
         }
       }
     }
-    BasemapUtils.saveLinks(basemap.getKey(),links);
 
     ParchmentMap parchmentMap=new ParchmentMap(activeElementId,mapName);
     _maps.add(parchmentMap);
@@ -245,6 +247,12 @@ public class MapsSystemLoader
     if (ok)
     {
       System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
+    }
+    // Save links
+    ok=LinksXMLWriter.writeLinksFile(LINKS_FILE,_links);
+    if (ok)
+    {
+      System.out.println("Wrote links file: "+LINKS_FILE);
     }
     //_geoLoader.getGeoManager().dump();
   }

@@ -1,11 +1,14 @@
 package delta.games.lotro.tools.lore.maps.linkEditor;
 
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.links.LinksManager;
+import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.ui.MapCanvas;
 import delta.games.lotro.maps.ui.MapPanelController;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
@@ -29,13 +32,13 @@ public class MainLinkEditor
     final MapsManager mapsManager=new MapsManager(rootDir);
     mapsManager.load();
 
-    MapBundle bundle=mapsManager.getMapByKey("268437653");
+    MapBundle bundle=mapsManager.getMapByKey(268437653);
     final MapPanelController mapPanelCtrl=new MapPanelController(mapsManager);
     MapCanvas canvas=mapPanelCtrl.getCanvas();
     final NavigationSupport navSupport=new NavigationSupport(canvas);
     NavigationListener listener=new NavigationListener()
     {
-      public void mapChangeRequest(String key)
+      public void mapChangeRequest(int key)
       {
         MapBundle map=mapsManager.getMapByKey(key);
         if (map==null)
@@ -47,13 +50,15 @@ public class MainLinkEditor
         // Set title
         String title=map.getName();
         _frame.setTitle(title);
+        LinksManager linksManager=mapsManager.getLinksManager();
+        List<MapLink> links=linksManager.getLinks(key,0);
         // Set links
-        navSupport.setLinks(map.getLinks());
+        navSupport.setLinks(links);
       }
     };
     navSupport.getNavigationListeners().addListener(listener);
-    /*LinkCreationInterator interactor=*/new LinkCreationInterator(mapsManager,canvas);
-    String key=bundle.getKey();
+    /*LinkCreationInterator interactor=*/new LinkCreationInteractor(mapsManager,canvas);
+    int key=bundle.getKey();
     JFrame f=new JFrame();
     _frame=f;
     String title=bundle.getName();

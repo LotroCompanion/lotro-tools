@@ -81,6 +81,7 @@ public class GeoDeedsDataInjector
 
   private void doTreasureCaches()
   {
+    // TODO: use new map identifiers
     doTreasureCaches("Treasure_of_Angmar","268437615",12);
     doTreasureCaches("Treasure_of_Evendim","evendim",12);
     doTreasureCaches("Treasure_of_Forochel","forochel",12);
@@ -197,7 +198,6 @@ public class GeoDeedsDataInjector
     DeedDescription deed=_deedsById.get(Integer.valueOf(1879378540));
     registerPointsOnMultipleMaps(deed,maps,markers,expectedMarkersCount,12);
   }
-  
 
   private void registerPointsByDeedId(int deedId, String mapKey, List<Marker> markers, int expectedPointsCount)
   {
@@ -208,7 +208,8 @@ public class GeoDeedsDataInjector
       LOGGER.warn("Deed not found!");
       return;
     }
-    registerPoints(deed,mapKey,markers,expectedPointsCount,expectedPointsCount);
+    int mapId=NumericTools.parseInt(mapKey,0);
+    registerPoints(deed,mapId,markers,expectedPointsCount,expectedPointsCount);
   }
 
   private void registerPointsByDeedKey(String deedKey, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
@@ -220,10 +221,11 @@ public class GeoDeedsDataInjector
       LOGGER.warn("Deed not found!");
       return;
     }
-    registerPoints(deed,mapKey,markers,expectedPointsCount,requiredPointsCount);
+    int mapId=NumericTools.parseInt(mapKey,0);
+    registerPoints(deed,mapId,markers,expectedPointsCount,requiredPointsCount);
   }
 
-  private void registerPoints(DeedDescription deed, String mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
+  private void registerPoints(DeedDescription deed, int mapKey, List<Marker> markers, int expectedPointsCount, int requiredPointsCount)
   {
     int nbPoints=markers.size();
     if (nbPoints>0)
@@ -253,7 +255,8 @@ public class GeoDeedsDataInjector
       int nbPoints=0;
       for(Marker marker : markers.get(i))
       {
-        DeedGeoPoint point=new DeedGeoPoint(mapKey[i],marker.getId());
+        int mapId=NumericTools.parseInt(mapKey[i],0);
+        DeedGeoPoint point=new DeedGeoPoint(mapId,marker.getId());
         data.addPoint(point);
         nbPoints++;
       }

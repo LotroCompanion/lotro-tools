@@ -9,16 +9,16 @@ import java.awt.event.MouseListener;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.MapBundle;
-import delta.games.lotro.maps.data.MapLink;
 import delta.games.lotro.maps.data.MapsManager;
-import delta.games.lotro.maps.data.io.xml.MapXMLWriter;
+import delta.games.lotro.maps.data.links.LinksManager;
+import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.ui.MapCanvas;
 
 /**
  * Manages link creation interactions.
  * @author DAM
  */
-public class LinkCreationInterator
+public class LinkCreationInteractor
 {
   private MapsManager _manager;
   private MapCanvas _canvas;
@@ -30,7 +30,7 @@ public class LinkCreationInterator
    * @param mapsManager Maps manager.
    * @param canvas Decorated canvas.
    */
-  public LinkCreationInterator(MapsManager mapsManager, MapCanvas canvas)
+  public LinkCreationInteractor(MapsManager mapsManager, MapCanvas canvas)
   {
     _manager=mapsManager;
     _canvas=canvas;
@@ -54,11 +54,12 @@ public class LinkCreationInterator
   {
     MapBundle currentMap=_canvas.getCurrentMap();
     GeoreferencedBasemap map=currentMap.getMap();
-    String target=bundle.getKey();
+    int target=bundle.getKey();
     GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
-    MapLink link=new MapLink(target,hotPoint);
-    currentMap.getLinks().add(link);
-    MapXMLWriter.writeLinkFiles(currentMap);
+    MapLink link=new MapLink(currentMap.getKey(),0,target,hotPoint);
+    LinksManager linksManager=_manager.getLinksManager();
+    linksManager.addLink(link);
+    linksManager.write();
     _canvas.repaint();
   }
 

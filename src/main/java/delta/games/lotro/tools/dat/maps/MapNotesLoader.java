@@ -106,26 +106,31 @@ public class MapNotesLoader
     {
       // Link
       DatPosition destPosition=GeoLoader.readPosition(bis);
-      // Dest area: is a Dungeon (most of the time) or an Area
-      int destAreaId=BufferUtils.readUInt32(bis);
-      Identifiable destArea=_markersUtils.getAreaOrDungeon(destAreaId);
-      if (destArea==null)
-      {
-        LOGGER.warn("Destination area not found: "+destAreaId);
-      }
+      // Dest zone: is a Dungeon (most of the time) or an Area
+      int destZoneId=BufferUtils.readUInt32(bis);
+      Identifiable destArea=_markersUtils.getAreaOrDungeon(destZoneId);
       // Dest dungeon
       int destDungeonId=BufferUtils.readUInt32(bis);
+      // Dest note
+      int destNoteId=BufferUtils.readUInt32(bis);
+      BufferUtils.skip(bis,6); // Always 0
+
+      // Checks
+      if (destArea==null)
+      {
+        LOGGER.warn("Destination area not found: "+destZoneId);
+        return;
+      }
       if (destDungeonId!=0) // Always 0
       {
         LOGGER.warn("Dest dungeon ID: "+destDungeonId);
+        return;
       }
-      // Dest note
-      int destNoteId=BufferUtils.readUInt32(bis);
       if (destNoteId!=0) // Always 0
       {
         LOGGER.warn("Dest note ID: "+destNoteId);
+        return;
       }
-      BufferUtils.skip(bis,6); // Always 0
       if (VERBOSE)
       {
         System.out.println("Link! Target position: "+destPosition);
