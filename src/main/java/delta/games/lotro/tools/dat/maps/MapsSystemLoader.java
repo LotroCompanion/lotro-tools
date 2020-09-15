@@ -129,8 +129,7 @@ public class MapsSystemLoader
     }
 
     // Region ID
-    //Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
-    //System.out.println("\tRegion: "+regionId);
+    Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
 
     // Scale
     // Scale decreases with high level maps:
@@ -184,6 +183,10 @@ public class MapsSystemLoader
     }
 
     ParchmentMap parchmentMap=new ParchmentMap(activeElementId,mapName);
+    if (regionId!=null)
+    {
+      parchmentMap.setRegion(regionId.intValue());
+    }
     _maps.add(parchmentMap);
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
