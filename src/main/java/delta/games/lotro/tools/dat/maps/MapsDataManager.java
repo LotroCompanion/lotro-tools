@@ -81,5 +81,6 @@ public class MapsDataManager
   {
     _mapsManager.getMarkersManager().write();
     _index.writeIndexes();
+    _mapsManager.getLinksManager().write();
   }
 }

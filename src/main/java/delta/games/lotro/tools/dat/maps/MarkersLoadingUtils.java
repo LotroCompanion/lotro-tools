@@ -13,11 +13,15 @@ import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.maps.data.links.LinksManager;
+import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
@@ -37,6 +41,7 @@ public class MarkersLoadingUtils
   private MapsDataManager _mapsDataManager;
   private ParentZoneIndex _parentZonesIndex;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
+  private LinksStorage _links;
 
   /**
    * Constructor.
@@ -54,6 +59,7 @@ public class MarkersLoadingUtils
     _geoAreasLoader=geoAreasLoader;
     ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
     _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
+    _links=new LinksStorage();
   }
 
   /**
@@ -256,6 +262,94 @@ public class MarkersLoadingUtils
       _mapsDataManager.registerContentLayerMarker(0,marker);
     }
     return marker;
+  }
+
+  /**
+   * Register links.
+   */
+  public void registerLinks()
+  {
+    LinksManager linksMgr=_mapsDataManager.getMapsManager().getLinksManager();
+    for(MapLink link : _links.getLinks())
+    {
+      linksMgr.addLink(link);
+    }
+  }
+
+  /**
+   * Add a link.
+   * @param position Link position.
+   * @param areaDID Source area.
+   * @param dungeonDID Source dungeon.
+   * @param noteDID Source DID.
+   * @param destArea Destination area/dungeon.
+   * @param contentLayersArray Content layers.
+   * @param text Link text.
+   */
+  public void addLink(DatPosition position, int areaDID, int dungeonDID, int noteDID, Identifiable destArea, Object[] contentLayersArray, String text)
+  {
+    DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
+    if (dataId==null)
+    {
+      return;
+    }
+    int classIndex=dataId.getWClass().getClassIndex();
+    if ((classIndex!=815) && (classIndex!=1722))
+    {
+      LOGGER.warn("Link DID is not a Waypoint or a DoorTemplate");
+      return;
+    }
+    Identifiable where=null;
+    if (dungeonDID!=0)
+    {
+      where=getAreaOrDungeon(dungeonDID);
+    }
+    if (where==null)
+    {
+      where=getAreaOrDungeon(areaDID);
+    }
+    int targetMapKey=0;
+    String additionalText=dataId.getName();
+    if (destArea instanceof Dungeon)
+    {
+      Dungeon dungeon=(Dungeon)destArea;
+      targetMapKey=dungeon.getIdentifier();
+      additionalText=additionalText+" - "+dungeon.getName();
+    }
+    else
+    {
+      LOGGER.warn("Target is not a dungeon: "+destArea);
+    }
+    if (additionalText!=null)
+    {
+      if (text==null)
+      {
+        text=additionalText;
+      }
+      else
+      {
+        text=text+" - "+additionalText;
+      }
+    }
+    float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
+    GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
+    //System.out.println("Data ID: "+dataId);
+    if ((contentLayersArray!=null) && (contentLayersArray.length>0))
+    {
+      for(Object contentLayerObj : contentLayersArray)
+      {
+        int contentLayer=((Integer)contentLayerObj).intValue();
+        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMapKey,geoPoint);
+        link.setLabel(text);
+        _links.addLink(link);
+      }
+    }
+    else
+    {
+      MapLink link=new MapLink(where.getIdentifier(),0,targetMapKey,geoPoint);
+      _links.addLink(link);
+      link.setLabel(text);
+    }
   }
 
   /**

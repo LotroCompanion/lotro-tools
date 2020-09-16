@@ -136,7 +136,7 @@ public class MapNotesLoader
         System.out.println("Link! Target position: "+destPosition);
         System.out.println("Dest area: "+destArea);
       }
-      _markersUtils.loadMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
+      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destArea,contentLayersArray,text);
     }
     else
     {
@@ -188,6 +188,7 @@ public class MapNotesLoader
     {
       LOGGER.warn("Available bytes: "+available);
     }
+    _markersUtils.registerLinks();
   }
 
   /**
