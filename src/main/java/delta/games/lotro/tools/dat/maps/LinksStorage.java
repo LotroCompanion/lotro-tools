@@ -14,7 +14,7 @@ import delta.games.lotro.maps.data.links.MapLink;
  */
 public class LinksStorage
 {
-  private static final float THRESHOLD=0.00001f;
+  private static final float THRESHOLD=0.0005f;
   private List<MapLink> _links;
   private Map<String,List<MapLink>> _sortedLinks;
 
