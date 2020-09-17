@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.maps;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -18,6 +19,8 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.lore.maps.ParchmentMap;
+import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
@@ -299,6 +302,10 @@ public class MarkersLoadingUtils
       LOGGER.warn("Link DID is not a Waypoint or a DoorTemplate");
       return;
     }
+    if ((text!=null) && (text.length()>0))
+    {
+      LOGGER.warn("Link has text: ["+text+"]");
+    }
     Identifiable where=null;
     if (dungeonDID!=0)
     {
@@ -308,28 +315,11 @@ public class MarkersLoadingUtils
     {
       where=getAreaOrDungeon(areaDID);
     }
-    int targetMapKey=0;
-    String additionalText=dataId.getName();
-    if (destArea instanceof Dungeon)
+    String[] targetMapName=new String[1];
+    int targetMapKey=getTargetMap(destArea,targetMapName);
+    if (targetMapKey!=0)
     {
-      Dungeon dungeon=(Dungeon)destArea;
-      targetMapKey=dungeon.getIdentifier();
-      additionalText=additionalText+" - "+dungeon.getName();
-    }
-    else
-    {
-      LOGGER.warn("Target is not a dungeon: "+destArea);
-    }
-    if (additionalText!=null)
-    {
-      if (text==null)
-      {
-        text=additionalText;
-      }
-      else
-      {
-        text=text+" - "+additionalText;
-      }
+      text="To: "+targetMapName[0];
     }
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
@@ -339,6 +329,15 @@ public class MarkersLoadingUtils
       for(Object contentLayerObj : contentLayersArray)
       {
         int contentLayer=((Integer)contentLayerObj).intValue();
+        if (contentLayer==0)
+        {
+          LOGGER.warn("Found CL 0!");
+        }
+        if (contentLayer==1)
+        {
+          // Merge layer 1 "InstanceZero" with world
+          contentLayer=0;
+        }
         MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMapKey,geoPoint);
         link.setLabel(text);
         _links.addLink(link);
@@ -350,6 +349,56 @@ public class MarkersLoadingUtils
       _links.addLink(link);
       link.setLabel(text);
     }
+  }
+
+  private int getTargetMap(Identifiable destArea, String[] name)
+  {
+    int targetMapKey=0;
+    if (destArea instanceof Dungeon)
+    {
+      Dungeon dungeon=(Dungeon)destArea;
+      targetMapKey=dungeon.getIdentifier();
+      name[0]=dungeon.getName();
+    }
+    else if (destArea instanceof Area)
+    {
+      ParchmentMap map=getParchmentMapForArea(destArea.getIdentifier());
+      if (map!=null)
+      {
+        targetMapKey=map.getIdentifier();
+        name[0]=map.getName();
+      }
+    }
+    if (targetMapKey==0)
+    {
+      LOGGER.warn("Target map not found for target: "+destArea);
+    }
+    return targetMapKey;
+  }
+
+  private ParchmentMap getParchmentMapForArea(int areaId)
+  {
+    ParchmentMap ret=null;
+    int nbFinds=0;
+    ParchmentMapsManager mapsManager=ParchmentMapsManager.getInstance();
+    List<ParchmentMap> maps=mapsManager.getParchmentMaps();
+    for(ParchmentMap map : maps)
+    {
+      List<Area> areas=map.getAreas();
+      for(Area area : areas)
+      {
+        if (area.getIdentifier()==areaId)
+        {
+          ret=map;
+          nbFinds++;
+        }
+      }
+    }
+    if (nbFinds>1)
+    {
+      LOGGER.warn("Multiple maps for area: "+areaId);
+    }
+    return ret;
   }
 
   /**
