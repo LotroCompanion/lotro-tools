@@ -11,6 +11,7 @@ import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.ui.MapCanvas;
 import delta.games.lotro.maps.ui.MapPanelController;
+import delta.games.lotro.maps.ui.navigation.MapViewDefinition;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
 import delta.games.lotro.maps.ui.navigation.NavigationSupport;
 
@@ -38,15 +39,16 @@ public class MainLinkEditor
     final NavigationSupport navSupport=new NavigationSupport(canvas);
     NavigationListener listener=new NavigationListener()
     {
-      public void mapChangeRequest(int key)
+      public void mapChangeRequest(MapViewDefinition mapView)
       {
+        int key=mapView.getMapKey();
         MapBundle map=mapsManager.getMapByKey(key);
         if (map==null)
         {
           return;
         }
         // Set map
-        mapPanelCtrl.setMap(key);
+        mapPanelCtrl.setMap(mapView);
         // Set title
         String title=map.getName();
         _frame.setTitle(title);
