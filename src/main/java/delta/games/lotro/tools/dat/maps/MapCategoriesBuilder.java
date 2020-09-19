@@ -48,6 +48,23 @@ public class MapCategoriesBuilder
       category.setName(meaning);
       categoriesManager.addCategory(category);
     }
+    // Additional categories
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.NPC,"NPC"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.MONSTER,"Monster"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.CONTAINER,"Container"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.DOOR,"Door"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.ITEM,"Item"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.LANDMARK,"Landmark"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.HOTSPOT,"Hotspot"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.OTHER,"Other"));
+  }
+
+  private Category buildCategory(int id, String name)
+  {
+    Category category=new Category(id);
+    category.setIcon(String.valueOf(id));
+    category.setName(name);
+    return category;
   }
 
   /**

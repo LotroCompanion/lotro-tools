@@ -73,8 +73,15 @@ public class MarkerUtils
   private static int getCategoryCode(DataIdentification dataId)
   {
     int classIndex=dataId.getWClass().getClassIndex();
-    if (classIndex==1723) return 44; // MonsterTemplate (red circle)
-    if (classIndex==1724) return 35; // NPCTemplate (green circle)
-    return 59;
+    if (classIndex==1723) return CategoriesConstants.MONSTER; // MonsterTemplate
+    if (classIndex==1724) return CategoriesConstants.NPC; // NPC
+    if (classIndex==815) return CategoriesConstants.WAYPOINT; // Waypoint
+    if (classIndex==794) return CategoriesConstants.CONTAINER; // GameplayContainer
+    if (classIndex==804) return CategoriesConstants.MILESTONE; // Milestone
+    if (classIndex==793) return CategoriesConstants.DOOR; // Door
+    if (classIndex==796) return CategoriesConstants.ITEM; // IItem
+    if (classIndex==1210) return CategoriesConstants.LANDMARK; // Landmark
+    if (classIndex==1170) return CategoriesConstants.HOTSPOT; // Hotspot
+    return CategoriesConstants.OTHER;
   }
 }
