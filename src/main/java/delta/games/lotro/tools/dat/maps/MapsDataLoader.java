@@ -14,6 +14,7 @@ import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
+import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
@@ -47,6 +48,10 @@ public class MapsDataLoader
     DungeonLoader dungeonLoader=new DungeonLoader(_facade);
     GeoAreasLoader geoAreasLoader=new GeoAreasLoader(_facade);
     _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,dungeonLoader,geoAreasLoader);
+    // Parchment maps
+    LinksManager linksMgr=mapsManager.getLinksManager();
+    MapsSystemLoader mapsSystemLoader=new MapsSystemLoader(_facade,linksMgr);
+    mapsSystemLoader.doIt();
     // Map notes
     {
       long now1=System.currentTimeMillis();

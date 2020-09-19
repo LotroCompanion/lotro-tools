@@ -21,8 +21,8 @@ import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
-import delta.games.lotro.maps.data.links.io.xml.LinksXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -33,26 +33,26 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 public class MapsSystemLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
-  private static File LINKS_FILE=new File("../lotro-maps-db/links.xml");
 
   private DataFacade _facade;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
   private List<ParchmentMap> _maps;
-  private List<MapLink> _links;
+  private LinksManager _links;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param links Links storage.
    */
-  public MapsSystemLoader(DataFacade facade)
+  public MapsSystemLoader(DataFacade facade, LinksManager links)
   {
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
     _maps=new ArrayList<ParchmentMap>();
-    _links=new ArrayList<MapLink>();
+    _links=links;
   }
 
   /**
@@ -177,7 +177,7 @@ public class MapsSystemLoader
           int target=childMapUI.intValue();
           GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
           MapLink link=new MapLink(activeElementId,0,target,hotPoint);
-          _links.add(link);
+          _links.addLink(link);
         }
       }
     }
@@ -237,7 +237,10 @@ public class MapsSystemLoader
     return null;
   }
 
-  private void doIt()
+  /**
+   * Load parchment maps and map links.
+   */
+  public void doIt()
   {
     PropertiesSet props=loadMapsSystemProperties();
     if (props!=null)
@@ -251,13 +254,6 @@ public class MapsSystemLoader
     {
       System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
     }
-    // Save links
-    ok=LinksXMLWriter.writeLinksFile(LINKS_FILE,_links);
-    if (ok)
-    {
-      System.out.println("Wrote links file: "+LINKS_FILE);
-    }
-    //_geoLoader.getGeoManager().dump();
   }
 
   /**
@@ -267,7 +263,9 @@ public class MapsSystemLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    MapsSystemLoader loader=new MapsSystemLoader(facade);
+    File rootDir=new File("../lotro-maps-db");
+    LinksManager linksManager=new LinksManager(rootDir);
+    MapsSystemLoader loader=new MapsSystemLoader(facade,linksManager);
     loader.doIt();
   }
 }
