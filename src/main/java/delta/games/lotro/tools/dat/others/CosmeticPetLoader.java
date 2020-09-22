@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.others;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,11 +13,11 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.lore.collections.pets.io.xml.CosmeticPetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.mobs.EntityClassificationLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
@@ -37,11 +36,7 @@ public class CosmeticPetLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
-  //private EnumMapper _alignment;
-  //private EnumMapper _class;
-  private EnumMapper _genus;
-  private EnumMapper _species;
-  private EnumMapper _subSpecies;
+  private EntityClassificationLoader _classificationLoader;
 
   /**
    * Constructor.
@@ -51,11 +46,7 @@ public class CosmeticPetLoader
   {
     _facade=facade;
     _category=facade.getEnumsManager().getEnumMapper(587202586);
-    //_alignment=facade.getEnumsManager().getEnumMapper(587202573);
-    //_class=facade.getEnumsManager().getEnumMapper(587202574);
-    _genus=facade.getEnumsManager().getEnumMapper(587202570);
-    _species=facade.getEnumsManager().getEnumMapper(587202571);
-    _subSpecies=facade.getEnumsManager().getEnumMapper(587202572);
+    _classificationLoader=new EntityClassificationLoader(facade);
   }
 
   /**
@@ -158,36 +149,7 @@ public class CosmeticPetLoader
   private void handleCosmeticEntity(CosmeticPetDescription pet, int cosmeticEntityId)
   {
     PropertiesSet cosmeticEntityProps=_facade.loadProperties(cosmeticEntityId+DATConstants.DBPROPERTIES_OFFSET);
-
-    // Alignment
-    /*
-    int alignmentCode=((Integer)cosmeticEntityProps.getProperty("Agent_Alignment")).intValue();
-    String alignment=_alignment.getString(alignmentCode);
-    System.out.println("Alignment: "+alignment);
-    */
-    // Class
-    /*
-    int classCode=((Integer)cosmeticEntityProps.getProperty("Agent_Class")).intValue();
-    String className=_class.getString(classCode);
-    System.out.println("Class: "+className);
-    */
-    // Genus
-    int genusCode=((Integer)cosmeticEntityProps.getProperty("Agent_Genus")).intValue();
-    BitSet genusBitSet=BitSetUtils.getBitSetFromFlags(genusCode);
-    String genuses=BitSetUtils.getStringFromBitSet(genusBitSet,_genus,"/");
-    pet.getClassification().setGenus(genuses);
-    // Species
-    int speciesCode=((Integer)cosmeticEntityProps.getProperty("Agent_Species")).intValue();
-    String species=_species.getString(speciesCode);
-    pet.getClassification().setSpecies(species);
-    // Sub-species
-    Integer showSubSpecies=(Integer)cosmeticEntityProps.getProperty("Agent_ShowSubspecies");
-    if ((showSubSpecies!=null) && (showSubSpecies.intValue()!=0))
-    {
-      int subSpeciesCode=((Integer)cosmeticEntityProps.getProperty("Agent_Subspecies")).intValue();
-      String subSpecies=_subSpecies.getString(subSpeciesCode);
-      pet.getClassification().setSubSpecies(subSpecies);
-    }
+    _classificationLoader.loadSpecification(cosmeticEntityProps,pet.getClassification());
   }
 
   /**
