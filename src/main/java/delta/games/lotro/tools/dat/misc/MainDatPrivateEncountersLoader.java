@@ -14,6 +14,8 @@ import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
+import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -39,7 +41,6 @@ public class MainDatPrivateEncountersLoader
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
   {
-    System.out.println("*********** "+privateEncounterId+" ***********");
     PropertiesSet props=_facade.loadProperties(privateEncounterId+DATConstants.DBPROPERTIES_OFFSET);
     if (props==null)
     {
@@ -78,12 +79,12 @@ public class MainDatPrivateEncountersLoader
         int cellX=(int)vector.getY();
         if (cellX%8!=0)
         {
-          LOGGER.warn("Cell X is not a mutiple of 8");
+          LOGGER.warn("Cell X is not a multiple of 8: "+cellX+" for PE "+privateEncounterId);
         }
         int cellY=(int)vector.getZ();
         if (cellY%8!=0)
         {
-          LOGGER.warn("Cell Y is not a mutiple of 8");
+          LOGGER.warn("Cell Y is not a multiple of 8: "+cellY+" for PE "+privateEncounterId);
         }
         BlockReference block=new BlockReference();
         block.setRegion(region);
@@ -145,10 +146,15 @@ public class MainDatPrivateEncountersLoader
           if (instanceData!=null)
           {
             _data.add(instanceData);
-            System.out.println(instanceData);
           }
         }
       }
+    }
+    // Save private encounters
+    boolean ok=PrivateEncountersXMLWriter.writePrivateEncountersFile(GeneratedFiles.PRIVATE_ENCOUNTERS,_data);
+    if (ok)
+    {
+      System.out.println("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
     }
   }
 
