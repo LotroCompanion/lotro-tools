@@ -3,7 +3,6 @@ package delta.games.lotro.tools.dat.maps;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -362,7 +361,8 @@ public class MarkersLoadingUtils
     }
     else if (destArea instanceof Area)
     {
-      ParchmentMap map=getParchmentMapForArea(destArea.getIdentifier());
+      ParchmentMapsManager parchmentMapsManager=ParchmentMapsManager.getInstance();
+      ParchmentMap map=parchmentMapsManager.getParchmentMapForArea(destArea.getIdentifier());
       if (map!=null)
       {
         targetMapKey=map.getIdentifier();
@@ -374,31 +374,6 @@ public class MarkersLoadingUtils
       LOGGER.warn("Target map not found for target: "+destArea);
     }
     return targetMapKey;
-  }
-
-  private ParchmentMap getParchmentMapForArea(int areaId)
-  {
-    ParchmentMap ret=null;
-    int nbFinds=0;
-    ParchmentMapsManager mapsManager=ParchmentMapsManager.getInstance();
-    List<ParchmentMap> maps=mapsManager.getParchmentMaps();
-    for(ParchmentMap map : maps)
-    {
-      List<Area> areas=map.getAreas();
-      for(Area area : areas)
-      {
-        if (area.getIdentifier()==areaId)
-        {
-          ret=map;
-          nbFinds++;
-        }
-      }
-    }
-    if (nbFinds>1)
-    {
-      LOGGER.warn("Multiple maps for area: "+areaId);
-    }
-    return ret;
   }
 
   /**
