@@ -5,8 +5,9 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.ui.MapCanvas;
@@ -31,9 +32,9 @@ public class MainLinkEditor
   {
     File rootDir=new File("../lotro-maps-db");
     final MapsManager mapsManager=new MapsManager(rootDir);
-    mapsManager.load();
+    final GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
 
-    MapBundle bundle=mapsManager.getMapByKey(268437653);
+    GeoreferencedBasemap basemap=basemapsManager.getMapById(268437653);
     final MapPanelController mapPanelCtrl=new MapPanelController(mapsManager);
     MapCanvas canvas=mapPanelCtrl.getCanvas();
     final NavigationSupport navSupport=new NavigationSupport(canvas);
@@ -42,7 +43,7 @@ public class MainLinkEditor
       public void mapChangeRequest(MapViewDefinition mapView)
       {
         int key=mapView.getMapKey();
-        MapBundle map=mapsManager.getMapByKey(key);
+        GeoreferencedBasemap map=basemapsManager.getMapById(key);
         if (map==null)
         {
           return;
@@ -60,13 +61,13 @@ public class MainLinkEditor
     };
     navSupport.getNavigationListeners().addListener(listener);
     /*LinkCreationInterator interactor=*/new LinkCreationInteractor(mapsManager,canvas);
-    int key=bundle.getKey();
+    int mapId=basemap.getIdentifier();
     JFrame f=new JFrame();
     _frame=f;
-    String title=bundle.getName();
+    String title=basemap.getName();
     f.setTitle(title);
     f.getContentPane().add(mapPanelCtrl.getLayers());
-    navSupport.requestMap(key);
+    navSupport.requestMap(mapId);
     f.pack();
     f.setVisible(true);
     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

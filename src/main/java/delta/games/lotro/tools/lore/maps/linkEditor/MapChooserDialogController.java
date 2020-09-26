@@ -10,24 +10,24 @@ import delta.common.ui.swing.GuiFactory;
 import delta.common.ui.swing.combobox.ComboBoxController;
 import delta.common.ui.swing.windows.DefaultFormDialogController;
 import delta.common.ui.swing.windows.WindowController;
-import delta.games.lotro.maps.data.MapBundle;
-import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 
 /**
  * Map chooser dialog controller.
  * @author DAM
  */
-public class MapChooserDialogController extends DefaultFormDialogController<MapBundle>
+public class MapChooserDialogController extends DefaultFormDialogController<GeoreferencedBasemap>
 {
-  private ComboBoxController<MapBundle> _controller;
-  private MapsManager _manager;
+  private ComboBoxController<GeoreferencedBasemap> _controller;
+  private GeoreferencedBasemapsManager _manager;
 
   /**
    * Constructor.
    * @param parentController Parent controller.
    * @param mapsManager Maps manager.
    */
-  public MapChooserDialogController(WindowController parentController, MapsManager mapsManager)
+  public MapChooserDialogController(WindowController parentController, GeoreferencedBasemapsManager mapsManager)
   {
     super(parentController,null);
     _manager=mapsManager;
@@ -44,13 +44,13 @@ public class MapChooserDialogController extends DefaultFormDialogController<MapB
     return map;
   }
 
-  private ComboBoxController<MapBundle> buildMapCombo()
+  private ComboBoxController<GeoreferencedBasemap> buildMapCombo()
   {
-    ComboBoxController<MapBundle> controller=new ComboBoxController<MapBundle>();
-    List<MapBundle> bundles=_manager.getMaps();
-    for(MapBundle bundle : bundles)
+    ComboBoxController<GeoreferencedBasemap> controller=new ComboBoxController<GeoreferencedBasemap>();
+    List<GeoreferencedBasemap> basemaps=_manager.getBasemaps();
+    for(GeoreferencedBasemap basemap : basemaps)
     {
-      controller.addItem(bundle,bundle.getName());
+      controller.addItem(basemap,basemap.getName());
     }
     return controller;
   }

@@ -21,6 +21,8 @@ import delta.games.lotro.dat.loaders.PropertyUtils;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.StringUtils;
+import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 
 /**
  * Loader for map notes.
@@ -211,7 +213,9 @@ public class MapNotesLoader
   {
     DataFacade facade=new DataFacade();
     MapsDataManager mapsDataManager=new MapsDataManager();
-    DungeonLoader dungeonLoader=new DungeonLoader(facade);
+    MapsManager mapsManager=mapsDataManager.getMapsManager();
+    GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
+    DungeonLoader dungeonLoader=new DungeonLoader(facade,basemapsManager);
     GeoAreasLoader geoAreasLoader=new GeoAreasLoader(facade);
     MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
     MapNotesLoader loader=new MapNotesLoader(facade,markersUtils);

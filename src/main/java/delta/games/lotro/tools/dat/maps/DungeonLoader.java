@@ -18,7 +18,8 @@ import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.io.xml.DungeonXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -31,15 +32,18 @@ public class DungeonLoader
   private static final Logger LOGGER=Logger.getLogger(DungeonLoader.class);
 
   private DataFacade _facade;
+  private GeoreferencedBasemapsManager _basemapsManager;
   private Map<Integer,Dungeon> _data;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param basemapsManager Georeferenced basemaps manager.
    */
-  public DungeonLoader(DataFacade facade)
+  public DungeonLoader(DataFacade facade, GeoreferencedBasemapsManager basemapsManager)
   {
     _facade=facade;
+    _basemapsManager=basemapsManager;
     _data=new HashMap<Integer,Dungeon>();
   }
 
@@ -123,9 +127,9 @@ Dungeon_ParentDungeon: 0
   UI_Map_PixelOffsetY: 254
   UI_Map_Scale: 3.0000002} 
      */
-    int key=dungeonId;
+    int mapId=dungeonId;
     int imageId=((Integer)mapUiProps.getProperty("UI_Map_MapImage")).intValue();
-    File basemapImageFile=BasemapUtils.getBasemapImageFile(key);
+    File basemapImageFile=_basemapsManager.getBasemapImageFile(mapId);
     if (!basemapImageFile.exists())
     {
       DatIconsUtils.buildImageFile(_facade,imageId,basemapImageFile);
@@ -143,10 +147,8 @@ Dungeon_ParentDungeon: 0
     GeoPoint origin=MapUtils.getOrigin(name,scale,mapUiProps);
     float geo2pixel=scale*200;
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key);
-    basemap.setGeoReference(geoReference);
-    basemap.setName(name);
-    BasemapUtils.saveBaseMap(basemap);
+    GeoreferencedBasemap basemap=new GeoreferencedBasemap(mapId,name,geoReference);
+    _basemapsManager.addBasemap(basemap);
     return dungeon;
   }
 

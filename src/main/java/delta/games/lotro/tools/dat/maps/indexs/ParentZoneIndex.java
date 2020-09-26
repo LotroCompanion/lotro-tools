@@ -78,11 +78,25 @@ public class ParentZoneIndex
     int region=position.getRegion();
     int blockX=position.getBlockX();
     int blockY=position.getBlockY();
+    int cell=position.getCell();
+    return getParentZone(region,blockX,blockY,cell);
+  }
+
+  /**
+   * Get the parent zone (area or dungeon) for a position.
+   * @param region Region.
+   * @param blockX Block X.
+   * @param blockY Block Y.
+   * @param cell Cell.
+   * @return A parent zone identifier or <code>null</code>.
+   */
+  public Integer getParentZone(int region, int blockX, int blockY, int cell)
+  {
     ParentZoneLandblockData data=getLandblockData(region,blockX,blockY);
     Integer ret=null;
     if (data!=null)
     {
-      ret=data.getParentData(position.getCell());
+      ret=data.getParentData(cell);
     }
     return ret;
   }

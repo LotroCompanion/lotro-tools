@@ -20,7 +20,9 @@ import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
-import delta.games.lotro.maps.data.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -39,20 +41,20 @@ public class MapsSystemLoader
   private EnumMapper _uiElementId;
   private GeoAreasLoader _geoLoader;
   private List<ParchmentMap> _maps;
-  private LinksManager _links;
+  private MapsManager _mapsManager;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param links Links storage.
+   * @param mapsManager Maps manager.
    */
-  public MapsSystemLoader(DataFacade facade, LinksManager links)
+  public MapsSystemLoader(DataFacade facade, MapsManager mapsManager)
   {
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _geoLoader=new GeoAreasLoader(_facade);
     _maps=new ArrayList<ParchmentMap>();
-    _links=links;
+    _mapsManager=mapsManager;
   }
 
   /**
@@ -113,11 +115,12 @@ public class MapsSystemLoader
     System.out.println(mapName);
 
     int key=activeElementId;
+    GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
     // Map image
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
     if (imageId!=null)
     {
-      File imageFile=BasemapUtils.getBasemapImageFile(key);
+      File imageFile=basemapsManager.getBasemapImageFile(key);
       if (!imageFile.exists())
       {
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
@@ -153,10 +156,8 @@ public class MapsSystemLoader
       geo2pixel=1;
     }
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key);
-    basemap.setGeoReference(geoReference);
-    basemap.setName(mapName);
-    BasemapUtils.saveBaseMap(basemap);
+    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key,mapName,geoReference);
+    basemapsManager.addBasemap(basemap);
 
     // Links
     UIElement uiElement=getUIElementById(activeElementId);
@@ -177,7 +178,8 @@ public class MapsSystemLoader
           int target=childMapUI.intValue();
           GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
           MapLink link=new MapLink(activeElementId,0,target,hotPoint);
-          _links.addLink(link);
+          LinksManager linksManager=_mapsManager.getLinksManager();
+          linksManager.addLink(link);
         }
       }
     }
@@ -264,8 +266,10 @@ public class MapsSystemLoader
   {
     DataFacade facade=new DataFacade();
     File rootDir=new File("../lotro-maps-db");
-    LinksManager linksManager=new LinksManager(rootDir);
-    MapsSystemLoader loader=new MapsSystemLoader(facade,linksManager);
+    MapsManager mapsManager=new MapsManager(rootDir);
+    MapsSystemLoader loader=new MapsSystemLoader(facade,mapsManager);
     loader.doIt();
+    mapsManager.getBasemapsManager().write();
+    mapsManager.getLinksManager().write();
   }
 }

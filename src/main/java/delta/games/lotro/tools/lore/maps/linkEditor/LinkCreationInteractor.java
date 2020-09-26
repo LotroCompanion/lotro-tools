@@ -7,9 +7,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import delta.games.lotro.maps.data.GeoPoint;
-import delta.games.lotro.maps.data.GeoreferencedBasemap;
-import delta.games.lotro.maps.data.MapBundle;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.ui.MapCanvas;
@@ -50,13 +50,13 @@ public class LinkCreationInteractor
     }
   }
 
-  private void doLink(MapBundle bundle, int x, int y)
+  private void doLink(GeoreferencedBasemap target, int x, int y)
   {
-    MapBundle currentMap=_canvas.getCurrentMap();
-    GeoreferencedBasemap map=currentMap.getMap();
-    int target=bundle.getKey();
-    GeoPoint hotPoint=map.getGeoReference().pixel2geo(new Dimension(x,y));
-    MapLink link=new MapLink(currentMap.getKey(),0,target,hotPoint);
+    GeoreferencedBasemap currentMap=_canvas.getCurrentBasemap();
+    int sourceMapId=currentMap.getIdentifier();
+    GeoPoint hotPoint=currentMap.getGeoReference().pixel2geo(new Dimension(x,y));
+    int targetMapId=target.getIdentifier();
+    MapLink link=new MapLink(sourceMapId,0,targetMapId,hotPoint);
     LinksManager linksManager=_manager.getLinksManager();
     linksManager.addLink(link);
     linksManager.write();
@@ -77,10 +77,11 @@ public class LinkCreationInteractor
       {
         _x=event.getX();
         _y=event.getY();
-        MapChooserDialogController chooser=new MapChooserDialogController(null,_manager);
+        GeoreferencedBasemapsManager basemapsManager=_manager.getBasemapsManager();
+        MapChooserDialogController chooser=new MapChooserDialogController(null,basemapsManager);
         chooser.setTitle("Choose...");
         chooser.getDialog().setLocationRelativeTo((Component)event.getSource());
-        MapBundle selected=chooser.editModal();
+        GeoreferencedBasemap selected=chooser.editModal();
         if (selected!=null)
         {
           doLink(selected,_x,_y);

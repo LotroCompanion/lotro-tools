@@ -79,6 +79,7 @@ public class MapsDataManager
    */
   public void write()
   {
+    _mapsManager.getBasemapsManager().write();
     _mapsManager.getMarkersManager().write();
     _index.writeIndexes();
     _mapsManager.getLinksManager().write();
