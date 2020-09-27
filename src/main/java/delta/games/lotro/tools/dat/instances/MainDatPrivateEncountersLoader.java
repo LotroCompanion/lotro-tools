@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.misc;
+package delta.games.lotro.tools.dat.instances;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,8 @@ import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
+import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -28,6 +30,7 @@ public class MainDatPrivateEncountersLoader
 
   private DataFacade _facade;
   private List<PrivateEncounter> _data;
+  private InstanceMapDataBuilder _mapDataBuilder;
 
   /**
    * Constructor.
@@ -37,6 +40,9 @@ public class MainDatPrivateEncountersLoader
   {
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
+    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
+    ParentZoneIndex parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
+    _mapDataBuilder=new InstanceMapDataBuilder(parentZonesIndex);
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -69,6 +75,7 @@ public class MainDatPrivateEncountersLoader
     int contentLayerId=((Integer)props.getProperty("PrivateEncounterTemplate_ContentLayer")).intValue();
     ret.setContentLayerId(contentLayerId);
     // Block references
+    List<BlockReference> blocks=new ArrayList<BlockReference>();
     Object[] blocksArray=(Object[])props.getProperty("PrivateEncounterTemplate_ContainedLandBlockArray");
     if ((blocksArray!=null) && (blocksArray.length>0))
     {
@@ -89,7 +96,7 @@ public class MainDatPrivateEncountersLoader
         BlockReference block=new BlockReference();
         block.setRegion(region);
         block.setBlock(cellX/8,cellY/8);
-        ret.addBlock(block);
+        blocks.add(block);
       }
     }
     // Quest ID
@@ -126,6 +133,8 @@ public class MainDatPrivateEncountersLoader
       Integer levelScaling=(Integer)props.getProperty("Skirmish_Template_LevelScalingLevel");
       skirmishPE.setLevelScaling(levelScaling);
     }
+    // Build maps
+    _mapDataBuilder.handlePrivateEncounter(ret,blocks);
     return ret;
   }
 

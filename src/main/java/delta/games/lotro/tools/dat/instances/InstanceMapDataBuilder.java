@@ -1,35 +1,32 @@
-package delta.games.lotro.tools.dat.maps.instances;
+package delta.games.lotro.tools.dat.instances;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Identifiable;
-import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.lore.geo.BlockReference;
+import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
-import delta.games.lotro.lore.instances.PrivateEncountersManager;
-import delta.games.lotro.lore.instances.ZoneAndMap;
-import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
-import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
- * A tool to find the maps that fits for each instance.
+ * Build map data for instances.
  * @author DAM
  */
-public class MainFindMapsForInstances
+public class InstanceMapDataBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(MainFindMapsForInstances.class);
+  private static final Logger LOGGER=Logger.getLogger(InstanceMapDataBuilder.class);
 
   private ParentZoneIndex _parentZoneIndex;
 
@@ -37,30 +34,22 @@ public class MainFindMapsForInstances
    * Constructor.
    * @param parentZoneIndex
    */
-  public MainFindMapsForInstances(ParentZoneIndex parentZoneIndex)
+  public InstanceMapDataBuilder(ParentZoneIndex parentZoneIndex)
   {
     _parentZoneIndex=parentZoneIndex;
   }
 
-  private void doIt()
+  /**
+   * Load map data for a private encounter.
+   * @param privateEncounter Private encounter to use.
+   * @param blocks Blocks for this encounter.
+   */
+  public void handlePrivateEncounter(PrivateEncounter privateEncounter, List<BlockReference> blocks)
   {
-    PrivateEncountersManager peManager=PrivateEncountersManager.getInstance();
-    List<PrivateEncounter> privateEncounters=peManager.getPrivateEncounters();
-    for(PrivateEncounter privateEncounter : privateEncounters)
-    {
-      handlePrivateEncounter(privateEncounter);
-    }
-    boolean ok=PrivateEncountersXMLWriter.writePrivateEncountersFile(GeneratedFiles.PRIVATE_ENCOUNTERS,peManager.getPrivateEncounters());
-    if (ok)
-    {
-      System.out.println("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
-    }
-  }
-
-  private void handlePrivateEncounter(PrivateEncounter privateEncounter)
-  {
+    Map<Integer,List<BlockReference>> blocksByZone=new HashMap<Integer,List<BlockReference>>();
     List<Integer> parentZoneIds=new ArrayList<Integer>();
-    List<BlockReference> blocks=privateEncounter.getBlocks();
+
+    // Find parent zones for each block
     for(BlockReference block : blocks)
     {
       int region=block.getRegion();
@@ -71,43 +60,78 @@ public class MainFindMapsForInstances
       int blockX=block.getBlockX();
       int blockY=block.getBlockY();
       ParentZoneLandblockData lbData=_parentZoneIndex.getLandblockData(region,blockX,blockY);
+      Integer parentZoneId=null;
       if (lbData!=null)
       {
         Integer dungeonId=lbData.getParentDungeon();
         if (dungeonId!=null)
         {
-          if (!parentZoneIds.contains(dungeonId))
-          {
-            parentZoneIds.add(dungeonId);
-          }
+          parentZoneId=dungeonId;
         }
         else
         {
           Integer areaId=lbData.getParentArea();
           if (areaId!=null)
           {
-            if (!parentZoneIds.contains(areaId))
-            {
-              parentZoneIds.add(areaId);
-            }
+            parentZoneId=areaId;
           }
+        }
+        if (parentZoneId==null)
+        {
+          LOGGER.warn("No parent zone for block: "+block);
         }
       }
       else
       {
         LOGGER.warn("Landblock data not found for: "+block);
       }
+      if (parentZoneId!=null)
+      {
+        // Add block for zone
+        List<BlockReference> blocksForZone=blocksByZone.get(parentZoneId);
+        if (blocksForZone==null)
+        {
+          blocksForZone=new ArrayList<BlockReference>();
+          blocksByZone.put(parentZoneId,blocksForZone);
+        }
+        blocksForZone.add(block);
+        // Add zone in zones list
+        if (!parentZoneIds.contains(parentZoneId))
+        {
+          parentZoneIds.add(parentZoneId);
+        }
+      }
     }
     //int id=privateEncounter.getIdentifier();
     //String name=privateEncounter.getName();
     //System.out.println("Zones for ID="+id+" ("+name+"): "+parentZoneIds);
     //List<Identifiable> maps=new ArrayList<Identifiable>();
+    Map<Integer,InstanceMapDescription> foundMaps=new HashMap<Integer,InstanceMapDescription>();
     for(Integer parentZoneID : parentZoneIds)
     {
       Identifiable map=findMapForZone(parentZoneID.intValue());
       Integer mapId=(map!=null)?Integer.valueOf(map.getIdentifier()):null;
-      ZoneAndMap zoneAndMap=new ZoneAndMap(parentZoneID.intValue(),mapId);
-      privateEncounter.addZoneAndMap(zoneAndMap);
+      InstanceMapDescription mapDescription=null;
+      if (mapId!=null)
+      {
+        mapDescription=foundMaps.get(mapId);
+        if (mapDescription==null)
+        {
+          mapDescription=new InstanceMapDescription(mapId);
+          foundMaps.put(mapId,mapDescription);
+          privateEncounter.addMapDescription(mapDescription);
+        }
+      }
+      else
+      {
+        mapDescription=new InstanceMapDescription(null);
+        privateEncounter.addMapDescription(mapDescription);
+      }
+      mapDescription.addZoneId(parentZoneID.intValue());
+      for(BlockReference block : blocksByZone.get(parentZoneID))
+      {
+        mapDescription.addBlock(block);
+      }
     }
     /*
     if (maps.size()>1)
@@ -154,18 +178,5 @@ public class MainFindMapsForInstances
       }
     }
     return null;
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
-    ParentZoneIndex parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
-    MainFindMapsForInstances main=new MainFindMapsForInstances(parentZonesIndex);
-    main.doIt();
   }
 }
