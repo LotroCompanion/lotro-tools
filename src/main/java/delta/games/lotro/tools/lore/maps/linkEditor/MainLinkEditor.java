@@ -10,8 +10,7 @@ import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
-import delta.games.lotro.maps.ui.MapCanvas;
-import delta.games.lotro.maps.ui.MapPanelController;
+import delta.games.lotro.maps.ui.BasemapPanelController;
 import delta.games.lotro.maps.ui.navigation.MapViewDefinition;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
 import delta.games.lotro.maps.ui.navigation.NavigationSupport;
@@ -35,9 +34,8 @@ public class MainLinkEditor
     final GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
 
     GeoreferencedBasemap basemap=basemapsManager.getMapById(268437653);
-    final MapPanelController mapPanelCtrl=new MapPanelController(mapsManager);
-    MapCanvas canvas=mapPanelCtrl.getCanvas();
-    final NavigationSupport navSupport=new NavigationSupport(canvas);
+    final BasemapPanelController mapPanelCtrl=new BasemapPanelController(basemapsManager);
+    final NavigationSupport navSupport=new NavigationSupport(mapPanelCtrl);
     NavigationListener listener=new NavigationListener()
     {
       public void mapChangeRequest(MapViewDefinition mapView)
@@ -60,13 +58,13 @@ public class MainLinkEditor
       }
     };
     navSupport.getNavigationListeners().addListener(listener);
-    /*LinkCreationInterator interactor=*/new LinkCreationInteractor(mapsManager,canvas);
+    /*LinkCreationInterator interactor=*/new LinkCreationInteractor(mapsManager,mapPanelCtrl);
     int mapId=basemap.getIdentifier();
     JFrame f=new JFrame();
     _frame=f;
     String title=basemap.getName();
     f.setTitle(title);
-    f.getContentPane().add(mapPanelCtrl.getLayers());
+    f.getContentPane().add(mapPanelCtrl.getComponent());
     navSupport.requestMap(mapId);
     f.pack();
     f.setVisible(true);

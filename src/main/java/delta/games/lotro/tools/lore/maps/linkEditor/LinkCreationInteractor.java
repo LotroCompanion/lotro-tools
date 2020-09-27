@@ -12,7 +12,7 @@ import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
-import delta.games.lotro.maps.ui.MapCanvas;
+import delta.games.lotro.maps.ui.BasemapPanelController;
 
 /**
  * Manages link creation interactions.
@@ -21,21 +21,21 @@ import delta.games.lotro.maps.ui.MapCanvas;
 public class LinkCreationInteractor
 {
   private MapsManager _manager;
-  private MapCanvas _canvas;
+  private BasemapPanelController _mapPanel;
 
   private MouseListener _listener;
 
   /**
    * Constructor.
    * @param mapsManager Maps manager.
-   * @param canvas Decorated canvas.
+   * @param mapPanel Map panel.
    */
-  public LinkCreationInteractor(MapsManager mapsManager, MapCanvas canvas)
+  public LinkCreationInteractor(MapsManager mapsManager, BasemapPanelController mapPanel)
   {
     _manager=mapsManager;
-    _canvas=canvas;
+    _mapPanel=mapPanel;
     _listener=new LinkCreationMouseListener();
-    _canvas.addMouseListener(_listener);
+    _mapPanel.getCanvas().addMouseListener(_listener);
   }
 
   /**
@@ -45,14 +45,14 @@ public class LinkCreationInteractor
   {
     if (_listener!=null)
     {
-      _canvas.removeMouseListener(_listener);
+      _mapPanel.getCanvas().removeMouseListener(_listener);
       _listener=null;
     }
   }
 
   private void doLink(GeoreferencedBasemap target, int x, int y)
   {
-    GeoreferencedBasemap currentMap=_canvas.getCurrentBasemap();
+    GeoreferencedBasemap currentMap=_mapPanel.getCurrentBasemap();
     int sourceMapId=currentMap.getIdentifier();
     GeoPoint hotPoint=currentMap.getGeoReference().pixel2geo(new Dimension(x,y));
     int targetMapId=target.getIdentifier();
@@ -60,7 +60,7 @@ public class LinkCreationInteractor
     LinksManager linksManager=_manager.getLinksManager();
     linksManager.addLink(link);
     linksManager.write();
-    _canvas.repaint();
+    _mapPanel.getCanvas().repaint();
   }
 
   private class LinkCreationMouseListener extends MouseAdapter
