@@ -13,8 +13,12 @@ import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.mobs.MobDescription;
+import delta.games.lotro.lore.mobs.io.xml.MobsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.others.LootLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get legendary titles definitions from DAT files.
@@ -39,19 +43,18 @@ public class MainDatMobsLoader
     _lootLoader=new LootLoader(facade,_loots);
   }
 
-  private Object load(int indexDataId)
+  private MobDescription load(int indexDataId)
   {
-    Object ret=null;
+    MobDescription ret=null;
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      //ret=new LegendaryTitle();
       // ID
-      //ret.setIdentifier(indexDataId);
       // Name
       String name=DatUtils.getStringProperty(properties,"Name");
-      //ret.setName(name);
-      System.out.println("ID="+indexDataId+", Name: "+name);
+      name=StringUtils.fixName(name);
+      ret=new MobDescription(indexDataId,name);
+      //System.out.println("ID="+indexDataId+", Name: "+name);
       int barterTrophyList=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
       if (barterTrophyList!=0)
       {
@@ -144,19 +147,25 @@ Quest_MonsterDivision: 245 => HallOfMirror
 
   private void doIt()
   {
-    List<Object> titles=new ArrayList<Object>();
+    List<MobDescription> mobs=new ArrayList<MobDescription>();
     //for(int id=1879079705;id<=1879079705;id++)
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);
       if (useIt)
       {
-        Object title=load(id);
-        if (title!=null)
+        MobDescription mob=load(id);
+        if (mob!=null)
         {
-          titles.add(title);
+          mobs.add(mob);
         }
       }
+    }
+    // Save mobs
+    boolean ok=MobsXMLWriter.writeMobsFile(GeneratedFiles.MOBS,mobs);
+    if (ok)
+    {
+      System.out.println("Wrote mobs file: "+GeneratedFiles.MOBS);
     }
   }
 
