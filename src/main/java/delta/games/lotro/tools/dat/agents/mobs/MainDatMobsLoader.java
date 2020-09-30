@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.npc;
+package delta.games.lotro.tools.dat.agents.mobs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +13,16 @@ import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.lore.mobs.MobDescription;
-import delta.games.lotro.lore.mobs.io.xml.MobsXMLWriter;
+import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.mobs.io.xml.MobsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.agents.ClassificationLoader;
 import delta.games.lotro.tools.dat.others.LootLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
 /**
- * Get legendary titles definitions from DAT files.
+ * Get mobs definitions from DAT files.
  * @author DAM
  */
 public class MainDatMobsLoader
@@ -29,6 +30,9 @@ public class MainDatMobsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatMobsLoader.class);
 
   private DataFacade _facade;
+  // Classification
+  private ClassificationLoader _classificationLoader;
+  // Loots
   private LootsManager _loots;
   private LootLoader _lootLoader;
 
@@ -39,6 +43,7 @@ public class MainDatMobsLoader
   public MainDatMobsLoader(DataFacade facade)
   {
     _facade=facade;
+    _classificationLoader=new ClassificationLoader(facade);
     _loots=new LootsManager();
     _lootLoader=new LootLoader(facade,_loots);
   }
@@ -55,6 +60,9 @@ public class MainDatMobsLoader
       name=StringUtils.fixName(name);
       ret=new MobDescription(indexDataId,name);
       //System.out.println("ID="+indexDataId+", Name: "+name);
+      // Classification
+      _classificationLoader.loadClassification(properties,ret.getClassification());
+      // Loot
       int barterTrophyList=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
       if (barterTrophyList!=0)
       {
@@ -127,7 +135,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
     }
     else
     {
-      LOGGER.warn("Could not handle legendary title ID="+indexDataId);
+      LOGGER.warn("Could not handle mob ID="+indexDataId);
     }
     return ret;
   }
@@ -148,7 +156,6 @@ Quest_MonsterDivision: 245 => HallOfMirror
   private void doIt()
   {
     List<MobDescription> mobs=new ArrayList<MobDescription>();
-    //for(int id=1879079705;id<=1879079705;id++)
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);

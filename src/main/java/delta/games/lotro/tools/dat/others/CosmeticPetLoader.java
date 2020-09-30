@@ -17,7 +17,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.lore.collections.pets.io.xml.CosmeticPetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.mobs.EntityClassificationLoader;
+import delta.games.lotro.tools.dat.agents.ClassificationLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
@@ -36,7 +36,7 @@ public class CosmeticPetLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
-  private EntityClassificationLoader _classificationLoader;
+  private ClassificationLoader _classificationLoader;
 
   /**
    * Constructor.
@@ -46,7 +46,7 @@ public class CosmeticPetLoader
   {
     _facade=facade;
     _category=facade.getEnumsManager().getEnumMapper(587202586);
-    _classificationLoader=new EntityClassificationLoader(facade);
+    _classificationLoader=new ClassificationLoader(facade);
   }
 
   /**
