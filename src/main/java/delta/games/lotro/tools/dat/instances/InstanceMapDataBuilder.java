@@ -60,32 +60,22 @@ public class InstanceMapDataBuilder
       int blockX=block.getBlockX();
       int blockY=block.getBlockY();
       ParentZoneLandblockData lbData=_parentZoneIndex.getLandblockData(region,blockX,blockY);
-      Integer parentZoneId=null;
+      List<Integer> parentZoneIdsForBlock=null;
       if (lbData!=null)
       {
-        Integer dungeonId=lbData.getParentDungeon();
-        if (dungeonId!=null)
-        {
-          parentZoneId=dungeonId;
-        }
-        else
-        {
-          Integer areaId=lbData.getParentArea();
-          if (areaId!=null)
-          {
-            parentZoneId=areaId;
-          }
-        }
-        if (parentZoneId==null)
+        parentZoneIdsForBlock=getParentZones(lbData);
+        if (parentZoneIdsForBlock.size()==0)
         {
           LOGGER.warn("No parent zone for block: "+block);
         }
       }
       else
       {
+        parentZoneIdsForBlock=new ArrayList<Integer>();
         LOGGER.warn("Landblock data not found for: "+block);
       }
-      if (parentZoneId!=null)
+
+      for(Integer parentZoneId : parentZoneIdsForBlock)
       {
         // Add block for zone
         List<BlockReference> blocksForZone=blocksByZone.get(parentZoneId);
@@ -143,6 +133,27 @@ public class InstanceMapDataBuilder
       System.out.println("\t=> Map: "+map);
     }
     */
+  }
+
+  private List<Integer> getParentZones(ParentZoneLandblockData lbData)
+  {
+    List<Integer> ret=new ArrayList<Integer>();
+    List<Integer> dungeonsFromCells=lbData.getDungeonsFromCells();
+    ret.addAll(dungeonsFromCells);
+    Integer dungeonId=lbData.getParentDungeon();
+    if ((dungeonId!=null) && (!ret.contains(dungeonId)))
+    {
+      ret.add(dungeonId);
+    }
+    if (ret.size()==0)
+    {
+      Integer areaId=lbData.getParentArea();
+      if (areaId!=null)
+      {
+        ret.add(areaId);
+      }
+    }
+    return ret;
   }
 
   private Identifiable getZone(int zoneId)

@@ -1,6 +1,8 @@
 package delta.games.lotro.tools.dat.maps.indexs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +41,23 @@ public class ParentZoneLandblockData
   public Integer getCellDungeon(int cellIndex)
   {
     return _cell2Dungeon.get(Integer.valueOf(cellIndex));
+  }
+
+  /**
+   * Get a list of all the dungeons found in cells.
+   * @return A possibly empty but never <code>null</code> list of dungeon IDs.
+   */
+  public List<Integer> getDungeonsFromCells()
+  {
+    List<Integer> ret=new ArrayList<Integer>();
+    for(Integer dungeonId :_cell2Dungeon.values())
+    {
+      if (!ret.contains(dungeonId))
+      {
+        ret.add(dungeonId);
+      }
+    }
+    return ret;
   }
 
   /**
