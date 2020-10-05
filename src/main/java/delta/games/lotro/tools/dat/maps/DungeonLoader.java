@@ -16,6 +16,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.io.xml.DungeonXMLWriter;
+import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
@@ -148,6 +149,10 @@ Dungeon_ParentDungeon: 0
     float geo2pixel=scale*200;
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
     GeoreferencedBasemap basemap=new GeoreferencedBasemap(mapId,name,geoReference);
+    // Bounding box
+    GeoBox boundingBox=MapUtils.computeBoundingBox(geoReference,basemapImageFile);
+    basemap.setBoundingBox(boundingBox);
+    // Register basemap
     _basemapsManager.addBasemap(basemap);
     return dungeon;
   }

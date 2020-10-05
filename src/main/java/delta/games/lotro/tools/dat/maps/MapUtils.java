@@ -1,10 +1,22 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.PositionDecoder;
+import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
+import delta.games.lotro.maps.data.GeoReference;
 
 /**
  * Utility methods for maps.
@@ -59,5 +71,50 @@ public class MapUtils
     float internalY=((pixelOffsetY.intValue()-0)/scale)+(PositionDecoder.LANDBLOCK_SIZE*blockY.intValue());
     float[] position=PositionDecoder.decodePosition(internalX,internalY);
     return new GeoPoint(position[0],position[1]);
+  }
+
+  /**
+   * Get the geographic bounding box for a basemap.
+   * @param geoRef Geographic reference.
+   * @param imageFile Image file.
+   * @return A geographic or <code>null</code> if computation fails.
+   */
+  public static GeoBox computeBoundingBox(GeoReference geoRef, File imageFile)
+  {
+    GeoPoint start=geoRef.getStart();
+    Dimension imageSize=getImageDimension(imageFile);
+    if (imageSize==null)
+    {
+      return null;
+    }
+    GeoPoint end=geoRef.pixel2geo(imageSize);
+    GeoBox ret=new GeoBox(start,end);
+    return ret;
+  }
+
+  private static Dimension getImageDimension(File imageFile)
+  {
+    Iterator<ImageReader> iter=ImageIO.getImageReadersBySuffix("png");
+    if (iter.hasNext())
+    {
+      ImageReader reader=iter.next();
+      try
+      {
+        ImageInputStream stream=new FileImageInputStream(imageFile);
+        reader.setInput(stream);
+        int width=reader.getWidth(reader.getMinIndex());
+        int height=reader.getHeight(reader.getMinIndex());
+        return new Dimension(width,height);
+      }
+      catch (IOException e)
+      {
+        // Ignored
+      }
+      finally
+      {
+        reader.dispose();
+      }
+    }
+    return null;
   }
 }

@@ -18,6 +18,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
+import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.MapsManager;
@@ -117,10 +118,11 @@ public class MapsSystemLoader
     int key=activeElementId;
     GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
     // Map image
+    File imageFile=null;
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
     if (imageId!=null)
     {
-      File imageFile=basemapsManager.getBasemapImageFile(key);
+      imageFile=basemapsManager.getBasemapImageFile(key);
       if (!imageFile.exists())
       {
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
@@ -157,6 +159,13 @@ public class MapsSystemLoader
     }
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
     GeoreferencedBasemap basemap=new GeoreferencedBasemap(key,mapName,geoReference);
+    // Bounding box
+    if (imageFile!=null)
+    {
+      GeoBox boundingBox=MapUtils.computeBoundingBox(geoReference,imageFile);
+      basemap.setBoundingBox(boundingBox);
+    }
+    // Register basemap
     basemapsManager.addBasemap(basemap);
 
     // Links
