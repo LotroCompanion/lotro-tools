@@ -16,6 +16,7 @@ import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.io.xml.ParchmentMapsXMLWriter;
 import delta.games.lotro.maps.data.GeoBox;
@@ -40,7 +41,6 @@ public class MapsSystemLoader
   private DataFacade _facade;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
-  private GeoAreasLoader _geoLoader;
   private List<ParchmentMap> _maps;
   private MapsManager _mapsManager;
 
@@ -53,7 +53,6 @@ public class MapsSystemLoader
   {
     _facade=facade;
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
-    _geoLoader=new GeoAreasLoader(_facade);
     _maps=new ArrayList<ParchmentMap>();
     _mapsManager=mapsManager;
   }
@@ -203,10 +202,11 @@ public class MapsSystemLoader
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
     if (areas!=null)
     {
+      GeoAreasManager geoAreasMgr=GeoAreasManager.getInstance();
       for(Object areaIdObj : areas)
       {
         int areaId=((Integer)areaIdObj).intValue();
-        Area area=_geoLoader.getArea(areaId);
+        Area area=geoAreasMgr.getAreaById(areaId);
         if (area!=null)
         {
           parchmentMap.addArea(area);

@@ -13,7 +13,6 @@ import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
-import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
@@ -45,10 +44,7 @@ public class MapsDataLoader
     // Categories
     MapsManager mapsManager=_mapsDataMgr.getMapsManager();
     initCategories(mapsManager.getCategories());
-    GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
-    DungeonLoader dungeonLoader=new DungeonLoader(_facade,basemapsManager);
-    GeoAreasLoader geoAreasLoader=new GeoAreasLoader(_facade);
-    _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr,dungeonLoader,geoAreasLoader);
+    _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr);
     // Parchment maps
     MapsSystemLoader mapsSystemLoader=new MapsSystemLoader(_facade,mapsManager);
     mapsSystemLoader.doIt();
@@ -87,11 +83,8 @@ public class MapsDataLoader
       long now2=System.currentTimeMillis();
       System.out.println("Landblocks took: "+(now2-now1)+"ms");
     }
-    // Save...
-    // - markers
+    // Save markers
     _mapsDataMgr.write();
-    // - dungeons
-    dungeonLoader.save();
   }
 
   private void initCategories(CategoriesManager categoriesManager)

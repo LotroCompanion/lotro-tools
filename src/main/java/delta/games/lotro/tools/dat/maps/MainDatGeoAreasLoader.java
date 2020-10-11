@@ -7,7 +7,7 @@ import delta.games.lotro.lore.maps.io.xml.GeoAreasXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
- * Get private encounters (instances) from DAT files.
+ * Get geographic areas from DAT files.
  * @author DAM
  */
 public class MainDatGeoAreasLoader

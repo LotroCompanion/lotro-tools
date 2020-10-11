@@ -9,8 +9,6 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.maps.data.MapsManager;
-import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 
 /**
  * Loader for quest map notes.
@@ -109,11 +107,7 @@ public class QuestMapNotesLoader
   {
     DataFacade facade=new DataFacade();
     MapsDataManager mapsDataManager=new MapsDataManager();
-    MapsManager mapsManager=mapsDataManager.getMapsManager();
-    GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
-    DungeonLoader dungeonLoader=new DungeonLoader(facade,basemapsManager);
-    GeoAreasLoader geoAreasLoader=new GeoAreasLoader(facade);
-    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager,dungeonLoader,geoAreasLoader);
+    MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager);
     QuestMapNotesLoader loader=new QuestMapNotesLoader(facade,markersUtils);
     loader.doIt();
     mapsDataManager.write();

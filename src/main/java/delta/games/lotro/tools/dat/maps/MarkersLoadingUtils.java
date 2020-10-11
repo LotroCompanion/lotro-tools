@@ -18,6 +18,8 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.lore.maps.DungeonsManager;
+import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.GeoPoint;
@@ -38,8 +40,6 @@ public class MarkersLoadingUtils
 
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
-  private DungeonLoader _dungeonLoader;
-  private GeoAreasLoader _geoAreasLoader;
   private MapsDataManager _mapsDataManager;
   private ParentZoneIndex _parentZonesIndex;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
@@ -49,16 +49,12 @@ public class MarkersLoadingUtils
    * Constructor.
    * @param facade Data facade.
    * @param mapsDataManager Maps data manager.
-   * @param dungeonLoader Loader for dungeons.
-   * @param geoAreasLoader Loader for geographic areas.
    */
-  public MarkersLoadingUtils(DataFacade facade, MapsDataManager mapsDataManager, DungeonLoader dungeonLoader, GeoAreasLoader geoAreasLoader)
+  public MarkersLoadingUtils(DataFacade facade, MapsDataManager mapsDataManager)
   {
     _facade=facade;
     _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     _mapsDataManager=mapsDataManager;
-    _dungeonLoader=dungeonLoader;
-    _geoAreasLoader=geoAreasLoader;
     ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
     _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
     _links=new LinksStorage();
@@ -183,7 +179,8 @@ public class MarkersLoadingUtils
     }
     if (dungeonDID!=0)
     {
-      where=_dungeonLoader.getDungeon(dungeonDID);
+      DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
+      where=dungeonsMgr.getDungeonById(dungeonDID);
     }
     //System.out.println("Area: "+area);
     /*
@@ -383,12 +380,14 @@ public class MarkersLoadingUtils
    */
   public Identifiable getAreaOrDungeon(int id)
   {
-    Dungeon dungeon=_dungeonLoader.getDungeon(id);
+    DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
+    Dungeon dungeon=dungeonsMgr.getDungeonById(id);
     if (dungeon!=null)
     {
       return dungeon;
     }
-    Area area=_geoAreasLoader.getArea(id);
+    GeoAreasManager geoAreasMgr=GeoAreasManager.getInstance();
+    Area area=geoAreasMgr.getAreaById(id);
     if (area!=null)
     {
       return area;
