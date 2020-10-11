@@ -127,15 +127,16 @@ public class MarkersLoadingUtils
       LOGGER.warn("No parent data for: "+position);
       return null;
     }
-    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
-    // Indexs
-    // - parent zone
+    // Parent zone
     int cell=position.getCell();
     Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
-    if (parentArea!=null)
+    if (parentArea==null)
     {
-      _mapsDataManager.registerDidMarker(parentArea.intValue(),marker);
+      LOGGER.warn("No parent area for marker!");
     }
+    int parentZoneId=parentArea.intValue();
+    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),parentZoneId);
+    // Indexs
     // - content layer
     _mapsDataManager.registerContentLayerMarker(layerId,marker);
     return marker;
@@ -238,10 +239,8 @@ public class MarkersLoadingUtils
       marker.setCategoryCode(code);
     }
     // Register this marker
-    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY());
+    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),where.getIdentifier());
     // Indexs
-    // - parent zone
-    _mapsDataManager.registerDidMarker(where.getIdentifier(),marker);
     // - content layer
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
     {

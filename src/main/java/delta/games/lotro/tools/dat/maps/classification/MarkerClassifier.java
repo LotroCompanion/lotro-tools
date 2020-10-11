@@ -14,6 +14,10 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.agents.AgentClassification;
+import delta.games.lotro.lore.crafting.CraftingData;
+import delta.games.lotro.lore.crafting.CraftingLevel;
+import delta.games.lotro.lore.crafting.CraftingSystem;
+import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
 
 /**
@@ -26,8 +30,6 @@ public class MarkerClassifier
   private static final boolean VERBOSE=false;
 
   private DataFacade _facade;
-  private EnumMapper _craftResourceType;
-  private EnumMapper _craftTier;
   private EnumMapper _mapNoteType;
   private ClassificationLoader _agentSpecLoader;
 
@@ -42,8 +44,6 @@ public class MarkerClassifier
   {
     _facade=facade;
     _cache=new HashMap<Integer,Classification>();
-    _craftResourceType=_facade.getEnumsManager().getEnumMapper(587202852);
-    _craftTier=_facade.getEnumsManager().getEnumMapper(587202659);
     _mapNoteType=_facade.getEnumsManager().getEnumMapper(587202775);
     _agentSpecLoader=new ClassificationLoader(facade);
   }
@@ -140,13 +140,11 @@ public class MarkerClassifier
     }
 
     Integer craftTierCode=(Integer)props.getProperty("Usage_RequiredCraftTier");
-    String craftTierLabel=null;
-    if (craftTierCode!=null)
-    {
-      craftTierLabel=_craftTier.getLabel(craftTierCode.intValue());
-    }
-    String craftResourceType=_craftResourceType.getLabel(craftResourceTypeCode.intValue());
-    ResourceClassification c=new ResourceClassification(craftResourceType,craftTierCode,craftTierLabel);
+    int professionId=((Integer)props.getProperty("Usage_RequiredCraftProfession")).intValue();
+    CraftingData craftingData=CraftingSystem.getInstance().getData();
+    Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
+    CraftingLevel level=profession.getByTier(craftTierCode.intValue());
+    ResourceClassification c=new ResourceClassification(level);
     return c;
     /*
     Craft_Resource_Type: 2 (Mine)

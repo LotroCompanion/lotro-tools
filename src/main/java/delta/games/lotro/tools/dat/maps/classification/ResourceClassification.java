@@ -1,58 +1,36 @@
 package delta.games.lotro.tools.dat.maps.classification;
 
+import delta.games.lotro.lore.crafting.CraftingLevel;
+
 /**
  * Resource node classification.
  * @author DAM
  */
 public class ResourceClassification extends Classification
 {
-  private String _nodeType;
-  private Integer _tier;
-  private String _tierName;
+  private CraftingLevel _level;
 
   /**
    * Constructor.
-   * @param nodeType Node type (Ruin,Mine,Wood).
-   * @param tier Tier.
-   * @param tierName Tier name.
+   * @param level Crafting level.
    */
-  public ResourceClassification(String nodeType, Integer tier, String tierName)
+  public ResourceClassification(CraftingLevel level)
   {
-    _nodeType=nodeType;
-    _tier=tier;
-    _tierName=tierName;
+    _level=level;
   }
 
   /**
-   * Get the node type.
-   * @return the node type.
+   * Get the crafting level.
+   * @return the crafting level.
    */
-  public String getNodeType()
+  public CraftingLevel getCraftingLevel()
   {
-    return _nodeType;
-  }
-
-  /**
-   * Get the node tier.
-   * @return the node tier.
-   */
-  public Integer getTier()
-  {
-    return _tier;
-  }
-
-  /**
-   * Get the node tier name.
-   * @return the node tier name.
-   */
-  public String getTierName()
-  {
-    return _tierName;
+    return _level;
   }
 
   @Override
   public String toString()
   {
-    return "Node type="+_nodeType+", tier="+_tier+", tier name="+_tierName;
+    return "Node for="+_level;
   }
 }

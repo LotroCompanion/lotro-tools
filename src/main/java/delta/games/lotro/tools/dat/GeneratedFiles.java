@@ -267,4 +267,8 @@ public class GeneratedFiles
    * Mobs.
    */
   public static final File MOBS=LotroCoreConfig.getInstance().getFile(DataFiles.MOBS);
+  /**
+   * Resources maps.
+   */
+  public static final File RESOURCES_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.RESOURCES_MAPS);
 }

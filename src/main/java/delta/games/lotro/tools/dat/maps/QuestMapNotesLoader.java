@@ -106,7 +106,7 @@ public class QuestMapNotesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    MapsDataManager mapsDataManager=new MapsDataManager();
+    MapsDataManager mapsDataManager=new MapsDataManager(facade);
     MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,mapsDataManager);
     QuestMapNotesLoader loader=new QuestMapNotesLoader(facade,markersUtils);
     loader.doIt();

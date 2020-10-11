@@ -11,12 +11,7 @@ import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
-import delta.games.lotro.lore.maps.Area;
-import delta.games.lotro.lore.maps.Dungeon;
-import delta.games.lotro.lore.maps.DungeonsManager;
-import delta.games.lotro.lore.maps.GeoAreasManager;
-import delta.games.lotro.lore.maps.ParchmentMap;
-import delta.games.lotro.lore.maps.ParchmentMapsManager;
+import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
 
@@ -99,7 +94,7 @@ public class InstanceMapDataBuilder
     Map<Integer,InstanceMapDescription> foundMaps=new HashMap<Integer,InstanceMapDescription>();
     for(Integer parentZoneID : parentZoneIds)
     {
-      Identifiable map=findMapForZone(parentZoneID.intValue());
+      Identifiable map=MapUtils.findMapForZone(parentZoneID.intValue());
       Integer mapId=(map!=null)?Integer.valueOf(map.getIdentifier()):null;
       InstanceMapDescription mapDescription=null;
       if (mapId!=null)
@@ -154,40 +149,5 @@ public class InstanceMapDataBuilder
       }
     }
     return ret;
-  }
-
-  private Identifiable getZone(int zoneId)
-  {
-    // Dungeon?
-    DungeonsManager dungeonsManager=DungeonsManager.getInstance();
-    Dungeon dungeon=dungeonsManager.getDungeonById(zoneId);
-    if (dungeon!=null)
-    {
-      return dungeon;
-    }
-    // Area?
-    GeoAreasManager geoAreasManager=GeoAreasManager.getInstance();
-    Area area=geoAreasManager.getAreaById(zoneId);
-    return area;
-  }
-
-  private Identifiable findMapForZone(int zoneId)
-  {
-    Identifiable zone=getZone(zoneId);
-    if (zone instanceof Dungeon)
-    {
-      return zone;
-    }
-    if (zone instanceof Area)
-    {
-      // Find parent map...
-      ParchmentMapsManager parchmentMapsManager=ParchmentMapsManager.getInstance();
-      ParchmentMap parchmentMap=parchmentMapsManager.getParchmentMapForArea(zoneId);
-      if (parchmentMap!=null)
-      {
-        return parchmentMap;
-      }
-    }
-    return null;
   }
 }

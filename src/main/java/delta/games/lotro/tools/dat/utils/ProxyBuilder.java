@@ -30,6 +30,7 @@ public class ProxyBuilder
       itemProxy=new Proxy<Item>();
       itemProxy.setId(itemId);
       itemProxy.setName(itemName);
+      itemProxy.setObject(item);
     }
     else
     {

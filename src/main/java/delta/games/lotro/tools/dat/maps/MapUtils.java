@@ -12,8 +12,15 @@ import javax.imageio.stream.ImageInputStream;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.PositionDecoder;
+import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.lore.maps.DungeonsManager;
+import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.lore.maps.ParchmentMap;
+import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
@@ -117,4 +124,45 @@ public class MapUtils
     }
     return null;
   }
+
+  /**
+   * Find the map (Dungeon/ParchmentMap) for a given zone (Dungeon/Area)
+   * @param zoneId Zone identifier.
+   * @return the found map or <code>null</code>.
+   */
+  public static Identifiable findMapForZone(int zoneId)
+  {
+    Identifiable zone=getZone(zoneId);
+    if (zone instanceof Dungeon)
+    {
+      return zone;
+    }
+    if (zone instanceof Area)
+    {
+      // Find parent map...
+      ParchmentMapsManager parchmentMapsManager=ParchmentMapsManager.getInstance();
+      ParchmentMap parchmentMap=parchmentMapsManager.getParchmentMapForArea(zoneId);
+      if (parchmentMap!=null)
+      {
+        return parchmentMap;
+      }
+    }
+    return null;
+  }
+
+  private static Identifiable getZone(int zoneId)
+  {
+    // Dungeon?
+    DungeonsManager dungeonsManager=DungeonsManager.getInstance();
+    Dungeon dungeon=dungeonsManager.getDungeonById(zoneId);
+    if (dungeon!=null)
+    {
+      return dungeon;
+    }
+    // Area?
+    GeoAreasManager geoAreasManager=GeoAreasManager.getInstance();
+    Area area=geoAreasManager.getAreaById(zoneId);
+    return area;
+  }
+
 }

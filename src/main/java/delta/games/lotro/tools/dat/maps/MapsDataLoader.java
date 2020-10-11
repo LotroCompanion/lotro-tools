@@ -33,7 +33,7 @@ public class MapsDataLoader
   public MapsDataLoader(DataFacade facade)
   {
     _facade=facade;
-    _mapsDataMgr=new MapsDataManager();
+    _mapsDataMgr=new MapsDataManager(facade);
   }
 
   /**
