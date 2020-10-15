@@ -8,6 +8,7 @@ import delta.games.lotro.dat.archive.DatFilesManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.tools.dat.maps.data.HeightMap;
 
 /**
  * Loader for landblock data.
@@ -29,13 +30,14 @@ public class LandblockDataLoader
   }
 
   /**
-   * Load a landblock info.
+   * Load a landblock data.
    * @param region Region identifier.
    * @param blockX Block coordinate (horizontal).
    * @param blockY Block coordinate (vertical).
+   * @return a height map.
    */
   @SuppressWarnings("unused")
-  public void loadLandblockData(int region, int blockX, int blockY)
+  public HeightMap loadLandblockData(int region, int blockX, int blockY)
   {
     long landblockDataDID=0x80000000L+(region*0x10000)+(blockX*0x100)+blockY;
 
@@ -43,12 +45,12 @@ public class LandblockDataLoader
     DATArchive cellArchive=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
     if (cellArchive==null)
     {
-      return;
+      return null;
     }
     byte[] data=cellArchive.loadEntry(landblockDataDID);
     if (data==null)
     {
-      return;
+      return null;
     }
     //System.out.println("*** Landblock data: region="+region+", blockX="+blockX+", blockY="+blockY);
     //System.out.println("LBD data length: "+data.length);
@@ -63,13 +65,16 @@ public class LandblockDataLoader
 
     // Divide by 65535 to get 0..1 range then double to get offset z
     int[] floorHeightMap=BufferUtils.readPrefixedArrayUInt16(bis);
-    System.out.println("Floor height map size: "+floorHeightMap.length);
+    //System.out.println("Floor height map size: "+floorHeightMap.length);
 
+    /*
     boolean hasCeiling=BufferUtils.readBoolean(bis);
     if (hasCeiling)
     {
       int[] ceilingHeightMap=BufferUtils.readPrefixedArrayUInt16(bis);
       System.out.println("Ceiling height map size: "+ceilingHeightMap.length);
     }
+    */
+    return new HeightMap(floorHeightMap);
   }
 }
