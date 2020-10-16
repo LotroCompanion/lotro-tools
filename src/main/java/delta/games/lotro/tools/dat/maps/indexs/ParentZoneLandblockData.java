@@ -118,9 +118,17 @@ public class ParentZoneLandblockData
     if (cell>0)
     {
       ret=getCellDungeon(cell);
-      if (ret==null)
+    }
+    if (ret==null)
+    {
+      Integer dungeonId=getParentDungeon();
+      if (dungeonId!=null)
       {
-        ret=getParentDungeon();
+        // Check height
+        if (oz<_centerHeight)
+        {
+          ret=dungeonId;
+        }
       }
     }
     if (ret==null)
