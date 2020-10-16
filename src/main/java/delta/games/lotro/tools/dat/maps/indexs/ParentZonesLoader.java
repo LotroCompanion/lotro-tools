@@ -3,8 +3,10 @@ package delta.games.lotro.tools.dat.maps.indexs;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.maps.BlockMapLoader;
+import delta.games.lotro.tools.dat.maps.LandblockDataLoader;
 import delta.games.lotro.tools.dat.maps.LandblockInfoLoader;
 import delta.games.lotro.tools.dat.maps.data.Cell;
+import delta.games.lotro.tools.dat.maps.data.HeightMap;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
@@ -15,6 +17,7 @@ public class ParentZonesLoader
 {
   private LandblockInfoLoader _lbiLoader;
   private BlockMapLoader _blockMapLoader;
+  private LandblockDataLoader _lbdLoader;
 
   /**
    * Constructor.
@@ -24,32 +27,7 @@ public class ParentZonesLoader
   {
     _lbiLoader=new LandblockInfoLoader(facade);
     _blockMapLoader=new BlockMapLoader(facade);
-  }
-
-  /**
-   * Build the whole index.
-   * @return the built index.
-   */
-  public ParentZoneIndex buildIndex()
-  {
-    ParentZoneIndex index=new ParentZoneIndex(this);
-    int nbBlocks=0;
-    for(int region=1;region<=4;region++)
-    {
-      for(int blockX=0;blockX<=0xFE;blockX++)
-      {
-        for(int blockY=0;blockY<=0xFE;blockY++)
-        {
-          ParentZoneLandblockData data=index.getLandblockData(region,blockX,blockY);
-          if (data!=null)
-          {
-            nbBlocks++;
-          }
-        }
-      }
-    }
-    System.out.println("Loaded "+nbBlocks+" blocks!");
-    return index;
+    _lbdLoader=new LandblockDataLoader(facade);
   }
 
   /**
@@ -81,24 +59,24 @@ public class ParentZonesLoader
     if (dungeonDID!=null)
     {
       ret.setParentDungeon(dungeonDID.intValue());
+      HeightMap heightmap=_lbdLoader.loadLandblockData(region,blockX,blockY);
+      if (heightmap!=null)
+      {
+        float centerHeight=heightmap.getCenterHeight();
+        ret.setCenterHeight(centerHeight);
+        //Dungeon dungeon=DungeonsManager.getInstance().getDungeonById(dungeonDID.intValue());
+        //System.out.println("Dungeon "+dungeonDID+" ("+dungeon.getName()+"): center height "+centerHeight+" for R"+region+", BX="+blockX+",BY="+blockY);
+      }
     }
     // Cells
     for(Cell cell : lbi.getCells())
     {
-      int cellDungeonId=cell.getDungeonId();
-      ret.addCellDungeon(cell.getIndex(),cellDungeonId);
+      Integer cellDungeonId=cell.getDungeonId();
+      if (cellDungeonId!=null)
+      {
+        ret.addCellDungeon(cell.getIndex(),cellDungeonId.intValue());
+      }
     }
     return ret;
-  }
-
-  /**
-   * Main method to build the whole index.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    ParentZonesLoader loader=new ParentZonesLoader(facade);
-    /*ParentZoneIndex index=*/loader.buildIndex();
   }
 }

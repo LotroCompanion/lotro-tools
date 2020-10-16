@@ -28,13 +28,13 @@ public class HeightMap
 
   /**
    * Get the height approximation for the given point.
-   * @param ox
-   * @param oy
-   * @return
+   * @param ox X position in landblock.
+   * @param oy Y position in landblock.
+   * @return the height value.
    */
   public float getHeight(float ox, float oy)
   {
-    int x=(int)(ox/5);
+    int x=(int)(ox/5); // 5 is 160/32
     int y=(int)(oy/5);
     float h1=getHeightAt(x,y);
     float h2=getHeightAt(x+1,y);

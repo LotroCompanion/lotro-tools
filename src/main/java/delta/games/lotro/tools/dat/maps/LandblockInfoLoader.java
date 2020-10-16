@@ -76,7 +76,7 @@ public class LandblockInfoLoader
     long did=BufferUtils.readUInt32AsLong(bis);
     if (did!=landblockInfoDID)
     {
-      throw new IllegalArgumentException("Expected DID for block map: "+landblockInfoDID);
+      throw new IllegalArgumentException("Expected DID for landblock info: "+landblockInfoDID);
     }
     LandBlockInfo ret=new LandBlockInfo(landblockInfoDID);
     int flags=BufferUtils.readUInt32(bis);
@@ -214,6 +214,7 @@ public class LandblockInfoLoader
     //System.out.println("\tPosition: "+position);
     int flags=BufferUtils.readUInt32(bis);
     int cellMeshDID=BufferUtils.readUInt32(bis);
+    //System.out.println("\tMesh ID: "+cellMeshDID);
     int neighboursCount=BufferUtils.readUInt32(bis);
     // Neighbours
     for(int i=0;i<neighboursCount;i++)
@@ -229,12 +230,15 @@ public class LandblockInfoLoader
       }
       int[] cellIndices0=readIntegerArray(bis);
       int[] cellIndices1=readIntegerArray(bis);
+      //System.out.println("\tCell indices: #0="+Arrays.toString(cellIndices0)+", #1="+Arrays.toString(cellIndices1));
       int unknown=BufferUtils.readUInt16(bis);
+      //System.out.println("\tUnknown: "+unknown);
     }
     else
     {
       int[] cellIndices0=readIntegerArray(bis);
       int[] cellIndices1=readIntegerArray(bis);
+      //System.out.println("\tCell indices: #0="+Arrays.toString(cellIndices0)+", #1="+Arrays.toString(cellIndices1));
     }
     Integer dungeonId=null;
     if ((flags&0x4)!=0)
@@ -263,11 +267,9 @@ public class LandblockInfoLoader
          */
       }
     }
-    if (dungeonId!=null)
-    {
-      return new Cell(index,dungeonId.intValue());
-    }
-    return null;
+    Cell ret=new Cell(index,dungeonId);
+    ret.setPosition(position);
+    return ret;
   }
 
   @SuppressWarnings("unused")
@@ -280,11 +282,11 @@ public class LandblockInfoLoader
     }
     int cellIndex=BufferUtils.readUInt16(bis);
     int neighbourIndex=BufferUtils.readUInt16(bis);
-    //System.out.println("Neighbour #"+index+" is cell #"+cellIndex);
     LoaderUtils.readAssert16(bis,0);
     LoaderUtils.readAssert16(bis,0);
     LoaderUtils.readAssert16(bis,0);
     boolean unknownBool=BufferUtils.readBoolean(bis);
+    //System.out.println("\tNeighbour #"+index+" is cell #"+cellIndex+", and reverse neighbour index is "+neighbourIndex+", bool="+unknownBool);
   }
 
   private EntityDescriptor loadStaticEntity(ByteArrayInputStream bis)

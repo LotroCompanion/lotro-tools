@@ -3,6 +3,8 @@ package delta.games.lotro.tools.dat.maps.indexs;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DatPosition;
 
 /**
@@ -12,6 +14,8 @@ import delta.games.lotro.dat.data.DatPosition;
  */
 public class ParentZoneIndex
 {
+  private static final Logger LOGGER=Logger.getLogger(ParentZoneIndex.class);
+
   private ParentZonesLoader _loader;
   private Map<String,ParentZoneLandblockData> _index;
 
@@ -79,24 +83,15 @@ public class ParentZoneIndex
     int blockX=position.getBlockX();
     int blockY=position.getBlockY();
     int cell=position.getCell();
-    return getParentZone(region,blockX,blockY,cell);
-  }
-
-  /**
-   * Get the parent zone (area or dungeon) for a position.
-   * @param region Region.
-   * @param blockX Block X.
-   * @param blockY Block Y.
-   * @param cell Cell.
-   * @return A parent zone identifier or <code>null</code>.
-   */
-  public Integer getParentZone(int region, int blockX, int blockY, int cell)
-  {
     ParentZoneLandblockData data=getLandblockData(region,blockX,blockY);
     Integer ret=null;
     if (data!=null)
     {
-      ret=data.getParentData(cell);
+      ret=data.getParentData(cell,position.getPosition().getZ());
+    }
+    else
+    {
+      LOGGER.warn("No parent data for: "+position);
     }
     return ret;
   }

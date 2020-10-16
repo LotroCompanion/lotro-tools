@@ -27,7 +27,6 @@ import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
 import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 
 /**
@@ -121,18 +120,12 @@ public class MarkersLoadingUtils
       LOGGER.warn("Found unsupported region: "+region);
       return null;
     }
-    ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
-    if (parentData==null)
-    {
-      LOGGER.warn("No parent data for: "+position);
-      return null;
-    }
-    // Parent zone
-    int cell=position.getCell();
-    Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
+
+    Integer parentArea=_parentZonesIndex.getParentZone(position);
     if (parentArea==null)
     {
       LOGGER.warn("No parent area for marker!");
+      return null;
     }
     int parentZoneId=parentArea.intValue();
     _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),parentZoneId);

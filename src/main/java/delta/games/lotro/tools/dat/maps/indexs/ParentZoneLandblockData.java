@@ -14,6 +14,7 @@ public class ParentZoneLandblockData
   private Map<Integer,Integer> _cell2Dungeon;
   private Integer _parentDungeon;
   private Integer _parentArea;
+  private float _centerHeight;
 
   /**
    * Constructor.
@@ -97,11 +98,21 @@ public class ParentZoneLandblockData
   }
 
   /**
+   * Set the center height.
+   * @param centerHeight Center height (unknown unit).
+   */
+  public void setCenterHeight(float centerHeight)
+  {
+    _centerHeight=centerHeight;
+  }
+
+  /**
    * Get the parent zone identifier.
    * @param cell Cell index to use.
+   * @param oz Height of point to check.
    * @return A parent zone identifier or <code>null</code>.
    */
-  public Integer getParentData(int cell)
+  public Integer getParentData(int cell, float oz)
   {
     Integer ret=null;
     if (cell>0)
