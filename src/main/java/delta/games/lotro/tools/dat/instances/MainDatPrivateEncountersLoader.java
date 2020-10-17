@@ -9,6 +9,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.Vector3D;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.geo.BlockReference;
@@ -31,6 +32,10 @@ public class MainDatPrivateEncountersLoader
   private DataFacade _facade;
   private List<PrivateEncounter> _data;
   private InstanceMapDataBuilder _mapDataBuilder;
+  private EnumMapper _difficultyTiers;
+  private EnumMapper _groupSize;
+  private EnumMapper _worldJoinType;
+  private EnumMapper _worldJoinCategory;
 
   /**
    * Constructor.
@@ -43,6 +48,10 @@ public class MainDatPrivateEncountersLoader
     ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
     ParentZoneIndex parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
     _mapDataBuilder=new InstanceMapDataBuilder(parentZonesIndex);
+    _difficultyTiers=facade.getEnumsManager().getEnumMapper(0x230002DC);
+    _groupSize=facade.getEnumsManager().getEnumMapper(0x230002DA);
+    _worldJoinType=facade.getEnumsManager().getEnumMapper(0x23000309);
+    _worldJoinCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -130,12 +139,99 @@ public class MainDatPrivateEncountersLoader
     // Skirmish specifics
     if (skirmishPE!=null)
     {
-      Integer levelScaling=(Integer)props.getProperty("Skirmish_Template_LevelScalingLevel");
-      skirmishPE.setLevelScaling(levelScaling);
+      loadSkirmishSpecifics(skirmishPE,props);
     }
     // Build maps
     _mapDataBuilder.handlePrivateEncounter(ret,blocks);
     return ret;
+  }
+
+  private void loadSkirmishSpecifics(SkirmishPrivateEncounter skirmishPE, PropertiesSet props)
+  {
+    // - difficulty tiers
+    /*
+    Skirmish_Template_DifficultyTierArray: 
+      #1: 1 (Tier I)
+      #2: 2 (Tier II)
+     */
+    Object[] difficultyTiersArray=(Object[])props.getProperty("Skirmish_Template_DifficultyTierArray");
+    if (difficultyTiersArray!=null)
+    {
+      for(Object difficultyTierObj : difficultyTiersArray)
+      {
+        int difficultyTierCode=((Integer)difficultyTierObj).intValue();
+        if (difficultyTierCode!=0)
+        {
+          String difficultyTier=_difficultyTiers.getString(difficultyTierCode);
+          skirmishPE.addDifficultyTier(difficultyTier);
+        }
+      }
+    }
+    else
+    {
+      LOGGER.warn("No difficulty tier!");
+    }
+    // - group sizes
+    /*
+    Skirmish_Template_GroupSizeArray: 
+      #1: 12 (Raid (12))
+     */
+    Object[] groupSizesArray=(Object[])props.getProperty("Skirmish_Template_GroupSizeArray");
+    if (groupSizesArray!=null)
+    {
+      for(Object groupSizeObj : groupSizesArray)
+      {
+        int groupSizeCode=((Integer)groupSizeObj).intValue();
+        if (groupSizeCode!=0)
+        {
+          String groupSize=_groupSize.getString(groupSizeCode);
+          skirmishPE.addGroupSize(groupSize);
+        }
+      }
+    }
+    else
+    {
+      LOGGER.warn("No group size!");
+    }
+    // - level scale
+    /*
+    Skirmish_Template_MaxLevelScale: 130
+    Skirmish_Template_MinLevelScale: 65
+     */
+    int minLevelScale=((Integer)props.getProperty("Skirmish_Template_MinLevelScale")).intValue();
+    int maxLevelScale=((Integer)props.getProperty("Skirmish_Template_MaxLevelScale")).intValue();
+    skirmishPE.setLevelScale(minLevelScale,maxLevelScale);
+    // - category
+    // WorldJoin_EncounterCategory: 11 (Dol Guldur)
+    Integer categoryCode=(Integer)props.getProperty("WorldJoin_EncounterCategory");
+    if (categoryCode!=null)
+    {
+      String category=_worldJoinCategory.getString(categoryCode.intValue());
+      if (categoryCode.intValue()==0)
+      {
+        category="Other";
+      }
+      skirmishPE.setCategory(category);
+    }
+    else
+    {
+      //LOGGER.warn("No category code: "+skirmishPE.getName());
+    }
+    // - type
+    // WorldJoin_EncounterType: 4 (Classic)
+    Integer typeCode=(Integer)props.getProperty("WorldJoin_EncounterType");
+    if (typeCode!=null)
+    {
+      String type=_worldJoinType.getString(typeCode.intValue());
+      skirmishPE.setType(type);
+    }
+    else
+    {
+      //LOGGER.warn("No type code: "+skirmishPE.getName());
+    }
+
+    Integer levelScaling=(Integer)props.getProperty("Skirmish_Template_LevelScalingLevel");
+    skirmishPE.setLevelScaling(levelScaling);
   }
 
   private void doIt()
