@@ -12,8 +12,8 @@ import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.tools.dat.maps.MapUtils;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneLandblockData;
+import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
+import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
  * Build map data for instances.
@@ -23,15 +23,14 @@ public class InstanceMapDataBuilder
 {
   private static final Logger LOGGER=Logger.getLogger(InstanceMapDataBuilder.class);
 
-  private ParentZoneIndex _parentZoneIndex;
+  private LandblocksManager _landblocksManager;
 
   /**
    * Constructor.
-   * @param parentZoneIndex
    */
-  public InstanceMapDataBuilder(ParentZoneIndex parentZoneIndex)
+  public InstanceMapDataBuilder()
   {
-    _parentZoneIndex=parentZoneIndex;
+    _landblocksManager=LandblocksManager.getInstance();
   }
 
   /**
@@ -54,7 +53,7 @@ public class InstanceMapDataBuilder
       }
       int blockX=block.getBlockX();
       int blockY=block.getBlockY();
-      ParentZoneLandblockData lbData=_parentZoneIndex.getLandblockData(region,blockX,blockY);
+      Landblock lbData=_landblocksManager.getLandblock(region,blockX,blockY);
       List<Integer> parentZoneIdsForBlock=null;
       if (lbData!=null)
       {
@@ -130,7 +129,7 @@ public class InstanceMapDataBuilder
     */
   }
 
-  private List<Integer> getParentZones(ParentZoneLandblockData lbData)
+  private List<Integer> getParentZones(Landblock lbData)
   {
     List<Integer> ret=new ArrayList<Integer>();
     List<Integer> dungeonsFromCells=lbData.getDungeonsFromCells();

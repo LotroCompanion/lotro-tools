@@ -271,4 +271,8 @@ public class GeneratedFiles
    * Resources maps.
    */
   public static final File RESOURCES_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.RESOURCES_MAPS);
+  /**
+   * Landblocks.
+   */
+  public static final File LANDBLOCKS=new File("../lotro-data/maps/landblocks.xml");
 }

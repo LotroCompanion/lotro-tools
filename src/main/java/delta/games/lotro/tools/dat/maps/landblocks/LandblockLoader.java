@@ -1,19 +1,17 @@
-package delta.games.lotro.tools.dat.maps.indexs;
+package delta.games.lotro.tools.dat.maps.landblocks;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.tools.dat.maps.BlockMapLoader;
-import delta.games.lotro.tools.dat.maps.LandblockDataLoader;
-import delta.games.lotro.tools.dat.maps.LandblockInfoLoader;
+import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.tools.dat.maps.data.Cell;
 import delta.games.lotro.tools.dat.maps.data.HeightMap;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
- * Loader for parent zone data.
+ * Loader for landblocks.
  * @author DAM
  */
-public class ParentZonesLoader
+public class LandblockLoader
 {
   private LandblockInfoLoader _lbiLoader;
   private BlockMapLoader _blockMapLoader;
@@ -21,9 +19,9 @@ public class ParentZonesLoader
 
   /**
    * Constructor.
-   * @param facade
+   * @param facade Data facade.
    */
-  public ParentZonesLoader(DataFacade facade)
+  public LandblockLoader(DataFacade facade)
   {
     _lbiLoader=new LandblockInfoLoader(facade);
     _blockMapLoader=new BlockMapLoader(facade);
@@ -31,13 +29,13 @@ public class ParentZonesLoader
   }
 
   /**
-   * Build landblock data.
+   * Build a landblock.
    * @param region Region identifier.
    * @param blockX Block coordinate (horizontal).
    * @param blockY Block coordinate (vertical).
    * @return the loaded data or <code>null</code>.
    */
-  public ParentZoneLandblockData buildLandblockData(int region, int blockX, int blockY)
+  public Landblock buildLandblock(int region, int blockX, int blockY)
   {
     // Landblock Info
     LandBlockInfo lbi=_lbiLoader.loadLandblockInfo(region,blockX,blockY);
@@ -45,7 +43,8 @@ public class ParentZonesLoader
     {
       return null;
     }
-    ParentZoneLandblockData ret=new ParentZoneLandblockData();
+    BlockReference blockId=new BlockReference(region,blockX,blockY);
+    Landblock ret=new Landblock(blockId);
     // Block map
     PropertiesSet props=_blockMapLoader.loadPropertiesForMapBlock(region,blockX,blockY);
     if (props!=null)
@@ -59,14 +58,13 @@ public class ParentZonesLoader
     if (dungeonDID!=null)
     {
       ret.setParentDungeon(dungeonDID.intValue());
-      HeightMap heightmap=_lbdLoader.loadLandblockData(region,blockX,blockY);
-      if (heightmap!=null)
-      {
-        float centerHeight=heightmap.getCenterHeight();
-        ret.setCenterHeight(centerHeight);
-        //Dungeon dungeon=DungeonsManager.getInstance().getDungeonById(dungeonDID.intValue());
-        //System.out.println("Dungeon "+dungeonDID+" ("+dungeon.getName()+"): center height "+centerHeight+" for R"+region+", BX="+blockX+",BY="+blockY);
-      }
+    }
+    // Heightmap
+    HeightMap heightmap=_lbdLoader.loadLandblockData(region,blockX,blockY);
+    if (heightmap!=null)
+    {
+      float centerHeight=heightmap.getCenterHeight();
+      ret.setCenterHeight(centerHeight);
     }
     // Cells
     for(Cell cell : lbi.getCells())

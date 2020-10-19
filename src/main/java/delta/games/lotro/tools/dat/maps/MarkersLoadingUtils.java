@@ -26,8 +26,7 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
+import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
  * Marker loading utilities.
@@ -40,7 +39,7 @@ public class MarkersLoadingUtils
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
   private MapsDataManager _mapsDataManager;
-  private ParentZoneIndex _parentZonesIndex;
+  private LandblocksManager _landblocksManager;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
   private LinksStorage _links;
 
@@ -54,8 +53,7 @@ public class MarkersLoadingUtils
     _facade=facade;
     _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     _mapsDataManager=mapsDataManager;
-    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
-    _parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
+    _landblocksManager=LandblocksManager.getInstance();
     _links=new LinksStorage();
   }
 
@@ -121,7 +119,7 @@ public class MarkersLoadingUtils
       return null;
     }
 
-    Integer parentArea=_parentZonesIndex.getParentZone(position);
+    Integer parentArea=_landblocksManager.getParentZone(position);
     if (parentArea==null)
     {
       LOGGER.warn("No parent area for marker!");

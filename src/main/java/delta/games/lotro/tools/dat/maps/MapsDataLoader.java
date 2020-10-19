@@ -15,6 +15,8 @@ import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
+import delta.games.lotro.tools.dat.maps.landblocks.LandblockGeneratorsAnalyzer;
+import delta.games.lotro.tools.dat.maps.landblocks.LandblockInfoLoader;
 
 /**
  * Loader for maps data.

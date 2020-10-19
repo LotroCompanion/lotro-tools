@@ -17,8 +17,6 @@ import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZoneIndex;
-import delta.games.lotro.tools.dat.maps.indexs.ParentZonesLoader;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -45,9 +43,7 @@ public class MainDatPrivateEncountersLoader
   {
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
-    ParentZonesLoader parentZoneLoader=new ParentZonesLoader(facade);
-    ParentZoneIndex parentZonesIndex=new ParentZoneIndex(parentZoneLoader);
-    _mapDataBuilder=new InstanceMapDataBuilder(parentZonesIndex);
+    _mapDataBuilder=new InstanceMapDataBuilder();
     _difficultyTiers=facade.getEnumsManager().getEnumMapper(0x230002DC);
     _groupSize=facade.getEnumsManager().getEnumMapper(0x230002DA);
     _worldJoinType=facade.getEnumsManager().getEnumMapper(0x23000309);
@@ -102,9 +98,7 @@ public class MainDatPrivateEncountersLoader
         {
           LOGGER.warn("Cell Y is not a multiple of 8: "+cellY+" for PE "+privateEncounterId);
         }
-        BlockReference block=new BlockReference();
-        block.setRegion(region);
-        block.setBlock(cellX/8,cellY/8);
+        BlockReference block=new BlockReference(region,cellX/8,cellY/8);
         blocks.add(block);
       }
     }

@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.maps;
+package delta.games.lotro.tools.dat.maps.landblocks;
 
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
@@ -7,16 +7,16 @@ import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
- * Simple test class for the landblock loader.
+ * Simple test class for the landblock info loader.
  * @author DAM
  */
-public class MainTestLandblockLoader
+public class MainTestLandblockInfoLoader
 {
   private DataFacade _facade;
   private LandblockInfoLoader _loader;
   private LandblockGeneratorsAnalyzer _analyzer;
 
-  private MainTestLandblockLoader()
+  private MainTestLandblockInfoLoader()
   {
     _facade=new DataFacade();
     _loader=new LandblockInfoLoader(_facade);
@@ -64,7 +64,8 @@ public class MainTestLandblockLoader
     //int region=1; int blockX=position.getBlockX(); int blockY=position.getBlockY();
     //int region=2; int blockX=252; int blockY=83;
     //int region=2; int blockX=0x71; int blockY=0xB5;
-    int region=2; int blockX=252; int blockY=82;
+    //int region=2; int blockX=252; int blockY=82;
+    int region=2; int blockX=248; int blockY=198;
     BlockMapLoader bmLoader=new BlockMapLoader(_facade);
     PropertiesSet props=bmLoader.loadPropertiesForMapBlock(region,blockX,blockY);
     System.out.println("Block map props: "+props.dump());
@@ -95,7 +96,7 @@ public class MainTestLandblockLoader
    */
   public static void main(String[] args)
   {
-    MainTestLandblockLoader loader=new MainTestLandblockLoader();
+    MainTestLandblockInfoLoader loader=new MainTestLandblockInfoLoader();
     loader.doIt();
   }
 }

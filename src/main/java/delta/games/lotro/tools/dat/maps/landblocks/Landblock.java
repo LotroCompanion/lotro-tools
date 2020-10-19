@@ -1,16 +1,21 @@
-package delta.games.lotro.tools.dat.maps.indexs;
+package delta.games.lotro.tools.dat.maps.landblocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.lore.geo.BlockReference;
+
 /**
- * 'Parent zone' data for a single landblock.
+ * Landblock.
+ * <p>
+ * Contains summary data for a single landblock, as used by tools.
  * @author DAM
  */
-public class ParentZoneLandblockData
+public class Landblock
 {
+  private BlockReference _id;
   private Map<Integer,Integer> _cell2Dungeon;
   private Integer _parentDungeon;
   private Integer _parentArea;
@@ -18,10 +23,21 @@ public class ParentZoneLandblockData
 
   /**
    * Constructor.
+   * @param id Block identifier.
    */
-  public ParentZoneLandblockData()
+  public Landblock(BlockReference id)
   {
+    _id=id;
     _cell2Dungeon=new HashMap<Integer,Integer>();
+  }
+
+  /**
+   * Get the block identifier.
+   * @return the block identifier.
+   */
+  public BlockReference getBlockId()
+  {
+    return _id;
   }
 
   /**
@@ -42,6 +58,15 @@ public class ParentZoneLandblockData
   public Integer getCellDungeon(int cellIndex)
   {
     return _cell2Dungeon.get(Integer.valueOf(cellIndex));
+  }
+
+  /**
+   * Get the indexes for the managed cells.
+   * @return a list of cell indexes.
+   */
+  public List<Integer> getCellIndexes()
+  {
+    return new ArrayList<Integer>(_cell2Dungeon.keySet());
   }
 
   /**
@@ -95,6 +120,15 @@ public class ParentZoneLandblockData
   public void setParentArea(int areaId)
   {
     _parentArea=Integer.valueOf(areaId);
+  }
+
+  /**
+   * Get the center height for this landblock.
+   * @return a height.
+   */
+  public float getCenterHeight()
+  {
+    return _centerHeight;
   }
 
   /**

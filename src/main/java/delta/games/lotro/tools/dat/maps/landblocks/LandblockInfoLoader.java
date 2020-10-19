@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.maps;
+package delta.games.lotro.tools.dat.maps.landblocks;
 
 import java.io.ByteArrayInputStream;
 import java.util.Set;
