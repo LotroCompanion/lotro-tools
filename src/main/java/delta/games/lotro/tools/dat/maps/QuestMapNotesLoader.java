@@ -68,7 +68,7 @@ public class QuestMapNotesLoader
         System.out.println("Quest dispenser info: "+questDispenserInfo.dump());
       }
     }
-    _markersUtils.loadMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
+    _markersUtils.buildMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
   }
 
   /**

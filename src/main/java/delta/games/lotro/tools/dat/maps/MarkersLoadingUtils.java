@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -26,6 +27,7 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
+import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
@@ -35,6 +37,7 @@ import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 public class MarkersLoadingUtils
 {
   private static final Logger LOGGER=Logger.getLogger(MarkersLoadingUtils.class);
+  private static final boolean DO_CHECK=false;
 
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
@@ -107,28 +110,26 @@ public class MarkersLoadingUtils
    */
   public Marker buildMarker(DatPosition position, DataIdentification dataId, int layerId)
   {
-    Marker marker=MarkerUtils.buildMarker(position,dataId);
-    if (marker==null)
-    {
-      return null;
-    }
     int region=position.getRegion();
     if ((region<1) || (region>4))
     {
       LOGGER.warn("Found unsupported region: "+region);
       return null;
     }
-
-    Integer parentArea=_landblocksManager.getParentZone(position);
-    if (parentArea==null)
+    Integer parentZoneId=_landblocksManager.getParentZone(position);
+    if (parentZoneId==null)
     {
-      LOGGER.warn("No parent area for marker!");
+      LOGGER.warn("No parent zone for marker!");
       return null;
     }
-    int parentZoneId=parentArea.intValue();
-    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),parentZoneId);
-    // Indexs
-    // - content layer
+    Marker marker=MarkerUtils.buildMarker(position,dataId);
+    if (marker==null)
+    {
+      return null;
+    }
+    // Register marker
+    _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),parentZoneId.intValue());
+    // Content layer
     _mapsDataManager.registerContentLayerMarker(layerId,marker);
     return marker;
   }
@@ -144,7 +145,7 @@ public class MarkersLoadingUtils
    * @param type Type override.
    * @return the generated marker or <code>null</code>.
    */
-  public Marker loadMarker(DatPosition position, int areaDID, int dungeonDID, int noteDID, Object[] contentLayersArray, String text, long type)
+  public Marker buildMarker(DatPosition position, int areaDID, int dungeonDID, int noteDID, Object[] contentLayersArray, String text, long type)
   {
     // Checks
     int region=position.getRegion();
@@ -159,54 +160,46 @@ public class MarkersLoadingUtils
       LOGGER.warn("Instance is not 0 for position: "+position);
     }
     Identifiable where=null;
-    Identifiable area=null;
     if (areaDID!=0)
     {
       where=getAreaOrDungeon(areaDID);
-      area=where;
-    }
-    if ((area==null) && (areaDID!=0))
-    {
-      LOGGER.warn("Area is null: ID="+areaDID);
+      if (where==null)
+      {
+        LOGGER.warn("Area is null: ID="+areaDID);
+      }
     }
     if (dungeonDID!=0)
     {
       DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
       where=dungeonsMgr.getDungeonById(dungeonDID);
     }
-    //System.out.println("Area: "+area);
-    /*
-    if (dungeon!=null)
-    {
-      System.out.println("Dungeon: "+dungeon);
-    }
-    */
     if (where==null)
     {
       LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
       return null;
     }
-    /*
-    ParentZoneLandblockData parentData=_parentZonesIndex.getLandblockData(position.getRegion(),position.getBlockX(),position.getBlockY());
-    if (parentData==null)
+    // Checks
+    if (DO_CHECK)
     {
-      LOGGER.warn("No parent data for: "+position);
+      // Verified to work 100%
+      Landblock landblock=_landblocksManager.getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
+      if (landblock==null)
+      {
+        LOGGER.warn("No parent data for: "+position);
+      }
+      int cell=position.getCell();
+      if ((cell!=0) && (!(where instanceof Dungeon)))
+      {
+        // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
+        //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
+      }
+      Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition().getZ()):null;
+      Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
+      if (!Objects.equals(whereId,parentArea))
+      {
+        LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
+      }
     }
-    int cell=position.getCell();
-    if ((cell!=0) && (!(where instanceof Dungeon)))
-    {
-      // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
-      //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
-    }
-    */
-    /*
-    Integer parentArea=(parentData!=null)?parentData.getParentData(cell):null;
-    Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
-    if (!Objects.equals(whereId,parentArea))
-    {
-      LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
-    }
-    */
     DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
     if (dataId==null)
     {
@@ -231,8 +224,7 @@ public class MarkersLoadingUtils
     }
     // Register this marker
     _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),where.getIdentifier());
-    // Indexs
-    // - content layer
+    // Content layer
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
     {
       for(Object contentLayerObj : contentLayersArray)

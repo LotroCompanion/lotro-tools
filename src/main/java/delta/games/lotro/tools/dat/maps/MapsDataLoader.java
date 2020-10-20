@@ -102,7 +102,7 @@ public class MapsDataLoader
     LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
     for(int region=1;region<=4;region++)
     {
-      //System.out.println("Region "+region);
+      System.out.println("Region "+region);
       for(int blockX=0;blockX<=0xFE;blockX++)
       {
         //System.out.println("X="+blockX);

@@ -56,8 +56,10 @@ public class MapsDataManager
   public void registerMarker(Marker marker, int region, int blockX, int blockY, int parentZoneId)
   {
     _mapsManager.getMarkersManager().registerMarker(marker,region,blockX,blockY);
-    // Register in parent zone inde
+    // Register in parent zone index
+    marker.setParentZoneId(parentZoneId);
     registerDidMarker(parentZoneId,marker);
+    // Classify DID
     int did=marker.getDid();
     Classification classification=_classifier.classifyDid(did);
     if (classification instanceof ResourceClassification)
