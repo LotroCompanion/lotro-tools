@@ -198,6 +198,7 @@ public class TraitPointsRegistryBuilder
   private static String[][] BOOK_NAMES=
   {
     {"A Hobbit's Holiday","A Study of the Skin-changer","Genealogy of the Beornings"},
+    null,
     {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
     {"The Candle's Flame","The Treatise of Valour","The Book of Oaths"},
     {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
@@ -212,6 +213,7 @@ public class TraitPointsRegistryBuilder
   private static String[][] CLASS_ACHIEVABLES_NAMES=
   {
     {"Grimbeorn's Challenge", "The Path Homeward" },
+    null,
     {"A Lesson from Bilbo Baggins", "The Path of the Mischief-maker"},
     {"A Lesson from Boromir", "The Path of the Healing Hands"},
     {"A Lesson from Gimli", "The Path of the Martial Champion"},
@@ -225,7 +227,8 @@ public class TraitPointsRegistryBuilder
 
   private static String[] IRON_GARNISON_GUARDS_BOOKS=
   {
-    "",
+    null,
+    null,
     "A Guide to the Quiet Knife",
     "The Master of the Charge",
     "The Boiling Rage",
@@ -261,6 +264,10 @@ public class TraitPointsRegistryBuilder
       // Legendary Books
       for(int i=0;i<3;i++)
       {
+        if (BOOK_NAMES[classIndex]==null)
+        {
+          continue;
+        }
         String book=BOOK_NAMES[classIndex][i];
         String pointId=key+":LegendaryBook"+(i+1);
         Achievable achievable=findAchievableByNameAndClass(book,cClass);
@@ -271,6 +278,10 @@ public class TraitPointsRegistryBuilder
       for(int i=0;i<2;i++)
       {
         int level=(i==0)?50:58;
+        if (CLASS_ACHIEVABLES_NAMES[classIndex]==null)
+        {
+          continue;
+        }
         String name=CLASS_ACHIEVABLES_NAMES[classIndex][i];
         String pointId=key+":ClassQuests"+level;
         Achievable achievable=findAchievableByNameAndClass(name,cClass);
@@ -279,7 +290,7 @@ public class TraitPointsRegistryBuilder
         String label="Complete the Level "+level+" "+type+" '" + name + "'";
         initPoint(pointId, category, label, cClass, id);
       }
-      if (cClass!=CharacterClass.BEORNING)
+      if (IRON_GARNISON_GUARDS_BOOKS[classIndex]!=null)
       {
         String dwarfBook=IRON_GARNISON_GUARDS_BOOKS[classIndex];
         Achievable achievable=findAchievableByNameAndClass(dwarfBook,cClass);
