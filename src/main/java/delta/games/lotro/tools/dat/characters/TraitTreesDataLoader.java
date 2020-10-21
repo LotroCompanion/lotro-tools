@@ -174,6 +174,7 @@ public class TraitTreesDataLoader
     if (traitNatureKey==26) return CharacterClass.CAPTAIN;
     if (traitNatureKey==27) return CharacterClass.GUARDIAN;
     if (traitNatureKey==31) return CharacterClass.BEORNING;
+    if (traitNatureKey==32) return CharacterClass.BRAWLER;
     return null;
   }
 }
