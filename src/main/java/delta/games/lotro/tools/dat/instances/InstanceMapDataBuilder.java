@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.instances;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,11 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.geo.BlockReference;
+import delta.games.lotro.lore.geo.BlockReferenceComparator;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
+import delta.games.lotro.lore.maps.Dungeon;
+import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
@@ -112,21 +116,19 @@ public class InstanceMapDataBuilder
         privateEncounter.addMapDescription(mapDescription);
       }
       mapDescription.addZoneId(parentZoneID.intValue());
-      for(BlockReference block : blocksByZone.get(parentZoneID))
+      Dungeon dungeon=DungeonsManager.getInstance().getDungeonById(parentZoneID.intValue());
+      if (dungeon==null)
       {
-        mapDescription.addBlock(block);
+        List<BlockReference> blocksForZone=blocksByZone.get(parentZoneID);
+        for(BlockReference block : blocksForZone)
+        {
+          mapDescription.addBlock(block);
+        }
+        Collections.sort(mapDescription.getBlocks(),new BlockReferenceComparator());
       }
     }
-    /*
-    if (maps.size()>1)
-    {
-      System.out.println("More than one map: "+maps.size());
-    }
-    for(Identifiable map : maps)
-    {
-      System.out.println("\t=> Map: "+map);
-    }
-    */
+    int nbMaps=privateEncounter.getMapDescriptions().size();
+    System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
   }
 
   private List<Integer> getParentZones(Landblock lbData)
