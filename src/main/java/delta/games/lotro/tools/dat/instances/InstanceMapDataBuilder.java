@@ -1,12 +1,12 @@
 package delta.games.lotro.tools.dat.instances;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
+import java.util.Set;
 
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.geo.BlockReference;
@@ -15,6 +15,9 @@ import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
+import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.maps.data.markers.MarkersFinder;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
@@ -25,8 +28,7 @@ import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
  */
 public class InstanceMapDataBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(InstanceMapDataBuilder.class);
-
+  private MarkersFinder _finder;
   private LandblocksManager _landblocksManager;
 
   /**
@@ -35,6 +37,9 @@ public class InstanceMapDataBuilder
   public InstanceMapDataBuilder()
   {
     _landblocksManager=LandblocksManager.getInstance();
+    File rootDir=new File("../lotro-maps-db");
+    MapsManager mapsManager=new MapsManager(rootDir);
+    _finder=mapsManager.getMarkersFinder();
   }
 
   /**
@@ -44,111 +49,182 @@ public class InstanceMapDataBuilder
    */
   public void handlePrivateEncounter(PrivateEncounter privateEncounter, List<BlockReference> blocks)
   {
-    Map<Integer,List<BlockReference>> blocksByZone=new HashMap<Integer,List<BlockReference>>();
-    List<Integer> parentZoneIds=new ArrayList<Integer>();
-
-    // Find parent zones for each block
-    for(BlockReference block : blocks)
+    int contentLayerId=privateEncounter.getContentLayerId();
+    List<Marker> markers=_finder.findMarkersForContentLayer(contentLayerId);
+    /*
+    System.out.println("PE: "+privateEncounter.getName());
+    System.out.println("\tFound "+markers.size()+" markers.");
+    System.out.println("Blocks: "+blocks);
+    for(Marker marker : markers)
     {
-      int region=block.getRegion();
-      if ((region<1) || (region>4))
-      {
-        continue;
-      }
-      int blockX=block.getBlockX();
-      int blockY=block.getBlockY();
-      Landblock lbData=_landblocksManager.getLandblock(region,blockX,blockY);
-      List<Integer> parentZoneIdsForBlock=null;
-      if (lbData!=null)
-      {
-        parentZoneIdsForBlock=getParentZones(lbData);
-        if (parentZoneIdsForBlock.size()==0)
-        {
-          LOGGER.warn("No parent zone for block: "+block);
-        }
-      }
-      else
-      {
-        parentZoneIdsForBlock=new ArrayList<Integer>();
-        LOGGER.warn("Landblock data not found for: "+block);
-      }
-
-      for(Integer parentZoneId : parentZoneIdsForBlock)
-      {
-        // Add block for zone
-        List<BlockReference> blocksForZone=blocksByZone.get(parentZoneId);
-        if (blocksForZone==null)
-        {
-          blocksForZone=new ArrayList<BlockReference>();
-          blocksByZone.put(parentZoneId,blocksForZone);
-        }
-        blocksForZone.add(block);
-        // Add zone in zones list
-        if (!parentZoneIds.contains(parentZoneId))
-        {
-          parentZoneIds.add(parentZoneId);
-        }
-      }
+      System.out.println(marker+" => "+getBlock(marker));
     }
-    //int id=privateEncounter.getIdentifier();
-    //String name=privateEncounter.getName();
-    //System.out.println("Zones for ID="+id+" ("+name+"): "+parentZoneIds);
-    //List<Identifiable> maps=new ArrayList<Identifiable>();
-    Map<Integer,InstanceMapDescription> foundMaps=new HashMap<Integer,InstanceMapDescription>();
-    for(Integer parentZoneID : parentZoneIds)
+    */
+    markers=filterMarkers(markers,blocks);
+
+    Map<Integer,List<Marker>> sortedMarkers=sortMarkersByZone(markers);
+    //System.out.println("\tFound "+sortedMarkers.size()+" zones.");
+    //Identifiable map=MapUtils.findMapForZone(parentZoneID.intValue());
+    List<Integer> dungeonsIds=findDungeons(sortedMarkers.keySet());
+    for(Integer dungeonId : dungeonsIds)
     {
-      Identifiable map=MapUtils.findMapForZone(parentZoneID.intValue());
-      Integer mapId=(map!=null)?Integer.valueOf(map.getIdentifier()):null;
-      InstanceMapDescription mapDescription=null;
-      if (mapId!=null)
+      sortedMarkers.remove(dungeonId);
+    }
+    List<Marker> landscapeMarkers=new ArrayList<Marker>();
+    for(List<Marker> markersForZone : sortedMarkers.values())
+    {
+      landscapeMarkers.addAll(markersForZone);
+    }
+    List<BlockReference> newBlocks=getBlocks(landscapeMarkers);
+    List<BlockReference> filteredBlocks=filterBlocks(newBlocks,blocks);
+    BlockGroupsBuilder builder=new BlockGroupsBuilder();
+    List<List<BlockReference>> groups=builder.buildGroups(filteredBlocks);
+
+    // Dungeons
+    Collections.sort(dungeonsIds);
+    for(Integer dungeonId : dungeonsIds)
+    {
+      InstanceMapDescription mapDescription=new InstanceMapDescription(dungeonId);
+      privateEncounter.addMapDescription(mapDescription);
+      mapDescription.addZoneId(dungeonId.intValue());
+    }
+    // Landscape
+    for(List<BlockReference> group : groups)
+    {
+      Integer mapId=null;
+      List<Integer> areaIds=getAreasForBlocks(group);
+      if (areaIds.size()>0)
       {
-        mapDescription=foundMaps.get(mapId);
-        if (mapDescription==null)
+        // Assume same map for all the blocks of a group
+        int areaId=areaIds.get(0).intValue();
+        Identifiable map=MapUtils.findMapForZone(areaId);
+        if (map!=null)
         {
-          mapDescription=new InstanceMapDescription(mapId);
-          foundMaps.put(mapId,mapDescription);
-          privateEncounter.addMapDescription(mapDescription);
+          mapId=Integer.valueOf(map.getIdentifier());
         }
       }
-      else
+      InstanceMapDescription mapDescription=new InstanceMapDescription(mapId);
+      for(Integer areaId : areaIds)
       {
-        mapDescription=new InstanceMapDescription(null);
-        privateEncounter.addMapDescription(mapDescription);
+        mapDescription.addZoneId(areaId.intValue());
       }
-      mapDescription.addZoneId(parentZoneID.intValue());
-      Dungeon dungeon=DungeonsManager.getInstance().getDungeonById(parentZoneID.intValue());
-      if (dungeon==null)
+      for(BlockReference block : group)
       {
-        List<BlockReference> blocksForZone=blocksByZone.get(parentZoneID);
-        for(BlockReference block : blocksForZone)
-        {
-          mapDescription.addBlock(block);
-        }
-        Collections.sort(mapDescription.getBlocks(),new BlockReferenceComparator());
+        mapDescription.addBlock(block);
       }
+      privateEncounter.addMapDescription(mapDescription);
     }
     int nbMaps=privateEncounter.getMapDescriptions().size();
     System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
   }
 
-  private List<Integer> getParentZones(Landblock lbData)
+  private Map<Integer,List<Marker>> sortMarkersByZone(List<Marker> markers)
   {
-    List<Integer> ret=new ArrayList<Integer>();
-    List<Integer> dungeonsFromCells=lbData.getDungeonsFromCells();
-    ret.addAll(dungeonsFromCells);
-    Integer dungeonId=lbData.getParentDungeon();
-    if ((dungeonId!=null) && (!ret.contains(dungeonId)))
+    Map<Integer,List<Marker>> ret=new HashMap<Integer,List<Marker>>();
+    for(Marker marker : markers)
     {
-      ret.add(dungeonId);
-    }
-    if (ret.size()==0)
-    {
-      Integer areaId=lbData.getParentArea();
-      if (areaId!=null)
+      Integer key=Integer.valueOf(marker.getParentZoneId());
+      List<Marker> sortedList=ret.get(key);
+      if (sortedList==null)
       {
-        ret.add(areaId);
+        sortedList=new ArrayList<Marker>();
+        ret.put(key,sortedList);
+      }
+      sortedList.add(marker);
+    }
+    return ret;
+  }
+
+  private List<Integer> findDungeons(Set<Integer> zoneIds)
+  {
+    DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
+    List<Integer> ret=new ArrayList<Integer>();
+    for(Integer zoneId : zoneIds)
+    {
+      Dungeon dungeon=dungeonsMgr.getDungeonById(zoneId.intValue());
+      if (dungeon!=null)
+      {
+        ret.add(zoneId);
       }
     }
     return ret;
+  }
+
+  private List<BlockReference> getBlocks(List<Marker> markers)
+  {
+    Map<String,BlockReference> map=new HashMap<String,BlockReference>();
+    for(Marker marker : markers)
+    {
+      BlockReference block=getBlock(marker);
+      map.put(block.toString(),block);
+    }
+    List<BlockReference> ret=new ArrayList<BlockReference>(map.values());
+    Collections.sort(ret,new BlockReferenceComparator());
+    return ret;
+  }
+
+  private List<BlockReference> filterBlocks(List<BlockReference> peBlocks, List<BlockReference> landscapeBlocks)
+  {
+    // TODO
+    return peBlocks;
+  }
+
+  private List<Marker> filterMarkers(List<Marker> markers, List<BlockReference> blocks)
+  {
+    List<Marker> ret=new ArrayList<Marker>();
+    for(Marker marker : markers)
+    {
+      BlockReference markerBlock=getBlock(marker);
+      if (blocks.contains(markerBlock))
+      {
+        ret.add(marker);
+      }
+    }
+    return ret;
+  }
+
+  private List<Integer> getAreasForBlocks(List<BlockReference> blocks)
+  {
+    List<Integer> ret=new ArrayList<Integer>();
+    for(BlockReference block : blocks)
+    {
+      Integer areaId=getAreaForBlock(block);
+      if (areaId!=null)
+      {
+        if (!ret.contains(areaId))
+        {
+          ret.add(areaId);
+        }
+      }
+    }
+    return ret;
+  }
+
+  private Integer getAreaForBlock(BlockReference block)
+  {
+    Landblock lb=_landblocksManager.getLandblock(block.getRegion(),block.getBlockX(),block.getBlockY());
+    if (lb!=null)
+    {
+      return lb.getParentArea();
+    }
+    return null;
+  }
+
+  /**
+   * Get the block reference for a marker.
+   * @param marker Marker to use.
+   * @return A block reference.
+   */
+  private BlockReference getBlock(Marker marker)
+  {
+    int markerId=marker.getId();
+    int region=(markerId&0x70000000)>>28;
+    int bigXBlock=(markerId&0xF000000)>>24;
+    int bigYBlock=(markerId&0xF00000)>>20;
+    int smallXBlock=(markerId&0xF0000)>>16;
+    int smallYBlock=(markerId&0xF000)>>12;
+    int blockX=bigXBlock*16+smallXBlock;
+    int blockY=bigYBlock*16+smallYBlock;
+    return new BlockReference(region,blockX,blockY);
   }
 }
