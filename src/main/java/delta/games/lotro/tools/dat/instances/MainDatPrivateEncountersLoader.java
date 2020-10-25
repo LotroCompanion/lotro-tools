@@ -135,6 +135,10 @@ public class MainDatPrivateEncountersLoader
     {
       loadSkirmishSpecifics(skirmishPE,props);
     }
+    if (!accept(ret))
+    {
+      return null;
+    }
     // Build maps
     _mapDataBuilder.handlePrivateEncounter(ret,blocks);
     return ret;
@@ -226,6 +230,16 @@ public class MainDatPrivateEncountersLoader
 
     Integer levelScaling=(Integer)props.getProperty("Skirmish_Template_LevelScalingLevel");
     skirmishPE.setLevelScaling(levelScaling);
+  }
+
+  private boolean accept(PrivateEncounter pe)
+  {
+    int id=pe.getIdentifier();
+    if (id==1879151688) return false; // Skirmish: Prototype
+    if (id==1879077455) return false; // Private Instance: Test
+    if (id==1879223788) return false; // PVMP_TEST: Arena
+    if (pe.getName().contains("DNT")) return false;
+    return true;
   }
 
   private void doIt()
