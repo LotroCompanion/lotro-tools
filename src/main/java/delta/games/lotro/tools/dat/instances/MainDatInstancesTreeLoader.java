@@ -9,11 +9,13 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.lore.instances.InstanceCategories;
 import delta.games.lotro.lore.instances.InstanceCategory;
+import delta.games.lotro.lore.instances.InstancesTree;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
+import delta.games.lotro.lore.instances.io.xml.InstancesTreeXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Loads instance categories (similar to the ones in the Instance Finder)
@@ -31,7 +33,7 @@ public class MainDatInstancesTreeLoader
   private DataFacade _facade;
   private EnumMapper _instanceGroups;
   private EnumMapper _encounterCategory;
-  private InstanceCategories _categories;
+  private InstancesTree _categories;
   private Set<String> _seasonalCategories;
 
   /**
@@ -41,7 +43,7 @@ public class MainDatInstancesTreeLoader
   public MainDatInstancesTreeLoader(DataFacade facade)
   {
     _facade=facade;
-    _categories=new InstanceCategories();
+    _categories=new InstancesTree();
     _instanceGroups=facade.getEnumsManager().getEnumMapper(0x230003D1);
     _encounterCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
     _seasonalCategories=new HashSet<String>();
@@ -113,7 +115,7 @@ public class MainDatInstancesTreeLoader
         }
         else
         {
-          // "Instance" or "Skimirsh" ATM
+          // "Instance" or "Skirmish" ATM
           path[0]=skirmishPE.getType();
         }
         InstanceCategory category=_categories.getFromPath(path);
@@ -125,6 +127,12 @@ public class MainDatInstancesTreeLoader
       }
     }
     _categories.dump();
+    // Save instances tree
+    boolean ok=InstancesTreeXMLWriter.writeInstancesTreeFile(GeneratedFiles.INSTANCES_TREE,_categories);
+    if (ok)
+    {
+      System.out.println("Wrote instances tree file: "+GeneratedFiles.INSTANCES_TREE);
+    }
   }
 
   private void loadCategories(PropertiesSet props)

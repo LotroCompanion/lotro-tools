@@ -264,6 +264,10 @@ public class GeneratedFiles
    */
   public static final File PRIVATE_ENCOUNTERS=LotroCoreConfig.getInstance().getFile(DataFiles.PRIVATE_ENCOUNTERS);
   /**
+   * Instances tree.
+   */
+  public static final File INSTANCES_TREE=LotroCoreConfig.getInstance().getFile(DataFiles.INSTANCES_TREE);
+  /**
    * Mobs.
    */
   public static final File MOBS=LotroCoreConfig.getInstance().getFile(DataFiles.MOBS);
