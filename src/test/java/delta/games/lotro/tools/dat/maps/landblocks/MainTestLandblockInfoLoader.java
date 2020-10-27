@@ -65,7 +65,9 @@ public class MainTestLandblockInfoLoader
     //int region=2; int blockX=252; int blockY=83;
     //int region=2; int blockX=0x71; int blockY=0xB5;
     //int region=2; int blockX=252; int blockY=82;
-    int region=2; int blockX=248; int blockY=198;
+    //int region=2; int blockX=248; int blockY=198;
+    //int region=1; int blockX=2000/8; int blockY=904/8;
+    int region=4; int blockX=252; int blockY=232;
     BlockMapLoader bmLoader=new BlockMapLoader(_facade);
     PropertiesSet props=bmLoader.loadPropertiesForMapBlock(region,blockX,blockY);
     System.out.println("Block map props: "+props.dump());

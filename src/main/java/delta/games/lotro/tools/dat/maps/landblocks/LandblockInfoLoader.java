@@ -55,6 +55,7 @@ public class LandblockInfoLoader
    * @param blockY Block coordinate (vertical).
    * @return <code>true</code> if the landblock info exists, <code>false</code> otherwise.
    */
+  @SuppressWarnings("unused")
   public LandBlockInfo loadLandblockInfo(int region, int blockX, int blockY)
   {
     long landblockInfoDID=0x80200000L+(region*0x10000)+(blockX*0x100)+blockY;
@@ -80,7 +81,7 @@ public class LandblockInfoLoader
     }
     LandBlockInfo ret=new LandBlockInfo(landblockInfoDID);
     int flags=BufferUtils.readUInt32(bis);
-    /*int sizeHint=*/BufferUtils.readUInt32(bis);
+    int sizeHint=BufferUtils.readUInt32(bis);
     // Cross links
     if ((flags & HAS_LINKS)!=0)
     {
@@ -159,7 +160,7 @@ public class LandblockInfoLoader
     int bytesAvailable=bis.available();
     if (bytesAvailable>0)
     {
-      /*int unknownFinal=*/BufferUtils.readUInt32(bis);
+      int unknownFinal=BufferUtils.readUInt32(bis);
     }
     bytesAvailable=bis.available();
     if (bytesAvailable>0)

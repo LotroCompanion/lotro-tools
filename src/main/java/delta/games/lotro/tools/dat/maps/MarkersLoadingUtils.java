@@ -193,7 +193,7 @@ public class MarkersLoadingUtils
         // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
         //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
       }
-      Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition().getZ()):null;
+      Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition()):null;
       Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
       if (!Objects.equals(whereId,parentArea))
       {

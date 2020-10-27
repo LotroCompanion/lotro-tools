@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.dat.data.Vector3D;
 import delta.games.lotro.lore.geo.BlockReference;
+import delta.games.lotro.tools.dat.maps.data.Cell;
 
 /**
  * Landblock.
@@ -16,7 +18,7 @@ import delta.games.lotro.lore.geo.BlockReference;
 public class Landblock
 {
   private BlockReference _id;
-  private Map<Integer,Integer> _cell2Dungeon;
+  private Map<Integer,Cell> _cells;
   private Integer _parentDungeon;
   private Integer _parentArea;
   private float _centerHeight;
@@ -28,7 +30,7 @@ public class Landblock
   public Landblock(BlockReference id)
   {
     _id=id;
-    _cell2Dungeon=new HashMap<Integer,Integer>();
+    _cells=new HashMap<Integer,Cell>();
   }
 
   /**
@@ -41,13 +43,23 @@ public class Landblock
   }
 
   /**
-   * Add a cell/dungeon relation.
-   * @param cellIndex Cell index.
-   * @param dungeonId Dungeon identifier.
+   * Add a cell.
+   * @param cell Cell to add.
    */
-  public void addCellDungeon(int cellIndex, int dungeonId)
+  public void addCell(Cell cell)
   {
-    _cell2Dungeon.put(Integer.valueOf(cellIndex),Integer.valueOf(dungeonId));
+    _cells.put(Integer.valueOf(cell.getIndex()),cell);
+  }
+
+  /**
+   * Get a cell using its index.
+   * @param cellIndex Cell index to use.
+   * @return A cell or <code>null<:code> if not found.
+   */
+  public Cell getCell(int cellIndex)
+  {
+    Cell cell=_cells.get(Integer.valueOf(cellIndex));
+    return cell;
   }
 
   /**
@@ -57,7 +69,12 @@ public class Landblock
    */
   public Integer getCellDungeon(int cellIndex)
   {
-    return _cell2Dungeon.get(Integer.valueOf(cellIndex));
+    Cell cell=_cells.get(Integer.valueOf(cellIndex));
+    if (cell!=null)
+    {
+      return cell.getDungeonId();
+    }
+    return null;
   }
 
   /**
@@ -66,7 +83,7 @@ public class Landblock
    */
   public List<Integer> getCellIndexes()
   {
-    return new ArrayList<Integer>(_cell2Dungeon.keySet());
+    return new ArrayList<Integer>(_cells.keySet());
   }
 
   /**
@@ -76,9 +93,10 @@ public class Landblock
   public List<Integer> getDungeonsFromCells()
   {
     List<Integer> ret=new ArrayList<Integer>();
-    for(Integer dungeonId :_cell2Dungeon.values())
+    for(Cell cell : _cells.values())
     {
-      if (!ret.contains(dungeonId))
+      Integer dungeonId=cell.getDungeonId();
+      if ((dungeonId!=null) && (!ret.contains(dungeonId)))
       {
         ret.add(dungeonId);
       }
@@ -143,31 +161,80 @@ public class Landblock
   /**
    * Get the parent zone identifier.
    * @param cell Cell index to use.
-   * @param oz Height of point to check.
+   * @param position Position of point to check.
    * @return A parent zone identifier or <code>null</code>.
    */
-  public Integer getParentData(int cell, float oz)
+  public Integer getParentData(int cell, Vector3D position)
   {
     Integer ret=null;
+
     if (cell>0)
     {
+      // Dungeon
       ret=getCellDungeon(cell);
-    }
-    if (ret==null)
-    {
-      Integer dungeonId=getParentDungeon();
-      if (dungeonId!=null)
+      if (ret==null)
       {
-        // Check height
-        if (oz<_centerHeight)
+        ret=getParentDungeon();
+      }
+      if (ret==null)
+      {
+        //System.out.println("No dungeon for cell: "+cell+" in landblock: "+_id);
+      }
+    }
+    else if (cell==0)
+    {
+      // Landscape
+      ret=getParentArea();
+    }
+    else // Cell not set, cell=-1 (entities)
+    {
+      boolean hasDungeon=hasDungeon();
+      if ((hasDungeon) && (position.getZ()<_centerHeight))
+      {
+        // In dungeon
+        int nbCells=_cells.size();
+        if (nbCells>0)
         {
-          ret=dungeonId;
+          Cell nearestCell=getNearestCell(position);
+          ret=nearestCell.getDungeonId();
+          if (ret==null)
+          {
+            ret=getParentDungeon();
+          }
         }
       }
     }
+    // Default
     if (ret==null)
     {
       ret=getParentArea();
+    }
+    return ret;
+  }
+
+  private boolean hasDungeon()
+  {
+    if (_parentDungeon!=null) return true;
+    if (getDungeonsFromCells().size()>0) return true;
+    return false;
+  }
+
+  private Cell getNearestCell(Vector3D position)
+  {
+    Cell ret=null;
+    float min=Float.MAX_VALUE;
+    for(Cell cell : _cells.values())
+    {
+      Vector3D cellPosition=cell.getPosition().getPosition();
+      float dx=Math.abs(position.getX()-cellPosition.getX());
+      float dy=Math.abs(position.getY()-cellPosition.getY());
+      float dz=Math.abs(position.getZ()-cellPosition.getZ());
+      float value=dx*dx+dy*dy+dz*dz;
+      if (value<min)
+      {
+        ret=cell;
+        min=value;
+      }
     }
     return ret;
   }
@@ -184,9 +251,9 @@ public class Landblock
     {
       sb.append(", dungeon=").append(_parentDungeon);
     }
-    if (_cell2Dungeon.size()>0)
+    if (_cells.size()>0)
     {
-      sb.append(", cells=").append(_cell2Dungeon);
+      sb.append(", cells=").append(_cells);
     }
     return sb.toString();
   }

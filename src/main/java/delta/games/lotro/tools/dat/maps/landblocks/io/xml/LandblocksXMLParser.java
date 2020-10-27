@@ -7,7 +7,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 import delta.common.utils.xml.DOMParsingTools;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.lore.geo.BlockReference;
+import delta.games.lotro.tools.dat.maps.data.Cell;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
@@ -81,8 +83,16 @@ public class LandblocksXMLParser
     {
       NamedNodeMap cellAttrs=cellTag.getAttributes();
       int cellIndex=DOMParsingTools.getIntAttribute(cellAttrs,LandblocksXMLConstants.CELL_INDEX_ATTR,0);
-      int dungeonIdForCell=DOMParsingTools.getIntAttribute(cellAttrs,LandblocksXMLConstants.DUNGEON_ID_ATTR,0);
-      ret.addCellDungeon(cellIndex,dungeonIdForCell);
+      int dungeonIdForCellValue=DOMParsingTools.getIntAttribute(cellAttrs,LandblocksXMLConstants.DUNGEON_ID_ATTR,-1);
+      Integer dungeonIdForCell=(dungeonIdForCellValue!=-1)?Integer.valueOf(dungeonIdForCellValue):null;
+      float x=DOMParsingTools.getFloatAttribute(cellAttrs,LandblocksXMLConstants.CELL_X_ATTR,0);
+      float y=DOMParsingTools.getFloatAttribute(cellAttrs,LandblocksXMLConstants.CELL_Y_ATTR,0);
+      float z=DOMParsingTools.getFloatAttribute(cellAttrs,LandblocksXMLConstants.CELL_Z_ATTR,0);
+      DatPosition position=new DatPosition();
+      position.setPosition(x,y,z);
+      Cell cell=new Cell(cellIndex,dungeonIdForCell);
+      cell.setPosition(position);
+      ret.addCell(cell);
     }
     return ret;
   }

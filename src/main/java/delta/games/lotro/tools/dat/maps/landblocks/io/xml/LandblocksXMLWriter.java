@@ -12,7 +12,9 @@ import org.xml.sax.helpers.AttributesImpl;
 import delta.common.utils.io.xml.XmlFileWriterHelper;
 import delta.common.utils.io.xml.XmlWriter;
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.lore.geo.BlockReference;
+import delta.games.lotro.tools.dat.maps.data.Cell;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 import delta.games.lotro.tools.dat.maps.landblocks.comparators.LandblockIdComparator;
@@ -105,10 +107,21 @@ public class LandblocksXMLWriter
     Collections.sort(cellIndexes);
     for(Integer cellIndex : cellIndexes)
     {
+      Cell cell=landblock.getCell(cellIndex.intValue());
       AttributesImpl cellAttrs=new AttributesImpl();
       cellAttrs.addAttribute("","",LandblocksXMLConstants.CELL_INDEX_ATTR,XmlWriter.CDATA,cellIndex.toString());
       Integer dungeonIdForCell=landblock.getCellDungeon(cellIndex.intValue());
-      cellAttrs.addAttribute("","",LandblocksXMLConstants.DUNGEON_ID_ATTR,XmlWriter.CDATA,dungeonIdForCell.toString());
+      if (dungeonIdForCell!=null)
+      {
+        cellAttrs.addAttribute("","",LandblocksXMLConstants.DUNGEON_ID_ATTR,XmlWriter.CDATA,dungeonIdForCell.toString());
+      }
+      DatPosition position=cell.getPosition();
+      if (position!=null)
+      {
+        cellAttrs.addAttribute("","",LandblocksXMLConstants.CELL_X_ATTR,XmlWriter.CDATA,String.valueOf(position.getPosition().getX()));
+        cellAttrs.addAttribute("","",LandblocksXMLConstants.CELL_Y_ATTR,XmlWriter.CDATA,String.valueOf(position.getPosition().getY()));
+        cellAttrs.addAttribute("","",LandblocksXMLConstants.CELL_Z_ATTR,XmlWriter.CDATA,String.valueOf(position.getPosition().getZ()));
+      }
       hd.startElement("","",LandblocksXMLConstants.CELL_TAG,cellAttrs);
       hd.endElement("","",LandblocksXMLConstants.CELL_TAG);
     }

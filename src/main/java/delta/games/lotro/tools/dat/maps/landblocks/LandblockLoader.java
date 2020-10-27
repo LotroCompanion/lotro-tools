@@ -69,11 +69,7 @@ public class LandblockLoader
     // Cells
     for(Cell cell : lbi.getCells())
     {
-      Integer cellDungeonId=cell.getDungeonId();
-      if (cellDungeonId!=null)
-      {
-        ret.addCellDungeon(cell.getIndex(),cellDungeonId.intValue());
-      }
+      ret.addCell(cell);
     }
     return ret;
   }

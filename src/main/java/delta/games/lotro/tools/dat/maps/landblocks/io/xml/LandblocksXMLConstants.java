@@ -47,4 +47,16 @@ public class LandblocksXMLConstants
    * Tag 'cell', attribute 'index'.
    */
   public static final String CELL_INDEX_ATTR="index";
+  /**
+   * Tag 'cell', attribute 'x'.
+   */
+  public static final String CELL_X_ATTR="x";
+  /**
+   * Tag 'cell', attribute 'y'.
+   */
+  public static final String CELL_Y_ATTR="y";
+  /**
+   * Tag 'cell', attribute 'z'.
+   */
+  public static final String CELL_Z_ATTR="z";
 }

@@ -102,7 +102,7 @@ public class LandblocksManager
     Integer ret=null;
     if (data!=null)
     {
-      ret=data.getParentData(cell,position.getPosition().getZ());
+      ret=data.getParentData(cell,position.getPosition());
     }
     else
     {
