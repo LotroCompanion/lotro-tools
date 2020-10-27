@@ -48,7 +48,11 @@ public class ResourcesMapsBuilder
     Identifiable map=MapUtils.findMapForZone(parentZoneId);
     if (map!=null)
     {
-      mapDescriptor.addMapId(map.getIdentifier());
+      int mapId=map.getIdentifier();
+      if (mapId!=268437557) // Skip Eriador map
+      {
+        mapDescriptor.addMapId(map.getIdentifier());
+      }
     }
   }
 
