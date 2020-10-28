@@ -49,11 +49,23 @@ public class ResourcesMapsBuilder
     if (map!=null)
     {
       int mapId=map.getIdentifier();
-      if (mapId!=268437557) // Skip Eriador map
+      if (useMap(mapId,level))
       {
-        mapDescriptor.addMapId(map.getIdentifier());
+        mapDescriptor.addMapId(mapId);
       }
     }
+  }
+
+  private boolean useMap(int mapId, CraftingLevel level)
+  {
+    // Skip Eriador map
+    if (mapId==268437557) return false;
+    if (mapId==268447030)
+    {
+      // Skip Supreme for map "Dunland"
+      if (level.getTier()==6) return false;
+    }
+    return true;
   }
 
   /**
