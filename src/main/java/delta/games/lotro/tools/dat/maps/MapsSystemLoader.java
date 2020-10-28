@@ -259,12 +259,34 @@ public class MapsSystemLoader
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
       handleMapProps(areaProps,0);
     }
+    // Fix some maps
+    fixMaps();
     // Save parchment maps
     boolean ok=ParchmentMapsXMLWriter.writeParchmentMapsFile(GeneratedFiles.PARCHMENT_MAPS,_maps);
     if (ok)
     {
       System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
     }
+  }
+
+  private void fixMaps()
+  {
+    ParchmentMap helmsDeep=getMap(268449767);
+    Area deepingCoomb=helmsDeep.removeArea(1879277189);
+    ParchmentMap westfold=getMap(268449758);
+    westfold.addArea(deepingCoomb);
+  }
+
+  private ParchmentMap getMap(int id)
+  {
+    for(ParchmentMap map : _maps)
+    {
+      if (map.getIdentifier()==id)
+      {
+        return map;
+      }
+    }
+    return null;
   }
 
   /**
