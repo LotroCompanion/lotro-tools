@@ -60,6 +60,13 @@ public class InstanceMapDataBuilder
       System.out.println(marker+" => "+getBlock(marker));
     }
     */
+    List<Integer> additionalContentLayers=privateEncounter.getAdditionalContentLayers();
+    for(Integer contentLayer : additionalContentLayers)
+    {
+      List<Marker> markersInBlocks=findMarkersForBlocks(blocks,contentLayer);
+      markers.addAll(markersInBlocks);
+    }
+
     markers=filterMarkers(markers,blocks);
 
     Map<Integer,List<Marker>> sortedMarkers=sortMarkersByZone(markers);
@@ -116,6 +123,17 @@ public class InstanceMapDataBuilder
     }
     int nbMaps=privateEncounter.getMapDescriptions().size();
     System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
+  }
+
+  private List<Marker> findMarkersForBlocks(List<BlockReference> blocks, Integer contentLayer)
+  {
+    List<Marker> ret=new ArrayList<Marker>();
+    for(BlockReference block : blocks)
+    {
+      List<Marker> markers=_finder.findMarkersForBlock(block.getRegion(),block.getBlockX(),block.getBlockY(),contentLayer);
+      ret.addAll(markers);
+    }
+    return ret;
   }
 
   private Map<Integer,List<Marker>> sortMarkersByZone(List<Marker> markers)

@@ -139,6 +139,8 @@ public class MainDatPrivateEncountersLoader
     {
       return null;
     }
+    // Additional content layers
+    handleAdditionalContentLayers(ret);
     // Build maps
     _mapDataBuilder.handlePrivateEncounter(ret,blocks);
     return ret;
@@ -240,6 +242,32 @@ public class MainDatPrivateEncountersLoader
     if (id==1879223788) return false; // PVMP_TEST: Arena
     if (pe.getName().contains("DNT")) return false;
     return true;
+  }
+
+  private void handleAdditionalContentLayers(PrivateEncounter pe)
+  {
+    int peId=pe.getIdentifier();
+    if (peId==1879185298) // Urugarth
+    {
+      pe.addAdditionalContentLayer(0);
+    }
+    if (peId==1879184817) // Drake Wing
+    {
+      pe.addAdditionalContentLayer(0);
+    }
+    if (peId==1879083265) // Fire and Ice
+    {
+      pe.addAdditionalContentLayer(0);
+    }
+    if (peId==1879185310) // The Rift of Nûrz Ghâshu
+    {
+      pe.addAdditionalContentLayer(0);
+    }
+    if (peId==1879094769) // Instance: The Rift of Nûrz Ghâshu
+    {
+      pe.addAdditionalContentLayer(0);
+    }
+    
   }
 
   private void doIt()
