@@ -153,7 +153,7 @@ public class MainDatRecipesLoader
       if (professionId!=null)
       {
         Profession profession=getProfessionFromProfessionId(professionId.intValue());
-        recipe.setProfession(profession.getName());
+        recipe.setProfession(profession);
       }
       // Tier
       Integer tier=getTier(properties);
