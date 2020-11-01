@@ -84,7 +84,12 @@ public class MarkerClassifier
   private Classification getClassification(int did)
   {
     PropertiesSet props=_facade.loadProperties(did+DATConstants.DBPROPERTIES_OFFSET);
-    Classification rc=tryResourceClassification(did,props);
+    Classification rc=tryResourceNodeClassification(did,props);
+    if (rc!=null)
+    {
+      return rc;
+    }
+    rc=tryResourceCropClassification(did,props);
     if (rc!=null)
     {
       return rc;
@@ -118,7 +123,47 @@ public class MarkerClassifier
     return rc;
   }
 
-  private ResourceClassification tryResourceClassification(int did, PropertiesSet props)
+  private ResourceClassification tryResourceCropClassification(int did, PropertiesSet props)
+  {
+    Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
+    if (craftResourceTypeCode==null)
+    {
+      return null;
+    }
+    int typeCode=craftResourceTypeCode.intValue();
+    if (typeCode!=4) // Crop (4)
+    {
+      return null;
+    }
+    Integer usedInCrafting=(Integer)props.getProperty("Craft_UsedInCrafting");
+    if ((usedInCrafting==null) || (usedInCrafting.intValue()!=1))
+    {
+      return null;
+    }
+    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    if ((weenieType==null) || (weenieType.intValue()!=129)) // Item
+    {
+      LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
+      return null;
+    }
+
+    Integer craftTierCode=(Integer)props.getProperty("CraftTrinket_Tier");
+    int professionId=((Integer)props.getProperty("CraftTrinket_Profession")).intValue();
+    CraftingData craftingData=CraftingSystem.getInstance().getData();
+    Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
+    CraftingLevel level=profession.getByTier(craftTierCode.intValue());
+    ResourceClassification c=new ResourceClassification(level);
+    return c;
+    /*
+    CraftTrinket_Profession: 1879061252
+    CraftTrinket_Tier: 3 (Expert)
+    Craft_Resource_Type: 4 (Crop)
+    Craft_UsedInCrafting: 1
+    WeenieType: 129 (Item)
+     */
+  }
+
+  private ResourceClassification tryResourceNodeClassification(int did, PropertiesSet props)
   {
     Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
     Integer weenieType=(Integer)props.getProperty("WeenieType");
@@ -169,24 +214,6 @@ public class MarkerClassifier
     return ret;
   }
 
-  // Ingredients:
-  /*
-  Item_Class: 38 (Craft: Ingredient) or 37 (Craft: Component)
-  Item_Client_Sort_Type: 5 (Craft_Ingredient)
-  WeenieType: 129 (Item)
-  */
-  /*
-  ******** Properties: 1879061259
-  CraftTrinket_Profession: 1879061252
-  CraftTrinket_Tier: 3 (Expert)
-  Craft_Resource_Type: 4 (Crop)
-  Craft_UsedInCrafting: 1
-  Item_Class: 38 (Craft: Ingredient)
-  Item_Client_Sort_Type: 5 (Craft_Ingredient)
-  Name: 
-    #1: Green Onion[e]
-  WeenieType: 129 (Item)
-  */
   // Critters
   /*
 Agent_Alignment: 2 (Neutral)
@@ -237,9 +264,6 @@ WeenieType: 262145 (Hotspot)
       //int code=typeSet.nextSetBit(0)+1;
       ret=new ItemClassification(typeStr);
     }
-    // Find ingredients
-    // ...
-    // TODO
     if (ret==null)
     {
       ret=new ItemClassification("");
