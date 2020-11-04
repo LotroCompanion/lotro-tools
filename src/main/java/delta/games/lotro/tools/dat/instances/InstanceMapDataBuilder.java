@@ -83,9 +83,8 @@ public class InstanceMapDataBuilder
       landscapeMarkers.addAll(markersForZone);
     }
     List<BlockReference> newBlocks=getBlocks(landscapeMarkers);
-    List<BlockReference> filteredBlocks=filterBlocks(newBlocks,blocks);
     BlockGroupsBuilder builder=new BlockGroupsBuilder();
-    List<List<BlockReference>> groups=builder.buildGroups(filteredBlocks);
+    List<List<BlockReference>> groups=builder.buildGroups(newBlocks);
 
     // Dungeons
     Collections.sort(dungeonsIds);
@@ -121,6 +120,8 @@ public class InstanceMapDataBuilder
       }
       privateEncounter.addMapDescription(mapDescription);
     }
+    // Fixes
+    fixes(privateEncounter);
     int nbMaps=privateEncounter.getMapDescriptions().size();
     System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
   }
@@ -181,12 +182,6 @@ public class InstanceMapDataBuilder
     return ret;
   }
 
-  private List<BlockReference> filterBlocks(List<BlockReference> peBlocks, List<BlockReference> landscapeBlocks)
-  {
-    // TODO
-    return peBlocks;
-  }
-
   private List<Marker> filterMarkers(List<Marker> markers, List<BlockReference> blocks)
   {
     List<Marker> ret=new ArrayList<Marker>();
@@ -244,5 +239,20 @@ public class InstanceMapDataBuilder
     int blockX=bigXBlock*16+smallXBlock;
     int blockY=bigYBlock*16+smallYBlock;
     return new BlockReference(region,blockX,blockY);
+  }
+
+  private void fixes(PrivateEncounter privateEncounter)
+  {
+    int peId=privateEncounter.getIdentifier();
+    // 1879184816 Dragon Wing: remove Spider Wing map
+    if (peId==1879184816)
+    {
+      privateEncounter.removeMapDescription(1879084152);
+    }
+    // 1879224851 Storm on Methedras: remove zone 1879201776 "Tâl Methedras"
+    else if (peId==1879224851)
+    {
+      privateEncounter.removeZone(1879201776);
+    }
   }
 }
