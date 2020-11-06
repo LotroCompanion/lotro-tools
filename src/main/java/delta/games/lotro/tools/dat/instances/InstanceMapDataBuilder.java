@@ -19,6 +19,7 @@ import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
 import delta.games.lotro.tools.dat.maps.MapUtils;
+import delta.games.lotro.tools.dat.maps.MarkerUtils;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
@@ -231,14 +232,7 @@ public class InstanceMapDataBuilder
   private BlockReference getBlock(Marker marker)
   {
     int markerId=marker.getId();
-    int region=(markerId&0x70000000)>>28;
-    int bigXBlock=(markerId&0xF000000)>>24;
-    int bigYBlock=(markerId&0xF00000)>>20;
-    int smallXBlock=(markerId&0xF0000)>>16;
-    int smallYBlock=(markerId&0xF000)>>12;
-    int blockX=bigXBlock*16+smallXBlock;
-    int blockY=bigYBlock*16+smallYBlock;
-    return new BlockReference(region,blockX,blockY);
+    return MarkerUtils.getBlockForMarker(markerId);
   }
 
   private void fixes(PrivateEncounter privateEncounter)

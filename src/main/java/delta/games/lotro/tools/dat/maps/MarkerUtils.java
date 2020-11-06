@@ -4,6 +4,7 @@ import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.wlib.ClassDefinition;
+import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 
@@ -83,5 +84,22 @@ public class MarkerUtils
     if (classIndex==1210) return CategoriesConstants.LANDMARK; // Landmark
     if (classIndex==1170) return CategoriesConstants.HOTSPOT; // Hotspot
     return CategoriesConstants.OTHER;
+  }
+
+  /**
+   * Get a block reference from a marker ID.
+   * @param markerId Marker identifier.
+   * @return A block reference.
+   */
+  public static BlockReference getBlockForMarker(int markerId)
+  {
+    int region=(markerId&0x70000000)>>28;
+    int bigXBlock=(markerId&0xF000000)>>24;
+    int bigYBlock=(markerId&0xF00000)>>20;
+    int smallXBlock=(markerId&0xF0000)>>16;
+    int smallYBlock=(markerId&0xF000)>>12;
+    int blockX=bigXBlock*16+smallXBlock;
+    int blockY=bigYBlock*16+smallYBlock;
+    return new BlockReference(region,blockX,blockY);
   }
 }
