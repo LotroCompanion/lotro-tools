@@ -62,10 +62,17 @@ public class MarkerUtils
     if (classIndex==1843) return false; // BoolEventBox
     if (classIndex==1892) return false; // IntEventBox
     if (classIndex==2516) return false; // WorldEventGenerator
+    if (classIndex==1725) return false; // RefereeTemplate
+    if (classIndex==1510) return false; // Tripwire
+    int did=dataId.getDid();
+    if (did==1879131572) return false; // Logic Box Timer
+    if (did==1879077024) return false; // Counter Box
+    if (did==1879152898) return false; // Skirmish Point Calculator
     String name=dataId.getName();
     if (name.contains("DNT")) return false;
     if (name.contains("TBD")) return false;
     if (name.contains("GNDN")) return false;
+    if (name.equals("Random Box")) return false;
     if (name.contains("Invisible Collision Waypoint")) return false;
     if (name.contains("Hotspot Quest Detector")) return false;
     return true;
