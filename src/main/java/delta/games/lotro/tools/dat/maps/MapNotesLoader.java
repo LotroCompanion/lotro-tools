@@ -77,6 +77,7 @@ public class MapNotesLoader
     int[] key=(int[])stringinfo;
     String[] labelArray=_facade.getStringsManager().resolveStringInfo(key[0],key[1]);
     String text=StringUtils.stringArrayToString(labelArray);
+    text=text.replace("\\n","\n");
     text=delta.games.lotro.utils.StringUtils.fixName(text);
     // Icon
     int iconId=BufferUtils.readUInt32(bis);
