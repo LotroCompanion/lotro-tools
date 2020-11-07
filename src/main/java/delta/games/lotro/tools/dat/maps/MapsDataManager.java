@@ -12,6 +12,7 @@ import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
 import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;
 import delta.games.lotro.tools.dat.maps.classification.Classification;
+import delta.games.lotro.tools.dat.maps.classification.CropClassification;
 import delta.games.lotro.tools.dat.maps.classification.MarkerClassifier;
 import delta.games.lotro.tools.dat.maps.classification.ResourceClassification;
 
@@ -75,6 +76,14 @@ public class MapsDataManager
       ResourceClassification resourceClassification=(ResourceClassification)classification;
       CraftingLevel level=resourceClassification.getCraftingLevel();
       _resourcesMapsBuilder.registerResource(did,level,parentZoneId);
+      if (classification instanceof CropClassification)
+      {
+        marker.setCategoryCode(CategoriesConstants.CROP);
+      }
+      else
+      {
+        marker.setCategoryCode(CategoriesConstants.RESOURCE_NODE);
+      }
     }
   }
 

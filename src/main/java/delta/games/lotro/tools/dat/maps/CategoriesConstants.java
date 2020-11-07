@@ -43,6 +43,14 @@ public class CategoriesConstants
    */
   public static final int DOOR=76;
   /**
+   * Resource node.
+   */
+  public static final int RESOURCE_NODE=50;
+  /**
+   * Crop.
+   */
+  public static final int CROP=77;
+  /**
    * Other.
    */
   public static final int OTHER=100;

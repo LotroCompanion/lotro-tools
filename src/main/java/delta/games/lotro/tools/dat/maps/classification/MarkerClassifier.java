@@ -152,7 +152,7 @@ public class MarkerClassifier
     CraftingData craftingData=CraftingSystem.getInstance().getData();
     Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
     CraftingLevel level=profession.getByTier(craftTierCode.intValue());
-    ResourceClassification c=new ResourceClassification(level);
+    CropClassification c=new CropClassification(level);
     return c;
     /*
     CraftTrinket_Profession: 1879061252
