@@ -121,9 +121,11 @@ public class MapsDataLoader
   private void loadPositions(GeoData data)
   {
     // Word geo data
+    System.out.println("\tWorld geo data");
     ContentLayerGeoData worldGeoData=data.getWorldGeoData();
     loadPositions(worldGeoData);
     // Content layers geo data
+    System.out.println("\tContent layers geo data");
     List<Integer> contentLayers=data.getContentLayers();
     for(Integer contentLayer : contentLayers)
     {
@@ -131,6 +133,7 @@ public class MapsDataLoader
       loadPositions(contentLayerGeoData);
     }
     // Achievables geo data
+    System.out.println("\tAchievables layers geo data");
     List<AchievableGeoData> achievableGeoDatas=data.getAllAchievableGeoData();
     for(AchievableGeoData achievableGeoData : achievableGeoDatas)
     {

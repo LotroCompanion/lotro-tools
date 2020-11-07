@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
@@ -17,6 +19,8 @@ import delta.games.lotro.maps.data.markers.comparators.MarkerPositionComparator;
  */
 public class MarkerDuplicatesRemover
 {
+  private static final Logger LOGGER=Logger.getLogger(MarkerDuplicatesRemover.class);
+
   private int _removedMarkers=0;
   private int _totalMarkers=0;
 
@@ -105,11 +109,10 @@ public class MarkerDuplicatesRemover
       }
       else
       {
-        System.out.println("Found same DID and position: \n\t"+marker1+"\n\t"+marker2);
-        System.out.println("\tCategories differ: "+category1+" / "+category2);
+        LOGGER.warn("Found same DID and position: \n\t"+marker1+"\n\t"+marker2);
+        LOGGER.warn("\tCategories differ: "+category1+" / "+category2);
       }
     }
-    // TODO Handle category code changes: eg: 74/43
     mgr.removeMarker(marker2);
     marker2.setId(marker1.getId());
     _removedMarkers++;
@@ -124,7 +127,7 @@ public class MarkerDuplicatesRemover
     }
     if (!ret)
     {
-      System.out.println("Unresolved label diff: \n\t"+marker1+"\n\t"+marker2);
+      LOGGER.warn("Unresolved label diff: \n\t"+marker1+"\n\t"+marker2);
     }
     return ret;
   }
@@ -134,7 +137,7 @@ public class MarkerDuplicatesRemover
     int category1=marker1.getCategoryCode();
     if (category1==74)
     {
-      System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }
@@ -157,20 +160,20 @@ public class MarkerDuplicatesRemover
           newLabel=marker1.getLabel().trim();
         }
       }
-      System.out.println("\tReplace "+marker1.getLabel()+" and "+marker2.getLabel()+" by "+newLabel);
+      //System.out.println("\tReplace "+marker1.getLabel()+" and "+marker2.getLabel()+" by "+newLabel);
       marker1.setLabel(newLabel);
       marker2.setLabel(newLabel);
       return true;
     }
     if ((category1==57) && (category2==55))
     {
-      System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }
     if (marker2.getLabel().contains(marker1.getLabel()))
     {
-      System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }

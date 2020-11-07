@@ -1,12 +1,15 @@
 package delta.games.lotro.tools.dat.maps;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
-import delta.games.lotro.maps.data.markers.index.MarkersIndex;
+import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
+import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
 import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;
 import delta.games.lotro.tools.dat.maps.classification.Classification;
 import delta.games.lotro.tools.dat.maps.classification.MarkerClassifier;
@@ -20,6 +23,8 @@ public class MapsDataManager
 {
   private MapsManager _mapsManager;
   private MarkersIndexesManager _index;
+  private Map<Integer,MarkersStore> _didStore;
+  private Map<Integer,MarkersStore> _clStore;
   private MarkerClassifier _classifier;
   private ResourcesMapsBuilder _resourcesMapsBuilder;
 
@@ -32,6 +37,8 @@ public class MapsDataManager
     File rootDir=new File("../lotro-maps-db");
     _mapsManager=new MapsManager(rootDir);
     _index=new MarkersIndexesManager(rootDir);
+    _didStore=new HashMap<Integer,MarkersStore>();
+    _clStore=new HashMap<Integer,MarkersStore>();
     _classifier=new MarkerClassifier(facade);
     _resourcesMapsBuilder=new ResourcesMapsBuilder();
   }
@@ -78,8 +85,14 @@ public class MapsDataManager
    */
   public void registerDidMarker(int did, Marker marker)
   {
-    MarkersIndex index=_index.getDidIndex(did);
-    index.addMarker(marker.getId());
+    Integer key=Integer.valueOf(did);
+    MarkersStore store=_didStore.get(key);
+    if (store==null)
+    {
+      store=new MarkersStore(did);
+      _didStore.put(key,store);
+    }
+    store.addMarker(marker);
   }
 
   /**
@@ -94,8 +107,49 @@ public class MapsDataManager
     {
       layerId=0;
     }
-    MarkersIndex index=_index.getContentLayerIndex(layerId);
-    index.addMarker(marker.getId());
+    Integer key=Integer.valueOf(layerId);
+    MarkersStore store=_clStore.get(key);
+    if (store==null)
+    {
+      store=new MarkersStore(layerId);
+      _clStore.put(key,store);
+    }
+    store.addMarker(marker);
+  }
+
+  private void buildIndexes()
+  {
+    // DID
+    for(Integer did : _didStore.keySet())
+    {
+      MarkersStore store=_didStore.get(did);
+      for(Integer markerId : store.getMarkers())
+      {
+        _index.getDidIndex(did.intValue()).addMarker(markerId.intValue());
+      }
+    }
+    // CL
+    for(Integer contentLayerId : _clStore.keySet())
+    {
+      MarkersStore store=_clStore.get(contentLayerId);
+      for(Integer markerId : store.getMarkers())
+      {
+        _index.getContentLayerIndex(contentLayerId.intValue()).addMarker(markerId.intValue());
+      }
+    }
+  }
+
+  private void cleanupMarkers()
+  {
+    MarkerDuplicatesRemover remover=new MarkerDuplicatesRemover();
+    GlobalMarkersManager markersMgr=_mapsManager.getMarkersManager();
+    for(LandblockMarkersManager landblockMarkersMgr : markersMgr.getAllManagers())
+    {
+      remover.handleLandblock(landblockMarkersMgr);
+    }
+    int nbRemovedMarkers=remover.getRemovedMarkers();
+    int nbTotalMarkers=remover.getTotalMarkers();
+    System.out.println("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
   }
 
   /**
@@ -103,8 +157,10 @@ public class MapsDataManager
    */
   public void write()
   {
+    cleanupMarkers();
     _mapsManager.getBasemapsManager().write();
     _mapsManager.getMarkersManager().write();
+    buildIndexes();
     _index.writeIndexes();
     _mapsManager.getLinksManager().write();
     _resourcesMapsBuilder.write();
