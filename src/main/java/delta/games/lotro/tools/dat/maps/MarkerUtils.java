@@ -68,6 +68,7 @@ public class MarkerUtils
     if (did==1879131572) return false; // Logic Box Timer
     if (did==1879077024) return false; // Counter Box
     if (did==1879152898) return false; // Skirmish Point Calculator
+    if (did==1879343958) return false; // NPC with no name (appears in generators)
     String name=dataId.getName();
     if (name.contains("DNT")) return false;
     if (name.contains("TBD")) return false;

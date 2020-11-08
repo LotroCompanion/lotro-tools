@@ -14,6 +14,7 @@ import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;
 import delta.games.lotro.tools.dat.maps.classification.Classification;
 import delta.games.lotro.tools.dat.maps.classification.CropClassification;
 import delta.games.lotro.tools.dat.maps.classification.MarkerClassifier;
+import delta.games.lotro.tools.dat.maps.classification.MonsterClassification;
 import delta.games.lotro.tools.dat.maps.classification.ResourceClassification;
 
 /**
@@ -83,6 +84,14 @@ public class MapsDataManager
       else
       {
         marker.setCategoryCode(CategoriesConstants.RESOURCE_NODE);
+      }
+    }
+    if (classification instanceof MonsterClassification)
+    {
+      boolean isCritter=((MonsterClassification)classification).isCritter();
+      if (isCritter)
+      {
+        marker.setCategoryCode(CategoriesConstants.CRITTER);
       }
     }
   }

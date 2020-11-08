@@ -51,6 +51,10 @@ public class CategoriesConstants
    */
   public static final int CROP=77;
   /**
+   * Critter.
+   */
+  public static final int CRITTER=78;
+  /**
    * Other.
    */
   public static final int OTHER=100;

@@ -36,6 +36,24 @@ public class MarkerClassifier
   // Map of resolved items
   private Map<Integer,Classification> _cache;
 
+  private static final int[] CRITTER_NPC = {
+    1879363746, // Black Squirrel
+    1879080635, // Deer
+    1879061185, // Dora's Chicken
+    1879077970, // Frog
+    1879078196, // Fox
+    1879358942, // Goat
+    1879255968, // Horse
+    1879339414, // Ithilien Fox
+    1879079062, // Rabbit
+    1879077352, // Restless Shade
+    1879078796, // Squirrel
+    1879076795, // Sheep
+    1879204319, // Shrew
+    1879078100, // Snake
+    1879363747, // Turtle
+  };
+
   /**
    * Constructor.
    * @param facade Data facade.
@@ -302,7 +320,7 @@ WeenieType: 259 (GameplayContainer)
     return new ItemClassification("Container");
   }
 
-  private NpcClassification tryNpcClassification(int did, PropertiesSet props)
+  private Classification tryNpcClassification(int did, PropertiesSet props)
   {
     Integer weenieType=(Integer)props.getProperty("WeenieType");
     if ((weenieType==null) || (weenieType.intValue()!=131151)) // RealNPC
@@ -319,6 +337,17 @@ WeenieType: 259 (GameplayContainer)
       if (code!=39)
       {
         ret=new NpcClassification(typeStr);
+      }
+    }
+    // NPC that are critters
+    if (ret==null)
+    {
+      for(int critterId : CRITTER_NPC)
+      {
+        if (did==critterId)
+        {
+          return new MonsterClassification(null);
+        }
       }
     }
     if (ret==null)

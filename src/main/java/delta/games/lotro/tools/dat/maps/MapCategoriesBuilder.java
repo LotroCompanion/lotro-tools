@@ -57,6 +57,7 @@ public class MapCategoriesBuilder
     categoriesManager.addCategory(buildCategory(CategoriesConstants.LANDMARK,"Landmark"));
     categoriesManager.addCategory(buildCategory(CategoriesConstants.HOTSPOT,"Hotspot"));
     categoriesManager.addCategory(buildCategory(CategoriesConstants.CROP,"Crop"));
+    categoriesManager.addCategory(buildCategory(CategoriesConstants.CRITTER,"Critter"));
     categoriesManager.addCategory(buildCategory(CategoriesConstants.OTHER,"Other"));
   }
 

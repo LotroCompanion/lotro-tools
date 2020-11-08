@@ -9,6 +9,7 @@ import delta.games.lotro.lore.agents.AgentClassification;
 public class MonsterClassification extends Classification
 {
   private AgentClassification _classification;
+  private boolean _isCritter;
 
   /**
    * Constructor.
@@ -17,6 +18,23 @@ public class MonsterClassification extends Classification
   public MonsterClassification(AgentClassification classification)
   {
     _classification=classification;
+    if (classification!=null)
+    {
+      _isCritter=("Critter".equals(classification.getEntityClassification().getSpecies()));
+    }
+    else
+    {
+      _isCritter=true;
+    }
+  }
+
+  /**
+   * Indicates if this is a critter monster/NPC.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public boolean isCritter()
+  {
+    return _isCritter;
   }
 
   @Override
