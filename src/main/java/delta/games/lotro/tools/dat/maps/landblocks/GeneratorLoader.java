@@ -1,7 +1,10 @@
 package delta.games.lotro.tools.dat.maps.landblocks;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +23,7 @@ public class GeneratorLoader
   private DataFacade _facade;
   private Set<Integer> _dids;
   private Set<Integer> _idsToUse;
+  private Map<String,Set<Integer>> _cache;
 
   /**
    * Constructor.
@@ -29,6 +33,7 @@ public class GeneratorLoader
   {
     _facade=facade;
     _idsToUse=new HashSet<Integer>();
+    _cache=new HashMap<String,Set<Integer>>();
   }
 
   /**
@@ -41,7 +46,7 @@ public class GeneratorLoader
     Integer profileId=(Integer)props.getProperty("Generator_ProfileDID");
     if (profileId==null)
     {
-      return new HashSet<Integer>();
+      return null;
     }
     /*
 Generator_PositionSetLimitArray: 
@@ -61,13 +66,20 @@ Generator_PositionSetLimitArray:
         {
           if (filter==null)
           {
-            filter=new HashSet<Integer>();
+            filter=new TreeSet<Integer>();
           }
           filter.add(id);
         }
       }
     }
-    return handleGeneratorProfile(profileId.intValue(),filter);
+    String key=profileId+"#"+((filter!=null)?filter.toString():"");
+    Set<Integer> ret=_cache.get(key);
+    if (ret==null)
+    {
+      ret=handleGeneratorProfile(profileId.intValue(),filter);
+      _cache.put(key,ret);
+    }
+    return ret;
   }
 
   /**
@@ -147,8 +159,16 @@ Generator_PositionSetLimitArray:
       Integer profileId=(Integer)profileEntryProps.getProperty("GeneratorProfile_ProfileDefinition");
       if (profileId!=null)
       {
-        PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-        handleGeneratorProps(generatorProps);
+        Integer probability=(Integer)entryProps.getProperty("GeneratorProfile_Probability");
+        if ((probability==null) || ((probability!=null) && (probability.intValue()>0)))
+        {
+          PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+          handleGeneratorProps(generatorProps);
+        }
+        else
+        {
+          LOGGER.warn("Probability is: "+probability);
+        }
       }
     }
     /*
@@ -171,8 +191,16 @@ Generator_PositionSetLimitArray:
     Integer profileId=(Integer)entryProps.getProperty("GeneratorProfile_ProfileDefinition");
     if (profileId!=null)
     {
-      PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      handleGeneratorProps(generatorProps);
+      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
+      if ((weight!=null) && (weight.intValue()>0))
+      {
+        PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+        handleGeneratorProps(generatorProps);
+      }
+      else
+      {
+        LOGGER.warn("Weight is: "+weight);
+      }
     }
   }
 
@@ -199,10 +227,18 @@ Generator_PositionSetLimitArray:
     Object[] oneOfArray=(Object[])entryProps.getProperty("GeneratorProfile_OneOf");
     if (oneOfArray!=null)
     {
-      for(Object oneOfEntryObj : oneOfArray)
+      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
+      if ((weight==null) || ((weight!=null) && (weight.intValue()>0)))
       {
-        PropertiesSet oneOfProps=(PropertiesSet)oneOfEntryObj;
-        handleGeneratorEntryProps(oneOfProps);
+        for(Object oneOfEntryObj : oneOfArray)
+        {
+          PropertiesSet oneOfProps=(PropertiesSet)oneOfEntryObj;
+          handleGeneratorEntryProps(oneOfProps);
+        }
+      }
+      else
+      {
+        LOGGER.warn("OneOf Weight is: "+weight);
       }
     }
   }
@@ -212,9 +248,13 @@ Generator_PositionSetLimitArray:
     Integer entityId=(Integer)entryProps.getProperty("GeneratorProfile_WSLEntity");
     if (entityId!=null)
     {
-      _dids.add(entityId);
-      // Weight: GeneratorProfile_Weight
-      return true;
+      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
+      if ((weight==null) || ((weight!=null) && (weight.intValue()>0)))
+      {
+        _dids.add(entityId);
+        return true;
+      }
+      LOGGER.warn("SimpleEntry Weight is: "+weight);
     }
     return false;
   }
