@@ -143,6 +143,7 @@ public class MarkerClassifier
 
   private ResourceClassification tryResourceCropClassification(int did, PropertiesSet props)
   {
+    /*
     Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
     if (craftResourceTypeCode==null)
     {
@@ -153,6 +154,7 @@ public class MarkerClassifier
     {
       return null;
     }
+    */
     Integer usedInCrafting=(Integer)props.getProperty("Craft_UsedInCrafting");
     if ((usedInCrafting==null) || (usedInCrafting.intValue()!=1))
     {
@@ -166,7 +168,13 @@ public class MarkerClassifier
     }
 
     Integer craftTierCode=(Integer)props.getProperty("CraftTrinket_Tier");
+    if (craftTierCode==null)
+    {
+      return null;
+    }
     int professionId=((Integer)props.getProperty("CraftTrinket_Profession")).intValue();
+    // Fix Farmer -> Cook
+    if (professionId==1879062816) professionId=1879061252;
     CraftingData craftingData=CraftingSystem.getInstance().getData();
     Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
     CraftingLevel level=profession.getByTier(craftTierCode.intValue());
