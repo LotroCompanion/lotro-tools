@@ -69,6 +69,17 @@ public class MarkerUtils
     if (did==1879077024) return false; // Counter Box
     if (did==1879152898) return false; // Skirmish Point Calculator
     if (did==1879343958) return false; // NPC with no name (appears in generators)
+    if (did==1879231787) return false; // PhasingBox
+    if (did==1879182362) return false; // Boss Manager
+    if (did==1879095684) return false; // Camera Shake
+    if (did==1879153040) return false; // Drama Director
+    if (did==1879181880) return false; // Encounter Manager
+    if (did==1879157753) return false; // Encounter Manager
+    if (did==1879078044) return false; // Drama Coach
+    if (did==1879095474) return false; // PELockBox
+    if (did==1879334488) return false; // PELockBox
+    if (did==1879288379) return false; // Private Encounter Shutdown
+
     String name=dataId.getName();
     if (name.contains("DNT")) return false;
     if (name.contains("TBD")) return false;
