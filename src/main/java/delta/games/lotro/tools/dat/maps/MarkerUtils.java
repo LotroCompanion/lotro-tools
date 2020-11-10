@@ -73,12 +73,16 @@ public class MarkerUtils
     if (did==1879182362) return false; // Boss Manager
     if (did==1879095684) return false; // Camera Shake
     if (did==1879153040) return false; // Drama Director
+    if (did==1879199964) return false; // Festival Play Drama Director
     if (did==1879181880) return false; // Encounter Manager
     if (did==1879157753) return false; // Encounter Manager
     if (did==1879078044) return false; // Drama Coach
     if (did==1879095474) return false; // PELockBox
     if (did==1879334488) return false; // PELockBox
     if (did==1879288379) return false; // Private Encounter Shutdown
+    if (did==1879086367) return false; // Logic Box
+    if (did==1879248354) return false; // Logic Box
+    if (did==1879277552) return false; // AI Puppet Combat Zone
 
     String name=dataId.getName();
     if (name.contains("DNT")) return false;
@@ -87,6 +91,7 @@ public class MarkerUtils
     if (name.equals("Random Box")) return false;
     if (name.contains("Invisible Collision Waypoint")) return false;
     if (name.contains("Hotspot Quest Detector")) return false;
+    if (name.contains("PatrolBox")) return false;
     return true;
   }
 
