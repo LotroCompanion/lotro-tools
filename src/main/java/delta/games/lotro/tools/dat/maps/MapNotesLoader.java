@@ -140,7 +140,7 @@ public class MapNotesLoader
         System.out.println("Link! Target position: "+destPosition);
         System.out.println("Dest area: "+destArea);
       }
-      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destArea,contentLayersArray,text);
+      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destPosition,destArea,contentLayersArray,text);
     }
     else
     {

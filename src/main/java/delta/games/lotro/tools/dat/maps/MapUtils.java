@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.PositionDecoder;
+import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
@@ -130,12 +131,12 @@ public class MapUtils
    * @param zoneId Zone identifier.
    * @return the found map or <code>null</code>.
    */
-  public static Identifiable findMapForZone(int zoneId)
+  public static AbstractMap findMapForZone(int zoneId)
   {
     Identifiable zone=getZone(zoneId);
     if (zone instanceof Dungeon)
     {
-      return zone;
+      return (AbstractMap)zone;
     }
     if (zone instanceof Area)
     {
@@ -164,5 +165,4 @@ public class MapUtils
     Area area=geoAreasManager.getAreaById(zoneId);
     return area;
   }
-
 }

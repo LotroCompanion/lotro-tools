@@ -17,6 +17,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
+import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
@@ -263,11 +264,12 @@ public class MarkersLoadingUtils
    * @param areaDID Source area.
    * @param dungeonDID Source dungeon.
    * @param noteDID Source DID.
+   * @param destPosition Destination position.
    * @param destArea Destination area/dungeon.
    * @param contentLayersArray Content layers.
    * @param text Link text.
    */
-  public void addLink(DatPosition position, int areaDID, int dungeonDID, int noteDID, Identifiable destArea, Object[] contentLayersArray, String text)
+  public void addLink(DatPosition position, int areaDID, int dungeonDID, int noteDID, DatPosition destPosition, Identifiable destArea, Object[] contentLayersArray, String text)
   {
     DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
     if (dataId==null)
@@ -294,7 +296,7 @@ public class MarkersLoadingUtils
       where=getAreaOrDungeon(areaDID);
     }
     String[] targetMapName=new String[1];
-    int targetMapKey=getTargetMap(destArea,targetMapName);
+    int targetMapKey=getTargetMap(destArea,destPosition,targetMapName);
     if (targetMapKey!=0)
     {
       text="To: "+targetMapName[0];
@@ -329,7 +331,7 @@ public class MarkersLoadingUtils
     }
   }
 
-  private int getTargetMap(Identifiable destArea, String[] name)
+  private int getTargetMap(Identifiable destArea, DatPosition destPosition, String[] name)
   {
     int targetMapKey=0;
     if (destArea instanceof Dungeon)
@@ -346,6 +348,19 @@ public class MarkersLoadingUtils
       {
         targetMapKey=map.getIdentifier();
         name[0]=map.getName();
+      }
+    }
+    if (targetMapKey==0)
+    {
+      Integer parentZone=_landblocksManager.getParentZone(destPosition);
+      if (parentZone!=null)
+      {
+        AbstractMap mapId=MapUtils.findMapForZone(parentZone.intValue());
+        if (mapId!=null)
+        {
+          targetMapKey=mapId.getIdentifier();
+          name[0]=mapId.getName();
+        }
       }
     }
     if (targetMapKey==0)
