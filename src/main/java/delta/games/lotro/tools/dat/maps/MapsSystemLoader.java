@@ -171,6 +171,7 @@ public class MapsSystemLoader
     UIElement uiElement=getUIElementById(activeElementId);
     if (uiElement!=null)
     {
+      GeoBox boundingBox=basemap.getBoundingBox();
       for(UIElement childElement : uiElement.getChildElements())
       {
         Integer childMapUI=findChildMap(childElement);
@@ -185,9 +186,16 @@ public class MapsSystemLoader
           // Add link
           int target=childMapUI.intValue();
           GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
-          MapLink link=new MapLink(activeElementId,0,target,hotPoint);
-          LinksManager linksManager=_mapsManager.getLinksManager();
-          linksManager.addLink(link);
+          if (boundingBox.isInBox(hotPoint))
+          {
+            MapLink link=new MapLink(activeElementId,0,target,hotPoint);
+            LinksManager linksManager=_mapsManager.getLinksManager();
+            linksManager.addLink(link);
+          }
+          else
+          {
+            LOGGER.warn("Point: "+hotPoint+" is not in bounding box: "+boundingBox);
+          }
         }
       }
     }
@@ -259,6 +267,8 @@ public class MapsSystemLoader
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
       handleMapProps(areaProps,0);
     }
+    // Setup link labels
+    setLabels();
     // Fix some maps
     fixMaps();
     // Save parchment maps
@@ -266,6 +276,27 @@ public class MapsSystemLoader
     if (ok)
     {
       System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
+    }
+  }
+
+  private void setLabels()
+  {
+    GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
+    LinksManager linksManager=_mapsManager.getLinksManager();
+    for(MapLink link : linksManager.getAll())
+    {
+      int targetMapId=link.getTargetMapKey();
+      GeoreferencedBasemap basemap=basemapsManager.getMapById(targetMapId);
+      if (basemap!=null)
+      {
+        String name=basemap.getName();
+        String label="To: "+name;
+        link.setLabel(label);
+      }
+      else
+      {
+        LOGGER.warn("Unknown map ID="+targetMapId);
+      }
     }
   }
 
