@@ -134,6 +134,12 @@ public class MarkerDuplicatesRemover
 
   private boolean resolveLabelOneWay(Marker marker1, Marker marker2)
   {
+    if (marker2.getLabel().contains(marker1.getLabel()))
+    {
+      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      marker1.setLabel(marker2.getLabel());
+      return true;
+    }
     int category1=marker1.getCategoryCode();
     if (category1==74)
     {
@@ -166,12 +172,6 @@ public class MarkerDuplicatesRemover
       return true;
     }
     if ((category1==57) && (category2==55))
-    {
-      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
-      marker1.setLabel(marker2.getLabel());
-      return true;
-    }
-    if (marker2.getLabel().contains(marker1.getLabel()))
     {
       //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
