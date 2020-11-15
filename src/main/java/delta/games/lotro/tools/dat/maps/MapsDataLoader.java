@@ -133,7 +133,7 @@ public class MapsDataLoader
       loadPositions(contentLayerGeoData);
     }
     // Achievables geo data
-    System.out.println("\tAchievables layers geo data");
+    System.out.println("\tAchievables geo data");
     List<AchievableGeoData> achievableGeoDatas=data.getAllAchievableGeoData();
     for(AchievableGeoData achievableGeoData : achievableGeoDatas)
     {
@@ -162,7 +162,7 @@ public class MapsDataLoader
 
   private void loadAchievableGeoData(AchievableGeoData achievableGeoData)
   {
-    for(AchievableGeoDataItem dataItem : achievableGeoData.getItems())
+    for(AchievableGeoDataItem dataItem : achievableGeoData.getAllItems())
     {
       int itemId=dataItem.getDid();
       if (itemId==0)
