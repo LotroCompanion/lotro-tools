@@ -83,52 +83,7 @@ public class DatStatUtils
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
-        Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
-        PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
-        StatDescription stat=getStatDescription(def);
-        if (stat==null)
-        {
-          continue;
-        }
-        //String statKey=def.getName();
-        //boolean useStat=useStat(statKey);
-        boolean useStat=useStat(stat);
-        if (!useStat) continue;
-        /*
-        String descriptionOverride=getDescriptionOverride(statProperties);
-        if (descriptionOverride!=null)
-        {
-          System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
-        }
-        */
-        _statsUsageStatistics.registerStatUsage(stat);
-        StatProvider provider=null;
-        Number value=null;
-        // Often 7 for "add"
-        Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
-        StatOperator operator=delta.games.lotro.utils.dat.DatStatUtils.getOperator(modOp);
-        Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
-        if (progressId!=null)
-        {
-          provider=buildStatProvider(facade,stat,progressId.intValue());
-        }
-        else
-        {
-          Object propValue=statProperties.getProperty(def.getName());
-          if (propValue instanceof Number)
-          {
-            value=(Number)propValue;
-            float statValue=StatUtils.fixStatValue(stat,value.floatValue());
-            if (Math.abs(statValue)>0.001)
-            {
-              provider=new ConstantStatProvider(stat,statValue);
-            }
-          }
-          else
-          {
-            LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
-          }
-        }
+        StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties);
         if (provider!=null)
         {
           Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
@@ -136,7 +91,11 @@ public class DatStatUtils
           if ((minLevel!=null) || (maxLevel!=null))
           {
             RangedStatProvider rangedProvider=null;
-            if (rangedStatProviders==null) rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
+            if (rangedStatProviders==null)
+            {
+              rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
+            }
+            StatDescription stat=provider.getStat();
             rangedProvider=rangedStatProviders.get(stat);
             if (rangedProvider==null)
             {
@@ -150,35 +109,123 @@ public class DatStatUtils
           {
             statsProvider.addStatProvider(provider);
           }
-          provider.setOperator(operator);
         }
       }
     }
     return statsProvider;
   }
 
-  static String getDescriptionOverride(PropertiesSet statProperties)
+  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties)
   {
-    String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
+    StatProvider provider=null;
+
+    String modifiedPropName="Mod_Modified";
+    String progressionPropName="Mod_Progression";
+    if (propsPrefix!=null)
+    {
+      modifiedPropName=propsPrefix+modifiedPropName;
+      progressionPropName=propsPrefix+progressionPropName;
+    }
+
+    Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
+    PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
+    StatDescription stat=getStatDescription(def);
+    if (stat==null)
+    {
+      return null;
+    }
+    boolean useStat=useStat(stat);
+    if (!useStat)
+    {
+      return null;
+    }
+    /*
+    String descriptionOverride=getDescriptionOverride(statProperties);
     if (descriptionOverride!=null)
     {
-      return descriptionOverride.length+": "+Arrays.toString(descriptionOverride);
-      /*
-      if ((descriptionOverride.length==2) && ("+".equals(descriptionOverride[0].trim())))
+      System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
+    }
+    */
+    _statsUsageStatistics.registerStatUsage(stat);
+
+    Number value=null;
+    Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
+    if (progressId!=null)
+    {
+      provider=buildStatProvider(facade,stat,progressId.intValue());
+    }
+    else
+    {
+      Object propValue=statProperties.getProperty(def.getName());
+      if (propValue instanceof Number)
       {
-        return descriptionOverride[1].trim();
-      }
-      else if (descriptionOverride.length==1)
-      {
-        return descriptionOverride[0].trim();
+        value=(Number)propValue;
+        float statValue=StatUtils.fixStatValue(stat,value.floatValue());
+        if ((Math.abs(statValue)>0.001) /*|| (descriptionOverride!=null)*/)
+        {
+          provider=new ConstantStatProvider(stat,statValue);
+        }
       }
       else
       {
-        System.out.println(Arrays.toString(descriptionOverride));
+        LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
+      }
+    }
+    if (provider!=null)
+    {
+      // - Operator
+      // Often 7 for "add"
+      Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
+      StatOperator operator=getOperator(modOp);
+      provider.setOperator(operator);
+      // - Descriptor override
+      /*
+      if ((descriptionOverride!=null) && (descriptionOverride.length()>0))
+      {
+        provider.setDescriptionOverride(descriptionOverride);
       }
       */
     }
+    return provider;
+  }
+
+  /**
+   * Build a stat operator from an operation code.
+   * @param modOpInteger
+   * @return A stat operator or <code>null</code>.
+   */
+  private static StatOperator getOperator(Integer modOpInteger)
+  {
+    if (modOpInteger==null) return StatOperator.ADD;
+    int modOp=modOpInteger.intValue();
+    if (modOp==5) return StatOperator.SET;
+    if (modOp==6) return StatOperator.SUBSTRACT;
+    if (modOp==7) return StatOperator.ADD;
+    if (modOp==8) return StatOperator.MULTIPLY;
+    LOGGER.warn("Unmanaged operator: "+modOp);
     return null;
+  }
+
+  private static String getDescriptionOverride(PropertiesSet statProperties)
+  {
+    String ret=null;
+    String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
+    if (descriptionOverride!=null)
+    {
+      if (descriptionOverride.length==2)
+      {
+        ret=descriptionOverride[0]+"{***}"+descriptionOverride[1];
+      }
+      else if (descriptionOverride.length==1)
+      {
+        ret=descriptionOverride[0];
+      }
+      else
+      {
+        LOGGER.warn("Unsupported length for description override: "+Arrays.toString(descriptionOverride));
+      }
+    }
+    return ret;
   }
 
   /**
