@@ -139,13 +139,7 @@ public class DatStatUtils
     {
       return null;
     }
-    /*
     String descriptionOverride=getDescriptionOverride(statProperties);
-    if (descriptionOverride!=null)
-    {
-      System.out.println("Description override: ["+descriptionOverride+"] for "+stat.getName()+"="+stat.getKey());
-    }
-    */
     _statsUsageStatistics.registerStatUsage(stat);
 
     Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
@@ -183,12 +177,10 @@ public class DatStatUtils
       // Often 7 for "add"
       provider.setOperator(operator);
       // - Descriptor override
-      /*
-      if ((descriptionOverride!=null) && (descriptionOverride.length()>0))
+      if (descriptionOverride!=null)
       {
         provider.setDescriptionOverride(descriptionOverride);
       }
-      */
     }
     return provider;
   }

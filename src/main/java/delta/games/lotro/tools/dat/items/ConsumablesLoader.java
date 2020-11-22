@@ -172,6 +172,7 @@ public class ConsumablesLoader
           Float value=provider.getStatValue(1,level);
           StatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
           consumableProvider.setOperator(provider.getOperator());
+          consumableProvider.setDescriptionOverride(provider.getDescriptionOverride());
           consumableStatsProvider.addStatProvider(consumableProvider);
         }
         else
