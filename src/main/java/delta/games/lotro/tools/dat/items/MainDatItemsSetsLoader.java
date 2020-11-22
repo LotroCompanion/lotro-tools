@@ -204,6 +204,8 @@ Set_Name:
     {
       System.out.println("Wrote sets file: "+to);
     }
+    // Save progressions
+    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
   }
 
   /**

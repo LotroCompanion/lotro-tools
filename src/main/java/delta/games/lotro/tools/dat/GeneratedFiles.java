@@ -92,6 +92,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_ITEMS=new File("data/progressions/tmp/progressions_items.xml").getAbsoluteFile();
   /**
+   * Progressions for item sets.
+   */
+  public static final File PROGRESSIONS_ITEMS_SETS=new File("data/progressions/tmp/progressions_itemsSets.xml").getAbsoluteFile();
+  /**
    * Progressions for characters.
    */
   public static final File PROGRESSIONS_CHARACTERS=new File("data/progressions/tmp/progressions_characters.xml").getAbsoluteFile();

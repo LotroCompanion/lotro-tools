@@ -223,6 +223,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
     deleteFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
     deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     deleteFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     deleteFile(GeneratedFiles.PROGRESSIONS);

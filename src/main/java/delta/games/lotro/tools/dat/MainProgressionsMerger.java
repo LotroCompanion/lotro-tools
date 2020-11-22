@@ -20,6 +20,7 @@ public class MainProgressionsMerger
   {
     ProgressionsManager progressions=new ProgressionsManager();
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_COMBAT);
