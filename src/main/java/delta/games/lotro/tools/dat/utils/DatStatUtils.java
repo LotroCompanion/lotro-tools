@@ -148,6 +148,8 @@ public class DatStatUtils
     */
     _statsUsageStatistics.registerStatUsage(stat);
 
+    Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
+    StatOperator operator=getOperator(modOp);
     Number value=null;
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
@@ -160,7 +162,11 @@ public class DatStatUtils
       if (propValue instanceof Number)
       {
         value=(Number)propValue;
-        float statValue=StatUtils.fixStatValue(stat,value.floatValue());
+        float statValue=value.floatValue();
+        if (operator!=StatOperator.MULTIPLY)
+        {
+          statValue=StatUtils.fixStatValue(stat,statValue);
+        }
         if ((Math.abs(statValue)>0.001) /*|| (descriptionOverride!=null)*/)
         {
           provider=new ConstantStatProvider(stat,statValue);
@@ -175,8 +181,6 @@ public class DatStatUtils
     {
       // - Operator
       // Often 7 for "add"
-      Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
-      StatOperator operator=getOperator(modOp);
       provider.setOperator(operator);
       // - Descriptor override
       /*
