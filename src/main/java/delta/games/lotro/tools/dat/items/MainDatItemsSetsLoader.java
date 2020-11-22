@@ -71,66 +71,75 @@ Set_Name:
 
   private ItemsSet load(int indexDataId)
   {
-    ItemsSet set=null;
     int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    if (properties!=null)
+    if (properties==null)
     {
-      set=new ItemsSet();
-      set.setIdentifier(indexDataId);
-      //System.out.println("************* "+indexDataId+" *****************");
-      //System.out.println(properties.dump());
-      // Name
-      String name=DatUtils.getStringProperty(properties,"Set_Name");
-      set.setName(name);
-      // Level
-      int level=((Integer)properties.getProperty("Set_Level")).intValue();
-      set.setLevel(level);
-      // Required level
-      Integer requiredLevelInt=(Integer)properties.getProperty("Set_LevelRequired");
-      int requiredLevel=(requiredLevelInt!=null)?requiredLevelInt.intValue():1;
-      set.setRequiredLevel(requiredLevel);
-      // Description
-      String description=DatUtils.getStringProperty(properties,"Set_Description");
-      set.setDescription(description);
-      // Members
-      Object[] membersArray=(Object[])properties.getProperty("Set_MemberList");
-      if (membersArray!=null)
+      LOGGER.warn("Properties not found: "+indexDataId);
+      LOGGER.warn("Could not handle items set ID="+indexDataId);
+      return null;
+    }
+    //System.out.println("************* "+indexDataId+" *****************");
+    //System.out.println(properties.dump());
+    // Name
+    String name=DatUtils.getStringProperty(properties,"Set_Name");
+    boolean useIt=useIt(name);
+    if (!useIt)
+    {
+      return null;
+    }
+    ItemsSet set=new ItemsSet();
+    set.setIdentifier(indexDataId);
+    set.setName(name);
+    // Level
+    int level=((Integer)properties.getProperty("Set_Level")).intValue();
+    set.setLevel(level);
+    // Required level
+    Integer requiredLevelInt=(Integer)properties.getProperty("Set_LevelRequired");
+    int requiredLevel=(requiredLevelInt!=null)?requiredLevelInt.intValue():1;
+    set.setRequiredLevel(requiredLevel);
+    // Description
+    String description=DatUtils.getStringProperty(properties,"Set_Description");
+    set.setDescription(description);
+    // Members
+    Object[] membersArray=(Object[])properties.getProperty("Set_MemberList");
+    if (membersArray!=null)
+    {
+      for(Object memberObj : membersArray)
       {
-        for(Object memberObj : membersArray)
+        int memberId=((Integer)memberObj).intValue();
+        Item member=ItemsManager.getInstance().getItem(memberId);
+        if (member!=null)
         {
-          int memberId=((Integer)memberObj).intValue();
-          Item member=ItemsManager.getInstance().getItem(memberId);
-          if (member!=null)
-          {
-            Proxy<Item> proxy=new Proxy<Item>();
-            proxy.setId(memberId);
-            proxy.setName(member.getName());
-            proxy.setObject(member);
-            set.addMember(proxy);
-          }
-          else
-          {
-            LOGGER.warn("Member not found: "+memberId+" in set "+name);
-          }
+          Proxy<Item> proxy=new Proxy<Item>();
+          proxy.setId(memberId);
+          proxy.setName(member.getName());
+          proxy.setObject(member);
+          set.addMember(proxy);
         }
-        // Bonus
-        Object[] bonusesArray=(Object[])properties.getProperty("Set_ActiveCountDataList");
-        if (bonusesArray!=null)
+        else
         {
-          for(Object bonusObj : bonusesArray)
-          {
-            ItemsSetBonus bonus=loadBonus((PropertiesSet)bonusObj);
-            set.addBonus(bonus);
-          }
+          LOGGER.warn("Member not found: "+memberId+" in set "+name);
+        }
+      }
+      // Bonus
+      Object[] bonusesArray=(Object[])properties.getProperty("Set_ActiveCountDataList");
+      if (bonusesArray!=null)
+      {
+        for(Object bonusObj : bonusesArray)
+        {
+          ItemsSetBonus bonus=loadBonus((PropertiesSet)bonusObj);
+          set.addBonus(bonus);
         }
       }
     }
-    else
-    {
-      LOGGER.warn("Could not handle items set ID="+indexDataId);
-    }
     return set;
+  }
+
+  private boolean useIt(String name)
+  {
+    if (name.contains("TBD")) return false;
+    return true;
   }
 
   private ItemsSetBonus loadBonus(PropertiesSet properties)
