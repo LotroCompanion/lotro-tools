@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -18,6 +19,7 @@ import delta.games.lotro.lore.items.sets.ItemsSet;
 import delta.games.lotro.lore.items.sets.ItemsSetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
@@ -160,6 +162,24 @@ Set_Name:
       bonus=new ItemsSetBonus(count);
       bonus.setStatsProvider(provider);
     }
+    Object[] effectsArray=(Object[])properties.getProperty("Set_EffectDataList");
+    if (effectsArray!=null)
+    {
+      for(Object effectObj : effectsArray)
+      {
+        PropertiesSet effectProps=(PropertiesSet)effectObj;
+        // EffectGenerator_EffectSpellcraft
+        int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
+        Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
+        StatsProvider effectStats=effect.getStatsProvider();
+        int nbEffectStats=effectStats.getNumberOfStatProviders();
+        for(int i=0;i<nbEffectStats;i++)
+        {
+          provider.addStatProvider(effectStats.getStatProvider(i));
+        }
+      }
+    }
+
     return bonus;
   }
 
