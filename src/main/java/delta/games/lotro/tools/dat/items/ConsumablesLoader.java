@@ -9,6 +9,7 @@ import java.util.Map;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.ConstantStatProvider;
+import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -141,6 +142,7 @@ public class ConsumablesLoader
       effect.setIconId(null);
       _parsedEffects.put(key,effect);
     }
+    StatsProvider consumableStatsProvider=_currentConsumable.getProvider();
     StatsProvider statsProvider=effect.getStatsProvider();
     if (statsProvider.getNumberOfStatProviders()>0)
     {
@@ -161,7 +163,6 @@ public class ConsumablesLoader
           level=itemLevel.intValue();
         }
       }
-      StatsProvider consumableStatsProvider=_currentConsumable.getProvider();
       int nbStats=statsProvider.getNumberOfStatProviders();
       for(int i=0;i<nbStats;i++)
       {
@@ -180,6 +181,10 @@ public class ConsumablesLoader
           consumableStatsProvider.addStatProvider(provider);
         }
       }
+    }
+    for(SpecialEffect specialEffect : statsProvider.getSpecialEffects())
+    {
+      consumableStatsProvider.addSpecialEffect(specialEffect);
     }
   }
 

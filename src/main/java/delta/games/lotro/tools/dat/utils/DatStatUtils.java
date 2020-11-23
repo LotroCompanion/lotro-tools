@@ -10,6 +10,7 @@ import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
+import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatOperator;
 import delta.games.lotro.common.stats.StatProvider;
@@ -83,39 +84,41 @@ public class DatStatUtils
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
-        StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties);
-        if (provider!=null)
+        StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties,statsProvider);
+        if (provider==null)
         {
-          Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
-          Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
-          if ((minLevel!=null) || (maxLevel!=null))
+          continue;
+        }
+        // Special case for level-ranged providers
+        Integer minLevel=(Integer)statProperties.getProperty("Mod_ProgressionFloor");
+        Integer maxLevel=(Integer)statProperties.getProperty("Mod_ProgressionCeiling");
+        if ((minLevel!=null) || (maxLevel!=null))
+        {
+          RangedStatProvider rangedProvider=null;
+          if (rangedStatProviders==null)
           {
-            RangedStatProvider rangedProvider=null;
-            if (rangedStatProviders==null)
-            {
-              rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
-            }
-            StatDescription stat=provider.getStat();
-            rangedProvider=rangedStatProviders.get(stat);
-            if (rangedProvider==null)
-            {
-              rangedProvider=new RangedStatProvider(stat);
-              rangedStatProviders.put(stat,rangedProvider);
-              statsProvider.addStatProvider(rangedProvider);
-            }
-            rangedProvider.addRange(minLevel,maxLevel,provider);
+            rangedStatProviders=new HashMap<StatDescription,RangedStatProvider>();
           }
-          else
+          StatDescription stat=provider.getStat();
+          rangedProvider=rangedStatProviders.get(stat);
+          if (rangedProvider==null)
           {
-            statsProvider.addStatProvider(provider);
+            rangedProvider=new RangedStatProvider(stat);
+            rangedStatProviders.put(stat,rangedProvider);
+            statsProvider.addStatProvider(rangedProvider);
           }
+          rangedProvider.addRange(minLevel,maxLevel,provider);
+        }
+        else
+        {
+          statsProvider.addStatProvider(provider);
         }
       }
     }
     return statsProvider;
   }
 
-  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties)
+  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties, StatsProvider statsProvider)
   {
     StatProvider provider=null;
 
@@ -161,9 +164,18 @@ public class DatStatUtils
         {
           statValue=StatUtils.fixStatValue(stat,statValue);
         }
-        if ((Math.abs(statValue)>0.001) /*|| (descriptionOverride!=null)*/)
+        if (Math.abs(statValue)>0.001)
         {
           provider=new ConstantStatProvider(stat,statValue);
+        }
+        else if (descriptionOverride!=null)
+        {
+          SpecialEffect effect=new SpecialEffect(descriptionOverride);
+          statsProvider.addSpecialEffect(effect);
+        }
+        else
+        {
+          LOGGER.warn("Value 0 with no override!");
         }
       }
       else
