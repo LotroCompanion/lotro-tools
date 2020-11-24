@@ -21,6 +21,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -120,6 +121,32 @@ public class DatStatUtils
 
   private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties, StatsProvider statsProvider)
   {
+    String descriptionOverride=getDescriptionOverride(statProperties);
+    StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties);
+    if (provider!=null)
+    {
+      // Descriptor override
+      if (descriptionOverride!=null)
+      {
+        provider.setDescriptionOverride(descriptionOverride);
+      }
+      StatDescription stat=provider.getStat();
+      _statsUsageStatistics.registerStatUsage(stat);
+    }
+    else if (descriptionOverride!=null)
+    {
+      SpecialEffect effect=new SpecialEffect(descriptionOverride);
+      statsProvider.addSpecialEffect(effect);
+    }
+    else
+    {
+      LOGGER.debug("No provider and no override!");
+    }
+    return provider;
+  }
+
+  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties)
+  {
     StatProvider provider=null;
 
     String modifiedPropName="Mod_Modified";
@@ -135,18 +162,18 @@ public class DatStatUtils
     StatDescription stat=getStatDescription(def);
     if (stat==null)
     {
+      LOGGER.warn("Unknown stat: "+def.getName());
       return null;
     }
-    boolean useStat=useStat(stat);
+    boolean useStat=useStat(stat,def);
     if (!useStat)
     {
       return null;
     }
-    String descriptionOverride=getDescriptionOverride(statProperties);
-    _statsUsageStatistics.registerStatUsage(stat);
-
+    // Operator (often 7 for "add")
     Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
     StatOperator operator=getOperator(modOp);
+
     Number value=null;
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
@@ -160,39 +187,23 @@ public class DatStatUtils
       {
         value=(Number)propValue;
         float statValue=value.floatValue();
-        if (operator!=StatOperator.MULTIPLY)
-        {
-          statValue=StatUtils.fixStatValue(stat,statValue);
-        }
         if (Math.abs(statValue)>0.001)
         {
+          if (operator!=StatOperator.MULTIPLY)
+          {
+            statValue=StatUtils.fixStatValue(stat,statValue);
+          }
           provider=new ConstantStatProvider(stat,statValue);
-        }
-        else if (descriptionOverride!=null)
-        {
-          SpecialEffect effect=new SpecialEffect(descriptionOverride);
-          statsProvider.addSpecialEffect(effect);
-        }
-        else
-        {
-          LOGGER.warn("Value 0 with no override!");
         }
       }
       else
       {
-        LOGGER.warn("No progression ID and no direct value... Stat is "+stat.getName());
+        LOGGER.warn("Property value is not a Number: "+stat);
       }
     }
     if (provider!=null)
     {
-      // - Operator
-      // Often 7 for "add"
       provider.setOperator(operator);
-      // - Descriptor override
-      if (descriptionOverride!=null)
-      {
-        provider.setDescriptionOverride(descriptionOverride);
-      }
     }
     return provider;
   }
@@ -315,8 +326,15 @@ public class DatStatUtils
     return delta.games.lotro.utils.dat.DatStatUtils.getStatDescription(propertyDefinition.getPropertyId(),propertyDefinition.getName());
   }
 
-  private static boolean useStat(StatDescription stat)
+  private static boolean useStat(StatDescription stat, PropertyDefinition def)
   {
+    PropertyType type=def.getPropertyType();
+    if ((type==PropertyType.BIT_FIELD32) || (type==PropertyType.DATA_FILE) ||
+        (type==PropertyType.ARRAY) || (type==PropertyType.BOOLEAN))
+    {
+      return false;
+    }
+    //System.out.println("Type: "+type);
     if (doFilterStats)
     {
       return stat.isPremium();
