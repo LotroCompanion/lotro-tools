@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.utils;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -105,8 +106,16 @@ public class DatStatUtils
           if (rangedProvider==null)
           {
             rangedProvider=new RangedStatProvider(stat);
+            rangedProvider.setDescriptionOverride(provider.getDescriptionOverride());
             rangedStatProviders.put(stat,rangedProvider);
             statsProvider.addStatProvider(rangedProvider);
+          }
+          else
+          {
+            if (!Objects.equals(provider.getDescriptionOverride(),rangedProvider.getDescriptionOverride()))
+            {
+              LOGGER.warn("Description override mismatch: ["+provider.getDescriptionOverride()+"],["+rangedProvider.getDescriptionOverride()+")");
+            }
           }
           rangedProvider.addRange(minLevel,maxLevel,provider);
         }
