@@ -144,8 +144,11 @@ public class DatStatUtils
     }
     else if (descriptionOverride!=null)
     {
-      SpecialEffect effect=new SpecialEffect(descriptionOverride);
-      statsProvider.addSpecialEffect(effect);
+      if (descriptionOverride.length()>0)
+      {
+        SpecialEffect effect=new SpecialEffect(descriptionOverride);
+        statsProvider.addSpecialEffect(effect);
+      }
     }
     else
     {
@@ -246,7 +249,7 @@ public class DatStatUtils
       }
       else if (descriptionOverride.length==1)
       {
-        ret=descriptionOverride[0];
+        ret=descriptionOverride[0].trim();
       }
       else
       {
