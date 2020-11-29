@@ -253,7 +253,7 @@ public class MainDatItemsLoader
       // - faction
       getRequiredFaction(properties,item.getUsageRequirements());
       // Stats providers
-      DatStatUtils.doFilterStats=true;
+      DatStatUtils.doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       if (armorStatProvider!=null)
       {
