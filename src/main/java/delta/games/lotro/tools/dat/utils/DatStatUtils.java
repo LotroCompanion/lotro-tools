@@ -144,7 +144,7 @@ public class DatStatUtils
     }
     else if (descriptionOverride!=null)
     {
-      if (descriptionOverride.length()>0)
+      if ((descriptionOverride.length()>0) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
       {
         SpecialEffect effect=new SpecialEffect(descriptionOverride);
         statsProvider.addSpecialEffect(effect);
@@ -169,8 +169,12 @@ public class DatStatUtils
       progressionPropName=propsPrefix+progressionPropName;
     }
 
-    Integer statId=(Integer)statProperties.getProperty(modifiedPropName);
-    PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId.intValue());
+    int statId=((Integer)statProperties.getProperty(modifiedPropName)).intValue();
+    if (statId==0)
+    {
+      return null;
+    }
+    PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId);
     StatDescription stat=getStatDescription(def);
     if (stat==null)
     {
@@ -245,7 +249,7 @@ public class DatStatUtils
     {
       if (descriptionOverride.length==2)
       {
-        ret=descriptionOverride[0]+"{***}"+descriptionOverride[1];
+        ret=descriptionOverride[0]+StatUtils.VALUE_PLACE_HOLDER+descriptionOverride[1];
       }
       else if (descriptionOverride.length==1)
       {
@@ -255,6 +259,10 @@ public class DatStatUtils
       {
         LOGGER.warn("Unsupported length for description override: "+Arrays.toString(descriptionOverride));
       }
+    }
+    else if (statProperties.hasProperty("Mod_DescriptionOverride"))
+    {
+      ret=StatUtils.NO_DESCRIPTION;
     }
     if (ret!=null)
     {
