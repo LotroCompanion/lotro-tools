@@ -256,6 +256,11 @@ public class DatStatUtils
         LOGGER.warn("Unsupported length for description override: "+Arrays.toString(descriptionOverride));
       }
     }
+    if (ret!=null)
+    {
+      ret=ret.replace("\\n","\n");
+      ret=ret.trim();
+    }
     return ret;
   }
 
