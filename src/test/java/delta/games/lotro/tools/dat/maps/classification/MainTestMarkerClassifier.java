@@ -26,7 +26,19 @@ public class MainTestMarkerClassifier
     _classifier=new MarkerClassifier(facade);
   }
 
+  private void doSimpleClassification()
+  {
+    Classification classif=_classifier.classifyDid(1879410562);
+    System.out.println(classif);
+  }
+
   private void doIt()
+  {
+    //doBlocks();
+    doSimpleClassification();
+  }
+
+  void doBlocks()
   {
     File rootDir=new File("../lotro-maps-db");
     MapsManager maps=new MapsManager(rootDir);
