@@ -157,7 +157,7 @@ public class MountsLoader
     boolean ok=archiver.go(GeneratedFiles.MOUNT_ICONS,MOUNT_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote mount icons archive: "+GeneratedFiles.MOUNT_ICONS);
+      LOGGER.info("Wrote mount icons archive: "+GeneratedFiles.MOUNT_ICONS);
     }
   }
 
@@ -178,7 +178,7 @@ public class MountsLoader
         mounts.add(mount);
       }
     }
-    System.out.println("Loaded "+mounts.size()+" mounts.");
+    LOGGER.info("Loaded "+mounts.size()+" mounts.");
     saveMounts(mounts);
   }
 

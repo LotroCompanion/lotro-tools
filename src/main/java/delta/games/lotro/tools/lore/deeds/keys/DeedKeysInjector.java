@@ -3,6 +3,8 @@ package delta.games.lotro.tools.lore.deeds.keys;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -14,6 +16,8 @@ import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
  */
 public class DeedKeysInjector
 {
+  private static final Logger LOGGER=Logger.getLogger(DeedKeysInjector.class);
+
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
   //private static final File OLD_FILE_NO_ID=new File("../lotro-deeds-db/deeds_no_id.xml").getAbsoluteFile();
 
@@ -79,7 +83,7 @@ public class DeedKeysInjector
       if (newDeed==null)
       {
         //System.out.println("manualResolution(\""+key+"\",1234567);");
-        System.out.println("\tDeed not resolved: key=["+key+"], name=["+name+"]");
+        LOGGER.warn("Deed not resolved: key=["+key+"], name=["+name+"]");
         _nbFailures++;
       }
       else
@@ -90,7 +94,7 @@ public class DeedKeysInjector
     else
     {
       //System.out.println("manualResolution(\""+key+"\",1234567);");
-      System.out.println("\tSeveral old deeds with that name: "+name);
+      LOGGER.warn("Several old deeds with that name: "+name);
       _nbFailures++;
     }
   }
@@ -117,7 +121,7 @@ public class DeedKeysInjector
     if (nbNewDeeds>1)
     {
       // TODO Handle these
-      System.out.println("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      LOGGER.warn("Ambiguous name: (x"+nbNewDeeds+") "+name);
       //return null;
       return newDeeds.get(0);
     }

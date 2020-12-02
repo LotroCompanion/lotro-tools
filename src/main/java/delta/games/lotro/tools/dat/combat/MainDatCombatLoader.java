@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.combat;
 
 import java.util.Objects;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.stats.ratings.ProgressionRatingCurveImpl;
 import delta.games.lotro.character.stats.ratings.RatingCurve;
 import delta.games.lotro.character.stats.ratings.RatingCurveId;
@@ -21,6 +23,8 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class MainDatCombatLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MainDatCombatLoader.class);
+
   private DataFacade _facade;
   private EnumMapper _calcType;
   private CombatData _data;
@@ -79,7 +83,7 @@ public class MainDatCombatLoader
     }
     else
     {
-      System.out.println("Unmanaged curve type: "+calcType+" => "+_calcType.getString(calcType));
+      LOGGER.warn("Unmanaged curve type: "+calcType+" => "+_calcType.getString(calcType));
       //System.out.println("Hard cap: "+hardCapProg);
       //System.out.println("Rating: "+ratingProg);
       //System.out.println("Target cap: "+targetCapProg);

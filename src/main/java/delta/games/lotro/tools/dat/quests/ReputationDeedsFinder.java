@@ -77,7 +77,7 @@ public class ReputationDeedsFinder
     if (oldDeed==null)
     {
       deedsMap.put(tierKey,deed);
-      LOGGER.info("Found deed: "+deed+" for faction id="+factionId+", tier="+tier);
+      LOGGER.debug("Found deed: "+deed+" for faction id="+factionId+", tier="+tier);
     }
     else
     {

@@ -76,6 +76,7 @@ public class ConsistencyChecks
         }
       }
     }
+    System.out.println("Items statistics:");
     System.out.println("Nb armours with missing armour type: " + nbMissingArmourTypes);
     System.out.println("Nb armours with missing armour value: " + nbMissingArmourValues);
     System.out.println("Nb weapons with missing type: " + nbMissingWeaponTypes);

@@ -90,7 +90,7 @@ public class MainDatLegendarySystemLoader
        */
       int qualityCode=((Integer)itemInfoProps.getProperty("ItemAdvancement_Quality")).intValue();
       ItemQuality quality=DatEnumsUtils.getQuality(qualityCode);
-      LOGGER.info("Quality: "+quality);
+      LOGGER.debug("Quality: "+quality);
       QualityBasedData qualityData=_data.getQualityData(quality,true);
       // - item level info
       int itemLevelInfoId=((Integer)itemInfoProps.getProperty("ItemAdvancement_ItemLevelInfo")).intValue();
@@ -101,7 +101,7 @@ public class MainDatLegendarySystemLoader
       // - level table
       int levelTableId=((Integer)itemInfoProps.getProperty("ItemAdvancement_LevelTable")).intValue();
       int[] xpTable=handleLevelTable(levelTableId);
-      LOGGER.info("\tFound XP table: "+Arrays.toString(xpTable));
+      LOGGER.debug("\tFound XP table: "+Arrays.toString(xpTable));
       qualityData.setXpTable(xpTable);
     }
   }
@@ -149,11 +149,11 @@ public class MainDatLegendarySystemLoader
       int slotBits=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_Slot")).intValue();
       BitSet slotsSet=BitSetUtils.getBitSetFromFlags(slotBits);
       String slots=BitSetUtils.getStringFromBitSet(slotsSet,_slotMapper,",");
-      LOGGER.info("\t\tSlots: "+slots);
+      LOGGER.debug("\t\tSlots: "+slots);
       // Legendary points table
       int legendaryPointsTableId=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_LegendaryPointsTable")).intValue();
       int[] pointsByLevel=getPointsByLevel(legendaryPointsTableId);
-      LOGGER.info("\t\tPoints by level: "+Arrays.toString(pointsByLevel));
+      LOGGER.debug("\t\tPoints by level: "+Arrays.toString(pointsByLevel));
       EquipmentLocation slot=DatEnumsUtils.getSlot(slotBits);
       qualityData.setPointsTable(slot,pointsByLevel);
     }

@@ -201,6 +201,7 @@ Set_Name:
   public void doIt()
   {
     DatStatUtils.doFilterStats=false;
+    DatStatUtils._statsUsageStatistics.reset();
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 
     for(int id=0x70000000;id<=0x77FFFFFF;id++)

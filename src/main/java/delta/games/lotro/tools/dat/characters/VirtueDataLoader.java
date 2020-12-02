@@ -109,6 +109,7 @@ public class VirtueDataLoader
       ret.setXpPropertyName(xpPropertyName);
       // Stats
       DatStatUtils.doFilterStats=false;
+      DatStatUtils._statsUsageStatistics.reset();
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
       ret.setStatsProvider(statsProvider);
       // Build icon file

@@ -98,6 +98,7 @@ public class TraitLoader
 
     // Stats
     DatStatUtils.doFilterStats=false;
+    DatStatUtils._statsUsageStatistics.reset();
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
     ret.setStatsProvider(statsProvider);
     // Build icon file

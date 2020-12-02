@@ -20,7 +20,6 @@ import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -36,7 +35,7 @@ public class RaceDataLoader
 
   private DataFacade _facade;
   private Map<Integer,RaceDescription> _racesById;
-  private EnumMapper _nationalities;
+  //private EnumMapper _nationalities;
 
   /**
    * Constructor.
@@ -46,7 +45,7 @@ public class RaceDataLoader
   {
     _facade=facade;
     _racesById=new HashMap<Integer,RaceDescription>();
-    _nationalities=_facade.getEnumsManager().getEnumMapper(587202577);
+    //_nationalities=_facade.getEnumsManager().getEnumMapper(587202577);
     loadNationalities();
   }
 

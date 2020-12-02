@@ -81,18 +81,19 @@ public class TraitPointsRegistryBuilder
 
   private void showTraitPointsPerClass()
   {
+    System.out.println("Checking trait points / class:");
     for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
     {
       List<TraitPoint> points=_registry.getPointsForClass(cClass);
       Collections.sort(points,new TraitPointLabelComparator());
-      System.out.println(cClass+":"+points.size());
+      System.out.println(cClass+": "+points.size());
       for(TraitPoint point : points)
       {
         System.out.println("\t"+point.getAchievableId()+" - "+point.getLabel()+" -- "+point.getId());
       }
     }
     List<TraitPoint> all=_registry.getAll();
-    System.out.println("All:"+all.size());
+    System.out.println("All: "+all.size());
   }
 
   private void checkAvailableTraitPoints()

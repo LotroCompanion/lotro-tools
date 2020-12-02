@@ -49,7 +49,7 @@ public class MainStatTomesLoader
       int subDirectoryId=((Integer)subDirectoryObj).intValue();
       handleStat(subDirectoryId);
     }
-    showRegistry();
+    //showRegistry();
     StatTomesXMLWriter.write(GeneratedFiles.STAT_TOMES,_tomesManager);
   }
 
@@ -96,7 +96,7 @@ public class MainStatTomesLoader
     _tomesManager.registerStatTome(tome);
   }
 
-  private void showRegistry()
+  void showRegistry()
   {
     List<StatDescription> stats=_tomesManager.getStats();
     for(StatDescription stat : stats)

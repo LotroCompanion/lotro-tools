@@ -88,6 +88,7 @@ public class LegaciesLoader
   public void loadLegacies()
   {
     DatStatUtils.doFilterStats=false;
+    DatStatUtils._statsUsageStatistics.reset();
     loadNonImbuedLegacies();
     loadImbuedLegacies();
   }
@@ -160,7 +161,7 @@ public class LegaciesLoader
         StatDescription oldStat=stats.getByKey(propDef.getName());
         if (oldStat!=null)
         {
-          System.out.println("Old stat: "+oldStat.getName());
+          LOGGER.debug("Old stat: "+oldStat.getName());
           TieredNonImbuedLegacy oldLegacy=_nonImbuedLegaciesManager.getLegacy(oldStat);
           if (oldLegacy!=null)
           {
@@ -170,14 +171,14 @@ public class LegaciesLoader
           }
           else
           {
-            System.out.println("Old legacy not found for stat: "+oldStat.getName());
+            LOGGER.warn("Old legacy not found for stat: "+oldStat.getName());
           }
         }
       }
     }
     else
     {
-      System.out.println("No mutation data for: "+ret);
+      LOGGER.debug("No mutation data for: "+ret);
     }
     return ret;
   }

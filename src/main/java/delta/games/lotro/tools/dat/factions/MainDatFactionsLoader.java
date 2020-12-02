@@ -85,7 +85,7 @@ Reputation_LowestTier: 1
 
     Faction faction=new Faction(factionId);
     faction.setName(name);
-    LOGGER.info("ID: "+factionId+" => "+name);
+    LOGGER.info("Loading faction: ID: "+factionId+" => "+name);
 
     // Category
     String[] factionDescription=getFactionDescription(factionId);
@@ -103,9 +103,9 @@ Reputation_LowestTier: 1
 
     // Tier names:
     int tierNamesId=((Integer)properties.getProperty("Reputation_Faction_TierNameProgression")).intValue();
-    LOGGER.info("Tier names table: "+tierNamesId);
+    LOGGER.debug("Tier names table: "+tierNamesId);
     Map<Integer,String> tierNames=getTierNames(tierNamesId);
-    LOGGER.info(tierNames);
+    LOGGER.debug(tierNames);
 
     // Lowest/initial/highest tiers
     int lowestTier=((Integer)properties.getProperty("Reputation_LowestTier")).intValue();
@@ -114,7 +114,7 @@ Reputation_LowestTier: 1
     faction.setHighestTier(highestTier);
     int defaultTier=((Integer)properties.getProperty("Reputation_Faction_DefaultTier")).intValue();
     faction.setInitialTier(defaultTier);
-    LOGGER.info("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
+    LOGGER.debug("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
 
     // Guild?
     boolean isGuild=isGuildFaction(factionId);
@@ -154,10 +154,10 @@ Reputation_LowestTier: 1
     // Faction advancement table
     // Here we find the total amount of reputation points for each tier
     int reputationTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
-    LOGGER.info("Reputation table: "+reputationTableId);
+    LOGGER.debug("Reputation table: "+reputationTableId);
     WStateDataSet table=_facade.loadWState(reputationTableId);
     long[] reputationTable=(long[])table.getValue(1);
-    LOGGER.info(Arrays.toString(reputationTable));
+    LOGGER.debug(Arrays.toString(reputationTable));
 
     List<FactionLevel> levels=buildFactionLevels(tierNames,reputationTable,lowestTier,highestTier);
     for(FactionLevel level : levels)

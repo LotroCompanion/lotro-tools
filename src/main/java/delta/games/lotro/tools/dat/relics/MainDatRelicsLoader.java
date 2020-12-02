@@ -180,6 +180,7 @@ public class MainDatRelicsLoader
   public void doIt()
   {
     DatStatUtils.doFilterStats=false;
+    DatStatUtils._statsUsageStatistics.reset();
     _categories=_facade.getEnumsManager().getEnumMapper(587203232);
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
@@ -209,6 +210,7 @@ public class MainDatRelicsLoader
       System.out.println("Wrote relic icons archive: "+GeneratedFiles.RELIC_ICONS);
     }
     // Stats usage statistics
+    System.out.println("Stats usage statistics (relics):");
     DatStatUtils._statsUsageStatistics.showResults();
   }
 

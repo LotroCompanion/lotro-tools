@@ -77,7 +77,7 @@ public class LootLoader
       float percentage=((Float)entryProps.getProperty("LootGenControl_DropFrequency_Percentage")).floatValue();
       int code=((Integer)entryProps.getProperty("LootGenControl_DropFrequency_Label")).intValue();
       _probabilities.put(Integer.valueOf(code),Float.valueOf(percentage));
-      System.out.println("Probability is "+percentage*100+" for "+_dropFrequency.getString(code));
+      LOGGER.debug("Probability is "+percentage*100+" for "+_dropFrequency.getString(code));
     }
   }
 

@@ -688,7 +688,7 @@ public class DatRewardsLoader
     int index=1;
     for(Object rewardMapObj : rewardMaps)
     {
-      LOGGER.info("Loading default rewards map for level: "+index);
+      LOGGER.debug("Loading default rewards map for level: "+index);
       Integer rewardLevelId=(Integer)rewardMapObj;
       RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
       _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);

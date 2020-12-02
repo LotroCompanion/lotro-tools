@@ -38,7 +38,7 @@ public class RewardsMapLoader
     PropertiesSet props=_facade.loadProperties(rewardsMapId+DATConstants.DBPROPERTIES_OFFSET);
     if (props!=null)
     {
-      LOGGER.info("Loading map ID: "+rewardsMapId);
+      LOGGER.debug("Loading map ID: "+rewardsMapId);
       rewardsMap=new RewardsMap();
       fill(props,rewardsMap);
     }
@@ -82,7 +82,7 @@ public class RewardsMapLoader
         T value=(T)entryProps.getProperty(entryPropName);
         storage.addEntry(tier.intValue(),value);
       }
-      LOGGER.info("Loaded list: "+listPropName+": "+storage);
+      LOGGER.debug("Loaded list: "+listPropName+": "+storage);
     }
     else
     {

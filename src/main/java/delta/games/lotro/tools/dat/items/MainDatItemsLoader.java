@@ -986,6 +986,7 @@ public class MainDatItemsLoader
     _legaciesLoader.loadLegacies();
 
     // Items
+    DatStatUtils._statsUsageStatistics.reset();
     List<Item> items=new ArrayList<Item>();
 
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
@@ -1013,6 +1014,7 @@ public class MainDatItemsLoader
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
+    System.out.println("Stats usage statistics (items):");
     DatStatUtils._statsUsageStatistics.showResults();
     // Save passives
     _passivesLoader.savePassives();

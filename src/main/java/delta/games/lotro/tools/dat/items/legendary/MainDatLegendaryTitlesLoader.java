@@ -172,6 +172,7 @@ Mod_Array:
   public void doIt()
   {
     DatStatUtils.doFilterStats=false;
+    DatStatUtils._statsUsageStatistics.reset();
     List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

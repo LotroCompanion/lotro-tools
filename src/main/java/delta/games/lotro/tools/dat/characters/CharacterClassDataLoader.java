@@ -70,11 +70,11 @@ public class CharacterClassDataLoader
     ClassDescription classDescription=new ClassDescription(characterClass);
     LOGGER.info("Handling class: "+characterClass);
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
-    LOGGER.info("Class abbreviation: "+classAbbreviation);
+    LOGGER.debug("Class abbreviation: "+classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
     // Class description
     String description=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
-    LOGGER.info("Class description: "+description);
+    LOGGER.debug("Class description: "+description);
     classDescription.setDescription(description);
     // Icons
     // Normal size (48 pixels)
@@ -152,7 +152,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     {
       PropertiesSet levelProperties=(PropertiesSet)levelPropertiesObj;
       int level=((Integer)levelProperties.getProperty("AdvTable_Level")).intValue();
-      LOGGER.info("Level: "+level);
+      LOGGER.debug("Level: "+level);
       BasicStatsSet stats=new BasicStatsSet();
       // Vitals
       Object[] vitalStats=(Object[])levelProperties.getProperty("AdvTable_BaseVitalEntryList");
@@ -323,7 +323,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
-      LOGGER.info("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
+      LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
       TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
       ClassTrait classTrait=new ClassTrait(level,trait);
       description.addTrait(classTrait);

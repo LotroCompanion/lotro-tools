@@ -166,7 +166,7 @@ public class CosmeticPetLoader
     boolean ok=archiver.go(GeneratedFiles.PET_ICONS,PET_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote pet icons archive: "+GeneratedFiles.PET_ICONS);
+      LOGGER.info("Wrote pet icons archive: "+GeneratedFiles.PET_ICONS);
     }
   }
 
@@ -187,7 +187,7 @@ public class CosmeticPetLoader
         pets.add(pet);
       }
     }
-    System.out.println("Loaded "+pets.size()+" pets.");
+    LOGGER.info("Loaded "+pets.size()+" pets.");
     savePets(pets);
   }
 

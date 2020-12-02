@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
@@ -23,7 +25,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
  */
 public class TraitTreesDataLoader
 {
-  //private static final Logger LOGGER=Logger.getLogger(MainTraitTreesDataLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(TraitTreesDataLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _traitTreeBranch;
@@ -58,7 +60,7 @@ public class TraitTreesDataLoader
     }
     */
     TraitTree tree=new TraitTree(characterClass);
-    System.out.println("Class: "+characterClass);
+    LOGGER.info("Loading trait tree for class: "+characterClass);
     //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations

@@ -27,6 +27,14 @@ public class StatsUsageStatistics
   }
 
   /**
+   * Reset statistics.
+   */
+  public void reset()
+  {
+    _data.clear();
+  }
+
+  /**
    * Register stat usage.
    * @param stat Stat to use.
    */
