@@ -79,6 +79,15 @@ public class MainDatPrivateEncountersLoader
     // Content Layer ID
     int contentLayerId=((Integer)props.getProperty("PrivateEncounterTemplate_ContentLayer")).intValue();
     ret.setContentLayerId(contentLayerId);
+    // Public instances?
+    /*
+    Integer isPublic=(Integer)props.getProperty("PrivateEncounterTemplate_PublicInstance");
+    if ((isPublic!=null) && (isPublic.intValue()==1))
+    {
+      // Assume public instances do use the world layer!
+      ret.addAdditionalContentLayer(0);
+    }
+    */
     // Block references
     List<BlockReference> blocks=new ArrayList<BlockReference>();
     Object[] blocksArray=(Object[])props.getProperty("PrivateEncounterTemplate_ContainedLandBlockArray");
@@ -267,7 +276,6 @@ public class MainDatPrivateEncountersLoader
     {
       pe.addAdditionalContentLayer(0);
     }
-    
   }
 
   private void doIt()

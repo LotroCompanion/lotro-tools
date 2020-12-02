@@ -132,6 +132,21 @@ public class DatRolesLoader
           {
             LOGGER.warn("Found out of range objective index: "+objectiveIndex+". Max: "+objectives.size());
           }
+          /*
+          if (dispenserAction==3) // Teleport
+          {
+            Integer peId=(Integer)roleProps.getProperty("QuestDispenser_PrivateEncounterTemplate");
+            if (peId!=null)
+            {
+              PrivateEncounter pe=PrivateEncountersManager.getInstance().getPrivateEncounterById(peId.intValue());
+              System.out.println("Found PE: "+peId+"("+pe.getName()+") in quest "+quest.getName());
+            }
+            else
+            {
+              System.out.println("PE is null"+" in quest "+quest.getName());
+            }
+          }
+          */
         }
         else if (dispenserAction==5) // LeaveInstance
         {

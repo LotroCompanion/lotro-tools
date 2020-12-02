@@ -20,6 +20,7 @@ import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -35,6 +36,7 @@ public class RaceDataLoader
 
   private DataFacade _facade;
   private Map<Integer,RaceDescription> _racesById;
+  private EnumMapper _nationalities;
 
   /**
    * Constructor.
@@ -44,6 +46,8 @@ public class RaceDataLoader
   {
     _facade=facade;
     _racesById=new HashMap<Integer,RaceDescription>();
+    _nationalities=_facade.getEnumsManager().getEnumMapper(587202577);
+    loadNationalities();
   }
 
   private void handleRace(int racePropertiesId)
@@ -57,18 +61,61 @@ public class RaceDataLoader
     String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
     description=description.trim();
     raceDescription.setDescription(description);
+    // Nationalities
     /*
-RaceTable_NationalityList: 
-  #1: 17
-  #2: 16
-  #3: 6
-  #4: 5
+    Object[] nationalityCodes=(Object[])properties.getProperty("RaceTable_NationalityList");
+    for(Object nationalityCodeObj : nationalityCodes)
+    {
+      int nationalityCode=((Integer)nationalityCodeObj).intValue();
+      String nationality=_nationalities.getString(nationalityCode);
+      System.out.println("Nationality: "+nationality);
+    }
     */
-
     loadGenders(raceDescription,properties);
     loadCharacteristics(raceDescription,properties);
     loadAllowedClasses(raceDescription,properties);
     _racesById.put(Integer.valueOf(raceId),raceDescription);
+  }
+
+  private void loadNationalities()
+  {
+    PropertiesSet properties=_facade.loadProperties(0x79000210);
+    Object[] nationalityIdsArray=(Object[])properties.getProperty("NationalityTable_NationalityTableList");
+    for(Object nationalityId : nationalityIdsArray)
+    {
+      handleNationality(((Integer)nationalityId).intValue());
+    }
+  }
+
+  private void handleNationality(int nationalityId)
+  {
+    /*
+    PropertiesSet properties=_facade.loadProperties(nationalityId+DATConstants.DBPROPERTIES_OFFSET);
+    System.out.println(properties.dump());
+    */
+    /*
+    NationalityTable_Desc: 
+      #1: <li><rgb=#FFFF00>Lore: </rgb>You grew up in Bree-land, once part of the North Kingdom of Arnor, once ruled by Elendil the Tall as High King of Middle-earth, and later by his elder son Isildur. Now it is but a simple, rustic land, and the North Kingdom is no more.</li>
+    NationalityTable_Icon: 1091603145
+    NationalityTable_Name: 
+      #1: Bree-land
+    NationalityTable_Naming_Guideline_Array: 
+      #1: 
+        NationalityTable_Naming_Guideline: 
+          #1: \n\n<li><rgb=#FFFF00>Naming Guidelines: </rgb>Bree-men usually have short, simple English-styled names like Ned, Bill, Mat, Wil, or Tom, but longer or less familiar names -- such as Barliman, Humphrey, or Cuthbert -- are not unknown.\n\nSometimes Bree-landers go by their last names, which are almost always related to plants, such as Appledore, Thistleway, Butterbur, or Ferny.</li>
+        NationalityTable_Sex: 4096 (Male)
+      #2: 
+        NationalityTable_Naming_Guideline: 
+          #1: \n\n<li><rgb=#FFFF00>Naming Guidelines: </rgb>Bree-women tend towards simple, familiar English-styled names such as Ellie, Dora, Adela, and Clara, though less familiar names -- such as Amabel, Maribel, or Livina -- are not unknown.\n\nSometimes Bree-landers go by their last names, which are almost always related to plants, such as Appledore, Thistleway, Butterbur, or Ferny.</li>
+        NationalityTable_Sex: 8192 (Female)
+    NationalityTable_Nationality: 17 (Bree_land)
+    NationalityTable_Title: 1879073639
+    Reputation_FactionTable: 
+      #1: 1879091340
+      #2: 1879091408
+      #3: 1879091346
+      #4: 1879091345
+    */
   }
 
   private void loadGenders(RaceDescription description, PropertiesSet properties)
@@ -101,7 +148,21 @@ RaceTable_NationalityList:
     DatIconsUtils.buildImageFile(_facade,largeIconId,largeIconFile);
     int smallIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
     gender.setSmallIconId(smallIconId);
+    // Avatar
+    //int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
+    //loadAvatar(avatarId);
     return gender;
+  }
+
+  void loadAvatar(int avatarId)
+  {
+    PropertiesSet properties=_facade.loadProperties(avatarId+DATConstants.DBPROPERTIES_OFFSET);
+    //System.out.println(properties.dump());
+    float icmr=((Float)properties.getProperty("Vital_HealthCombatBaseRegen")).floatValue();
+    float ocmr=((Float)properties.getProperty("Vital_HealthPeaceBaseRegen")).floatValue();
+    float icpr=((Float)properties.getProperty("Vital_PowerCombatBaseRegen")).floatValue();
+    float ocpr=((Float)properties.getProperty("Vital_PowerPeaceBaseRegen")).floatValue();
+    System.out.println("ICMR="+icmr+", OCMR="+ocmr+", ICPR="+icpr+", OCPR="+ocpr);
   }
 
   private File getIconFile(Race race, CharacterSex sex)
