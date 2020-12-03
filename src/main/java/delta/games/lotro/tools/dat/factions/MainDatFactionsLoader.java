@@ -232,7 +232,6 @@ Reputation_LowestTier: 1
       registry.registerFaction(faction);
     }
     buildFactionDeeds(registry);
-    associateDeeds(registry);
     save(registry);
   }
 
@@ -280,10 +279,14 @@ Reputation_LowestTier: 1
     return ret;
   }
 
-  private void associateDeeds(FactionsRegistry registry)
+  /**
+   * Find deeds associuated to faction levels.
+   * @param registry Factions registry to use.
+   */
+  public static void associateDeeds(FactionsRegistry registry)
   {
     ReputationDeedsFinder finder=new ReputationDeedsFinder();
-    DeedsManager deedsManager=new DeedsManager();
+    DeedsManager deedsManager=DeedsManager.getInstance();
     finder.init(deedsManager.getAll());
     for(Faction faction : registry.getAll())
     {
@@ -299,9 +302,14 @@ Reputation_LowestTier: 1
         }
       }
     }
+    save(registry);
   }
 
-  private void save(FactionsRegistry factions)
+  /**
+   * Save a factions registry to a file.
+   * @param factions
+   */
+  public static void save(FactionsRegistry factions)
   {
     File toFile=GeneratedFiles.FACTIONS;
     boolean ok=FactionsXMLWriter.writeFactionsFile(toFile,factions);

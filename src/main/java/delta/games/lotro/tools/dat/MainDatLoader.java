@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.tools.ReferenceDataGenerator;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
@@ -108,8 +109,8 @@ public class MainDatLoader
     // Quests and deeds
     new MainDatAchievablesLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
-    // Factions (reloaded)
-    new MainDatFactionsLoader(_facade).doIt();
+    // Associate deeds to faction levels
+    MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
     // Buffs
     new MainBuffsLoader(_facade).doIt();
     // Trait points
