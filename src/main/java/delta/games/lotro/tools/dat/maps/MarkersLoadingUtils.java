@@ -28,6 +28,7 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
+import delta.games.lotro.maps.data.links.MapLinkType;
 import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
@@ -295,12 +296,12 @@ public class MarkersLoadingUtils
     {
       where=getAreaOrDungeon(areaDID);
     }
-    String[] targetMapName=new String[1];
-    int targetMapKey=getTargetMap(destArea,destPosition,targetMapName);
-    if (targetMapKey!=0)
+    AbstractMap targetMap=getTargetMap(destArea,destPosition);
+    if (targetMap==null)
     {
-      text="To: "+targetMapName[0];
+      return;
     }
+    text="To: "+targetMap.getName();
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
     //System.out.println("Data ID: "+dataId);
@@ -318,27 +319,34 @@ public class MarkersLoadingUtils
           // Merge layer 1 "InstanceZero" with world
           contentLayer=0;
         }
-        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMapKey,geoPoint);
+        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMap.getIdentifier(),geoPoint);
+        if (targetMap instanceof Dungeon)
+        {
+          link.setType(MapLinkType.TO_DUNGEON);
+        }
         link.setLabel(text);
         _links.addLink(link);
       }
     }
     else
     {
-      MapLink link=new MapLink(where.getIdentifier(),0,targetMapKey,geoPoint);
-      _links.addLink(link);
+      MapLink link=new MapLink(where.getIdentifier(),0,targetMap.getIdentifier(),geoPoint);
+      if (targetMap instanceof Dungeon)
+      {
+        link.setType(MapLinkType.TO_DUNGEON);
+      }
       link.setLabel(text);
+      _links.addLink(link);
     }
   }
 
-  private int getTargetMap(Identifiable destArea, DatPosition destPosition, String[] name)
+  private AbstractMap getTargetMap(Identifiable destArea, DatPosition destPosition)
   {
-    int targetMapKey=0;
+    AbstractMap targetMap=null;
     if (destArea instanceof Dungeon)
     {
       Dungeon dungeon=(Dungeon)destArea;
-      targetMapKey=dungeon.getIdentifier();
-      name[0]=dungeon.getName();
+      targetMap=dungeon;
     }
     else if (destArea instanceof Area)
     {
@@ -346,28 +354,26 @@ public class MarkersLoadingUtils
       ParchmentMap map=parchmentMapsManager.getParchmentMapForArea(destArea.getIdentifier());
       if (map!=null)
       {
-        targetMapKey=map.getIdentifier();
-        name[0]=map.getName();
+        targetMap=map;
       }
     }
-    if (targetMapKey==0)
+    if (targetMap==null)
     {
       Integer parentZone=_landblocksManager.getParentZone(destPosition);
       if (parentZone!=null)
       {
-        AbstractMap mapId=MapUtils.findMapForZone(parentZone.intValue());
-        if (mapId!=null)
+        AbstractMap map=MapUtils.findMapForZone(parentZone.intValue());
+        if (map!=null)
         {
-          targetMapKey=mapId.getIdentifier();
-          name[0]=mapId.getName();
+          targetMap=map;
         }
       }
     }
-    if (targetMapKey==0)
+    if (targetMap==null)
     {
       LOGGER.warn("Target map not found for target: "+destArea);
     }
-    return targetMapKey;
+    return targetMap;
   }
 
   /**
