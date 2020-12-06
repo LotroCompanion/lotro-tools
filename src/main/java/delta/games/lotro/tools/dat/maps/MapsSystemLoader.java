@@ -97,7 +97,7 @@ public class MapsSystemLoader
     return null;
   }
 
-  private void handleMapProps(PropertiesSet props, int level)
+  private void handleMapProps(PropertiesSet props, int level, int parentMapId)
   {
     // ActiveElement
     int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
@@ -201,10 +201,14 @@ public class MapsSystemLoader
     }
 
     ParchmentMap parchmentMap=new ParchmentMap(activeElementId,mapName);
+    // Region
     if (regionId!=null)
     {
       parchmentMap.setRegion(regionId.intValue());
     }
+    // Parent map ID
+    parchmentMap.setParentMapId(parentMapId);
+    // Register map
     _maps.add(parchmentMap);
     // Areas
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
@@ -228,7 +232,7 @@ public class MapsSystemLoader
       for(Object subMapObj : subMaps)
       {
         PropertiesSet subMapProps=(PropertiesSet)subMapObj;
-        handleMapProps(subMapProps,level+1);
+        handleMapProps(subMapProps,level+1,activeElementId);
       }
     }
   }
@@ -265,7 +269,7 @@ public class MapsSystemLoader
     if (props!=null)
     {
       PropertiesSet areaProps=(PropertiesSet)props.getProperty("UI_Map_AreaData");
-      handleMapProps(areaProps,0);
+      handleMapProps(areaProps,0,0);
     }
     // Setup link labels
     setLabels();
