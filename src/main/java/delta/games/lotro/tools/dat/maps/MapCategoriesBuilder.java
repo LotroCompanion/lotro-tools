@@ -5,6 +5,7 @@ import java.util.List;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.maps.data.categories.CategoriesConstants;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.maps.data.categories.Category;
 import delta.games.lotro.utils.StringUtils;

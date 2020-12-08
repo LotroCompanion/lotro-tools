@@ -8,6 +8,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.maps.data.categories.CategoriesConstants;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
 import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;

@@ -7,6 +7,7 @@ import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
+import delta.games.lotro.maps.data.categories.CategoriesConstants;
 
 /**
  * Marker utilities.
