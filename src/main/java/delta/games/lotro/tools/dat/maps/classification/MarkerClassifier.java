@@ -62,7 +62,6 @@ public class MarkerClassifier
   {
     _facade=facade;
     _cache=new HashMap<Integer,Classification>();
-    _cache.put(Integer.valueOf(0),null);
     _mapNoteType=_facade.getEnumsManager().getEnumMapper(587202775);
     _agentSpecLoader=new ClassificationLoader(facade);
   }

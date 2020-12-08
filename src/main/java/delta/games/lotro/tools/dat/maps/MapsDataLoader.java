@@ -165,6 +165,10 @@ public class MapsDataLoader
     for(AchievableGeoDataItem dataItem : achievableGeoData.getAllItems())
     {
       int did=dataItem.getDid();
+      if (did==0)
+      {
+        continue;
+      }
       DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
       DatPosition position=dataItem.getPosition();
       _markerUtils.buildMarker(position,dataId,0); // Assume world marker!
