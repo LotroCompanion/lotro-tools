@@ -301,9 +301,13 @@ public class MarkersLoadingUtils
     {
       return;
     }
+    if (where==null)
+    {
+      return;
+    }
     text="To: "+targetMap.getName();
-    float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
-    GeoPoint geoPoint=new GeoPoint(lonLat[0],lonLat[1]);
+    float[] fromLonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
+    GeoPoint fromPoint=new GeoPoint(fromLonLat[0],fromLonLat[1]);
     //System.out.println("Data ID: "+dataId);
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
     {
@@ -319,7 +323,7 @@ public class MarkersLoadingUtils
           // Merge layer 1 "InstanceZero" with world
           contentLayer=0;
         }
-        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMap.getIdentifier(),geoPoint);
+        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMap.getIdentifier(),fromPoint);
         if (targetMap instanceof Dungeon)
         {
           link.setType(MapLinkType.TO_DUNGEON);
@@ -330,7 +334,7 @@ public class MarkersLoadingUtils
     }
     else
     {
-      MapLink link=new MapLink(where.getIdentifier(),0,targetMap.getIdentifier(),geoPoint);
+      MapLink link=new MapLink(where.getIdentifier(),0,targetMap.getIdentifier(),fromPoint);
       if (targetMap instanceof Dungeon)
       {
         link.setType(MapLinkType.TO_DUNGEON);
@@ -357,16 +361,19 @@ public class MarkersLoadingUtils
         targetMap=map;
       }
     }
-    if (targetMap==null)
+    Integer parentZone=_landblocksManager.getParentZone(destPosition);
+    Integer destId=(destArea!=null)?Integer.valueOf(destArea.getIdentifier()):null;
+    if (!Objects.equals(destId,parentZone))
     {
-      Integer parentZone=_landblocksManager.getParentZone(destPosition);
-      if (parentZone!=null)
+      LOGGER.warn("Parent mismatch: got="+parentZone+", expected="+destId);
+    }
+
+    if (parentZone!=null)
+    {
+      AbstractMap map=MapUtils.findMapForZone(parentZone.intValue());
+      if (map!=null)
       {
-        AbstractMap map=MapUtils.findMapForZone(parentZone.intValue());
-        if (map!=null)
-        {
-          targetMap=map;
-        }
+        targetMap=map;
       }
     }
     if (targetMap==null)
