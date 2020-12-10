@@ -308,7 +308,8 @@ public class MarkersLoadingUtils
     text="To: "+targetMap.getName();
     float[] fromLonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     GeoPoint fromPoint=new GeoPoint(fromLonLat[0],fromLonLat[1]);
-    //System.out.println("Data ID: "+dataId);
+    float[] toLonLat=PositionDecoder.decodePosition(destPosition.getBlockX(),destPosition.getBlockY(),destPosition.getPosition().getX(),destPosition.getPosition().getY());
+    GeoPoint toPoint=new GeoPoint(toLonLat[0],toLonLat[1]);
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
     {
       for(Object contentLayerObj : contentLayersArray)
@@ -323,7 +324,7 @@ public class MarkersLoadingUtils
           // Merge layer 1 "InstanceZero" with world
           contentLayer=0;
         }
-        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMap.getIdentifier(),fromPoint);
+        MapLink link=new MapLink(where.getIdentifier(),contentLayer,targetMap.getIdentifier(),fromPoint,toPoint);
         if (targetMap instanceof Dungeon)
         {
           link.setType(MapLinkType.TO_DUNGEON);
@@ -334,7 +335,7 @@ public class MarkersLoadingUtils
     }
     else
     {
-      MapLink link=new MapLink(where.getIdentifier(),0,targetMap.getIdentifier(),fromPoint);
+      MapLink link=new MapLink(where.getIdentifier(),0,targetMap.getIdentifier(),fromPoint,toPoint);
       if (targetMap instanceof Dungeon)
       {
         link.setType(MapLinkType.TO_DUNGEON);

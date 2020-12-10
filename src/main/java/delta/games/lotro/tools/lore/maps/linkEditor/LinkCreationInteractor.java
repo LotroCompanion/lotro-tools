@@ -56,7 +56,7 @@ public class LinkCreationInteractor
     int sourceMapId=currentMap.getIdentifier();
     GeoPoint hotPoint=currentMap.getGeoReference().pixel2geo(new Dimension(x,y));
     int targetMapId=target.getIdentifier();
-    MapLink link=new MapLink(sourceMapId,0,targetMapId,hotPoint);
+    MapLink link=new MapLink(sourceMapId,0,targetMapId,hotPoint,null);
     LinksManager linksManager=_manager.getLinksManager();
     linksManager.addLink(link);
     linksManager.write();

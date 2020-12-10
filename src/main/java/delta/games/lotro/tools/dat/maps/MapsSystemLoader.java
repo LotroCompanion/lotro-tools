@@ -100,8 +100,8 @@ public class MapsSystemLoader
   private void handleMapProps(PropertiesSet props, int level, int parentMapId)
   {
     // ActiveElement
-    int activeElementId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
-    String activeElementName=_uiElementId.getString(activeElementId);
+    int parchmentMapId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
+    String activeElementName=_uiElementId.getString(parchmentMapId);
     //System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
 
     // Map name
@@ -114,14 +114,13 @@ public class MapsSystemLoader
     for(int i=0;i<level;i++) System.out.print("\t");
     System.out.println(mapName);
 
-    int key=activeElementId;
     GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
     // Map image
     File imageFile=null;
     Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
     if (imageId!=null)
     {
-      imageFile=basemapsManager.getBasemapImageFile(key);
+      imageFile=basemapsManager.getBasemapImageFile(parchmentMapId);
       if (!imageFile.exists())
       {
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
@@ -157,7 +156,7 @@ public class MapsSystemLoader
       geo2pixel=1;
     }
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    GeoreferencedBasemap basemap=new GeoreferencedBasemap(key,mapName,geoReference);
+    GeoreferencedBasemap basemap=new GeoreferencedBasemap(parchmentMapId,mapName,geoReference);
     // Bounding box
     if (imageFile!=null)
     {
@@ -168,7 +167,7 @@ public class MapsSystemLoader
     basemapsManager.addBasemap(basemap);
 
     // Links
-    UIElement uiElement=getUIElementById(activeElementId);
+    UIElement uiElement=getUIElementById(parchmentMapId);
     if (uiElement!=null)
     {
       GeoBox boundingBox=basemap.getBoundingBox();
@@ -188,7 +187,7 @@ public class MapsSystemLoader
           GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
           if (boundingBox.isInBox(hotPoint))
           {
-            MapLink link=new MapLink(activeElementId,0,target,hotPoint);
+            MapLink link=new MapLink(parchmentMapId,0,target,hotPoint,null);
             LinksManager linksManager=_mapsManager.getLinksManager();
             linksManager.addLink(link);
           }
@@ -200,7 +199,7 @@ public class MapsSystemLoader
       }
     }
 
-    ParchmentMap parchmentMap=new ParchmentMap(activeElementId,mapName);
+    ParchmentMap parchmentMap=new ParchmentMap(parchmentMapId,mapName);
     // Region
     if (regionId!=null)
     {
@@ -232,7 +231,7 @@ public class MapsSystemLoader
       for(Object subMapObj : subMaps)
       {
         PropertiesSet subMapProps=(PropertiesSet)subMapObj;
-        handleMapProps(subMapProps,level+1,activeElementId);
+        handleMapProps(subMapProps,level+1,parchmentMapId);
       }
     }
   }
