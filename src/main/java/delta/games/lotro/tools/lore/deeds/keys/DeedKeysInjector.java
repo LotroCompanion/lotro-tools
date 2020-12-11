@@ -372,6 +372,28 @@ public class DeedKeysInjector
     // Force some resolutions otherwise wrong with auto resolution
     manualResolution("Enmity_of_the_Goblins_(Hobbit)",1879073466);
     manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
+
+    // Some more manual resolutions after an update of the deed label
+    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
+    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
+    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
+    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
+    manualResolution("Uruk_Slayer_of_the_Westemnet",1879287745);
+    manualResolution("Dunlending_Slayer_of_the_Westemnet_(Advanced)",1879287747);
+    manualResolution("Dunlending_Slayer_of_the_Westemnet",1879287748);
+    manualResolution("Uruk_Slayer_of_the_Westemnet_(Advanced)",1879287749);
+    manualResolution("Craban_Slayer_of_the_Westemnet",1879287752);
+    manualResolution("Craban_Slayer_of_the_Westemnet_(Advanced)",1879287753);
+    manualResolution("Orc_Slayer_of_the_Westemnet_(Advanced)",1879287754);
+    manualResolution("Warg_Slayer_of_the_Westemnet_(Advanced)",1879287755);
+    manualResolution("Orc_Slayer_of_the_Westemnet",1879287756);
+    manualResolution("Warg_Slayer_of_the_Westemnet",1879287757);
+    manualResolution("Wolf_Slayer_of_the_Westemnet_(Advanced)",1879287760);
+    manualResolution("Wolf_Slayer_of_the_Westemnet",1879287761);
+    manualResolution("Troll_Slayer_of_the_Westemnet_(Advanced)",1879287762);
+    manualResolution("Troll_Slayer_of_the_Westemnet",1879287763);
+    manualResolution("Goblin_Slayer_of_the_Westemnet_(Advanced)",1879287764);
+    manualResolution("Goblin_Slayer_of_the_Westemnet",1879287765);
   }
 
   private void manualResolution(String key, int identifier)
