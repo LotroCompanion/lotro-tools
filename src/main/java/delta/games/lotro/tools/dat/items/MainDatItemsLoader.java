@@ -765,6 +765,11 @@ public class MainDatItemsLoader
     {
       // Weapon Aura
     }
+    else if (equipmentCategory==1L<<47)
+    {
+      // Battle gauntlets
+      weaponType=WeaponType.BATTLE_GAUNTLETS;
+    }
     else
     {
       LOGGER.warn("Unmanaged equipment category " + equipmentCategory+" for: "+_currentId);

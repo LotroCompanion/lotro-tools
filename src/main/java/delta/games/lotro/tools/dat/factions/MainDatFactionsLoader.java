@@ -273,7 +273,8 @@ Reputation_LowestTier: 1
         ret.add(foundFaction);
       }
     }
-    if (factions.size()>0) {
+    if (factions.size()>0)
+    {
       LOGGER.warn("Sort order not specified for some factions: "+factions);
     }
     return ret;
@@ -431,6 +432,11 @@ Reputation_LowestTier: 1
     if (factionId==1879124452) return new String[]{category,"GUILD_TAILOR",FactionLevelTemplates.GUILD}; // Tailor's Guild
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
+
+    if (factionId==1879413167) return new String[]{category,null,null}; // The League of the Axe
+    if (factionId==1879413168) return new String[]{category,null,null}; // The Woodmen's Brotherhood
+    if (factionId==1879413559) return new String[]{category,null,null}; // DNT
+
     LOGGER.warn("Unmanaged faction ID: "+factionId);
     return null;
   }
@@ -483,6 +489,8 @@ Reputation_LowestTier: 1
       1879345134,1879345135,1879345132,1879389871,1879389868,1879389872,
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
+      // New ones
+      1879413167,1879413168,1879413559
     };
     return ret;
   }
