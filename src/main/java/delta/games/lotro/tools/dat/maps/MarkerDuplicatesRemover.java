@@ -193,8 +193,8 @@ public class MarkerDuplicatesRemover
   private Integer resolveCategoryOneWay(int category1, int category2)
   {
     if ((category1==70) &&
-        ((category2==23) || (category2==24) || (category2==27) || (category2==29)
-          || (category2==31)
+        ((category2==22) || (category2==23) || (category2==24)
+          || (category2==27) || (category2==29) || (category2==31)
           || (category2==33) || (category2==38) || (category2==40)
           || (category2==42) || (category2==51) || (category2==52) || (category2==53)
           || (category2==54) || (category2==58) || (category2==60)
@@ -213,6 +213,7 @@ public class MarkerDuplicatesRemover
     if ((category1==74) && (category2==51)) return Integer.valueOf(51);
     if ((category1==74) && (category2==56)) return Integer.valueOf(56);
     if ((category1==74) && (category2==57)) return Integer.valueOf(57);
+    if ((category1==74) && (category2==58)) return Integer.valueOf(74); // Trader/Landmark=>Landmark (once at MT Skirmish Camp)
     if ((category1==43) && (category2==39)) return Integer.valueOf(43);
     if ((category1==55) && (category2==57)) return Integer.valueOf(57);
     return null;
@@ -221,6 +222,7 @@ public class MarkerDuplicatesRemover
   /*
    * Some mappings:
    * NPCs: 70
+   * 22: Dock-master
    * 23: Far-ranging Stable-master
    * 24: Eagle
    * 27: Task
