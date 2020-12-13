@@ -623,7 +623,7 @@ public class DatRewardsLoader
     Integer challengeLevelOverrideProperty=(Integer)properties.getProperty("Quest_ChallengeLevelOverrideProperty");
     Integer ignoreDefaultChallengeLevel=(Integer)properties.getProperty("Quest_IgnoreDefaultChallengeLevel");
     boolean ignoreChallengeLevel=((ignoreDefaultChallengeLevel!=null) && (ignoreDefaultChallengeLevel.intValue()!=0));
-    if ((ignoreChallengeLevel) || (challengeLevel==null))
+    if ((ignoreChallengeLevel) || (challengeLevel==null) || (challengeLevelOverrideProperty!=null))
     {
       if (challengeLevelOverrideProperty!=null)
       {
