@@ -236,13 +236,12 @@ public class LootLoader
         }
         for(Object trophyObj : trophyList)
         {
+          TrophyListEntry entry=null;
           PropertiesSet trophyProps=(PropertiesSet)trophyObj;
           // Probability
           int frequencyCode=((Integer)trophyProps.getProperty("LootGen_TrophyList_DropFrequency")).intValue();
           float probability=getProbability(frequencyCode);
           // Quantity
-          Integer quantityInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
-          int quantity=(quantityInt!=null)?quantityInt.intValue():1;
           int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
           Proxy<Item> itemProxy=null;
           TreasureGroupProfile treasureGroup=null;
@@ -251,19 +250,24 @@ public class LootLoader
           {
             // Item
             itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
+            if (itemProxy!=null)
+            {
+              Integer quantityInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
+              int quantity=(quantityInt!=null)?quantityInt.intValue():1;
+              entry=new TrophyListEntry(probability,itemProxy,quantity);
+            }
           }
           else
           {
             // or treasure group
             treasureGroup=handleTreasureGroupProfile(itemOrProfile);
+            if (treasureGroup!=null)
+            {
+              entry=new TrophyListEntry(probability,treasureGroup);
+            }
           }
-          if ((itemProxy==null) && (treasureGroup==null))
+          if (entry!=null)
           {
-            LOGGER.warn("Could not find item or treasure group for ID: "+itemOrProfile);
-          }
-          else
-          {
-            TrophyListEntry entry=new TrophyListEntry(probability,itemProxy,treasureGroup,quantity);
             ret.addEntry(entry);
           }
         }
