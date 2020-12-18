@@ -119,12 +119,19 @@ public class DatObjectivesLoader
         //System.out.println(objectiveProps.dump());
         // Index
         int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
-        //System.out.println("Objective #"+objectiveIndex);
         objective.setIndex(objectiveIndex);
         // Description
         String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription",Markers.CHARACTER);
-        //System.out.println("\tDescription: "+description);
-        objective.setText(description);
+        objective.setDescription(description);
+        // Lore override
+        String loreOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveLoreOverride",Markers.CHARACTER);
+        objective.setLoreOverride(loreOverride);
+        // Progress override
+        String progressOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveProgressOverride",Markers.CHARACTER);
+        objective.setProgressOverride(progressOverride);
+        // Billboard override
+        String billboardOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride",Markers.CHARACTER);
+        objective.setBillboardOverride(billboardOverride);
         // Conditions (can have several conditions)
         Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
         if (completionConditionsArray!=null)
@@ -175,15 +182,26 @@ public class DatObjectivesLoader
     int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
     //System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
     // Billboard
-    Integer showBillboardText=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
-    if ((showBillboardText!=null) && (showBillboardText.intValue()!=0))
+    boolean showBillboardText=true;
+    Integer showBillboardTextInt=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
+    if ((showBillboardTextInt!=null) && (showBillboardTextInt.intValue()==0))
     {
-      //System.out.println("\t\tShow billboard text: "+showBillboardText);
+      showBillboardText=false;
+      //System.out.println("\t\tShow billboard text: "+showBillboardTextInt);
     }
+    // Billboard override
     String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",Markers.CHARACTER);
     if (billboardProgressOverride!=null)
     {
       //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
+    }
+    // Progress
+    boolean showProgressText=true;
+    Integer showProgressTextInt=(Integer)properties.getProperty("QuestEvent_ShowProgressText");
+    if ((showProgressTextInt!=null) && (showProgressTextInt.intValue()==0))
+    {
+      showProgressText=false;
+      //System.out.println("\t\tShow progress text: "+showProgressTextInt);
     }
     // Progress override
     String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",Markers.CHARACTER);
@@ -387,14 +405,19 @@ public class DatObjectivesLoader
     {
       condition.setIndex(eventOrder.intValue());
     }
+    // Lore info
     if (loreInfo!=null)
     {
       condition.setLoreInfo(loreInfo);
     }
+    // Progress
     if (progressOverride!=null)
     {
       condition.setProgressOverride(progressOverride);
     }
+    condition.setShowProgressText(showProgressText);
+    // Billboard
+    condition.setShowBillboardText(showBillboardText);
     objective.addCondition(condition);
   }
 
