@@ -42,6 +42,7 @@ import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.NpcUsedCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
+import delta.games.lotro.lore.quests.objectives.ObjectivesConstants;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestBestowedCondition;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
@@ -190,7 +191,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow billboard text: "+showBillboardTextInt);
     }
     // Billboard override
-    String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",Markers.CHARACTER);
+    String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",ObjectivesConstants.COUNT);
     if (billboardProgressOverride!=null)
     {
       //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
@@ -204,7 +205,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow progress text: "+showProgressTextInt);
     }
     // Progress override
-    String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",Markers.CHARACTER);
+    String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",ObjectivesConstants.COUNT);
     // Role constraint
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     if (roleConstraint!=null)
