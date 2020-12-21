@@ -60,6 +60,7 @@ public class MainDatContainerLoader
     FilteredTrophyTable filteredTable=null;
     WeightedTreasureTable weightedTable=null;
     TrophyList trophyList=null;
+    TrophyList barterTrophyList=null;
     TreasureList treasureList=null;
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
@@ -101,6 +102,12 @@ public class MainDatContainerLoader
           LOGGER.warn("Trophy list override");
         }
         trophyList=_lootLoader.handleTrophyList(trophyListOverrideId.intValue());
+      }
+      // Barter trophy list
+      Integer barterTrophyListId=(Integer)properties.getProperty("LootGen_BarterTrophyList");
+      if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
+      {
+        barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
       }
       // Preview
       /*
@@ -153,6 +160,10 @@ public class MainDatContainerLoader
         if (trophyList!=null)
         {
           itemsContainer.setTrophyList(trophyList);
+        }
+        if (barterTrophyList!=null)
+        {
+          itemsContainer.setBarterTrophyList(barterTrophyList);
         }
         if (treasureList!=null)
         {
