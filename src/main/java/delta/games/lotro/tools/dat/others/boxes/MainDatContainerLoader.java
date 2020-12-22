@@ -37,6 +37,7 @@ public class MainDatContainerLoader
   private DataFacade _facade;
   private LootLoader _lootLoader;
   private LootsManager _loots;
+  private CustomInstancesLootLoader _instancesLootLoader;
 
   /**
    * Constructor.
@@ -47,6 +48,7 @@ public class MainDatContainerLoader
     _facade=facade;
     _loots=new LootsManager();
     _lootLoader=new LootLoader(facade,_loots);
+    _instancesLootLoader=new CustomInstancesLootLoader(_facade,_lootLoader);
   }
 
   /**
@@ -137,11 +139,18 @@ public class MainDatContainerLoader
         PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverrideId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
         treasureList=_lootLoader.handleTreasureList(treasureListOverrideId.intValue(),treasureListProps);
       }
+      // Reputation trophy
       Integer reputationTrophyList=(Integer)properties.getProperty("LootGen_ReputationTrophyList");
       if ((reputationTrophyList!=null) && (reputationTrophyList.intValue()!=0))
       {
         // Never happens
-        LOGGER.warn("Reputation trophy override - should never happen");
+        LOGGER.warn("Reputation trophy - should never happen");
+      }
+      // Custom skirmish loot lookup table
+      Integer customSkirmishLootLookupTableId=(Integer)properties.getProperty("LootGen_CustomSkirmishLootLookupTable");
+      if ((customSkirmishLootLookupTableId!=null) && (customSkirmishLootLookupTableId.intValue()!=0))
+      {
+        _instancesLootLoader.handleCustomSkirmishLootLookupTable(customSkirmishLootLookupTableId.intValue());
       }
 
       int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
