@@ -28,7 +28,10 @@ public class MainDatDungeonsLoader
     _loader=new DungeonLoader(facade,_basemapsManager);
   }
 
-  private void doIt()
+  /**
+   * Load all dungeons.
+   */
+  public void doIt()
   {
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

@@ -1,0 +1,94 @@
+package delta.games.lotro.tools.dat;
+
+import java.io.File;
+
+import org.apache.log4j.Logger;
+
+import delta.common.utils.files.FilesDeleter;
+import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
+import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
+import delta.games.lotro.tools.dat.maps.MapsDataLoader;
+import delta.games.lotro.tools.dat.maps.landblocks.MainLandblocksBuilder;
+
+/**
+ * Global procedure to load geographic data from DAT files.
+ * @author DAM
+ */
+public class MainGeoDatLoader
+{
+  private static final Logger LOGGER=Logger.getLogger(MainGeoDatLoader.class);
+
+  private static final File ROOT_MAPS_DIR=new File("../lotro-maps-db");
+  private static final File CATEGORIES_DIR=new File(ROOT_MAPS_DIR,"categories");
+  private static final File INDEXES_DIR=new File(ROOT_MAPS_DIR,"indexes");
+  private static final File MAPS_DIR=new File(ROOT_MAPS_DIR,"maps");
+  private static final File MARKERS_DIR=new File(ROOT_MAPS_DIR,"markers");
+  private static final File LINKS=new File(ROOT_MAPS_DIR,"links.xml");
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public MainGeoDatLoader(DataFacade facade)
+  {
+    _facade=facade;
+  }
+
+  private void doIt()
+  {
+    cleanup();
+    load();
+  }
+
+  private void load()
+  {
+    // Landblocks
+    new MainLandblocksBuilder(_facade).doIt();
+    // Dungeons
+    new MainDatDungeonsLoader(_facade).doIt();
+    // Geographics areas
+    new MainDatGeoAreasLoader(_facade).doIt();
+    // Maps data (basemaps, markers)
+    new MapsDataLoader(_facade).doIt();
+  }
+
+  private void cleanup()
+  {
+    deleteDirectory(CATEGORIES_DIR);
+    deleteDirectory(INDEXES_DIR);
+    deleteDirectory(MAPS_DIR);
+    deleteDirectory(MARKERS_DIR);
+    deleteFile(LINKS);
+  }
+
+  private void deleteFile(File toDelete)
+  {
+    if (toDelete.exists())
+    {
+      boolean ok=toDelete.delete();
+      if (!ok)
+      {
+        LOGGER.warn("Could not delete file: "+toDelete);
+      }
+    }
+  }
+
+  private void deleteDirectory(File toDelete)
+  {
+    FilesDeleter deleter=new FilesDeleter(toDelete,null,true);
+    deleter.doIt();
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=new DataFacade();
+    new MainGeoDatLoader(facade).doIt();
+    facade.dispose();
+  }
+}

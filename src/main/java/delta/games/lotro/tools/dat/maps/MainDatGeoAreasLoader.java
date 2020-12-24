@@ -25,7 +25,10 @@ public class MainDatGeoAreasLoader
     _loader=new GeoAreasLoader(facade);
   }
 
-  private void doIt()
+  /**
+   * Load all geographic areas.
+   */
+  public void doIt()
   {
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

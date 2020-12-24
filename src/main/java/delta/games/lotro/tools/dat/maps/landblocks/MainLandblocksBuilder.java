@@ -10,14 +10,24 @@ import delta.games.lotro.tools.dat.maps.landblocks.io.xml.LandblocksXMLWriter;
  */
 public class MainLandblocksBuilder
 {
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public MainLandblocksBuilder(DataFacade facade)
+  {
+    _facade=facade;
+  }
+
   /**
    * Build a landblocks manager with all known landblocks.
    * @return a landblocks manager.
    */
-  private static LandblocksManager build()
+  private LandblocksManager build()
   {
-    DataFacade facade=new DataFacade();
-    LandblockLoader landblockLoader=new LandblockLoader(facade);
+    LandblockLoader landblockLoader=new LandblockLoader(_facade);
     LandblocksManager index=new LandblocksManager();
     int nbBlocks=0;
     for(int region=1;region<=4;region++)
@@ -42,10 +52,9 @@ public class MainLandblocksBuilder
   }
 
   /**
-   * Main method for this test.
-   * @param args Not used.
+   * Load landblock data.
    */
-  public static void main(String[] args)
+  public void doIt()
   {
     LandblocksManager index=build();
     // Save landblocks.
@@ -54,5 +63,15 @@ public class MainLandblocksBuilder
     {
       System.out.println("Wrote landblocks file: "+GeneratedFiles.LANDBLOCKS);
     }
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=new DataFacade();
+    new MainLandblocksBuilder(facade).doIt();
   }
 }
