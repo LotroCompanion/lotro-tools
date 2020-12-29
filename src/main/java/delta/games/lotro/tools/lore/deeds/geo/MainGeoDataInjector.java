@@ -17,6 +17,8 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.maps.AbstractMap;
+import delta.games.lotro.lore.maps.Area;
+import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.geo.AchievableGeoPoint;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
@@ -102,15 +104,13 @@ public class MainGeoDataInjector
         }
         float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
         Integer mapId=getMap(position);
-        if (mapId!=null)
+        if (mapId==null)
         {
-          AchievableGeoPoint item=new AchievableGeoPoint(did,key,mapId.intValue(),new Point2D.Float(lonLat[0],lonLat[1]));
-          condition.addPoint(item);
+          LOGGER.warn("Deed: "+achievable.getName()+": No map for point: "+position);
+          mapId=Integer.valueOf(0);
         }
-        else
-        {
-          LOGGER.warn("No map for point: "+position);
-        }
+        AchievableGeoPoint item=new AchievableGeoPoint(did,key,mapId.intValue(),new Point2D.Float(lonLat[0],lonLat[1]));
+        condition.addPoint(item);
       }
     }
   }
@@ -142,6 +142,11 @@ public class MainGeoDataInjector
       if (map!=null)
       {
         ret=Integer.valueOf(map.getIdentifier());
+      }
+      else
+      {
+        Area area=GeoAreasManager.getInstance().getAreaById(parentZoneId.intValue());
+        LOGGER.warn("No map for zone: "+parentZoneId+" => "+area);
       }
     }
     return ret;
