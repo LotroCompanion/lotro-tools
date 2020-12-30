@@ -432,7 +432,7 @@ Reputation_LowestTier: 1
     if (factionId==1879124452) return new String[]{category,"GUILD_TAILOR",FactionLevelTemplates.GUILD}; // Tailor's Guild
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
-
+    category="";
     if (factionId==1879413167) return new String[]{category,null,null}; // The League of the Axe
     if (factionId==1879413168) return new String[]{category,null,null}; // The Woodmen's Brotherhood
     if (factionId==1879413559) return new String[]{category,null,null}; // DNT
@@ -503,6 +503,7 @@ Reputation_LowestTier: 1
   {
     DataFacade facade=new DataFacade();
     new MainDatFactionsLoader(facade).doIt();
+    MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
     facade.dispose();
   }
 }
