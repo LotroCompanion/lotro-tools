@@ -77,7 +77,7 @@ public class OldMarkersMigration
   {
     int pointId=spec.getPointId();
     if (pointId==9632) spec.setPosition(54.032597f,-4.0633106f);
-    else if (pointId==9934) spec.setPosition(33.46252f,18.695488f);
+    else if (pointId==9934) spec.setPosition(10.7f,-64.2f);
   }
 
   private void handleDeed(int deedId, List<OldMarkerSpec> specs)

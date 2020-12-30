@@ -111,7 +111,20 @@ public class MainGeoDataInjector
           mapId=Integer.valueOf(0);
         }
         AchievableGeoPoint item=new AchievableGeoPoint(did,key,mapId.intValue(),new Point2D.Float(lonLat[0],lonLat[1]));
+        fixPoint(achievable.getIdentifier(),item);
         condition.addPoint(item);
+      }
+    }
+  }
+
+  private void fixPoint(int deedId, AchievableGeoPoint point)
+  {
+    // Rare Gorgoroth Chests of Lhingris
+    if (deedId==1879354855)
+    {
+      if ("cache_1".equals(point.getKey()))
+      {
+        point.setPosition(10.7f,-64.2f);
       }
     }
   }
