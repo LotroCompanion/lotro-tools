@@ -214,6 +214,8 @@ public class DatObjectivesLoader
     }
     // Lore info
     String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
+    // Count
+    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
 
     // Deeds:
     // QuestEvent_ID: {32=3936(done), 22=1142(done), 1=889, 21=869(done), 26=611, 31=487(done), 45=411, 7=349, 25=116,
@@ -419,6 +421,11 @@ public class DatObjectivesLoader
     condition.setShowProgressText(showProgressText);
     // Billboard
     condition.setShowBillboardText(showBillboardText);
+    // Count
+    if (count!=null)
+    {
+      condition.setCount(count.intValue());
+    }
     objective.addCondition(condition);
   }
 
@@ -491,11 +498,10 @@ public class DatObjectivesLoader
      * QuestEvent_DestroyInventoryItems: optional, found 16 times Integer 0 or 1.
      */
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemUsedCondition ret=new ItemUsedCondition();
-    fillItemCondition(ret,itemId,count);
+    fillItemCondition(ret,itemId);
     /*List<DatPosition> positions=*/
     //getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
@@ -505,11 +511,10 @@ public class DatObjectivesLoader
   private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties, Objective objective)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
-    fillItemCondition(ret,itemId,count);
+    fillItemCondition(ret,itemId);
     //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
@@ -518,22 +523,16 @@ public class DatObjectivesLoader
   private ItemTalkCondition handleItemTalk(PropertiesSet properties, Objective objective)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemTalkCondition ret=new ItemTalkCondition();
-    fillItemCondition(ret,itemId,count);
+    fillItemCondition(ret,itemId);
     //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
-  private void fillItemCondition(ItemCondition ret, Integer itemId, Integer count)
+  private void fillItemCondition(ItemCondition ret, Integer itemId)
   {
-    // Count
-    if (count!=null)
-    {
-      ret.setCount(count.intValue());
-    }
     if (itemId!=null)
     {
       Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
@@ -676,9 +675,6 @@ QuestEvent_ShowBillboardText: 0
         ret.setMobName(mobName);
       }
     }
-    Integer nbTimes=(Integer)properties.getProperty("QuestEvent_Number");
-    int count=(nbTimes!=null)?nbTimes.intValue():1;
-    ret.setCount(count);
     return ret;
   }
 
@@ -708,10 +704,6 @@ QuestEvent_ShowBillboardText: 0
       target=getTarget(targetDID);
     }
     ret.setTarget(target);
-    // Number of times
-    Integer nbTimesInt=(Integer)properties.getProperty("QuestEvent_Number");
-    int nbTimes=(nbTimesInt!=null)?nbTimesInt.intValue():1;
-    ret.setCount(nbTimes);
     // Max daily
     Integer maxTimesPerDay=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
     if (maxTimesPerDay!=null)
@@ -776,9 +768,6 @@ QuestEvent_ShowBillboardText: 0
         LOGGER.warn("Skill not found: "+skillId);
       }
     }
-    Integer countInt=(Integer)properties.getProperty("QuestEvent_Number");
-    int count=(countInt!=null)?countInt.intValue():1;
-    ret.setCount(count);
     Integer dailyMaxIncrement=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
     if (dailyMaxIncrement!=null)
     {
@@ -821,8 +810,7 @@ QuestEvent_ShowBillboardText: 0
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     if (itemId!=null)
     {
-      Integer count=(Integer)properties.getProperty("QuestEvent_Number");
-      fillItemCondition(ret,itemId,count);
+      fillItemCondition(ret,itemId);
     }
     else
     {
@@ -848,13 +836,6 @@ QuestEvent_ShowBillboardText: 0
 
     QuestCompleteCondition ret=new QuestCompleteCondition();
 
-    // Count
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
-    if (count!=null)
-    {
-      //System.out.println("\t\tQuests count: "+count);
-      ret.setCompletionCount(count.intValue());
-    }
     Integer questId=(Integer)properties.getProperty("QuestEvent_QuestComplete");
     if (questId!=null)
     {
@@ -932,10 +913,7 @@ QuestEvent_ShowBillboardText: 0
      */
     //int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    Integer countInt=(Integer)properties.getProperty("QuestEvent_Number");
-    int count=(countInt!=null)?countInt.intValue():1;
     HobbyCondition ret=new HobbyCondition();
-    ret.setCount(count);
     Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
     ret.setProxy(itemProxy);
     return ret;
