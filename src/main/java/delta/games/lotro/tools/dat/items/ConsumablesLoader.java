@@ -81,7 +81,9 @@ public class ConsumablesLoader
       }
       // Register consumable
       StatsProvider statsProvider=_currentConsumable.getProvider();
-      if (statsProvider.getNumberOfStatProviders()>0)
+      int nbStatProviders=statsProvider.getNumberOfStatProviders();
+      int nbEffects=statsProvider.getSpecialEffects().size();
+      if ((nbStatProviders>0) || (nbEffects>0))
       {
         _consumables.add(_currentConsumable);
         //BasicStatsSet stats=_currentConsumable.getProvider().getStats(1,120);
