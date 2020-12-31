@@ -23,6 +23,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -141,8 +142,25 @@ public class DatStatUtils
       }
       StatDescription stat=provider.getStat();
       _statsUsageStatistics.registerStatUsage(stat);
+      if (!isSpecialStat(provider.getStat()))
+      {
+        return provider;
+      }
     }
-    else if (descriptionOverride!=null)
+    // Special case for stat "Item_Minstrel_Oathbreaker_Damagetype"
+    if (provider!=null)
+    {
+      String label=descriptionOverride;
+      if (descriptionOverride==null)
+      {
+        label=handleSpecialStat(facade,(ConstantStatProvider)provider);
+      }
+      SpecialEffect effect=new SpecialEffect(label);
+      statsProvider.addSpecialEffect(effect);
+      return null;
+    }
+    // Effect label only
+    if (descriptionOverride!=null)
     {
       if ((descriptionOverride.length()>0) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
       {
@@ -150,11 +168,28 @@ public class DatStatUtils
         statsProvider.addSpecialEffect(effect);
       }
     }
-    else
-    {
-      LOGGER.debug("No provider and no override!");
-    }
-    return provider;
+    LOGGER.debug("No provider and no override!");
+    return null;
+  }
+
+  private static boolean isSpecialStat(StatDescription stat)
+  {
+    String statKey=stat.getKey();
+    if ("Item_Minstrel_Oathbreaker_Damagetype".equals(statKey)) return true;
+    if ("Skill_DamageTypeOverride_AllSkillsOverride".equals(statKey)) return true;
+    if ("ForwardSource_Combat_TraitCombo".equals(statKey)) return true;
+    return false;
+  }
+
+  private static String handleSpecialStat(DataFacade facade, ConstantStatProvider provider)
+  {
+    StatDescription stat=provider.getStat();
+    String statName=stat.getName();
+    float value=provider.getValue();
+    EnumMapper mapper=facade.getEnumsManager().getEnumMapper(587202600);
+    String valueName=mapper.getLabel((int)value);
+    String result="Set "+statName+" to "+valueName;
+    return result;
   }
 
   private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties)
