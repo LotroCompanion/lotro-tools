@@ -142,22 +142,8 @@ public class DatStatUtils
       }
       StatDescription stat=provider.getStat();
       _statsUsageStatistics.registerStatUsage(stat);
-      if (!isSpecialStat(provider.getStat()))
-      {
-        return provider;
-      }
-    }
-    // Special case for stat "Item_Minstrel_Oathbreaker_Damagetype"
-    if (provider!=null)
-    {
-      String label=descriptionOverride;
-      if (descriptionOverride==null)
-      {
-        label=handleSpecialStat(facade,(ConstantStatProvider)provider);
-      }
-      SpecialEffect effect=new SpecialEffect(label);
-      statsProvider.addSpecialEffect(effect);
-      return null;
+      provider=handleSpecificCases(provider,facade,statsProvider,descriptionOverride);
+      return provider;
     }
     // Effect label only
     if (descriptionOverride!=null)
@@ -170,6 +156,46 @@ public class DatStatUtils
     }
     LOGGER.debug("No provider and no override!");
     return null;
+  }
+
+  private static StatProvider handleSpecificCases(StatProvider provider, DataFacade facade, StatsProvider statsProvider, String descriptionOverride)
+  {
+    StatDescription stat=provider.getStat();
+    if (isSpecialStat(stat))
+    {
+      // Special case for special stats like "Item_Minstrel_Oathbreaker_Damagetype"
+      String label=descriptionOverride;
+      if (descriptionOverride==null)
+      {
+        label=handleSpecialStat(facade,(ConstantStatProvider)provider);
+      }
+      SpecialEffect effect=new SpecialEffect(label);
+      statsProvider.addSpecialEffect(effect);
+      return null;
+    }
+    // Constant MULTIPLY on a percentag stat (e.g: CombatStateMod_CC_DurationMultModifier)
+    boolean isPercentage=stat.isPercentage();
+    StatOperator operator=provider.getOperator();
+    boolean isConstant=(provider instanceof ConstantStatProvider);
+    if ((isPercentage) && (isConstant) && (operator==StatOperator.MULTIPLY))
+    {
+      ConstantStatProvider constantProvider=(ConstantStatProvider)provider;
+      float value=constantProvider.getValue();
+      if (value<1)
+      {
+        value=Math.round((1-value)*100);
+        operator=StatOperator.SUBSTRACT;
+      }
+      else
+      {
+        value=Math.round((value-1)*100);
+        operator=StatOperator.ADD;
+      }
+      provider=new ConstantStatProvider(stat,value);
+      provider.setOperator(operator);
+      provider.setDescriptionOverride(descriptionOverride);
+    }
+    return provider;
   }
 
   private static boolean isSpecialStat(StatDescription stat)
