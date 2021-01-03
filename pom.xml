@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>delta-lotro-tools</artifactId>
   <packaging>jar</packaging>
-  <version>13.0</version>
+  <version>14.0</version>
   <name>lotro-tools</name>
   <parent>
     <groupId>com.dam.delta4j</groupId>
@@ -14,27 +14,27 @@
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-maps</artifactId>
-      <version>2.0</version>
+      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-companion</artifactId>
-      <version>13.0</version>
+      <version>14.0</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-core</artifactId>
-      <version>13.0</version>
+      <version>14.0</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-dat-utils</artifactId>
-      <version>4.0</version>
+      <version>5.0</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-common-ui</artifactId>
-      <version>1.11</version>
+      <version>1.12</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-common</artifactId>
-      <version>1.6.1</version>
+      <version>1.6.2</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
