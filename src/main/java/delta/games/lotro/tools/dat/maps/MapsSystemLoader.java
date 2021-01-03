@@ -116,19 +116,11 @@ public class MapsSystemLoader
 
     GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
     // Map image
-    File imageFile=null;
-    Integer imageId=(Integer)props.getProperty("UI_Map_MapImage");
-    if (imageId!=null)
+    int imageId=((Integer)props.getProperty("UI_Map_MapImage")).intValue();
+    File imageFile=basemapsManager.getBasemapImageFile(parchmentMapId);
+    if (!imageFile.exists())
     {
-      imageFile=basemapsManager.getBasemapImageFile(parchmentMapId);
-      if (!imageFile.exists())
-      {
-        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
-      }
-    }
-    else
-    {
-      LOGGER.warn("No map image!");
+      DatIconsUtils.buildImageFile(_facade,imageId,imageFile);
     }
 
     // Region ID
@@ -163,6 +155,8 @@ public class MapsSystemLoader
       GeoBox boundingBox=MapUtils.computeBoundingBox(geoReference,imageFile);
       basemap.setBoundingBox(boundingBox);
     }
+    // Image ID
+    basemap.setImageId(imageId);
     // Register basemap
     basemapsManager.addBasemap(basemap);
 

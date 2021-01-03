@@ -152,6 +152,8 @@ Dungeon_ParentDungeon: 0
     // Bounding box
     GeoBox boundingBox=MapUtils.computeBoundingBox(geoReference,basemapImageFile);
     basemap.setBoundingBox(boundingBox);
+    // Image ID
+    basemap.setImageId(imageId);
     // Register basemap
     _basemapsManager.addBasemap(basemap);
     return dungeon;
