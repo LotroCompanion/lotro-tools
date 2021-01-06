@@ -169,8 +169,11 @@ public class DatStatUtils
       {
         label=handleSpecialStat(facade,(ConstantStatProvider)provider);
       }
-      SpecialEffect effect=new SpecialEffect(label);
-      statsProvider.addSpecialEffect(effect);
+      if (!StatUtils.NO_DESCRIPTION.equals(label))
+      {
+        SpecialEffect effect=new SpecialEffect(label);
+        statsProvider.addSpecialEffect(effect);
+      }
       return null;
     }
     // Constant MULTIPLY on a percentag stat (e.g: CombatStateMod_CC_DurationMultModifier)
