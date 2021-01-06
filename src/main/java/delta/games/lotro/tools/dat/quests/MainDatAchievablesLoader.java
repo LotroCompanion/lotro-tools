@@ -40,6 +40,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
 
@@ -688,6 +689,9 @@ public class MainDatAchievablesLoader
     // - deed keys injection
     DeedKeysInjector injector=new DeedKeysInjector();
     injector.doIt(deeds);
+    // - deed geo data injection
+    MainGeoDataInjector geoDataInjector=new MainGeoDataInjector(_facade);
+    geoDataInjector.doIt(deeds);
 
     // Save
     doSave();

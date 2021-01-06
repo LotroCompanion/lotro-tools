@@ -42,9 +42,13 @@ public class MainGeoDataInjector
   private DataFacade _facade;
   private LandblocksManager _landblocksManager;
 
-  private MainGeoDataInjector()
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public MainGeoDataInjector(DataFacade facade)
   {
-    _facade=new DataFacade();
+    _facade=facade;
     _landblocksManager=LandblocksManager.getInstance();
   }
 
@@ -166,20 +170,27 @@ public class MainGeoDataInjector
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Perform injection.
+   * @param deeds Deeds to use.
+   */
+  public void doIt(List<DeedDescription> deeds)
   {
     // Add geo data
     GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
-    DeedsManager deedsMgr=DeedsManager.getInstance();
-    for(DeedDescription deed : deedsMgr.getAll())
+    for(DeedDescription deed : deeds)
     {
       handleAchievable(deed,data);
     }
     // Old points migration
-    new OldMarkersMigration().doIt();
+    new OldMarkersMigration(deeds).doIt();
+  }
+
+  private void save(List<DeedDescription> deeds)
+  {
     // Save data
     DeedXMLWriter writer=new DeedXMLWriter();
-    boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deedsMgr.getAll(),EncodingNames.UTF_8);
+    boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
     if (ok)
     {
       System.out.println("Updated the deeds file: "+GeneratedFiles.DEEDS);
@@ -192,6 +203,11 @@ public class MainGeoDataInjector
    */
   public static void main(String[] args)
   {
-    new MainGeoDataInjector().doIt();
+    DataFacade facade=new DataFacade();
+    MainGeoDataInjector injector=new MainGeoDataInjector(facade);
+    DeedsManager deedsMgr=DeedsManager.getInstance();
+    List<DeedDescription> deeds=deedsMgr.getAll();
+    injector.doIt(deeds);
+    injector.save(deeds);
   }
 }

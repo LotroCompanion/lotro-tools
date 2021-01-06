@@ -12,7 +12,6 @@ import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.url.URLTools;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.geo.AchievableGeoPoint;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
@@ -23,6 +22,21 @@ import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
  */
 public class OldMarkersMigration
 {
+  private Map<Integer,DeedDescription> _deeds;
+
+  /**
+   * Constructor.
+   * @param deeds Deeds to use.
+   */
+  public OldMarkersMigration(List<DeedDescription> deeds)
+  {
+    _deeds=new HashMap<Integer,DeedDescription>();
+    for(DeedDescription deed : deeds)
+    {
+      _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
+    }
+  }
+
   private List<OldMarkerSpec> loadOldMarkers()
   {
     URL url=URLTools.getFromClassPath("oldMarkers.txt",this);
@@ -82,8 +96,7 @@ public class OldMarkersMigration
 
   private void handleDeed(int deedId, List<OldMarkerSpec> specs)
   {
-    DeedsManager deedsMgr=DeedsManager.getInstance();
-    DeedDescription deed=deedsMgr.getDeed(deedId);
+    DeedDescription deed=_deeds.get(Integer.valueOf(deedId));
     if (deed==null)
     {
       return;
