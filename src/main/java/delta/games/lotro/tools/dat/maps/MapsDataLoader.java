@@ -85,6 +85,10 @@ public class MapsDataLoader
       long now2=System.currentTimeMillis();
       System.out.println("Landblocks took: "+(now2-now1)+"ms");
     }
+    // Prune categories
+    MainCategoriesPruner pruner=new MainCategoriesPruner(_mapsDataMgr.getMapsManager());
+    pruner.doIt();
+
     // Save markers
     _mapsDataMgr.write();
   }

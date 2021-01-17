@@ -1,9 +1,11 @@
 package delta.games.lotro.tools.dat;
 
 import java.io.File;
+import java.io.FileFilter;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.NumericTools;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
@@ -56,7 +58,24 @@ public class MainGeoDatLoader
 
   private void cleanup()
   {
-    deleteDirectory(CATEGORIES_DIR);
+    FileFilter f=new FileFilter()
+    {
+      @Override
+      public boolean accept(File pathname)
+      {
+        String name=pathname.getName();
+        if (name.endsWith(".png"))
+        {
+          int id=NumericTools.parseInt(name.substring(0,name.length()-4),0);
+          if (id>=70)
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+    };
+    deleteDirectory(CATEGORIES_DIR,f);
     deleteDirectory(INDEXES_DIR);
     deleteDirectory(MAPS_DIR);
     deleteDirectory(MARKERS_DIR);
@@ -77,7 +96,12 @@ public class MainGeoDatLoader
 
   private void deleteDirectory(File toDelete)
   {
-    FilesDeleter deleter=new FilesDeleter(toDelete,null,true);
+    deleteDirectory(toDelete,null);
+  }
+
+  private void deleteDirectory(File toDelete, FileFilter filter)
+  {
+    FilesDeleter deleter=new FilesDeleter(toDelete,filter,true);
     deleter.doIt();
   }
 

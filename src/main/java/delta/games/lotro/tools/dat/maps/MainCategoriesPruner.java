@@ -10,8 +10,8 @@ import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.maps.data.categories.Category;
-import delta.games.lotro.maps.data.markers.BlockMarkersManager;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
+import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
 
 /**
  * Prunes unused marker categories.
@@ -30,19 +30,16 @@ public class MainCategoriesPruner
     _mapsManager=mapsManager;
   }
 
-  private void doIt()
+  /**
+   * Perform pruning.
+   */
+  public void doIt()
   {
     Map<Integer,IntegerHolder> stats=new HashMap<Integer,IntegerHolder>();
     GlobalMarkersManager markersMgr=_mapsManager.getMarkersManager();
-    for(int region=1;region<=4;region++)
+    for(LandblockMarkersManager landblockMgr : markersMgr.getAllManagers())
     {
-      for(int blockX=0;blockX<=0xFE;blockX++)
-      {
-        for(int blockY=0;blockY<=0xFE;blockY++)
-        {
-          doBlock(region,blockX,blockY,markersMgr,stats);
-        }
-      }
+      doBlock(landblockMgr,stats);
     }
     CategoriesManager categoriesMgr=_mapsManager.getCategories();
     List<Category> categories=categoriesMgr.getAllSortedByCode();
@@ -60,10 +57,9 @@ public class MainCategoriesPruner
     categoriesMgr.save();
   }
 
-  private void doBlock(int region, int x, int y, GlobalMarkersManager markersMgr, Map<Integer,IntegerHolder> stats)
+  private void doBlock(LandblockMarkersManager landblockMgr, Map<Integer,IntegerHolder> stats)
   {
-    BlockMarkersManager blockMgr=markersMgr.getBlockManager(region,x,y);
-    List<Marker> markers=blockMgr.getMarkers();
+    List<Marker> markers=landblockMgr.getMarkers();
     for(Marker marker : markers)
     {
       Integer code=Integer.valueOf(marker.getCategoryCode());
