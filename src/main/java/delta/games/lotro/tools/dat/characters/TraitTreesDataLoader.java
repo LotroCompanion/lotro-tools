@@ -139,6 +139,7 @@ public class TraitTreesDataLoader
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
+    Map<Integer,TraitTreeBranch> branchByCode=new HashMap<Integer,TraitTreeBranch>();
     Object[] traitNatures=(Object[])properties.getProperty("Trait_Control_PointBasedTraitNature_Array");
     for(Object traitNatureObj : traitNatures)
     {
@@ -157,9 +158,40 @@ public class TraitTreesDataLoader
             if (description.getCharacterClass()==characterClass)
             {
               description.setTraitTree(tree);
+              for(TraitTreeBranch branch : tree.getBranches())
+              {
+                branchByCode.put(Integer.valueOf(branch.getCode()),branch);
+              }
             }
           }
         }
+      }
+      if (traitNatureKey==28)
+      {
+        handleMainTraits(traitNatureProps,branchByCode);
+      }
+    }
+  }
+
+  private void handleMainTraits(PropertiesSet traitNatureProps, Map<Integer,TraitTreeBranch> branchByCode)
+  {
+    System.out.println(traitNatureProps.dump());
+    Object[] traitTreeArray=(Object[])traitNatureProps.getProperty("Trait_Control_PointBasedTrait_TraitTreeArray");
+    for(Object traitTreeIdObj : traitTreeArray)
+    {
+      int traitTreeId=((Integer)traitTreeIdObj).intValue();
+      PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
+      System.out.println(properties.dump());
+      // Traits
+      Object[] traits=(Object[])properties.getProperty("Trait_TraitTree_TraitArray");
+      for(Object traitObj : traits)
+      {
+        PropertiesSet traitProps=(PropertiesSet)traitObj;
+        int branchId=((Integer)traitProps.getProperty("Trait_TraitTree_Branch")).intValue();
+        TraitTreeBranch branch=branchByCode.get(Integer.valueOf(branchId));
+        int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
+        TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+        branch.setMainTrait(trait);
       }
     }
   }
