@@ -148,7 +148,8 @@ public class RaceDataLoader
     int smallIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
     gender.setSmallIconId(smallIconId);
     // Avatar
-    //int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
+    int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
+    gender.setAvatarId(avatarId);
     //loadAvatar(avatarId);
     return gender;
   }
