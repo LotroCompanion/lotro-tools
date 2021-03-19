@@ -358,6 +358,8 @@ Reputation_LowestTier: 1
     if (factionId==1879103954) return new String[]{category,"LOSSOTH",FactionLevelTemplates.CLASSIC}; // Lossoth of Forochel
     if (factionId==1879091341) return new String[]{category,"COUNCIL_OF_THE_NORTH",FactionLevelTemplates.CLASSIC}; // Council of the North
     if (factionId==1879097420) return new String[]{category,"ELDGANG",FactionLevelTemplates.CLASSIC}; // The Eldgang
+    if (factionId==1879413167) return new String[]{category,null,null}; // The League of the Axe
+    if (factionId==1879413168) return new String[]{category,null,null}; // Woodcutter's Brotherhood
     category="Rhovanion";
     if (factionId==1879143761) return new String[]{category,"MORIA_GUARDS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Guards
     if (factionId==1879143766) return new String[]{category,"MORIA_MINERS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Miners
@@ -433,9 +435,7 @@ Reputation_LowestTier: 1
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
     category="";
-    if (factionId==1879413167) return new String[]{category,null,null}; // The League of the Axe
-    if (factionId==1879413168) return new String[]{category,null,null}; // The Woodmen's Brotherhood
-    if (factionId==1879413559) return new String[]{category,null,null}; // DNT
+    if (factionId==1879413559) return new String[]{category,null,null}; // The Haban’akkâ of Thráin
 
     LOGGER.warn("Unmanaged faction ID: "+factionId);
     return null;
