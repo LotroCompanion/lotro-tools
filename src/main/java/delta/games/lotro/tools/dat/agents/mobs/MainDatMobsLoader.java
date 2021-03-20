@@ -153,7 +153,10 @@ Quest_MonsterDivision: 245 => HallOfMirror
     return false;
   }
 
-  private void doIt()
+  /**
+   * Load mobs.
+   */
+  public void doIt()
   {
     List<MobDescription> mobs=new ArrayList<MobDescription>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)

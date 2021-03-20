@@ -59,7 +59,11 @@ public class MainDatInstancesTreeLoader
    * - Skirmish
    * - Classic
    */
-  private void doIt()
+
+  /**
+   * Load instances tree.
+   */
+  public void doIt()
   {
     // WorldJoinControl
     PropertiesSet props=_facade.loadProperties(0x7001B7CE+DATConstants.DBPROPERTIES_OFFSET);

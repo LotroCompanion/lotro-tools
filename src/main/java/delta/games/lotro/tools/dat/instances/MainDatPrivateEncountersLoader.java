@@ -278,7 +278,10 @@ public class MainDatPrivateEncountersLoader
     }
   }
 
-  private void doIt()
+  /**
+   * Load private encounters data.
+   */
+  public void doIt()
   {
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

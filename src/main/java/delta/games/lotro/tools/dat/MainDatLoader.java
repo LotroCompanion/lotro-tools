@@ -8,6 +8,7 @@ import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.tools.ReferenceDataGenerator;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
@@ -21,6 +22,8 @@ import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatRecipesLoader;
 import delta.games.lotro.tools.dat.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
+import delta.games.lotro.tools.dat.instances.MainDatInstancesTreeLoader;
+import delta.games.lotro.tools.dat.instances.MainDatPrivateEncountersLoader;
 import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
@@ -125,6 +128,12 @@ public class MainDatLoader
     new MainDatContainerLoader(_facade).doIt();
     // Disenchantment
     new MainDatDisenchantmentsLoader(_facade).doIt();
+    // Mobs
+    new MainDatMobsLoader(_facade).doIt();
+    // Private encounters
+    new MainDatPrivateEncountersLoader(_facade).doIt();
+    // Instances tree
+    new MainDatInstancesTreeLoader(_facade).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data
@@ -216,6 +225,12 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.LOOTS);
     // Disenchantment
     deleteFile(GeneratedFiles.DISENCHANTMENTS);
+    // Mobs
+    deleteFile(GeneratedFiles.MOBS);
+    // Private encounters
+    deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
+    // Instances tree
+    deleteFile(GeneratedFiles.INSTANCES_TREE);
     // Misc icons
     deleteFile(GeneratedFiles.MISC_ICONS);
     deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);
