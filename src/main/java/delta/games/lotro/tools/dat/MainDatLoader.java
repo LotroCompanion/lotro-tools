@@ -124,16 +124,16 @@ public class MainDatLoader
     new CosmeticPetLoader(_facade).doIt();
     // Vendors & barterers
     new MainDatNpcLoader(_facade).doIt();
+    // Private encounters
+    new MainDatPrivateEncountersLoader(_facade).doIt();
+    // Instances tree
+    new MainDatInstancesTreeLoader(_facade).doIt();
     // Containers
     new MainDatContainerLoader(_facade).doIt();
     // Disenchantment
     new MainDatDisenchantmentsLoader(_facade).doIt();
     // Mobs
     new MainDatMobsLoader(_facade).doIt();
-    // Private encounters
-    new MainDatPrivateEncountersLoader(_facade).doIt();
-    // Instances tree
-    new MainDatInstancesTreeLoader(_facade).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data
@@ -219,6 +219,10 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.VENDORS);
     // Barterers
     deleteFile(GeneratedFiles.BARTERS);
+    // Private encounters
+    deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
+    // Instances tree
+    deleteFile(GeneratedFiles.INSTANCES_TREE);
     // Containers
     deleteFile(GeneratedFiles.CONTAINERS);
     // Loot tables
@@ -227,10 +231,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.DISENCHANTMENTS);
     // Mobs
     deleteFile(GeneratedFiles.MOBS);
-    // Private encounters
-    deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
-    // Instances tree
-    deleteFile(GeneratedFiles.INSTANCES_TREE);
     // Misc icons
     deleteFile(GeneratedFiles.MISC_ICONS);
     deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);
