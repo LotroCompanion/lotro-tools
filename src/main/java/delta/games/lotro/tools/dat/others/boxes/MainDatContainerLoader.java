@@ -153,7 +153,7 @@ public class MainDatContainerLoader
         _instancesLootLoader.handleCustomSkirmishLootLookupTable(customSkirmishLootLookupTableId.intValue());
       }
 
-      int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((treasureList!=null)?1:0);
+      int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((barterTrophyList!=null)?1:0)+((treasureList!=null)?1:0);
       if (count>=1)
       {
         ItemsContainer itemsContainer=new ItemsContainer(indexDataId);
