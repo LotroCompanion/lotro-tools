@@ -276,6 +276,10 @@ public class MainDatPrivateEncountersLoader
     {
       pe.addAdditionalContentLayer(0);
     }
+    if (peId==1879414603) // Agoroth, the Narrowdelve
+    {
+      pe.addAdditionalContentLayer(0);
+    }
   }
 
   /**
