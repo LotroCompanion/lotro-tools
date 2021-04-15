@@ -21,22 +21,25 @@ import delta.updates.utils.DescriptionBuilder;
 public class MainInitUpdatesSystem
 {
   /**
-   * Main method for this test.
+   * Main method for this tool.
    * @param args Not used.
    */
   public static void main(String[] args)
   {
+    // Constants
     String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app/";
     File to=new File("d:/tmp/lc15-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to); 
-
     File from=new File("d:/tmp/lc15");
+
+    // Build a description of the software directory
     DescriptionBuilder descriptionBuilder=new DescriptionBuilder();
     DirectoryDescription description=(DirectoryDescription)descriptionBuilder.build(from);
     description.removeEntry(".updates");
     description.setName("");
-    PackagesBuilder builder=new PackagesBuilder(from,config);
 
+    // Build packages
+    PackagesBuilder builder=new PackagesBuilder(from,config);
     List<SoftwarePackageDescription> packages=new ArrayList<SoftwarePackageDescription>();
     int packageID=0;
     // Data
@@ -51,7 +54,7 @@ public class MainInitUpdatesSystem
     packages.add(builder.buildPackage(packageID,"main",description));
     packageID++;
 
-    // Software
+    // Build the software description
     SoftwareDescription software=new SoftwareDescription(0);
     software.setName("Lotro Companion");
     software.setVersion(new Version(1500,"15.0.29.0.1"));
