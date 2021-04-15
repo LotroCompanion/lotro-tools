@@ -16,6 +16,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-common-ui"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-lotro-companion"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-lotro-dat-utils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/delta-updates-manager"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
