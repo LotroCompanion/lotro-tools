@@ -68,9 +68,7 @@ public class MainBuildUpdatePackage
     SoftwarePackageDescription newPackage=null;
     try
     {
-      buildPackageDir(operations,from,packageDir);
-      DirectoryDescription packageDescription=(DirectoryDescription)builder.build(packageDir);
-      packageDescription.setName("");
+      DirectoryDescription packageDescription=buildPackageDir(operations,from,packageDir);
       int packageID=software.getPackages().size();
       newPackage=packagesBuilder.buildPackage(packageID,packageName,packageDescription);
     }
@@ -83,6 +81,12 @@ public class MainBuildUpdatePackage
         deleter.doIt();
       }
     }
+    // Handle deleted entries if any
+    List<String> deletedEntries=getEntriesToDelete(operations);
+    for(String deletedEntry : deletedEntries)
+    {
+      newPackage.addEntryToDelete(deletedEntry);
+    }
 
     // Update the software description
     software.setVersion(newVersion);
@@ -92,7 +96,7 @@ public class MainBuildUpdatePackage
     packagesBuilder.updateSoftware(software,newPackageDescriptions);
   }
 
-  private static void buildPackageDir(UpdateOperations operations, File fromDir, File packageDir)
+  private static DirectoryDescription buildPackageDir(UpdateOperations operations, File fromDir, File packageDir)
   {
     for(UpdateOperation operation : operations.getOperations())
     {
@@ -114,5 +118,28 @@ public class MainBuildUpdatePackage
         }
       }
     }
+    DescriptionBuilder builder=new DescriptionBuilder();
+    DirectoryDescription packageDescription=(DirectoryDescription)builder.build(packageDir);
+    if (packageDescription!=null)
+    {
+      packageDescription.setName("");
+    }
+    return packageDescription;
+  }
+
+  private static List<String> getEntriesToDelete(UpdateOperations operations)
+  {
+    List<String> ret=new ArrayList<String>();
+    for(UpdateOperation operation : operations.getOperations())
+    {
+      OperationType type=operation.getOperation();
+      if (type==OperationType.DELETE)
+      {
+        DirectoryEntryDescription entry=operation.getEntry();
+        String path=EntryUtils.getPath(entry);
+        ret.add(path);
+      }
+    }
+    return ret;
   }
 }
