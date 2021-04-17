@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
@@ -88,6 +89,7 @@ public class MainDatItemsLoader
   private ConsumablesLoader _consumablesLoader;
   private LegaciesLoader _legaciesLoader;
   private ItemValueLoader _valueLoader;
+  private Map<Integer,Integer> _itemLevelOffsets;
 
   /**
    * Constructor.
@@ -177,6 +179,9 @@ public class MainDatItemsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
+      // Item level tweak
+      Integer itemLevelOffset=getItemLevelOffset(item,properties);
+      item.setItemLevelOffset(itemLevelOffset);
       handleMunging(properties);
       if (level!=null)
       {
@@ -274,7 +279,9 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
-        BasicStatsSet stats=statsProvider.getStats(1,level.intValue(),true);
+        int offset=(itemLevelOffset!=null)?itemLevelOffset.intValue():0;
+        int statsLevel=level.intValue()+offset;
+        BasicStatsSet stats=statsProvider.getStats(1,statsLevel,true);
         item.getStats().addStats(stats);
       }
       if (item instanceof Weapon)
@@ -887,6 +894,21 @@ public class MainDatItemsLoader
     }
   }
 
+  private Integer getItemLevelOffset(Item item, PropertiesSet properties)
+  {
+    Integer ret=null;
+    Integer distributionType=(Integer)properties.getProperty("Item_DistributionType");
+    if (distributionType!=null)
+    {
+      Integer offset=_itemLevelOffsets.get(distributionType);
+      if ((offset!=null) && (offset.intValue()!=0))
+      {
+        ret=offset;
+      }
+    }
+    return ret;
+  }
+
   private int getQualityEnum(ItemQuality quality)
   {
     if (quality==ItemQuality.LEGENDARY) return 1;
@@ -990,6 +1012,8 @@ public class MainDatItemsLoader
     // Legacies
     _legaciesLoader.loadLegacies();
 
+    // Offsets
+    _itemLevelOffsets=ItemLevelOffsetsUtils.buildOffsetsMap(_facade);
     // Items
     DatStatUtils._statsUsageStatistics.reset();
     List<Item> items=new ArrayList<Item>();
