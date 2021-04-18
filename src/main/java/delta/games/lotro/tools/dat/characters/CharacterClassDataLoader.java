@@ -19,7 +19,6 @@ import delta.games.lotro.character.stats.base.DerivedStatsContributionsMgr;
 import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
-import delta.games.lotro.character.stats.buffs.BuffSpecification;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
@@ -119,6 +118,7 @@ public class CharacterClassDataLoader
       }
     }
     // Default buffs
+    /*
     if (characterClass==CharacterClass.CAPTAIN)
     {
       BuffSpecification idome=new BuffSpecification("IN_DEFENCE_OF_MIDDLE_EARTH",null);
@@ -126,6 +126,7 @@ public class CharacterClassDataLoader
       BuffSpecification motivated=new BuffSpecification("MOTIVATED",null);
       classDescription.addDefaultBuff(motivated);
     }
+    */
     /*
 AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List: 
   #1: 
