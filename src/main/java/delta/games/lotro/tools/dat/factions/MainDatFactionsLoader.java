@@ -436,6 +436,8 @@ Reputation_LowestTier: 1
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
     category="";
     if (factionId==1879413559) return new String[]{category,null,null}; // The Haban’akkâ of Thráin
+    if (factionId==1879416174) return new String[]{category,null,null}; // Kharum-ubnâr
+    if (factionId==1879416935) return new String[]{category,null,null}; // Reclaimers of the Mountain-hold
 
     LOGGER.warn("Unmanaged faction ID: "+factionId);
     return null;
@@ -490,7 +492,7 @@ Reputation_LowestTier: 1
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
       // New ones
-      1879413167,1879413168,1879413559
+      1879413167,1879413168,1879413559,1879416174,1879416935
     };
     return ret;
   }
