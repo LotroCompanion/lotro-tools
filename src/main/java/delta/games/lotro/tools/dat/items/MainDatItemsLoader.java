@@ -179,6 +179,14 @@ public class MainDatItemsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
+      // Loot
+      /*
+      Integer lootId=(Integer)properties.getProperty("LootGen_CustomSkirmishLootLookupTable");
+      if ((lootId!=null) && (lootId.intValue()!=0))
+      {
+        System.out.println(lootId+" => "+item);
+      }
+      */
       // Item level tweak
       Integer itemLevelOffset=getItemLevelOffset(item,properties);
       item.setItemLevelOffset(itemLevelOffset);

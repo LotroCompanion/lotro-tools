@@ -58,6 +58,7 @@ public class CustomInstancesLootLoader
     }
   }
 
+  @SuppressWarnings("unused")
   private void handleEntry(int lookupEntryId)
   {
     PropertiesSet properties=_facade.loadProperties(lookupEntryId+DATConstants.DBPROPERTIES_OFFSET);
@@ -76,7 +77,7 @@ public class CustomInstancesLootLoader
     int encounterId=((Integer)properties.getProperty("SkirmishTreasureLookup_EncounterDID")).intValue();
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     PrivateEncounter privateEncounter=peMgr.getPrivateEncounterById(encounterId);
-    System.out.println("Encounter: "+privateEncounter.getName());
+    //System.out.println("Encounter: "+privateEncounter.getName());
     int parametersDid=((Integer)properties.getProperty("SkirmishTreasureLookup_SkirmishMatchParametersDID")).intValue();
     handleParameters(parametersDid);
     handleLootTables(properties);
@@ -118,6 +119,7 @@ public class CustomInstancesLootLoader
     }
   }
 
+  @SuppressWarnings("unused")
   private void handleParameters(int parametersDid)
   {
     PropertiesSet properties=_facade.loadProperties(parametersDid+DATConstants.DBPROPERTIES_OFFSET);
@@ -143,7 +145,7 @@ public class CustomInstancesLootLoader
     int maxDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Max")).intValue();
     String minDifficultyTier=_difficultyTiers.getString(minDifficultyCode);
     String maxDifficultyTier=_difficultyTiers.getString(maxDifficultyCode);
-    System.out.println("Level "+minLevel+"-"+maxLevel+", size="+minGroupSize+"/"+maxGroupSize+", difficulty="+minDifficultyTier+"/"+maxDifficultyTier);
+    //System.out.println("Level "+minLevel+"-"+maxLevel+", size="+minGroupSize+"/"+maxGroupSize+", difficulty="+minDifficultyTier+"/"+maxDifficultyTier);
   }
 
   /**

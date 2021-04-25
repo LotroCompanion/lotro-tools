@@ -175,13 +175,13 @@ public class TraitTreesDataLoader
 
   private void handleMainTraits(PropertiesSet traitNatureProps, Map<Integer,TraitTreeBranch> branchByCode)
   {
-    System.out.println(traitNatureProps.dump());
+    //System.out.println(traitNatureProps.dump());
     Object[] traitTreeArray=(Object[])traitNatureProps.getProperty("Trait_Control_PointBasedTrait_TraitTreeArray");
     for(Object traitTreeIdObj : traitTreeArray)
     {
       int traitTreeId=((Integer)traitTreeIdObj).intValue();
       PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println(properties.dump());
+      //System.out.println(properties.dump());
       // Traits
       Object[] traits=(Object[])properties.getProperty("Trait_TraitTree_TraitArray");
       for(Object traitObj : traits)

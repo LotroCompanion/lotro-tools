@@ -70,7 +70,7 @@ public class MainDatMobsLoader
         TrophyList trophyList=_lootLoader.handleTrophyList(barterTrophyList);
         if (trophyList!=null)
         {
-          System.out.println(trophyList.toString());
+          //System.out.println(trophyList.toString());
         }
       }
       /*
@@ -87,7 +87,7 @@ public class MainDatMobsLoader
         TrophyList trophyList=_lootLoader.handleTrophyList(reputationTrophyList);
         if (trophyList!=null)
         {
-          System.out.println(trophyList.toString());
+          //System.out.println(trophyList.toString());
         }
       }
       int treasureListOverride=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();
@@ -98,7 +98,7 @@ public class MainDatMobsLoader
         TreasureList treasureList=_lootLoader.handleTreasureList(treasureListOverride,treasureListProps);
         if (treasureList!=null)
         {
-          System.out.println(treasureList.toString());
+          //System.out.println(treasureList.toString());
         }
       }
       int trophyListOverride=((Integer)properties.getProperty("LootGen_TrophyList_Override")).intValue();
@@ -108,13 +108,13 @@ public class MainDatMobsLoader
         TrophyList trophyList=_lootLoader.handleTrophyList(trophyListOverride);
         if (trophyList!=null)
         {
-          System.out.println(trophyList.toString());
+          //System.out.println(trophyList.toString());
         }
       }
       Integer isRemoteLootable=(Integer)properties.getProperty("Loot_IsRemoteLootable");
       if ((isRemoteLootable==null) || (isRemoteLootable.intValue()!=1))
       {
-        System.out.println("\tLoot_IsRemoteLootable="+isRemoteLootable);
+        //System.out.println("\tLoot_IsRemoteLootable="+isRemoteLootable);
       }
       /*
 Agent_Alignment: 3
