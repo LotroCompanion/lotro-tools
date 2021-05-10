@@ -123,8 +123,8 @@ public class InstanceMapDataBuilder
     }
     // Fixes
     fixes(privateEncounter);
-    int nbMaps=privateEncounter.getMapDescriptions().size();
-    System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
+    //int nbMaps=privateEncounter.getMapDescriptions().size();
+    //System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
   }
 
   private List<Marker> findMarkersForBlocks(List<BlockReference> blocks, Integer contentLayer)
