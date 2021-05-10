@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.utils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +23,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -308,30 +308,14 @@ public class DatStatUtils
   private static String getDescriptionOverride(PropertiesSet statProperties)
   {
     String ret=null;
-    String[] descriptionOverride=(String[])statProperties.getProperty("Mod_DescriptionOverride");
-    if (descriptionOverride!=null)
+    Object propertyValue=statProperties.getProperty("Mod_DescriptionOverride");
+    if (propertyValue!=null)
     {
-      if (descriptionOverride.length==2)
-      {
-        ret=descriptionOverride[0]+StatUtils.VALUE_PLACE_HOLDER+descriptionOverride[1];
-      }
-      else if (descriptionOverride.length==1)
-      {
-        ret=descriptionOverride[0].trim();
-      }
-      else
-      {
-        LOGGER.warn("Unsupported length for description override: "+Arrays.toString(descriptionOverride));
-      }
+      ret=DatStringUtils.getString(propertyValue);
     }
     else if (statProperties.hasProperty("Mod_DescriptionOverride"))
     {
       ret=StatUtils.NO_DESCRIPTION;
-    }
-    if (ret!=null)
-    {
-      ret=ret.replace("\\n","\n");
-      ret=ret.trim();
     }
     return ret;
   }

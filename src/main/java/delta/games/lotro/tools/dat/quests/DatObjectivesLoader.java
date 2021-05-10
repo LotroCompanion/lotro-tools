@@ -42,7 +42,6 @@ import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.NpcUsedCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
-import delta.games.lotro.lore.quests.objectives.ObjectivesConstants;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.quests.objectives.QuestBestowedCondition;
 import delta.games.lotro.lore.quests.objectives.QuestCompleteCondition;
@@ -122,16 +121,16 @@ public class DatObjectivesLoader
         int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
         objective.setIndex(objectiveIndex);
         // Description
-        String description=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveDescription",Markers.CHARACTER);
+        String description=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveDescription");
         objective.setDescription(description);
         // Lore override
-        String loreOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveLoreOverride",Markers.CHARACTER);
+        String loreOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveLoreOverride");
         objective.setLoreOverride(loreOverride);
         // Progress override
-        String progressOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveProgressOverride",Markers.CHARACTER);
+        String progressOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveProgressOverride");
         objective.setProgressOverride(progressOverride);
         // Billboard override
-        String billboardOverride=DatUtils.getFullStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride",Markers.CHARACTER);
+        String billboardOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride");
         objective.setBillboardOverride(billboardOverride);
         // Conditions (can have several conditions)
         Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
@@ -191,7 +190,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow billboard text: "+showBillboardTextInt);
     }
     // Billboard override
-    String billboardProgressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_BillboardProgressOverride",ObjectivesConstants.COUNT);
+    String billboardProgressOverride=DatUtils.getStringProperty(properties,"QuestEvent_BillboardProgressOverride");
     if (billboardProgressOverride!=null)
     {
       //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
@@ -205,7 +204,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow progress text: "+showProgressTextInt);
     }
     // Progress override
-    String progressOverride=DatUtils.getFullStringProperty(properties,"QuestEvent_ProgressOverride",ObjectivesConstants.COUNT);
+    String progressOverride=DatUtils.getStringProperty(properties,"QuestEvent_ProgressOverride");
     // Role constraint
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     if (roleConstraint!=null)

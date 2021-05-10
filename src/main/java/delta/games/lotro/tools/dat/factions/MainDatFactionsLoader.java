@@ -14,6 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
@@ -198,8 +199,7 @@ Reputation_LowestTier: 1
     int index=minIndex;
     for(Object tierPropsObj : tierPropsArray)
     {
-      String[] tierNames=(String[])tierPropsObj;
-      String tierName=tierNames[0];
+      String tierName=DatStringUtils.getString(tierPropsObj);
       ret.put(Integer.valueOf(index),tierName);
       index++;
     }

@@ -14,6 +14,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -100,81 +101,8 @@ Title_String:
 
   private String getName(PropertiesSet properties)
   {
-    String ret=null;
-    Object[] titleStrings=(Object[])properties.getProperty("Title_String");
-    if (titleStrings!=null)
-    {
-      StringBuilder sb=new StringBuilder();
-      for(Object titleString : titleStrings)
-      {
-        String line=(String)titleString;
-        if (line.startsWith(", ")) line=line.substring(2);
-        sb.append(line);
-      }
-      ret=cleanupLine(sb.toString());
-      ret=removeChoiceArtefacts(ret);
-    }
-    return ret;
-  }
-
-  private String cleanupLine(String line)
-  {
-    for(int i=0;i<2;i++)
-    {
-      line=line.trim();
-      line=line.replace("#1:","");
-      line=line.replace("#2:","");
-      line=line.replace("#3:","");
-      line=line.replace("#4:","");
-      line=line.replace("#-4:","");
-      line=line.replace("{ [E]}","");
-      line=line.replace("  "," ");
-      line=line.trim();
-    }
-    return line;
-  }
-
-  private String removeChoiceArtefacts(String line)
-  {
-    String ret=line;
-    int index=line.indexOf('{');
-    if (index!=-1)
-    {
-      int index2=line.indexOf('}',index+1);
-      if (index2!=-1)
-      {
-        String choice=line.substring(index+1,index2);
-        choice=updateChoiceString(choice);
-        ret=line.substring(0,index)+choice+line.substring(index2+1);
-      }
-    }
-    return ret;
-  }
-
-  private String updateChoiceString(String choice)
-  {
-    StringBuilder sb=new StringBuilder();
-    String[] items=choice.split("\\|");
-    for(String item : items)
-    {
-      item=item.trim();
-      int index=item.indexOf('[');
-      if (index!=-1)
-      {
-        int index2=item.indexOf(']',index+1);
-        if (index2!=-1)
-        {
-          item=item.substring(0,index)+item.substring(index2+1);
-          item=item.trim();
-        }
-      }
-      if (sb.length()>0)
-      {
-        sb.append(" / ");
-      }
-      sb.append(item);
-    }
-    return sb.toString();
+    return DatStringUtils.getStringProperty(properties,"Title_String");
+    //if (line.startsWith(", ")) line=line.substring(2);
   }
 
   private boolean useId(int id)

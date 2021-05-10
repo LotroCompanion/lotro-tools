@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.dialogs.DialogElement;
@@ -84,7 +85,7 @@ public class DatRolesLoader
         {
           System.out.println("\tdispenserRole Constraint: " +dispenserRoleConstraint);
         }
-        String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
+        String successText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
         System.out.println("\tSuccess text: "+successText);
         index++;
       }
@@ -105,8 +106,8 @@ public class DatRolesLoader
         Integer objectiveIndex=(Integer)roleProps.getProperty("Quest_ObjectiveIndex");
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
-        String successText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleSuccessText",Markers.CHARACTER);
-        String failureText=DatUtils.getFullStringProperty(roleProps,"QuestDispenser_RoleFailureText",Markers.CHARACTER);
+        String successText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
+        String failureText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleFailureText");
         if ((objectiveIndex!=null) && (objectiveIndex.intValue()==0) && (dispenserAction==6)) // Bestow
         {
           DialogElement dialog=buildDialog(npcId,successText);
@@ -238,9 +239,8 @@ public class DatRolesLoader
 
     for(Object textObj : textArray)
     {
-      String[] comment=(String[])textObj;
-      String commentStr=DatUtils.getFullString(comment,Markers.CHARACTER);
-      ret.addWhat(commentStr);
+      String comment=DatStringUtils.getString(textObj);
+      ret.addWhat(comment);
     }
     return ret;
   }

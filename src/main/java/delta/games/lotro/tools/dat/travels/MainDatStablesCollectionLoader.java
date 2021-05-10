@@ -8,7 +8,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Loads travel NPC for the stables collection UI.
@@ -51,8 +50,7 @@ public class MainDatStablesCollectionLoader
     for(UIElement buttonElement : uiElement.getChildElements())
     {
       PropertiesSet props=buttonElement.getProperties();
-      String[] names=(String[])props.getProperty("UICore_Element_tooltip_entry");
-      String name=DatUtils.getFullString(names, ",");
+      String name=(String)props.getProperty("UICore_Element_tooltip_entry");
       Integer npc=(Integer)props.getProperty("UI_StablesCollection_TravelNPC");
       System.out.println("Name: "+name+", NPC="+npc);
       handleNpc(npc.intValue());
