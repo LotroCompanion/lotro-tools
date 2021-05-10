@@ -14,13 +14,15 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.strings.StringInfo;
+import delta.games.lotro.dat.data.strings.StringInfoUtils;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.PropertyUtils;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.dat.utils.StringUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 
 /**
  * Loader for map notes.
@@ -73,15 +75,10 @@ public class MapNotesLoader
       contentLayersArray=(Object[])contentLayersProperties.getValue();
     }
     // Displayed text
-    Object stringinfo=PropertyUtils.readStringInfoProperty(bis);
-    int[] key=(int[])stringinfo;
-    String[] labelArray=_facade.getStringsManager().resolveStringInfo(key[0],key[1]);
-    String text=StringUtils.stringArrayToString(labelArray);
-    if (text!=null)
-    {
-      text=text.replace("\\n","\n");
-      text=delta.games.lotro.utils.StringUtils.fixName(text);
-    }
+    StringInfo stringinfo=PropertyUtils.readStringInfoProperty(bis);
+    String text=StringInfoUtils.buildStringFormat(_facade.getStringsManager(),stringinfo);
+    text=DatStringUtils.cleanupString(text);
+    text=DatStringUtils.fixName(text);
     // Icon
     int iconId=BufferUtils.readUInt32(bis);
     // Level
