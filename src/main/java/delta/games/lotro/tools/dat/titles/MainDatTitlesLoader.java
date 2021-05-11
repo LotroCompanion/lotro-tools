@@ -12,6 +12,7 @@ import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
@@ -19,6 +20,7 @@ import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 
 /**
  * Get titles definitions from DAT files.
@@ -35,6 +37,7 @@ public class MainDatTitlesLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
+  private StringRenderer _customRenderer;
 
   /**
    * Constructor.
@@ -44,6 +47,7 @@ public class MainDatTitlesLoader
   {
     _facade=facade;
     _category=_facade.getEnumsManager().getEnumMapper(587202682);
+    _customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
   }
 
   /*
@@ -74,8 +78,9 @@ Title_String:
       //System.out.println("************* "+indexDataId+" *****************");
       //System.out.println(properties.dump());
       // Name
-      String name=getName(properties);
-      title.setName(name);
+      String titleFormat=DatStringUtils.getStringProperty(properties,"Title_String");
+      String renderedTitle=renderTitle(titleFormat);
+      title.setName(renderedTitle);
       // Category
       int categoryId=((Integer)properties.getProperty("Title_Category")).intValue();
       String category=_category.getString(categoryId);
@@ -99,10 +104,13 @@ Title_String:
     return title;
   }
 
-  private String getName(PropertiesSet properties)
+  private String renderTitle(String titleFormat)
   {
-    return DatStringUtils.getStringProperty(properties,"Title_String");
-    //if (line.startsWith(", ")) line=line.substring(2);
+    String renderedTitle=_customRenderer.render(titleFormat);
+    renderedTitle=renderedTitle.replace(" ,","");
+    renderedTitle=renderedTitle.replace("  "," ");
+    renderedTitle=renderedTitle.trim();
+    return renderedTitle;
   }
 
   private boolean useId(int id)
