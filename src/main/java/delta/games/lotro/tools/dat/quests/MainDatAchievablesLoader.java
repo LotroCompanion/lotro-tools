@@ -26,6 +26,8 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
@@ -40,6 +42,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
@@ -64,6 +67,7 @@ public class MainDatAchievablesLoader
   private DatRewardsLoader _rewardsLoader;
   private DatObjectivesLoader _objectivesLoader;
   private DatRolesLoader _rolesLoader;
+  private StringRenderer _renderer;
 
   /**
    * Constructor.
@@ -79,6 +83,7 @@ public class MainDatAchievablesLoader
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
     _rolesLoader=new DatRolesLoader(facade);
+    _renderer=StringRenderingUtils.buildAllOptionsRenderer();
   }
 
   private void handleArc(int arcId)
@@ -130,6 +135,14 @@ public class MainDatAchievablesLoader
     }
   }
 
+  private String renderName(String titleFormat)
+  {
+    String ret=_renderer.render(titleFormat);
+    ret=ret.replace("  "," ");
+    ret=ret.trim();
+    return ret;
+  }
+
   private void loadQuest(int indexDataId, PropertiesSet properties)
   {
     // Check
@@ -143,8 +156,10 @@ public class MainDatAchievablesLoader
     // ID
     quest.setIdentifier(indexDataId);
     // Name
-    String name=DatUtils.getStringProperty(properties,"Quest_Name");
-    quest.setName(name);
+    String nameFormat=DatStringUtils.getStringProperty(properties,"Quest_Name");
+    String renderedName=renderName(nameFormat);
+    quest.setName(renderedName);
+
     //DatObjectivesLoader.currentName=name;
     //System.out.println("Quest name: "+name);
     // Description
@@ -353,8 +368,9 @@ public class MainDatAchievablesLoader
     // ID
     deed.setIdentifier(indexDataId);
     // Name
-    String name=DatUtils.getStringProperty(properties,"Quest_Name");
-    deed.setName(name);
+    String nameFormat=DatStringUtils.getStringProperty(properties,"Quest_Name");
+    String renderedName=renderName(nameFormat);
+    deed.setName(renderedName);
     //System.out.println("Deed name: "+name);
     //DatObjectivesLoader.currentName=name;
     // Description
