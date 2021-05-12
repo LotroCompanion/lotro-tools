@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.tools.ReferenceDataGenerator;
+import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
@@ -42,6 +42,7 @@ import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
+import delta.games.lotro.tools.reports.ReferenceDataGenerator;
 
 /**
  * Global procedure to load data from DAT files.
@@ -66,6 +67,7 @@ public class MainDatLoader
   {
     cleanup();
     load();
+    KnownVariablesManager.getInstance().showFailures();
   }
 
   private void load()
