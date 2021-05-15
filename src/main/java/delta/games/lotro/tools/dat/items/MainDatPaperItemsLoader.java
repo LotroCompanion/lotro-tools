@@ -20,7 +20,8 @@ import delta.games.lotro.lore.items.paper.io.xml.PaperItemsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
- * @author dm
+ * Get paper items details from DAT files.
+ * @author DAM
  */
 public class MainDatPaperItemsLoader
 {
@@ -151,6 +152,26 @@ PaperItemControl_VersionArray:
     PaperItemControl_VersionTutorial: 237 (Currency)
   ... (91 items)
      */
+    {
+      Object[] array=(Object[])props.getProperty("PaperItemControl_VersionArray");
+      for(Object arrayItem : array)
+      {
+        PropertiesSet versionProps=(PropertiesSet)arrayItem;
+        Integer oldItemId=(Integer)versionProps.getProperty("PaperItemControl_OldItem");
+        if (oldItemId!=null)
+        {
+          PaperItem paperItem=paperItems.get(oldItemId);
+          if (paperItem!=null)
+          {
+            paperItem.setOld(true);
+          }
+          else
+          {
+            LOGGER.warn("Old item not found: item ID="+oldItemId);
+          }
+        }
+      }
+    }
 
     LOGGER.info("Writing "+paperItems.size()+" paperItems");
     File to=GeneratedFiles.PAPER_ITEMS;
