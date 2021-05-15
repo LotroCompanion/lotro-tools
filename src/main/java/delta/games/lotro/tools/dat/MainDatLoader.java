@@ -27,6 +27,7 @@ import delta.games.lotro.tools.dat.instances.MainDatPrivateEncountersLoader;
 import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
+import delta.games.lotro.tools.dat.items.MainDatPaperItemsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
@@ -99,6 +100,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade).doIt();
+    // Paper items
+    new MainDatPaperItemsLoader(_facade).doIt();
     // Legendary data
     new MainDatLegendarySystemLoader(_facade).doIt();
     // Legendary titles
@@ -177,6 +180,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PASSIVES);
     deleteFile(GeneratedFiles.PASSIVES_USAGE);
     deleteFile(GeneratedFiles.CONSUMABLES);
+    deleteFile(GeneratedFiles.PAPER_ITEMS);
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
