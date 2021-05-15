@@ -283,4 +283,8 @@ public class GeneratedFiles
    * Landblocks.
    */
   public static final File LANDBLOCKS=new File("../lotro-data/maps/landblocks.xml");
+  /**
+   * Paper items.
+   */
+  public static final File PAPER_ITEMS=LotroCoreConfig.getInstance().getFile(DataFiles.PAPER_ITEMS);
 }
