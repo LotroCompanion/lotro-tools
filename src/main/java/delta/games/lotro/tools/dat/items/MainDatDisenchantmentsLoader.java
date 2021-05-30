@@ -14,7 +14,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.CountedItem;
 import delta.games.lotro.lore.items.DisenchantmentResult;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.DisenchantmentResultXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -63,10 +62,8 @@ public class MainDatDisenchantmentsLoader
         ret=new DisenchantmentResult(indexDataId);
         if (did!=null)
         {
-          ItemProxy proxy=new ItemProxy();
           Item item=ItemsManager.getInstance().getItem(did.intValue());
-          proxy.setItem(item);
-          CountedItem countedItem=new CountedItem(proxy,value.intValue());
+          CountedItem<Item> countedItem=new CountedItem<Item>(item,value.intValue());
           ret.setCountedItem(countedItem);
         }
       }
