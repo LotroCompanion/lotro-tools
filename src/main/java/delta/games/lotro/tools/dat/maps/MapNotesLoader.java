@@ -110,26 +110,10 @@ public class MapNotesLoader
       // Dest zone: is a Dungeon (most of the time) or an Area
       int destZoneId=BufferUtils.readUInt32(bis);
       Identifiable destArea=_markersUtils.getAreaOrDungeon(destZoneId);
-      // Dest dungeon
-      int destDungeonId=BufferUtils.readUInt32(bis);
-      // Dest note
-      int destNoteId=BufferUtils.readUInt32(bis);
-      BufferUtils.skip(bis,6); // Always 0
-
       // Checks
       if (destArea==null)
       {
         LOGGER.warn("Destination area not found: "+destZoneId);
-        return;
-      }
-      if (destDungeonId!=0) // Always 0
-      {
-        LOGGER.warn("Dest dungeon ID: "+destDungeonId);
-        return;
-      }
-      if (destNoteId!=0) // Always 0
-      {
-        LOGGER.warn("Dest note ID: "+destNoteId);
         return;
       }
       if (VERBOSE)
@@ -139,29 +123,29 @@ public class MapNotesLoader
       }
       _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destPosition,destArea,contentLayersArray,text);
     }
-    else
-    {
-      float minRange=BufferUtils.readFloat(bis);
-      float maxRange=BufferUtils.readFloat(bis);
-      int discoverableMapNoteIndex=BufferUtils.readUInt32(bis);
-      PropertiesSet gameSpecificProps=new PropertiesSet();
-      propsLoader.decodeProperties(bis,gameSpecificProps);
+    float minRange=BufferUtils.readFloat(bis);
+    float maxRange=BufferUtils.readFloat(bis);
+    int discoverableMapNoteIndex=BufferUtils.readUInt32(bis);
+    PropertiesSet gameSpecificProps=new PropertiesSet();
+    propsLoader.decodeProperties(bis,gameSpecificProps);
 
-      if (VERBOSE)
+    if (VERBOSE)
+    {
+      if ((minRange>0) || (maxRange>0))
       {
-        if ((minRange>0) || (maxRange>0))
-        {
-          System.out.println("Range: min="+minRange+", max="+maxRange);
-        }
-        if (discoverableMapNoteIndex!=0)
-        {
-          System.out.println("discoverableMapNoteIndex="+discoverableMapNoteIndex);
-        }
-        if (gameSpecificProps.getPropertyNames().size()>0)
-        {
-          System.out.println("Game specific props: "+gameSpecificProps.dump());
-        }
+        System.out.println("Range: min="+minRange+", max="+maxRange);
       }
+      if (discoverableMapNoteIndex!=0)
+      {
+        System.out.println("discoverableMapNoteIndex="+discoverableMapNoteIndex);
+      }
+      if (gameSpecificProps.getPropertyNames().size()>0)
+      {
+        System.out.println("Game specific props: "+gameSpecificProps.dump());
+      }
+    }
+    if (type!=1)
+    {
       _markersUtils.buildMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
     }
   }
