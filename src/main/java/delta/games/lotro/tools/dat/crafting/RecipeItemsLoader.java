@@ -18,7 +18,6 @@ import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
 
 /**
@@ -76,9 +75,7 @@ public class RecipeItemsLoader
           }
           _unknownRecipes.remove(recipeKey);
           //System.out.println("Recipe "+recipe+" comes from "+item);
-          ItemProxy itemProxy=new ItemProxy();
-          itemProxy.setItem(item);
-          recipe.setRecipeScroll(itemProxy);
+          recipe.setRecipeScroll(item);
         }
       }
     }

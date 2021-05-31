@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.crafting;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
 import delta.games.lotro.lore.crafting.Profession;
@@ -23,7 +21,6 @@ import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemProxy;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -127,22 +124,23 @@ public class MainDatRecipesLoader
           Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
           if ((resultId!=null) && (resultId.intValue()>0))
           {
-            Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
-            newVersion.getRegular().setItem(buildItemProxy(resultId.intValue(),iconId));
+            Item resultItem=_itemsManager.getItem(resultId.intValue());
+            newVersion.getRegular().setItem(resultItem);
           }
           // - critical result
           Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
           if ((critResultId!=null) && (critResultId.intValue()>0))
           {
             CraftingResult critical=newVersion.getCritical();
-            Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
-            critical.setItem(buildItemProxy(critResultId.intValue(),iconId));
+            Item critResultItem=_itemsManager.getItem(critResultId.intValue());
+            critical.setItem(critResultItem);
           }
           // Ingredient
           Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
           if (ingredientId!=null)
           {
-            newVersion.getIngredients().get(0).setItem(buildItemProxy(ingredientId.intValue()));
+            Item firstIngredient=_itemsManager.getItem(ingredientId.intValue());
+            newVersion.getIngredients().get(0).setItem(firstIngredient);
           }
           recipe.getVersions().add(newVersion);
         }
@@ -219,8 +217,8 @@ public class MainDatRecipesLoader
           ingredient.setQuantity(quantity.intValue());
         }
         // Build item proxy
-        ItemProxy ingredientProxy=buildItemProxy(ingredientId.intValue());
-        ingredient.setItem(ingredientProxy);
+        Item ingredientItem=_itemsManager.getItem(ingredientId.intValue());
+        ingredient.setItem(ingredientItem);
         // Optionals
         ingredient.setOptional(optional);
         if (optional)
@@ -247,9 +245,8 @@ public class MainDatRecipesLoader
       if (resultId!=null)
       {
         // Item
-        Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
-        ItemProxy proxy=buildItemProxy(resultId.intValue(),iconId);
-        regular.setItem(proxy);
+        Item resultItem=_itemsManager.getItem(resultId.intValue());
+        regular.setItem(resultItem);
         // Quantity
         Integer quantity=(Integer)properties.getProperty("CraftRecipe_ResultItemQuantity");
         if (quantity!=null)
@@ -267,9 +264,8 @@ public class MainDatRecipesLoader
       criticalResult=new CraftingResult();
       criticalResult.setCriticalResult(true);
       // Item
-      Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
-      ItemProxy proxy=buildItemProxy(criticalResultId.intValue(),iconId);
-      criticalResult.setItem(proxy);
+      Item critResultItem=_itemsManager.getItem(criticalResultId.intValue());
+      criticalResult.setItem(critResultItem);
       // Quantity
       Integer quantity=(Integer)properties.getProperty("CraftRecipe_CriticalResultItemQuantity");
       if (quantity!=null)
@@ -285,52 +281,6 @@ public class MainDatRecipesLoader
       }
     }
     return version;
-  }
-
-  private ItemProxy buildItemProxy(int id)
-  {
-    Item item=_itemsManager.getItem(id);
-    ItemProxy proxy=new ItemProxy();
-    if (item==null)
-    {
-      item=resolveItem(id);
-    }
-    proxy.setItem(item);
-    return proxy;
-  }
-
-  private ItemProxy buildItemProxy(int id, Integer iconId)
-  {
-    ItemProxy proxy=buildItemProxy(id);
-    if (proxy.getIcon()==null)
-    {
-      if (iconId!=null)
-      {
-        resolveIcon(iconId.intValue());
-        proxy.getItem().setIcon(iconId.toString());
-      }
-    }
-    return proxy;
-  }
-
-  private Item resolveItem(int itemId)
-  {
-    PropertiesSet properties=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
-    String name=DatUtils.getStringProperty(properties,"Name");
-    name=StringUtils.fixName(name);
-    Item item=new Item();
-    item.setIdentifier(itemId);
-    item.setName(name);
-    return item;
-  }
-
-  private void resolveIcon(int iconId)
-  {
-    File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconId+".png").getAbsoluteFile();
-    if (!iconFile.exists())
-    {
-      DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
-    }
   }
 
   private String getCategory(int key)
@@ -435,26 +385,26 @@ public class MainDatRecipesLoader
     {
       // Regular
       CraftingResult regular=version.getRegular();
-      ItemProxy regularResultProxy=regular.getItem();
-      checkProxy(context,regularResultProxy);
+      Item regularResultItem=regular.getItem();
+      checkItem(context,regularResultItem);
       // Regular
       CraftingResult critical=version.getCritical();
       if (critical!=null)
       {
-        ItemProxy criticalResultProxy=critical.getItem();
-        checkProxy(context,criticalResultProxy);
+        Item criticalResultItem=critical.getItem();
+        checkItem(context,criticalResultItem);
       }
     }
   }
 
-  private void checkProxy(String context,ItemProxy proxy)
+  private void checkItem(String context,Item item)
   {
-    if (proxy==null)
+    if (item==null)
     {
-      LOGGER.error(context+": missing proxy");
+      LOGGER.error(context+": missing item");
       return;
     }
-    String icon=proxy.getIcon();
+    String icon=item.getIcon();
     if (icon==null)
     {
       LOGGER.warn(context+": missing icon");
