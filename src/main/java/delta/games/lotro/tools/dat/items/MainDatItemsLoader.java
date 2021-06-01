@@ -1025,7 +1025,6 @@ public class MainDatItemsLoader
     // Items
     DatStatUtils._statsUsageStatistics.reset();
     List<Item> items=new ArrayList<Item>();
-
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
@@ -1040,6 +1039,8 @@ public class MainDatItemsLoader
         }
       }
     }
+    // Field icons
+    new FieldIconsLoader(_facade,mapById).doIt();
     // Consistency checks
     ConsistencyChecks checks=new ConsistencyChecks();
     checks.consistencyChecks(items);

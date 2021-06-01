@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -10,7 +11,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
@@ -22,16 +22,17 @@ public class FieldIconsLoader
   private static final Logger LOGGER=Logger.getLogger(FieldIconsLoader.class);
 
   private DataFacade _facade;
-  private ItemsManager _itemsManager;
+  private HashMap<Integer,Item> _mapById;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param mapById Map of item, by ID.
    */
-  public FieldIconsLoader(DataFacade facade)
+  public FieldIconsLoader(DataFacade facade, HashMap<Integer,Item> mapById)
   {
     _facade=facade;
-    _itemsManager=ItemsManager.getInstance();
+    _mapById=mapById;
   }
 
   private void handleRecipe(int indexDataId)
@@ -56,20 +57,14 @@ public class FieldIconsLoader
           if ((resultId!=null) && (resultId.intValue()>0))
           {
             Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
-            if (iconId!=null)
-            {
-              handleIcon(resultId.intValue(),iconId.intValue());
-            }
+            handleIcon(resultId.intValue(),iconId);
           }
           // - critical result
           Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
           if ((critResultId!=null) && (critResultId.intValue()>0))
           {
             Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
-            if (iconId!=null)
-            {
-              handleIcon(critResultId.intValue(),iconId.intValue());
-            }
+            handleIcon(critResultId.intValue(),iconId);
           }
         }
       }
@@ -88,10 +83,7 @@ public class FieldIconsLoader
       if (resultId!=null)
       {
         Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_ResultIcon");
-        if (iconId!=null)
-        {
-          handleIcon(resultId.intValue(),iconId.intValue());
-        }
+        handleIcon(resultId.intValue(),iconId);
       }
     }
     // Critical result
@@ -99,10 +91,7 @@ public class FieldIconsLoader
     if ((criticalResultId!=null) && (criticalResultId.intValue()>0))
     {
       Integer iconId=(Integer)properties.getProperty("CraftRecipe_Field_CritResultIcon");
-      if (iconId!=null)
-      {
-        handleIcon(criticalResultId.intValue(),iconId.intValue());
-      }
+      handleIcon(criticalResultId.intValue(),iconId);
     }
   }
 
@@ -134,10 +123,16 @@ public class FieldIconsLoader
     }
   }
 
-  private void handleIcon(int itemId, int iconId)
+  private void handleIcon(int itemId, Integer iconId)
   {
-    resolveIcon(iconId);
-    Item item=_itemsManager.getItem(itemId);
-    item.setIcon(String.valueOf(iconId));
+    if ((iconId!=null) && (iconId.intValue()>0))
+    {
+      resolveIcon(iconId.intValue());
+      Item item=_mapById.get(Integer.valueOf(itemId));
+      if ((item!=null) && (item.getIcon()==null))
+      {
+        item.setIcon(String.valueOf(iconId));
+      }
+    }
   }
 }
