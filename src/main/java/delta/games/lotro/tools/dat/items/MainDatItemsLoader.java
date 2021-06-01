@@ -136,25 +136,27 @@ public class MainDatItemsLoader
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
-      if ((iconId!=null) || (backgroundIconId!=null))
+      Integer shadowIconId=(Integer)properties.getProperty("Icon_Layer_ShadowDID");
+      shadowIconId=null;
+      Integer underlayIconId=(Integer)properties.getProperty("Icon_Layer_UnderlayDID");
+      underlayIconId=null;
+      if ((iconId!=null) || (backgroundIconId!=null) || (shadowIconId!=null) || (underlayIconId!=null))
       {
         String iconName=((iconId!=null)?iconId:"0")+"-"+((backgroundIconId!=null)?backgroundIconId:"0");
+        if ((shadowIconId!=null) || (underlayIconId!=null))
+        {
+          iconName=iconName+"-"+((shadowIconId!=null)?shadowIconId:"0")+"-"+((underlayIconId!=null)?underlayIconId:"0");
+        }
         item.setIcon(iconName);
         File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconName+".png").getAbsoluteFile();
         if (!iconFile.exists())
         {
-          if ((iconId!=null) && (backgroundIconId!=null))
-          {
-            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),backgroundIconId.intValue(),iconFile);
-          }
-          else if (iconId==null)
-          {
-            DatIconsUtils.buildImageFile(_facade,backgroundIconId.intValue(),iconFile);
-          }
-          else if (backgroundIconId==null)
-          {
-            DatIconsUtils.buildImageFile(_facade,iconId.intValue(),iconFile);
-          }
+          int[] imageIds=new int[4];
+          imageIds[0]=(backgroundIconId!=null)?backgroundIconId.intValue():0;
+          imageIds[1]=(underlayIconId!=null)?underlayIconId.intValue():0;
+          imageIds[2]=(shadowIconId!=null)?shadowIconId.intValue():0;
+          imageIds[3]=(iconId!=null)?iconId.intValue():0;
+          DatIconsUtils.buildImageFile(_facade,imageIds,iconFile);
         }
       }
       // Unique

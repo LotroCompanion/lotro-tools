@@ -125,11 +125,15 @@ public class MainDatRelicsLoader
       // Icons
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer imageIconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
+      // Unused:
+      //Integer shadowIconId=(Integer)properties.getProperty("Icon_Layer_ShadowDID");
+      //Integer underlayIconId=(Integer)properties.getProperty("Icon_Layer_UnderlayDID");
       String iconFilename=imageIconId+"-"+backgroundIconId+".png";
       File to=new File(RELIC_ICONS_DIR,"relicIcons/"+iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
-        boolean ok=DatIconsUtils.buildImageFile(_facade,imageIconId.intValue(),backgroundIconId.intValue(),to);
+        int[] imagesIDs=new int[]{backgroundIconId.intValue(),imageIconId.intValue()};
+        boolean ok=DatIconsUtils.buildImageFile(_facade,imagesIDs,to);
         if (!ok)
         {
           LOGGER.warn("Could not build relic icon: "+iconFilename);
