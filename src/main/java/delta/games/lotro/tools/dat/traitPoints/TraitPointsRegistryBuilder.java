@@ -9,6 +9,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.character.traitPoints.TraitPoint;
+import delta.games.lotro.character.traitPoints.TraitPointCategories;
+import delta.games.lotro.character.traitPoints.TraitPointsRegistry;
+import delta.games.lotro.character.traitPoints.comparators.TraitPointLabelComparator;
+import delta.games.lotro.character.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
@@ -18,11 +23,6 @@ import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestsManager;
-import delta.games.lotro.stats.traitPoints.TraitPoint;
-import delta.games.lotro.stats.traitPoints.TraitPointCategories;
-import delta.games.lotro.stats.traitPoints.TraitPointsRegistry;
-import delta.games.lotro.stats.traitPoints.comparators.TraitPointLabelComparator;
-import delta.games.lotro.stats.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
