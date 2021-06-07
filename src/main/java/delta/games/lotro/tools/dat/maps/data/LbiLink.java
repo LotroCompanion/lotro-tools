@@ -3,7 +3,8 @@ package delta.games.lotro.tools.dat.maps.data;
 import delta.games.lotro.dat.data.PropertiesSet;
 
 /**
- * @author dm
+ * A link as found in LandBlockInfos.
+ * @author DAM
  */
 public class LbiLink
 {
@@ -19,11 +20,12 @@ public class LbiLink
    */
   public LbiLink()
   {
-    
+    // Nothing!
   }
 
   /**
-   * @return the iid
+   * Get the IID.
+   * @return a IID.
    */
   public long getIid()
   {
@@ -31,7 +33,8 @@ public class LbiLink
   }
 
   /**
-   * @param iid the iid to set
+   * Set the IID.
+   * @param iid the IID to set.
    */
   public void setIid(long iid)
   {
@@ -39,7 +42,8 @@ public class LbiLink
   }
 
   /**
-   * @return the name
+   * Get the name.
+   * @return a name or <code>null</code> if not set.
    */
   public String getName()
   {
@@ -47,7 +51,8 @@ public class LbiLink
   }
 
   /**
-   * @param name the name to set
+   * Set the name.
+   * @param name the name to set.
    */
   public void setName(String name)
   {
@@ -55,7 +60,8 @@ public class LbiLink
   }
 
   /**
-   * @return the fromIid
+   * Get the 'from' IID.
+   * @return the from IID.
    */
   public long getFromIid()
   {
@@ -63,7 +69,8 @@ public class LbiLink
   }
 
   /**
-   * @param fromIid the fromIid to set
+   * Set the 'from' IID.
+   * @param fromIid the IID to set.
    */
   public void setFromIid(long fromIid)
   {
@@ -71,7 +78,8 @@ public class LbiLink
   }
 
   /**
-   * @return the toIid
+   * Get the 'to' IID.
+   * @return the 'to' IID.
    */
   public long getToIid()
   {
@@ -79,7 +87,8 @@ public class LbiLink
   }
 
   /**
-   * @param toIid the toIid to set
+   * Set the 'to' IID.
+   * @param toIid the IID to set.
    */
   public void setToIid(long toIid)
   {
@@ -87,7 +96,8 @@ public class LbiLink
   }
 
   /**
-   * @return the type
+   * Get the link type.
+   * @return a link type.
    */
   public String getType()
   {
@@ -95,7 +105,8 @@ public class LbiLink
   }
 
   /**
-   * @param type the type to set
+   * Set the link type.
+   * @param type the type to set.
    */
   public void setType(String type)
   {
@@ -103,7 +114,8 @@ public class LbiLink
   }
 
   /**
-   * @return the props
+   * Get the properties.
+   * @return some properties or <code>null</code> if not set.
    */
   public PropertiesSet getProps()
   {
@@ -111,7 +123,8 @@ public class LbiLink
   }
 
   /**
-   * @param props the props to set
+   * Set the properties.
+   * @param props the properties to set.
    */
   public void setProps(PropertiesSet props)
   {

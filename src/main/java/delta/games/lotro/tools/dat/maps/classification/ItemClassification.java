@@ -2,7 +2,7 @@ package delta.games.lotro.tools.dat.maps.classification;
 
 /**
  * Item classification.
- * @author dm
+ * @author DAM
  */
 public class ItemClassification extends Classification
 {
