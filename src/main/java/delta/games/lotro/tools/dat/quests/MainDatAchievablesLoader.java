@@ -471,6 +471,11 @@ public class MainDatAchievablesLoader
         type=DeedType.CLASS;
         deed.setRequiredClass(CharacterClass.BEORNING);
       }
+      else if (typeCode==40)
+      {
+        type=DeedType.CLASS;
+        deed.setRequiredClass(CharacterClass.BRAWLER);
+      }
       else if (typeCode==34)
       {
         type=DeedType.EVENT;
