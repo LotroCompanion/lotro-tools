@@ -104,7 +104,8 @@ public class MapsDataLoader
   {
     LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
     LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
-    for(int region=1;region<=4;region++)
+    int[] regions={1,2,3,4,14};
+    for(int region : regions)
     {
       System.out.println("Region "+region);
       for(int blockX=0;blockX<=0xFE;blockX++)

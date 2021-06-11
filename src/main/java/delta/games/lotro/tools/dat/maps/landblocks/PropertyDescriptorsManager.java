@@ -1,8 +1,8 @@
 package delta.games.lotro.tools.dat.maps.landblocks;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -21,10 +21,8 @@ public class PropertyDescriptorsManager
 {
   private static final Logger LOGGER=Logger.getLogger(PropertyDescriptorsManager.class);
 
-  private static final int[] PROPERTY_DESC_DIDS= { 0x18000000, 0x18000014, 0x18000015, 0x1800001a};
-
   private DataFacade _facade;
-  private List<PropertiesDescriptor> _descriptors;
+  private Map<Integer,PropertiesDescriptor> _descriptors;
 
   /**
    * Constructor.
@@ -33,7 +31,7 @@ public class PropertyDescriptorsManager
   public PropertyDescriptorsManager(DataFacade facade)
   {
     _facade=facade;
-    _descriptors=new ArrayList<PropertiesDescriptor>();
+    _descriptors=new HashMap<Integer,PropertiesDescriptor>();
     init();
   }
 
@@ -103,13 +101,19 @@ public class PropertyDescriptorsManager
     return ret;
   }
 
+  private void handleRegion(int region, int propertyDescId)
+  {
+    PropertiesDescriptor descriptor=loadPropertiesDescriptor(propertyDescId);
+    _descriptors.put(Integer.valueOf(region),descriptor);
+  }
+
   private void init()
   {
-    for(int propertyDescId : PROPERTY_DESC_DIDS)
-    {
-      PropertiesDescriptor descriptors=loadPropertiesDescriptor(propertyDescId);
-      _descriptors.add(descriptors);
-    }
+    handleRegion(1,0x18000000);
+    handleRegion(2,0x18000014);
+    handleRegion(3,0x18000015);
+    handleRegion(4,0x1800001a);
+    handleRegion(14,0x18000014);
   }
 
   /**
@@ -119,10 +123,6 @@ public class PropertyDescriptorsManager
    */
   public PropertiesDescriptor getDescriptorForRegion(int region)
   {
-    if ((region>=1) && (region<=_descriptors.size()))
-    {
-      return _descriptors.get(region-1);
-    }
-    return null;
+    return _descriptors.get(Integer.valueOf(region));
   }
 }

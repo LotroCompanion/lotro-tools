@@ -30,7 +30,8 @@ public class MainLandblocksBuilder
     LandblockLoader landblockLoader=new LandblockLoader(_facade);
     LandblocksManager index=new LandblocksManager();
     int nbBlocks=0;
-    for(int region=1;region<=4;region++)
+    int[] regions={1,2,3,4,14};
+    for(int region : regions)
     {
       System.out.println("Region "+region);
       for(int blockX=0;blockX<=0xFF;blockX++)
