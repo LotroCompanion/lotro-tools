@@ -118,7 +118,7 @@ public class MarkerUtils
    */
   public static BlockReference getBlockForMarker(int markerId)
   {
-    int region=(markerId&0x70000000)>>28;
+    int region=((markerId&0xF0000000)>>28)&0xF;
     int bigXBlock=(markerId&0xF000000)>>24;
     int bigYBlock=(markerId&0xF00000)>>20;
     int smallXBlock=(markerId&0xF0000)>>16;
