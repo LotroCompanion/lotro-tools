@@ -372,7 +372,9 @@ Reputation_LowestTier: 1
     if (factionId==1879386002) return new String[]{category,"WILDERFOLK",FactionLevelTemplates.CLASSIC}; // Wilderfolk
     if (factionId==1879403792) return new String[]{category,null,null}; // Protectors of Wilderland
     if (factionId==1879407816) return new String[]{category,null,null}; // March on Gundabad
-    if (factionId==1879408300) return new String[]{category,null,null}; // The War Effort
+    if (factionId==1879408300) return new String[]{category,null,null}; // The Gabil'akkâ
+    if (factionId==1879413559) return new String[]{category,null,null}; // The Haban’akkâ of Thráin
+    if (factionId==1879416174) return new String[]{category,null,null}; // Kharum-ubnâr
     category="Dunland";
     if (factionId==1879181920) return new String[]{category,"ALGRAIG",FactionLevelTemplates.CLASSIC}; // Algraig, Men of Enedwaith
     if (factionId==1879181919) return new String[]{category,"GREY_COMPANY",FactionLevelTemplates.CLASSIC}; // The Grey Company
@@ -435,8 +437,6 @@ Reputation_LowestTier: 1
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
     category="";
-    if (factionId==1879413559) return new String[]{category,null,null}; // The Haban’akkâ of Thráin
-    if (factionId==1879416174) return new String[]{category,null,null}; // Kharum-ubnâr
     if (factionId==1879416935) return new String[]{category,null,null}; // Reclaimers of the Mountain-hold
 
     LOGGER.warn("Unmanaged faction ID: "+factionId);
