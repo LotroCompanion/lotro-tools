@@ -173,6 +173,8 @@ public class TraitPointsRegistryBuilder
     initPoint("Central Gondor:Pelargir", category, "Central Gondor: complete Pelargir quest chain", null, "Faltharan's Confrontation");
     // Eastern Gondor quest chain
     initPoint("Eastern Gondor:AshesAndStars", category, "Osgiliath: complete Ashes and Stars, Chapter 4", null, "Ashes and Stars, Chapter 4");
+    // Blood of Azog
+    initPoint("BloodOfAzog", category, "Complete Interlude: Blood of Azog", null, "Interlude: Blood of Azog");
     // Epic quests
     category=TraitPointCategories.EPIC;
     initPoint("EpicVol4Book2", category, "Complete Volume IV, Book 2: The Dawnless Day", null, "Book 2, Chapter 9: Even In Darkness");
