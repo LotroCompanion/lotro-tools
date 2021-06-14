@@ -82,7 +82,7 @@ public class GeneratedFiles
   /**
    * Item icons.
    */
-  public static final File ITEM_ICONS_DIR=new File("../lotro-item-icons-db/icons").getAbsoluteFile();
+  public static final File ITEM_ICONS_DIR=new File("../lotro-icons/items").getAbsoluteFile();
   /**
    * Stats.
    */

@@ -137,28 +137,13 @@ public class MainDatItemsLoader
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer shadowIconId=(Integer)properties.getProperty("Icon_Layer_ShadowDID");
-      shadowIconId=null;
       Integer underlayIconId=(Integer)properties.getProperty("Icon_Layer_UnderlayDID");
-      underlayIconId=null;
-      if ((iconId!=null) || (backgroundIconId!=null) || (shadowIconId!=null) || (underlayIconId!=null))
-      {
-        String iconName=((iconId!=null)?iconId:"0")+"-"+((backgroundIconId!=null)?backgroundIconId:"0");
-        if ((shadowIconId!=null) || (underlayIconId!=null))
-        {
-          iconName=iconName+"-"+((shadowIconId!=null)?shadowIconId:"0")+"-"+((underlayIconId!=null)?underlayIconId:"0");
-        }
-        item.setIcon(iconName);
-        File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconName+".png").getAbsoluteFile();
-        if (!iconFile.exists())
-        {
-          int[] imageIds=new int[4];
-          imageIds[0]=(backgroundIconId!=null)?backgroundIconId.intValue():0;
-          imageIds[1]=(underlayIconId!=null)?underlayIconId.intValue():0;
-          imageIds[2]=(shadowIconId!=null)?shadowIconId.intValue():0;
-          imageIds[3]=(iconId!=null)?iconId.intValue():0;
-          DatIconsUtils.buildImageFile(_facade,imageIds,iconFile);
-        }
-      }
+      String iconName=buildIconName(iconId,backgroundIconId,shadowIconId,underlayIconId);
+      item.setIcon(iconName);
+      loadIcon(iconId);
+      loadIcon(backgroundIconId);
+      loadIcon(shadowIconId);
+      loadIcon(underlayIconId);
       // Unique
       Integer unique=(Integer)properties.getProperty("Inventory_Unique");
       boolean isUnique=((unique!=null) && (unique.intValue()==1));
@@ -309,6 +294,40 @@ public class MainDatItemsLoader
       LOGGER.warn("Could not handle item ID="+indexDataId);
     }
     return item;
+  }
+
+  private String buildIconName(Integer iconId, Integer backgroundIconId, Integer shadowIconId, Integer underlayIconId)
+  {
+    String iconName=null;
+    if ((iconId!=null) || (backgroundIconId!=null) || (shadowIconId!=null) || (underlayIconId!=null))
+    {
+      iconName=((iconId!=null)?iconId:"0")+"-"+((backgroundIconId!=null)?backgroundIconId:"0");
+      if (((shadowIconId!=null) && (shadowIconId.intValue()!=0)) ||
+          ((underlayIconId!=null) && (underlayIconId.intValue()!=0)))
+      {
+        iconName=iconName+"-"+((shadowIconId!=null)?shadowIconId:"0");
+        if (!Objects.equals(shadowIconId,underlayIconId))
+        {
+          if ((underlayIconId!=null) && (underlayIconId.intValue()!=0))
+          {
+            iconName=iconName+"-"+underlayIconId;
+          }
+        }
+      }
+    }
+    return iconName;
+  }
+
+  private void loadIcon(Integer iconId)
+  {
+    if ((iconId!=null) && (iconId.intValue()!=0))
+    {
+      File iconFile=new File(GeneratedFiles.ITEM_ICONS_DIR,iconId.intValue()+".png").getAbsoluteFile();
+      if (!iconFile.exists())
+      {
+        DatIconsUtils.buildImageFile(_facade,iconId.intValue(),iconFile);
+      }
+    }
   }
 
   private void handleItemValue(Item item, PropertiesSet properties)
