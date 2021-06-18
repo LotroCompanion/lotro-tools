@@ -37,12 +37,13 @@ public class MainBuildUpdatePackage
   public static void main(String[] args)
   {
     // Constants
-    String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app/";
-    File to=new File("d:/tmp/lc15-packages");
+    //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/${file}";
+    String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
+    File to=new File("d:/tmp/lc16-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to); 
-    File from=new File("d:/tmp/lc15");
-    String packageName="patch";
-    Version newVersion=new Version(1501,"15.1.29.0.2");
+    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/16.0/LotRO Companion/app");
+    String packageName="patch16.1";
+    Version newVersion=new Version(1601,"16.1.30.0.2");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);

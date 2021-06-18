@@ -27,10 +27,11 @@ public class MainInitUpdatesSystem
   public static void main(String[] args)
   {
     // Constants
-    String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app/";
-    File to=new File("d:/tmp/lc15-packages");
+    //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/";
+    String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
+    File to=new File("d:/tmp/lc16-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to); 
-    File from=new File("d:/tmp/lc15");
+    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/16.0/LotRO Companion/app");
 
     // Build a description of the software directory
     DescriptionBuilder descriptionBuilder=new DescriptionBuilder();
@@ -57,8 +58,8 @@ public class MainInitUpdatesSystem
     // Build the software description
     SoftwareDescription software=new SoftwareDescription(0);
     software.setName("Lotro Companion");
-    software.setVersion(new Version(1500,"15.0.29.0.1"));
-    software.setContentsDescription("Version 15 of the famous tool for Lotro");
+    software.setVersion(new Version(1600,"16.0.30.0.1"));
+    software.setContentsDescription("Version 16 of the famous tool for Lotro");
     software.setDate(new Date().getTime());
     builder.updateSoftware(software,packages);
   }
