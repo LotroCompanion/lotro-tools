@@ -29,7 +29,6 @@ import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
-import delta.games.lotro.tools.lore.deeds.geo.migration.OldMarkersMigration;
 
 /**
  * Injector for deed geo data.
@@ -182,8 +181,6 @@ public class MainGeoDataInjector
     {
       handleAchievable(deed,data);
     }
-    // Old points migration
-    new OldMarkersMigration(deeds).doIt();
   }
 
   private void save(List<DeedDescription> deeds)
