@@ -9,12 +9,17 @@ import java.util.Map;
 import java.util.Set;
 
 import delta.games.lotro.common.Identifiable;
+import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.geo.BlockReferenceComparator;
+import delta.games.lotro.lore.geo.GeoBoundingBox;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
+import delta.games.lotro.lore.maps.MapDescription;
+import delta.games.lotro.maps.data.GeoBox;
+import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
@@ -91,9 +96,12 @@ public class InstanceMapDataBuilder
     Collections.sort(dungeonsIds);
     for(Integer dungeonId : dungeonsIds)
     {
-      InstanceMapDescription mapDescription=new InstanceMapDescription(dungeonId);
-      privateEncounter.addMapDescription(mapDescription);
-      mapDescription.addZoneId(dungeonId.intValue());
+      InstanceMapDescription instanceMap=new InstanceMapDescription();
+      MapDescription basemap=new MapDescription();
+      basemap.setMapId(dungeonId);
+      instanceMap.setMap(basemap);
+      privateEncounter.addMapDescription(instanceMap);
+      instanceMap.addZoneId(dungeonId.intValue());
     }
     // Landscape
     for(List<BlockReference> group : groups)
@@ -110,21 +118,54 @@ public class InstanceMapDataBuilder
           mapId=Integer.valueOf(map.getIdentifier());
         }
       }
-      InstanceMapDescription mapDescription=new InstanceMapDescription(mapId);
+      InstanceMapDescription instanceMap=new InstanceMapDescription();
+      MapDescription basemap=new MapDescription();
+      basemap.setMapId(mapId);
+      int region=group.get(0).getRegion();
+      basemap.setRegion(region);
+      instanceMap.setMap(basemap);
       for(Integer areaId : areaIds)
       {
-        mapDescription.addZoneId(areaId.intValue());
+        instanceMap.addZoneId(areaId.intValue());
       }
-      for(BlockReference block : group)
-      {
-        mapDescription.addBlock(block);
-      }
-      privateEncounter.addMapDescription(mapDescription);
+      GeoBox boundingBox=buildBoundingBox(group);
+      GeoBoundingBox geoBBox=new GeoBoundingBox(boundingBox.getMin().getLongitude(),boundingBox.getMin().getLatitude(),boundingBox.getMax().getLongitude(),boundingBox.getMax().getLatitude());
+      basemap.setBoundingBox(geoBBox);
+      privateEncounter.addMapDescription(instanceMap);
     }
     // Fixes
     fixes(privateEncounter);
     //int nbMaps=privateEncounter.getMapDescriptions().size();
     //System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
+  }
+
+  private GeoBox buildBoundingBox(List<BlockReference> blocks)
+  {
+    GeoBox box=null;
+    for(BlockReference block : blocks)
+    {
+      GeoBox blockBox=buildBoxForBlock(block);
+      if (box==null)
+      {
+        box=blockBox;
+      }
+      else
+      {
+        box.extend(blockBox);
+      }
+    }
+    return box;
+  }
+
+  private GeoBox buildBoxForBlock(BlockReference block)
+  {
+    int blockX=block.getBlockX();
+    int blockY=block.getBlockY();
+    float[] startLatLon=PositionDecoder.decodePosition(blockX,blockY,0,0);
+    GeoPoint landBlockStart=new GeoPoint(startLatLon[0],startLatLon[1]);
+    float[] endLatLon=PositionDecoder.decodePosition(blockX+1,blockY+1,0,0);
+    GeoPoint landBlockEnd=new GeoPoint(endLatLon[0],endLatLon[1]);
+    return new GeoBox(landBlockStart,landBlockEnd);
   }
 
   private List<Marker> findMarkersForBlocks(List<BlockReference> blocks, Integer contentLayer)

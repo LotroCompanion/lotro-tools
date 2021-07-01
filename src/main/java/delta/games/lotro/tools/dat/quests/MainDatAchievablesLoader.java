@@ -710,9 +710,12 @@ public class MainDatAchievablesLoader
     // - deed keys injection
     DeedKeysInjector injector=new DeedKeysInjector();
     injector.doIt(deeds);
-    // - deed geo data injection
+    // - achievables geo data injection
     MainGeoDataInjector geoDataInjector=new MainGeoDataInjector(_facade);
-    geoDataInjector.doIt(deeds);
+    List<Achievable> achievables=new ArrayList<Achievable>();
+    achievables.addAll(deeds);
+    achievables.addAll(_quests.values());
+    geoDataInjector.doIt(achievables);
 
     // Save
     doSave();

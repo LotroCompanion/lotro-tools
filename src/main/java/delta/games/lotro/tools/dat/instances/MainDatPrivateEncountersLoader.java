@@ -253,32 +253,26 @@ public class MainDatPrivateEncountersLoader
     return true;
   }
 
+  private static int[] CL0=
+  {
+    1879185298, // Urugarth
+    1879184817, // Drake Wing
+    1879083265, // Fire and Ice
+    1879185310, // The Rift of Nûrz Ghâshu
+    1879094769, // Instance: The Rift of Nûrz Ghâshu
+    1879414603, // Agoroth, the Narrowdelve
+  };
+
   private void handleAdditionalContentLayers(PrivateEncounter pe)
   {
     int peId=pe.getIdentifier();
-    if (peId==1879185298) // Urugarth
+    for(int id : CL0)
     {
-      pe.addAdditionalContentLayer(0);
-    }
-    if (peId==1879184817) // Drake Wing
-    {
-      pe.addAdditionalContentLayer(0);
-    }
-    if (peId==1879083265) // Fire and Ice
-    {
-      pe.addAdditionalContentLayer(0);
-    }
-    if (peId==1879185310) // The Rift of Nûrz Ghâshu
-    {
-      pe.addAdditionalContentLayer(0);
-    }
-    if (peId==1879094769) // Instance: The Rift of Nûrz Ghâshu
-    {
-      pe.addAdditionalContentLayer(0);
-    }
-    if (peId==1879414603) // Agoroth, the Narrowdelve
-    {
-      pe.addAdditionalContentLayer(0);
+      if (peId==id)
+      {
+        pe.addAdditionalContentLayer(0);
+        break;
+      }
     }
   }
 
