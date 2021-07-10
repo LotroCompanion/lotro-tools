@@ -177,6 +177,10 @@ public class MainDatAchievablesLoader
     Repeatability repeatability=Repeatability.NOT_REPEATABLE;
     if (maxTimes!=null)
     {
+      if (maxTimes.intValue()<0)
+      {
+        maxTimes=Integer.valueOf(-1);
+      }
       repeatability=Repeatability.getByCode(maxTimes.byteValue());
     }
     quest.setRepeatability(repeatability);
