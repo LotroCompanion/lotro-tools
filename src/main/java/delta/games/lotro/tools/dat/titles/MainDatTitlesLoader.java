@@ -38,6 +38,7 @@ public class MainDatTitlesLoader
   private DataFacade _facade;
   private EnumMapper _category;
   private StringRenderer _customRenderer;
+  private EnumMapper _exclusionGroup;
 
   /**
    * Constructor.
@@ -48,6 +49,7 @@ public class MainDatTitlesLoader
     _facade=facade;
     _category=_facade.getEnumsManager().getEnumMapper(587202682);
     _customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
+    _exclusionGroup=_facade.getEnumsManager().getEnumMapper(587202883);
   }
 
   /*
@@ -88,6 +90,20 @@ Title_String:
       // Description
       String description=DatUtils.getStringProperty(properties,"Title_Description");
       title.setDescription(description);
+      // Exclusion group
+      Integer exclusionGroupId=(Integer)properties.getProperty("Title_Exclusion_Group");
+      if ((exclusionGroupId!=null) && (exclusionGroupId.intValue()!=0))
+      {
+        String exclusionGroup=_exclusionGroup.getLabel(exclusionGroupId.intValue());
+        title.setExclusionGroup(exclusionGroup);
+        // Priority
+        int priority=((Integer)properties.getProperty("Title_Priority")).intValue();
+        title.setPriority(Integer.valueOf(priority));
+        if (priority<1)
+        {
+          LOGGER.warn("Unexpected priority value: "+priority+" for title ID="+indexDataId);
+        }
+      }
       // Icon
       int iconId=((Integer)properties.getProperty("Title_Icon")).intValue();
       File titleIcon=new File(TITLE_ICONS_DIR,"titleIcons/"+iconId+".png").getAbsoluteFile();
