@@ -287,4 +287,8 @@ public class GeneratedFiles
    * Paper items.
    */
   public static final File PAPER_ITEMS=LotroCoreConfig.getInstance().getFile(DataFiles.PAPER_ITEMS);
+  /**
+   * Tasks.
+   */
+  public static final File TASKS=LotroCoreConfig.getInstance().getFile(DataFiles.TASKS);
 }
