@@ -41,9 +41,9 @@ public class MainBuildUpdatePackage
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
     File to=new File("d:/tmp/lc16-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to); 
-    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/16.0/LotRO Companion/app");
-    String packageName="patch16.1";
-    Version newVersion=new Version(1601,"16.1.30.0.2");
+    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/16.5/LotRO Companion/app");
+    String packageName="patch16.5";
+    Version newVersion=new Version(1650,"16.5.30.1.1");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
