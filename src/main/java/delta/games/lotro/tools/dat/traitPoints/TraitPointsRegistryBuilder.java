@@ -9,11 +9,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EncodingNames;
-import delta.games.lotro.character.traitPoints.TraitPoint;
-import delta.games.lotro.character.traitPoints.TraitPointCategories;
-import delta.games.lotro.character.traitPoints.TraitPointsRegistry;
-import delta.games.lotro.character.traitPoints.comparators.TraitPointLabelComparator;
-import delta.games.lotro.character.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
+import delta.games.lotro.character.status.traitPoints.TraitPoint;
+import delta.games.lotro.character.status.traitPoints.TraitPointCategories;
+import delta.games.lotro.character.status.traitPoints.TraitPointsRegistry;
+import delta.games.lotro.character.status.traitPoints.comparators.TraitPointLabelComparator;
+import delta.games.lotro.character.status.traitPoints.io.xml.TraitPointsRegistryXMLWriter;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
