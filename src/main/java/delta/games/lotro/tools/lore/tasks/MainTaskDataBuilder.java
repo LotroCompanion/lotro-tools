@@ -116,7 +116,10 @@ public class MainTaskDataBuilder
     return ret;
   }
 
-  private void doIt()
+  /**
+   * Do it.
+   */
+  public void doIt()
   {
     List<Task> tasks=loadTasks();
     boolean ok=TasksXMLWriter.write(GeneratedFiles.TASKS,tasks);

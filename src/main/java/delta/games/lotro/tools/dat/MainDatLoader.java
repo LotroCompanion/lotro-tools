@@ -43,6 +43,7 @@ import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
+import delta.games.lotro.tools.lore.tasks.MainTaskDataBuilder;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
 
 /**
@@ -143,6 +144,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Reference data
     new ReferenceDataGenerator().doIt();
+    // Tasks data
+    new MainTaskDataBuilder().doIt();
   }
 
   private void cleanup()
@@ -207,6 +210,7 @@ public class MainDatLoader
     // Quests and deeds
     deleteFile(GeneratedFiles.QUESTS);
     deleteFile(GeneratedFiles.DEEDS);
+    deleteFile(GeneratedFiles.TASKS);
     // Crafting
     deleteFile(GeneratedFiles.CRAFTING_DATA);
     // Buffs
