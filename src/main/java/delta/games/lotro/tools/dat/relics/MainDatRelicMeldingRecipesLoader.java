@@ -40,6 +40,7 @@ public class MainDatRelicMeldingRecipesLoader
    */
   public MainDatRelicMeldingRecipesLoader(DataFacade facade)
   {
+    _facade=facade;
     _categories=_facade.getEnumsManager().getEnumMapper(587203362);
   }
 
@@ -161,7 +162,7 @@ public class MainDatRelicMeldingRecipesLoader
   public void doIt()
   {
     // Relic Transmutation Directory:
-    PropertiesSet props=_facade.loadProperties(1879201331);
+    PropertiesSet props=_facade.loadProperties(1879201331+DATConstants.DBPROPERTIES_OFFSET);
     if (props==null)
     {
       LOGGER.warn("Could not load transmutation directory properties");
