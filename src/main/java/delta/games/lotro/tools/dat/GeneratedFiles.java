@@ -128,6 +128,10 @@ public class GeneratedFiles
    */
   public static final File RELIC_ICONS=new File("../lotro-relics/relicIcons.zip").getAbsoluteFile();
   /**
+   * Relic melding recipes.
+   */
+  public static final File RELIC_MELDING_RECIPES=LotroCoreConfig.getInstance().getFile(DataFiles.RELIC_MELDING_RECIPES);
+  /**
    * Legendary titles.
    */
   public static final File LEGENDARY_TITLES=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_TITLES);

@@ -39,6 +39,7 @@ import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.others.MountsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
+import delta.games.lotro.tools.dat.relics.MainDatRelicMeldingRecipesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
@@ -146,6 +147,8 @@ public class MainDatLoader
     new ReferenceDataGenerator().doIt();
     // Tasks data
     new MainTaskDataBuilder().doIt();
+    // Relics melding recipes
+    new MainDatRelicMeldingRecipesLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -197,6 +200,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.LEGENDARY_TITLES);
     // Relics
     deleteFile(GeneratedFiles.RELICS);
+    deleteFile(GeneratedFiles.RELIC_MELDING_RECIPES);
     deleteFile(GeneratedFiles.RELIC_ICONS);
     deleteDirectory(MainDatRelicsLoader.RELIC_ICONS_DIR);
     // Recipes
