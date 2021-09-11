@@ -295,4 +295,8 @@ public class GeneratedFiles
    * Tasks.
    */
   public static final File TASKS=LotroCoreConfig.getInstance().getFile(DataFiles.TASKS);
+  /**
+   * Difficulties.
+   */
+  public static final File DIFFICULTIES=LotroCoreConfig.getInstance().getFile(DataFiles.DIFFICULTIES);
 }
