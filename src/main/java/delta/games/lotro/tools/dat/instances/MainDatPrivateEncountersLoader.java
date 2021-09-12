@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.difficulty.DifficultiesManager;
+import delta.games.lotro.common.difficulty.Difficulty;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -30,7 +32,6 @@ public class MainDatPrivateEncountersLoader
   private DataFacade _facade;
   private List<PrivateEncounter> _data;
   private InstanceMapDataBuilder _mapDataBuilder;
-  private EnumMapper _difficultyTiers;
   private EnumMapper _groupSize;
   private EnumMapper _worldJoinType;
   private EnumMapper _worldJoinCategory;
@@ -44,7 +45,6 @@ public class MainDatPrivateEncountersLoader
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
     _mapDataBuilder=new InstanceMapDataBuilder();
-    _difficultyTiers=facade.getEnumsManager().getEnumMapper(0x230002DC);
     _groupSize=facade.getEnumsManager().getEnumMapper(0x230002DA);
     _worldJoinType=facade.getEnumsManager().getEnumMapper(0x23000309);
     _worldJoinCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
@@ -166,13 +166,14 @@ public class MainDatPrivateEncountersLoader
     Object[] difficultyTiersArray=(Object[])props.getProperty("Skirmish_Template_DifficultyTierArray");
     if (difficultyTiersArray!=null)
     {
+      DifficultiesManager difficultiesMgr=DifficultiesManager.getInstance();
       for(Object difficultyTierObj : difficultyTiersArray)
       {
         int difficultyTierCode=((Integer)difficultyTierObj).intValue();
-        if (difficultyTierCode!=0)
+        Difficulty difficulty=difficultiesMgr.getDifficulty(difficultyTierCode);
+        if (difficulty!=null)
         {
-          String difficultyTier=_difficultyTiers.getString(difficultyTierCode);
-          skirmishPE.addDifficultyTier(difficultyTier);
+          skirmishPE.addDifficultyTier(difficulty);
         }
       }
     }
