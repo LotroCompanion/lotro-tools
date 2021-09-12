@@ -34,6 +34,7 @@ import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatDifficultiesLoader;
+import delta.games.lotro.tools.dat.misc.MainDatGroupSizesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
@@ -84,6 +85,8 @@ public class MainDatLoader
     new MainDatColorLoader(_facade).doIt();
     // Difficulties
     new MainDatDifficultiesLoader(_facade).doIt();
+    // Group sizes
+    new MainDatGroupSizesLoader(_facade).doIt();
     // Combat data
     new MainDatCombatLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -160,6 +163,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.STATS);
     deleteFile(GeneratedFiles.COLORS);
     deleteFile(GeneratedFiles.DIFFICULTIES);
+    deleteFile(GeneratedFiles.GROUP_SIZES);
     deleteFile(GeneratedFiles.COMBAT_DATA);
     // Character data
     deleteFile(GeneratedFiles.STAT_CONTRIBS);

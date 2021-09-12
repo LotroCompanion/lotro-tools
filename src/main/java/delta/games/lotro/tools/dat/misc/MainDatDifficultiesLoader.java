@@ -31,11 +31,10 @@ public class MainDatDifficultiesLoader
   }
 
   /**
-   * Load colors.
+   * Load difficulties.
    */
   public void doIt()
   {
-    // ItemMungingControl
     EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(587203292);
     if (enumMapper!=null)
     {

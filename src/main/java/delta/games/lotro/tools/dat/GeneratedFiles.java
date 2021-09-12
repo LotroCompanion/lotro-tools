@@ -299,4 +299,8 @@ public class GeneratedFiles
    * Difficulties.
    */
   public static final File DIFFICULTIES=LotroCoreConfig.getInstance().getFile(DataFiles.DIFFICULTIES);
+  /**
+   * Group sizes.
+   */
+  public static final File GROUP_SIZES=LotroCoreConfig.getInstance().getFile(DataFiles.GROUP_SIZES);
 }
