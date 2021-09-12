@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.difficulty.DifficultiesManager;
 import delta.games.lotro.common.difficulty.Difficulty;
+import delta.games.lotro.common.groupSize.GroupSize;
+import delta.games.lotro.common.groupSize.GroupSizesManager;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -32,7 +34,6 @@ public class MainDatPrivateEncountersLoader
   private DataFacade _facade;
   private List<PrivateEncounter> _data;
   private InstanceMapDataBuilder _mapDataBuilder;
-  private EnumMapper _groupSize;
   private EnumMapper _worldJoinType;
   private EnumMapper _worldJoinCategory;
 
@@ -45,7 +46,6 @@ public class MainDatPrivateEncountersLoader
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
     _mapDataBuilder=new InstanceMapDataBuilder();
-    _groupSize=facade.getEnumsManager().getEnumMapper(0x230002DA);
     _worldJoinType=facade.getEnumsManager().getEnumMapper(0x23000309);
     _worldJoinCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
   }
@@ -186,6 +186,7 @@ public class MainDatPrivateEncountersLoader
     Skirmish_Template_GroupSizeArray: 
       #1: 12 (Raid (12))
      */
+    GroupSizesManager groupSizesMgr=GroupSizesManager.getInstance();
     Object[] groupSizesArray=(Object[])props.getProperty("Skirmish_Template_GroupSizeArray");
     if (groupSizesArray!=null)
     {
@@ -194,7 +195,7 @@ public class MainDatPrivateEncountersLoader
         int groupSizeCode=((Integer)groupSizeObj).intValue();
         if (groupSizeCode!=0)
         {
-          String groupSize=_groupSize.getString(groupSizeCode);
+          GroupSize groupSize=groupSizesMgr.getGroupSize(groupSizeCode);
           skirmishPE.addGroupSize(groupSize);
         }
       }
