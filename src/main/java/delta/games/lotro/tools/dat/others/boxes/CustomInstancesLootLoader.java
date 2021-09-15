@@ -1,16 +1,27 @@
 package delta.games.lotro.tools.dat.others.boxes;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.treasure.LootsManager;
-import delta.games.lotro.common.treasure.TreasureList;
+import delta.common.utils.math.Range;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
+import delta.games.lotro.lore.instances.loot.InstanceLootEntry;
+import delta.games.lotro.lore.instances.loot.InstanceLootParameters;
+import delta.games.lotro.lore.instances.loot.InstanceLoots;
+import delta.games.lotro.lore.instances.loot.InstanceLootsTable;
+import delta.games.lotro.lore.instances.loot.io.xml.InstanceLootXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.others.LootLoader;
 
 /**
@@ -23,8 +34,8 @@ public class CustomInstancesLootLoader
 
   private DataFacade _facade;
   private LootLoader _lootLoader;
-  private EnumMapper _difficultyTiers;
-  private EnumMapper _groupSize;
+  private Map<Integer,InstanceLootsTable> _tables;
+  private Map<Integer,InstanceLoots> _loots;
 
   /**
    * Constructor.
@@ -35,8 +46,8 @@ public class CustomInstancesLootLoader
   {
     _facade=facade;
     _lootLoader=lootLoader;
-    _difficultyTiers=facade.getEnumsManager().getEnumMapper(0x230002DC);
-    _groupSize=facade.getEnumsManager().getEnumMapper(0x230002DA);
+    _tables=new HashMap<Integer,InstanceLootsTable>();
+    _loots=new HashMap<Integer,InstanceLoots>();
   }
 
   /**
@@ -50,15 +61,28 @@ public class CustomInstancesLootLoader
     {
       return;
     }
+    Integer key=Integer.valueOf(tableId);
+    if (_tables.containsKey(key))
+    {
+      return;
+    }
+    _loots.clear();
+    LOGGER.info("Doing custom skirmish loot table: "+tableId);
+    InstanceLootsTable table=new InstanceLootsTable(tableId);
     Object[] tableArray=(Object[])properties.getProperty("SkirmishCustomLootLookupTable_Array");
     for(Object tableItemObj : tableArray)
     {
       int lookupEntryId=((Integer)tableItemObj).intValue();
       handleEntry(lookupEntryId);
     }
+    for(InstanceLoots instanceLoots : _loots.values())
+    {
+      table.addInstanceLoots(instanceLoots);
+    }
+    _loots.clear();
+    _tables.put(key,table);
   }
 
-  @SuppressWarnings("unused")
   private void handleEntry(int lookupEntryId)
   {
     PropertiesSet properties=_facade.loadProperties(lookupEntryId+DATConstants.DBPROPERTIES_OFFSET);
@@ -75,25 +99,33 @@ public class CustomInstancesLootLoader
       SkirmishTreasureLookup_TrophyListTemplateDID: 1879194188
     */
     int encounterId=((Integer)properties.getProperty("SkirmishTreasureLookup_EncounterDID")).intValue();
+    Integer key=Integer.valueOf(encounterId);
+    InstanceLoots instanceLoots=_loots.get(key);
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     PrivateEncounter privateEncounter=peMgr.getPrivateEncounterById(encounterId);
-    //System.out.println("Encounter: "+privateEncounter.getName());
+    if (instanceLoots==null)
+    {
+      instanceLoots=new InstanceLoots(privateEncounter);
+      _loots.put(key,instanceLoots);
+    }
     int parametersDid=((Integer)properties.getProperty("SkirmishTreasureLookup_SkirmishMatchParametersDID")).intValue();
-    handleParameters(parametersDid);
-    handleLootTables(properties);
+    InstanceLootParameters parameters=handleParameters(parametersDid);
+    InstanceLootEntry entry=new InstanceLootEntry(parameters);
+    instanceLoots.addEntry(entry);
+    handleLootTables(properties,entry);
   }
 
-  @SuppressWarnings("unused")
-  private void handleLootTables(PropertiesSet properties)
+  private void handleLootTables(PropertiesSet properties, InstanceLootEntry entry)
   {
-    TrophyList barterTrophyList=null;
-    TreasureList treasureList=null;
+    //TrophyList barterTrophyList=null;
+    //TreasureList treasureList=null;
     TrophyList trophyList=null;
     // Barter trophy list
     Integer barterTrophyListId=(Integer)properties.getProperty("SkirmishTreasureLookup_BarterTrophyListDID");
     if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
     {
-      barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
+      LOGGER.warn("Barter trophy list - should never happen");
+      //barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
     }
     // Reputation trophy
     Integer reputationTrophyListId=(Integer)properties.getProperty("SkirmishTreasureLookup_ReputationTrophyListDID");
@@ -108,24 +140,25 @@ public class CustomInstancesLootLoader
     Integer treasureListTemplateId=(Integer)properties.getProperty("SkirmishTreasureLookup_TreasureListTemplateDID");
     if ((treasureListTemplateId!=null) && (treasureListTemplateId.intValue()!=0))
     {
-      PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      treasureList=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
+      LOGGER.warn("Treasure list - should never happen");
+      //PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+      //treasureList=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
     }
     // Trophy list template
     Integer trophyTemplateId=(Integer)properties.getProperty("SkirmishTreasureLookup_TrophyListTemplateDID");
     if ((trophyTemplateId!=null) && (trophyTemplateId.intValue()!=0))
     {
       trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
+      entry.setTrophyList(trophyList);
     }
   }
 
-  @SuppressWarnings("unused")
-  private void handleParameters(int parametersDid)
+  private InstanceLootParameters handleParameters(int parametersDid)
   {
     PropertiesSet properties=_facade.loadProperties(parametersDid+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      return;
+      return null;
     }
     /*
       SkirmishMatchParams_DifficultyTier_Max: 1 (Tier I)
@@ -137,35 +170,25 @@ public class CustomInstancesLootLoader
      */
     int minLevel=((Integer)properties.getProperty("SkirmishMatchParams_Level_Min")).intValue();
     int maxLevel=((Integer)properties.getProperty("SkirmishMatchParams_Level_Max")).intValue();
+    Range level=new Range(minLevel,maxLevel);
     int minSizeCode=((Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Min")).intValue();
     int maxSizeCode=((Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Max")).intValue();
-    String minGroupSize=_groupSize.getString(minSizeCode);
-    String maxGroupSize=_groupSize.getString(maxSizeCode);
+    Range size=new Range(minSizeCode,maxSizeCode);
     int minDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Min")).intValue();
     int maxDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Max")).intValue();
-    String minDifficultyTier=_difficultyTiers.getString(minDifficultyCode);
-    String maxDifficultyTier=_difficultyTiers.getString(maxDifficultyCode);
+    Range difficulty=new Range(minDifficultyCode,maxDifficultyCode);
     //System.out.println("Level "+minLevel+"-"+maxLevel+", size="+minGroupSize+"/"+maxGroupSize+", difficulty="+minDifficultyTier+"/"+maxDifficultyTier);
+    InstanceLootParameters params=new InstanceLootParameters(difficulty,size,level);
+    return params;
   }
 
   /**
-   * Load containers.
+   * Write the managed data.
    */
-  public void doIt()
+  public void writeData()
   {
-    handleCustomSkirmishLootLookupTable(1879174480);
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    LootsManager lootsMgr=new LootsManager();
-    LootLoader lootLoader=new LootLoader(facade,lootsMgr);
-    new CustomInstancesLootLoader(facade,lootLoader).doIt();
-    facade.dispose();
+    List<InstanceLootsTable> loots=new ArrayList<InstanceLootsTable>(_tables.values());
+    Collections.sort(loots,new IdentifiableComparator<InstanceLootsTable>());
+    InstanceLootXMLWriter.writeInstanceLootsFile(GeneratedFiles.INSTANCES_LOOTS,loots);
   }
 }

@@ -294,6 +294,8 @@ If PackageItem_IsPreviewable: 1
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
     // Write container data
     ContainerXMLWriter.writeContainersFile(GeneratedFiles.CONTAINERS,containers);
+    // Write custom instance loots
+    _instancesLootLoader.writeData();
     // Test samples:
     /*
     // Battle Gift Box

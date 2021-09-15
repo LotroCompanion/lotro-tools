@@ -276,6 +276,10 @@ public class GeneratedFiles
    */
   public static final File INSTANCES_TREE=LotroCoreConfig.getInstance().getFile(DataFiles.INSTANCES_TREE);
   /**
+   * Instances loots.
+   */
+  public static final File INSTANCES_LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.INSTANCE_LOOTS);
+  /**
    * Mobs.
    */
   public static final File MOBS=LotroCoreConfig.getInstance().getFile(DataFiles.MOBS);
