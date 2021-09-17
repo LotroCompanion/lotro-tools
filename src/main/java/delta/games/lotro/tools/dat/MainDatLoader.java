@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
+import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -146,7 +147,7 @@ public class MainDatLoader
     // Disenchantment
     new MainDatDisenchantmentsLoader(_facade).doIt();
     // Mobs
-    new MainDatMobsLoader(_facade).doIt();
+    new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data

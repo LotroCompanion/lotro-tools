@@ -8,12 +8,14 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
+import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.mobs.MobLoot;
 import delta.games.lotro.lore.agents.mobs.io.xml.MobsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
@@ -39,12 +41,13 @@ public class MainDatMobsLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param lootsManager Loots manager.
    */
-  public MainDatMobsLoader(DataFacade facade)
+  public MainDatMobsLoader(DataFacade facade, LootsManager lootsManager)
   {
     _facade=facade;
     _classificationLoader=new ClassificationLoader(facade);
-    _loots=new LootsManager();
+    _loots=lootsManager;
     _lootLoader=new LootLoader(facade,_loots);
   }
 
@@ -54,7 +57,6 @@ public class MainDatMobsLoader
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      // ID
       // Name
       String name=DatUtils.getStringProperty(properties,"Name");
       name=StringUtils.fixName(name);
@@ -63,58 +65,44 @@ public class MainDatMobsLoader
       // Classification
       _classificationLoader.loadClassification(properties,ret.getClassification());
       // Loot
-      int barterTrophyList=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
-      if (barterTrophyList!=0)
+      TrophyList barterTrophyList=null;
+      int barterTrophyListId=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
+      if (barterTrophyListId!=0)
       {
-        //System.out.println("\tLootGen_BarterTrophyList="+barterTrophyList);
-        TrophyList trophyList=_lootLoader.handleTrophyList(barterTrophyList);
-        if (trophyList!=null)
-        {
-          //System.out.println(trophyList.toString());
-        }
+        barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId);
       }
-      /*
-      int generatesTrophy=((Integer)properties.getProperty("LootGen_GeneratesTrophies")).intValue();
-      if (generatesTrophy!=0)
+      boolean generatesTrophy=(((Integer)properties.getProperty("LootGen_GeneratesTrophies")).intValue()!=0);
+      TrophyList reputationTrophyList=null;
+      int reputationTrophyListId=((Integer)properties.getProperty("LootGen_ReputationTrophyList")).intValue();
+      if (reputationTrophyListId!=0)
       {
-        System.out.println("\tLootGen_GeneratesTrophies="+generatesTrophy);
+        reputationTrophyList=_lootLoader.handleTrophyList(reputationTrophyListId);
       }
-      */
-      int reputationTrophyList=((Integer)properties.getProperty("LootGen_ReputationTrophyList")).intValue();
-      if (reputationTrophyList!=0)
+      TreasureList treasureList=null;
+      int treasureListOverrideId=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();
+      if (treasureListOverrideId!=0)
       {
-        //System.out.println("\tLootGen_ReputationTrophyList="+reputationTrophyList);
-        TrophyList trophyList=_lootLoader.handleTrophyList(reputationTrophyList);
-        if (trophyList!=null)
-        {
-          //System.out.println(trophyList.toString());
-        }
+        PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverrideId+DATConstants.DBPROPERTIES_OFFSET);
+        treasureList=_lootLoader.handleTreasureList(treasureListOverrideId,treasureListProps);
       }
-      int treasureListOverride=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();
-      if (treasureListOverride!=0)
+      TrophyList trophyListOverride=null;
+      int trophyListOverrideId=((Integer)properties.getProperty("LootGen_TrophyList_Override")).intValue();
+      if (trophyListOverrideId!=0)
       {
-        //System.out.println("\tLootGen_TreasureList_Override="+treasureListOverride);
-        PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverride+DATConstants.DBPROPERTIES_OFFSET);
-        TreasureList treasureList=_lootLoader.handleTreasureList(treasureListOverride,treasureListProps);
-        if (treasureList!=null)
-        {
-          //System.out.println(treasureList.toString());
-        }
+        trophyListOverride=_lootLoader.handleTrophyList(trophyListOverrideId);
       }
-      int trophyListOverride=((Integer)properties.getProperty("LootGen_TrophyList_Override")).intValue();
-      if (trophyListOverride!=0)
+      Integer isRemoteLootableInt=(Integer)properties.getProperty("Loot_IsRemoteLootable");
+      boolean remoteLootable=((isRemoteLootableInt!=null) && (isRemoteLootableInt.intValue()>0));
+      if ((barterTrophyList!=null) || (reputationTrophyList!=null) || (treasureList!=null) || (trophyListOverride!=null))
       {
-        //System.out.println("\tLootGen_TrophyList_Override="+trophyListOverride);
-        TrophyList trophyList=_lootLoader.handleTrophyList(trophyListOverride);
-        if (trophyList!=null)
-        {
-          //System.out.println(trophyList.toString());
-        }
-      }
-      Integer isRemoteLootable=(Integer)properties.getProperty("Loot_IsRemoteLootable");
-      if ((isRemoteLootable==null) || (isRemoteLootable.intValue()!=1))
-      {
-        //System.out.println("\tLoot_IsRemoteLootable="+isRemoteLootable);
+        MobLoot loot=new MobLoot();
+        loot.setBarterTrophy(barterTrophyList);
+        loot.setReputationTrophy(reputationTrophyList);
+        loot.setTreasureListOverride(treasureList);
+        loot.setTrophyListOverride(trophyListOverride);
+        loot.setGeneratesTrophy(generatesTrophy);
+        loot.setRemoteLootable(remoteLootable);
+        ret.setMobLoot(loot);
       }
       /*
 Agent_Alignment: 3
@@ -177,6 +165,8 @@ Quest_MonsterDivision: 245 => HallOfMirror
     {
       System.out.println("Wrote mobs file: "+GeneratedFiles.MOBS);
     }
+    // Write loot data
+    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
   }
 
   /**
@@ -186,7 +176,8 @@ Quest_MonsterDivision: 245 => HallOfMirror
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatMobsLoader(facade).doIt();
+    LootsManager lootsManager=new LootsManager();
+    new MainDatMobsLoader(facade,lootsManager).doIt();
     facade.dispose();
   }
 }
