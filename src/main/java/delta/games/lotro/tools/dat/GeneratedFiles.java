@@ -300,11 +300,7 @@ public class GeneratedFiles
    */
   public static final File TASKS=LotroCoreConfig.getInstance().getFile(DataFiles.TASKS);
   /**
-   * Difficulties.
+   * Enums directory.
    */
-  public static final File DIFFICULTIES=LotroCoreConfig.getInstance().getFile(DataFiles.DIFFICULTIES);
-  /**
-   * Group sizes.
-   */
-  public static final File GROUP_SIZES=LotroCoreConfig.getInstance().getFile(DataFiles.GROUP_SIZES);
+  public static final File ENUMS_DIR=LotroCoreConfig.getInstance().getFile(DataFiles.ENUMS_DIR);
 }

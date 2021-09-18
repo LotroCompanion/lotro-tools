@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.difficulty.DifficultiesManager;
-import delta.games.lotro.common.difficulty.Difficulty;
-import delta.games.lotro.common.groupSize.GroupSize;
-import delta.games.lotro.common.groupSize.GroupSizesManager;
+import delta.games.lotro.common.enums.Difficulty;
+import delta.games.lotro.common.enums.GroupSize;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -166,11 +166,11 @@ public class MainDatPrivateEncountersLoader
     Object[] difficultyTiersArray=(Object[])props.getProperty("Skirmish_Template_DifficultyTierArray");
     if (difficultyTiersArray!=null)
     {
-      DifficultiesManager difficultiesMgr=DifficultiesManager.getInstance();
+      LotroEnum<Difficulty> difficultiesMgr=LotroEnumsRegistry.getInstance().get(Difficulty.class);
       for(Object difficultyTierObj : difficultyTiersArray)
       {
         int difficultyTierCode=((Integer)difficultyTierObj).intValue();
-        Difficulty difficulty=difficultiesMgr.getDifficulty(difficultyTierCode);
+        Difficulty difficulty=difficultiesMgr.getEntry(difficultyTierCode);
         if (difficulty!=null)
         {
           skirmishPE.addDifficultyTier(difficulty);
@@ -186,7 +186,7 @@ public class MainDatPrivateEncountersLoader
     Skirmish_Template_GroupSizeArray: 
       #1: 12 (Raid (12))
      */
-    GroupSizesManager groupSizesMgr=GroupSizesManager.getInstance();
+    LotroEnum<GroupSize> groupSizesMgr=LotroEnumsRegistry.getInstance().get(GroupSize.class);
     Object[] groupSizesArray=(Object[])props.getProperty("Skirmish_Template_GroupSizeArray");
     if (groupSizesArray!=null)
     {
@@ -195,7 +195,7 @@ public class MainDatPrivateEncountersLoader
         int groupSizeCode=((Integer)groupSizeObj).intValue();
         if (groupSizeCode!=0)
         {
-          GroupSize groupSize=groupSizesMgr.getGroupSize(groupSizeCode);
+          GroupSize groupSize=groupSizesMgr.getEntry(groupSizeCode);
           skirmishPE.addGroupSize(groupSize);
         }
       }
