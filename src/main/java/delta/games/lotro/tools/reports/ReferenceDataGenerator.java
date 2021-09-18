@@ -59,6 +59,7 @@ public class ReferenceDataGenerator
     dumpControl("CraftDirectory",1879048722); // 0x70000212
     dumpControl("LootGenControl",1879076022); // 0x70006CB6
     dumpControl("SkirmishControl",1879154125); // 0x70019DCD
+    dumpControl("PrivateEncounterControl",1879048753); // 0x70000231
     dumpLevelTableDirectory();
   }
 
