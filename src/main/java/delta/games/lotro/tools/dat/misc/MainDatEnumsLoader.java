@@ -5,13 +5,18 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.enums.Difficulty;
+import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
+import delta.games.lotro.common.enums.MobType;
+import delta.games.lotro.common.enums.Species;
+import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get difficulties from DAT files.
@@ -39,6 +44,10 @@ public class MainDatEnumsLoader
   {
     loadEnum(587203292,"SkirmishDifficultyTier",Difficulty.class);
     loadEnum(587203290,"SkirmishGroupSize",GroupSize.class);
+    loadEnum(587202570,"GenusType",Genus.class);
+    loadEnum(587202571,"Agent_Species",Species.class);
+    loadEnum(587202572,"SubspeciesType",SubSpecies.class);
+    loadEnum(587202672,"ExaminationModStatType",MobType.class);
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -54,6 +63,7 @@ public class MainDatEnumsLoader
           continue;
         }
         String label=enumMapper.getLabel(code.intValue());
+        label=StringUtils.fixName(label);
         String key=getKey(implClass,code.intValue());
         T entry=lotroEnum.buildEntryInstance(code.intValue(),key,label);
         lotroEnum.registerEntry(entry);

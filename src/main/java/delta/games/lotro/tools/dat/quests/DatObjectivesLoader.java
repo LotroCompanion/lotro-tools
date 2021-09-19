@@ -11,8 +11,8 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
+import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
-import delta.games.lotro.lore.agents.mobs.MobReference;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
@@ -656,11 +656,10 @@ QuestEvent_ShowBillboardText: 0
           where=concat(where,landmarkName);
         }
         // What
-        MobReference mobReference=_mobLoader.buildMobReference(monsterGenusProps);
-        String what=(mobReference!=null)?mobReference.getLabel():null;
+        EntityClassification mobReference=_mobLoader.buildMobReference(monsterGenusProps);
         MobSelection selection=new MobSelection();
         selection.setWhere(where);
-        selection.setWhat(what);
+        selection.setWhat(mobReference);
         ret.getMobSelections().add(selection);
       }
     }

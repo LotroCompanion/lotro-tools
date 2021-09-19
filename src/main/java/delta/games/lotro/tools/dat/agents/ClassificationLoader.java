@@ -1,14 +1,19 @@
 package delta.games.lotro.tools.dat.agents;
 
 import java.util.BitSet;
+import java.util.List;
 
+import delta.games.lotro.common.enums.Genus;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.Species;
+import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.EntityClassification;
-import delta.games.lotro.utils.StringUtils;
 
 /**
  * EntityClassification loader.
@@ -19,9 +24,9 @@ public class ClassificationLoader
   private EnumMapper _alignment;
   private EnumMapper _class;
   private EnumMapper _classFilter;
-  private EnumMapper _genus;
-  private EnumMapper _species;
-  private EnumMapper _subSpecies;
+  private LotroEnum<Genus> _genus;
+  private LotroEnum<Species> _species;
+  private LotroEnum<SubSpecies> _subSpecies;
 
   /**
    * Constructor.
@@ -32,9 +37,10 @@ public class ClassificationLoader
     _alignment=facade.getEnumsManager().getEnumMapper(587202573);
     _class=facade.getEnumsManager().getEnumMapper(587202574);
     _classFilter=facade.getEnumsManager().getEnumMapper(587202575);
-    _genus=facade.getEnumsManager().getEnumMapper(587202570);
-    _species=facade.getEnumsManager().getEnumMapper(587202571);
-    _subSpecies=facade.getEnumsManager().getEnumMapper(587202572);
+    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    _genus=enumsRegistry.get(Genus.class);
+    _species=enumsRegistry.get(Species.class);
+    _subSpecies=enumsRegistry.get(SubSpecies.class);
   }
 
   /**
@@ -56,6 +62,7 @@ public class ClassificationLoader
     int classFilterCode=((Integer)props.getProperty("Agent_ClassificationFilter")).intValue();
     String classFilter=_classFilter.getString(classFilterCode);
     storage.setClassificationFilter(classFilter);
+    // Entity classification
     loadSpecification(props,storage.getEntityClassification());
   }
 
@@ -69,21 +76,18 @@ public class ClassificationLoader
     // Genus
     int genusCode=((Integer)props.getProperty("Agent_Genus")).intValue();
     BitSet genusBitSet=BitSetUtils.getBitSetFromFlags(genusCode);
-    String genuses=BitSetUtils.getStringFromBitSet(genusBitSet,_genus,"/");
-    genuses=StringUtils.fixName(genuses);
+    List<Genus> genuses=_genus.getFromBitSet(genusBitSet);
     storage.setGenus(genuses);
     // Species
     int speciesCode=((Integer)props.getProperty("Agent_Species")).intValue();
-    String species=_species.getString(speciesCode);
-    species=StringUtils.fixName(species);
+    Species species=_species.getEntry(speciesCode);
     storage.setSpecies(species);
     // Sub-species
     Integer showSubSpecies=(Integer)props.getProperty("Agent_ShowSubspecies");
     if ((showSubSpecies!=null) && (showSubSpecies.intValue()!=0))
     {
       int subSpeciesCode=((Integer)props.getProperty("Agent_Subspecies")).intValue();
-      String subSpecies=_subSpecies.getString(subSpeciesCode);
-      subSpecies=StringUtils.fixName(subSpecies);
+      SubSpecies subSpecies=_subSpecies.getEntry(subSpeciesCode);
       storage.setSubSpecies(subSpecies);
     }
   }
