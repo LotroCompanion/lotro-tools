@@ -9,6 +9,7 @@ import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.tools.dat.agents.mobs.MainDatGenericMobLootLoader;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
@@ -145,6 +146,7 @@ public class MainDatLoader
     new MainDatDisenchantmentsLoader(_facade).doIt();
     // Mobs
     new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
+    new MainDatGenericMobLootLoader(_facade,LootsManager.getInstance()).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data

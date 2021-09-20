@@ -284,6 +284,10 @@ public class GeneratedFiles
    */
   public static final File MOBS=LotroCoreConfig.getInstance().getFile(DataFiles.MOBS);
   /**
+   * Generic mob loot.
+   */
+  public static final File GENERIC_MOB_LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.GENERIC_MOB_LOOTS);
+  /**
    * Resources maps.
    */
   public static final File RESOURCES_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.RESOURCES_MAPS);
