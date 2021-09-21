@@ -11,6 +11,7 @@ import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.categories.CategoriesConstants;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
+import delta.games.lotro.maps.data.markers.index.MarkersIndex;
 import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;
 import delta.games.lotro.tools.dat.maps.classification.Classification;
 import delta.games.lotro.tools.dat.maps.classification.CropClassification;
@@ -142,19 +143,15 @@ public class MapsDataManager
     for(Integer did : _didStore.keySet())
     {
       MarkersStore store=_didStore.get(did);
-      for(Integer markerId : store.getMarkers())
-      {
-        _index.getDidIndex(did.intValue()).addMarker(markerId.intValue());
-      }
+      MarkersIndex index=new MarkersIndex(did.intValue(),store.getMarkers());
+      _index.setDidIndex(index);
     }
     // CL
     for(Integer contentLayerId : _clStore.keySet())
     {
       MarkersStore store=_clStore.get(contentLayerId);
-      for(Integer markerId : store.getMarkers())
-      {
-        _index.getContentLayerIndex(contentLayerId.intValue()).addMarker(markerId.intValue());
-      }
+      MarkersIndex index=new MarkersIndex(contentLayerId.intValue(),store.getMarkers());
+      _index.setContentLayerIndex(index);
     }
   }
 
