@@ -20,7 +20,7 @@ public class MonsterClassification extends Classification
     _classification=classification;
     if (classification!=null)
     {
-      _isCritter=("Critter".equals(classification.getEntityClassification().getSpecies()));
+      _isCritter=(classification.getEntityClassification().getSpecies().getCode()==27);
     }
     else
     {
