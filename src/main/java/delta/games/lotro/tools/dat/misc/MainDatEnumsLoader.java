@@ -4,6 +4,9 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.enums.AgentClass;
+import delta.games.lotro.common.enums.Alignment;
+import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
@@ -47,6 +50,9 @@ public class MainDatEnumsLoader
     loadEnum(587202570,"GenusType",Genus.class);
     loadEnum(587202571,"Agent_Species",Species.class);
     loadEnum(587202572,"SubspeciesType",SubSpecies.class);
+    loadEnum(587202573,"AlignmentType",Alignment.class);
+    loadEnum(587202574,"CharacterClassType",AgentClass.class);
+    loadEnum(587202575,"ClassificationFilterType",ClassificationFilter.class);
     loadEnum(587202672,"ExaminationModStatType",MobType.class);
   }
 

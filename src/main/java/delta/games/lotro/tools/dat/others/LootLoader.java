@@ -171,6 +171,7 @@ public class LootLoader
             }
           }
         }
+        // TODO Species filter (for PVP?)
       }
       if (size>3)
       {

@@ -3,6 +3,9 @@ package delta.games.lotro.tools.dat.agents;
 import java.util.BitSet;
 import java.util.List;
 
+import delta.games.lotro.common.enums.AgentClass;
+import delta.games.lotro.common.enums.Alignment;
+import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -10,7 +13,6 @@ import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.EntityClassification;
@@ -21,9 +23,9 @@ import delta.games.lotro.lore.agents.EntityClassification;
  */
 public class ClassificationLoader
 {
-  private EnumMapper _alignment;
-  private EnumMapper _class;
-  private EnumMapper _classFilter;
+  private LotroEnum<Alignment> _alignment;
+  private LotroEnum<AgentClass> _class;
+  private LotroEnum<ClassificationFilter> _classFilter;
   private LotroEnum<Genus> _genus;
   private LotroEnum<Species> _species;
   private LotroEnum<SubSpecies> _subSpecies;
@@ -34,9 +36,10 @@ public class ClassificationLoader
    */
   public ClassificationLoader(DataFacade facade)
   {
-    _alignment=facade.getEnumsManager().getEnumMapper(587202573);
-    _class=facade.getEnumsManager().getEnumMapper(587202574);
-    _classFilter=facade.getEnumsManager().getEnumMapper(587202575);
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    _alignment=registry.get(Alignment.class);
+    _class=registry.get(AgentClass.class);
+    _classFilter=registry.get(ClassificationFilter.class);
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _genus=enumsRegistry.get(Genus.class);
     _species=enumsRegistry.get(Species.class);
@@ -52,15 +55,15 @@ public class ClassificationLoader
   {
     // Alignment
     int alignmentCode=((Integer)props.getProperty("Agent_Alignment")).intValue();
-    String alignment=_alignment.getString(alignmentCode);
+    Alignment alignment=_alignment.getEntry(alignmentCode);
     storage.setAlignment(alignment);
     // Class
     int classCode=((Integer)props.getProperty("Agent_Class")).intValue();
-    String className=_class.getString(classCode);
+    AgentClass className=_class.getEntry(classCode);
     storage.setAgentClass(className);
     // Class filter
     int classFilterCode=((Integer)props.getProperty("Agent_ClassificationFilter")).intValue();
-    String classFilter=_classFilter.getString(classFilterCode);
+    ClassificationFilter classFilter=_classFilter.getEntry(classFilterCode);
     storage.setClassificationFilter(classFilter);
     // Entity classification
     loadSpecification(props,storage.getEntityClassification());
