@@ -9,10 +9,8 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.sets.ItemsSet;
@@ -93,6 +91,13 @@ Set_Name:
     ItemsSet set=new ItemsSet();
     set.setIdentifier(indexDataId);
     set.setName(name);
+    // Class
+    Integer classCode=(Integer)properties.getProperty("Set_TraitSet_Class");
+    if ((classCode!=null) && (classCode.intValue()==213))
+    {
+      // PVP set
+      return null;
+    }
     // Level
     int level=((Integer)properties.getProperty("Set_Level")).intValue();
     set.setLevel(level);
@@ -183,18 +188,6 @@ Set_Name:
     return bonus;
   }
 
-  private boolean useId(int id)
-  {
-    byte[] data=_facade.loadData(id);
-    if (data!=null)
-    {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
-      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      return (classDefIndex==WStateClass.SET);
-    }
-    return false;
-  }
-
   /**
    * Load item sets.
    */
@@ -204,16 +197,15 @@ Set_Name:
     DatStatUtils._statsUsageStatistics.reset();
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 
-    for(int id=0x70000000;id<=0x77FFFFFF;id++)
+    PropertiesSet props=_facade.loadProperties(0x79009869); // GameSetDirectory
+    Object[] setIdArray=(Object[])props.getProperty("Set_Directory_GameSetList");
+    for(Object setIdObj : setIdArray)
     {
-      boolean useIt=useId(id);
-      if (useIt)
+      int id=((Integer)setIdObj).intValue();
+      ItemsSet set=load(id);
+      if (set!=null)
       {
-        ItemsSet set=load(id);
-        if (set!=null)
-        {
-          sets.add(set);
-        }
+        sets.add(set);
       }
     }
     // Save sets
