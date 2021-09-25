@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.characters;
 
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -33,13 +34,21 @@ public class MainCharacterDataLoader
     new CharacterClassDataLoader(_facade).doIt();
     // Load virtues data
     new VirtueDataLoader(_facade).doIt();
-    // Load progression of class trait points with character level
-    DatStatUtils.getProgression(_facade,1879271247);
+    // Load progression of class trait points with character level (expect 1879271247)
+    int progressionId=getLevelToTraitPointsProgressionId();
+    DatStatUtils.getProgression(_facade,progressionId);
 
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Load gear icons
     new SlotIconsLoader(_facade).doIt();
+  }
+
+  private int getLevelToTraitPointsProgressionId()
+  {
+    PropertiesSet props=_facade.loadProperties(0x7900025B); // TraitControl
+    int id=((Integer)props.getProperty("Trait_Control_LevelToTotalClassTraitPointsProgression")).intValue();
+    return id;
   }
 
   /**
