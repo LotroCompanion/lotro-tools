@@ -53,18 +53,19 @@ public class CustomInstancesLootLoader
   /**
    * Handle a custom skirmish loot lookup table.
    * @param tableId Table identifier.
+   * @return the table.
    */
-  public void handleCustomSkirmishLootLookupTable(int tableId)
+  public InstanceLootsTable handleCustomSkirmishLootLookupTable(int tableId)
   {
     PropertiesSet properties=_facade.loadProperties(tableId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      return;
+      return null;
     }
     Integer key=Integer.valueOf(tableId);
     if (_tables.containsKey(key))
     {
-      return;
+      return _tables.get(key);
     }
     _loots.clear();
     LOGGER.info("Doing custom skirmish loot table: "+tableId);
@@ -81,6 +82,7 @@ public class CustomInstancesLootLoader
     }
     _loots.clear();
     _tables.put(key,table);
+    return table;
   }
 
   private void handleEntry(int lookupEntryId)
