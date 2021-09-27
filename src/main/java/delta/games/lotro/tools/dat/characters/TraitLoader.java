@@ -11,6 +11,10 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.SkillCategory;
+import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -93,9 +97,30 @@ public class TraitLoader
     }
     //System.out.println("Trait name: "+traitName+" (min level="+minLevel+")");
 
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     // Category
-    // See enum: SkillCharacteristicCategory (id=587202586). 93 = Discounts:
-
+    Integer categoryCode=(Integer)traitProperties.getProperty("SkillCharacteristicCategory");
+    if ((categoryCode!=null) && (categoryCode.intValue()>0))
+    {
+      LotroEnum<SkillCategory> categoryMgr=registry.get(SkillCategory.class);
+      SkillCategory category=categoryMgr.getEntry(categoryCode.intValue());
+      ret.setCategory(category);
+    }
+    // Nature
+    Integer natureCode=(Integer)traitProperties.getProperty("Trait_Nature");
+    if ((natureCode!=null) && (natureCode.intValue()>0))
+    {
+      LotroEnum<TraitNature> natureMgr=registry.get(TraitNature.class);
+      TraitNature nature=natureMgr.getEntry(natureCode.intValue());
+      ret.setNature(nature);
+    }
+    // Tooltip
+    String tooltip=DatUtils.getStringProperty(traitProperties,"Trait_Tooltip");
+    ret.setTooltip(tooltip);
+    // Cosmetic
+    Integer cosmeticCode=(Integer)traitProperties.getProperty("Trait_Cosmetic");
+    boolean cosmetic=((cosmeticCode!=null) && (cosmeticCode.intValue()!=0));
+    ret.setCosmetic(cosmetic);
     // Stats
     DatStatUtils.doFilterStats=false;
     DatStatUtils._statsUsageStatistics.reset();

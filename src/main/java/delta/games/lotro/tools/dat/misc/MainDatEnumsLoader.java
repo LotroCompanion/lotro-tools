@@ -13,8 +13,10 @@ import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
+import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
+import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -54,6 +56,8 @@ public class MainDatEnumsLoader
     loadEnum(587202574,"CharacterClassType",AgentClass.class);
     loadEnum(587202575,"ClassificationFilterType",ClassificationFilter.class);
     loadEnum(587202672,"ExaminationModStatType",MobType.class);
+    loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class);
+    loadEnum(587202647,"TraitNature",TraitNature.class);
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
