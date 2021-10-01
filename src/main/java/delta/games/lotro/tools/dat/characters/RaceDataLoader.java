@@ -196,10 +196,7 @@ public class RaceDataLoader
     {
       int classCode=((Integer)classCodeObj).intValue();
       CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
-      if (characterClass!=CharacterClass.BRAWLER)
-      {
-        description.addAllowedClass(characterClass);
-      }
+      description.addAllowedClass(characterClass);
     }
   }
 
