@@ -214,6 +214,10 @@ public class LootLoader
     if (ret==null)
     {
       PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+      if (properties==null)
+      {
+        return null;
+      }
       Object[] trophyList=(Object[])properties.getProperty("LootGen_TrophyList");
       if (trophyList!=null)
       {
