@@ -191,6 +191,7 @@ public class TraitPointsRegistryBuilder
     initPoint("Durin2.7", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 2.7: A Thirst for Blood", null, "Chapter 2.7: A Thirst for Blood");
     initPoint("Wedding", category, "Complete Volume V, Book 1, Chapter 8: The Wedding Banquet", null, "Book 1, Chapter 8: The Wedding Banquet");
     initPoint("Durin4.9", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 4.9: The Lord of Gundabad", null, "Chapter 4.9: The Lord of Gundabad");
+    initPoint("Durin7.8", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 7.8: A Silent Presence", null, "Chapter 7.8: A Silent Presence");
 
     category=TraitPointCategories.DEEDS;
     initPoint("Epic Battles 1", category, "Earn 100 Promotion Points", null, "Promotion Points 1");
@@ -202,7 +203,7 @@ public class TraitPointsRegistryBuilder
   private static String[][] BOOK_NAMES=
   {
     {"A Hobbit's Holiday","A Study of the Skin-changer","Genealogy of the Beornings"},
-    null,
+    {"Knowledge of Kicks","The Art of the Perfect Punch","Martial Movement"},
     {"The Book of Knives","Knee-breaker's Manual","The Expert's Guide to Dirty Fighting"},
     {"The Candle's Flame","The Treatise of Valour","The Book of Oaths"},
     {"The Tome of Swords","The Joy of Battle","The Artisan Blade"},
@@ -217,7 +218,7 @@ public class TraitPointsRegistryBuilder
   private static String[][] CLASS_ACHIEVABLES_NAMES=
   {
     {"Grimbeorn's Challenge", "The Path Homeward" },
-    null,
+    {"Brawling Lessons", "A Drubbing in the Deep"},
     {"A Lesson from Bilbo Baggins", "The Path of the Mischief-maker"},
     {"A Lesson from Boromir", "The Path of the Healing Hands"},
     {"A Lesson from Gimli", "The Path of the Martial Champion"},
@@ -258,6 +259,19 @@ public class TraitPointsRegistryBuilder
       Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BEORNING);
       int id=(achievable!=null)?achievable.getIdentifier():0;
       initPoint("Beorning:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest '"+name+"'", CharacterClass.BEORNING, id);
+    }
+    // Add Brawler specifics
+    {
+      String name="Threat of a Good Punch";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BRAWLER);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Brawler:ClassQuests15", TraitPointCategories.CLASS, "Complete the Level 15 Class Quest '"+name+"'", CharacterClass.BRAWLER, id);
+    }
+    {
+      String name="The Melee in the Square";
+      Achievable achievable=findAchievableByNameAndClass(name,CharacterClass.BRAWLER);
+      int id=(achievable!=null)?achievable.getIdentifier():0;
+      initPoint("Brawler:ClassQuests30", TraitPointCategories.CLASS, "Complete the Level 30 Class Quest '"+name+"'", CharacterClass.BRAWLER, id);
     }
 
     int classIndex=0;
