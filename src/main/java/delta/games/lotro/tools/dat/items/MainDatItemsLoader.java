@@ -13,6 +13,9 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.money.QualityBasedValueLookupTable;
 import delta.games.lotro.common.money.io.xml.ValueTablesXMLWriter;
 import delta.games.lotro.common.requirements.FactionRequirement;
@@ -42,6 +45,8 @@ import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
 import delta.games.lotro.lore.items.scaling.Munging;
+import delta.games.lotro.lore.items.traceries.SocketEntry;
+import delta.games.lotro.lore.items.traceries.SocketsSetup;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -82,6 +87,13 @@ public class MainDatItemsLoader
     4178 // Carry-alls
   };
 
+  private static final int[] OVERLAY_FOR_TIER=
+  {
+    1091914756, 1091914773, 1091914770, 1091914772, 1091914776, // 1-5
+    1091914767, 1091914762, 1091914765, 1091914774, 1091914766, // 6-10
+    1092396132, 1092396316, 1092508824, 1092694659 // 11-14
+  };
+
   private DataFacade _facade;
   private int _currentId;
   private Item _currentItem;
@@ -90,6 +102,7 @@ public class MainDatItemsLoader
   private LegaciesLoader _legaciesLoader;
   private ItemValueLoader _valueLoader;
   private Map<Integer,Integer> _itemLevelOffsets;
+  private LotroEnum<SocketType> _socketTypes;
 
   /**
    * Constructor.
@@ -102,6 +115,8 @@ public class MainDatItemsLoader
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
+    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    _socketTypes=enumsRegistry.get(SocketType.class);
   }
 
   private boolean _debug=false;
@@ -157,12 +172,8 @@ public class MainDatItemsLoader
       // Slot
       EquipmentLocation slot=getSlot(properties);
       item.setEquipmentLocation(slot);
-      // Essence slots
-      Integer essenceSlots=(Integer)properties.getProperty("Item_Socket_Count");
-      if ((essenceSlots!=null) && (essenceSlots.intValue()>0))
-      {
-        item.setEssenceSlots(essenceSlots.intValue());
-      }
+      // Essence slots & traceries
+      handleSockets(item,properties);
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
@@ -211,10 +222,10 @@ public class MainDatItemsLoader
       // Category
       String category=_facade.getEnumsManager().resolveEnum(0x23000036,itemClass);
       item.setSubCategory(category);
-      // Classify essences
+      // Classify socketables (essences, traceries, enhancement runes) 
       if (itemClass==235)
       {
-        classifyEssence(item,properties);
+        classifySocketable(item,properties);
       }
       // Armour value
       StatProvider armorStatProvider=null;
@@ -328,6 +339,70 @@ public class MainDatItemsLoader
         DatIconsUtils.buildImageFile(_facade,iconId.intValue(),iconFile);
       }
     }
+  }
+
+  private void handleSockets(Item item, PropertiesSet properties)
+  {
+    Object[] essenceSlots=(Object[])properties.getProperty("Item_Socket_Array");
+    if (essenceSlots==null)
+    {
+      return;
+    }
+    int nbSlots=essenceSlots.length;
+    if (nbSlots==0)
+    {
+      return;
+    }
+    boolean isNewLegendary=isNewLegendaryItem(essenceSlots);
+    if (!isNewLegendary)
+    {
+      // Essences
+      item.setEssenceSlots(nbSlots);
+      return;
+    }
+    // New legendary item
+    SocketsSetup setup=new SocketsSetup();
+    for(Object essenceSlot : essenceSlots)
+    {
+      PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
+      // Item_Socket_Type: 4 (Heraldric Tracery)
+      // Item_Socket_Unlock_ILevel: 52
+      int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
+      SocketType socketType=getSocketType(socketTypeCode);
+      int unlockLevel=((Integer)essenceSlotProps.getProperty("Item_Socket_Unlock_ILevel")).intValue();
+      SocketEntry entry=new SocketEntry(socketType,unlockLevel);
+      setup.addSocket(entry);
+    }
+    //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
+  }
+
+  private SocketType getSocketType(int code)
+  {
+    List<SocketType> types=_socketTypes.getFromBitSet(code);
+    if (types.size()!=1)
+    {
+      LOGGER.warn("Unsupported socket type code: "+code);
+      return null;
+    }
+    return types.get(0);
+  }
+
+  private boolean isNewLegendaryItem(Object[] essenceSlots)
+  {
+    for(Object essenceSlot : essenceSlots)
+    {
+      PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
+      /*
+  Item_Socket_Type: 4 (Heraldric Tracery)
+  Item_Socket_Unlock_ILevel: 52
+       */
+      int socketType=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
+      if (socketType!=1)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   private void handleItemValue(Item item, PropertiesSet properties)
@@ -979,40 +1054,65 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private void classifyEssence(Item essence, PropertiesSet properties)
+  private void classifySocketable(Item item, PropertiesSet properties)
   {
     Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
-    String category=null;
-    if (overlay==null) category="Essence";
+    String ret=null;
+    if (overlay==null)
+    {
+      ret="Essence";
+    }
     else
     {
-      String name=essence.getName();
+      String name=item.getName();
       if ((name!=null) && (name.contains("Mordor - Essences")))
       {
-        category="Box of Essences";
+        ret="Box of Essences";
       }
-      else if (overlay.intValue()==1091914756) category="Essence:Tier1";
-      else if (overlay.intValue()==1091914773) category="Essence:Tier2";
-      else if (overlay.intValue()==1091914770) category="Essence:Tier3";
-      else if (overlay.intValue()==1091914772) category="Essence:Tier4";
-      else if (overlay.intValue()==1091914776) category="Essence:Tier5";
-      else if (overlay.intValue()==1091914767) category="Essence:Tier6";
-      else if (overlay.intValue()==1091914762) category="Essence:Tier7";
-      else if (overlay.intValue()==1091914765) category="Essence:Tier8";
-      else if (overlay.intValue()==1091914774) category="Essence:Tier9";
-      else if (overlay.intValue()==1091914766) category="Essence:Tier10";
-      else if (overlay.intValue()==1092396132) category="Essence:Tier11";
-      else if (overlay.intValue()==1092396316) category="Essence:Tier12";
-      else if (overlay.intValue()==1092508824) category="Essence:Tier12";
       else
       {
-        LOGGER.warn("Unmanaged essence overlay: "+overlay+" for "+name);
+        String category=getSocketableCategory(properties);
+        int nbOverlays=OVERLAY_FOR_TIER.length;
+        int tier=0;
+        for(int i=0;i<nbOverlays;i++)
+        {
+          if (overlay.intValue()==OVERLAY_FOR_TIER[i])
+          {
+            tier=i+1;
+            break;
+          }
+        }
+        if (tier==0)
+        {
+          LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
+        }
+        ret=category+":Tier"+tier;
       }
     }
-    if (category!=null)
+    if (ret!=null)
     {
-      essence.setSubCategory(category);
+      item.setSubCategory(ret);
     }
+  }
+
+  private String getSocketableCategory(PropertiesSet properties)
+  {
+    Long type=(Long)properties.getProperty("Item_Socket_Type");
+    if (type==null)
+    {
+      return null;
+    }
+    if (type.intValue()==0)
+    {
+      return "Enhancement Rune";
+    }
+    SocketType socketType=getSocketType(type.intValue());
+    if (socketType==null)
+    {
+      return null;
+    }
+    if (socketType.getCode()==1) return "Essence";
+    return socketType.getLabel();
   }
 
   private boolean useId(int id)
