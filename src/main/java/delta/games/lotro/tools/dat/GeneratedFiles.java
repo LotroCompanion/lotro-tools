@@ -164,6 +164,10 @@ public class GeneratedFiles
    */
   public static final File LEGENDARY_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_DATA);
   /**
+   * Legendary attributes.
+   */
+  public static final File LEGENDARY_ATTRS=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_ATTRS);
+  /**
    * Consumables.
    */
   public static final File CONSUMABLES=LotroCoreConfig.getInstance().getFile(DataFiles.CONSUMABLES);

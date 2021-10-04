@@ -44,9 +44,14 @@ import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.lore.items.legendary2.Legendary2;
+import delta.games.lotro.lore.items.legendary2.LegendaryAttrs2;
+import delta.games.lotro.lore.items.legendary2.LegendaryItem2;
+import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
+import delta.games.lotro.lore.items.legendary2.SocketEntry;
+import delta.games.lotro.lore.items.legendary2.SocketsSetup;
+import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
-import delta.games.lotro.lore.items.traceries.SocketEntry;
-import delta.games.lotro.lore.items.traceries.SocketsSetup;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -353,25 +358,30 @@ public class MainDatItemsLoader
     {
       return;
     }
-    boolean isNewLegendary=isNewLegendaryItem(essenceSlots);
-    if (!isNewLegendary)
+    if (item instanceof Legendary2)
+    {
+      int itemId=item.getIdentifier();
+      SocketsSetup setup=new SocketsSetup(itemId);
+      for(Object essenceSlot : essenceSlots)
+      {
+        PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
+        // Item_Socket_Type: 4 (Heraldric Tracery)
+        // Item_Socket_Unlock_ILevel: 52
+        int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
+        SocketType socketType=getSocketType(socketTypeCode);
+        int unlockLevel=((Integer)essenceSlotProps.getProperty("Item_Socket_Unlock_ILevel")).intValue();
+        SocketEntry entry=new SocketEntry(socketType,unlockLevel);
+        setup.addSocket(entry);
+      }
+      Legendary2 legendary=(Legendary2)item;
+      LegendaryAttrs2 attrs=legendary.getLegendaryAttrs();
+      attrs.setSockets(setup);
+    }
+    else
     {
       // Essences
       item.setEssenceSlots(nbSlots);
       return;
-    }
-    // New legendary item
-    SocketsSetup setup=new SocketsSetup();
-    for(Object essenceSlot : essenceSlots)
-    {
-      PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
-      // Item_Socket_Type: 4 (Heraldric Tracery)
-      // Item_Socket_Unlock_ILevel: 52
-      int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
-      SocketType socketType=getSocketType(socketTypeCode);
-      int unlockLevel=((Integer)essenceSlotProps.getProperty("Item_Socket_Unlock_ILevel")).intValue();
-      SocketEntry entry=new SocketEntry(socketType,unlockLevel);
-      setup.addSocket(entry);
     }
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
@@ -389,6 +399,10 @@ public class MainDatItemsLoader
 
   private boolean isNewLegendaryItem(Object[] essenceSlots)
   {
+    if (essenceSlots==null)
+    {
+      return false;
+    }
     for(Object essenceSlot : essenceSlots)
     {
       PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
@@ -888,11 +902,13 @@ public class MainDatItemsLoader
     // Legendary stuff?
     Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
     boolean isLegendary=((isAdvancementItem!=null) && (isAdvancementItem.intValue()==1));
+    Object[] essenceSlots=(Object[])properties.getProperty("Item_Socket_Array");
+    boolean isNewLegendary=isNewLegendaryItem(essenceSlots);
 
     Item ret=null;
     if (weaponType!=null)
     {
-      Weapon weapon=(isLegendary?new LegendaryWeapon():new Weapon());
+      Weapon weapon=(isLegendary?new LegendaryWeapon():(isNewLegendary?new LegendaryWeapon2():new Weapon()));
       weapon.setWeaponType(weaponType);
       ret=weapon;
     }
@@ -904,7 +920,7 @@ public class MainDatItemsLoader
     }
     else
     {
-      ret=(isLegendary?new LegendaryItem():new Item());
+      ret=(isLegendary?new LegendaryItem():(isNewLegendary?new LegendaryItem2():new Item()));
     }
     //ret.setEquipmentLocation(slot);
     return ret;
@@ -1146,6 +1162,7 @@ public class MainDatItemsLoader
     // Items
     DatStatUtils._statsUsageStatistics.reset();
     List<Item> items=new ArrayList<Item>();
+    List<Legendary2> legendaryItems=new ArrayList<Legendary2>();
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
@@ -1157,6 +1174,10 @@ public class MainDatItemsLoader
         {
           items.add(newItem);
           mapById.put(Integer.valueOf(id),newItem);
+          if (newItem instanceof Legendary2)
+          {
+            legendaryItems.add((Legendary2)newItem);
+          }
         }
       }
     }
@@ -1170,6 +1191,8 @@ public class MainDatItemsLoader
     statistics.showStatistics(items);
     // Save items
     /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
+    // Save legendary data
+    LegendaryAttrs2XMLWriter.write(GeneratedFiles.LEGENDARY_ATTRS,legendaryItems);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
