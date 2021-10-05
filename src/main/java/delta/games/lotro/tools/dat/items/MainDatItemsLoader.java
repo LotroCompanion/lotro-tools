@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -50,7 +52,9 @@ import delta.games.lotro.lore.items.legendary2.LegendaryItem2;
 import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
 import delta.games.lotro.lore.items.legendary2.SocketEntry;
 import delta.games.lotro.lore.items.legendary2.SocketsSetup;
+import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
+import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -108,6 +112,7 @@ public class MainDatItemsLoader
   private ItemValueLoader _valueLoader;
   private Map<Integer,Integer> _itemLevelOffsets;
   private LotroEnum<SocketType> _socketTypes;
+  private List<Tracery> _traceries;
 
   /**
    * Constructor.
@@ -122,6 +127,7 @@ public class MainDatItemsLoader
     _valueLoader=new ItemValueLoader(_facade);
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _socketTypes=enumsRegistry.get(SocketType.class);
+    _traceries=new ArrayList<Tracery>();
   }
 
   private boolean _debug=false;
@@ -1087,7 +1093,7 @@ public class MainDatItemsLoader
       }
       else
       {
-        String category=getSocketableCategory(properties);
+        String category=getSocketableCategory(item,properties);
         int nbOverlays=OVERLAY_FOR_TIER.length;
         int tier=0;
         for(int i=0;i<nbOverlays;i++)
@@ -1111,7 +1117,7 @@ public class MainDatItemsLoader
     }
   }
 
-  private String getSocketableCategory(PropertiesSet properties)
+  private String getSocketableCategory(Item item, PropertiesSet properties)
   {
     Long type=(Long)properties.getProperty("Item_Socket_Type");
     if (type==null)
@@ -1127,8 +1133,21 @@ public class MainDatItemsLoader
     {
       return null;
     }
-    if (socketType.getCode()==1) return "Essence";
+    if (socketType.getCode()==1)
+    {
+      return "Essence";
+    }
+    handleTracery(item,socketType,properties);
     return socketType.getLabel();
+  }
+
+  private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
+  {
+    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
+    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
+    int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
+    Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement);
+    _traceries.add(tracery);
   }
 
   private boolean useId(int id)
@@ -1193,6 +1212,9 @@ public class MainDatItemsLoader
     /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save legendary data
     LegendaryAttrs2XMLWriter.write(GeneratedFiles.LEGENDARY_ATTRS,legendaryItems);
+    // Save traceries
+    Collections.sort(_traceries,new IdentifiableComparator<Tracery>());
+    TraceriesXMLWriter.write(GeneratedFiles.TRACERIES,_traceries);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
