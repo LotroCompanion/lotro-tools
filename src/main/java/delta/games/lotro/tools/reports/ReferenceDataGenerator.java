@@ -13,9 +13,11 @@ import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.data.enums.DIDMapper;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
+import delta.games.lotro.dat.loaders.DataIdMapLoader;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.WLibData;
 
@@ -25,7 +27,7 @@ import delta.games.lotro.dat.wlib.WLibData;
  */
 public class ReferenceDataGenerator
 {
-  private static final File ROOT_DIR=new File("../lotro-companion-doc/DevNotes/dat");
+  private static final File ROOT_DIR=new File("../lotro-companion-private-doc/dat");
 
   private DataFacade _facade;
 
@@ -42,7 +44,8 @@ public class ReferenceDataGenerator
    */
   public void doIt()
   {
-    dumpControls();
+    dumpWeenieContent();
+    dumpLevelTableDirectory();
     dumpProperties();
     dumpEnums();
     dumpMaps();
@@ -50,25 +53,35 @@ public class ReferenceDataGenerator
     dumpWLibClassesHierarchy();
   }
 
-  private void dumpControls()
+  private void dumpWeenieContent()
   {
-    dumpControl("CombatControl",1879048757); 
-    dumpControl("ProgressionControl",1879110218); 
-    dumpControl("ItemAdvancementControl",1879108262);
-    dumpControl("CraftControl",1879048734);
-    dumpControl("CraftDirectory",1879048722); // 0x70000212
-    dumpControl("LootGenControl",1879076022); // 0x70006CB6
-    dumpControl("SkirmishControl",1879154125); // 0x70019DCD
-    dumpControl("PrivateEncounterControl",1879048753); // 0x70000231
-    dumpLevelTableDirectory();
+    byte[] data=_facade.loadData(0x28000000);
+    DIDMapper map=DataIdMapLoader.decodeDataIdMap(data);
+    Integer dataId=map.getDataIdForLabel("WEENIECONTENT");
+    if (dataId!=null)
+    {
+      data=_facade.loadData(dataId.intValue());
+      DIDMapper subMap=DataIdMapLoader.decodeDataIdMap(data);
+      List<String> subLabels=subMap.getLabels();
+      for(String subLabel : subLabels)
+      {
+        if (subLabel.startsWith("\u0000\u0000")) continue;
+        int subDataId=subMap.getDataIdForLabel(subLabel).intValue();
+        File toDir=new File(ROOT_DIR,"WeenieContent");
+        File to=new File(toDir,subLabel+".txt");
+        dumpProperties(subDataId,to);
+      }
+    }
   }
 
-  private void dumpControl(String name, int id)
+  private void dumpProperties(int id, File to)
   {
     PropertiesSet props=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    String dump=props.dump();
-    File to=new File(ROOT_DIR,"/"+name+".txt");
-    writeFile(to,dump);
+    if (props!=null)
+    {
+      String dump=props.dump();
+      writeFile(to,dump);
+    }
   }
 
   private void dumpLevelTableDirectory()
@@ -78,7 +91,9 @@ public class ReferenceDataGenerator
     for(Object classId : classIds)
     {
       int propsId=((Integer)classId).intValue();
-      dumpControl("LevelTable-"+propsId,propsId);
+      File toDir=new File(ROOT_DIR,"LevelTables");
+      File to=new File(toDir,"LevelTable-"+propsId+".txt");
+      dumpProperties(propsId,to);
     }
   }
 
