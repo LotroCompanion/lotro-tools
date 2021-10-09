@@ -392,6 +392,23 @@ public class MainDatItemsLoader
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
 
+  private CharacterClass getRequiredClass(SocketType socketType)
+  {
+    int code=socketType.getCode();
+    if (code==6) return CharacterClass.BEORNING;
+    if (code==7) return CharacterClass.BRAWLER;
+    if (code==8) return CharacterClass.BURGLAR;
+    if (code==9) return CharacterClass.CAPTAIN;
+    if (code==10) return CharacterClass.CHAMPION;
+    if (code==11) return CharacterClass.GUARDIAN;
+    if (code==12) return CharacterClass.HUNTER;
+    if (code==13) return CharacterClass.LORE_MASTER;
+    if (code==14) return CharacterClass.MINSTREL;
+    if (code==15) return CharacterClass.RUNE_KEEPER;
+    if (code==16) return CharacterClass.WARDEN;
+    return null;
+  }
+
   private SocketType getSocketType(int code)
   {
     List<SocketType> types=_socketTypes.getFromBitSet(code);
@@ -1148,6 +1165,8 @@ public class MainDatItemsLoader
     int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
     Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement);
     _traceries.add(tracery);
+    CharacterClass requiredClass=getRequiredClass(socketType);
+    item.setRequiredClass(requiredClass);
   }
 
   private boolean useId(int id)
