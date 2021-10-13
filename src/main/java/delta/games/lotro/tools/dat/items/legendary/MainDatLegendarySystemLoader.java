@@ -70,8 +70,8 @@ public class MainDatLegendarySystemLoader
     // Is it defined somewhere in the DAT files?
     // TODO => yes, on each ItemInfo entry
     _data.setMaxUiRank(9);
-    // Load properties for ItemAdvancementControl (0x7900EAA6)
-    PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
+    // Load properties for ItemAdvancementControl
+    PropertiesSet itemAdvancementControlProps=_facade.loadProperties(0x7000EAA6+DATConstants.DBPROPERTIES_OFFSET);
 
     // Max rank for main legacy
     int maxMainLegacyRank=((Integer)itemAdvancementControlProps.getProperty("ItemAdvancement_CombatDPS_MaxRank")).intValue();

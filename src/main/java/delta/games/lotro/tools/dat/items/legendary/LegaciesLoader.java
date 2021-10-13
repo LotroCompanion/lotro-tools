@@ -206,7 +206,8 @@ public class LegaciesLoader
 
   private void loadImbuedLegacies()
   {
-    PropertiesSet props=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
+    // ItemAdvancementControl
+    PropertiesSet props=_facade.loadProperties(0x7000EAA6+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(props.dump());
 
     // Extract imbued class/stat legacies
