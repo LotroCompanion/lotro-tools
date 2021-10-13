@@ -52,8 +52,8 @@ public class TraitKeyGenerator
     setup("MARTIAL_PROWESS","Martial Prowess");
     setup("STEELED_RESOLVE","Steeled Resolve");
     // Champion
-    setup("CRIT_CHANCE_INCREASE","Critical Chance Increase");
-    setup("MIGHT_INCREASE","Might Increase");
+    setup("CRIT_CHANCE_INCREASE",1879270411);
+    setup("MIGHT_INCREASE",1879270409);
     setup("FINESSE_INCREASE",1879270656);
     // Guardian
     setup("OVERPOWER","Valorous Strength");
