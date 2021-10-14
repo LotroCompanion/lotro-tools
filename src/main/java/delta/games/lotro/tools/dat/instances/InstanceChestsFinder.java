@@ -2,18 +2,27 @@ package delta.games.lotro.tools.dat.instances;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import delta.games.lotro.config.DataFiles;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
+import delta.games.lotro.lore.instances.InstancesTree;
+import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
+import delta.games.lotro.lore.instances.comparators.PrivateEncounterNameComparator;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.ContainersManager;
+import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsContainer;
+import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.comparators.ItemNameComparator;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
@@ -26,6 +35,8 @@ public class InstanceChestsFinder
 {
   private MapsManager _mapsManager;
   private Map<Integer,ItemsContainer> _containers;
+  private Map<Integer,Set<PrivateEncounter>> _mapByContainer;
+  private Map<Integer,Set<Integer>> _mapByPe;
 
   /**
    * Constructor.
@@ -39,6 +50,8 @@ public class InstanceChestsFinder
 
   private void doIt()
   {
+    _mapByContainer=new HashMap<Integer,Set<PrivateEncounter>>();
+    _mapByPe=new HashMap<Integer,Set<Integer>>();
     //_containers=findContainersWithCustomLootTables();
     _containers=findContainers();
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
@@ -46,20 +59,84 @@ public class InstanceChestsFinder
     {
       doIt(skirmishPe);
     }
+    showResults();
   }
 
   private void doIt(SkirmishPrivateEncounter pe)
   {
     Map<Integer,Marker> markers=getMarkersForInstance(pe);
+    Set<Integer> items=new HashSet<Integer>();
+    _mapByPe.put(Integer.valueOf(pe.getIdentifier()),items);
     for(Integer containerId : _containers.keySet())
     {
       for(Marker marker : markers.values())
       {
         if (marker.getDid()==containerId.intValue())
         {
-          System.out.println("Found container "+containerId+" in PE: "+pe.getName());
+          // Register in containers map
+          Set<PrivateEncounter> pes=_mapByContainer.get(containerId);
+          if (pes==null)
+          {
+            pes=new HashSet<PrivateEncounter>();
+            _mapByContainer.put(containerId,pes);
+          }
+          pes.add(pe);
+          // Register in pes map
+          items.add(containerId);
+          pes.add(pe);
           break;
         }
+      }
+    }
+  }
+
+  private void showResults()
+  {
+    //showByContainer();
+    showByInstance();
+  }
+
+  @SuppressWarnings("unused")
+  private void showByContainer()
+  {
+    ItemsManager itemsMgr=ItemsManager.getInstance();
+    List<Integer> containerIds=new ArrayList<Integer>(_mapByContainer.keySet());
+    Collections.sort(containerIds);
+    for(Integer containerId : containerIds)
+    {
+      Item item=itemsMgr.getItem(containerId.intValue());
+      System.out.println("Container: "+item+" was found in:");
+      List<PrivateEncounter> pes=new ArrayList<PrivateEncounter>(_mapByContainer.get(containerId));
+      Collections.sort(pes,new PrivateEncounterNameComparator());
+      for(PrivateEncounter pe : pes)
+      {
+        System.out.println("\t"+pe.getName());
+      }
+    }
+  }
+
+  private void showByInstance()
+  {
+    ItemsManager itemsMgr=ItemsManager.getInstance();
+    @SuppressWarnings("unused")
+    PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
+    List<Integer> peIds=new ArrayList<Integer>(_mapByPe.keySet());
+    Collections.sort(peIds);
+    for(SkirmishPrivateEncounter pe : InstancesTree.getInstance().getInstances())
+    //for(Integer peId : peIds)
+    {
+      Integer peId=Integer.valueOf(pe.getIdentifier());
+      List<Item> items=new ArrayList<Item>();
+      for(Integer itemId : _mapByPe.get(peId))
+      {
+        items.add(itemsMgr.getItem(itemId.intValue()));
+      }
+      Collections.sort(items,new ItemNameComparator());
+      //PrivateEncounter pe=peMgr.getPrivateEncounterById(peId.intValue());
+      System.out.println("Private encounter "+pe.getName()+" has chests:");
+      for(Item item : items)
+      {
+        System.out.println("\t"+item);
       }
     }
   }
