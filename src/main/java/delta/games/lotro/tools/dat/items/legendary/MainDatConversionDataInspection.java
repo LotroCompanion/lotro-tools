@@ -6,7 +6,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionFactory;
 import delta.games.lotro.utils.StringUtils;
-import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -81,6 +80,8 @@ public class MainDatConversionDataInspection
     }
     else
     {
+      System.out.println("Level to item progression");
+      /*
       ArrayProgression itemProg=(ArrayProgression)ProgressionFactory.buildProgression(itemId,itemProps);
       int nbPoints=itemProg.getNumberOfPoints();
       for(int i=0;i<nbPoints;i++)
@@ -96,6 +97,7 @@ public class MainDatConversionDataInspection
           System.out.println("Level "+level+" => Item name: "+itemName+"; quality: "+itemQuality);
         }
       }
+      */
       Progression prog=ProgressionFactory.buildProgression(progressionId,progressionProps);
       System.out.println(" => "+prog);
     }
