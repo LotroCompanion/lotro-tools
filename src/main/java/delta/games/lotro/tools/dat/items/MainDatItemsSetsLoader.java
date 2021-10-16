@@ -14,7 +14,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.sets.ItemsSet;
-import delta.games.lotro.lore.items.sets.ItemsSetBonus;
+import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
@@ -100,11 +100,22 @@ Set_Name:
     }
     // Level
     int level=((Integer)properties.getProperty("Set_Level")).intValue();
-    set.setLevel(level);
+    set.setSetLevel(level);
+    Integer useAverageItemLevel=(Integer)properties.getProperty("ItemGameSet_UseAverageItemLevelForSetLevel");
+    if ((useAverageItemLevel!=null) && (useAverageItemLevel.intValue()==1))
+    {
+      set.setUseAverageItemLevelForSetLevel(true);
+    }
     // Required level
     Integer requiredLevelInt=(Integer)properties.getProperty("Set_LevelRequired");
     int requiredLevel=(requiredLevelInt!=null)?requiredLevelInt.intValue():1;
-    set.setRequiredLevel(requiredLevel);
+    set.setRequiredMinLevel(requiredLevel);
+    // Max character level
+    Integer maxCharacterLevel=(Integer)properties.getProperty("Set_MaxPlayerLevel");
+    if ((maxCharacterLevel!=null) && (maxCharacterLevel.intValue()>=1))
+    {
+      set.setRequiredMaxLevel(maxCharacterLevel);
+    }
     // Description
     String description=DatUtils.getStringProperty(properties,"Set_Description");
     set.setDescription(description);
@@ -129,15 +140,15 @@ Set_Name:
           LOGGER.warn("Member not found: "+memberId+" in set "+name);
         }
       }
-      // Bonus
-      Object[] bonusesArray=(Object[])properties.getProperty("Set_ActiveCountDataList");
-      if (bonusesArray!=null)
+    }
+    // Bonus
+    Object[] bonusesArray=(Object[])properties.getProperty("Set_ActiveCountDataList");
+    if (bonusesArray!=null)
+    {
+      for(Object bonusObj : bonusesArray)
       {
-        for(Object bonusObj : bonusesArray)
-        {
-          ItemsSetBonus bonus=loadBonus((PropertiesSet)bonusObj);
-          set.addBonus(bonus);
-        }
+        SetBonus bonus=loadBonus((PropertiesSet)bonusObj);
+        set.addBonus(bonus);
       }
     }
     return set;
@@ -149,7 +160,7 @@ Set_Name:
     return true;
   }
 
-  private ItemsSetBonus loadBonus(PropertiesSet properties)
+  private SetBonus loadBonus(PropertiesSet properties)
   {
 /*
     Mod_Array: 
@@ -159,12 +170,12 @@ Set_Name:
         Mod_Progression: 1879212451
     Set_ActiveCount: 2
  */
-    ItemsSetBonus bonus=null;
+    SetBonus bonus=null;
     int count=((Integer)properties.getProperty("Set_ActiveCount")).intValue();
     StatsProvider provider=DatStatUtils.buildStatProviders(_facade,properties);
     if ((count>0) && (provider!=null))
     {
-      bonus=new ItemsSetBonus(count);
+      bonus=new SetBonus(count);
       bonus.setStatsProvider(provider);
     }
     Object[] effectsArray=(Object[])properties.getProperty("Set_EffectDataList");

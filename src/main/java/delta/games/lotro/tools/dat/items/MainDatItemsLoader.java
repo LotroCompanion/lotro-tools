@@ -1163,7 +1163,8 @@ public class MainDatItemsLoader
     int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
     int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
     int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
-    Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement);
+    int setId=((Integer)props.getProperty("Item_PropertySet")).intValue();
+    Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement,setId);
     _traceries.add(tracery);
     CharacterClass requiredClass=getRequiredClass(socketType);
     item.setRequiredClass(requiredClass);
