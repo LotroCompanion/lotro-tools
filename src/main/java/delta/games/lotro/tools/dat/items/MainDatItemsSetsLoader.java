@@ -2,10 +2,12 @@ package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
@@ -13,6 +15,8 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.legendary2.TraceriesManager;
+import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.lore.items.sets.ItemsSet;
 import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
@@ -199,6 +203,37 @@ Set_Name:
     return bonus;
   }
 
+  private void handleTraceriesSets(List<ItemsSet> sets)
+  {
+    TraceriesManager traceriesMgr=TraceriesManager.getInstance();
+    List<Tracery> traceries=traceriesMgr.getAll();
+    Collections.sort(traceries,new IdentifiableComparator<Tracery>());
+    for(Tracery tracery : traceries)
+    {
+      int setId=tracery.getSetId();
+      if (setId!=0)
+      {
+        ItemsSet set=findSet(sets,setId);
+        Proxy<Item> proxy=new Proxy<Item>();
+        proxy.setId(tracery.getIdentifier());
+        proxy.setName(tracery.getName());
+        set.addMember(proxy);
+      }
+    }
+  }
+
+  private ItemsSet findSet(List<ItemsSet> sets, int setId)
+  {
+    for(ItemsSet set : sets)
+    {
+      if (set.getIdentifier()==setId)
+      {
+        return set;
+      }
+    }
+    return null;
+  }
+
   /**
    * Load item sets.
    */
@@ -219,6 +254,8 @@ Set_Name:
         sets.add(set);
       }
     }
+    // Add traceries members
+    handleTraceriesSets(sets);
     // Save sets
     int nbSets=sets.size();
     LOGGER.info("Writing "+nbSets+" sets");
