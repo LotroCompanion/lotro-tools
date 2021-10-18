@@ -25,6 +25,7 @@ public class MainProgressionsMerger
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_COMBAT);
     progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_BUFFS);
+    progressions.loadFromFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     progressions.writeToFile(GeneratedFiles.PROGRESSIONS);
   }
 

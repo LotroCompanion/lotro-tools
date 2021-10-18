@@ -112,6 +112,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_COMBAT=new File("data/progressions/tmp/progressions_combat.xml").getAbsoluteFile();
   /**
+   * Progressions for legendary stuff.
+   */
+  public static final File PROGRESSIONS_LEGENDARY=new File("data/progressions/tmp/progressions_legendary.xml").getAbsoluteFile();
+  /**
    * All progressions.
    */
   public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);
@@ -167,6 +171,10 @@ public class GeneratedFiles
    * Legendary attributes.
    */
   public static final File LEGENDARY_ATTRS=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_ATTRS);
+  /**
+   * Data for the legendary system (reloaded).
+   */
+  public static final File LEGENDARY_DATA2=LotroCoreConfig.getInstance().getFile(DataFiles.LEGENDARY_DATA2);
   /**
    * Traceries.
    */

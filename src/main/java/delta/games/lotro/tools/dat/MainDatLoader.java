@@ -31,6 +31,7 @@ import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
 import delta.games.lotro.tools.dat.items.MainDatPaperItemsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
+import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
@@ -111,6 +112,7 @@ public class MainDatLoader
     new MainDatPaperItemsLoader(_facade).doIt();
     // Legendary data
     new MainDatLegendarySystemLoader(_facade).doIt();
+    new MainDatLegendarySystem2Loader(_facade).doIt();
     // Legendary titles
     new MainDatLegendaryTitlesLoader(_facade).doIt();
     // Relics
@@ -203,6 +205,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.SETS);
     // Legendary system
     deleteFile(GeneratedFiles.LEGENDARY_DATA);
+    deleteFile(GeneratedFiles.LEGENDARY_DATA2);
     // Legendary titles
     deleteFile(GeneratedFiles.LEGENDARY_TITLES);
     // Relics
@@ -263,6 +266,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
     deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     deleteFile(GeneratedFiles.PROGRESSIONS_BUFFS);
+    deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     deleteFile(GeneratedFiles.PROGRESSIONS);
   }
 
