@@ -46,6 +46,7 @@ import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
+import delta.games.lotro.lore.items.legendary2.EnhancementRune;
 import delta.games.lotro.lore.items.legendary2.Legendary2;
 import delta.games.lotro.lore.items.legendary2.LegendaryAttrs2;
 import delta.games.lotro.lore.items.legendary2.LegendaryItem2;
@@ -53,6 +54,7 @@ import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
 import delta.games.lotro.lore.items.legendary2.SocketEntry;
 import delta.games.lotro.lore.items.legendary2.SocketsSetup;
 import delta.games.lotro.lore.items.legendary2.Tracery;
+import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
@@ -113,6 +115,7 @@ public class MainDatItemsLoader
   private Map<Integer,Integer> _itemLevelOffsets;
   private LotroEnum<SocketType> _socketTypes;
   private List<Tracery> _traceries;
+  private List<EnhancementRune> _enhancementRunes;
 
   /**
    * Constructor.
@@ -128,6 +131,7 @@ public class MainDatItemsLoader
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _socketTypes=enumsRegistry.get(SocketType.class);
     _traceries=new ArrayList<Tracery>();
+    _enhancementRunes=new ArrayList<EnhancementRune>();
   }
 
   private boolean _debug=false;
@@ -1143,6 +1147,7 @@ public class MainDatItemsLoader
     }
     if (type.intValue()==0)
     {
+      handleEnhancementRune(item,properties);
       return "Enhancement Rune";
     }
     SocketType socketType=getSocketType(type.intValue());
@@ -1168,6 +1173,15 @@ public class MainDatItemsLoader
     _traceries.add(tracery);
     CharacterClass requiredClass=getRequiredClass(socketType);
     item.setRequiredClass(requiredClass);
+  }
+
+  private void handleEnhancementRune(Item item, PropertiesSet props)
+  {
+    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
+    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
+    int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
+    EnhancementRune enhancementRune=new EnhancementRune(item,minItemLevel,maxItemLevel,levelupIncrement);
+    _enhancementRunes.add(enhancementRune);
   }
 
   private boolean useId(int id)
@@ -1235,6 +1249,9 @@ public class MainDatItemsLoader
     // Save traceries
     Collections.sort(_traceries,new IdentifiableComparator<Tracery>());
     TraceriesXMLWriter.write(GeneratedFiles.TRACERIES,_traceries);
+    // Save enhancement runes
+    Collections.sort(_enhancementRunes,new IdentifiableComparator<EnhancementRune>());
+    EnhancementRunesXMLWriter.write(GeneratedFiles.ENHANCEMENT_RUNES,_enhancementRunes);
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics

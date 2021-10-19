@@ -205,7 +205,11 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.SETS);
     // Legendary system
     deleteFile(GeneratedFiles.LEGENDARY_DATA);
+    // Legendary system (reloaded)
     deleteFile(GeneratedFiles.LEGENDARY_DATA2);
+    deleteFile(GeneratedFiles.LEGENDARY_ATTRS);
+    deleteFile(GeneratedFiles.TRACERIES);
+    deleteFile(GeneratedFiles.ENHANCEMENT_RUNES);
     // Legendary titles
     deleteFile(GeneratedFiles.LEGENDARY_TITLES);
     // Relics

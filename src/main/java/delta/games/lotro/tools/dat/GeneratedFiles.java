@@ -180,6 +180,11 @@ public class GeneratedFiles
    */
   public static final File TRACERIES=LotroCoreConfig.getInstance().getFile(DataFiles.TRACERIES);
   /**
+   * Enhancement runes.
+   */
+  public static final File ENHANCEMENT_RUNES=LotroCoreConfig.getInstance().getFile(DataFiles.ENHANCEMENT_RUNES
+      );
+  /**
    * Consumables.
    */
   public static final File CONSUMABLES=LotroCoreConfig.getInstance().getFile(DataFiles.CONSUMABLES);
