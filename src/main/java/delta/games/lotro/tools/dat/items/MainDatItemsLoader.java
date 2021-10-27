@@ -165,7 +165,7 @@ public class MainDatItemsLoader
       // Name
       item.setName(name);
       // Item class
-      int itemClass=itemClassInt.intValue();
+      int itemClass=(itemClassInt!=null)?itemClassInt.intValue():0;
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
@@ -496,6 +496,7 @@ public class MainDatItemsLoader
     if (name.contains("GNDN")) return false;
     if (name.contains("Tester")) return false;
     if (name.contains("Barter Test")) return false;
+    if (name.contains("Test of Will")) return true;
     if (name.startsWith("Test ")) return false;
     //int itemClass=itemClassInt.intValue();
     //if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
