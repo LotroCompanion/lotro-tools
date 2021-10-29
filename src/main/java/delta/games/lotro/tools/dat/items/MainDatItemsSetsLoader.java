@@ -18,13 +18,13 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary2.TraceriesManager;
 import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.lore.items.sets.ItemsSet;
+import delta.games.lotro.lore.items.sets.ItemsSet.SetType;
 import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Get items sets definitions from DAT files.
@@ -133,11 +133,7 @@ Set_Name:
         Item member=ItemsManager.getInstance().getItem(memberId);
         if (member!=null)
         {
-          Proxy<Item> proxy=new Proxy<Item>();
-          proxy.setId(memberId);
-          proxy.setName(member.getName());
-          proxy.setObject(member);
-          set.addMember(proxy);
+          set.addMember(member);
         }
         else
         {
@@ -214,10 +210,8 @@ Set_Name:
       if (setId!=0)
       {
         ItemsSet set=findSet(sets,setId);
-        Proxy<Item> proxy=new Proxy<Item>();
-        proxy.setId(tracery.getIdentifier());
-        proxy.setName(tracery.getName());
-        set.addMember(proxy);
+        set.addMember(tracery.getItem());
+        set.setSetType(SetType.TRACERIES);
       }
     }
   }
