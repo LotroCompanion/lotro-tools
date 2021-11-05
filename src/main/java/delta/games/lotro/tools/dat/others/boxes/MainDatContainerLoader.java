@@ -20,6 +20,7 @@ import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsContainer;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.containers.LootType;
 import delta.games.lotro.lore.items.io.xml.ContainerXMLWriter;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsContainer;
@@ -59,6 +60,7 @@ public class MainDatContainerLoader
    */
   public Container load(int indexDataId)
   {
+    Item item=ItemsManager.getInstance().getItem(indexDataId);
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
@@ -88,14 +90,36 @@ public class MainDatContainerLoader
     }
     // Other filtered trophy table
     Integer filteredTrophyTableId=(Integer)properties.getProperty("LootGen_FilteredTrophyTable");
-    if (filteredTrophyTableId!=null)
+    if ((filteredTrophyTableId!=null) && (filteredTrophyTableId.intValue()!=0))
     {
       if (filteredTable!=null)
       {
-        LOGGER.warn("Filtered table override");
+        LOGGER.warn("Filtered table override: "+item);
       }
       filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTableId.intValue());
     }
+    // Other filtered trophy table
+    /*
+    Integer filteredTrophyTable2Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable2");
+    if ((filteredTrophyTable2Id!=null) && (filteredTrophyTable2Id.intValue()!=0))
+    {
+      if (filteredTable!=null)
+      {
+        LOGGER.warn("Filtered table override (2): "+item);
+      }
+      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable2Id.intValue());
+    }
+    // Other filtered trophy table
+    Integer filteredTrophyTable3Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable3");
+    if ((filteredTrophyTable3Id!=null) && (filteredTrophyTable3Id.intValue()!=0))
+    {
+      if (filteredTable!=null)
+      {
+        LOGGER.warn("Filtered table override (3): "+item);
+      }
+      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable3Id.intValue());
+    }
+    */
     // Trophy list override
     Integer trophyListOverrideId=(Integer)properties.getProperty("LootGen_TrophyList_Override");
     if ((trophyListOverrideId!=null) && (trophyListOverrideId.intValue()!=0))
@@ -165,23 +189,23 @@ public class MainDatContainerLoader
       ret=itemsContainer;
       if (filteredTable!=null)
       {
-        itemsContainer.setFilteredTable(filteredTable);
+        itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
       }
       if (weightedTable!=null)
       {
-        itemsContainer.setWeightedTable(weightedTable);
+        itemsContainer.set(LootType.WEIGHTED_TREASURE_TABLE,weightedTable);
       }
       if (trophyList!=null)
       {
-        itemsContainer.setTrophyList(trophyList);
+        itemsContainer.set(LootType.TROPHY_LIST,trophyList);
       }
       if (barterTrophyList!=null)
       {
-        itemsContainer.setBarterTrophyList(barterTrophyList);
+        itemsContainer.set(LootType.BARTER_TROPHY_LIST,barterTrophyList);
       }
       if (treasureList!=null)
       {
-        itemsContainer.setTreasureList(treasureList);
+        itemsContainer.set(LootType.TREASURE_LIST,treasureList);
       }
       if ((customSkirmishLootLookupTableId!=null) && (customSkirmishLootLookupTableId.intValue()!=0))
       {
