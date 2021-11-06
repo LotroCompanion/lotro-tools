@@ -60,82 +60,68 @@ public class MainDatContainerLoader
    */
   public Container load(int indexDataId)
   {
-    Item item=ItemsManager.getInstance().getItem(indexDataId);
     PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
       LOGGER.warn("Could not handle container item ID="+indexDataId);
       return null;
     }
+    ItemsContainer itemsContainer=new ItemsContainer(indexDataId);
     // Filtered trophy table
-    FilteredTrophyTable filteredTable=null;
     Integer filteredLootTableId=(Integer)properties.getProperty("PackageItem_FilteredTrophyTableTemplate");
     if (filteredLootTableId!=null)
     {
-      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredLootTableId.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredLootTableId.intValue());
+      itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
     }
     // Free-people weighted treasure table ID
-    WeightedTreasureTable weightedTable=null;
     Integer freepWeightedTreasureTableId=(Integer)properties.getProperty("PackageItem_Freep_WeightedTreasureTableID");
     if ((freepWeightedTreasureTableId!=null) && (freepWeightedTreasureTableId.intValue()!=0))
     {
-      weightedTable=_lootLoader.handleWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
+      WeightedTreasureTable weightedTable=_lootLoader.handleWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
+      itemsContainer.set(LootType.WEIGHTED_TREASURE_TABLE,weightedTable);
     }
     // Trophy template
-    TrophyList trophyList=null;
     Integer trophyTemplateId=(Integer)properties.getProperty("PackageItem_TrophyListTemplate");
     if ((trophyTemplateId!=null) && (trophyTemplateId.intValue()!=0))
     {
-      trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
+      TrophyList trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
+      itemsContainer.set(LootType.TROPHY_LIST,trophyList);
     }
     // Other filtered trophy table
     Integer filteredTrophyTableId=(Integer)properties.getProperty("LootGen_FilteredTrophyTable");
     if ((filteredTrophyTableId!=null) && (filteredTrophyTableId.intValue()!=0))
     {
-      if (filteredTable!=null)
-      {
-        LOGGER.warn("Filtered table override: "+item);
-      }
-      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTableId.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTableId.intValue());
+      itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
     }
     // Other filtered trophy table
-    /*
     Integer filteredTrophyTable2Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable2");
     if ((filteredTrophyTable2Id!=null) && (filteredTrophyTable2Id.intValue()!=0))
     {
-      if (filteredTable!=null)
-      {
-        LOGGER.warn("Filtered table override (2): "+item);
-      }
-      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable2Id.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable2Id.intValue());
+      itemsContainer.set(LootType.FILTERED_TROPHY_TABLE2,filteredTable);
     }
     // Other filtered trophy table
     Integer filteredTrophyTable3Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable3");
     if ((filteredTrophyTable3Id!=null) && (filteredTrophyTable3Id.intValue()!=0))
     {
-      if (filteredTable!=null)
-      {
-        LOGGER.warn("Filtered table override (3): "+item);
-      }
-      filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable3Id.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable3Id.intValue());
+      itemsContainer.set(LootType.FILTERED_TROPHY_TABLE3,filteredTable);
     }
-    */
     // Trophy list override
     Integer trophyListOverrideId=(Integer)properties.getProperty("LootGen_TrophyList_Override");
     if ((trophyListOverrideId!=null) && (trophyListOverrideId.intValue()!=0))
     {
-      if (trophyList!=null)
-      {
-        LOGGER.warn("Trophy list override");
-      }
-      trophyList=_lootLoader.handleTrophyList(trophyListOverrideId.intValue());
+      TrophyList trophyList=_lootLoader.handleTrophyList(trophyListOverrideId.intValue());
+      itemsContainer.set(LootType.TROPHY_LIST,trophyList);
     }
     // Barter trophy list
-    TrophyList barterTrophyList=null;
     Integer barterTrophyListId=(Integer)properties.getProperty("LootGen_BarterTrophyList");
     if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
     {
-      barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
+      TrophyList barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
+      itemsContainer.set(LootType.BARTER_TROPHY_LIST,barterTrophyList);
     }
     // Preview
     /*
@@ -153,8 +139,8 @@ public class MainDatContainerLoader
     }
     */
     // Effects (for scrolls)
-    TreasureList treasureList=null;
-    treasureList=handleEffects(properties);
+    TreasureList treasureList=handleEffects(properties);
+    itemsContainer.set(LootType.TREASURE_LIST,treasureList);
     // Treasure list override
     Integer treasureListOverrideId=(Integer)properties.getProperty("LootGen_TreasureList_Override");
     if ((treasureListOverrideId!=null) && (treasureListOverrideId.intValue()!=0))
@@ -165,6 +151,7 @@ public class MainDatContainerLoader
       }
       PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverrideId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
       treasureList=_lootLoader.handleTreasureList(treasureListOverrideId.intValue(),treasureListProps);
+      itemsContainer.set(LootType.TREASURE_LIST,treasureList);
     }
     // Reputation trophy
     Integer reputationTrophyList=(Integer)properties.getProperty("LootGen_ReputationTrophyList");
@@ -174,44 +161,18 @@ public class MainDatContainerLoader
       LOGGER.warn("Reputation trophy - should never happen");
     }
     // Custom skirmish loot lookup table
-    InstanceLootsTable table=null;
+    InstanceLootsTable instanceLootsTable=null;
     Integer customSkirmishLootLookupTableId=(Integer)properties.getProperty("LootGen_CustomSkirmishLootLookupTable");
     if ((customSkirmishLootLookupTableId!=null) && (customSkirmishLootLookupTableId.intValue()!=0))
     {
-      table=_instancesLootLoader.handleCustomSkirmishLootLookupTable(customSkirmishLootLookupTableId.intValue());
+      instanceLootsTable=_instancesLootLoader.handleCustomSkirmishLootLookupTable(customSkirmishLootLookupTableId.intValue());
+      itemsContainer.setCustomSkirmishLootTableId(customSkirmishLootLookupTableId);
     }
 
     Container ret=null;
-    int count=((filteredTable!=null)?1:0)+((weightedTable!=null)?1:0)+((trophyList!=null)?1:0)+((barterTrophyList!=null)?1:0)+((treasureList!=null)?1:0)+((table!=null)?1:0);
-    if (count>=1)
+    if ((itemsContainer.hasTables()) || (instanceLootsTable!=null))
     {
-      ItemsContainer itemsContainer=new ItemsContainer(indexDataId);
       ret=itemsContainer;
-      if (filteredTable!=null)
-      {
-        itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
-      }
-      if (weightedTable!=null)
-      {
-        itemsContainer.set(LootType.WEIGHTED_TREASURE_TABLE,weightedTable);
-      }
-      if (trophyList!=null)
-      {
-        itemsContainer.set(LootType.TROPHY_LIST,trophyList);
-      }
-      if (barterTrophyList!=null)
-      {
-        itemsContainer.set(LootType.BARTER_TROPHY_LIST,barterTrophyList);
-      }
-      if (treasureList!=null)
-      {
-        itemsContainer.set(LootType.TREASURE_LIST,treasureList);
-      }
-      if ((customSkirmishLootLookupTableId!=null) && (customSkirmishLootLookupTableId.intValue()!=0))
-      {
-        itemsContainer.setCustomSkirmishLootTableId(customSkirmishLootLookupTableId);
-      }
-      //System.out.println(properties.dump());
     }
 
     // Relics?
