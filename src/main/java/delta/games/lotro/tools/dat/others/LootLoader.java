@@ -158,7 +158,7 @@ public class LootLoader
     for(Object listItemObj : list)
     {
       PropertiesSet itemProps=(PropertiesSet)listItemObj;
-      int lootTableId=((Integer)itemProps.getProperty("LootGen_FislteredTrophyTable_EntryDID")).intValue();
+      int lootTableId=((Integer)itemProps.getProperty("LootGen_FilteredTrophyTable_EntryDID")).intValue();
       LootTable lootTable=getTrophyList(lootTableId);
       if (lootTable==null)
       {
