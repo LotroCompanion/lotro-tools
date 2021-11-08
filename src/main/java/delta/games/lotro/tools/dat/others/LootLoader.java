@@ -84,71 +84,91 @@ public class LootLoader
   }
 
   /**
-   * Handle a weighted treasure table.
+   * Get a weighted treasure table.
    * @param id Table identifier.
    * @return a weighted treasure table or <code>null</code>.
    */
-  public WeightedTreasureTable handleWeightedTreasureTable(int id)
+  public WeightedTreasureTable getWeightedTreasureTable(int id)
   {
-    WeightedTreasureTable ret=(WeightedTreasureTable)_lootsMgr.getTables().getItem(id);
+    WeightedTreasureTable ret=get(id,WeightedTreasureTable.class);
     if (ret==null)
     {
-      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-      Object[] treasureTable=(Object[])properties.getProperty("LootGen_WeightedTreasureTable");
-      if (treasureTable!=null)
+      ret=loadWeightedTreasureTable(id);
+      if (ret!=null)
       {
-        ret=new WeightedTreasureTable(id);
-        for(Object treasureTableItem : treasureTable)
-        {
-          PropertiesSet treasureTableItemProps=(PropertiesSet)treasureTableItem;
-          int weight=((Integer)treasureTableItemProps.getProperty("LootGen_WeightedTreasureTable_TrophyList_Weight")).intValue();
-          int trophyListId=((Integer)treasureTableItemProps.getProperty("LootGen_WeightedTreasureTable_TrophyList")).intValue();
-          TrophyList trophyList=handleTrophyList(trophyListId);
-          WeightedTreasureTableEntry entry=new WeightedTreasureTableEntry(weight,trophyList);
-          ret.addEntry(entry);
-        }
         _lootsMgr.getTables().add(ret);
       }
     }
     return ret;
   }
 
+  private WeightedTreasureTable loadWeightedTreasureTable(int id)
+  {
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return null;
+    }
+    Object[] treasureTable=(Object[])properties.getProperty("LootGen_WeightedTreasureTable");
+    if (treasureTable==null)
+    {
+      return null;
+    }
+    WeightedTreasureTable ret=new WeightedTreasureTable(id);
+    for(Object treasureTableItem : treasureTable)
+    {
+      PropertiesSet treasureTableItemProps=(PropertiesSet)treasureTableItem;
+      int weight=((Integer)treasureTableItemProps.getProperty("LootGen_WeightedTreasureTable_TrophyList_Weight")).intValue();
+      int trophyListId=((Integer)treasureTableItemProps.getProperty("LootGen_WeightedTreasureTable_TrophyList")).intValue();
+      TrophyList trophyList=getTrophyList(trophyListId);
+      WeightedTreasureTableEntry entry=new WeightedTreasureTableEntry(weight,trophyList);
+      ret.addEntry(entry);
+    }
+    return ret;
+  }
+
   /**
-   * Handle a filtered trophy list list.
+   * Get a filtered trophy list.
    * @param id Identifier.
    * @return a table.
    */
-  public FilteredTrophyTable handleFilteredTrophyTable(int id)
+  public FilteredTrophyTable getFilteredTrophyTable(int id)
   {
-    FilteredTrophyTable ret=(FilteredTrophyTable)_lootsMgr.getTables().getItem(id);
+    FilteredTrophyTable ret=get(id,FilteredTrophyTable.class);
     if (ret==null)
     {
-      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-      if (properties!=null)
+      ret=loadFilteredTrophyTable(id);
+      if (ret!=null)
       {
-        ret=new FilteredTrophyTable(id);
-        Object[] list=(Object[])properties.getProperty("LootGen_FilteredTreasureListArray");
-        for(Object listItemObj : list)
-        {
-          PropertiesSet itemProps=(PropertiesSet)listItemObj;
-          int lootTableId=((Integer)itemProps.getProperty("LootGen_FilteredTrophyTable_EntryDID")).intValue();
-          LootTable lootTable=handleLootTable(lootTableId);
-          if (lootTable==null)
-          {
-            lootTable=handleTrophyList(lootTableId);
-            if (lootTable==null)
-            {
-              lootTable=handleWeightedTreasureTable(lootTableId);
-            }
-          }
-          FilteredTrophyTableEntry entry=new FilteredTrophyTableEntry(lootTable);
-          ret.addEntry(entry);
-          // Filter
-          Object[] filter=(Object[])itemProps.getProperty("EntityFilter_Array");
-          loadFilterData(filter,entry.getUsageRequirement());
-        }
         _lootsMgr.getTables().add(ret);
       }
+    }
+    return ret;
+  }
+
+  private FilteredTrophyTable loadFilteredTrophyTable(int id)
+  {
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return null;
+    }
+    FilteredTrophyTable ret=new FilteredTrophyTable(id);
+    Object[] list=(Object[])properties.getProperty("LootGen_FilteredTreasureListArray");
+    for(Object listItemObj : list)
+    {
+      PropertiesSet itemProps=(PropertiesSet)listItemObj;
+      int lootTableId=((Integer)itemProps.getProperty("LootGen_FislteredTrophyTable_EntryDID")).intValue();
+      LootTable lootTable=getTrophyList(lootTableId);
+      if (lootTable==null)
+      {
+        lootTable=getWeightedTreasureTable(lootTableId);
+      }
+      FilteredTrophyTableEntry entry=new FilteredTrophyTableEntry(lootTable);
+      ret.addEntry(entry);
+      // Filter
+      Object[] filter=(Object[])itemProps.getProperty("EntityFilter_Array");
+      loadFilterData(filter,entry.getUsageRequirement());
     }
     return ret;
   }
@@ -164,7 +184,7 @@ public class LootLoader
         {
           // Level filter
           PropertiesSet levelProps=(PropertiesSet)filterEntry;
-          handleLevelFilter(levelProps,requirements);
+          loadLevelFilter(levelProps,requirements);
         }
         else
         {
@@ -189,7 +209,7 @@ public class LootLoader
     }
   }
 
-  private void handleLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
+  private void loadLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
   {
     /*
     EntityFilter_PropertyRange_Max: 
@@ -213,90 +233,89 @@ public class LootLoader
   }
 
   /**
-   * Handle a loot tzable.
-   * @param id Table identifier.
-   * @return a loot table or <code>null</code>.
-   */
-  public LootTable handleLootTable(int id)
-  {
-    LootTable ret=_lootsMgr.getTables().getItem(id);
-    return ret;
-  }
-
-  /**
-   * Handle a trophy list.
+   * Get a trophy list.
    * @param id List identifier.
    * @return a trophy list or <code>null</code>.
    */
-  public TrophyList handleTrophyList(int id)
+  public TrophyList getTrophyList(int id)
   {
-    TrophyList ret=(TrophyList)_lootsMgr.getTables().getItem(id);
+    TrophyList ret=get(id,TrophyList.class);
     if (ret==null)
     {
-      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-      if (properties==null)
+      ret=loadTrophyList(id);
+      if (ret!=null)
       {
-        return null;
-      }
-      Object[] trophyList=(Object[])properties.getProperty("LootGen_TrophyList");
-      if (trophyList!=null)
-      {
-        ret=new TrophyList(id);
-        String description=DatUtils.getStringProperty(properties,"Description");
-        if (description!=null)
-        {
-          description=StringUtils.fixName(description);
-          ret.setDescription(description);
-        }
-        Integer imageDid=(Integer)properties.getProperty("Icon_Layer_ImageOverrideDID");
-        if (imageDid!=null)
-        {
-          ret.setImageId(imageDid);
-          File toDir=new File(MiscIconsManager.MISC_ICONS_DIR,"trophyListIcons");
-          File to=new File(toDir,imageDid.toString()+".png");
-          if (!to.exists())
-          {
-            DatIconsUtils.buildImageFile(_facade,imageDid.intValue(),to);
-          }
-        }
-        for(Object trophyObj : trophyList)
-        {
-          TrophyListEntry entry=null;
-          PropertiesSet trophyProps=(PropertiesSet)trophyObj;
-          // Probability
-          int frequencyCode=((Integer)trophyProps.getProperty("LootGen_TrophyList_DropFrequency")).intValue();
-          float probability=getProbability(frequencyCode);
-          // Quantity
-          int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
-          Proxy<Item> itemProxy=null;
-          TreasureGroupProfile treasureGroup=null;
-          String itemName=getItemName(itemOrProfile);
-          if (itemName!=null)
-          {
-            // Item
-            itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
-            if (itemProxy!=null)
-            {
-              Integer quantityInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
-              int quantity=(quantityInt!=null)?quantityInt.intValue():1;
-              entry=new TrophyListEntry(probability,itemProxy,quantity);
-            }
-          }
-          else
-          {
-            // or treasure group
-            treasureGroup=handleTreasureGroupProfile(itemOrProfile);
-            if (treasureGroup!=null)
-            {
-              entry=new TrophyListEntry(probability,treasureGroup);
-            }
-          }
-          if (entry!=null)
-          {
-            ret.addEntry(entry);
-          }
-        }
         _lootsMgr.getTables().add(ret);
+      }
+    }
+    return ret;
+  }
+
+  private TrophyList loadTrophyList(int id)
+  {
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return null;
+    }
+    Object[] trophyList=(Object[])properties.getProperty("LootGen_TrophyList");
+    if (trophyList==null)
+    {
+      return null;
+    }
+    TrophyList ret=new TrophyList(id);
+    String description=DatUtils.getStringProperty(properties,"Description");
+    if (description!=null)
+    {
+      description=StringUtils.fixName(description);
+      ret.setDescription(description);
+    }
+    Integer imageDid=(Integer)properties.getProperty("Icon_Layer_ImageOverrideDID");
+    if (imageDid!=null)
+    {
+      ret.setImageId(imageDid);
+      File toDir=new File(MiscIconsManager.MISC_ICONS_DIR,"trophyListIcons");
+      File to=new File(toDir,imageDid.toString()+".png");
+      if (!to.exists())
+      {
+        DatIconsUtils.buildImageFile(_facade,imageDid.intValue(),to);
+      }
+    }
+    for(Object trophyObj : trophyList)
+    {
+      TrophyListEntry entry=null;
+      PropertiesSet trophyProps=(PropertiesSet)trophyObj;
+      // Probability
+      int frequencyCode=((Integer)trophyProps.getProperty("LootGen_TrophyList_DropFrequency")).intValue();
+      float probability=getProbability(frequencyCode);
+      // Quantity
+      int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
+      Proxy<Item> itemProxy=null;
+      TreasureGroupProfile treasureGroup=null;
+      String itemName=getItemName(itemOrProfile);
+      if (itemName!=null)
+      {
+        // Item
+        itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
+        if (itemProxy!=null)
+        {
+          Integer quantityInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
+          int quantity=(quantityInt!=null)?quantityInt.intValue():1;
+          entry=new TrophyListEntry(probability,itemProxy,quantity);
+        }
+      }
+      else
+      {
+        // or treasure group
+        treasureGroup=getTreasureGroupProfile(itemOrProfile);
+        if (treasureGroup!=null)
+        {
+          entry=new TrophyListEntry(probability,treasureGroup);
+        }
+      }
+      if (entry!=null)
+      {
+        ret.addEntry(entry);
       }
     }
     return ret;
@@ -313,100 +332,140 @@ public class LootLoader
     return ret;
   }
 
-  private TreasureGroupProfile handleTreasureGroupProfile(int id)
+  private TreasureGroupProfile getTreasureGroupProfile(int id)
   {
-    TreasureGroupProfile ret=(TreasureGroupProfile)_lootsMgr.getTables().getItem(id);
+    TreasureGroupProfile ret=get(id,TreasureGroupProfile.class);
     if (ret==null)
     {
-      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-      ItemsTable itemsTable=handleItemsTable(id,properties);
-      if (itemsTable!=null)
+      ret=loadTreasureGroupProfile(id);
+      if (ret!=null)
       {
-        ret=itemsTable;
+        _lootsMgr.getTables().add(ret);
+      }
+    }
+    return ret;
+  }
+
+  private TreasureGroupProfile loadTreasureGroupProfile(int id)
+  {
+    TreasureGroupProfile ret=null;
+    ItemsTable itemsTable=loadItemsTable(id);
+    if (itemsTable!=null)
+    {
+      ret=itemsTable;
+    }
+    else
+    {
+      TreasureList treasureList=loadTreasureList(id);
+      if (treasureList!=null)
+      {
+        ret=treasureList;
       }
       else
       {
-        TreasureList treasureList=handleTreasureList(id,properties);
-        if (treasureList!=null)
-        {
-          ret=treasureList;
-        }
-        else
-        {
-          System.out.println("**********************");
-          System.out.println(properties.dump());
-          // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
-        }
+        System.out.println("**********************");
+        PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+        System.out.println(properties.dump());
+        // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
       }
     }
     return ret;
   }
 
-  private ItemsTable handleItemsTable(int id, PropertiesSet properties)
+  @SuppressWarnings("unchecked")
+  private <T extends LootTable> T get(int id, Class<T> clazz)
   {
-    ItemsTable ret=(ItemsTable)_lootsMgr.getTables().getItem(id);
-    if (ret==null)
+    LootTable ret=_lootsMgr.getTables().getItem(id);
+    if (ret!=null)
     {
-      Object[] itemTableArray=(Object[])properties.getProperty("TreasureGroupProfile_ItemTable");
-      if (itemTableArray!=null)
+      if (clazz.isAssignableFrom(ret.getClass()))
       {
-        ret=new ItemsTable(id);
-        for(Object itemTableEntryObj : itemTableArray)
-        {
-          PropertiesSet entryProps=(PropertiesSet)itemTableEntryObj;
-          int weight=((Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Weight")).intValue();
-          int itemId=((Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Item")).intValue();
-          Integer quantityInt=(Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Quantity");
-          int quantity=(quantityInt!=null)?quantityInt.intValue():1;
-          Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId);
-          if (itemProxy!=null)
-          {
-            ItemsTableEntry entry=new ItemsTableEntry(weight,itemProxy,quantity);
-            ret.addEntry(entry);
-          }
-        }
-        _lootsMgr.getTables().add(ret);
+        return (T)ret;
+      }
+    }
+    return null;
+  }
+
+  private ItemsTable loadItemsTable(int id)
+  {
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return null;
+    }
+    Object[] itemTableArray=(Object[])properties.getProperty("TreasureGroupProfile_ItemTable");
+    if (itemTableArray==null)
+    {
+      return null;
+    }
+    ItemsTable ret=new ItemsTable(id);
+    for(Object itemTableEntryObj : itemTableArray)
+    {
+      PropertiesSet entryProps=(PropertiesSet)itemTableEntryObj;
+      int weight=((Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Weight")).intValue();
+      int itemId=((Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Item")).intValue();
+      Integer quantityInt=(Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Quantity");
+      int quantity=(quantityInt!=null)?quantityInt.intValue():1;
+      Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId);
+      if (itemProxy!=null)
+      {
+        ItemsTableEntry entry=new ItemsTableEntry(weight,itemProxy,quantity);
+        ret.addEntry(entry);
       }
     }
     return ret;
   }
 
   /**
-   * Handle a treasure list.
+   * Get a treasure list.
    * @param id Identifier.
-   * @param properties Input data.
    * @return A treasure list or <code>null</code>.
    */
-  public TreasureList handleTreasureList(int id, PropertiesSet properties)
+  public TreasureList getTreasureList(int id)
   {
-    TreasureList ret=(TreasureList)_lootsMgr.getTables().getItem(id);
+    TreasureList ret=get(id,TreasureList.class);
     if (ret==null)
     {
-      Object[] treasureList=(Object[])properties.getProperty("LootGen_TreasureList");
-      if (treasureList!=null)
+      ret=loadTreasureList(id);
+      if (ret!=null)
       {
-        ret=new TreasureList(id);
-        for(Object treasureObj : treasureList)
-        {
-          PropertiesSet treasureProps=(PropertiesSet)treasureObj;
-          int weight=((Integer)treasureProps.getProperty("LootGen_TreasureList_Weight")).intValue();
-          int profile=((Integer)treasureProps.getProperty("LootGen_TreasureList_GroupProfile")).intValue();
-          TreasureGroupProfile treasureGroupProfile=handleTreasureGroupProfile(profile);
-          TreasureListEntry entry=new TreasureListEntry(weight,treasureGroupProfile);
-          ret.addEntry(entry);
-        }
         _lootsMgr.getTables().add(ret);
       }
     }
     return ret;
   }
 
+  private TreasureList loadTreasureList(int id)
+  {
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return null;
+    }
+    Object[] treasureList=(Object[])properties.getProperty("LootGen_TreasureList");
+    if (treasureList==null)
+    {
+      return null;
+    }
+    TreasureList ret=new TreasureList(id);
+    for(Object treasureObj : treasureList)
+    {
+      PropertiesSet treasureProps=(PropertiesSet)treasureObj;
+      int weight=((Integer)treasureProps.getProperty("LootGen_TreasureList_Weight")).intValue();
+      int profile=((Integer)treasureProps.getProperty("LootGen_TreasureList_GroupProfile")).intValue();
+      TreasureGroupProfile treasureGroupProfile=getTreasureGroupProfile(profile);
+      TreasureListEntry entry=new TreasureListEntry(weight,treasureGroupProfile);
+      ret.addEntry(entry);
+    }
+    return ret;
+  }
+
   /**
-   * Handle a relics list.
+   * Get a relics list.
    * @param propertyId Identifier.
    * @return A relics list or <code>null</code>.
    */
-  public RelicsList handleRelicsList(int propertyId)
+  public RelicsList getRelicsList(int propertyId)
   {
     RelicsList ret=_lootsMgr.getRelicsLists().getItem(propertyId);
     if (ret==null)
@@ -430,7 +489,7 @@ public class LootLoader
         RelicsTreasureGroup treasureGroup=null;
         if (relic==null)
         {
-          treasureGroup=handleRelicsTreasureGroup(id);
+          treasureGroup=getRelicsTreasureGroup(id);
         }
         if ((relic!=null) || (treasureGroup!=null))
         {
@@ -443,7 +502,7 @@ public class LootLoader
     return ret;
   }
 
-  private RelicsTreasureGroup handleRelicsTreasureGroup(int id)
+  private RelicsTreasureGroup getRelicsTreasureGroup(int id)
   {
     RelicsTreasureGroup ret=_lootsMgr.getRelicsTreasureGroups().getItem(id);
     if (ret==null)

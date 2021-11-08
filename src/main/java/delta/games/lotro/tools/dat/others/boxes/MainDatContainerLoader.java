@@ -71,56 +71,56 @@ public class MainDatContainerLoader
     Integer filteredLootTableId=(Integer)properties.getProperty("PackageItem_FilteredTrophyTableTemplate");
     if (filteredLootTableId!=null)
     {
-      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredLootTableId.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.getFilteredTrophyTable(filteredLootTableId.intValue());
       itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
     }
     // Free-people weighted treasure table ID
     Integer freepWeightedTreasureTableId=(Integer)properties.getProperty("PackageItem_Freep_WeightedTreasureTableID");
     if ((freepWeightedTreasureTableId!=null) && (freepWeightedTreasureTableId.intValue()!=0))
     {
-      WeightedTreasureTable weightedTable=_lootLoader.handleWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
+      WeightedTreasureTable weightedTable=_lootLoader.getWeightedTreasureTable(freepWeightedTreasureTableId.intValue());
       itemsContainer.set(LootType.WEIGHTED_TREASURE_TABLE,weightedTable);
     }
     // Trophy template
     Integer trophyTemplateId=(Integer)properties.getProperty("PackageItem_TrophyListTemplate");
     if ((trophyTemplateId!=null) && (trophyTemplateId.intValue()!=0))
     {
-      TrophyList trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
+      TrophyList trophyList=_lootLoader.getTrophyList(trophyTemplateId.intValue());
       itemsContainer.set(LootType.TROPHY_LIST,trophyList);
     }
     // Other filtered trophy table
     Integer filteredTrophyTableId=(Integer)properties.getProperty("LootGen_FilteredTrophyTable");
     if ((filteredTrophyTableId!=null) && (filteredTrophyTableId.intValue()!=0))
     {
-      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTableId.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.getFilteredTrophyTable(filteredTrophyTableId.intValue());
       itemsContainer.set(LootType.FILTERED_TROPHY_TABLE,filteredTable);
     }
     // Other filtered trophy table
     Integer filteredTrophyTable2Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable2");
     if ((filteredTrophyTable2Id!=null) && (filteredTrophyTable2Id.intValue()!=0))
     {
-      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable2Id.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.getFilteredTrophyTable(filteredTrophyTable2Id.intValue());
       itemsContainer.set(LootType.FILTERED_TROPHY_TABLE2,filteredTable);
     }
     // Other filtered trophy table
     Integer filteredTrophyTable3Id=(Integer)properties.getProperty("LootGen_FilteredTrophyTable3");
     if ((filteredTrophyTable3Id!=null) && (filteredTrophyTable3Id.intValue()!=0))
     {
-      FilteredTrophyTable filteredTable=_lootLoader.handleFilteredTrophyTable(filteredTrophyTable3Id.intValue());
+      FilteredTrophyTable filteredTable=_lootLoader.getFilteredTrophyTable(filteredTrophyTable3Id.intValue());
       itemsContainer.set(LootType.FILTERED_TROPHY_TABLE3,filteredTable);
     }
     // Trophy list override
     Integer trophyListOverrideId=(Integer)properties.getProperty("LootGen_TrophyList_Override");
     if ((trophyListOverrideId!=null) && (trophyListOverrideId.intValue()!=0))
     {
-      TrophyList trophyList=_lootLoader.handleTrophyList(trophyListOverrideId.intValue());
+      TrophyList trophyList=_lootLoader.getTrophyList(trophyListOverrideId.intValue());
       itemsContainer.set(LootType.TROPHY_LIST,trophyList);
     }
     // Barter trophy list
     Integer barterTrophyListId=(Integer)properties.getProperty("LootGen_BarterTrophyList");
     if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
     {
-      TrophyList barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
+      TrophyList barterTrophyList=_lootLoader.getTrophyList(barterTrophyListId.intValue());
       itemsContainer.set(LootType.BARTER_TROPHY_LIST,barterTrophyList);
     }
     // Preview
@@ -149,8 +149,7 @@ public class MainDatContainerLoader
       {
         LOGGER.warn("Treasure list override");
       }
-      PropertiesSet treasureListProps=_facade.loadProperties(treasureListOverrideId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      treasureList=_lootLoader.handleTreasureList(treasureListOverrideId.intValue(),treasureListProps);
+      treasureList=_lootLoader.getTreasureList(treasureListOverrideId.intValue());
       itemsContainer.set(LootType.TREASURE_LIST,treasureList);
     }
     // Reputation trophy
@@ -226,8 +225,7 @@ If PackageItem_IsPreviewable: 1
     Integer treasureListTemplateId=(Integer)effectProps.getProperty("Effect_Lootgen_DiscoveryTreasureListTemplate");
     if (treasureListTemplateId!=null)
     {
-      PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      ret=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
+      ret=_lootLoader.getTreasureList(treasureListTemplateId.intValue());
     }
     return ret;
   }
@@ -254,7 +252,7 @@ If PackageItem_IsPreviewable: 1
     Integer runicLootListId=(Integer)properties.getProperty("ItemAdvancement_RunicLootListOverride");
     if (runicLootListId!=null)
     {
-      RelicsList list=_lootLoader.handleRelicsList(runicLootListId.intValue());
+      RelicsList list=_lootLoader.getRelicsList(runicLootListId.intValue());
       //System.out.println(list);
       ret=new RelicsContainer(containerId);
       ret.setRelicsList(list);

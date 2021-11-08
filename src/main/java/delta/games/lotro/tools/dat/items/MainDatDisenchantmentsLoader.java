@@ -70,7 +70,7 @@ public class MainDatDisenchantmentsLoader
       else if (trophyListId!=null)
       {
         ret=new DisenchantmentResult(indexDataId);
-        TrophyList trophyList=_lootLoader.handleTrophyList(trophyListId.intValue());
+        TrophyList trophyList=_lootLoader.getTrophyList(trophyListId.intValue());
         ret.setTrophyList(trophyList);
       }
     }

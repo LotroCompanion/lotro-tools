@@ -165,8 +165,7 @@ LevelBasedLootTable_LootTable:
     int treasureProfileId=((Integer)entryProps.getProperty("LevelBasedLootTable_TreasureProfile")).intValue();
     if (treasureProfileId!=0)
     {
-      PropertiesSet treasureListProps=_facade.loadProperties(treasureProfileId+DATConstants.DBPROPERTIES_OFFSET);
-      treasureList=_lootLoader.handleTreasureList(treasureProfileId,treasureListProps);
+      treasureList=_lootLoader.getTreasureList(treasureProfileId);
       if (treasureList==null)
       {
         LOGGER.warn("Treasure list not found: "+treasureProfileId);
@@ -176,7 +175,7 @@ LevelBasedLootTable_LootTable:
     int trophyListId=((Integer)entryProps.getProperty("LevelBasedLootTable_TrophyList")).intValue();
     if (trophyListId!=0)
     {
-      trophyList=_lootLoader.handleTrophyList(trophyListId);
+      trophyList=_lootLoader.getTrophyList(trophyListId);
       if (trophyList==null)
       {
         LOGGER.warn("Trophy list not found: "+trophyListId);

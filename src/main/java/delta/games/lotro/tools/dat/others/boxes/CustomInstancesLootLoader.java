@@ -150,7 +150,7 @@ public class CustomInstancesLootLoader
     Integer trophyTemplateId=(Integer)properties.getProperty("SkirmishTreasureLookup_TrophyListTemplateDID");
     if ((trophyTemplateId!=null) && (trophyTemplateId.intValue()!=0))
     {
-      trophyList=_lootLoader.handleTrophyList(trophyTemplateId.intValue());
+      trophyList=_lootLoader.getTrophyList(trophyTemplateId.intValue());
       entry.setTrophyList(trophyList);
     }
   }
