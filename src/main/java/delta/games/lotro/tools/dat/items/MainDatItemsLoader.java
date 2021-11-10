@@ -441,7 +441,7 @@ public class MainDatItemsLoader
   Item_Socket_Unlock_ILevel: 52
        */
       int socketType=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
-      if (socketType!=1)
+      if ((socketType!=1) && (socketType!=131072))
       {
         return true;
       }
@@ -1162,6 +1162,10 @@ public class MainDatItemsLoader
     if (socketType.getCode()==1)
     {
       return "Essence";
+    }
+    if (socketType.getCode()==18)
+    {
+      return "Essence of War";
     }
     handleTracery(item,socketType,properties);
     return socketType.getLabel();

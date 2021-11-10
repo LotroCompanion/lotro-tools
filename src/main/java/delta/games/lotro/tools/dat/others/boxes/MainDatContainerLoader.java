@@ -121,10 +121,6 @@ public class MainDatContainerLoader
     {
       ret=itemsContainer;
       Item item=ItemsManager.getInstance().getItem(indexDataId);
-      Integer action=(Integer)properties.getProperty("Usage_Action");
-      Integer weenieType=(Integer)properties.getProperty("WeenieType");
-      Integer bind2Acc=(Integer)properties.getProperty("PackageItem_BindAllItemsToAccount");
-      Integer bind2Char=(Integer)properties.getProperty("PackageItem_BindAllItemsToCharacter");
       Integer previewable=(Integer)properties.getProperty("PackageItem_IsPreviewable");
       if ((previewable!=null) && (previewable.intValue()==1))
       {
@@ -134,8 +130,14 @@ public class MainDatContainerLoader
           LOGGER.warn("No or empty preview list for "+item);
         }
       }
+      /*
+      Integer action=(Integer)properties.getProperty("Usage_Action");
+      Integer weenieType=(Integer)properties.getProperty("WeenieType");
+      Integer bind2Acc=(Integer)properties.getProperty("PackageItem_BindAllItemsToAccount");
+      Integer bind2Char=(Integer)properties.getProperty("PackageItem_BindAllItemsToCharacter");
       Integer playerForMunging=(Integer)properties.getProperty("PackageItem_UsePlayerAsContainerForMunging");
       //System.out.println(item+"\t"+action+"\t"+weenieType+"\t"+bind2Acc+"\t"+bind2Char+"\t"+previewable+"\t"+playerForMunging);
+      */
     }
 
     // Relics?
