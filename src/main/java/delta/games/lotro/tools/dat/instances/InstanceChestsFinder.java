@@ -20,9 +20,10 @@ import delta.games.lotro.lore.instances.comparators.PrivateEncounterNameComparat
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.ContainersManager;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsContainer;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.comparators.ItemNameComparator;
+import delta.games.lotro.lore.items.containers.ItemsContainer;
+import delta.games.lotro.lore.items.containers.LootTables;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
@@ -180,7 +181,8 @@ public class InstanceChestsFinder
       if (container instanceof ItemsContainer)
       {
         ItemsContainer itemsContainer=(ItemsContainer)container;
-        Integer tableId=itemsContainer.getCustomSkirmishLootTableId();
+        LootTables lootTables=itemsContainer.getLootTables();
+        Integer tableId=lootTables.getCustomSkirmishLootTableId();
         if (tableId!=null)
         {
           Integer key=Integer.valueOf(itemsContainer.getIdentifier());

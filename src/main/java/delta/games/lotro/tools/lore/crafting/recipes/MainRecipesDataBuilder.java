@@ -11,8 +11,9 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.ContainersManager;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsContainer;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.containers.ItemsContainer;
+import delta.games.lotro.lore.items.containers.LootTables;
 import delta.games.lotro.lore.trade.barter.BarterEntry;
 import delta.games.lotro.lore.trade.barter.BarterEntryElement;
 import delta.games.lotro.lore.trade.barter.BarterNpc;
@@ -70,7 +71,8 @@ public class MainRecipesDataBuilder
       if (container instanceof ItemsContainer)
       {
         ItemsContainer itemsContainer=(ItemsContainer)container;
-        Set<Integer> containedItems=itemsContainer.getItemIds();
+        LootTables lootTables=itemsContainer.getLootTables();
+        Set<Integer> containedItems=lootTables.getItemIds();
         containedItems.retainAll(recipeScrollsIds);
         if (containedItems.size()>0)
         {
