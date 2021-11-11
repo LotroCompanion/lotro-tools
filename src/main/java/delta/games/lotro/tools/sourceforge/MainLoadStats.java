@@ -129,6 +129,8 @@ public class MainLoadStats
     doIt(start,end,"lotro-companion-3.0.zip");
     doIt(start,end,"lotro-companion-2.0.zip");
     doIt(start,end,"lotro-companion-1.0.zip");
+    start=buildDate(2018,1,1);
+    doIt(start,end,"LotroCompanion-plugin-1.0.zip");
   }
 
   private Results doIt(Date start, Date end, String file)
