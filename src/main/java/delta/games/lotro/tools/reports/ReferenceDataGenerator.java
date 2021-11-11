@@ -3,6 +3,8 @@ package delta.games.lotro.tools.reports;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.EndOfLine;
@@ -18,6 +20,8 @@ import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
 import delta.games.lotro.dat.loaders.DataIdMapLoader;
+import delta.games.lotro.dat.loaders.wstate.WSLUtils;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.WLibData;
 
@@ -27,6 +31,8 @@ import delta.games.lotro.dat.wlib.WLibData;
  */
 public class ReferenceDataGenerator
 {
+  private static final Logger LOGGER=Logger.getLogger(ReferenceDataGenerator.class);
+
   private static final File ROOT_DIR=new File("../lotro-companion-private-doc/dat");
 
   private DataFacade _facade;
@@ -70,7 +76,34 @@ public class ReferenceDataGenerator
         File toDir=new File(ROOT_DIR,"WeenieContent");
         File to=new File(toDir,subLabel+".txt");
         dumpProperties(subDataId,to);
+        //File toWState=new File(toDir,subLabel+".wsl.txt");
+        //dumpWState(subDataId,toWState);
       }
+    }
+  }
+
+  @SuppressWarnings("unused")
+  private void dumpWState(int id, File to)
+  {
+    try
+    {
+      WStateDataSet decodedData=_facade.loadWState(id);
+      if (decodedData!=null)
+      {
+        StringBuilder sb=new StringBuilder();
+        List<Integer> mainReferences=decodedData.getOrphanReferences();
+        for(Integer mainReference : mainReferences)
+        {
+          Object value=decodedData.getValueForReference(mainReference.intValue());
+          String display=WSLUtils.getDecodedDataDisplay(value);
+          sb.append("#"+mainReference+": "+display).append(EndOfLine.NATIVE_EOL);
+        }
+        writeFile(to,sb.toString().trim());
+      }
+    }
+    catch(Throwable e)
+    {
+      LOGGER.error("Error with WSL ID="+id+", "+to, e);
     }
   }
 
