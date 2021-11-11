@@ -192,6 +192,7 @@ public class TraitPointsRegistryBuilder
     initPoint("Wedding", category, "Complete Volume V, Book 1, Chapter 8: The Wedding Banquet", null, "Book 1, Chapter 8: The Wedding Banquet");
     initPoint("Durin4.9", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 4.9: The Lord of Gundabad", null, "Chapter 4.9: The Lord of Gundabad");
     initPoint("Durin7.8", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 7.8: A Silent Presence", null, "Chapter 7.8: A Silent Presence");
+    initPoint("Durin11.5", category, "Complete The Legacy of Durin and the Trials of the Dwarves, Chapter 11.5: Gundabad Is Ours!", null, "Chapter 11.5: Gundabad Is Ours!");
 
     category=TraitPointCategories.DEEDS;
     initPoint("Epic Battles 1", category, "Earn 100 Promotion Points", null, "Promotion Points 1");
