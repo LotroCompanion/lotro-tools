@@ -328,4 +328,12 @@ public class GeneratedFiles
    * Enums directory.
    */
   public static final File ENUMS_DIR=LotroCoreConfig.getInstance().getFile(DataFiles.ENUMS_DIR);
+  /**
+   * Allegiances.
+   */
+  public static final File ALLEGIANCES=LotroCoreConfig.getInstance().getFile(DataFiles.ALLEGIANCES);
+  /**
+   * Allegiance icons.
+   */
+  public static final File ALLEGIANCES_ICONS=new File("../lotro-data/allegiances/allegianceIcons.zip").getAbsoluteFile();
 }
