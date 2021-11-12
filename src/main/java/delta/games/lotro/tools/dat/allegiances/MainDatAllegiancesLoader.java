@@ -1,8 +1,6 @@
 package delta.games.lotro.tools.dat.allegiances;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -13,13 +11,16 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.allegiances.AllegianceDescription;
+import delta.games.lotro.lore.allegiances.AllegiancesManager;
+import delta.games.lotro.lore.allegiances.Points2LevelCurve;
 import delta.games.lotro.lore.allegiances.io.xml.AllegianceXMLWriter;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -57,8 +58,8 @@ public class MainDatAllegiancesLoader
     }
     AllegianceDescription ret=new AllegianceDescription();
     ret.setIdentifier(allegianceID);
-    System.out.println("************* "+allegianceID+" *****************");
-    System.out.println(properties.dump());
+    //System.out.println("************* "+allegianceID+" *****************");
+    //System.out.println(properties.dump());
     // Name
     String name=DatUtils.getStringProperty(properties,"Allegiance_Name");
     ret.setName(name);
@@ -101,6 +102,20 @@ public class MainDatAllegiancesLoader
     return ret;
   }
 
+  private Points2LevelCurve loadCurve(int curveID)
+  {
+    WStateDataSet data=_facade.loadWState(curveID);
+    ClassInstance advancementTable=(ClassInstance)data.getValue(data.getOrphanReferences().get(0).intValue());
+    long[] longValues=(long[])advancementTable.getAttributeValue("267720940");
+    int [] values=new int[longValues.length];
+    for(int i=0;i<values.length;i++)
+    {
+      values[i]=(int)longValues[i];
+    }
+    Points2LevelCurve ret=new Points2LevelCurve(curveID,values);
+    return ret;
+  }
+
   /**
    * Load allegiances.
    */
@@ -108,9 +123,9 @@ public class MainDatAllegiancesLoader
   {
     // Load AllegianceControl
     PropertiesSet props=_facade.loadProperties(0x7904A21F);
-    System.out.println(props.dump());
+    //System.out.println(props.dump());
 
-    List<AllegianceDescription> allegiances=new ArrayList<AllegianceDescription>();
+    AllegiancesManager mgr=new AllegiancesManager();
     Object[] allegianceIds=(Object[])props.getProperty("Allegiance_Type_Array");
     for(Object allegianceIdObj : allegianceIds)
     {
@@ -118,24 +133,24 @@ public class MainDatAllegiancesLoader
       AllegianceDescription allegiance=load(allegianceId);
       if (allegiance!=null)
       {
-        allegiances.add(allegiance);
+        mgr.addAllegiance(allegiance);
       }
       else
       {
         LOGGER.warn("Could not handle allegiance ID="+allegianceId);
       }
     }
-    // Load progressions
-    Object[] progressionIds=(Object[])props.getProperty("Allegiance_Advancement_Progressions_Array");
-    for(Object progressionIdObj : progressionIds)
+    // Load curves
+    int[] curveIDs={1879353332,1879353333,1879353334,1879353335};
+    //Object[] curveIDs=(Object[])props.getProperty("Allegiance_Advancement_Progressions_Array");
+    //for(Object curveIDObj : curveIDs)
+    for(int curveID : curveIDs)
     {
-      int progressionID=((Integer)progressionIdObj).intValue();
-      DatStatUtils.getProgression(_facade,progressionID);
+      //int curveID=((Integer)curveIDObj).intValue();
+      Points2LevelCurve curve=loadCurve(curveID);
+      mgr.getCurvesManager().addCurve(curve);
     }
-    // Save allegiances
-    int nbAllegiances=allegiances.size();
-    LOGGER.info("Writing "+nbAllegiances+" allegiances");
-    boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,allegiances);
+    boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,mgr);
     if (ok)
     {
       System.out.println("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
