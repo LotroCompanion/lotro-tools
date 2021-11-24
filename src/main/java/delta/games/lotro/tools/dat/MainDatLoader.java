@@ -12,6 +12,7 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatGenericMobLootLoader;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
+import delta.games.lotro.tools.dat.allegiances.MainDatAllegiancesLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
@@ -157,6 +158,8 @@ public class MainDatLoader
     new MainTaskDataBuilder().doIt();
     // Relics melding recipes
     new MainDatRelicMeldingRecipesLoader(_facade).doIt();
+    // Allegiances
+    new MainDatAllegiancesLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -262,6 +265,9 @@ public class MainDatLoader
     // Misc icons
     deleteFile(GeneratedFiles.MISC_ICONS);
     deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);
+    // Allegiances
+    deleteFile(GeneratedFiles.ALLEGIANCES);
+    deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
