@@ -118,6 +118,7 @@ public class MainDatItemsLoader
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
   private EnumMapper _uniquenessChannel;
+  private ItemSortingDataLoader _sortDataLoader;
 
   /**
    * Constructor.
@@ -135,6 +136,7 @@ public class MainDatItemsLoader
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
+    _sortDataLoader=new ItemSortingDataLoader(facade);
   }
 
   private boolean _debug=false;
@@ -164,6 +166,8 @@ public class MainDatItemsLoader
       item.setIdentifier(indexDataId);
       // Name
       item.setName(name);
+      // Sort data
+      _sortDataLoader.handleItem(item,properties);
       // Item class
       int itemClass=(itemClassInt!=null)?itemClassInt.intValue():0;
       // Icon
