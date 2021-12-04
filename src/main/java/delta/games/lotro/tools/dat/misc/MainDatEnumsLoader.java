@@ -10,6 +10,7 @@ import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
+import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
@@ -60,7 +61,7 @@ public class MainDatEnumsLoader
     loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class);
     loadEnum(587202647,"TraitNature",TraitNature.class);
     loadEnum(587203634,"ItemSocketType",SocketType.class);
-    
+    loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
