@@ -11,6 +11,7 @@ import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.ItemClass;
+import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
@@ -72,7 +73,7 @@ public class MainDatEnumsLoader
     {
       for(Integer code : enumMapper.getTokens())
       {
-        if (code.intValue()==0)
+        if ((code.intValue()==0) && (!useZero(enumId)))
         {
           continue;
         }
@@ -82,6 +83,7 @@ public class MainDatEnumsLoader
         T entry=lotroEnum.buildEntryInstance(code.intValue(),key,label);
         lotroEnum.registerEntry(entry);
       }
+      handleAdditionalEntries(enumId,lotroEnum,implClass);
       File enumsDir=GeneratedFiles.ENUMS_DIR;
       String fileName=implClass.getSimpleName()+".xml";
       File enumFile=new File(enumsDir,fileName);
@@ -90,6 +92,46 @@ public class MainDatEnumsLoader
     else
     {
       LOGGER.warn("Could not load difficulties enum");
+    }
+  }
+
+  private boolean useZero(int enumId)
+  {
+    return (enumId==0x23000036);
+  }
+
+  private <T extends LotroEnumEntry> void handleAdditionalEntries(int enumId, LotroEnum<T> lotroEnum, Class<T> implClass)
+  {
+    if (enumId==0x23000036) // ItemClass
+    {
+      // Box of Essences
+      int code=ItemClassUtils.getBoxOfEssenceCode();
+      T entry=lotroEnum.buildEntryInstance(code,null,"Box of Essences");
+      lotroEnum.registerEntry(entry);
+      for(int tier=1;tier<=14;tier++)
+      {
+        // Essences
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEssenceCode(tier),null,"Essence:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Enhancement runes
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEnhancementRuneCode(tier),null,"Enhancement Rune:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Heraldric Traceries
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getHeraldicTraceryCode(tier),null,"Heraldric Tracery:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Words of Power
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfPowerCode(tier),null,"Word of Power:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Words of Mastery
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfMasteryCode(tier),null,"Word of Mastery:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Words of Craft
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfCraftCode(tier),null,"Word of Craft:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Essences of War
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEssenceOfWarCode(tier),null,"Essence of War:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+      }
     }
   }
 

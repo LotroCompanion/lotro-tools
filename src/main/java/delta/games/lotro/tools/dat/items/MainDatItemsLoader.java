@@ -15,6 +15,8 @@ import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.enums.ItemClass;
+import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
@@ -119,6 +121,7 @@ public class MainDatItemsLoader
   private List<EnhancementRune> _enhancementRunes;
   private EnumMapper _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
+  private LotroEnum<ItemClass> _itemClassEnum;
 
   /**
    * Constructor.
@@ -137,6 +140,7 @@ public class MainDatItemsLoader
     _enhancementRunes=new ArrayList<EnhancementRune>();
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
+    _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
   }
 
   private boolean _debug=false;
@@ -155,10 +159,10 @@ public class MainDatItemsLoader
         FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
         System.out.println(properties.dump());
       }
-      Integer itemClassInt=(Integer)properties.getProperty("Item_Class");
+      Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
       String name=DatUtils.getStringProperty(properties,"Name");
       name=StringUtils.fixName(name);
-      if (!useItem(name,itemClassInt)) return null;
+      if (!useItem(name,itemClassCode)) return null;
       nb++;
       item=buildItem(properties);
       _currentItem=item;
@@ -168,8 +172,6 @@ public class MainDatItemsLoader
       item.setName(name);
       // Sort data
       _sortDataLoader.handleItem(item,properties);
-      // Item class
-      int itemClass=(itemClassInt!=null)?itemClassInt.intValue():0;
       // Icon
       Integer iconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
@@ -241,14 +243,15 @@ public class MainDatItemsLoader
       {
         item.setQuality(DatEnumsUtils.getQuality(quality.intValue()));
       }
-      // Category
-      String category=_facade.getEnumsManager().resolveEnum(0x23000036,itemClass);
-      item.setSubCategory(category);
+      // Item class
+      ItemClass itemClass=_itemClassEnum.getEntry(itemClassCode.intValue());
       // Classify socketables (essences, traceries, enhancement runes) 
-      if (itemClass==235)
+      if (itemClassCode.intValue()==ItemClassUtils.ESSENCE_CODE)
       {
-        classifySocketable(item,properties);
+        int code=classifySocketable(item,properties);
+        itemClass=_itemClassEnum.getEntry(code);
       }
+      item.setItemClass(itemClass);
       // Armour value
       StatProvider armorStatProvider=null;
       Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
@@ -1105,74 +1108,84 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private void classifySocketable(Item item, PropertiesSet properties)
+  private int classifySocketable(Item item, PropertiesSet properties)
   {
     Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
-    String ret=null;
     if (overlay==null)
     {
-      ret="Essence";
+      return ItemClassUtils.ESSENCE_CODE;
     }
-    else
+    String name=item.getName();
+    if ((name!=null) && (name.contains("Mordor - Essences")))
     {
-      String name=item.getName();
-      if ((name!=null) && (name.contains("Mordor - Essences")))
+      return ItemClassUtils.getBoxOfEssenceCode();
+    }
+    int nbOverlays=OVERLAY_FOR_TIER.length;
+    int tier=0;
+    for(int i=0;i<nbOverlays;i++)
+    {
+      if (overlay.intValue()==OVERLAY_FOR_TIER[i])
       {
-        ret="Box of Essences";
-      }
-      else
-      {
-        String category=getSocketableCategory(item,properties);
-        int nbOverlays=OVERLAY_FOR_TIER.length;
-        int tier=0;
-        for(int i=0;i<nbOverlays;i++)
-        {
-          if (overlay.intValue()==OVERLAY_FOR_TIER[i])
-          {
-            tier=i+1;
-            break;
-          }
-        }
-        if (tier==0)
-        {
-          LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
-        }
-        ret=category+":Tier"+tier;
+        tier=i+1;
+        break;
       }
     }
-    if (ret!=null)
+    if (tier==0)
     {
-      item.setSubCategory(ret);
+      LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
     }
+    int code=getSocketableItemClass(item,properties,tier);
+    return code;
   }
 
-  private String getSocketableCategory(Item item, PropertiesSet properties)
+  private int getSocketableItemClass(Item item, PropertiesSet properties, int tier)
   {
     Long type=(Long)properties.getProperty("Item_Socket_Type");
     if (type==null)
     {
-      return null;
+      LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
+      return 0;
     }
     if (type.intValue()==0)
     {
       handleEnhancementRune(item,properties);
-      return "Enhancement Rune";
+      return ItemClassUtils.getEnhancementRuneCode(tier);
     }
     SocketType socketType=getSocketType(type.intValue());
     if (socketType==null)
     {
-      return null;
+      LOGGER.warn("Unexpected socket type: "+type+" for item: "+item);
+      return 0;
     }
-    if (socketType.getCode()==1)
+    int socketTypeCode=socketType.getCode();
+    if (socketTypeCode==1)
     {
-      return "Essence";
+      return ItemClassUtils.getEssenceCode(tier);
     }
-    if (socketType.getCode()==18)
+    if (socketTypeCode==18)
     {
-      return "Essence of War";
+      return ItemClassUtils.getEssenceOfWarCode(tier);
     }
     handleTracery(item,socketType,properties);
-    return socketType.getLabel();
+    if (socketTypeCode==3)
+    {
+      return ItemClassUtils.getHeraldicTraceryCode(tier);
+    }
+    else if (socketTypeCode==4)
+    {
+      return ItemClassUtils.getWordOfPowerCode(tier);
+    }
+    else if (socketTypeCode==5)
+    {
+      return ItemClassUtils.getWordOfCraftCode(tier);
+    }
+    else if (socketTypeCode==2)
+    {
+      LOGGER.warn("Unmanaged socket type 'Triangle' for item: "+item);
+      return 0;
+    }
+    // 6-16
+    return ItemClassUtils.getWordOfMasteryCode(tier);
   }
 
   private void handleTracery(Item item, SocketType socketType, PropertiesSet props)

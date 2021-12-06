@@ -8,6 +8,7 @@ import java.util.Map;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
+import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
@@ -63,10 +64,10 @@ public class ConsumablesLoader
       }
       int id=item.getIdentifier();
       String name=item.getName();
-      String category=item.getSubCategory();
+      ItemClass itemClass=item.getItemClass();
       String icon=item.getIcon();
 
-      _currentConsumable=new Consumable(id,name,icon,category);
+      _currentConsumable=new Consumable(id,name,icon,itemClass);
 
       // Look for a spellcraft property
       _spellcraftProperty=loadSpellcraftProperty(properties);
