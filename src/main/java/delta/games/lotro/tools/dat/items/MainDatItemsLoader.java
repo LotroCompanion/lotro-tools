@@ -122,6 +122,7 @@ public class MainDatItemsLoader
   private EnumMapper _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
   private LotroEnum<ItemClass> _itemClassEnum;
+  private CarryAllsLoader _carryAllsLoader;
 
   /**
    * Constructor.
@@ -141,6 +142,7 @@ public class MainDatItemsLoader
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
+    _carryAllsLoader=new CarryAllsLoader();
   }
 
   private boolean _debug=false;
@@ -324,6 +326,8 @@ public class MainDatItemsLoader
       handleLegendaries(item, properties);
       // Value
       handleItemValue(item,properties);
+      // Carry-alls
+      _carryAllsLoader.handleItem(item,properties);
     }
     else
     {
@@ -1296,6 +1300,8 @@ public class MainDatItemsLoader
     _legaciesLoader.save();
     // Save value tables
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
+    // Save carry-alls definitions
+    _carryAllsLoader.saveCarryAlls();
   }
 
   /**

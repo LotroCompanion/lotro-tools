@@ -199,6 +199,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PASSIVES_USAGE);
     deleteFile(GeneratedFiles.CONSUMABLES);
     deleteFile(GeneratedFiles.PAPER_ITEMS);
+    deleteFile(GeneratedFiles.CARRY_ALLS);
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
