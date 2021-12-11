@@ -44,6 +44,7 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.carryalls.CarryAll;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
@@ -122,7 +123,6 @@ public class MainDatItemsLoader
   private EnumMapper _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
   private LotroEnum<ItemClass> _itemClassEnum;
-  private CarryAllsLoader _carryAllsLoader;
 
   /**
    * Constructor.
@@ -142,7 +142,6 @@ public class MainDatItemsLoader
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
-    _carryAllsLoader=new CarryAllsLoader();
   }
 
   private boolean _debug=false;
@@ -321,13 +320,15 @@ public class MainDatItemsLoader
       {
         loadWeaponSpecifics((Weapon)item,properties);
       }
+      if (item instanceof CarryAll)
+      {
+        loadCarryAllSpecifics((CarryAll)item,properties);
+      }
       // Handle legendaries
       DatStatUtils.doFilterStats=false;
       handleLegendaries(item, properties);
       // Value
       handleItemValue(item,properties);
-      // Carry-alls
-      _carryAllsLoader.handleItem(item,properties);
     }
     else
     {
@@ -738,6 +739,14 @@ public class MainDatItemsLoader
     return ret;
   }
 
+  private void loadCarryAllSpecifics(CarryAll carryAll, PropertiesSet properties)
+  {
+    int stackMax=((Integer)properties.getProperty("BoS_Available_MaxQuantity")).intValue();
+    carryAll.setItemStackMax(stackMax);
+    int maxItems=((Integer)properties.getProperty("BoS_Available_MaxDifferentTypesOfItems")).intValue();
+    carryAll.setMaxItems(maxItems);
+  }
+
   private Item buildItem(PropertiesSet properties)
   {
     //EquipmentLocation slot=null;
@@ -960,9 +969,25 @@ public class MainDatItemsLoader
       armour.setArmourType(armourType);
       ret=armour;
     }
+    else if (isLegendary)
+    {
+      ret=new LegendaryItem();
+    }
+    else if (isNewLegendary)
+    {
+      ret=new LegendaryItem2();
+    }
     else
     {
-      ret=(isLegendary?new LegendaryItem():(isNewLegendary?new LegendaryItem2():new Item()));
+      Integer weenieType=(Integer)properties.getProperty("WeenieType");
+      if ((weenieType!=null) && (weenieType.intValue()==15728769))
+      {
+        ret=new CarryAll();
+      }
+      else
+      {
+        ret=new Item();
+      }
     }
     //ret.setEquipmentLocation(slot);
     return ret;
@@ -1300,8 +1325,6 @@ public class MainDatItemsLoader
     _legaciesLoader.save();
     // Save value tables
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
-    // Save carry-alls definitions
-    _carryAllsLoader.saveCarryAlls();
   }
 
   /**

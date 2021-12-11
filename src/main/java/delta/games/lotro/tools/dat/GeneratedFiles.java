@@ -336,8 +336,4 @@ public class GeneratedFiles
    * Allegiance icons.
    */
   public static final File ALLEGIANCES_ICONS=new File("../lotro-data/allegiances/allegianceIcons.zip").getAbsoluteFile();
-  /**
-   * Carry-alls.
-   */
-  public static final File CARRY_ALLS=LotroCoreConfig.getInstance().getFile(DataFiles.CARRY_ALLS);
 }
