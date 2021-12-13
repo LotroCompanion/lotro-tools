@@ -3,6 +3,7 @@ package delta.games.lotro.tools.misc;
 import java.io.File;
 import java.util.List;
 
+import delta.common.utils.NumericTools;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
@@ -25,21 +26,19 @@ import delta.games.lotro.lore.maps.DungeonsManager;
  */
 public class MainLotroImagesCleanup
 {
-  private static final File ROOT_DIR=new File("D:\\tmp\\lotro images");
+  private static final File ROOT_DIR=new File("D:\\dev\\git\\lotro-tools");
   private static final File TO_DIR=new File("D:\\tmp\\radar images");
 
   private DataFacade _facade=new DataFacade();
 
   private void doIt()
   {
-    /*
     cleanupItems();
     cleanSkills();
     cleanBasemaps();
     cleanTraits();
     cleanRadarImages();
     cleanEffects();
-    */
   }
 
   void cleanupItems()
@@ -47,21 +46,14 @@ public class MainLotroImagesCleanup
     ItemsManager itemsMgr=ItemsManager.getInstance();
     for(Item item : itemsMgr.getAllItems())
     {
-      int backgroundId=item.getBackgroundIconId();
-      removeIcon(backgroundId);
-      int iconId=item.getIconId();
-      removeIcon(iconId);
-      // Other icons
-      PropertiesSet props=_facade.loadProperties(item.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
-      Integer id=(Integer)props.getProperty("Icon_Layer_ShadowDID");
-      if (id!=null)
+      String iconStr=item.getIcon();
+      if (iconStr!=null)
       {
-        removeIcon(id.intValue());
-      }
-      id=(Integer)props.getProperty("Icon_Layer_UnderlayDID");
-      if (id!=null)
-      {
-        removeIcon(id.intValue());
+        String[] iconIds=iconStr.split("-");
+        for(String iconId : iconIds)
+        {
+          removeIcon(NumericTools.parseInt(iconId,0));
+        }
       }
     }
   }
@@ -99,7 +91,8 @@ public class MainLotroImagesCleanup
 
   void cleanRadarImages()
   {
-    for(int region=1;region<=4;region++)
+    int[] regions=new int[]{1,2,3,4,14,15};
+    for(int region : regions)
     {
       for(int blockX=0;blockX<=255;blockX++)
       {
@@ -138,9 +131,12 @@ public class MainLotroImagesCleanup
     File from=new File(ROOT_DIR,imageId+".png");
     if (from.exists())
     {
+      from.delete();
+      /*
       File to=new File(TO_DIR,imageId+".png");
       TO_DIR.mkdirs();
       from.renameTo(to);
+      */
     }
   }
 
