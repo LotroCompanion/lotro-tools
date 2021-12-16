@@ -10,7 +10,6 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.config.DataFiles;
 import delta.games.lotro.config.LotroCoreConfig;
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.buffs.EffectBuff;
@@ -27,7 +26,7 @@ import delta.games.lotro.lore.maps.DungeonsManager;
 public class MainLotroImagesCleanup
 {
   private static final File ROOT_DIR=new File("D:\\dev\\git\\lotro-tools");
-  private static final File TO_DIR=new File("D:\\tmp\\radar images");
+  //private static final File TO_DIR=new File("D:\\tmp\\radar images");
 
   private DataFacade _facade=new DataFacade();
 
