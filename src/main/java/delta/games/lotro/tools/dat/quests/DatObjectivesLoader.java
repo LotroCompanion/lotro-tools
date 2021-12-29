@@ -5,8 +5,10 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.dat.WStateClass;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
@@ -133,36 +135,126 @@ public class DatObjectivesLoader
         String billboardOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride");
         objective.setBillboardOverride(billboardOverride);
         // Conditions (can have several conditions)
-        Object[] completionConditionsArray=(Object[])objectiveProps.getProperty("Quest_CompletionConditionArray");
+        ArrayPropertyValue completionConditionsArray=(ArrayPropertyValue)objectiveProps.getPropertyValueByName("Quest_CompletionConditionArray");
         if (completionConditionsArray!=null)
         {
-          for(Object item : completionConditionsArray)
+          for(PropertyValue completionConditionValue : completionConditionsArray.getValues())
           {
-            handleObjectiveItem(objective,item);
+            handleObjectiveItem(objective,completionConditionValue);
           }
         }
+        // Ignored: Quest_NPCObjRoles (Array) and Quest_ObjectiveVolumeString (String)
         objectivesManager.addObjective(objective);
       }
     }
     objectivesManager.sort();
   }
 
-  private void handleObjectiveItem(Objective objective, Object item)
+  private void handleObjectiveItem(Objective objective, PropertyValue item)
   {
-    if (item instanceof Object[])
+    String propertyName=item.getDefinition().getName();
+    if ("Quest_CompletionCondition".equals(propertyName))
     {
-      for(Object childItem : (Object[])item)
-      {
-        handleObjectiveItem(objective, childItem);
-      }
+      ArrayPropertyValue completionConditionArray=(ArrayPropertyValue)item;
+      handleCompletionCondition(objective,completionConditionArray);
     }
-    else if (item instanceof PropertiesSet)
+    else if ("Quest_FailureCondition".equals(propertyName))
     {
-      handleCompletionCondition(objective, (PropertiesSet)item);
+      ArrayPropertyValue failureConditionArray=(ArrayPropertyValue)item;
+      handleFailureCondition(objective,failureConditionArray);
+    }
+    else
+    {
+      LOGGER.warn("Unmanaged item for a completion condition array: "+item);
     }
   }
 
-  private void handleCompletionCondition(Objective objective, PropertiesSet properties)
+  @SuppressWarnings("unused")
+  private void handleCompletionCondition(Objective objective, ArrayPropertyValue completionConditionArray)
+  {
+    /*
+268439142 - Quest_CompletionCondition, type=Array
+  Property: QuestEvent_CompoundEvent, ID=268439626, type=Array
+  Property: Quest_CompletionConditionCount, ID=268461297, type=Int
+  Property: Quest_Condition_NeverFinish, ID=268437079, type=boolean
+  Property: QuestEvent_Entry, ID=268439867, type=Struct
+     */
+    for(PropertyValue completionConditionItem : completionConditionArray.getValues())
+    {
+      String propertyName=completionConditionItem.getDefinition().getName();
+      if ("Quest_CompletionConditionCount".equals(propertyName))
+      {
+        int conditionCount=((Integer)completionConditionItem.getValue()).intValue();
+      }
+      else if ("QuestEvent_Entry".equals(propertyName))
+      {
+        PropertiesSet questEventEntryProps=(PropertiesSet)completionConditionItem.getValue();
+        handleQuestEventEntry(objective,questEventEntryProps);
+      }
+      else if ("QuestEvent_CompoundEvent".equals(propertyName))
+      {
+        ArrayPropertyValue compoundEventArray=(ArrayPropertyValue)completionConditionItem;
+        handleCompoundEvent(objective,compoundEventArray);
+      }
+      else if ("Quest_Condition_NeverFinish".equals(propertyName))
+      {
+        int neverFinish=((Integer)completionConditionItem.getValue()).intValue();
+      }
+      else
+      {
+        LOGGER.warn("Unmanaged item for a completion condition array: "+completionConditionItem);
+      }
+    }
+  }
+
+  private void handleCompoundEvent(Objective objective, ArrayPropertyValue compoundEventArray)
+  {
+    /*
+268439626 - QuestEvent_CompoundEvent, type=Array
+  Property: Accomplishment_LoreInfo, ID=268437995, type=String Info
+  Property: QuestEvent_Entry, ID=268439867, type=Struct
+  Property: QuestEvent_CompoundProgressOverride, ID=268439136, type=String Info
+  Property: QuestEvent_Entry_Array, ID=268457470, type=Array
+     */
+    for(PropertyValue compoundEventItem : compoundEventArray.getValues())
+    {
+      String propertyName=compoundEventItem.getDefinition().getName();
+      if ("QuestEvent_Entry".equals(propertyName))
+      {
+        PropertiesSet questEventEntryProps=(PropertiesSet)compoundEventItem.getValue();
+        handleQuestEventEntry(objective,questEventEntryProps);
+      }
+      else if ("QuestEvent_Entry_Array".equals(propertyName))
+      {
+        ArrayPropertyValue questEventArray=(ArrayPropertyValue)compoundEventItem;
+        handleQuestEventEntryArray(objective,questEventArray);
+      }
+    }
+  }
+
+  private void handleQuestEventEntryArray(Objective objective, ArrayPropertyValue questEventArray)
+  {
+    /*
+268457470 - QuestEvent_Entry_Array, type=Array
+  Property: QuestEvent_Entry, ID=268439867, type=Struct
+     */
+    for(PropertyValue questEventItem : questEventArray.getValues())
+    {
+      String propertyName=questEventItem.getDefinition().getName();
+      if ("QuestEvent_Entry".equals(propertyName))
+      {
+        PropertiesSet questEventEntryProps=(PropertiesSet)questEventItem.getValue();
+        handleQuestEventEntry(objective,questEventEntryProps);
+      }
+    }
+  }
+
+  private void handleFailureCondition(Objective objective, ArrayPropertyValue failureConditionArray)
+  {
+    // Unmanaged
+  }
+
+  private void handleQuestEventEntry(Objective objective, PropertiesSet properties)
   {
     /*
      * Shared condition attributes:
