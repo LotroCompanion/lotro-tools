@@ -224,8 +224,7 @@ public class MainDatAchievablesLoader
     */
     // Chain
     // - previous
-    boolean obsolete=findPrerequisites(quest,properties);
-    quest.setObsolete(obsolete);
+    findPrerequisites(quest,properties);
     // - next
     Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
     if (nextQuestId!=null)
@@ -387,8 +386,8 @@ public class MainDatAchievablesLoader
     // Deed type
     handleDeedType(deed,properties);
 
-    boolean obsolete=findPrerequisites(deed,properties);
-    deed.setObsolete(obsolete);
+    // Pre-requisites
+    findPrerequisites(deed,properties);
 
     // Requirements
     findRequirements(deed,properties);
@@ -610,7 +609,7 @@ public class MainDatAchievablesLoader
 
   private boolean findPrerequisites(Achievable achievable, PropertiesSet properties)
   {
-    boolean obsolete=false;
+    boolean hidden=false;
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
@@ -634,7 +633,7 @@ public class MainDatAchievablesLoader
             }
             else
             {
-              obsolete=true;
+              hidden=true;
             }
           }
           else
@@ -652,13 +651,14 @@ public class MainDatAchievablesLoader
           Usage_QuestID: 1879048439
           Usage_QuestStatus: 805306368
     */
-    return obsolete;
+    achievable.setHidden(hidden);
+    return hidden;
   }
 
   private boolean useQuest(int id, PropertiesSet properties)
   {
-    // Ignore 'Test' quests
     Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
+    // Ignore 'Test' quests
     if ((categoryId!=null) && (categoryId.intValue()==16))
     {
       return false;
