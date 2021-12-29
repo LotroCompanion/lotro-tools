@@ -20,7 +20,6 @@ import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
-import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -42,6 +41,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
@@ -521,90 +521,20 @@ public class MainDatAchievablesLoader
 
   private void findRequirements(Achievable achievable, PropertiesSet properties)
   {
-    // - level
-    findLevelRequirements(achievable,properties);
-    // - race
-    findRaceRequirements(achievable,properties);
-    // - class
-    findClassRequirements(achievable,properties);
-    // TODO: Usage_RequiredFaction
-    // TODO: Usage_WorldEvent_AllConditionList, Usage_WorldEvent_AnyConditionList
-    // TODO: Usage_RequiredAccountToken
-  }
-
-  private void findLevelRequirements(Achievable achievable, PropertiesSet properties)
-  {
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
-      Integer minLevel=(Integer)permissions.getProperty("Usage_MinLevel");
-      if ((minLevel!=null) && (minLevel.intValue()>1))
-      {
-        achievable.setMinimumLevel(minLevel);
-      }
-      Integer maxLevel=(Integer)permissions.getProperty("Usage_MaxLevel");
-      if ((maxLevel!=null) && (maxLevel.intValue()!=-1))
-      {
-        achievable.setMaximumLevel(maxLevel);
-      }
+      // - level
+      RequirementsLoadingUtils.loadLevelRequirements(permissions,achievable.getUsageRequirement());
+      // - races
+      RequirementsLoadingUtils.loadRequiredRaces(permissions,achievable.getUsageRequirement());
+      // - classes
+      RequirementsLoadingUtils.loadRequiredClasses(permissions,achievable.getUsageRequirement());
+      // - faction
+      RequirementsLoadingUtils.loadRequiredFaction(permissions,achievable.getUsageRequirement());
+      // TODO: Usage_WorldEvent_AllConditionList, Usage_WorldEvent_AnyConditionList
+      // TODO: Usage_RequiredAccountToken
     }
-    // TODO: Usage_MinLevel_FloatToCap
-  }
-
-  private void findRaceRequirements(Achievable achievable, PropertiesSet properties)
-  {
-    PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
-    if (permissions!=null)
-    {
-      Object[] raceIds=(Object[])permissions.getProperty("Usage_RequiredRaces");
-      if (raceIds!=null)
-      {
-        UsageRequirement requirements=achievable.getUsageRequirement();
-        for(Object raceIdObj : raceIds)
-        {
-          Integer raceId=(Integer)raceIdObj;
-          Race race=DatEnumsUtils.getRaceFromRaceId(raceId.intValue());
-          if (race!=null)
-          {
-            requirements.addAllowedRace(race);
-          }
-        }
-      }
-    }
-    /*
-    DefaultPermissionBlobStruct: 
-      Usage_RequiredRaces: 
-        #1: 81
-        #2: 23
-        #3: 114
-    */
-  }
-
-  private void findClassRequirements(Achievable achievable, PropertiesSet properties)
-  {
-    PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
-    if (permissions!=null)
-    {
-      Object[] classIds=(Object[])permissions.getProperty("Usage_RequiredClassList");
-      if (classIds!=null)
-      {
-        UsageRequirement requirements=achievable.getUsageRequirement();
-        for(Object classIdObj : classIds)
-        {
-          Integer classId=(Integer)classIdObj;
-          CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId.intValue());
-          if (characterClass!=null)
-          {
-            requirements.addAllowedClass(characterClass);
-          }
-        }
-      }
-    }
-    /*
-    DefaultPermissionBlobStruct: 
-      Usage_RequiredClassList: 
-        #1: 162
-    */
   }
 
   private boolean findPrerequisites(Achievable achievable, PropertiesSet properties)

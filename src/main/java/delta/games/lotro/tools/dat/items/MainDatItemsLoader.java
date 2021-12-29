@@ -14,7 +14,6 @@ import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -22,8 +21,6 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.money.QualityBasedValueLookupTable;
 import delta.games.lotro.common.money.io.xml.ValueTablesXMLWriter;
-import delta.games.lotro.common.requirements.FactionRequirement;
-import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -62,14 +59,13 @@ import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
-import delta.games.lotro.lore.reputation.Faction;
-import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -284,11 +280,11 @@ public class MainDatItemsLoader
       }
       // Requirements
       // - class
-      getRequiredClasses(properties,item.getUsageRequirements());
+      RequirementsLoadingUtils.loadRequiredClasses(properties,item.getUsageRequirements());
       // - race
-      getRequiredRaces(properties,item.getUsageRequirements());
+      RequirementsLoadingUtils.loadRequiredRaces(properties,item.getUsageRequirements());
       // - faction
-      getRequiredFaction(properties,item.getUsageRequirements());
+      RequirementsLoadingUtils.loadRequiredFaction(properties,item.getUsageRequirements());
       // Stats providers
       DatStatUtils.doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
@@ -999,60 +995,6 @@ public class MainDatItemsLoader
     int defaultSlot=(defaultSlotInt!=null)?defaultSlotInt.intValue():0;
     EquipmentLocation slot=DatEnumsUtils.getSlot(defaultSlot);
     return slot;
-  }
-
-  private void getRequiredClasses(PropertiesSet properties, UsageRequirement requirements)
-  {
-    Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
-    if (classReqs!=null)
-    {
-      for(Object classReq : classReqs)
-      {
-        int characterClassId=((Integer)classReq).intValue();
-        CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(characterClassId);
-        if (characterClass!=null)
-        {
-          requirements.addAllowedClass(characterClass);
-        }
-      }
-    }
-  }
-
-  private void getRequiredRaces(PropertiesSet properties, UsageRequirement requirements)
-  {
-    Object[] raceReqs=(Object[])properties.getProperty("Usage_RequiredRaces");
-    if (raceReqs!=null)
-    {
-      for(Object raceReq : raceReqs)
-      {
-        int raceId=((Integer)raceReq).intValue();
-        Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
-        if (race!=null)
-        {
-          requirements.addAllowedRace(race);
-        }
-      }
-    }
-  }
-
-  private void getRequiredFaction(PropertiesSet properties, UsageRequirement requirements)
-  {
-    PropertiesSet factionReqProps=(PropertiesSet)properties.getProperty("Usage_RequiredFaction");
-    if (factionReqProps!=null)
-    {
-      int factionId=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_DataID")).intValue();
-      int tier=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_Tier")).intValue();
-      Faction faction=FactionsRegistry.getInstance().getById(factionId);
-      if (faction!=null)
-      {
-        FactionRequirement factionRequirement=new FactionRequirement(faction,tier);
-        requirements.setFactionRequirement(factionRequirement);
-      }
-      else
-      {
-        LOGGER.warn("Faction not found: "+factionId);
-      }
-    }
   }
 
   private void handleMunging(PropertiesSet properties)
