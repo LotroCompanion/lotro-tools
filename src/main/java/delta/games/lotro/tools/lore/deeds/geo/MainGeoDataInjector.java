@@ -62,7 +62,7 @@ public class MainGeoDataInjector
     AchievableGeoData achievableGeoData=data.getGeoDataForAchievable(achievableId);
     if (achievableGeoData!=null)
     {
-      System.out.println("Achievable: "+achievable);
+      //System.out.println("Achievable: "+achievable);
       List<Objective> objectives=achievable.getObjectives().getObjectives();
       List<Integer> objectiveIndexes=achievableGeoData.getObjectiveIndexes();
       for(Integer objectiveIndex : objectiveIndexes)
@@ -81,7 +81,7 @@ public class MainGeoDataInjector
   private void handleAchievableObjective(AchievableGeoPointsManager pointsMgr, Achievable achievable, Objective objective, AchievableGeoData geoData)
   {
     int objectiveIndex=objective.getIndex();
-    System.out.println("\tObjective #"+objectiveIndex);
+    //System.out.println("\tObjective #"+objectiveIndex);
     List<Integer> conditionIndexes=geoData.getConditionIndexes(objectiveIndex);
     List<ObjectiveCondition> conditions=objective.getConditions();
     for(Integer conditionIndex : conditionIndexes)
@@ -98,7 +98,7 @@ public class MainGeoDataInjector
       {
         continue;
       }
-      System.out.println("\t\tCondition #"+conditionIndex);
+      //System.out.println("\t\tCondition #"+conditionIndex);
       List<AchievableGeoDataItem> items=geoData.getConditionData(objectiveIndex,conditionIndex.intValue());
       for(AchievableGeoDataItem geoItem : items)
       {
