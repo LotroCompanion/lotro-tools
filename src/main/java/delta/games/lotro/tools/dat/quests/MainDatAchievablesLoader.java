@@ -68,6 +68,7 @@ public class MainDatAchievablesLoader
   private DatObjectivesLoader _objectivesLoader;
   private DatRolesLoader _rolesLoader;
   private StringRenderer _renderer;
+  private AchievablesLogger _logger;
 
   /**
    * Constructor.
@@ -84,6 +85,7 @@ public class MainDatAchievablesLoader
     _objectivesLoader=new DatObjectivesLoader(facade);
     _rolesLoader=new DatRolesLoader(facade);
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
+    _logger=new AchievablesLogger(true,true,"achievables.txt");
   }
 
   private void handleArc(int arcId)
@@ -128,6 +130,7 @@ public class MainDatAchievablesLoader
       {
         loadDeed(indexDataId,properties);
       }
+      _logger.handleAchievable(indexDataId,isQuest,properties);
     }
     else
     {
@@ -653,6 +656,7 @@ public class MainDatAchievablesLoader
 
     // Save
     doSave();
+    _logger.finish();
   }
 
   private void doScan()
