@@ -119,7 +119,7 @@ public class RequirementsLoadingUtils
       }
       else
       {
-        LOGGER.warn("Incomplete faction requirement: factionId="+factionId+", tier="+tier);
+        LOGGER.debug("Incomplete faction requirement: factionId="+factionId+", tier="+tier);
       }
     }
   }
