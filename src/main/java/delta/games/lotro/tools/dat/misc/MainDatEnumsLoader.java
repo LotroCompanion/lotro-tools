@@ -59,7 +59,7 @@ public class MainDatEnumsLoader
     loadEnum(587202574,"CharacterClassType",AgentClass.class);
     loadEnum(587202575,"ClassificationFilterType",ClassificationFilter.class);
     loadEnum(587202672,"ExaminationModStatType",MobType.class);
-    loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class);
+    loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class); // 0x2300001A
     loadEnum(587202647,"TraitNature",TraitNature.class);
     loadEnum(587203634,"ItemSocketType",SocketType.class);
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036

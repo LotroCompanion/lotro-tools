@@ -9,10 +9,12 @@ import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -60,8 +62,8 @@ public class SkillLoader
       Integer categoryId=(Integer)skillProperties.getProperty("Skill_Category");
       if (categoryId!=null)
       {
-        EnumMapper categoryMapper=facade.getEnumsManager().getEnumMapper(587202586);
-        String category=categoryMapper.getString(categoryId.intValue());
+        LotroEnum<SkillCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(SkillCategory.class);
+        SkillCategory category=categoryEnum.getEntry(categoryId.intValue());
         ret.setCategory(category);
       }
       // Build icon file
