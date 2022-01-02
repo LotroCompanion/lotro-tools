@@ -60,6 +60,10 @@ public class RaceDataLoader
     String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
     description=description.trim();
     raceDescription.setDescription(description);
+    // Short or tall?
+    Integer isTall=(Integer)properties.getProperty("RaceTable_IsTallRace");
+    boolean tall=(isTall!=null)?(isTall.intValue()==1):true;
+    raceDescription.setTall(tall);
     // Nationalities
     /*
     Object[] nationalityCodes=(Object[])properties.getProperty("RaceTable_NationalityList");
