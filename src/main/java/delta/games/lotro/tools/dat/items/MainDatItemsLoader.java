@@ -119,6 +119,7 @@ public class MainDatItemsLoader
   private EnumMapper _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
   private LotroEnum<ItemClass> _itemClassEnum;
+  private ItemDetailsLoader _skillDetailsLoader;
 
   /**
    * Constructor.
@@ -138,6 +139,7 @@ public class MainDatItemsLoader
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
+    _skillDetailsLoader=new ItemDetailsLoader();
   }
 
   private boolean _debug=false;
@@ -325,6 +327,8 @@ public class MainDatItemsLoader
       handleLegendaries(item, properties);
       // Value
       handleItemValue(item,properties);
+      // Skill details
+      _skillDetailsLoader.handleItem(item,properties);
     }
     else
     {
