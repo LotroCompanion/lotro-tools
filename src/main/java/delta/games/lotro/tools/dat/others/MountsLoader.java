@@ -167,10 +167,12 @@ public class MountsLoader
   public void doIt()
   {
     List<MountDescription> mounts=new ArrayList<MountDescription>();
+    // MountDirectory
     PropertiesSet mountsDirectoryProps=_facade.loadProperties(0x70048B29+DATConstants.DBPROPERTIES_OFFSET);
     Object[] mountSkillsList=(Object[])mountsDirectoryProps.getProperty("Mount_SkillList");
     for(Object mountSkillObj : mountSkillsList)
     {
+      // Use property name on each entry to get tall/short type
       int mountSkillId=((Integer)mountSkillObj).intValue();
       MountDescription mount=load(mountSkillId);
       if (mount!=null)
