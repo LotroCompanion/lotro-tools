@@ -20,6 +20,7 @@ import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.common.enums.TraitNature;
+import delta.games.lotro.common.enums.TravelLink;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -63,6 +64,7 @@ public class MainDatEnumsLoader
     loadEnum(587202647,"TraitNature",TraitNature.class);
     loadEnum(587203634,"ItemSocketType",SocketType.class);
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
+    loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
