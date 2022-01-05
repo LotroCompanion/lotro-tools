@@ -3,7 +3,8 @@ package delta.games.lotro.tools.dat.maps.landblocks;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.geo.BlockReference;
-import delta.games.lotro.tools.dat.maps.data.Cell;
+import delta.games.lotro.lore.maps.landblocks.Cell;
+import delta.games.lotro.lore.maps.landblocks.Landblock;
 import delta.games.lotro.tools.dat.maps.data.HeightMap;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 

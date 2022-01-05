@@ -4,12 +4,12 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.math.geometry.Vector3D;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.Vector3D;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.tools.dat.maps.MarkersLoadingUtils;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;

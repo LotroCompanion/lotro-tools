@@ -8,6 +8,7 @@ import java.util.Map;
 
 import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.maps.landblocks.Cell;
 
 /**
  * Land-block info.

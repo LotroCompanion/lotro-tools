@@ -14,7 +14,6 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.maps.MapUtils;
-import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
  * Finds map for points.
@@ -24,7 +23,6 @@ public class MapsFinder
 {
   private static final Logger LOGGER=Logger.getLogger(MapsFinder.class);
 
-  private LandblocksManager _landblocksManager;
   private GeoreferencedBasemapsManager _basemapsManager;
 
   /**
@@ -32,7 +30,6 @@ public class MapsFinder
    */
   public MapsFinder()
   {
-    _landblocksManager=LandblocksManager.getInstance();
     File rootDir=new File("../lotro-maps-db/maps");
     _basemapsManager=new GeoreferencedBasemapsManager(rootDir);
   }
@@ -65,7 +62,7 @@ public class MapsFinder
   private Integer getMapUsingParentZone(DatPosition position)
   {
     Integer ret=null;
-    Integer parentZoneId=_landblocksManager.getParentZone(position);
+    Integer parentZoneId=MapUtils.getParentZone(position);
     if (parentZoneId!=null)
     {
       AbstractMap map=MapUtils.findMapForZone(parentZoneId.intValue());

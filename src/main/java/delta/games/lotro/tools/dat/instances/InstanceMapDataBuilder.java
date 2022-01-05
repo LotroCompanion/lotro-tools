@@ -18,6 +18,8 @@ import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.MapDescription;
+import delta.games.lotro.lore.maps.landblocks.Landblock;
+import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
@@ -25,8 +27,6 @@ import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.MarkerUtils;
-import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
-import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
  * Build map data for instances.

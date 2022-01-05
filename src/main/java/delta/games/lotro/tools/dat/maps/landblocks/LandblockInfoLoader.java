@@ -17,7 +17,7 @@ import delta.games.lotro.dat.loaders.EntityDescLoader;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.tools.dat.maps.data.Cell;
+import delta.games.lotro.lore.maps.landblocks.Cell;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 import delta.games.lotro.tools.dat.maps.data.LbiLink;
 import delta.games.lotro.tools.dat.maps.data.Weenie;
@@ -269,7 +269,7 @@ public class LandblockInfoLoader
       }
     }
     Cell ret=new Cell(index,dungeonId);
-    ret.setPosition(position);
+    ret.setPosition(position.getPosition());
     return ret;
   }
 

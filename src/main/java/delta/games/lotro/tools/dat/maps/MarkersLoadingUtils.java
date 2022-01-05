@@ -24,13 +24,13 @@ import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
+import delta.games.lotro.lore.maps.landblocks.Landblock;
+import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.maps.data.links.MapLinkType;
-import delta.games.lotro.tools.dat.maps.landblocks.Landblock;
-import delta.games.lotro.tools.dat.maps.landblocks.LandblocksManager;
 
 /**
  * Marker loading utilities.
@@ -44,7 +44,6 @@ public class MarkersLoadingUtils
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
   private MapsDataManager _mapsDataManager;
-  private LandblocksManager _landblocksManager;
   private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
   private LinksStorage _links;
 
@@ -58,7 +57,6 @@ public class MarkersLoadingUtils
     _facade=facade;
     _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     _mapsDataManager=mapsDataManager;
-    _landblocksManager=LandblocksManager.getInstance();
     _links=new LinksStorage();
   }
 
@@ -118,7 +116,7 @@ public class MarkersLoadingUtils
       LOGGER.warn("Found unsupported region: "+region);
       return null;
     }
-    Integer parentZoneId=_landblocksManager.getParentZone(position);
+    Integer parentZoneId=MapUtils.getParentZone(position);
     if (parentZoneId==null)
     {
       LOGGER.warn("No parent zone for marker!");
@@ -184,7 +182,7 @@ public class MarkersLoadingUtils
     if (DO_CHECK)
     {
       // Verified to work 100%
-      Landblock landblock=_landblocksManager.getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
+      Landblock landblock=LandblocksManager.getInstance().getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
       if (landblock==null)
       {
         LOGGER.warn("No parent data for: "+position);
@@ -362,7 +360,7 @@ public class MarkersLoadingUtils
         targetMap=map;
       }
     }
-    Integer parentZone=_landblocksManager.getParentZone(destPosition);
+    Integer parentZone=MapUtils.getParentZone(destPosition);
     Integer destId=(destArea!=null)?Integer.valueOf(destArea.getIdentifier()):null;
     if (!Objects.equals(destId,parentZone))
     {

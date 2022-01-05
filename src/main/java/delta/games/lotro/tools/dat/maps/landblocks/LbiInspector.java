@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.EntityDescriptor;
-import delta.games.lotro.tools.dat.maps.data.Cell;
+import delta.games.lotro.lore.maps.landblocks.Cell;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 import delta.games.lotro.tools.dat.maps.data.LbiLink;
 import delta.games.lotro.tools.dat.maps.data.Weenie;

@@ -3,7 +3,9 @@ package delta.games.lotro.tools.dat.maps.landblocks;
 import java.util.Collections;
 import java.util.List;
 
-import delta.games.lotro.tools.dat.maps.landblocks.comparators.LandblockIdComparator;
+import delta.games.lotro.lore.maps.landblocks.Landblock;
+import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
+import delta.games.lotro.lore.maps.landblocks.comparators.LandblockIdComparator;
 
 /**
  * Evaluate assumptions about landblocks.
