@@ -176,61 +176,100 @@ public class SkillConstraintsComputer
   private void handleSkill(SkillDescription skill)
   {
     System.out.println("Skill: "+skill);
-    // Class skills
+    UsageRequirement req=getSkillRequirement(skill);
+    System.out.println("\t"+req);
+  }
+
+  private UsageRequirement getSkillRequirement(SkillDescription skill)
+  {
     Integer key=Integer.valueOf(skill.getIdentifier());
+    UsageRequirement ret=null;
+    // Class skills
     List<ClassDescription> classes=_classSkills.get(key);
-    if (classes!=null)
+    if ((classes!=null) && (classes.size()>0))
     {
-      for(ClassDescription classDescription : classes)
+      ret=new UsageRequirement();
+      for(ClassDescription characterClass : classes)
       {
-        System.out.println("\tClass: "+classDescription.getCharacterClass());
+        ret.addAllowedClass(characterClass.getCharacterClass());
       }
     }
     // Item granted skills
     List<Item> items=_itemGrantedSkills.get(key);
     if (items!=null)
     {
-      for(Item item : items)
+      UsageRequirement itemReq=getRequirementFromItems(items);
+      if (itemReq==null)
       {
-        System.out.println("\tItem: "+item);
-        ItemBinding binding=item.getBinding();
-        if (binding==ItemBinding.BIND_ON_ACQUIRE)
-        {
-          analyzeRequirements(item.getUsageRequirements());
-        }
+        return null;
       }
+      ret=itemReq; // Merge!
     }
     // Trait granted skills
     List<TraitDescription> traits=_traitSkills.get(key);
     if (traits!=null)
     {
-      for(TraitDescription trait : traits)
+      UsageRequirement traitsReq=getRequirementsFromTraits(traits);
+      if (traitsReq==null)
       {
-        System.out.println("\tTrait: "+trait);
-        Integer traitKey=Integer.valueOf(trait.getIdentifier());
-        List<RaceDescription> races=_trait2Race.get(traitKey);
-        if (races!=null)
-        {
-          for(RaceDescription raceDescription : races)
-          {
-            System.out.println("\t\tRace: "+raceDescription.getRace());
-          }
-        }
+        return null;
       }
+      ret=traitsReq; // Merge
     }
+    return ret;
   }
 
-  private void analyzeRequirements(UsageRequirement requirements)
+  private UsageRequirement getRequirementFromItems(List<Item> items)
+  {
+    UsageRequirement ret=null;
+    for(Item item : items)
+    {
+      UsageRequirement itemReq=null;
+      //System.out.println("\tItem: "+item);
+      ItemBinding binding=item.getBinding();
+      if (binding==ItemBinding.BIND_ON_ACQUIRE)
+      {
+        itemReq=analyzeRequirements(item.getUsageRequirements());
+      }
+      if (itemReq==null)
+      {
+        return null;
+      }
+      ret=itemReq; // Merge!
+    }
+    return ret;
+  }
+
+  private UsageRequirement getRequirementsFromTraits(List<TraitDescription> traits)
+  {
+    UsageRequirement ret=null;
+    for(TraitDescription trait : traits)
+    {
+      //System.out.println("\tTrait: "+trait);
+      Integer traitKey=Integer.valueOf(trait.getIdentifier());
+      List<RaceDescription> races=_trait2Race.get(traitKey);
+      if (races==null)
+      {
+        return null;
+      }
+      for(RaceDescription raceDescription : races)
+      {
+        ret=new UsageRequirement();
+        ret.addAllowedRace(raceDescription.getRace());
+        //System.out.println("\t\tRace: "+raceDescription.getRace());
+      }
+    }
+    return ret;
+  }
+
+  private UsageRequirement analyzeRequirements(UsageRequirement requirements)
   {
     ClassRequirement classRequirement=requirements.getClassRequirement();
     if (classRequirement!=null)
     {
-      List<CharacterClass> requiredClasses=classRequirement.getAllowedClasses();
-      for(CharacterClass requiredClass : requiredClasses)
-      {
-        System.out.println("\t\tClass: "+requiredClass);
-      }
+      return requirements;
     }
+    return null;
   }
 
   private void doIt()
@@ -239,8 +278,8 @@ public class SkillConstraintsComputer
     _itemGrantedSkills=loadItemGrantedSkills();
     _traitSkills=loadTraitSkills();
     _trait2Race=loadRacialTraits();
-    //List<SkillDescription> skills=getTravelSkills();
-    List<SkillDescription> skills=getStandardMountSkills();
+    List<SkillDescription> skills=getTravelSkills();
+    //List<SkillDescription> skills=getStandardMountSkills();
     for(SkillDescription skill : skills)
     {
       handleSkill(skill);
