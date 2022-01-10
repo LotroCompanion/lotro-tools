@@ -50,6 +50,7 @@ public class MainDatGeoAreasLoader
         }
       }
     }
+    _loader.addMissingRegions();
     // Save geo areas
     boolean ok=GeoAreasXMLWriter.writeGeoAreasFile(GeneratedFiles.GEO_AREAS,_loader.getGeoManager());
     if (ok)

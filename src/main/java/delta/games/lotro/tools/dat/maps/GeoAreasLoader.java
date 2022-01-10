@@ -175,4 +175,25 @@ public class GeoAreasLoader
     Region region=new Region(regionId,regionCode,areaName);
     return region;
   }
+
+  /**
+   * Add missing regions.
+   */
+  public void addMissingRegions()
+  {
+    PropertiesSet regionControlProps=_facade.loadProperties(1879146908+DATConstants.DBPROPERTIES_OFFSET); // 0x7001819C
+    Object[] regionArray=(Object[])regionControlProps.getProperty("Region_Map_List");
+    for(Object regionObj : regionArray)
+    {
+      PropertiesSet regionProps=(PropertiesSet)regionObj;
+      int regionCode=((Integer)regionProps.getProperty("Region_ID")).intValue(); 
+      Region region=_geoMgr.getRegionByCode(regionCode);
+      if (region==null)
+      {
+        String regionName=(String)regionProps.getProperty("Region_Name");
+        Region newRegion=new Region(regionCode,regionCode,regionName);
+        _geoMgr.addRegion(newRegion);
+      }
+    }
+  }
 }
