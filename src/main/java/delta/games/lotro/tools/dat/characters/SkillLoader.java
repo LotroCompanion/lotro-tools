@@ -8,10 +8,12 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
+import delta.games.lotro.common.enums.TravelLink;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -46,7 +48,7 @@ public class SkillLoader
     if (skillProperties!=null)
     {
       //System.out.println("*********** Skill: "+skillId+" ****************");
-      ret=new SkillDescription();
+      ret=buildSkill(skillProperties);
       ret.setIdentifier(skillId);
       // Name
       String skillName=DatUtils.getStringProperty(skillProperties,"Skill_Name");
@@ -98,6 +100,37 @@ public class SkillLoader
       */
     }
     return ret;
+  }
+
+  private static SkillDescription buildSkill(PropertiesSet properties)
+  {
+    TravelLink travelType=getTravelType(properties);
+    if (travelType!=null)
+    {
+      return new TravelSkill(travelType);
+    }
+    return new SkillDescription();
+  }
+
+  private static TravelLink getTravelType(PropertiesSet properties)
+  {
+    Integer toCheckFor=(Integer)properties.getProperty("Skill_TravelLinkToCheckFor");
+    if ((toCheckFor!=null) && (toCheckFor.intValue()>0))
+    {
+      return getTravelType(toCheckFor.intValue());
+    }
+    Integer toUse=(Integer)properties.getProperty("Skill_TravelLinkToUse");
+    if ((toUse!=null) && (toUse.intValue()>0))
+    {
+      return getTravelType(toUse.intValue());
+    }
+    return null;
+  }
+
+  private static TravelLink getTravelType(int code)
+  {
+    LotroEnum<TravelLink> travelLinkEnum=LotroEnumsRegistry.getInstance().get(TravelLink.class);
+    return travelLinkEnum.getEntry(code);
   }
 
   /**
