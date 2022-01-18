@@ -10,10 +10,14 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.io.xml.DungeonXMLWriter;
 import delta.games.lotro.maps.data.GeoBox;
@@ -156,7 +160,22 @@ Dungeon_ParentDungeon: 0
     basemap.setImageId(imageId);
     // Register basemap
     _basemapsManager.addBasemap(basemap);
+
+    // Handle position
+    loadPosition(dungeon, dungeonId);
     return dungeon;
+  }
+
+  private void loadPosition(Dungeon dungeon, int dungeonID)
+  {
+    WStateDataSet wstate=_facade.loadWState(dungeonID);
+    ClassInstance dungeonData=(ClassInstance)wstate.getValue(wstate.getOrphanReferences().get(0).intValue());
+    DatPosition position=(DatPosition)dungeonData.getAttributeValue("11794990");
+    if (position!=null)
+    {
+      ExtendedPosition extendedPosition=GeoUtils.buildPosition(position);
+      dungeon.setMapPosition(extendedPosition);
+    }
   }
 
   /**

@@ -56,6 +56,7 @@ public class SkillConstraintsComputer
     return skills;
   }
 
+  @SuppressWarnings("unused")
   private List<SkillDescription> getStandardMountSkills()
   {
     SkillsManager mgr=SkillsManager.getInstance();
