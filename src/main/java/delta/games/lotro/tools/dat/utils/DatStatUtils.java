@@ -176,7 +176,7 @@ public class DatStatUtils
       }
       return null;
     }
-    // Constant MULTIPLY on a percentag stat (e.g: CombatStateMod_CC_DurationMultModifier)
+    // Constant MULTIPLY on a percentage stat (e.g: CombatStateMod_CC_DurationMultModifier)
     boolean isPercentage=stat.isPercentage();
     StatOperator operator=provider.getOperator();
     boolean isConstant=(provider instanceof ConstantStatProvider);

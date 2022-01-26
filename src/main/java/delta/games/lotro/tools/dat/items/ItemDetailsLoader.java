@@ -11,6 +11,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
+import delta.games.lotro.lore.items.details.ItemXP;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
@@ -28,6 +29,7 @@ public class ItemDetailsLoader
   {
     handleGrantedSkills(item,props);
     handleGrantedTrait(item,props,"Item_GrantedTrait",GrantType.TRAIT);
+    handleItemXP(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -96,6 +98,17 @@ Mount_SkillToGrantRaceArray:
         GrantedElement<TraitDescription> grantedElement=new GrantedElement<TraitDescription>(type,trait);
         Item.addDetail(item,grantedElement);
       }
+    }
+  }
+
+  private void handleItemXP(Item item, PropertiesSet props)
+  {
+    //ItemAdvancement_XPToAdd
+    Integer amount=(Integer)props.getProperty("ItemAdvancement_XPToAdd");
+    if (amount!=null)
+    {
+      ItemXP itemXP=new ItemXP(amount.intValue());
+      Item.addDetail(item,itemXP);
     }
   }
 }
