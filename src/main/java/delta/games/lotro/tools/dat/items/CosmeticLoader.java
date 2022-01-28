@@ -8,6 +8,9 @@ import java.util.Map;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.cosmetics.ItemCosmetics;
+import delta.games.lotro.lore.items.cosmetics.io.xml.ItemCosmeticsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Loader for cosmetic details for items.
@@ -60,6 +63,29 @@ public class CosmeticLoader
       _map.put(appearanceHash,list);
     }
     list.add(item);
+  }
+
+  /**
+   * Save data to file.
+   */
+  public void save()
+  {
+    ItemCosmetics cosmetics=new ItemCosmetics();
+    int cosmeticID=0;
+    List<String> stringIDs=new ArrayList<String>(_map.keySet());
+    Collections.sort(stringIDs);
+    for(String stringID : stringIDs)
+    {
+      List<Item> items=_map.get(stringID);
+      int[] itemIDs=new int[items.size()];
+      for(int i=0;i<items.size();i++)
+      {
+        itemIDs[i]=items.get(i).getIdentifier();
+      }
+      cosmetics.addEntry(cosmeticID,itemIDs);
+      cosmeticID++;
+    }
+    ItemCosmeticsXMLWriter.write(GeneratedFiles.ITEM_COSMETICS,cosmetics);
   }
 
   /**

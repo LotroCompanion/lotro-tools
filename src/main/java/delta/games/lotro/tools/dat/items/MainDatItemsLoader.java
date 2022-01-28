@@ -1275,7 +1275,8 @@ public class MainDatItemsLoader
     _legaciesLoader.save();
     // Save value tables
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
-    _cosmeticLoader.dump();
+    // Save item cosmetics
+    _cosmeticLoader.save();
   }
 
   /**
