@@ -146,7 +146,7 @@ public class MainDatItemsLoader
 
   private boolean _debug=false;
   int nb=0;
-  private Item load(int indexDataId)
+  private Item load(int indexDataId, int type)
   {
     Item item=null;
     int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
@@ -332,7 +332,7 @@ public class MainDatItemsLoader
       // Details
       _detailsLoader.handleItem(item,properties);
       // Cosmetics
-      _cosmeticLoader.handleItem(item,properties);
+      _cosmeticLoader.handleItem(item,properties,type);
     }
     else
     {
@@ -1194,19 +1194,24 @@ public class MainDatItemsLoader
     _enhancementRunes.add(enhancementRune);
   }
 
-  private boolean useId(int id)
+  private int getType(int id)
   {
     byte[] data=_facade.loadData(id);
     if (data!=null)
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      for(int i=0;i<TYPES.length;i++)
+      return classDefIndex;
+    }
+    return 0;
+  }
+
+  private boolean useId(int type)
+  {
+    for(int i=0;i<TYPES.length;i++)
+    {
+      if (TYPES[i]==type)
       {
-        if (TYPES[i]==classDefIndex)
-        {
-          return true;
-        }
+        return true;
       }
     }
     return false;
@@ -1229,10 +1234,11 @@ public class MainDatItemsLoader
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
-      boolean useIt=useId(id);
+      int type=getType(id);
+      boolean useIt=useId(type);
       if (useIt)
       {
-        Item newItem=load(id);
+        Item newItem=load(id,type);
         if (newItem!=null)
         {
           items.add(newItem);

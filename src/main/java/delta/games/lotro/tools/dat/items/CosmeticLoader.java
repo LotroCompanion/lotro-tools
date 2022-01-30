@@ -24,35 +24,44 @@ public class CosmeticLoader
    * Handle an item.
    * @param item Item to use.
    * @param props Properties to use.
+   * @param type Item type.
    */
-  public void handleItem(Item item, PropertiesSet props)
+  public void handleItem(Item item, PropertiesSet props, int type)
   {
-    Integer physObj=(Integer)props.getProperty("PhysObj");
-    if (physObj==null)
+    // Use only IWeapon, IShield and IClothing
+    if ((type!=799)&&(type!=797)&&(type!=795))
     {
       return;
     }
+    Integer physObj=(Integer)props.getProperty("PhysObj");
     Object[] entryArray=(Object[])props.getProperty("Item_WornAppearanceMapList");
-    if (entryArray==null)
+    if ((physObj==null) && (entryArray==null))
     {
       return;
     }
     StringBuilder sb=new StringBuilder();
-    for(Object entryObj : entryArray)
+    if (physObj!=null)
     {
-      if (sb.length()>0)
+      sb.append(physObj).append("#");
+    }
+    if (entryArray!=null)
+    {
+      for(Object entryObj : entryArray)
       {
-        sb.append(',');
+        if (sb.length()>0)
+        {
+          sb.append(',');
+        }
+        PropertiesSet entryProps=(PropertiesSet)entryObj;
+        int key=((Integer)entryProps.getProperty("Item_AppearanceKey")).intValue();
+        sb.append(key).append('/');
+        int sex=((Integer)entryProps.getProperty("Item_SexOfWearer")).intValue();
+        sb.append(sex).append('/');
+        int species=((Integer)entryProps.getProperty("Item_SpeciesOfWearer")).intValue();
+        sb.append(species).append('/');
+        int wornAppearance=((Integer)entryProps.getProperty("Item_WornAppearance")).intValue();
+        sb.append(wornAppearance);
       }
-      PropertiesSet entryProps=(PropertiesSet)entryObj;
-      int key=((Integer)entryProps.getProperty("Item_AppearanceKey")).intValue();
-      sb.append(key).append('/');
-      int sex=((Integer)entryProps.getProperty("Item_SexOfWearer")).intValue();
-      sb.append(sex).append('/');
-      int species=((Integer)entryProps.getProperty("Item_SpeciesOfWearer")).intValue();
-      sb.append(species).append('/');
-      int wornAppearance=((Integer)entryProps.getProperty("Item_WornAppearance")).intValue();
-      sb.append(wornAppearance);
     }
     String appearanceHash=sb.toString();
     //System.out.println(physObj+" => "+appearanceHash+" => "+item);
