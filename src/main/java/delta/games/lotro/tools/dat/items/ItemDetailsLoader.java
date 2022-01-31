@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.items;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.skills.SkillDescription;
@@ -11,7 +13,10 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
+import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemXP;
+import delta.games.lotro.lore.reputation.Faction;
+import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
@@ -20,6 +25,8 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
  */
 public class ItemDetailsLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(ItemDetailsLoader.class);
+
   /**
    * Handle an item.
    * @param item Item to use.
@@ -30,6 +37,7 @@ public class ItemDetailsLoader
     handleGrantedSkills(item,props);
     handleGrantedTrait(item,props,"Item_GrantedTrait",GrantType.TRAIT);
     handleItemXP(item,props);
+    handleItemReputation(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -109,6 +117,28 @@ Mount_SkillToGrantRaceArray:
     {
       ItemXP itemXP=new ItemXP(amount.intValue());
       Item.addDetail(item,itemXP);
+    }
+  }
+
+  private void handleItemReputation(Item item, PropertiesSet props)
+  {
+    Integer isRepItem=(Integer)props.getProperty("Reputation_IsReputationItem");
+    if ((isRepItem!=null) && (isRepItem.intValue()==1))
+    {
+      int factionID=((Integer)props.getProperty("Reputation_Faction")).intValue();
+      Faction faction=FactionsRegistry.getInstance().getById(factionID);
+      if (faction!=null)
+      {
+        Long reputationGain=(Long)props.getProperty("Reputation_ReputationGain");
+        Long reputationLoss=(Long)props.getProperty("Reputation_ReputationLoss");
+        int value=(reputationGain!=null)?reputationGain.intValue():((reputationLoss!=null)?reputationLoss.intValue():0);
+        ItemReputation reputation=new ItemReputation(faction,value);
+        Item.addDetail(item,reputation);
+      }
+      else
+      {
+        LOGGER.warn("Could not find faction with ID: "+factionID);
+      }
     }
   }
 }
