@@ -125,19 +125,26 @@ Mount_SkillToGrantRaceArray:
     Integer isRepItem=(Integer)props.getProperty("Reputation_IsReputationItem");
     if ((isRepItem!=null) && (isRepItem.intValue()==1))
     {
-      int factionID=((Integer)props.getProperty("Reputation_Faction")).intValue();
-      Faction faction=FactionsRegistry.getInstance().getById(factionID);
-      if (faction!=null)
+      Integer factionID=(Integer)props.getProperty("Reputation_Faction");
+      if ((factionID!=null) && (factionID.intValue()!=0))
       {
-        Long reputationGain=(Long)props.getProperty("Reputation_ReputationGain");
-        Long reputationLoss=(Long)props.getProperty("Reputation_ReputationLoss");
-        int value=(reputationGain!=null)?reputationGain.intValue():((reputationLoss!=null)?reputationLoss.intValue():0);
-        ItemReputation reputation=new ItemReputation(faction,value);
-        Item.addDetail(item,reputation);
+        Faction faction=FactionsRegistry.getInstance().getById(factionID.intValue());
+        if (faction!=null)
+        {
+          Long reputationGain=(Long)props.getProperty("Reputation_ReputationGain");
+          Long reputationLoss=(Long)props.getProperty("Reputation_ReputationLoss");
+          int value=(reputationGain!=null)?reputationGain.intValue():((reputationLoss!=null)?reputationLoss.intValue():0);
+          ItemReputation reputation=new ItemReputation(faction,value);
+          Item.addDetail(item,reputation);
+        }
+        else
+        {
+          LOGGER.warn("Could not find faction with ID: "+factionID);
+        }
       }
       else
       {
-        LOGGER.warn("Could not find faction with ID: "+factionID);
+        LOGGER.warn("No faction ID, and isRepItem is "+isRepItem);
       }
     }
   }
