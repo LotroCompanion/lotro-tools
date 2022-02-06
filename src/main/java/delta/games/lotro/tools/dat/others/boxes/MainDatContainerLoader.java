@@ -55,20 +55,21 @@ public class MainDatContainerLoader
 
   /**
    * Load a container.
-   * @param indexDataId Container item identifier.
+   * @param item Item to use.
    * @return the loaded container.
    */
-  public Container load(int indexDataId)
+  public Container load(Item item)
   {
-    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
+    int itemID=item.getIdentifier();
+    PropertiesSet properties=_facade.loadProperties(itemID+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle container item ID="+indexDataId);
+      LOGGER.warn("Could not handle container item ID="+itemID);
       return null;
     }
 
     //System.out.println(properties.dump());
-    ItemsContainer itemsContainer=new ItemsContainer(indexDataId);
+    ItemsContainer itemsContainer=new ItemsContainer(item);
     LootTables lootTables=itemsContainer.getLootTables();
     // Filtered trophy table
     Integer filteredLootTableId=(Integer)properties.getProperty("PackageItem_FilteredTrophyTableTemplate");
@@ -120,7 +121,6 @@ public class MainDatContainerLoader
     if (lootTables.hasTables())
     {
       ret=itemsContainer;
-      Item item=ItemsManager.getInstance().getItem(indexDataId);
       Integer previewable=(Integer)properties.getProperty("PackageItem_IsPreviewable");
       if ((previewable!=null) && (previewable.intValue()==1))
       {
@@ -141,12 +141,12 @@ public class MainDatContainerLoader
     }
 
     // Relics?
-    RelicsContainer relicsContainer=handleRelics(indexDataId,properties);
+    RelicsContainer relicsContainer=handleRelics(item,properties);
     if (relicsContainer!=null)
     {
       if (ret!=null)
       {
-        LOGGER.warn("Both containers (items+relics) for: "+indexDataId);
+        LOGGER.warn("Both containers (items+relics) for: "+itemID);
       }
       ret=relicsContainer;
     }
@@ -257,7 +257,7 @@ If PackageItem_IsPreviewable: 1
     return ret;
   }
 
-  private RelicsContainer handleRelics(int containerId, PropertiesSet properties)
+  private RelicsContainer handleRelics(Item item, PropertiesSet properties)
   {
     RelicsContainer ret=null;
     Integer relicId=(Integer)properties.getProperty("ItemAdvancement_RunicToCreate");
@@ -267,7 +267,7 @@ If PackageItem_IsPreviewable: 1
       Relic relic=relicsMgr.getById(relicId.intValue());
       if (relic!=null)
       {
-        ret=new RelicsContainer(containerId);
+        ret=new RelicsContainer(item);
         ret.setRelic(relic);
       }
       else
@@ -281,7 +281,7 @@ If PackageItem_IsPreviewable: 1
     {
       RelicsList list=_lootLoader.getRelicsList(runicLootListId.intValue());
       //System.out.println(list);
-      ret=new RelicsContainer(containerId);
+      ret=new RelicsContainer(item);
       ret.setRelicsList(list);
     }
     return ret;
@@ -296,7 +296,7 @@ If PackageItem_IsPreviewable: 1
     ItemsManager itemsMgr=ItemsManager.getInstance();
     for(Item item : itemsMgr.getAllItems())
     {
-      Container container=load(item.getIdentifier());
+      Container container=load(item);
       if (container!=null)
       {
         containers.add(container);

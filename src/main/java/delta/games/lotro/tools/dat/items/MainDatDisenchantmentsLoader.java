@@ -45,13 +45,14 @@ public class MainDatDisenchantmentsLoader
 
   /**
    * Load disenchantment data for an item.
-   * @param indexDataId Item identifier.
+   * @param sourceItem Source item.
    * @return the dienchantment result, if any.
    */
-  public DisenchantmentResult load(int indexDataId)
+  public DisenchantmentResult load(Item sourceItem)
   {
     DisenchantmentResult ret=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
+    int sourceItemID=sourceItem.getIdentifier();
+    PropertiesSet properties=_facade.loadProperties(sourceItemID+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       Integer value=(Integer)properties.getProperty("Item_Disenchant_Value");
@@ -59,7 +60,7 @@ public class MainDatDisenchantmentsLoader
       Integer trophyListId=(Integer)properties.getProperty("Item_Disenchant_Trophy_List");
       if ((value!=null) && (value.intValue()>0) && (did!=null))
       {
-        ret=new DisenchantmentResult(indexDataId);
+        ret=new DisenchantmentResult(sourceItem);
         if (did!=null)
         {
           Item item=ItemsManager.getInstance().getItem(did.intValue());
@@ -69,14 +70,14 @@ public class MainDatDisenchantmentsLoader
       }
       else if (trophyListId!=null)
       {
-        ret=new DisenchantmentResult(indexDataId);
+        ret=new DisenchantmentResult(sourceItem);
         TrophyList trophyList=_lootLoader.getTrophyList(trophyListId.intValue());
         ret.setTrophyList(trophyList);
       }
     }
     else
     {
-      LOGGER.warn("Could not handle disenchantment for item ID="+indexDataId);
+      LOGGER.warn("Could not handle disenchantment for item: "+sourceItem);
     }
     return ret;
   }
@@ -90,7 +91,7 @@ public class MainDatDisenchantmentsLoader
     ItemsManager itemsMgr=ItemsManager.getInstance();
     for(Item item : itemsMgr.getAllItems())
     {
-      DisenchantmentResult disenchantment=load(item.getIdentifier());
+      DisenchantmentResult disenchantment=load(item);
       if (disenchantment!=null)
       {
         disenchantments.add(disenchantment);
