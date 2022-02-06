@@ -139,12 +139,12 @@ Mount_SkillToGrantRaceArray:
         }
         else
         {
-          LOGGER.warn("Could not find faction with ID: "+factionID);
+          LOGGER.warn("Could not find faction with ID: "+factionID+" for item: "+item);
         }
       }
       else
       {
-        LOGGER.warn("No faction ID, and isRepItem is "+isRepItem);
+        LOGGER.debug("No faction ID, and isRepItem is "+isRepItem+" for item: "+item);
       }
     }
   }
