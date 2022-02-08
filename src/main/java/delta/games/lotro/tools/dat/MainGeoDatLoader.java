@@ -58,6 +58,7 @@ public class MainGeoDatLoader
 
   private void cleanup()
   {
+    // Maps
     FileFilter f=new FileFilter()
     {
       @Override
@@ -80,6 +81,15 @@ public class MainGeoDatLoader
     deleteDirectory(MAPS_DIR);
     deleteDirectory(MARKERS_DIR);
     deleteFile(LINKS);
+    deleteFile(GeneratedFiles.PARCHMENT_MAPS);
+    deleteFile(GeneratedFiles.RESOURCES_MAPS);
+    // Dungeons
+    deleteFile(GeneratedFiles.DUNGEONS);
+    // Areas
+    deleteFile(GeneratedFiles.GEO_AREAS);
+    deleteFile(GeneratedFiles.AREA_ICONS);
+    // Landblocks
+    deleteFile(GeneratedFiles.LANDBLOCKS);
   }
 
   private void deleteFile(File toDelete)

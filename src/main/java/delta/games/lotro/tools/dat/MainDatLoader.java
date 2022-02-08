@@ -200,6 +200,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.CONSUMABLES);
     deleteFile(GeneratedFiles.PAPER_ITEMS);
     deleteFile(GeneratedFiles.ITEM_COSMETICS);
+    deleteFile(GeneratedFiles.VALUE_TABLES);
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
@@ -237,6 +238,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.CRAFTING_DATA);
     // Buffs
     deleteFile(GeneratedFiles.BUFFS);
+    deleteFile(GeneratedFiles.EFFECT_ICONS);
     // Trait points
     deleteFile(GeneratedFiles.TRAIT_POINTS);
     // Mounts
@@ -251,14 +253,15 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.VENDORS);
     // Barterers
     deleteFile(GeneratedFiles.BARTERS);
-    // Private encounters
+    // Instances
     deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
-    // Instances tree
     deleteFile(GeneratedFiles.INSTANCES_TREE);
     // Containers
     deleteFile(GeneratedFiles.CONTAINERS);
     // Loot tables
     deleteFile(GeneratedFiles.LOOTS);
+    deleteFile(GeneratedFiles.GENERIC_MOB_LOOTS);
+    deleteFile(GeneratedFiles.INSTANCES_LOOTS);
     // Disenchantment
     deleteFile(GeneratedFiles.DISENCHANTMENTS);
     // Mobs
