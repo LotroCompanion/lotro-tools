@@ -669,7 +669,6 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       condition.setProxy(proxy);
     }
     // TODO
-    //Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     /*List<DatPosition> positions=*/
     //getPositions(npcId,roleConstraint,objective.getIndex());
@@ -983,7 +982,6 @@ QuestEvent_ShowBillboardText: 0
     Integer value=(Integer)properties.getProperty("QuestEvent_WorldEvent_Value");
     int id=((Integer)properties.getProperty("QuestEvent_WorldEvent")).intValue();
     int operator=((Integer)properties.getProperty("QuestEvent_WorldEvent_Operator")).intValue();
-    Integer count=(Integer)properties.getProperty("QuestEvent_Number");
     String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     System.out.println("World event: ID="+id+", operator="+operator+", value="+value+", count="+count+", constraint="+constraint);
     PropertiesSet worldEventProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
