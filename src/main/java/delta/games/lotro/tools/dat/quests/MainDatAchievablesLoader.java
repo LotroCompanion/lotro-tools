@@ -35,7 +35,6 @@ import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
-import delta.games.lotro.lore.quests.QuestDescription.FACTION;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -204,11 +203,9 @@ public class MainDatAchievablesLoader
     // Scope
     //handleScope(quest, properties);
     // Monster play?
-    Integer isMonsterPlay=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
-    if ((isMonsterPlay!=null) && (isMonsterPlay.intValue()!=0))
-    {
-      quest.setFaction(FACTION.MONSTER_PLAY);
-    }
+    Integer isMonsterPlayCode=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
+    boolean isMonsterPlay=((isMonsterPlayCode!=null) && (isMonsterPlayCode.intValue()!=0));
+    quest.setMonsterPlay(isMonsterPlay);
     // Quests to complete (only for 'level up' quests)
     /*
     Object questsToComplete=properties.getProperty("Quest_QuestsToComplete");
@@ -388,6 +385,10 @@ public class MainDatAchievablesLoader
     deed.setCategory(uiTabName);
     // Deed type
     handleDeedType(deed,properties);
+    // Monster play?
+    Integer isMonsterPlayCode=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
+    boolean isMonsterPlay=((isMonsterPlayCode!=null) && (isMonsterPlayCode.intValue()!=0));
+    deed.setMonsterPlay(isMonsterPlay);
 
     // Pre-requisites
     findPrerequisites(deed,properties);
