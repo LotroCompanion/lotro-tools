@@ -25,6 +25,7 @@ import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -500,7 +501,7 @@ public class DatRewardsLoader
       int level=challengeLevel.getEffectiveLevel();
       if (level==0)
       {
-        level=130; // TODO Use cap
+        level=LotroCoreConfig.getInstance().getMaxCharacterLevel();
       }
       rewardsMap=_defaultRewardMaps.get(Integer.valueOf(level));
     }
