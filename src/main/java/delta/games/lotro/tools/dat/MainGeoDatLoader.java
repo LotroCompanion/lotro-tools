@@ -49,9 +49,12 @@ public class MainGeoDatLoader
     // Landblocks
     new MainLandblocksBuilder(_facade).doIt();
     // Dungeons
-    new MainDatDungeonsLoader(_facade).doIt();
+    MainDatDungeonsLoader dungeonsLoader=new MainDatDungeonsLoader(_facade);
+    dungeonsLoader.doIt();
     // Geographics areas
     new MainDatGeoAreasLoader(_facade).doIt();
+    // Load dungeon positions
+    dungeonsLoader.loadPositions();
     // Maps data (basemaps, markers)
     new MapsDataLoader(_facade).doIt();
   }

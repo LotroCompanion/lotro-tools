@@ -161,13 +161,12 @@ Dungeon_ParentDungeon: 0
     // Register basemap
     _basemapsManager.addBasemap(basemap);
 
-    // Handle position
-    loadPosition(dungeon, dungeonId);
     return dungeon;
   }
 
-  private void loadPosition(Dungeon dungeon, int dungeonID)
+  private void loadPosition(Dungeon dungeon)
   {
+    int dungeonID=dungeon.getIdentifier();
     WStateDataSet wstate=_facade.loadWState(dungeonID);
     ClassInstance dungeonData=(ClassInstance)wstate.getValue(wstate.getOrphanReferences().get(0).intValue());
     DatPosition position=(DatPosition)dungeonData.getAttributeValue("11794990");
@@ -203,6 +202,20 @@ Dungeon_ParentDungeon: 0
     if (ok)
     {
       System.out.println("Wrote dungeons file: "+GeneratedFiles.DUNGEONS);
+    }
+  }
+
+  /**
+   * Load dungeon positions.
+   */
+  public void loadPositions()
+  {
+    List<Dungeon> dungeons=getDungeons();
+    System.out.println("Found "+dungeons.size()+" dungeons");
+    for(Dungeon dungeon : dungeons)
+    {
+      // Handle position
+      loadPosition(dungeon);
     }
   }
 }

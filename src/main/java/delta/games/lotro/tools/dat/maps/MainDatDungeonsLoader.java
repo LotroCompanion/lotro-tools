@@ -50,6 +50,15 @@ public class MainDatDungeonsLoader
   }
 
   /**
+   * Load positions.
+   */
+  public void loadPositions()
+  {
+    _loader.loadPositions();
+    _loader.save();
+  }
+
+  /**
    * Main method for this tool.
    * @param args Not used.
    */
