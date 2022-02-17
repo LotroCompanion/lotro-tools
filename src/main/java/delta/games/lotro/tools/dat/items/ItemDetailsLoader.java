@@ -112,11 +112,31 @@ Mount_SkillToGrantRaceArray:
   private void handleItemXP(Item item, PropertiesSet props)
   {
     //ItemAdvancement_XPToAdd
-    Integer amount=(Integer)props.getProperty("ItemAdvancement_XPToAdd");
-    if (amount!=null)
     {
-      ItemXP itemXP=new ItemXP(amount.intValue());
-      Item.addDetail(item,itemXP);
+      Integer amount=(Integer)props.getProperty("ItemAdvancement_XPToAdd");
+      if (amount!=null)
+      {
+        ItemXP itemXP=new ItemXP(amount.intValue());
+        Item.addDetail(item,itemXP);
+      }
+    }
+    //RewardTrack_ExperienceType: 1 (ItemAdvancement)
+    //RewardTrack_XPToAdd: 130000
+    {
+      Integer amount=(Integer)props.getProperty("RewardTrack_XPToAdd");
+      Integer type=(Integer)props.getProperty("RewardTrack_ExperienceType");
+      if (amount!=null)
+      {
+        if ((type!=null) && (type.intValue()==1))
+        {
+          ItemXP itemXP=new ItemXP(amount.intValue());
+          Item.addDetail(item,itemXP);
+        }
+        else
+        {
+          LOGGER.warn("Type not found or type is not 1 for "+item);
+        }
+      }
     }
   }
 
