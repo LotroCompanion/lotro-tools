@@ -696,12 +696,12 @@ public class MainDatItemsLoader
     weapon.setDPS(baseDPS);
     // Max DPS
     float maxDamage=((Float)properties.getProperty("Combat_Damage")).floatValue();
-    weapon.setMaxDamage((int)maxDamage);
+    weapon.setMaxDamage(Math.round(maxDamage));
     //Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
     // Min DPS
     float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();
     float minDamage=maxDamage*(1-variance);
-    weapon.setMinDamage((int)minDamage);
+    weapon.setMinDamage(Math.round(minDamage));
     // Damage type
     int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
     weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
