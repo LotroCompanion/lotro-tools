@@ -20,6 +20,7 @@ import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
+import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -56,8 +57,6 @@ public class MainDatAchievablesLoader
 
   private static final int DEBUG_ID=1879000000;
 
-  private static final int HIDING_CONTENT_QUEST_ID=1879049597;
-
   private DataFacade _facade;
   private Map<Integer,QuestDescription> _quests;
   private Map<Integer,DeedDescription> _deeds;
@@ -66,6 +65,7 @@ public class MainDatAchievablesLoader
   private DatRewardsLoader _rewardsLoader;
   private DatObjectivesLoader _objectivesLoader;
   private DatRolesLoader _rolesLoader;
+  private QuestRequirementsLoader _requirementsLoader;
   private StringRenderer _renderer;
   private AchievablesLogger _logger;
 
@@ -83,6 +83,7 @@ public class MainDatAchievablesLoader
     _rewardsLoader=new DatRewardsLoader(facade);
     _objectivesLoader=new DatObjectivesLoader(facade);
     _rolesLoader=new DatRolesLoader(facade);
+    _requirementsLoader=new QuestRequirementsLoader(facade);
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _logger=new AchievablesLogger(true,true,"achievables.txt");
   }
@@ -541,40 +542,15 @@ public class MainDatAchievablesLoader
     }
   }
 
-  private boolean findPrerequisites(Achievable achievable, PropertiesSet properties)
+  private void findPrerequisites(Achievable achievable, PropertiesSet properties)
   {
-    boolean hidden=false;
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
-      Object[] questRequirements=(Object[])permissions.getProperty("Usage_QuestRequirements");
+      AbstractAchievableRequirement questRequirements=_requirementsLoader.loadQuestRequirements(achievable,permissions);
       if (questRequirements!=null)
       {
-        for(Object questRequirementObj : questRequirements)
-        {
-          PropertiesSet questRequirementProps=(PropertiesSet)questRequirementObj;
-          int operator=((Integer)questRequirementProps.getProperty("Usage_Operator")).intValue();
-          int questId=((Integer)questRequirementProps.getProperty("Usage_QuestID")).intValue();
-          int questStatus=((Integer)questRequirementProps.getProperty("Usage_QuestStatus")).intValue();
-          if ((operator==3) && (questStatus==805306368))
-          {
-            if (questId!=HIDING_CONTENT_QUEST_ID)
-            {
-              //System.out.println("Requires completed quest: "+questId);
-              Proxy<Achievable> proxy=new Proxy<Achievable>();
-              proxy.setId(questId);
-              achievable.addPrerequisite(proxy);
-            }
-            else
-            {
-              hidden=true;
-            }
-          }
-          else
-          {
-            //LOGGER.warn("Unmanaged quest requirement: operator="+operator+", status="+questStatus+", questId="+questId);
-          }
-        }
+        achievable.setQuestRequirements(questRequirements);
       }
     }
     /*
@@ -585,8 +561,6 @@ public class MainDatAchievablesLoader
           Usage_QuestID: 1879048439
           Usage_QuestStatus: 805306368
     */
-    achievable.setHidden(hidden);
-    return hidden;
   }
 
   private boolean useQuest(int id, PropertiesSet properties)
@@ -616,7 +590,7 @@ public class MainDatAchievablesLoader
     {
       return false;
     }
-    if (id==HIDING_CONTENT_QUEST_ID)
+    if (id==QuestRequirementsLoader.HIDING_CONTENT_QUEST_ID)
     {
       return false;
     }
