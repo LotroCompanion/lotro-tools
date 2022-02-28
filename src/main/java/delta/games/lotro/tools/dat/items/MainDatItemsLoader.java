@@ -553,14 +553,20 @@ public class MainDatItemsLoader
       }
       else if (armourType==ArmourType.SHIELD)
       {
+        // +10% Ranged defence
+        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
+        statsProvider.addStatProvider(provider);
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879211641);
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
         statsProvider.addStatProvider(critDef);
       }
       else if (armourType==ArmourType.WARDEN_SHIELD)
       {
+        // +10% Ranged defence
+        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
+        statsProvider.addStatProvider(provider);
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260947);
+        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
         statsProvider.addStatProvider(critDef);
       }
     }
