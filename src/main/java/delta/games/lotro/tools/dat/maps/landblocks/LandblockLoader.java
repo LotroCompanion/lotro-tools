@@ -50,8 +50,11 @@ public class LandblockLoader
     PropertiesSet props=_blockMapLoader.loadPropertiesForMapBlock(region,blockX,blockY);
     if (props!=null)
     {
-      int areaId=((Integer)props.getProperty("Area_DID")).intValue(); // Always set
-      ret.setParentArea(areaId);
+      Integer areaId=(Integer)props.getProperty("Area_DID"); // Always set?
+      if (areaId!=null)
+      {
+        ret.setParentArea(areaId.intValue());
+      }
     }
     // Dungeon ID
     PropertiesSet lbiProps=lbi.getProps();
