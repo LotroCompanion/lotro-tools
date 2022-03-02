@@ -546,6 +546,7 @@ public class MainDatItemsLoader
       {
         // +10% Ranged defence
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
+        provider.setDescriptionOverride("+10% Ranged Defence");
         statsProvider.addStatProvider(provider);
         // Critical defence
         StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
@@ -555,6 +556,7 @@ public class MainDatItemsLoader
       {
         // +10% Ranged defence
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
+        provider.setDescriptionOverride("+10% Ranged Defence");
         statsProvider.addStatProvider(provider);
         // Critical defence
         StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
@@ -564,6 +566,7 @@ public class MainDatItemsLoader
       {
         // +10% Ranged defence
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
+        provider.setDescriptionOverride("+10% Ranged Defence");
         statsProvider.addStatProvider(provider);
         // Critical defence
         StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
