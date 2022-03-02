@@ -10,10 +10,10 @@
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/delta-common-ui"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-lotro-dat-utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/delta-updates-manager"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
@@ -26,5 +26,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/delta-lotro-maps"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

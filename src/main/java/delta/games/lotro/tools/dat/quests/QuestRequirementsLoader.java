@@ -202,11 +202,16 @@ DefaultPermissionBlobStruct:
 
   private QuestStatus getQuestStatusFromCode(int questStatus)
   {
-    if (questStatus==268435456) return QuestStatus.UNDERWAY;
-    if (questStatus==536870912) return QuestStatus.FAILED;
-    if (questStatus==805306368) return QuestStatus.COMPLETED;
-    //if (questStatus==1073741824) return QuestStatus.ABANDONED;
-    //if (questStatus==1342177280) return QuestStatus.TAPPED;
+    if (questStatus==0x10000000) return QuestStatus.UNDERWAY;
+    if (questStatus==0x20000000) return QuestStatus.FAILED;
+    if (questStatus==0x30000000) return QuestStatus.COMPLETED;
+    //if (questStatus==0x40000000) return QuestStatus.ABANDONED;
+    //if (questStatus==0x50000000) return QuestStatus.TAPPED;
+    if ((questStatus&0x10000000)==0x10000000)
+    {
+      int objectiveIndex=questStatus&0xFFFFFFF;
+      return QuestStatus.getUnderwayObjective(objectiveIndex);
+    }
     return null;
   }
 
