@@ -3,8 +3,10 @@ package delta.games.lotro.tools.dat.travels;
 import java.util.List;
 
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.data.ui.UILayoutLoader;
@@ -68,7 +70,16 @@ Travel_DiscountArray:
      */
     PropertiesSet props=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
     Integer travelNodeId=(Integer)props.getProperty("TravelWebWC");
-    System.out.println("Travel node ID: "+travelNodeId);
+    System.out.println("\tTravel node ID: "+travelNodeId);
+    ArrayPropertyValue discountArray=(ArrayPropertyValue)props.getPropertyValueByName("Travel_DiscountArray");
+    if (discountArray!=null)
+    {
+      PropertyValue[] values=discountArray.getValues();
+      for(PropertyValue value : values)
+      {
+        System.out.println("\t\tDiscount: "+value);
+      }
+    }
   }
 
   /**

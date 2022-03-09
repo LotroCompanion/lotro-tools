@@ -10,6 +10,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.travels.TravelDestination;
+import delta.games.lotro.lore.travels.TravelMode;
 import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelRoute;
 import delta.games.lotro.lore.travels.TravelRouteInstance;
@@ -116,7 +117,7 @@ public class MainDatTravelsLoader
   private TravelRoute loadTravelRoute(int travelRouteId)
   {
     PropertiesSet properties=_facade.loadProperties(travelRouteId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println("************* "+locationId+" *****************");
+    //System.out.println("************* "+travelRouteId+" *****************");
     //System.out.println(properties.dump());
     /*
 ************* 1879103917 *****************
@@ -148,12 +149,9 @@ Usage_RequiresSubscriberOrUnsub: 1
     Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
 
     // Travel mode
-    //int travelModeId=((Integer)properties.getProperty("TravelRoute_TravelMode")).intValue();
-    // Travel modes: [1879159548, 1879137174, 1879106525, 1879108779]
-    // 1879159548=boat
-    // 1879137174, 1879106525, 1879108779 => effect 1879048717
-    //loadTravelMode(travelModeId);
-    TravelRoute route=new TravelRoute(travelRouteId,routeName,destination,minLevel);
+    int travelModeId=((Integer)properties.getProperty("TravelRoute_TravelMode")).intValue();
+    TravelMode mode=getTravelMode(travelModeId);
+    TravelRoute route=new TravelRoute(travelRouteId,routeName,mode,destination,minLevel);
 
     // Route actions
     Object[] routeActionsArray=(Object[])properties.getProperty("TravelRoute_ActionArray");
@@ -167,6 +165,18 @@ Usage_RequiresSubscriberOrUnsub: 1
       }
     }
     return route;
+  }
+
+  private TravelMode getTravelMode(int travelModeId)
+  {
+    if (travelModeId==1879159548) return TravelMode.BOAT;
+    if (travelModeId==1879137174) return TravelMode.GOAT;
+    if (travelModeId==1879106525) return TravelMode.HORSE;
+    if (travelModeId==1879108779) return TravelMode.SHAGGY;
+    if (travelModeId==1879444821) return TravelMode.ELK;
+    if (travelModeId==1879417911) return TravelMode.BOAR;
+    LOGGER.warn("Unmanaged travel mode: "+travelModeId);
+    return null;
   }
 
   private String loadTravelRouteAction(int routeActionId)
@@ -223,7 +233,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     List<TravelNode> nodes=_travelsMgr.getNodes();
     for(TravelNode node : nodes)
     {
-      System.out.println("Node: ID="+node.getIdentifier()/*+", name="+node.getName()*/);
+      System.out.println("Node: ID="+node.getIdentifier()+", name="+node.getName());
       for(TravelDestination location : node.getLocations())
       {
         System.out.println("\tAssociated location: ID="+location.getIdentifier()+", name="+location.getName());
@@ -235,6 +245,7 @@ Usage_RequiresSubscriberOrUnsub: 1
         Money cost=routeInstance.getCost();
         System.out.println("\tRoute: ID="+route.getIdentifier()+", name="+route.getName());
         System.out.println("\t\tCost: "+cost);
+        System.out.println("\t\tMode: "+route.getMode());
         System.out.println("\t\t"+route.getDestination());
         Integer minLevel=route.getMinLevel();
         if (minLevel!=null)
