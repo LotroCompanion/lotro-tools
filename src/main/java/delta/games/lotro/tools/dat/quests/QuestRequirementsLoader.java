@@ -168,7 +168,10 @@ DefaultPermissionBlobStruct:
         boolean hidden=isHidden(questRequirement);
         if (hidden)
         {
-          achievable.setHidden(true);
+          if (achievable!=null)
+          {
+            achievable.setHidden(true);
+          }
         }
         else
         {

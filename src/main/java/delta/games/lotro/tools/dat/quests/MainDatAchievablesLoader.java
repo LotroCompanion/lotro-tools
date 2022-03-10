@@ -41,7 +41,6 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
@@ -529,16 +528,7 @@ public class MainDatAchievablesLoader
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
-      // - level
-      RequirementsLoadingUtils.loadLevelRequirements(permissions,achievable.getUsageRequirement());
-      // - races
-      RequirementsLoadingUtils.loadRequiredRaces(permissions,achievable.getUsageRequirement());
-      // - classes
-      RequirementsLoadingUtils.loadRequiredClasses(permissions,achievable.getUsageRequirement());
-      // - faction
-      RequirementsLoadingUtils.loadRequiredFaction(permissions,achievable.getUsageRequirement());
-      // TODO: Usage_WorldEvent_AllConditionList, Usage_WorldEvent_AnyConditionList
-      // TODO: Usage_RequiredAccountToken
+      UsageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
     }
   }
 

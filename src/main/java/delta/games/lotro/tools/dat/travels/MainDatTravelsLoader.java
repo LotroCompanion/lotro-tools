@@ -5,16 +5,21 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.money.Money;
+import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
+import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.travels.TravelDestination;
 import delta.games.lotro.lore.travels.TravelMode;
 import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelRoute;
 import delta.games.lotro.lore.travels.TravelRouteInstance;
 import delta.games.lotro.lore.travels.TravelsManager;
+import delta.games.lotro.tools.dat.quests.QuestRequirementsLoader;
+import delta.games.lotro.tools.dat.quests.UsageRequirementsLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -27,6 +32,7 @@ public class MainDatTravelsLoader
 
   private DataFacade _facade;
   private TravelsManager _travelsMgr;
+  private QuestRequirementsLoader _questRequirementsLoader;
 
   /**
    * Constructor.
@@ -36,6 +42,7 @@ public class MainDatTravelsLoader
   {
     _facade=facade;
     _travelsMgr=new TravelsManager();
+    _questRequirementsLoader=new QuestRequirementsLoader(facade);
   }
 
   private TravelNode load(int indexDataId)
@@ -145,13 +152,11 @@ Usage_RequiresSubscriberOrUnsub: 1
     // Destination
     int destinationId=((Integer)properties.getProperty("TravelRoute_Destination")).intValue();
     TravelDestination destination=getTravelDestination(destinationId);
-    // Min level
-    Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
 
     // Travel mode
     int travelModeId=((Integer)properties.getProperty("TravelRoute_TravelMode")).intValue();
     TravelMode mode=getTravelMode(travelModeId);
-    TravelRoute route=new TravelRoute(travelRouteId,routeName,mode,destination,minLevel);
+    TravelRoute route=new TravelRoute(travelRouteId,routeName,mode,destination);
 
     // Route actions
     Object[] routeActionsArray=(Object[])properties.getProperty("TravelRoute_ActionArray");
@@ -164,6 +169,18 @@ Usage_RequiresSubscriberOrUnsub: 1
         route.addRouteAction(segmentKey);
       }
     }
+    // Requirements
+    // - quests/deeds
+    AbstractAchievableRequirement questRequirement=_questRequirementsLoader.loadQuestRequirements(null,properties);
+    if (questRequirement!=null)
+    {
+      AchievableProxiesResolver.getInstance().resolveQuestRequirement(questRequirement);
+      route.setQuestRequirement(questRequirement);
+    }
+    // - other usage requirements
+    UsageRequirement usageRequirement=route.getUsageRequirement();
+    UsageRequirementsLoader.loadUsageRequirements(properties,usageRequirement);
+
     return route;
   }
 
@@ -247,10 +264,15 @@ Usage_RequiresSubscriberOrUnsub: 1
         System.out.println("\t\tCost: "+cost);
         System.out.println("\t\tMode: "+route.getMode());
         System.out.println("\t\t"+route.getDestination());
-        Integer minLevel=route.getMinLevel();
-        if (minLevel!=null)
+        UsageRequirement usageRequirement=route.getUsageRequirement();
+        if (!usageRequirement.isEmpty())
         {
-          System.out.println("\t\tRequired level: "+minLevel);
+          System.out.println("\t\tRequirements: "+usageRequirement);
+        }
+        AbstractAchievableRequirement questRequirements=route.getQuestRequirement();
+        if (questRequirements!=null)
+        {
+          System.out.println("\t\tQuest requirements: "+questRequirements);
         }
       }
     }
