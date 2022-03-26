@@ -1,4 +1,4 @@
-package delta.games.lotro.tools;
+package delta.games.lotro.tools.dat.misc;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
