@@ -70,6 +70,10 @@ public class MainBuffsLoader
     buffs.add(loadBuff(1879145414,null));
     // A Quiet Calm (II)
     buffs.add(loadBuff(1879239303,null));
+    // Anthem of Composure
+    buffs.add(loadBuff(1879073122,null));
+    // Scroll of Finesse
+    buffs.add(loadBuff(1879216017,null));
     return buffs;
   }
 
