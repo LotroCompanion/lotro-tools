@@ -84,6 +84,10 @@ public class MainBuffsLoader
     buffs.add(loadBuff(1879205020,null));
     // Anthem of the Third Age - Melody
     buffs.add(loadBuff(1879217358,null));
+    // Dwarves Endurance
+    buffs.add(loadBuff(1879073616,null));
+    // Duty Bound
+    buffs.add(loadBuff(1879084065,null));
 
     // Scroll of Finesse
     buffs.add(loadBuff(1879216017,null));
