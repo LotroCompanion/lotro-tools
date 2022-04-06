@@ -645,11 +645,21 @@ public class MainDatAchievablesLoader
     for(QuestDescription quest : _quests.values())
     {
       resolver.resolveQuest(quest);
+      cleanup(quest);
     }
     for(DeedDescription deed : _deeds.values())
     {
       resolver.resolveDeed(deed);
+      cleanup(deed);
     }
+  }
+
+  private void cleanup(Achievable achievable)
+  {
+    // Cleanup requirements
+    AbstractAchievableRequirement requirement=achievable.getQuestRequirements();
+    requirement=_requirementsLoader.deepRequirementCleanup(requirement);
+    achievable.setQuestRequirements(requirement);
   }
 
   private void doSave()

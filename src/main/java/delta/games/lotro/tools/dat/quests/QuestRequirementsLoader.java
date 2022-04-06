@@ -12,6 +12,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for quest requirements.
@@ -155,6 +156,68 @@ DefaultPermissionBlobStruct:
       }
     }
     return input;
+  }
+
+  /**
+   * Deep requirement cleanup.
+   * @param input Input requirement.
+   * @return the cleaned up requirement.
+   */
+  public AbstractAchievableRequirement deepRequirementCleanup(AbstractAchievableRequirement input)
+  {
+    if (input==null)
+    {
+      return null;
+    }
+    if (input instanceof CompoundQuestRequirement)
+    {
+      CompoundQuestRequirement compoundRequirement=(CompoundQuestRequirement)input;
+      int nbRequirements=compoundRequirement.getNumberOfRequirements();
+      for(int i=0;i<nbRequirements;i++)
+      {
+        AbstractAchievableRequirement childRequirement=compoundRequirement.getRequirement(i);
+        AbstractAchievableRequirement cleanedChildRequirement=deepRequirementCleanup(childRequirement);
+        if (cleanedChildRequirement!=childRequirement)
+        {
+          if (cleanedChildRequirement==null)
+          {
+            compoundRequirement.removeRequirement(i);
+            i--;
+            nbRequirements--;
+          }
+          else
+          {
+            compoundRequirement.setRequirement(i,cleanedChildRequirement);
+          }
+        }
+      }
+      int nbReqs=compoundRequirement.getRequirements().size();
+      if (nbReqs==1)
+      {
+        return compoundRequirement.getRequirements().get(0);
+      }
+      if (nbReqs==0)
+      {
+        return null;
+      }
+      return input;
+    }
+    else if (input instanceof QuestRequirement)
+    {
+      QuestRequirement requirement=(QuestRequirement)input;
+      Proxy<Achievable> proxy=requirement.getRequiredAchievable();
+      if (proxy==null)
+      {
+        return null;
+      }
+      Achievable resolvedAchievable=proxy.getObject();
+      if (resolvedAchievable==null)
+      {
+        return null;
+      }
+      return requirement;
+    }
+    return null;
   }
 
   private void loadQuestRequirements(Achievable achievable, Object[] requirementItems, CompoundQuestRequirement storage)
