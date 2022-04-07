@@ -660,6 +660,20 @@ public class MainDatAchievablesLoader
     AbstractAchievableRequirement requirement=achievable.getQuestRequirements();
     requirement=_requirementsLoader.deepRequirementCleanup(requirement);
     achievable.setQuestRequirements(requirement);
+    // Next quest
+    if (achievable instanceof QuestDescription)
+    {
+      QuestDescription quest=(QuestDescription)achievable;
+      Proxy<Achievable> next=quest.getNextQuest();
+      if (next!=null)
+      {
+        Achievable nextQuest=next.getObject();
+        if (nextQuest==null)
+        {
+          quest.setNextQuest(null);
+        }
+      }
+    }
   }
 
   private void doSave()
