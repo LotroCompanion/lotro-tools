@@ -2,10 +2,12 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.LotroCore;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
@@ -35,7 +37,12 @@ public class RequirementsLoadingUtils
     {
       requirements.setMaxLevel(maxLevel);
     }
-    // TODO: Usage_MinLevel_FloatToCap
+    Integer floatToCap=(Integer)properties.getProperty("Usage_MinLevel_FloatToCap");
+    if ((floatToCap!=null) && (floatToCap.intValue()==1))
+    {
+      int capLevel=LotroCoreConfig.getInstance().getMaxCharacterLevel();
+      requirements.setMinLevel(Integer.valueOf(capLevel));
+    }
   }
 
   /**
