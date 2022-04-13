@@ -21,9 +21,10 @@ import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
-import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
+import delta.games.lotro.lore.maps.Zone;
+import delta.games.lotro.lore.maps.ZoneUtils;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
 import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.maps.data.GeoPoint;
@@ -159,10 +160,10 @@ public class MarkersLoadingUtils
     {
       LOGGER.warn("Instance is not 0 for position: "+position);
     }
-    Identifiable where=null;
+    Zone where=null;
     if (areaDID!=0)
     {
-      where=getAreaOrDungeon(areaDID);
+      where=ZoneUtils.getZone(areaDID);
       if (where==null)
       {
         LOGGER.warn("Area is null: ID="+areaDID);
@@ -285,14 +286,14 @@ public class MarkersLoadingUtils
     {
       LOGGER.warn("Link has text: ["+text+"]");
     }
-    Identifiable where=null;
+    Zone where=null;
     if (dungeonDID!=0)
     {
-      where=getAreaOrDungeon(dungeonDID);
+      where=ZoneUtils.getZone(dungeonDID);
     }
     if (where==null)
     {
-      where=getAreaOrDungeon(areaDID);
+      where=ZoneUtils.getZone(areaDID);
     }
     AbstractMap targetMap=getTargetMap(destArea,destPosition);
     if (targetMap==null)
@@ -380,27 +381,5 @@ public class MarkersLoadingUtils
       LOGGER.warn("Target map not found for target: "+destArea);
     }
     return targetMap;
-  }
-
-  /**
-   * Get an area of dungeon from a zone identifier.
-   * @param id Identifier to use.
-   * @return the found zone or <code>null</code> if not found.
-   */
-  public Identifiable getAreaOrDungeon(int id)
-  {
-    DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
-    Dungeon dungeon=dungeonsMgr.getDungeonById(id);
-    if (dungeon!=null)
-    {
-      return dungeon;
-    }
-    GeoAreasManager geoAreasMgr=GeoAreasManager.getInstance();
-    Area area=geoAreasMgr.getAreaById(id);
-    if (area!=null)
-    {
-      return area;
-    }
-    return null;
   }
 }

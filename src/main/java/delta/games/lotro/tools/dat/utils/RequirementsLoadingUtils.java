@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.LotroCore;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.requirements.FactionRequirement;
@@ -14,7 +13,7 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
 
 /**
  * Utility methods to load requirements.
- * @author DAL
+ * @author DAM
  */
 public class RequirementsLoadingUtils
 {
