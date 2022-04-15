@@ -40,32 +40,32 @@ public class MainDatColorLoader
     // ItemMungingControl
     int itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(itemMungingPropsId);
-    if (properties!=null)
-    {
-      List<ColorDescription> colors=new ArrayList<ColorDescription>();
-      Object[] entries=(Object[])properties.getProperty("ItemMunging_Control_Color_List");
-      for(Object colorEntryObj : entries)
-      {
-        PropertiesSet colorProps=(PropertiesSet)colorEntryObj;
-        String colorName=DatUtils.getStringProperty(colorProps,"ItemMunging_NameLookup_Name");
-        Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
-        //System.out.println("Color: "+colorName+", value: "+colorValue);
-        ColorDescription color=new ColorDescription();
-        color.setName(colorName);
-        if (colorValue!=null)
-        {
-          color.setCode(colorValue.floatValue());
-        }
-        colors.add(color);
-      }
-      ColorXMLWriter.writeColorsFile(GeneratedFiles.COLORS,colors);
-    }
-    else
+    if (properties==null)
     {
       LOGGER.warn("Could not load item munging control properties");
+      return;
     }
-    //ColorDescription color=ColorsManager.getInstance().getColor(0.15f);
-    //System.out.println(color);
+    List<ColorDescription> colors=new ArrayList<ColorDescription>();
+    Object[] entries=(Object[])properties.getProperty("ItemMunging_Control_Color_List");
+    for(Object colorEntryObj : entries)
+    {
+      PropertiesSet colorProps=(PropertiesSet)colorEntryObj;
+      String colorName=DatUtils.getStringProperty(colorProps,"ItemMunging_NameLookup_Name");
+      Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
+      //System.out.println("Color: "+colorName+", value: "+colorValue);
+      ColorDescription color=new ColorDescription();
+      color.setName(colorName);
+      if (colorValue!=null)
+      {
+        color.setCode(colorValue.floatValue());
+      }
+      // Color bit
+      Long colorBitSet=(Long)colorProps.getProperty("Wardrobe_ItemClothingColorExt_Bit");
+      int position=Long.numberOfTrailingZeros(colorBitSet.longValue())+1;
+      color.setIntCode(position);
+      colors.add(color);
+    }
+    ColorXMLWriter.writeColorsFile(GeneratedFiles.COLORS,colors);
   }
 
   /**
