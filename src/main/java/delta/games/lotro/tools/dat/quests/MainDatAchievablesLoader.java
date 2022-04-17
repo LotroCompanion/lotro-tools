@@ -326,7 +326,7 @@ public class MainDatAchievablesLoader
       //System.out.println("IS Fellowship recommended: "+fellowshipRecommended);
     }
     // - raid
-    Integer isRaidQuest=((Integer)properties.getProperty("Quest_IsRaidQuest"));
+    Integer isRaidQuest=((Integer)properties.getProperty("Quest_ShowRaidInJournal"));
     if ((isRaidQuest!=null) && (isRaidQuest.intValue()==1))
     {
       quest.setSize(Size.RAID);
