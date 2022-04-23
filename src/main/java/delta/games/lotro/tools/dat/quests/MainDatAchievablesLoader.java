@@ -326,7 +326,7 @@ public class MainDatAchievablesLoader
       //System.out.println("IS Fellowship recommended: "+fellowshipRecommended);
     }
     // - raid
-    Integer isRaidQuest=((Integer)properties.getProperty("Quest_IsRaidQuest"));
+    Integer isRaidQuest=((Integer)properties.getProperty("Quest_ShowRaidInJournal"));
     if ((isRaidQuest!=null) && (isRaidQuest.intValue()==1))
     {
       quest.setSize(Size.RAID);
@@ -645,10 +645,34 @@ public class MainDatAchievablesLoader
     for(QuestDescription quest : _quests.values())
     {
       resolver.resolveQuest(quest);
+      cleanup(quest);
     }
     for(DeedDescription deed : _deeds.values())
     {
       resolver.resolveDeed(deed);
+      cleanup(deed);
+    }
+  }
+
+  private void cleanup(Achievable achievable)
+  {
+    // Cleanup requirements
+    AbstractAchievableRequirement requirement=achievable.getQuestRequirements();
+    requirement=_requirementsLoader.deepRequirementCleanup(requirement);
+    achievable.setQuestRequirements(requirement);
+    // Next quest
+    if (achievable instanceof QuestDescription)
+    {
+      QuestDescription quest=(QuestDescription)achievable;
+      Proxy<Achievable> next=quest.getNextQuest();
+      if (next!=null)
+      {
+        Achievable nextQuest=next.getObject();
+        if (nextQuest==null)
+        {
+          quest.setNextQuest(null);
+        }
+      }
     }
   }
 

@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.misc.IntegerHolder;
-import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -23,6 +22,8 @@ import delta.games.lotro.dat.loaders.PropertyUtils;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.lore.maps.Zone;
+import delta.games.lotro.lore.maps.ZoneUtils;
 
 /**
  * Loader for map notes.
@@ -109,19 +110,19 @@ public class MapNotesLoader
       DatPosition destPosition=GeoLoader.readPosition(bis);
       // Dest zone: is a Dungeon (most of the time) or an Area
       int destZoneId=BufferUtils.readUInt32(bis);
-      Identifiable destArea=_markersUtils.getAreaOrDungeon(destZoneId);
+      Zone destZone=ZoneUtils.getZone(destZoneId);
       // Checks
-      if (destArea==null)
+      if (destZone==null)
       {
-        LOGGER.warn("Destination area not found: "+destZoneId);
+        LOGGER.warn("Destination zone not found: "+destZoneId);
         return;
       }
       if (VERBOSE)
       {
         System.out.println("Link! Target position: "+destPosition);
-        System.out.println("Dest area: "+destArea);
+        System.out.println("Dest zone: "+destZone);
       }
-      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destPosition,destArea,contentLayersArray,text);
+      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destPosition,destZone,contentLayersArray,text);
     }
     float minRange=BufferUtils.readFloat(bis);
     float maxRange=BufferUtils.readFloat(bis);

@@ -47,6 +47,7 @@ public class MainBuffsLoader
    */
   public void doIt()
   {
+    DatStatUtils.doFilterStats=false;
     List<EffectBuff> buffs=loadBuffs();
     save(buffs);
   }
@@ -70,6 +71,26 @@ public class MainBuffsLoader
     buffs.add(loadBuff(1879145414,null));
     // A Quiet Calm (II)
     buffs.add(loadBuff(1879239303,null));
+    // Minstrel anthems:
+    // Anthem of Composure
+    buffs.add(loadBuff(1879073122,null));
+    // Anthem of Prowess
+    buffs.add(loadBuff(1879073120,null));
+    // Anthem of War
+    buffs.add(loadBuff(1879060866,null));
+    // Anthem of the Third Age - Resonance
+    buffs.add(loadBuff(1879205019,null));
+    // Anthem of the Third Age - Dissonance
+    buffs.add(loadBuff(1879205020,null));
+    // Anthem of the Third Age - Melody
+    buffs.add(loadBuff(1879217358,null));
+    // Dwarves Endurance
+    buffs.add(loadBuff(1879073616,null));
+    // Duty Bound
+    buffs.add(loadBuff(1879084065,null));
+
+    // Scroll of Finesse
+    buffs.add(loadBuff(1879216017,null));
     return buffs;
   }
 
