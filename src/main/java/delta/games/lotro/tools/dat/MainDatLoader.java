@@ -35,6 +35,7 @@ import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
+import delta.games.lotro.tools.dat.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
@@ -160,6 +161,8 @@ public class MainDatLoader
     new MainDatRelicMeldingRecipesLoader(_facade).doIt();
     // Allegiances
     new MainDatAllegiancesLoader(_facade).doIt();
+    // Billing groups
+    new MainBillingGroupsLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -272,6 +275,8 @@ public class MainDatLoader
     // Allegiances
     deleteFile(GeneratedFiles.ALLEGIANCES);
     deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
+    // Billing groups
+    deleteFile(GeneratedFiles.BILLING_GROUPS);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
