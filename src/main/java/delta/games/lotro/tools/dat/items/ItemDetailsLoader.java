@@ -9,12 +9,16 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemXP;
+import delta.games.lotro.lore.items.details.VirtueXP;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -38,6 +42,7 @@ public class ItemDetailsLoader
     handleGrantedTrait(item,props,"Item_GrantedTrait",GrantType.TRAIT);
     handleItemXP(item,props);
     handleItemReputation(item,props);
+    handleItemVirtueXP(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -165,6 +170,123 @@ Mount_SkillToGrantRaceArray:
       else
       {
         LOGGER.debug("No faction ID, and isRepItem is "+isRepItem+" for item: "+item);
+      }
+    }
+  }
+
+  private void handleItemVirtueXP(Item item, PropertiesSet props)
+  {
+/*
+EffectGenerator_UsageEffectList: 
+  #1: EffectGenerator_EffectStruct 
+    EffectGenerator_EffectDataList: 
+      #1: Effect_GrantTraitRank_Grant_List 
+        #1: Effect_GrantTraitRank_Grant_Node 
+          Effect_GrantTraitRank_Grant_XP: 1000
+    EffectGenerator_EffectID: 1879186818
+    EffectGenerator_EffectSpellcraft: -1.0
+*/
+    Object[] usageEffectList=(Object[])props.getProperty("EffectGenerator_UsageEffectList");
+    if ((usageEffectList!=null) && (usageEffectList.length>0))
+    {
+      for(Object entry : usageEffectList)
+      {
+        handleEffect(item,(PropertiesSet)entry);
+      }
+    }
+  }
+
+  private void handleEffect(Item item, PropertiesSet effectProps)
+  {
+    ArrayPropertyValue dataListValue=(ArrayPropertyValue)effectProps.getPropertyValueByName("EffectGenerator_EffectDataList");
+    //Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
+    if (dataListValue!=null)
+    {
+      for(PropertyValue dataListEntry : dataListValue.getValues())
+      {
+        PropertyDefinition dataListEntryPropDef=dataListEntry.getDefinition();
+        if ("Effect_GrantTraitRank_Grant_List".equals(dataListEntryPropDef.getName()))
+        {
+          ArrayPropertyValue dataListEntryArray=(ArrayPropertyValue)dataListEntry;
+          handleGrantTraitRankGrantList(item,dataListEntryArray);
+        }
+        else if ("Effect_Crafting_Recipe".equals(dataListEntryPropDef.getName()))
+        {
+          // Data ID
+        }
+        else if ("Effect_Crafting_Profession".equals(dataListEntryPropDef.getName()))
+        {
+          // Data ID
+        }
+        else if ("Effect_Crafting_RecipeList".equals(dataListEntryPropDef.getName()))
+        {
+          // Array of recipe IDs?
+        }
+        else if ("Effect_GrantSkill_Skill_To_Grant".equals(dataListEntryPropDef.getName()))
+        {
+          // Skill Data ID?
+        }
+        else if ("Effect_GrantTrait_Trait_To_Grant".equals(dataListEntryPropDef.getName()))
+        {
+          // Trait Data ID?
+        }
+        else
+        {
+          LOGGER.warn("Unmanaged data list entry: "+dataListEntryPropDef);
+        }
+      }
+    }
+  }
+
+  private void handleGrantTraitRankGrantList(Item item, ArrayPropertyValue entriesArray)
+  {
+    for(PropertyValue grantListEntryValue : entriesArray.getValues())
+    {
+      PropertyDefinition grantEntryPropDef=grantListEntryValue.getDefinition();
+      if ("Effect_GrantTraitRank_Grant_Node".equals(grantEntryPropDef.getName()))
+      {
+        PropertiesSet grantNode=(PropertiesSet)grantListEntryValue.getValue();
+        /*
+268449607 - Effect_GrantTraitRank_Grant_Node, type=Struct
+Property: Effect_GrantTraitRank_Grant_N_Ranks, ID=268449606, type=Int
+Property: Effect_GrantTraitRank_Trait_To_Grant, ID=268449609, type=Data File ID
+Property: Effect_GrantTraitRank_Grant_Up_To_Rank, ID=268449610, type=Int
+Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
+         */
+        Integer virtueXPAmount=(Integer)grantNode.getProperty("Effect_GrantTraitRank_Grant_XP");
+        Integer upToRank=(Integer)grantNode.getProperty("Effect_GrantTraitRank_Grant_Up_To_Rank");
+        Integer traitToGrant=(Integer)grantNode.getProperty("Effect_GrantTraitRank_Trait_To_Grant");
+        Integer grantNRanks=(Integer)grantNode.getProperty("Effect_GrantTraitRank_Grant_N_Ranks");
+        if (((virtueXPAmount!=null) && (virtueXPAmount.intValue()!=0)) ||
+            ((upToRank!=null) && (upToRank.intValue()!=0)) ||
+            ((traitToGrant!=null) && (traitToGrant.intValue()!=0)) ||
+            ((grantNRanks!=null) && (grantNRanks.intValue()!=0)))
+        {
+          //System.out.println("Item : "+item);
+          if ((virtueXPAmount!=null) && (virtueXPAmount.intValue()!=0))
+          {
+            VirtueXP virtueXP=new VirtueXP(virtueXPAmount.intValue());
+            Item.addDetail(item,virtueXP);
+          }
+          /*
+          if ((upToRank!=null) && (upToRank.intValue()!=0))
+          {
+            System.out.println("\tUp to rank="+upToRank);
+          }
+          if ((traitToGrant!=null) && (traitToGrant.intValue()!=0))
+          {
+            System.out.println("\tTrait to grant="+traitToGrant);
+          }
+          if ((grantNRanks!=null) && (grantNRanks.intValue()!=0))
+          {
+            System.out.println("\tGrant N ranks="+grantNRanks);
+          }
+          */
+        }
+      }
+      else
+      {
+        System.out.println("Unmanaged grant entry: "+grantEntryPropDef);
       }
     }
   }

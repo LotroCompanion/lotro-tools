@@ -12,6 +12,10 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.common.ChallengeLevel;
+import delta.games.lotro.common.enums.BillingGroup;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.rewards.BillingTokenReward;
 import delta.games.lotro.common.rewards.CraftingXpReward;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
@@ -174,25 +178,13 @@ public class DatRewardsLoader
     }
     // Relics
     handleRelics(rewards,props);
+    // Billing token
+    handleBillingTokens(props,rewards.getRewardElements());
 
     // Class points: not for quests
     // Lotro points: not for quests
     // Destiny points
     // Skills? = traits?
-
-    // Billing token
-    /*
-    Object[] billingTokenArray=(Object[])props.getProperty("QuestTreasure_FixedBillingTokenArray");
-    if (billingTokenArray!=null)
-    {
-      for(Object billingTokenObj : billingTokenArray)
-      {
-        int billingTokenId=((Integer)billingTokenObj).intValue();
-        String key=_billingGroup.getString(billingTokenId);
-        System.out.println("Billing token: "+billingTokenId+": "+key);
-      }
-    }
-    */
   }
 
   // Virtues
@@ -483,6 +475,34 @@ public class DatRewardsLoader
           }
         }
       }
+    }
+  }
+
+  private void handleBillingTokens(PropertiesSet props, List<RewardElement> rewards)
+  {
+    Object[] billingTokenArray=(Object[])props.getProperty("QuestTreasure_FixedBillingTokenArray");
+    if (billingTokenArray!=null)
+    {
+      for(Object billingTokenObj : billingTokenArray)
+      {
+        int billingGroupId=((Integer)billingTokenObj).intValue();
+        handleBillingGroup(billingGroupId,rewards);
+      }
+    }
+  }
+
+  private void handleBillingGroup(int billingGroupId, List<RewardElement> rewards)
+  {
+    LotroEnum<BillingGroup> billingGroupsEnum=LotroEnumsRegistry.getInstance().get(BillingGroup.class);
+    BillingGroup billingGroup=billingGroupsEnum.getEntry(billingGroupId);
+    if (billingGroup!=null)
+    {
+      BillingTokenReward billingTokenReward=new BillingTokenReward(billingGroup);
+      rewards.add(billingTokenReward);
+    }
+    else
+    {
+      LOGGER.warn("Billing token not found: "+billingGroupId);
     }
   }
 

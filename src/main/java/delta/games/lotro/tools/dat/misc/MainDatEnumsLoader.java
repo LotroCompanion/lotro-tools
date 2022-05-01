@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
+import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.Genus;
@@ -65,6 +66,7 @@ public class MainDatEnumsLoader
     loadEnum(587203634,"ItemSocketType",SocketType.class);
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
+    loadEnum(587202756,"BillingGroup",BillingGroup.class); // 0x230000C4
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)

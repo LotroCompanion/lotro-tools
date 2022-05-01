@@ -340,4 +340,8 @@ public class GeneratedFiles
    * Allegiance icons.
    */
   public static final File ALLEGIANCES_ICONS=new File("../lotro-data/allegiances/allegianceIcons.zip").getAbsoluteFile();
+  /**
+   * Billing groups descriptions.
+   */
+  public static final File BILLING_GROUPS=LotroCoreConfig.getInstance().getFile(DataFiles.BILLING_GROUPS);
 }
