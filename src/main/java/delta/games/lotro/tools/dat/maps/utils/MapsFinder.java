@@ -49,6 +49,10 @@ public class MapsFinder
     // Check bounds
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     GeoreferencedBasemap basemap=_basemapsManager.getMapById(mapId.intValue());
+    if (basemap == null) {
+      LOGGER.warn("Base map not found.  MapId="+mapId);
+      return null;
+    }
     GeoBox box=basemap.getBoundingBox();
     boolean isInBox=box.isInBox(new GeoPoint(lonLat[0],lonLat[1]));
     if (!isInBox)
