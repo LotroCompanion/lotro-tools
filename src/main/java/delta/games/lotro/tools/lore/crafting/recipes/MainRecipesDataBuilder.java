@@ -6,14 +6,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import delta.games.lotro.common.rewards.RewardsExplorer;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
+import delta.games.lotro.lore.deeds.DeedDescription;
+import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.ContainersManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.containers.ItemsContainer;
 import delta.games.lotro.lore.items.containers.LootTables;
+import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.lore.trade.barter.BarterEntry;
 import delta.games.lotro.lore.trade.barter.BarterEntryElement;
 import delta.games.lotro.lore.trade.barter.BarterNpc;
@@ -50,12 +56,15 @@ public class MainRecipesDataBuilder
     Set<Integer> foundInContainers=findScrollsInContainers(recipeScrollsIds);
     Set<Integer> sold=findInVendors(recipeScrollsIds);
     Set<Integer> bartered=findInBarterers(recipeScrollsIds);
-    // TODO Quest rewards
+    Set<Integer> questRewards=findInQuestRewards(recipeScrollsIds);
+    Set<Integer> deedRewards=findInDeedRewards(recipeScrollsIds);
 
     Set<Integer> scrollsNotFound=new HashSet<Integer>(recipeScrollsIds);
     scrollsNotFound.removeAll(foundInContainers);
     scrollsNotFound.removeAll(sold);
     scrollsNotFound.removeAll(bartered);
+    scrollsNotFound.removeAll(questRewards);
+    scrollsNotFound.removeAll(deedRewards);
     System.out.println("Scrolls not found:");
     showList(scrollsNotFound);
   }
@@ -140,6 +149,43 @@ public class MainRecipesDataBuilder
           itemIds.add(Integer.valueOf(itemId));
         }
       }
+    }
+    return itemIds;
+  }
+
+  private Set<Integer> findInQuestRewards(Set<Integer> recipeScrollsIds)
+  {
+    List<QuestDescription> quests=QuestsManager.getInstance().getAll();
+    Set<Integer> rewardItemIDs=findRewardItems(quests);
+    rewardItemIDs.retainAll(recipeScrollsIds);
+    System.out.println("Quest rewards:");
+    showList(rewardItemIDs);
+    return rewardItemIDs;
+  }
+
+  private Set<Integer> findInDeedRewards(Set<Integer> recipeScrollsIds)
+  {
+    List<DeedDescription> deeds=DeedsManager.getInstance().getAll();
+    Set<Integer> rewardItemIDs=findRewardItems(deeds);
+    rewardItemIDs.retainAll(recipeScrollsIds);
+    System.out.println("Deed rewards:");
+    showList(rewardItemIDs);
+    return rewardItemIDs;
+  }
+
+  private Set<Integer> findRewardItems(List<? extends Achievable> achievables)
+  {
+    RewardsExplorer rewardsExplorer=new RewardsExplorer();
+    for(Achievable achievable : achievables)
+    {
+      rewardsExplorer.doIt(achievable.getRewards());
+    }
+    rewardsExplorer.resolveProxies();
+    List<Item> items=rewardsExplorer.getItems();
+    Set<Integer> itemIds=new HashSet<Integer>();
+    for(Item item : items)
+    {
+      itemIds.add(Integer.valueOf(item.getIdentifier()));
     }
     return itemIds;
   }
