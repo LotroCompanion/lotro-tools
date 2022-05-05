@@ -12,6 +12,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.tools.dat.utils.OperatorUtils;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -249,7 +250,7 @@ DefaultPermissionBlobStruct:
     int operatorCode=((Integer)questRequirementProps.getProperty("Usage_Operator")).intValue();
     int questId=((Integer)questRequirementProps.getProperty("Usage_QuestID")).intValue();
     int questStatusCode=((Integer)questRequirementProps.getProperty("Usage_QuestStatus")).intValue();
-    ComparisonOperator operator=getComparisonOperatorFromCode(operatorCode);
+    ComparisonOperator operator=OperatorUtils.getComparisonOperatorFromCode(operatorCode);
     if (operator==null)
     {
       LOGGER.warn("Unmanaged operator: "+operatorCode+": "+_operator.getLabel(operatorCode));
@@ -278,17 +279,6 @@ DefaultPermissionBlobStruct:
       int objectiveIndex=questStatus&0xFFFFFFF;
       return QuestStatus.getUnderwayObjective(objectiveIndex);
     }
-    return null;
-  }
-
-  private ComparisonOperator getComparisonOperatorFromCode(int operatorCode)
-  {
-    if (operatorCode==1) return ComparisonOperator.GREATER_OR_EQUAL;
-    if (operatorCode==2) return ComparisonOperator.NOT_EQUAL;
-    if (operatorCode==3) return ComparisonOperator.EQUAL;
-    if (operatorCode==4) return ComparisonOperator.LESS;
-    if (operatorCode==5) return ComparisonOperator.LESS_OR_EQUAL;
-    if (operatorCode==6) return ComparisonOperator.GREATER;
     return null;
   }
 }
