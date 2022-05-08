@@ -38,10 +38,12 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
+import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
@@ -67,6 +69,7 @@ public class MainDatAchievablesLoader
   private QuestRequirementsLoader _requirementsLoader;
   private StringRenderer _renderer;
   private AchievablesLogger _logger;
+  private UsageRequirementsLoader _usageRequirementsLoader;
 
   /**
    * Constructor.
@@ -85,6 +88,9 @@ public class MainDatAchievablesLoader
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _logger=new AchievablesLogger(true,true,"achievables.txt");
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    WorldEventConditionsLoader weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
+    _usageRequirementsLoader=new UsageRequirementsLoader(weConditionsLoader);
   }
 
   private void handleArc(int arcId)
@@ -528,7 +534,7 @@ public class MainDatAchievablesLoader
     PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
     if (permissions!=null)
     {
-      UsageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
+      _usageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
     }
   }
 
