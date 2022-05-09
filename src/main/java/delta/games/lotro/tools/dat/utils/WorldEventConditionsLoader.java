@@ -7,8 +7,8 @@ import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.utils.ComparisonOperator;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.worldEvents.WorldEvent;
-import delta.games.lotro.lore.worldEvents.WorldEventBooleanCondition;
-import delta.games.lotro.lore.worldEvents.WorldEventConditionItem;
+import delta.games.lotro.lore.worldEvents.CompoundWorldEventCondition;
+import delta.games.lotro.lore.worldEvents.SimpleWorldEventCondition;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.utils.Proxy;
 
@@ -38,7 +38,7 @@ public class WorldEventConditionsLoader
    */
   public void loadWorldEventsUsageRequirements(PropertiesSet properties, UsageRequirement requirements)
   {
-    WorldEventBooleanCondition condition=loadWorldEventsUsageConditions(properties);
+    CompoundWorldEventCondition condition=loadWorldEventsUsageConditions(properties);
     if (condition!=null)
     {
       System.out.println(condition);
@@ -50,7 +50,7 @@ public class WorldEventConditionsLoader
    * @param properties Source properties.
    * @return the loaded condition or <code>null</code>.
    */
-  public WorldEventBooleanCondition loadWorldEventsUsageConditions(PropertiesSet properties)
+  public CompoundWorldEventCondition loadWorldEventsUsageConditions(PropertiesSet properties)
   {
     return loadWorldEventsConditions(properties,"Usage_WorldEvent_AllConditionList","Usage_WorldEvent_AnyConditionList");
   }
@@ -62,10 +62,10 @@ public class WorldEventConditionsLoader
    * @param anyConditionPropertyName Name of the "any condition" property.
    * @return the loaded condition or <code>null</code>.
    */
-  public WorldEventBooleanCondition loadWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
+  public CompoundWorldEventCondition loadWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
   {
-    WorldEventBooleanCondition andCondition=loadWorldEventList(properties,Operator.AND,allConditionPropertyName);
-    WorldEventBooleanCondition orCondition=loadWorldEventList(properties,Operator.OR,anyConditionPropertyName);
+    CompoundWorldEventCondition andCondition=loadWorldEventList(properties,Operator.AND,allConditionPropertyName);
+    CompoundWorldEventCondition orCondition=loadWorldEventList(properties,Operator.OR,anyConditionPropertyName);
     if ((andCondition!=null) && (orCondition!=null))
     {
       LOGGER.warn("Both AND and OR world event condition: AND="+andCondition+", OR="+orCondition);
@@ -82,18 +82,18 @@ public class WorldEventConditionsLoader
     return null;
   }
 
-  private WorldEventBooleanCondition loadWorldEventList(PropertiesSet properties, Operator operator, String propertyName)
+  private CompoundWorldEventCondition loadWorldEventList(PropertiesSet properties, Operator operator, String propertyName)
   {
-    WorldEventBooleanCondition ret=null;
+    CompoundWorldEventCondition ret=null;
     Object[] allList=(Object[])properties.getProperty(propertyName);
     if (allList!=null)
     {
-      ret=new WorldEventBooleanCondition(operator);
+      ret=new CompoundWorldEventCondition(operator);
       for(Object entryPropsObj : allList)
       {
         //System.out.println(operator);
         PropertiesSet entryProps=(PropertiesSet)entryPropsObj;
-        WorldEventConditionItem element=handleWorldEventCondition(entryProps);
+        SimpleWorldEventCondition element=handleWorldEventCondition(entryProps);
         if (element!=null)
         {
           ret.addItem(element);
@@ -117,9 +117,9 @@ public class WorldEventConditionsLoader
     return null;
   }
 
-  private WorldEventConditionItem handleWorldEventCondition(PropertiesSet props)
+  private SimpleWorldEventCondition handleWorldEventCondition(PropertiesSet props)
   {
-    WorldEventConditionItem ret=null;
+    SimpleWorldEventCondition ret=null;
     int operatorCode=((Integer)props.getProperty("WorldEvent_Operator")).intValue();
     ComparisonOperator operator=OperatorUtils.getComparisonOperatorFromCode(operatorCode);
     int worldEventID=((Integer)props.getProperty("WorldEvent_WorldEvent")).intValue();
@@ -131,12 +131,12 @@ public class WorldEventConditionsLoader
     if (idToCompareWith!=null)
     {
       Proxy<WorldEvent> comparetToWorldEvent=buildWorldEventProxy(idToCompareWith.intValue());
-      ret=new WorldEventConditionItem(operator,worldEvent,comparetToWorldEvent);
+      ret=new SimpleWorldEventCondition(operator,worldEvent,comparetToWorldEvent);
       //System.out.println("\tCompare with world event: "+idToCompareWith);
     }
     else if (conditionValue!=null)
     {
-      ret=new WorldEventConditionItem(operator,worldEvent,conditionValue.intValue());
+      ret=new SimpleWorldEventCondition(operator,worldEvent,conditionValue.intValue());
       //System.out.println("\tCompare with value: "+conditionValue);
     }
     else

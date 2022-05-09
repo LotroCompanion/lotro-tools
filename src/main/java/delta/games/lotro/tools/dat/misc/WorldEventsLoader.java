@@ -9,7 +9,10 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.lore.worldEvents.WorldEvent;
-import delta.games.lotro.lore.worldEvents.WorldEventBooleanCondition;
+import delta.games.lotro.lore.worldEvents.BooleanWorldEvent;
+import delta.games.lotro.lore.worldEvents.CompoundWorldEventCondition;
+import delta.games.lotro.lore.worldEvents.ConditionWorldEvent;
+import delta.games.lotro.lore.worldEvents.IntegerWorldEvent;
 import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 
 /**
@@ -50,18 +53,13 @@ public class WorldEventsLoader
     return ret;
   }
 
-  @SuppressWarnings("unused")
   private WorldEvent handleWorldEvent(int worldEventId)
   {
-    //System.out.println("World Event: "+worldEventId);
+    WorldEvent ret=null;
     PropertiesSet props=_facade.loadProperties(worldEventId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(props.dump());
     int propertyID=((Integer)props.getProperty("WorldEvent_WorldPropertyName")).intValue();
-
-    WorldEvent ret=new WorldEvent(worldEventId,propertyID);
     PropertyDefinition propertyDefinition=_facade.getPropertiesRegistry().getPropertyDef(propertyID);
     String name=propertyDefinition.getName();
-    ret.setPropertyName(name);
     //System.out.println("\tPropertyID="+propertyID+", name: "+name);
     PropertyType type=propertyDefinition.getPropertyType();
     if (type==PropertyType.INT)
@@ -70,26 +68,52 @@ public class WorldEventsLoader
       int maxValue=((Integer)props.getProperty("WorldEvent_MaxIntValue")).intValue();
       Integer defaultValue=(Integer)props.getProperty("WorldEvent_DefaultIntValue");
       //System.out.println("\tINTEGER Min="+minValue+", Max="+maxValue+", Default="+defaultValue);
+      IntegerWorldEvent integerWE=new IntegerWorldEvent();
+      integerWE.setDefaultValue(defaultValue);
+      integerWE.setMinValue(minValue);
+      integerWE.setMaxValue(Integer.valueOf(maxValue));
+      ret=integerWE;
     }
     else if (type==PropertyType.BOOLEAN)
     {
-      Integer defaultValue=(Integer)props.getProperty("WorldEvent_DefaultBoolValue");
+      Integer defaultValueInt=(Integer)props.getProperty("WorldEvent_DefaultBoolValue");
       //System.out.println("\tBOOLEAN Default="+defaultValue);
+      CompoundWorldEventCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
+      if (condition!=null)
+      {
+        ConditionWorldEvent conditionWE=new ConditionWorldEvent();
+        conditionWE.setCondition(condition);
+        ret=conditionWE;
+      }
+      else
+      {
+        BooleanWorldEvent booleanWE=new BooleanWorldEvent();
+        boolean defaultValue=false;
+        if (defaultValueInt!=null)
+        {
+          defaultValue=(defaultValueInt.intValue()!=0);
+        }
+        booleanWE.setDefaultValue(defaultValue);
+        ret=booleanWE;
+      }
     }
+    ret.setIdentifier(worldEventId);
+    ret.setPropertyID(propertyID);
+    ret.setPropertyName(name);
+    // Description
     String description=(String)props.getProperty("WorldEvent_DescriptionString");
     if (description!=null)
     {
       //System.out.println("\tDescription: "+description);
       ret.setDescription(description);
     }
+    // Progress
     String progress=(String)props.getProperty("WorldEvent_ProgressString");
     if (progress!=null)
     {
       //System.out.println("\tProgress: "+progress);
       ret.setProgress(progress);
     }
-    WorldEventBooleanCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
-    ret.setValueComputer(condition);
     return ret;
   }
 }

@@ -1,7 +1,5 @@
 package delta.games.lotro.tools.dat.misc;
 
-import org.apache.log4j.Logger;
-
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.worldEvents.WorldEvent;
@@ -13,8 +11,6 @@ import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
  */
 public class MainWorldEventsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainWorldEventsLoader.class);
-
   private DataFacade _facade;
   private WorldEventsLoader _loader;
 
