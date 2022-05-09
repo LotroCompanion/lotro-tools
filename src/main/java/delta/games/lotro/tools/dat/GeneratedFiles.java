@@ -344,4 +344,8 @@ public class GeneratedFiles
    * Billing groups descriptions.
    */
   public static final File BILLING_GROUPS=LotroCoreConfig.getInstance().getFile(DataFiles.BILLING_GROUPS);
+  /**
+   * World events.
+   */
+  public static final File WORLD_EVENTS=LotroCoreConfig.getInstance().getFile(DataFiles.WORLD_EVENTS);
 }

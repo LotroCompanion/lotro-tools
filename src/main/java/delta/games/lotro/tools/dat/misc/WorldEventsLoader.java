@@ -1,8 +1,12 @@
 package delta.games.lotro.tools.dat.misc;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -34,6 +38,18 @@ public class WorldEventsLoader
     _facade=facade;
     _registry=new HashMap<Integer,WorldEvent>();
     _weConditionsLoader=new WorldEventConditionsLoader(this);
+  }
+
+  /**
+   * Get the managed world events.
+   * @return a list of world events, sorted by identifier.
+   */
+  public List<WorldEvent> getWorldEvents()
+  {
+    List<WorldEvent> ret=new ArrayList<WorldEvent>();
+    ret.addAll(_registry.values());
+    Collections.sort(ret,new IdentifiableComparator<WorldEvent>());
+    return ret;
   }
 
   /**

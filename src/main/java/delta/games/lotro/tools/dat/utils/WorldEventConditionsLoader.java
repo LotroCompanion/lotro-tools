@@ -59,6 +59,7 @@ public class WorldEventConditionsLoader
       CompoundWorldEventCondition ret=new CompoundWorldEventCondition(Operator.AND);
       ret.addItem(andCondition);
       ret.addItem(orCondition);
+      return ret;
     }
     if (andCondition!=null)
     {

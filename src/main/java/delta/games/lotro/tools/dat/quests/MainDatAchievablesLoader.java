@@ -38,6 +38,7 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
+import delta.games.lotro.lore.worldEvents.io.xml.WorldEventsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -71,6 +72,7 @@ public class MainDatAchievablesLoader
   private StringRenderer _renderer;
   private AchievablesLogger _logger;
   private UsageRequirementsLoader _usageRequirementsLoader;
+  private WorldEventsLoader _worldEventsLoader;
   private WorldEventConditionsLoader _weConditionsLoader;
 
 
@@ -91,8 +93,8 @@ public class MainDatAchievablesLoader
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _logger=new AchievablesLogger(true,true,"achievables.txt");
-    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
-    _weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
+    _worldEventsLoader=new WorldEventsLoader(facade);
+    _weConditionsLoader=new WorldEventConditionsLoader(_worldEventsLoader);
     _usageRequirementsLoader=new UsageRequirementsLoader();
   }
 
@@ -720,6 +722,16 @@ public class MainDatAchievablesLoader
     }
     // Save progressions
     DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
+    // Save world events
+    {
+      WorldEventsXMLWriter worldEventsWriter=new WorldEventsXMLWriter();
+      File worldEventsFile=GeneratedFiles.WORLD_EVENTS;
+      boolean ok=worldEventsWriter.write(worldEventsFile,_worldEventsLoader.getWorldEvents(),EncodingNames.UTF_8);
+      if (ok)
+      {
+        System.out.println("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
+      }
+    }
   }
 
   private void sortDeeds(List<DeedDescription> deeds)
