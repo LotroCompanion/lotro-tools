@@ -8,11 +8,11 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
-import delta.games.lotro.lore.worldEvents.WorldEvent;
+import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.BooleanWorldEvent;
-import delta.games.lotro.lore.worldEvents.CompoundWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.ConditionWorldEvent;
 import delta.games.lotro.lore.worldEvents.IntegerWorldEvent;
+import delta.games.lotro.lore.worldEvents.WorldEvent;
 import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 
 /**
@@ -78,7 +78,7 @@ public class WorldEventsLoader
     {
       Integer defaultValueInt=(Integer)props.getProperty("WorldEvent_DefaultBoolValue");
       //System.out.println("\tBOOLEAN Default="+defaultValue);
-      CompoundWorldEventCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
+      AbstractWorldEventCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
       if (condition!=null)
       {
         ConditionWorldEvent conditionWE=new ConditionWorldEvent();

@@ -1,14 +1,16 @@
 package delta.games.lotro.tools.dat.utils;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.common.utils.collections.filters.Operator;
-import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.utils.ComparisonOperator;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.lore.worldEvents.WorldEvent;
+import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.CompoundWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.SimpleWorldEventCondition;
+import delta.games.lotro.lore.worldEvents.WorldEvent;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.utils.Proxy;
 
@@ -32,25 +34,11 @@ public class WorldEventConditionsLoader
   }
 
   /**
-   * Handle world events requirement.
-   * @param properties Source properties.
-   * @param requirements Storage for loaded data.
-   */
-  public void loadWorldEventsUsageRequirements(PropertiesSet properties, UsageRequirement requirements)
-  {
-    CompoundWorldEventCondition condition=loadWorldEventsUsageConditions(properties);
-    if (condition!=null)
-    {
-      System.out.println(condition);
-    }
-  }
-
-  /**
    * Load world events conditions.
    * @param properties Source properties.
    * @return the loaded condition or <code>null</code>.
    */
-  public CompoundWorldEventCondition loadWorldEventsUsageConditions(PropertiesSet properties)
+  public AbstractWorldEventCondition loadWorldEventsUsageConditions(PropertiesSet properties)
   {
     return loadWorldEventsConditions(properties,"Usage_WorldEvent_AllConditionList","Usage_WorldEvent_AnyConditionList");
   }
@@ -62,14 +50,15 @@ public class WorldEventConditionsLoader
    * @param anyConditionPropertyName Name of the "any condition" property.
    * @return the loaded condition or <code>null</code>.
    */
-  public CompoundWorldEventCondition loadWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
+  public AbstractWorldEventCondition loadWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
   {
-    CompoundWorldEventCondition andCondition=loadWorldEventList(properties,Operator.AND,allConditionPropertyName);
-    CompoundWorldEventCondition orCondition=loadWorldEventList(properties,Operator.OR,anyConditionPropertyName);
+    AbstractWorldEventCondition andCondition=loadWorldEventList(properties,Operator.AND,allConditionPropertyName);
+    AbstractWorldEventCondition orCondition=loadWorldEventList(properties,Operator.OR,anyConditionPropertyName);
     if ((andCondition!=null) && (orCondition!=null))
     {
-      LOGGER.warn("Both AND and OR world event condition: AND="+andCondition+", OR="+orCondition);
-      System.out.println(properties.dump());
+      CompoundWorldEventCondition ret=new CompoundWorldEventCondition(Operator.AND);
+      ret.addItem(andCondition);
+      ret.addItem(orCondition);
     }
     if (andCondition!=null)
     {
@@ -82,25 +71,30 @@ public class WorldEventConditionsLoader
     return null;
   }
 
-  private CompoundWorldEventCondition loadWorldEventList(PropertiesSet properties, Operator operator, String propertyName)
+  private AbstractWorldEventCondition loadWorldEventList(PropertiesSet properties, Operator operator, String propertyName)
   {
-    CompoundWorldEventCondition ret=null;
-    Object[] allList=(Object[])properties.getProperty(propertyName);
-    if (allList!=null)
+    Object[] list=(Object[])properties.getProperty(propertyName);
+    if (list!=null)
     {
-      ret=new CompoundWorldEventCondition(operator);
-      for(Object entryPropsObj : allList)
+      CompoundWorldEventCondition ret=new CompoundWorldEventCondition(operator);
+      for(Object entryObj : list)
       {
         //System.out.println(operator);
-        PropertiesSet entryProps=(PropertiesSet)entryPropsObj;
+        PropertiesSet entryProps=(PropertiesSet)entryObj;
         SimpleWorldEventCondition element=handleWorldEventCondition(entryProps);
         if (element!=null)
         {
           ret.addItem(element);
         }
       }
+      List<AbstractWorldEventCondition> conditions=ret.getItems();
+      if (conditions.size()==1)
+      {
+        return conditions.get(0);
+      }
+      return ret;
     }
-    return ret;
+    return null;
   }
 
   private Proxy<WorldEvent> buildWorldEventProxy(int worldEventID)

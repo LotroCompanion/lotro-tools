@@ -18,11 +18,9 @@ import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelRoute;
 import delta.games.lotro.lore.travels.TravelRouteInstance;
 import delta.games.lotro.lore.travels.TravelsManager;
-import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.tools.dat.quests.QuestRequirementsLoader;
 import delta.games.lotro.tools.dat.quests.UsageRequirementsLoader;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 
 /**
  * Get travel definitions from DAT files.
@@ -46,9 +44,7 @@ public class MainDatTravelsLoader
     _facade=facade;
     _travelsMgr=new TravelsManager();
     _questRequirementsLoader=new QuestRequirementsLoader(facade);
-    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
-    WorldEventConditionsLoader weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
-    _usageRequirementsLoader=new UsageRequirementsLoader(weConditionsLoader);
+    _usageRequirementsLoader=new UsageRequirementsLoader();
   }
 
   private TravelNode load(int indexDataId)

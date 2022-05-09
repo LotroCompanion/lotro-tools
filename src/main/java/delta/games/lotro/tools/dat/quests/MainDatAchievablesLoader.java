@@ -37,6 +37,7 @@ import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
+import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -70,6 +71,8 @@ public class MainDatAchievablesLoader
   private StringRenderer _renderer;
   private AchievablesLogger _logger;
   private UsageRequirementsLoader _usageRequirementsLoader;
+  private WorldEventConditionsLoader _weConditionsLoader;
+
 
   /**
    * Constructor.
@@ -89,8 +92,8 @@ public class MainDatAchievablesLoader
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _logger=new AchievablesLogger(true,true,"achievables.txt");
     WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
-    WorldEventConditionsLoader weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
-    _usageRequirementsLoader=new UsageRequirementsLoader(weConditionsLoader);
+    _weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
+    _usageRequirementsLoader=new UsageRequirementsLoader();
   }
 
   private void handleArc(int arcId)
@@ -535,6 +538,9 @@ public class MainDatAchievablesLoader
     if (permissions!=null)
     {
       _usageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
+      // - world events
+      AbstractWorldEventCondition worldEventsRequirements=_weConditionsLoader.loadWorldEventsUsageConditions(permissions);
+      achievable.setWorldEventsRequirement(worldEventsRequirements);
     }
   }
 
