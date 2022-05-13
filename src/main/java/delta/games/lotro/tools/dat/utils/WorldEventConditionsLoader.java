@@ -32,6 +32,7 @@ public class WorldEventConditionsLoader
   public WorldEventConditionsLoader(WorldEventsLoader loader)
   {
     _loader=loader;
+    _normalizer=new WorldEventConditionNormalizer();
   }
 
   /**
