@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.deeds;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,9 @@ import java.util.Map;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
+import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.CompoundWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.SimpleWorldEventCondition;
@@ -22,45 +26,66 @@ import delta.games.lotro.utils.Proxy;
  */
 public class MainAssessWorldEventUsageInDeeds
 {
-  private Map<Integer,IntegerHolder> _counters=new HashMap<Integer,IntegerHolder>();
+  private Map<Integer,IntegerHolder> _weCounters=new HashMap<Integer,IntegerHolder>();
+  private Map<Integer,IntegerHolder> _complexityCounters=new HashMap<Integer,IntegerHolder>();
 
   private void doIt()
   {
-    for(DeedDescription deed : DeedsManager.getInstance().getAll())
-    {
-      checkDeed(deed);
-    }
+    doQuests();
+    //doDeeds();
     showResults();
   }
 
-  private void checkDeed(DeedDescription deed)
+  void doQuests()
   {
-    AbstractWorldEventCondition condition=deed.getWorldEventsRequirement();
+    for(QuestDescription quest : QuestsManager.getInstance().getAll())
+    {
+      checkAchievable(quest);
+    }
+  }
+
+  void doDeeds()
+  {
+    for(DeedDescription deed : DeedsManager.getInstance().getAll())
+    {
+      checkAchievable(deed);
+    }
+  }
+
+  private void checkAchievable(Achievable achievable)
+  {
+    checkWorldEventsInAchievable(achievable);
+    checkConditionComplexity(achievable);
+  }
+
+  private void checkWorldEventsInAchievable(Achievable achievable)
+  {
+    AbstractWorldEventCondition condition=achievable.getWorldEventsRequirement();
     if (condition==null)
     {
       return;
     }
-    inspectCondition(condition);
+    inspectWorldEventsInCondition(condition);
   }
 
-  private void inspectCondition(AbstractWorldEventCondition condition)
+  private void inspectWorldEventsInCondition(AbstractWorldEventCondition condition)
   {
     if (condition instanceof CompoundWorldEventCondition)
     {
       CompoundWorldEventCondition compoundCondition=(CompoundWorldEventCondition)condition;
       for(AbstractWorldEventCondition childCondition : compoundCondition.getItems())
       {
-        inspectCondition(childCondition);
+        inspectWorldEventsInCondition(childCondition);
       }
     }
     else if (condition instanceof SimpleWorldEventCondition)
     {
       SimpleWorldEventCondition simpleCondition=(SimpleWorldEventCondition)condition;
-      inspectSimpleCondition(simpleCondition);
+      inspectWorldEventsInSimpleCondition(simpleCondition);
     }
   }
 
-  private void inspectSimpleCondition(SimpleWorldEventCondition condition)
+  private void inspectWorldEventsInSimpleCondition(SimpleWorldEventCondition condition)
   {
     inspectWorldEvent(condition.getCompareToWorldEvent());
     inspectWorldEvent(condition.getWorldEvent());
@@ -73,24 +98,109 @@ public class MainAssessWorldEventUsageInDeeds
       return;
     }
     Integer key=Integer.valueOf(worldEvent.getId());
-    IntegerHolder counter=_counters.get(key);
+    IntegerHolder counter=_weCounters.get(key);
     if (counter==null)
     {
       counter=new IntegerHolder();
-      _counters.put(key,counter);
+      _weCounters.put(key,counter);
     }
     counter.increment();
   }
 
   private void showResults()
   {
-    List<Integer> ids=new ArrayList<Integer>(_counters.keySet());
-    Collections.sort(ids);
-    WorldEventsManager worldEventsMgr=WorldEventsManager.getInstance();
-    for(Integer id : ids)
+    //showWorldEventsUsage();
+    showComplexity();
+  }
+
+  private void showComplexity()
+  {
+    IntegerHolder nbComplexConditions=_complexityCounters.get(Integer.valueOf(-1));
+    System.out.println("Nb Complex condition: "+nbComplexConditions);
+    IntegerHolder nbNoConditions=_complexityCounters.get(Integer.valueOf(0));
+    System.out.println("Nb NO condition: "+nbNoConditions);
+    IntegerHolder nbSimpleConditions=_complexityCounters.get(Integer.valueOf(1));
+    System.out.println("Nb simple condition: "+nbSimpleConditions);
+    for(int i=2;i<20;i++)
     {
-      WorldEvent worldEvent=worldEventsMgr.getWorldEvent(id.intValue());
-      System.out.println(worldEvent+" => "+_counters.get(id));
+      IntegerHolder nb=_complexityCounters.get(Integer.valueOf(i));
+      if (nb!=null)
+      {
+        System.out.println(i+" conditions: "+nb);
+      }
+    }
+  }
+
+  void showWorldEventsUsage()
+  {
+    Comparator<Map.Entry<Integer,IntegerHolder>> c=new Comparator<Map.Entry<Integer,IntegerHolder>>()
+    {
+      public int compare(Map.Entry<Integer,IntegerHolder> e1, Map.Entry<Integer,IntegerHolder> e2)
+      {
+        return Integer.compare(e1.getValue().getInt(),e2.getValue().getInt());
+      }
+    };
+    List<Map.Entry<Integer,IntegerHolder>> entries=new ArrayList<Map.Entry<Integer,IntegerHolder>>(_weCounters.entrySet());
+    Collections.sort(entries,c);
+    Collections.reverse(entries);
+    WorldEventsManager worldEventsMgr=WorldEventsManager.getInstance();
+    for(Map.Entry<Integer,IntegerHolder> entry : entries)
+    {
+      int id=entry.getKey().intValue();
+      WorldEvent worldEvent=worldEventsMgr.getWorldEvent(id);
+      System.out.println(worldEvent+" => "+entry.getValue());
+    }
+  }
+
+  private void addComplexity(int intKey)
+  {
+    Integer key=Integer.valueOf(intKey);
+    IntegerHolder counter=_complexityCounters.get(key);
+    if (counter==null)
+    {
+      counter=new IntegerHolder();
+      _complexityCounters.put(key,counter);
+    }
+    counter.increment();
+  }
+
+  private void checkConditionComplexity(Achievable achievable)
+  {
+    // - no condition; 0
+    // - simple condition: 1
+    // - compound condition with N>=2 items: N
+    // - other: -1
+    AbstractWorldEventCondition condition=achievable.getWorldEventsRequirement();
+    if (condition==null)
+    {
+      addComplexity(0);
+    }
+    else if (condition instanceof SimpleWorldEventCondition)
+    {
+      addComplexity(1);
+    }
+    else if (condition instanceof CompoundWorldEventCondition)
+    {
+      CompoundWorldEventCondition compoundCondition=(CompoundWorldEventCondition)condition;
+      List<AbstractWorldEventCondition> childConditions=compoundCondition.getItems();
+      boolean hasCompoundChild=false;
+      for(AbstractWorldEventCondition childCondition : childConditions)
+      {
+        if (childCondition instanceof CompoundWorldEventCondition)
+        {
+          hasCompoundChild=true;
+          break;
+        }
+      }
+      if (hasCompoundChild)
+      {
+        addComplexity(-1);
+        System.out.println(achievable+" => "+condition);
+      }
+      else
+      {
+        addComplexity(childConditions.size());
+      }
     }
   }
 

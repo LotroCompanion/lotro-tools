@@ -23,6 +23,7 @@ public class WorldEventConditionsLoader
   private static final Logger LOGGER=Logger.getLogger(WorldEventConditionsLoader.class);
 
   private WorldEventsLoader _loader;
+  private WorldEventConditionNormalizer _normalizer;
 
   /**
    * Constructor.
@@ -51,6 +52,13 @@ public class WorldEventConditionsLoader
    * @return the loaded condition or <code>null</code>.
    */
   public AbstractWorldEventCondition loadWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
+  {
+    AbstractWorldEventCondition ret=extractWorldEventsConditions(properties,allConditionPropertyName,anyConditionPropertyName);
+    ret=_normalizer.normalize(ret);
+    return ret;
+  }
+
+  private AbstractWorldEventCondition extractWorldEventsConditions(PropertiesSet properties, String allConditionPropertyName, String anyConditionPropertyName)
   {
     AbstractWorldEventCondition andCondition=loadWorldEventList(properties,Operator.AND,allConditionPropertyName);
     AbstractWorldEventCondition orCondition=loadWorldEventList(properties,Operator.OR,anyConditionPropertyName);
