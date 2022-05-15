@@ -64,7 +64,7 @@ public class MainDatLegendarySystem2Loader
   {
     LegendaryData2XMLWriter.write(GeneratedFiles.LEGENDARY_DATA2,_data);
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
   }
 
   /**

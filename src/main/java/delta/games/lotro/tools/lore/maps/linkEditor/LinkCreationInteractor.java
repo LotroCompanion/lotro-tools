@@ -2,6 +2,7 @@ package delta.games.lotro.tools.lore.maps.linkEditor;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -73,7 +74,7 @@ public class LinkCreationInteractor
     {
       int button=event.getButton();
       int modifiers=event.getModifiers();
-      if ((button==MouseEvent.BUTTON1) && ((modifiers&MouseEvent.SHIFT_MASK)!=0))
+      if ((button==MouseEvent.BUTTON1) && ((modifiers&InputEvent.SHIFT_MASK)!=0))
       {
         _x=event.getX();
         _y=event.getY();

@@ -75,7 +75,7 @@ Set_Name:
 
   private ItemsSet load(int indexDataId)
   {
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
@@ -83,8 +83,6 @@ Set_Name:
       LOGGER.warn("Could not handle items set ID="+indexDataId);
       return null;
     }
-    //System.out.println("************* "+indexDataId+" *****************");
-    //System.out.println(properties.dump());
     // Name
     String name=DatUtils.getStringProperty(properties,"Set_Name");
     boolean useIt=useIt(name);
@@ -170,14 +168,18 @@ Set_Name:
         Mod_Progression: 1879212451
     Set_ActiveCount: 2
  */
-    SetBonus bonus=null;
     int count=((Integer)properties.getProperty("Set_ActiveCount")).intValue();
-    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,properties);
-    if ((count>0) && (provider!=null))
+    if (count==0)
     {
-      bonus=new SetBonus(count);
-      bonus.setStatsProvider(provider);
+      return null;
     }
+    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,properties);
+    if (provider==null)
+    {
+      return null;
+    }
+    SetBonus bonus=new SetBonus(count);
+    bonus.setStatsProvider(provider);
     Object[] effectsArray=(Object[])properties.getProperty("Set_EffectDataList");
     if (effectsArray!=null)
     {
@@ -195,7 +197,6 @@ Set_Name:
         }
       }
     }
-
     return bonus;
   }
 
@@ -210,8 +211,11 @@ Set_Name:
       if (setId!=0)
       {
         ItemsSet set=findSet(sets,setId);
-        set.addMember(tracery.getItem());
-        set.setSetType(SetType.TRACERIES);
+        if (set!=null)
+        {
+          set.addMember(tracery.getItem());
+          set.setSetType(SetType.TRACERIES);
+        }
       }
     }
   }
@@ -233,8 +237,8 @@ Set_Name:
    */
   public void doIt()
   {
-    DatStatUtils.doFilterStats=false;
-    DatStatUtils._statsUsageStatistics.reset();
+    DatStatUtils._doFilterStats=false;
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 
     PropertiesSet props=_facade.loadProperties(0x79009869); // GameSetDirectory
@@ -257,10 +261,10 @@ Set_Name:
     boolean ok=ItemsSetXMLWriter.writeSetsFile(to,sets);
     if (ok)
     {
-      System.out.println("Wrote sets file: "+to);
+      LOGGER.info("Wrote sets file: "+to);
     }
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
   }
 
   /**

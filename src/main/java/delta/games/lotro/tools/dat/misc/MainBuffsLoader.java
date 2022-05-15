@@ -47,7 +47,7 @@ public class MainBuffsLoader
    */
   public void doIt()
   {
-    DatStatUtils.doFilterStats=false;
+    DatStatUtils._doFilterStats=false;
     List<EffectBuff> buffs=loadBuffs();
     save(buffs);
   }
@@ -131,7 +131,7 @@ public class MainBuffsLoader
     // Buffs file
     saveBuffs(buffs);
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_BUFFS);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     // Write effect icons archive
     DirectoryArchiver archiver=new DirectoryArchiver();
     boolean ok=archiver.go(GeneratedFiles.EFFECT_ICONS,EFFECT_ICONS_DIR);

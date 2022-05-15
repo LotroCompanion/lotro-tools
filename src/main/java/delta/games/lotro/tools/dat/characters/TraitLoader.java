@@ -122,8 +122,8 @@ public class TraitLoader
     boolean cosmetic=((cosmeticCode!=null) && (cosmeticCode.intValue()!=0));
     ret.setCosmetic(cosmetic);
     // Stats
-    DatStatUtils.doFilterStats=false;
-    DatStatUtils._statsUsageStatistics.reset();
+    DatStatUtils._doFilterStats=false;
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,traitProperties);
     ret.setStatsProvider(statsProvider);
     // Build icon file

@@ -50,7 +50,7 @@ public class MainDatTravelsLoader
   private TravelNode load(int indexDataId)
   {
     TravelNode node=new TravelNode(indexDataId);
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {

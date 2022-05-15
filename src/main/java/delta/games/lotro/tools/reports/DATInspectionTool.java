@@ -95,7 +95,7 @@ public class DATInspectionTool
       {
         if (subLabel.startsWith("\u0000\u0000")) continue;
         int subDataId=subMap.getDataIdForLabel(subLabel).intValue();
-        int dbPropsId=subDataId+DATConstants.DBPROPERTIES_OFFSET;
+        long dbPropsId=subDataId+DATConstants.DBPROPERTIES_OFFSET;
         System.out.println("****** Weenie: "+subLabel+" - "+dbPropsId);
         PropertiesSet props=facade.loadProperties(dbPropsId);
         if (props!=null)

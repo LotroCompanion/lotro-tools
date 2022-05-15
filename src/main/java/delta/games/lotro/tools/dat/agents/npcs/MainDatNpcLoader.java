@@ -233,7 +233,7 @@ public class MainDatNpcLoader
       return profile;
     }
 
-    int dbPropertiesId=profileId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=profileId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
 
     profile=new BarterProfile(profileId);

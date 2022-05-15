@@ -38,7 +38,7 @@ public class MainDatColorLoader
   public void doIt()
   {
     // ItemMungingControl
-    int itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;
+    long itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(itemMungingPropsId);
     if (properties==null)
     {

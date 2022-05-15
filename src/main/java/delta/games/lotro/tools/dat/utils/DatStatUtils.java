@@ -37,17 +37,17 @@ public class DatStatUtils
   /**
    * Flag to indicate if stats shall be filtered or not.
    */
-  public static boolean doFilterStats=true;
+  public static boolean _doFilterStats=true;
 
   /**
    * Progressions manager.
    */
-  public static ProgressionsManager _progressions=new ProgressionsManager();
+  public static final ProgressionsManager PROGRESSIONS_MGR=new ProgressionsManager();
 
   /**
    * Stats usage statistics.
    */
-  public static StatsUsageStatistics _statsUsageStatistics=new StatsUsageStatistics();
+  public static final StatsUsageStatistics STATS_USAGE_STATISTICS=new StatsUsageStatistics();
 
   /**
    * Load a set of stats from some properties.
@@ -70,12 +70,10 @@ public class DatStatUtils
   public static StatsProvider buildStatProviders(String propsPrefix, DataFacade facade, PropertiesSet properties)
   {
     String arrayPropName="Mod_Array";
-    String modifiedPropName="Mod_Modified";
     String progressionPropName="Mod_Progression";
     if (propsPrefix!=null)
     {
       arrayPropName=propsPrefix+arrayPropName;
-      modifiedPropName=propsPrefix+modifiedPropName;
       progressionPropName=propsPrefix+progressionPropName;
     }
 
@@ -141,7 +139,7 @@ public class DatStatUtils
         provider.setDescriptionOverride(descriptionOverride);
       }
       StatDescription stat=provider.getStat();
-      _statsUsageStatistics.registerStatUsage(stat);
+      STATS_USAGE_STATISTICS.registerStatUsage(stat);
       provider=handleSpecificCases(provider,facade,statsProvider,descriptionOverride);
       return provider;
     }
@@ -328,17 +326,17 @@ public class DatStatUtils
    */
   public static Progression getProgression(DataFacade facade, int progressId)
   {
-    Progression ret=_progressions.getProgression(progressId);
+    Progression ret=PROGRESSIONS_MGR.getProgression(progressId);
     if (ret==null)
     {
-      int progressPropertiesId=progressId+DATConstants.DBPROPERTIES_OFFSET;
+      long progressPropertiesId=progressId+DATConstants.DBPROPERTIES_OFFSET;
       PropertiesSet progressProperties=facade.loadProperties(progressPropertiesId);
       if (progressProperties!=null)
       {
         ret=ProgressionFactory.buildProgression(progressId, progressProperties);
         if (ret!=null)
         {
-          _progressions.registerProgression(progressId,ret);
+          PROGRESSIONS_MGR.registerProgression(progressId,ret);
         }
       }
     }
@@ -408,7 +406,7 @@ public class DatStatUtils
       return false;
     }
     //System.out.println("Type: "+type);
-    if (doFilterStats)
+    if (_doFilterStats)
     {
       return stat.isPremium();
     }

@@ -18,6 +18,14 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class MainServersBuilder
 {
+  /**
+   * European servers.
+   */
+  private static final String EU="(EU)";
+  /**
+   * US servers.
+   */
+  private static final String US="(U.S)";
   private static final Logger LOGGER=Logger.getLogger(MainServersBuilder.class);
 
   private ServerDescription buildServer(String name, String ip, String location)
@@ -42,17 +50,17 @@ public class MainServersBuilder
   {
     List<ServerDescription> ret=new ArrayList<ServerDescription>();
     // US
-    ret.add(buildServer("Arkenstone","198.252.160.98","(U.S)"));
-    ret.add(buildServer("Brandywine","198.252.160.99","(U.S)"));
-    ret.add(buildServer("Crickhollow","198.252.160.100","(U.S)"));
-    ret.add(buildServer("Gladden","198.252.160.101","(U.S)"));
-    ret.add(buildServer("Landroval","198.252.160.102","(U.S)"));
+    ret.add(buildServer("Arkenstone","198.252.160.98",US));
+    ret.add(buildServer("Brandywine","198.252.160.99",US));
+    ret.add(buildServer("Crickhollow","198.252.160.100",US));
+    ret.add(buildServer("Gladden","198.252.160.101",US));
+    ret.add(buildServer("Landroval","198.252.160.102",US));
     // EU
-    ret.add(buildServer("Belegaer","198.252.160.103","(EU)"));
-    ret.add(buildServer("Evernight","198.252.160.104","(EU)"));
-    ret.add(buildServer("Gwaihir","198.252.160.105","(EU)"));
-    ret.add(buildServer("Laurelin","198.252.160.106","(EU)"));
-    ret.add(buildServer("Sirannon","198.252.160.107","(EU)"));
+    ret.add(buildServer("Belegaer","198.252.160.103",EU));
+    ret.add(buildServer("Evernight","198.252.160.104",EU));
+    ret.add(buildServer("Gwaihir","198.252.160.105",EU));
+    ret.add(buildServer("Laurelin","198.252.160.106",EU));
+    ret.add(buildServer("Sirannon","198.252.160.107",EU));
     return ret;
   }
 

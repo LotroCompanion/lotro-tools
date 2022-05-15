@@ -174,7 +174,7 @@ public class MainDatCombatLoader
   {
     CombatDataXMLWriter.write(GeneratedFiles.COMBAT_DATA,_data);
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_COMBAT);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_COMBAT);
   }
 
   /**

@@ -56,7 +56,7 @@ public class MainDatRecipesLoader
   private Recipe load(int indexDataId)
   {
     Recipe recipe=null;
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {

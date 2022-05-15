@@ -26,6 +26,14 @@ import delta.games.lotro.tools.dat.agents.ClassificationLoader;
  */
 public class MarkerClassifier
 {
+  /**
+   * Weenie type property name.
+   */
+  private static final String WEENIE_TYPE="WeenieType";
+  /**
+   * Map note type property name.
+   */
+  private static final String MAP_NOTE_TYPE="MapNote_Type";
   private static final Logger LOGGER=Logger.getLogger(MarkerClassifier.class);
   private static final boolean VERBOSE=false;
 
@@ -112,12 +120,12 @@ public class MarkerClassifier
     {
       return rc;
     }
-    rc=tryMonsterClassification(did,props);
+    rc=tryMonsterClassification(props);
     if (rc!=null)
     {
       return rc;
     }
-    rc=tryItemClassification(did,props);
+    rc=tryItemClassification(props);
     if (rc!=null)
     {
       return rc;
@@ -132,12 +140,12 @@ public class MarkerClassifier
     {
       return rc;
     }
-    rc=tryLandmarkClassification(did,props);
+    rc=tryLandmarkClassification(props);
     if (rc!=null)
     {
       return rc;
     }
-    rc=tryMilestoneClassification(did,props);
+    rc=tryMilestoneClassification(props);
     return rc;
   }
 
@@ -160,7 +168,7 @@ public class MarkerClassifier
     {
       return null;
     }
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=129)) // Item
     {
       LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
@@ -192,7 +200,7 @@ public class MarkerClassifier
   private ResourceClassification tryResourceNodeClassification(int did, PropertiesSet props)
   {
     Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
 
     if (craftResourceTypeCode==null)
     {
@@ -226,9 +234,9 @@ public class MarkerClassifier
     */
   }
 
-  private MonsterClassification tryMonsterClassification(int did, PropertiesSet props)
+  private MonsterClassification tryMonsterClassification(PropertiesSet props)
   {
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=65615))
     {
       return null;
@@ -251,15 +259,15 @@ WeenieType: 65615 (Monster)
   // !! Map Note type of type "No Icon" is found for NPC, Landmarks...
   // Workbench is sometimes an Item, sometimes a Hotspot (should be classified as Crafting Facility)
 
-  private ItemClassification tryItemClassification(int did, PropertiesSet props)
+  private ItemClassification tryItemClassification(PropertiesSet props)
   {
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=129)) // Item
     {
       return null;
     }
     ItemClassification ret=null;
-    Long mapNoteType=(Long)props.getProperty("MapNote_Type");
+    Long mapNoteType=(Long)props.getProperty(MAP_NOTE_TYPE);
     if ((mapNoteType!=null) && (mapNoteType.longValue()!=0))
     {
       // Expect:
@@ -287,7 +295,6 @@ WeenieType: 262145 (Hotspot)
        */
       BitSet typeSet=BitSetUtils.getBitSetFromFlags(mapNoteType.longValue());
       String typeStr=BitSetUtils.getStringFromBitSet(typeSet,_mapNoteType,"/");
-      //int code=typeSet.nextSetBit(0)+1;
       ret=new ItemClassification(typeStr);
     }
     if (ret==null)
@@ -301,7 +308,7 @@ WeenieType: 262145 (Hotspot)
   {
     // Chests
     Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
 
     if (craftResourceTypeCode==null)
     {
@@ -330,13 +337,13 @@ WeenieType: 259 (GameplayContainer)
 
   private Classification tryNpcClassification(int did, PropertiesSet props)
   {
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=131151)) // RealNPC
     {
       return null;
     }
     NpcClassification ret=null;
-    Long mapNoteType=(Long)props.getProperty("MapNote_Type");
+    Long mapNoteType=(Long)props.getProperty(MAP_NOTE_TYPE);
     if ((mapNoteType!=null) && (mapNoteType.longValue()!=0))
     {
       BitSet typeSet=BitSetUtils.getBitSetFromFlags(mapNoteType.longValue());
@@ -365,14 +372,14 @@ WeenieType: 259 (GameplayContainer)
     return ret;
   }
 
-  private CategoryClassification tryLandmarkClassification(int did, PropertiesSet props)
+  private CategoryClassification tryLandmarkClassification(PropertiesSet props)
   {
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=4194305)) // Landmark
     {
       return null;
     }
-    Long mapNoteType=(Long)props.getProperty("MapNote_Type");
+    Long mapNoteType=(Long)props.getProperty(MAP_NOTE_TYPE);
     if ((mapNoteType!=null) && (mapNoteType.longValue()!=0))
     {
       // Point of Interest, Settlement, No Icon (39)
@@ -397,14 +404,14 @@ WeenieType: 259 (GameplayContainer)
     */
   }
 
-  private CategoryClassification tryMilestoneClassification(int did, PropertiesSet props)
+  private CategoryClassification tryMilestoneClassification(PropertiesSet props)
   {
-    Integer weenieType=(Integer)props.getProperty("WeenieType");
+    Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=327809)) // Milestone
     {
       return null;
     }
-    Long mapNoteType=(Long)props.getProperty("MapNote_Type");
+    Long mapNoteType=(Long)props.getProperty(MAP_NOTE_TYPE);
     if ((mapNoteType!=null) && (mapNoteType.longValue()!=0))
     {
       // Camp Site, Milestone

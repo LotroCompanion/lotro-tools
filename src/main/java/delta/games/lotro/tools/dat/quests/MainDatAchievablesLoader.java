@@ -120,7 +120,7 @@ public class MainDatAchievablesLoader
 
   private void load(int indexDataId)
   {
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
@@ -721,7 +721,7 @@ public class MainDatAchievablesLoader
       }
     }
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     // Save world events
     {
       WorldEventsXMLWriter worldEventsWriter=new WorldEventsXMLWriter();

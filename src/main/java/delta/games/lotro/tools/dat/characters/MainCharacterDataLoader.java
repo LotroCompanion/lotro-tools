@@ -39,7 +39,7 @@ public class MainCharacterDataLoader
     DatStatUtils.getProgression(_facade,progressionId);
 
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Load gear icons
     new SlotIconsLoader(_facade).doIt();
   }
@@ -60,7 +60,7 @@ public class MainCharacterDataLoader
     DataFacade facade=new DataFacade();
     new MainCharacterDataLoader(facade).doIt();
     // Stats usage statistics
-    DatStatUtils._statsUsageStatistics.showResults();
+    DatStatUtils.STATS_USAGE_STATISTICS.showResults();
     facade.dispose();
   }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
@@ -68,6 +69,6 @@ public class MainLinkEditor
     navSupport.requestMap(mapId);
     f.pack();
     f.setVisible(true);
-    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
   }
 }

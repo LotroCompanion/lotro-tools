@@ -51,7 +51,7 @@ public class MainStatsLoader
 
   private void load(int indexDataId)
   {
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {

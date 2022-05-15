@@ -138,7 +138,7 @@ public class MainLoadStats
     Date myStart;
     Date myEnd=end;
     Results results=new Results();
-    Calendar c=GregorianCalendar.getInstance();
+    Calendar c=Calendar.getInstance();
     System.out.println(file);
     while (true)
     {

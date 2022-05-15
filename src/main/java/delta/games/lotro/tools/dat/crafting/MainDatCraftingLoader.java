@@ -82,10 +82,7 @@ public class MainDatCraftingLoader
     {
       int professionId=((Integer)professionObj).intValue();
       Profession profession=handleProfession(professionId);
-      if (profession!=null)
-      {
-        ret.addProfession(profession);
-      }
+      ret.addProfession(profession);
     }
     // - key
     String key=getVocationKey(vocationId);

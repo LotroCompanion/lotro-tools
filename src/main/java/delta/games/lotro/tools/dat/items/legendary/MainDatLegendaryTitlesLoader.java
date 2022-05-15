@@ -88,7 +88,7 @@ Mod_Array:
   private LegendaryTitle load(int indexDataId)
   {
     LegendaryTitle ret=null;
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
@@ -171,8 +171,8 @@ Mod_Array:
    */
   public void doIt()
   {
-    DatStatUtils.doFilterStats=false;
-    DatStatUtils._statsUsageStatistics.reset();
+    DatStatUtils._doFilterStats=false;
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

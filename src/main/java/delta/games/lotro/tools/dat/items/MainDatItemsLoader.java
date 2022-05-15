@@ -149,7 +149,7 @@ public class MainDatItemsLoader
   private Item load(int indexDataId, int type)
   {
     Item item=null;
-    int dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
@@ -290,7 +290,7 @@ public class MainDatItemsLoader
       // - faction
       RequirementsLoadingUtils.loadRequiredFaction(properties,item.getUsageRequirements());
       // Stats providers
-      DatStatUtils.doFilterStats=false;
+      DatStatUtils._doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       if (armorStatProvider!=null)
       {
@@ -325,7 +325,7 @@ public class MainDatItemsLoader
         loadCarryAllSpecifics((CarryAll)item,properties);
       }
       // Handle legendaries
-      DatStatUtils.doFilterStats=false;
+      DatStatUtils._doFilterStats=false;
       handleLegendaries(item, properties);
       // Value
       handleItemValue(item,properties);
@@ -1237,7 +1237,7 @@ public class MainDatItemsLoader
     // Offsets
     _itemLevelOffsets=ItemLevelOffsetsUtils.buildOffsetsMap(_facade);
     // Items
-    DatStatUtils._statsUsageStatistics.reset();
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<Item> items=new ArrayList<Item>();
     List<Legendary2> legendaryItems=new ArrayList<Legendary2>();
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
@@ -1278,10 +1278,10 @@ public class MainDatItemsLoader
     Collections.sort(_enhancementRunes,new IdentifiableComparator<EnhancementRune>());
     EnhancementRunesXMLWriter.write(GeneratedFiles.ENHANCEMENT_RUNES,_enhancementRunes);
     // Save progressions
-    DatStatUtils._progressions.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
     System.out.println("Stats usage statistics (items):");
-    DatStatUtils._statsUsageStatistics.showResults();
+    DatStatUtils.STATS_USAGE_STATISTICS.showResults();
     // Save passives
     _passivesLoader.savePassives();
     // Save consumables
