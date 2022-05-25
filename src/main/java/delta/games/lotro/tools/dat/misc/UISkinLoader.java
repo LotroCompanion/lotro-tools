@@ -1,7 +1,6 @@
 package delta.games.lotro.tools.dat.misc;
 
 import delta.common.utils.collections.CollectionTools;
-import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.DIDMapper;
@@ -29,6 +28,7 @@ public class UISkinLoader {
     private final UILayoutLoader uiLoader;
     private final EnumMapper artAssetMapper;
     private final EnumMapper uiElementMapper;
+    private final EnumMapper uiElementTypeMapper;
     private final Map<Integer, UIElement> elementLookup;
     private final Map<Integer, UILayout> layoutLookup;
     private final Map<String, UIElement> skinPanels;
@@ -36,36 +36,41 @@ public class UISkinLoader {
     private final File outputFolder;
     private final JSONObject jsonImages;
     private final JSONObject jsonPanels;
+    private final  boolean dumpAssocations;
 
-    public UISkinLoader(DataFacade facade, File outputFolder) {
+    public UISkinLoader(DataFacade facade, File outputFolder, boolean dumpAssocations) {
         this.facade = facade;
         this.uiLoader = new UILayoutLoader(facade);
         this.artAssetMapper = facade.getEnumsManager().getEnumMapper(587202796);
         this.uiElementMapper = facade.getEnumsManager().getEnumMapper(587202769);
+        this.uiElementTypeMapper = facade.getEnumsManager().getEnumMapper(587202763);
         this.elementLookup = new HashMap<>();
         this.layoutLookup = new HashMap<>();
         this.skinPanels = new HashMap<>();
         this.images = new HashMap<>();
         this.outputFolder = outputFolder;
+        this.dumpAssocations = dumpAssocations;
         this.jsonImages = new JSONObject();
         this.jsonPanels = new JSONObject();
     }
 
     public void doIt() {
 
-        FilesDeleter deleter=new FilesDeleter(outputFolder,null,true);
-        deleter.doIt();
-        outputFolder.mkdirs();
+//        FilesDeleter deleter=new FilesDeleter(outputFolder,null,true);
+//        deleter.doIt();
+//        outputFolder.mkdirs();
         buildImages();
         buildUILayout();
 
-        try (PrintWriter fw = new PrintWriter(new FileWriter(new File(outputFolder, "SkinImages.json")))) {
-            JSONObject data = new JSONObject();
-            data.put("panels", this.jsonPanels);
-            data.put("assets", this.jsonImages);
-            data.write(fw);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (this.dumpAssocations) {
+            try (PrintWriter fw = new PrintWriter(new FileWriter(new File(outputFolder, "SkinData.json")))) {
+                JSONObject data = new JSONObject();
+                data.put("panels", this.jsonPanels);
+                data.put("assets", this.jsonImages);
+                data.write(fw);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -95,6 +100,7 @@ public class UISkinLoader {
             fw.println("</opt>");
             fw.close();
 
+            // these images aren't in skinning but are useful for plugins
             Map<Integer, String> cursors = new HashMap<Integer, String>(){{
                 put(0x410000DD, "cursor_move");
                 put(0x41007DC7, "cursor_pointer");
@@ -120,8 +126,8 @@ public class UISkinLoader {
             // skins save images in tga format
             //boolean ret = DatIconsUtils.buildImageFile(facade, dataId, "tga", to);
             BufferedImage image = DatIconsUtils.loadImage(facade, dataId);
-            rec.put("width", image.getWidth());
-            rec.put("height", image.getHeight());
+            rec.put("w", image.getWidth());
+            rec.put("h", image.getHeight());
             to.getAbsoluteFile().getParentFile().mkdirs();
             boolean ret= ImageIO.write(image,"tga",to);
             if (!ret) {
@@ -129,10 +135,25 @@ public class UISkinLoader {
             }
         }
         String imageIdHex = String.format("0x%08X", dataId);
-        rec.put("id", imageIdHex);
-        rec.put("name", assetName);
-        jsonImages.put(imageIdHex, rec);
+        //rec.put("id", imageIdHex);
+        rec.put("n", assetName);
+        if (this.dumpAssocations) jsonImages.put(imageIdHex, rec);
         return to;
+    }
+
+    private String capitalize(String phrase, boolean lowerFirst) {
+        String[] words = phrase.split("[\\W_]+");
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (i == 0 && lowerFirst) {
+                word = word.isEmpty() ? word : word.toLowerCase();
+            } else {
+                word = word.isEmpty() ? word : Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
+            }
+            builder.append(word);
+        }
+        return builder.toString();
     }
 
     private void buildUILayout() {
@@ -146,6 +167,14 @@ public class UISkinLoader {
             try {
                 UILayout layout = uiLoader.loadUiLayout(dataId);
                 if (layout == null) continue;
+                /*
+                // map & theater are unexposed skins.  They aren't fully plumbed into skin system.
+                //  worth exploring
+                if (label.matches("^(map|theater)")) {
+                    skinPanels.put("ID_UISkin_" + capitalize(label, false), layout.getChildElements());
+                    buildLookup(layout);
+                }
+                */
                 buildLookup(layout);
             } catch (Exception e) {
             }
@@ -193,12 +222,13 @@ public class UISkinLoader {
         try {
             // print it all out
             PrintWriter fw = new PrintWriter(new FileWriter(new File(outputFolder, "SkinDictionary.txt")));
+            //for (Map.Entry<String, UIElement> panel : Collections.singletonMap("ID_UISkin_AccomplishmentPanel", skinPanels.get("ID_UISkin_AccomplishmentPanel")).entrySet()) {
             for (Map.Entry<String, UIElement> panel : skinPanels.entrySet()) {
                 JSONObject rec = new JSONObject();
                 fw.println(String.format("<PanelFile ID=\"%s\">", panel.getKey()));
                 printChildren(fw, panel.getValue(), rec, "\t");
                 fw.println("</PanelFile>");
-                this.jsonPanels.put(panel.getKey(), rec);
+                if (this.dumpAssocations) this.jsonPanels.put(panel.getKey(), rec);
             }
             fw.close();
         } catch (Exception e) {
@@ -216,6 +246,7 @@ public class UISkinLoader {
 
     private void buildLookup(UIElement ui) {
         int id = ui.getIdentifier();
+        String name = uiElementMapper.getLabel(id);
         elementLookup.put(id, ui);
         int bld = ui.getBaseLayoutDID();
         if (bld > 0 && !layoutLookup.containsKey(bld)) {
@@ -230,7 +261,7 @@ public class UISkinLoader {
             skinPanels.put(skin, ui);
         }
         for (UIElement child : ui.getChildElements()) {
-            buildLookup(child);
+           buildLookup(child);
         }
     }
 
@@ -238,7 +269,9 @@ public class UISkinLoader {
 
         int id = ui.getIdentifier();
         String name = uiElementMapper.getString(id);
-
+        Rectangle r = ui.getRelativeBounds();
+        // {UICore_Element_ObjectMode=UICore_Element_ObjectMode: 1 (Stretch)} <-- Investigate
+        //UICore_Element_ObjectMode -> {PropertiesSet$PropertyValue@1120} "UICore_Element_ObjectMode: 3 (CanvasResize)"
         // See which UIElements are tied to skinning images
         Map<String, String> assets = buildElementAssetMap(name, ui);
 
@@ -250,6 +283,12 @@ public class UISkinLoader {
             try {
                 UIElement baseEl = elementLookup.get(base);
                 if (baseEl != null) {
+                    if (!r.contains(baseEl.getRelativeBounds()) && !baseEl.getChildElements().isEmpty()) {
+                        //System.out.println("Parent: " + name + ", Base: " + uiElementMapper.getString(base) + " (" + basetype + "), children # : " + baseEl.getChildElements().size());
+                        //String basetype = uiElementTypeMapper.getLabel(baseEl.getTypeID());
+                        //System.out.println("Base: " + uiElementMapper.getString(base) + " (" + basetype + "), children # : " + baseEl.getChildElements().size());
+                        baseEl = this.constrainElementTo(baseEl, r);
+                    }
                     Object templates = baseEl.getProperties().getProperty("UICore_ListBox_entry_templates");
                     if (templates != null) {
                         for (Object cur : (Object[]) templates) {
@@ -285,39 +324,31 @@ public class UISkinLoader {
         }
         children.addAll(ui.getChildElements());
 
-        Rectangle r = ui.getRelativeBounds();
-        //ui.getProperties().getPropertyNames().forEach(n -> System.out.println(String.format("%s => %s", n, ui.getProperties().getProperty(n))));
         String openingTag = String.format(prefix + "<Element ID=\"%s\" X=\"%s\" Y=\"%s\" Width=\"%s\" Height=\"%s\">", name, (int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
 
         rec.put("id", name);
-        if (!assets.isEmpty()) {
+        if (this.dumpAssocations && !assets.isEmpty()) {
             // I want keys and values to be in same order
             // so can't use keys & values functions
-            JSONArray jsonAssets = new JSONArray();
+            /*
             List<String> keys = new LinkedList<>();
             List<String> values = new LinkedList<>();
             for (Map.Entry<String, String> e : assets.entrySet()) {
                 keys.add(e.getKey());
                 values.add(e.getValue());
-                JSONObject a = new JSONObject();
-                a.put("assetID", e.getKey());
-                a.put("imageID", e.getValue());
-                jsonAssets.put(a);
             }
-            rec.put("assets", jsonAssets);
-            /*
             String artAssetID = CollectionTools.stringListAsString(keys, ",", null, null);
             String imageID = CollectionTools.stringListAsString(values, ",", null, null);
             openingTag = String.format(prefix + "<Element ID=\"%s\" ArtAssetID=\"%s\" ImageID=\"%s\" X=\"%s\" Y=\"%s\" Width=\"%s\" Height=\"%s\">", name, artAssetID, imageID, (int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
             */
+            rec.put("assets", new JSONArray(new LinkedList(assets.values())));
         }
         JSONObject bounds = new JSONObject();
-        bounds.put("width", (int) r.getWidth());
-        bounds.put("height", (int) r.getHeight());
+        bounds.put("w", (int) r.getWidth());
+        bounds.put("h", (int) r.getHeight());
         bounds.put("x", (int) r.getX());
         bounds.put("y", (int) r.getY());
-        rec.put("bounds", bounds);
-        rec.put("margins", new JSONArray(ui.getMargins()));
+        rec.put("b", bounds);
 
         if (children.isEmpty() && notFound == null) {
             pw.println(openingTag + " </Element>");
@@ -330,11 +361,120 @@ public class UISkinLoader {
             printChildren(pw, child, cRec,prefix + "\t");
             jsonChildren.put(cRec);
         }
-        rec.put("children", jsonChildren);
+        rec.put("c", jsonChildren);
         if (notFound != null) {
             pw.println(prefix + "\t<!-- NOT FOUND: " + notFound + " -->");
         }
         pw.println(prefix + "</Element>");
+    }
+
+    private UIElement shallowCopyEl(UIElement el) {
+        UIElement newEl = new UIElement(el.getIdentifier());
+        newEl.setTypeID(el.getTypeID());
+        newEl.setMargins(el.getMargins().clone());
+        newEl.setBaseLayoutDID(el.getBaseLayoutDID());
+        newEl.setBaseElementId(el.getBaseElementId());
+        PropertiesSet oldPs = el.getProperties();
+        PropertiesSet ps = newEl.getProperties();
+        for (String name : oldPs.getPropertyNames()) {
+            ps.setProperty(oldPs.getPropertyValueByName(name));
+        }
+        for (UIData d : el.getData()) newEl.addData(d);
+        newEl.setRelativeBounds((Rectangle) el.getRelativeBounds().clone());
+        return newEl;
+    }
+
+    private Map<String, UIElement> shallowCloneChildrenToLabelMap(UIElement el, String stripLabelPrefix) {
+        Map<String, UIElement> children = new LinkedHashMap<>();
+        for (UIElement c : el.getChildElements()) {
+            String name = uiElementMapper.getLabel(c.getIdentifier()).replaceAll(stripLabelPrefix, "");
+            children.put(name, shallowCopyEl(c));
+        }
+        return children;
+    }
+
+    private UIElement constrainElementTo(UIElement el, Rectangle r) {
+        UIElement newEl = shallowCopyEl(el);
+        newEl.setRelativeBounds((Rectangle) r.clone());
+
+        String name = uiElementMapper.getLabel(el.getIdentifier());
+        switch (name) {
+            case "Tab_Tier1_Left": {
+                UIElement oldTab = el.getChildElements().get(0);
+                UIElement newTab = shallowCopyEl(oldTab);
+                int tabWidth = (int) (r.getWidth() - 1);
+                newTab.getRelativeBounds().setSize(tabWidth, (int) r.getHeight());
+                newEl.getChildElements().add(newTab);
+                Map<String, UIElement> children = shallowCloneChildrenToLabelMap(oldTab, "^tab_front_");
+                Rectangle nRec = children.get("n").getRelativeBounds();
+                Rectangle wRec = children.get("w").getRelativeBounds();
+                Rectangle eRec = children.get("e").getRelativeBounds();
+                nRec.setSize((int) (tabWidth - wRec.getWidth() - eRec.getWidth() + 3), (int) nRec.getHeight());
+                eRec.setLocation((int) (tabWidth - eRec.getWidth() + 1), (int) eRec.getY());
+                newTab.getChildElements().addAll(children.values());
+                break;
+            }
+            case "Box_Silver": {
+                int recHeight = (int) r.getHeight();
+                int recWidth = (int) r.getWidth();
+                Map<String, UIElement> children = shallowCloneChildrenToLabelMap(el, "^Base_Box_Silver_");
+                Rectangle mRec = children.get("TopMid").getRelativeBounds();
+                Rectangle lRec = children.get("TopLeft").getRelativeBounds();
+                Rectangle rRec = children.get("TopRight").getRelativeBounds();
+                int middleWidth = (int) (recWidth - lRec.getWidth() - rRec.getWidth());
+                int rightOffset = (int) (recWidth - rRec.getWidth());
+                mRec.setSize(middleWidth, (int) mRec.getHeight());
+                rRec.setLocation(rightOffset, (int) rRec.getY());
+                int sideHeight = (int) lRec.getHeight();
+                int midHeight = (int) mRec.getHeight();
+
+                mRec = children.get("Background").getRelativeBounds();
+                lRec = children.get("MidLeft").getRelativeBounds();
+                rRec = children.get("MidRight").getRelativeBounds();
+                mRec.setSize((int) (recWidth - lRec.getWidth() - rRec.getWidth()), (int) (recHeight - (midHeight * 2)));
+                rRec.setBounds((int) (recWidth - rRec.getWidth()), (int) rRec.getY(), (int) rRec.getWidth(), (int) (recHeight - (sideHeight * 2)));
+                lRec.setSize((int) lRec.getWidth(), (int) rRec.getHeight());
+
+                mRec = children.get("BottomMid").getRelativeBounds();
+                lRec = children.get("BottomLeft").getRelativeBounds();
+                rRec = children.get("BottomRight").getRelativeBounds();
+                mRec.setBounds((int) mRec.getX(), (int) (recHeight - mRec.getHeight()), middleWidth, (int) mRec.getHeight());
+                rRec.setLocation(rightOffset, (int) (recHeight - rRec.getHeight()));
+                lRec.setLocation((int) lRec.getX(), (int) (recHeight - rRec.getHeight()));
+
+                newEl.getChildElements().addAll(children.values());
+                break;
+            }
+            case "Base_Box_Titlebar": {
+                Map<String, UIElement> children = shallowCloneChildrenToLabelMap(el, "^Base_Box_Titlebar_Top");
+                Rectangle mRec = children.get("Mid").getRelativeBounds();
+                Rectangle lRec = children.get("Left").getRelativeBounds();
+                Rectangle rRec = children.get("Right").getRelativeBounds();
+                mRec.setSize((int) (r.getWidth() - lRec.getWidth() - rRec.getWidth()), (int) mRec.getHeight());
+                rRec.setLocation((int) (r.getWidth() - rRec.getWidth()), (int) rRec.getY());
+                newEl.getChildElements().addAll(children.values());
+                // TODO: The label needs sized
+                break;
+            }
+            default:
+                List<String> children = new LinkedList<>();
+                for (UIElement c : el.getChildElements()) {
+                    Rectangle cr = c.getRelativeBounds();
+                    children.add(String.format("%s (x:%s, y:%s, w:%s, h: %s, c:[%s])", uiElementMapper.getLabel(c.getIdentifier()), cr.getX(), cr.getY(), cr.getWidth(), cr.getHeight(), c.getChildElements().size()));
+                }
+                //System.out.println("Base: " + String.format("%s (x:%s, y:%s, w:%s, h: %s)", uiElementMapper.getLabel(el.getIdentifier()), r.getX(), r.getY(), r.getWidth(), r.getHeight()) + " => " + CollectionTools.stringListAsString(children, null, ", "));
+                System.out.println("Base: " + uiElementMapper.getLabel(el.getIdentifier()) + " => " + CollectionTools.stringListAsString(children, null, ", "));
+                return el;
+        }
+
+         /*
+        Base: AccomplishmentsPage_Base => , AccomplishmentsPage_FilterMenuContainer (x:-6.0, y:48.0, w:177.0, h: 32.0, c:[2]) , AccomplishmentExamination_Container (x:269.0, y:0.0, w:276.0, h: 460.0, c:[1]) , AccomplishmentsPage_ShowCompletedField (x:165.0, y:41.0, w:95.0, h: 20.0, c:[2]) , AccomplishmentsPage_Title (x:1.0, y:12.0, w:268.0, h: 30.0, c:[0]) , AccomplishmentsList_Container (x:6.0, y:8.0, w:262.0, h: 457.0, c:[2]) , AccomplishmentsPage_ShowSetRewardsField (x:165.0, y:59.0, w:105.0, h: 20.0, c:[2]) , AccomplishmentTrackerButton (x:403.0, y:422.0, w:128.0, h: 20.0, c:[0]) , WebStoreAccelerateDeedButton (x:280.0, y:408.0, w:103.0, h: 42.0, c:[1])
+        Base: Base_Box_Titlebar => , Base_Box_Titlebar_TopRight (x:856.0, y:0.0, w:35.0, h: 42.0, c:[0]) , Base_Box_Titlebar_TopLeft (x:0.0, y:0.0, w:35.0, h: 42.0, c:[0]) , Base_Box_Titlebar_TopMid (x:35.0, y:0.0, w:821.0, h: 42.0, c:[0])
+        Base: Box_Silver => , Base_Box_Silver_BottomLeft (x:0.0, y:476.0, w:36.0, h: 36.0, c:[0]) , Base_Box_Silver_BottomMid (x:36.0, y:476.0, w:440.0, h: 36.0, c:[0]) , Base_Box_Silver_BottomRight (x:476.0, y:476.0, w:36.0, h: 36.0, c:[0]) , Base_Box_Silver_MidRight (x:476.0, y:36.0, w:36.0, h: 440.0, c:[0]) , Base_Box_Silver_Background (x:36.0, y:36.0, w:440.0, h: 440.0, c:[0]) , Base_Box_Silver_TopRight (x:476.0, y:0.0, w:36.0, h: 36.0, c:[0]) , Base_Box_Silver_TopLeft (x:0.0, y:0.0, w:36.0, h: 36.0, c:[0]) , Base_Box_Silver_TopMid (x:36.0, y:0.0, w:440.0, h: 36.0, c:[0]) , Base_Box_Silver_MidLeft (x:0.0, y:36.0, w:36.0, h: 440.0, c:[0])
+        Base: Reputation_Tab => , Reputation_Tab_Icon (x:0.0, y:0.0, w:59.0, h: 47.0, c:[0])
+        Base: Tab_Tier1_Left => , tab_tier1_left_innards (x:0.0, y:0.0, w:200.0, h: 29.0, c:[3])
+         */
+        return newEl;
     }
 
     private Map<String, String> buildElementAssetMap(String elementName, UIElement ui) {
@@ -386,14 +526,14 @@ public class UISkinLoader {
 
     public static void main(String[] args) {
 
-        if (args.length != 1) {
-            System.out.println("USAGE:\n\t" + UISkinLoader.class.getName() + " <out folder>\n");
+        if (args.length < 1 || args.length > 2) {
+            System.out.println("USAGE:\n\t" + UISkinLoader.class.getName() + " <out folder> [<dump associations> (true|false)]\n");
             System.exit(0);
         }
         File outputFolder = new File(args[0]);
         if (!outputFolder.exists()) outputFolder.mkdirs();
         DataFacade facade = new DataFacade();
-        UISkinLoader skinning = new UISkinLoader(facade, outputFolder);
+        UISkinLoader skinning = new UISkinLoader(facade, outputFolder, args.length > 1 && "true".equals(args[1]));
         skinning.doIt();
         facade.dispose();
     }

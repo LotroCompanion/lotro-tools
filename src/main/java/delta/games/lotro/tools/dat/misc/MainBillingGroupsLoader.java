@@ -146,7 +146,7 @@ public class MainBillingGroupsLoader
 
   void showGroup(BillingGroupDescription groupDescription)
   {
-    List<TitleDescription> titles=groupDescription.getAcountTitles();
+    List<TitleDescription> titles=groupDescription.getAccountTitles();
     if (titles.size()>0)
     {
       System.out.println("Group: "+groupDescription.getName());
