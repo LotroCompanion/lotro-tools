@@ -65,6 +65,7 @@ public class MarkerUtils
     if (classIndex==2516) return false; // WorldEventGenerator
     if (classIndex==1725) return false; // RefereeTemplate
     if (classIndex==1510) return false; // Tripwire
+    if (classIndex==1170) return false; // Hotspot
     int did=dataId.getDid();
     if (did==1879131572) return false; // Logic Box Timer
     if (did==1879077024) return false; // Counter Box
@@ -84,6 +85,7 @@ public class MarkerUtils
     if (did==1879086367) return false; // Logic Box
     if (did==1879248354) return false; // Logic Box
     if (did==1879277552) return false; // AI Puppet Combat Zone
+    if (did==1879200630) return false; // Cooldown Reset
 
     String name=dataId.getName();
     if (name.contains("DNT")) return false;
