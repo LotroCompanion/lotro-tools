@@ -37,9 +37,12 @@ import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
+import delta.games.lotro.lore.webStore.WebStoreItem;
+import delta.games.lotro.lore.webStore.io.xml.WebStoreItemsXMLWriter;
 import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.io.xml.WorldEventsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -74,7 +77,7 @@ public class MainDatAchievablesLoader
   private UsageRequirementsLoader _usageRequirementsLoader;
   private WorldEventsLoader _worldEventsLoader;
   private WorldEventConditionsLoader _weConditionsLoader;
-
+  private WebStoreItemsLoader _webStoreItemsLoader;
 
   /**
    * Constructor.
@@ -96,6 +99,7 @@ public class MainDatAchievablesLoader
     _worldEventsLoader=new WorldEventsLoader(facade);
     _weConditionsLoader=new WorldEventConditionsLoader(_worldEventsLoader);
     _usageRequirementsLoader=new UsageRequirementsLoader();
+    _webStoreItemsLoader=new WebStoreItemsLoader(facade);
   }
 
   private void handleArc(int arcId)
@@ -274,7 +278,13 @@ public class MainDatAchievablesLoader
     _rolesLoader.loadRoles(quest,properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
-
+    Integer webStoreItemID=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
+    if (webStoreItemID!=null)
+    {
+      WebStoreItem webStoreItem=_webStoreItemsLoader.getWebStoreItem(webStoreItemID.intValue());
+      quest.setWebStoreItem(webStoreItem);
+    }
+    // Registration
     _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
   }
 
@@ -424,7 +434,13 @@ public class MainDatAchievablesLoader
     _objectivesLoader.handleObjectives(deed.getObjectives(),deed,properties);
 
     // Web Store (needed xpack/region): WebStoreAccountItem_DataID
-
+    Integer webStoreItemID=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
+    if (webStoreItemID!=null)
+    {
+      WebStoreItem webStoreItem=_webStoreItemsLoader.getWebStoreItem(webStoreItemID.intValue());
+      deed.setWebStoreItem(webStoreItem);
+    }
+    // Registration
     _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
   }
 
@@ -730,6 +746,16 @@ public class MainDatAchievablesLoader
       if (ok)
       {
         System.out.println("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
+      }
+    }
+    // Save web store items
+    {
+      WebStoreItemsXMLWriter webStoreItemsWriter=new WebStoreItemsXMLWriter();
+      File webStoreItemsFile=GeneratedFiles.WEB_STORE_ITEMS;
+      boolean ok=webStoreItemsWriter.write(webStoreItemsFile,_webStoreItemsLoader.getWebStoreItems(),EncodingNames.UTF_8);
+      if (ok)
+      {
+        System.out.println("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
       }
     }
   }

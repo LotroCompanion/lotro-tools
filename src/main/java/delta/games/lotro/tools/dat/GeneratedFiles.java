@@ -348,4 +348,8 @@ public class GeneratedFiles
    * World events.
    */
   public static final File WORLD_EVENTS=LotroCoreConfig.getInstance().getFile(DataFiles.WORLD_EVENTS);
+  /**
+   * Web store items.
+   */
+  public static final File WEB_STORE_ITEMS=LotroCoreConfig.getInstance().getFile(DataFiles.WEB_STORE_ITEMS);
 }
