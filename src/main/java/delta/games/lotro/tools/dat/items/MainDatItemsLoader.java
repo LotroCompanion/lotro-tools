@@ -496,7 +496,7 @@ public class MainDatItemsLoader
         item.setValueTable(table);
       }
     }
-    if (!Objects.equals(itemValueFromTable,itemValueFromTable))
+    if (!Objects.equals(itemValue,itemValueFromTable))
     {
       LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
       LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
