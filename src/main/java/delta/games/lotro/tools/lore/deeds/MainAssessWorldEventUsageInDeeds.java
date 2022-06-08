@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.utils.collections.filters.Operator;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
@@ -28,11 +29,13 @@ public class MainAssessWorldEventUsageInDeeds
 {
   private Map<Integer,IntegerHolder> _weCounters=new HashMap<Integer,IntegerHolder>();
   private Map<Integer,IntegerHolder> _complexityCounters=new HashMap<Integer,IntegerHolder>();
+  private int _nbCompound;
+  private int _nbAnd;
 
   private void doIt()
   {
-    doQuests();
-    //doDeeds();
+    //doQuests();
+    doDeeds();
     showResults();
   }
 
@@ -109,11 +112,11 @@ public class MainAssessWorldEventUsageInDeeds
 
   private void showResults()
   {
-    //showWorldEventsUsage();
+    showWorldEventsUsage();
     showComplexity();
   }
 
-  private void showComplexity()
+  void showComplexity()
   {
     IntegerHolder nbComplexConditions=_complexityCounters.get(Integer.valueOf(-1));
     System.out.println("Nb Complex condition: "+nbComplexConditions);
@@ -129,6 +132,7 @@ public class MainAssessWorldEventUsageInDeeds
         System.out.println(i+" conditions: "+nb);
       }
     }
+    System.out.println("Nb compound: "+_nbCompound+", nb AND: "+_nbAnd+", nb OR: "+(_nbCompound-_nbAnd));
   }
 
   void showWorldEventsUsage()
@@ -181,7 +185,12 @@ public class MainAssessWorldEventUsageInDeeds
     }
     else if (condition instanceof CompoundWorldEventCondition)
     {
+      _nbCompound++;
       CompoundWorldEventCondition compoundCondition=(CompoundWorldEventCondition)condition;
+      if (compoundCondition.getOperator()==Operator.AND)
+      {
+        _nbAnd++;
+      }
       List<AbstractWorldEventCondition> childConditions=compoundCondition.getItems();
       boolean hasCompoundChild=false;
       for(AbstractWorldEventCondition childCondition : childConditions)
@@ -195,11 +204,35 @@ public class MainAssessWorldEventUsageInDeeds
       if (hasCompoundChild)
       {
         addComplexity(-1);
-        System.out.println(achievable+" => "+condition);
+        show(achievable);
       }
       else
       {
         addComplexity(childConditions.size());
+        if ((childConditions.size()>2) || (compoundCondition.getOperator()==Operator.OR))
+        {
+          show(achievable);
+        }
+      }
+    }
+  }
+
+  private void show(Achievable achievable)
+  {
+    System.out.println("Achievable: "+achievable.getName());
+    AbstractWorldEventCondition condition=achievable.getWorldEventsRequirement();
+    if (condition instanceof SimpleWorldEventCondition)
+    {
+      System.out.println("\t"+condition);
+    }
+    else if (condition instanceof CompoundWorldEventCondition)
+    {
+      CompoundWorldEventCondition compoundCondition=(CompoundWorldEventCondition)condition;
+      System.out.println("Operator: "+compoundCondition.getOperator());
+      List<AbstractWorldEventCondition> childConditions=compoundCondition.getItems();
+      for(AbstractWorldEventCondition childCondition : childConditions)
+      {
+        System.out.println("\t"+childCondition);
       }
     }
   }
