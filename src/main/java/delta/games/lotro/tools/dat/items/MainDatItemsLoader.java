@@ -496,7 +496,7 @@ public class MainDatItemsLoader
         item.setValueTable(table);
       }
     }
-    if (!Objects.equals(itemValueFromTable,itemValueFromTable))
+    if (!Objects.equals(itemValue,itemValueFromTable))
     {
       LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
       LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
@@ -542,27 +542,7 @@ public class MainDatItemsLoader
     {
       Armour armour=(Armour)item;
       ArmourType armourType=armour.getArmourType();
-      if (armourType==ArmourType.HEAVY_SHIELD)
-      {
-        // +10% Ranged defence
-        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
-        provider.setDescriptionOverride("+10% Ranged Defence");
-        statsProvider.addStatProvider(provider);
-        // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
-        statsProvider.addStatProvider(critDef);
-      }
-      else if (armourType==ArmourType.SHIELD)
-      {
-        // +10% Ranged defence
-        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
-        provider.setDescriptionOverride("+10% Ranged Defence");
-        statsProvider.addStatProvider(provider);
-        // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
-        statsProvider.addStatProvider(critDef);
-      }
-      else if (armourType==ArmourType.WARDEN_SHIELD)
+      if ((armourType==ArmourType.HEAVY_SHIELD) || (armourType==ArmourType.SHIELD) || (armourType==ArmourType.WARDEN_SHIELD))
       {
         // +10% Ranged defence
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
@@ -762,7 +742,6 @@ public class MainDatItemsLoader
 
   private Item buildItem(PropertiesSet properties)
   {
-    //EquipmentLocation slot=null;
     WeaponType weaponType=null;
     ArmourType armourType=null;
     long equipmentCategory=getEquipmentCategory(properties);
@@ -772,31 +751,27 @@ public class MainDatItemsLoader
     }
     else if (equipmentCategory==1)
     {
-      //slot=EquipmentLocation.EAR;
+      // Ear
     }
     else if (equipmentCategory==1L<<1)
     {
-      //slot=EquipmentLocation.POCKET;
+      // Pocket
     }
     else if (equipmentCategory==1L<<2)
     {
       weaponType=WeaponType.TWO_HANDED_SWORD;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<3)
     {
       weaponType=WeaponType.TWO_HANDED_CLUB;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<4)
     {
       //weaponType=WeaponType.TWO_HANDED_MACE;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<5)
     {
       weaponType=WeaponType.TWO_HANDED_AXE;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<6)
     {
@@ -805,7 +780,6 @@ public class MainDatItemsLoader
     else if (equipmentCategory==1L<<7)
     {
       weaponType=WeaponType.BOW;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<8)
     {
@@ -818,137 +792,118 @@ public class MainDatItemsLoader
     else if (equipmentCategory==1L<<10)
     {
       armourType=ArmourType.HEAVY_SHIELD;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<11)
     {
       weaponType=WeaponType.ONE_HANDED_HAMMER;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<12)
     {
       weaponType=WeaponType.SPEAR;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<13)
     {
       weaponType=WeaponType.CROSSBOW;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<14)
     {
       weaponType=WeaponType.TWO_HANDED_HAMMER;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<15)
     {
       weaponType=WeaponType.HALBERD;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<16)
     {
       armourType=ArmourType.SHIELD;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<17)
     {
       armourType=ArmourType.LIGHT;
     }
-    else if (equipmentCategory==1L<<18) // Ring
+    else if (equipmentCategory==1L<<18)
     {
-      //slot=EquipmentLocation.FINGER;
+      // Ring
     }
     else if (equipmentCategory==1L<<19)
     {
       weaponType=WeaponType.DAGGER;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
-    else if (equipmentCategory==1L<<20) // Craft Tool
+    else if (equipmentCategory==1L<<20)
     {
-      //slot=EquipmentLocation.TOOL;
+      // Craft Tool
     }
     else if (equipmentCategory==1L<<21)
     {
       weaponType=WeaponType.STAFF;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
-    else if (equipmentCategory==1L<<22) // Necklace
+    else if (equipmentCategory==1L<<22)
     {
-      //slot=EquipmentLocation.NECK;
+      // Necklace
     }
     else if (equipmentCategory==1L<<23)
     {
       weaponType=WeaponType.ONE_HANDED_AXE;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
-    else if (equipmentCategory==1L<<24) // Class Item
+    else if (equipmentCategory==1L<<24)
     {
-      //slot=EquipmentLocation.CLASS_SLOT;
+      // Class Item
     }
     else if (equipmentCategory==1L<<25)
     {
       weaponType=WeaponType.ONE_HANDED_CLUB;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<26)
     {
       weaponType=WeaponType.ONE_HANDED_MACE;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<27)
     {
       weaponType=WeaponType.ONE_HANDED_SWORD;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
-    else if (equipmentCategory==1L<<28) // Thrown Weapon
+    else if (equipmentCategory==1L<<28)
     {
-      //
+      // Thrown Weapon
     }
-    else if (equipmentCategory==1L<<29) // Armband
+    else if (equipmentCategory==1L<<29)
     {
-      //slot=EquipmentLocation.WRIST;
+      // Armband
     }
     else if (equipmentCategory==1L<<30) // Cloak
     {
       armourType=ArmourType.LIGHT;
-      //slot=EquipmentLocation.BACK;
     }
-    else if (equipmentCategory==1L<<31) // Cosmetic
+    else if (equipmentCategory==1L<<31)
     {
-      // No slot
+      // Cosmetic
     }
-    else if (equipmentCategory==1L<<33) // Two-handed implement
+    else if (equipmentCategory==1L<<33)
     {
-      //slot=EquipmentLocation.MAIN_HAND;
+      // Two-handed implement
     }
-    else if (equipmentCategory==1L<<36) // One-handed implement
+    else if (equipmentCategory==1L<<36) 
     {
-      //slot=EquipmentLocation.MAIN_HAND;
+      // One-handed implement
     }
     else if (equipmentCategory==1L<<38)
     {
       weaponType=WeaponType.RUNE_STONE;
-      //slot=EquipmentLocation.MAIN_HAND;
     }
     else if (equipmentCategory==1L<<39)
     {
       armourType=ArmourType.WARDEN_SHIELD;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<40)
     {
       weaponType=WeaponType.JAVELIN;
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<42)
     {
       // Oath-bound Armaments
-      //slot=EquipmentLocation.RANGED_ITEM;
     }
     else if (equipmentCategory==1L<<43)
     {
       // War-steed Item
-      //slot=EquipmentLocation.BRIDLE;
     }
     else if (equipmentCategory==1L<<46)
     {
