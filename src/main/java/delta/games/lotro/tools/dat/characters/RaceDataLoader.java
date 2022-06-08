@@ -9,9 +9,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.races.NationalitiesManager;
+import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RaceGender;
 import delta.games.lotro.character.races.RaceTrait;
+import delta.games.lotro.character.races.io.xml.NationalityDescriptionXMLWriter;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
@@ -24,6 +27,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get race definitions from DAT files.
@@ -35,7 +39,6 @@ public class RaceDataLoader
 
   private DataFacade _facade;
   private Map<Integer,RaceDescription> _racesById;
-  //private EnumMapper _nationalities;
 
   /**
    * Constructor.
@@ -45,7 +48,6 @@ public class RaceDataLoader
   {
     _facade=facade;
     _racesById=new HashMap<Integer,RaceDescription>();
-    //_nationalities=_facade.getEnumsManager().getEnumMapper(587202577);
     loadNationalities();
   }
 
@@ -65,15 +67,13 @@ public class RaceDataLoader
     boolean tall=(isTall!=null)?(isTall.intValue()==1):true;
     raceDescription.setTall(tall);
     // Nationalities
-    /*
     Object[] nationalityCodes=(Object[])properties.getProperty("RaceTable_NationalityList");
     for(Object nationalityCodeObj : nationalityCodes)
     {
       int nationalityCode=((Integer)nationalityCodeObj).intValue();
-      String nationality=_nationalities.getString(nationalityCode);
-      System.out.println("Nationality: "+nationality);
+      NationalityDescription nationality=NationalitiesManager.getInstance().getNationalityDescription(nationalityCode);
+      raceDescription.addNationality(nationality);
     }
-    */
     loadGenders(raceDescription,properties);
     loadCharacteristics(raceDescription,properties);
     loadAllowedClasses(raceDescription,properties);
@@ -82,43 +82,53 @@ public class RaceDataLoader
 
   private void loadNationalities()
   {
+    List<NationalityDescription> nationalities=new ArrayList<NationalityDescription>();
     PropertiesSet properties=_facade.loadProperties(0x79000210);
     Object[] nationalityIdsArray=(Object[])properties.getProperty("NationalityTable_NationalityTableList");
     for(Object nationalityId : nationalityIdsArray)
     {
-      handleNationality(((Integer)nationalityId).intValue());
+      NationalityDescription nationality=handleNationality(((Integer)nationalityId).intValue());
+      nationalities.add(nationality);
     }
+    NationalityDescriptionXMLWriter.write(GeneratedFiles.NATIONALITIES,nationalities);
   }
 
-  private void handleNationality(int nationalityId)
+  private NationalityDescription handleNationality(int nationalityId)
   {
-    /*
     PropertiesSet properties=_facade.loadProperties(nationalityId+DATConstants.DBPROPERTIES_OFFSET);
-    System.out.println(properties.dump());
-    */
-    /*
-    NationalityTable_Desc: 
-      #1: <li><rgb=#FFFF00>Lore: </rgb>You grew up in Bree-land, once part of the North Kingdom of Arnor, once ruled by Elendil the Tall as High King of Middle-earth, and later by his elder son Isildur. Now it is but a simple, rustic land, and the North Kingdom is no more.</li>
-    NationalityTable_Icon: 1091603145
-    NationalityTable_Name: 
-      #1: Bree-land
-    NationalityTable_Naming_Guideline_Array: 
-      #1: 
-        NationalityTable_Naming_Guideline: 
-          #1: \n\n<li><rgb=#FFFF00>Naming Guidelines: </rgb>Bree-men usually have short, simple English-styled names like Ned, Bill, Mat, Wil, or Tom, but longer or less familiar names -- such as Barliman, Humphrey, or Cuthbert -- are not unknown.\n\nSometimes Bree-landers go by their last names, which are almost always related to plants, such as Appledore, Thistleway, Butterbur, or Ferny.</li>
-        NationalityTable_Sex: 4096 (Male)
-      #2: 
-        NationalityTable_Naming_Guideline: 
-          #1: \n\n<li><rgb=#FFFF00>Naming Guidelines: </rgb>Bree-women tend towards simple, familiar English-styled names such as Ellie, Dora, Adela, and Clara, though less familiar names -- such as Amabel, Maribel, or Livina -- are not unknown.\n\nSometimes Bree-landers go by their last names, which are almost always related to plants, such as Appledore, Thistleway, Butterbur, or Ferny.</li>
-        NationalityTable_Sex: 8192 (Female)
-    NationalityTable_Nationality: 17 (Bree_land)
-    NationalityTable_Title: 1879073639
-    Reputation_FactionTable: 
-      #1: 1879091340
-      #2: 1879091408
-      #3: 1879091346
-      #4: 1879091345
-    */
+    // Code
+    int code=((Integer)properties.getProperty("NationalityTable_Nationality")).intValue();
+    NationalityDescription ret=new NationalityDescription(code);
+    // Name
+    String name=DatUtils.getStringProperty(properties,"NationalityTable_Name");
+    name=StringUtils.fixName(name);
+    ret.setName(name);
+    // Description
+    String description=DatUtils.getStringProperty(properties,"NationalityTable_Desc");
+    ret.setDescription(description);
+    // Icon ID
+    int iconID=((Integer)properties.getProperty("NationalityTable_Icon")).intValue();
+    ret.setIconID(iconID);
+    // Guidelines
+    Object[] guidelinesArray=(Object[])properties.getProperty("NationalityTable_Naming_Guideline_Array");
+    for(Object guidelineEntryObj : guidelinesArray)
+    {
+      PropertiesSet guidelineProps=(PropertiesSet)guidelineEntryObj;
+      String guideline=DatUtils.getStringProperty(guidelineProps,"NationalityTable_Naming_Guideline");
+      int sexCode=((Integer)guidelineProps.getProperty("NationalityTable_Sex")).intValue();
+      if (sexCode==4096)
+      {
+        ret.setNamingGuidelineMale(guideline);
+      }
+      else if (sexCode==8192)
+      {
+        ret.setNamingGuidelineFemale(guideline);
+      }
+    }
+    // Title
+    int titleID=((Integer)properties.getProperty("NationalityTable_Title")).intValue();
+    ret.setTitleID(titleID);
+    return ret;
   }
 
   private void loadGenders(RaceDescription description, PropertiesSet properties)

@@ -28,6 +28,10 @@ public class GeneratedFiles
    */
   public static final File RACES=LotroCoreConfig.getInstance().getFile(DataFiles.RACES);
   /**
+   * Nationalities.
+   */
+  public static final File NATIONALITIES=LotroCoreConfig.getInstance().getFile(DataFiles.NATIONALITIES);
+  /**
    * Factions.
    */
   public static final File FACTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.FACTIONS);

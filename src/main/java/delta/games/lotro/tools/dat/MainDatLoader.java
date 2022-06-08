@@ -177,6 +177,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.START_STATS);
     deleteFile(GeneratedFiles.CLASSES);
     deleteFile(GeneratedFiles.RACES);
+    deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
     deleteFile(GeneratedFiles.SKILLS);
     deleteFile(GeneratedFiles.SKILL_ICONS);
