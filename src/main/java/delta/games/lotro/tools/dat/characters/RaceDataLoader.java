@@ -124,10 +124,17 @@ public class RaceDataLoader
       {
         ret.setNamingGuidelineFemale(guideline);
       }
+      else
+      {
+        LOGGER.warn("Unmanaged gender code: "+sexCode);
+      }
     }
     // Title
-    int titleID=((Integer)properties.getProperty("NationalityTable_Title")).intValue();
-    ret.setTitleID(titleID);
+    Integer titleID=(Integer)properties.getProperty("NationalityTable_Title");
+    if (titleID!=null)
+    {
+      ret.setTitleID(titleID);
+    }
     return ret;
   }
 
