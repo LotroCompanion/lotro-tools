@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.text.EndOfLine;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatDescriptionComparator;
+import delta.games.lotro.common.stats.StatType;
 import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.StatsSorter;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -20,6 +21,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
@@ -70,7 +72,26 @@ public class MainStatsLoader
     boolean isPercentage=((percentage!=null) && (percentage.intValue()==1));
 
     // Add stat
-    addDatStat(propertyId,propertyKey,propertyName,isPercentage);
+    StatDescription stat=addDatStat(propertyId,propertyKey,propertyName,isPercentage);
+    // Set stat type
+    StatType type=getTypeFromPropertyType(propertyDefinition.getPropertyType());
+    stat.setType(type);
+  }
+
+  private StatType getTypeFromPropertyType(PropertyType propertyType)
+  {
+    if (propertyType==PropertyType.BOOLEAN) return StatType.BOOLEAN;
+    if (propertyType==PropertyType.INT) return StatType.INTEGER;
+    if (propertyType==PropertyType.FLOAT) return StatType.FLOAT;
+    if (propertyType==PropertyType.ENUM_MAPPER) return StatType.ENUM;
+    if (propertyType==PropertyType.DATA_FILE) return StatType.DID;
+    if (propertyType==PropertyType.STRING) return StatType.STRING;
+    if (propertyType==PropertyType.BIT_FIELD) return StatType.BITFIELD;
+    if (propertyType==PropertyType.BIT_FIELD32) return StatType.BITFIELD;
+    if (propertyType==PropertyType.BITFIELD_64) return StatType.BITFIELD;
+    if (propertyType==PropertyType.ARRAY) return StatType.ARRAY;
+    System.out.println(propertyType);
+    return StatType.OTHER;
   }
 
   /**
@@ -231,31 +252,33 @@ public class MainStatsLoader
     System.out.println(result);
   }
 
-  private void addDatStat(int id, String key, String name, boolean isPercentage)
+  private StatDescription addDatStat(int id, String key, String name, boolean isPercentage)
   {
     StatDescription stat=new StatDescription(id);
     stat.setKey(key);
     stat.setInternalName(name);
     stat.setPercentage(isPercentage);
     _stats.addStat(stat);
+    return stat;
   }
 
-  private void addCustomStatFromOldStat(int id, OldStatEnum oldStat)
+  private void addCustomStatFromOldStat(int id, OldStatEnum oldStat, StatType type)
   {
     String legacyKey=oldStat.name();
     boolean isPercentage=oldStat.isPercentage();
     String legacyName=oldStat.getName();
     //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
-    addCustomStat(id,legacyKey,legacyName,isPercentage);
+    addCustomStat(id,legacyKey,legacyName,isPercentage,type);
   }
 
-  private void addCustomStat(int id, String legacyKey, String legacyName, boolean isPercentage)
+  private void addCustomStat(int id, String legacyKey, String legacyName, boolean isPercentage, StatType type)
   {
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
     stat.setInternalName(legacyName);
     stat.setPercentage(isPercentage);
+    stat.setType(type);
     _stats.addStat(stat);
   }
 
@@ -263,18 +286,18 @@ public class MainStatsLoader
   {
     int id=-1000;
     // Add missing well known stats from the old stats enum
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_MELEE_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_RANGED_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_TACTICAL_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.FINESSE_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.RESISTANCE_PERCENTAGE);
-    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR);
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_MELEE_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_RANGED_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_TACTICAL_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.FINESSE_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.RESISTANCE_PERCENTAGE,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR,StatType.FLOAT);
     // Add other stats
-    addCustomStat(id--,"DPS","DPS",false);
-    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1","Shield Use Rank",false);
+    addCustomStat(id--,"DPS","DPS",false,StatType.FLOAT);
+    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1","Shield Use Rank",false,StatType.FLOAT);
   }
 
   /**
