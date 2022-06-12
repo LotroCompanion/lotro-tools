@@ -294,7 +294,7 @@ public class MainStatsLoader
     addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE,StatType.FLOAT);
     addCustomStatFromOldStat(id--,OldStatEnum.FINESSE_PERCENTAGE,StatType.FLOAT);
     addCustomStatFromOldStat(id--,OldStatEnum.RESISTANCE_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR,StatType.FLOAT);
+    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR,StatType.INTEGER);
     // Add other stats
     addCustomStat(id--,"DPS","DPS",false,StatType.FLOAT);
     addCustomStat(id--,"Combat_TacticalDPS_Modifier#1","Shield Use Rank",false,StatType.FLOAT);
