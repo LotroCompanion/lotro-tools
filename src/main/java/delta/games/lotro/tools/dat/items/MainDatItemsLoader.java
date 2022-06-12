@@ -263,7 +263,8 @@ public class MainDatItemsLoader
         if (armourProgressId!=null)
         {
           armorStatProvider=DatStatUtils.buildStatProvider(_facade,WellKnownStat.ARMOUR,armourProgressId.intValue());
-          Float computedArmourValue=armorStatProvider.getStatValue(1,level.intValue());
+          int statsLevel=item.getItemLevelForStats().intValue();
+          Float computedArmourValue=armorStatProvider.getStatValue(1,statsLevel);
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
           {
             //System.out.println("Delta in armour for "+_currentItem+": got "+computedArmourValue+", expected "+armourValue);
@@ -313,7 +314,7 @@ public class MainDatItemsLoader
       {
         int offset=(itemLevelOffset!=null)?itemLevelOffset.intValue():0;
         int statsLevel=level.intValue()+offset;
-        BasicStatsSet stats=statsProvider.getStats(1,statsLevel,true);
+        BasicStatsSet stats=statsProvider.getStats(1,statsLevel);
         item.getStats().addStats(stats);
       }
       if (item instanceof Weapon)
@@ -496,10 +497,14 @@ public class MainDatItemsLoader
         item.setValueTable(table);
       }
     }
+    else
+    {
+      itemValueFromTable=Integer.valueOf(0);
+    }
     if (!Objects.equals(itemValue,itemValueFromTable))
     {
-      LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
-      LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
+      //LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
+      //LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
     }
   }
 

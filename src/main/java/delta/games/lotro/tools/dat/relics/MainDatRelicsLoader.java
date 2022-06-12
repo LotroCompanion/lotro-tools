@@ -99,13 +99,13 @@ public class MainDatRelicsLoader
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
-      BasicStatsSet stats=statsProvider.getStats(1,level.intValue(),true);
+      BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
       relic.getStats().addStats(stats);
       // Runic stats
       StatsProvider runicStatsProvider=DatStatUtils.buildStatProviders("Runic_",_facade,properties);
       if (runicStatsProvider.getNumberOfStatProviders()>0)
       {
-        BasicStatsSet runicStats=runicStatsProvider.getStats(1,level.intValue(),true);
+        BasicStatsSet runicStats=runicStatsProvider.getStats(1,level.intValue());
         relic.getStats().addStats(runicStats);
       }
       // Required level
