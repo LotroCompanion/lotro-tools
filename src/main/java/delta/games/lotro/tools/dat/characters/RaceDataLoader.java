@@ -85,11 +85,12 @@ public class RaceDataLoader
     List<NationalityDescription> nationalities=new ArrayList<NationalityDescription>();
     PropertiesSet properties=_facade.loadProperties(0x79000210);
     Object[] nationalityIdsArray=(Object[])properties.getProperty("NationalityTable_NationalityTableList");
-    for(Object nationalityId : nationalityIdsArray)
+    for(Object nationalityIdObj : nationalityIdsArray)
     {
-      int nationalityCode=((Integer)nationalityId).intValue();
-      NationalityDescription nationality=handleNationality(nationalityCode);
+      int nationalityId=((Integer)nationalityIdObj).intValue();
+      NationalityDescription nationality=handleNationality(nationalityId);
       nationalities.add(nationality);
+      int nationalityCode=nationality.getIdentifier();
       // Aliases
       if (nationalityCode==16) nationality.addAlias("Dale");
       if (nationalityCode==12) nationality.addAlias("Lonely Mountain");
