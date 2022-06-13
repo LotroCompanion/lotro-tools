@@ -87,8 +87,15 @@ public class RaceDataLoader
     Object[] nationalityIdsArray=(Object[])properties.getProperty("NationalityTable_NationalityTableList");
     for(Object nationalityId : nationalityIdsArray)
     {
-      NationalityDescription nationality=handleNationality(((Integer)nationalityId).intValue());
+      int nationalityCode=((Integer)nationalityId).intValue();
+      NationalityDescription nationality=handleNationality(nationalityCode);
       nationalities.add(nationality);
+      // Aliases
+      if (nationalityCode==16) nationality.addAlias("Dale");
+      if (nationalityCode==12) nationality.addAlias("Lonely Mountain");
+      if (nationalityCode==18) nationality.addAlias("Fallohides");
+      if (nationalityCode==13) nationality.addAlias("Stoors");
+      if (nationalityCode==27) nationality.addAlias("Mordor Mountains");
     }
     NationalityDescriptionXMLWriter.write(GeneratedFiles.NATIONALITIES,nationalities);
   }
