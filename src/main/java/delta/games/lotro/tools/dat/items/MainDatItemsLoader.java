@@ -312,8 +312,7 @@ public class MainDatItemsLoader
       // Stats
       if (level!=null)
       {
-        int offset=(itemLevelOffset!=null)?itemLevelOffset.intValue():0;
-        int statsLevel=level.intValue()+offset;
+        int statsLevel=item.getItemLevelForStats().intValue();
         BasicStatsSet stats=statsProvider.getStats(1,statsLevel);
         item.getStats().addStats(stats);
       }
