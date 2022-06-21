@@ -47,6 +47,13 @@ public class MainBillingGroupsLoader
    */
   public void doIt()
   {
+    initGroups();
+    loadTitles();
+    save();
+  }
+
+  private void loadTitles()
+  {
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"VersionAccountTitleBestow");
     Object[] partnerDataList=(Object[])props.getProperty("Version_TitleBestow_PartnerDataList");
     for(Object partnerDataObj : partnerDataList)
@@ -59,7 +66,15 @@ public class MainBillingGroupsLoader
         handleEntry(entryProps);
       }
     }
-    save();
+  }
+
+  private void initGroups()
+  {
+    LotroEnum<BillingGroup> groupsEnum=LotroEnumsRegistry.getInstance().get(BillingGroup.class);
+    for(BillingGroup group : groupsEnum.getAll())
+    {
+      getBillingGroupDescription(group);
+    }
   }
 
   private void handleEntry(PropertiesSet entryProps)
