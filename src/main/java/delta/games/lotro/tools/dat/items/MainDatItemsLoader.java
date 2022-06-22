@@ -162,7 +162,7 @@ public class MainDatItemsLoader
       }
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
       String name=DatUtils.getStringProperty(properties,"Name");
-      name=StringUtils.fixName(name);
+      name=StringUtils.removeMarks(name);
       if (!useItem(name,itemClassCode)) return null;
       nb++;
       item=buildItem(properties);
@@ -279,10 +279,8 @@ public class MainDatItemsLoader
       }
       // Description
       String description=DatUtils.getStringProperty(properties,"Description");
-      if (description!=null)
-      {
-        item.setDescription(description.trim());
-      }
+      description=StringUtils.removeMarks(description);
+      item.setDescription(description);
       // Requirements
       // - class
       RequirementsLoadingUtils.loadRequiredClasses(properties,item.getUsageRequirements());

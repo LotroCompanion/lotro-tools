@@ -56,7 +56,7 @@ public class MainBuildNPCTable
     if (enProperties!=null)
     {
       enName=DatUtils.getStringProperty(enProperties,"Name");
-      enName=StringUtils.fixName(enName);
+      enName=StringUtils.removeMarks(enName);
     }
     else
     {

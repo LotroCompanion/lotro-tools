@@ -482,7 +482,7 @@ public class MainDatNpcLoader
   {
     // Name
     String npcName=DatUtils.getStringProperty(properties,"Name");
-    npcName=StringUtils.fixName(npcName);
+    npcName=StringUtils.removeMarks(npcName);
     NpcDescription npc=new NpcDescription(npcId,npcName);
     // Title
     String title=DatUtils.getStringProperty(properties,"OccupationTitle");

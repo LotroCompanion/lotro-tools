@@ -36,7 +36,7 @@ public class NpcLoader
       {
         // Name
         String npcName=DatUtils.getStringProperty(npcProperties,"Name");
-        npcName=StringUtils.fixName(npcName);
+        npcName=StringUtils.removeMarks(npcName);
         _names.put(Integer.valueOf(npcId),npcName);
         ret=npcName;
       }
