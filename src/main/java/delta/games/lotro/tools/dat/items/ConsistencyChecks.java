@@ -12,7 +12,6 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.Legendary;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Performs consistency checks on a collection of items.
@@ -51,7 +50,7 @@ public class ConsistencyChecks
       if (item instanceof Armour)
       {
         Armour armour=(Armour)item;
-        FixedDecimalsInteger armourValue=armour.getStats().getStat(WellKnownStat.ARMOUR);
+        Number armourValue=armour.getStats().getStat(WellKnownStat.ARMOUR);
         if (armourValue==null)
         {
           nbMissingArmourValues++;

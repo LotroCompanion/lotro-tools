@@ -10,7 +10,6 @@ import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Tool to find items in the items database.
@@ -42,7 +41,7 @@ public class MainItemsFinder
         {
           if (item instanceof Armour)
           {
-            FixedDecimalsInteger stat=item.getStats().getStat(WellKnownStat.MIGHT);
+            Number stat=item.getStats().getStat(WellKnownStat.MIGHT);
             if (stat!=null)
             {
               if (locs.contains(item.getEquipmentLocation()))

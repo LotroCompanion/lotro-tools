@@ -32,7 +32,6 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Get class definitions from DAT files.
@@ -167,7 +166,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         {
           if (useStartStat(stat))
           {
-            stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+            stats.setStat(stat,value);
           }
         }
         else
@@ -187,7 +186,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         {
           if (useStartStat(stat))
           {
-            stats.setStat(stat,new FixedDecimalsInteger(value.intValue()));
+            stats.setStat(stat,value);
           }
         }
         else
@@ -199,7 +198,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       // ICPR
       if (characterClass!=CharacterClass.BEORNING)
       {
-        stats.setStat(WellKnownStat.ICPR,new FixedDecimalsInteger(240));
+        stats.setStat(WellKnownStat.ICPR,Integer.valueOf(240));
       }
       // OCPR
       if (characterClass!=CharacterClass.BEORNING)
@@ -208,7 +207,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=3) ocpr=90;
         if (level>=8) ocpr=105;
         if (level>=26) ocpr=120;
-        stats.setStat(WellKnownStat.OCPR,new FixedDecimalsInteger(ocpr));
+        stats.setStat(WellKnownStat.OCPR,Integer.valueOf(ocpr));
       }
       // OCMR
       if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
@@ -217,7 +216,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=4) ocmr=180;
         if (level>=10) ocmr=240;
         if (level>=31) ocmr=300;
-        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
       }
       else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
       {
@@ -225,13 +224,13 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         if (level>=2) ocmr=120;
         if (level>=6) ocmr=180;
         if (level>=16) ocmr=240;
-        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
       }
       else
       {
         int ocmr=60;
         if (level>=5) ocmr=120;
-        stats.setStat(WellKnownStat.OCMR,new FixedDecimalsInteger(ocmr));
+        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
       }
       // ICMR
       int icmr;
@@ -247,7 +246,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       {
         icmr=(int)(71.1 + level * 0.6);
       }
-      stats.setStat(WellKnownStat.ICMR,new FixedDecimalsInteger(icmr));
+      stats.setStat(WellKnownStat.ICMR,Integer.valueOf(icmr));
       _startStatsManager.setStats(characterClass,level,stats);
     }
   }
@@ -283,10 +282,10 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
               if (sourceStat!=null)
               {
                 //System.out.println(sourceStat+"*"+value+" => "+targetStat);
-                _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,new FixedDecimalsInteger(value));
+                _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,Float.valueOf(value));
                 if (targetStat==WellKnownStat.TACTICAL_MASTERY)
                 {
-                  _derivatedStatsManager.setFactor(sourceStat,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(value));
+                  _derivatedStatsManager.setFactor(sourceStat,WellKnownStat.OUTGOING_HEALING,characterClass,Float.valueOf(value));
                 }
               }
             }
@@ -299,19 +298,19 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private void addImplicitDerivations(CharacterClass characterClass)
   {
-    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.MELEE_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.RANGED_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.TACTICAL_CRITICAL_DEFENCE,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.PHYSICAL_MITIGATION,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.TACTICAL_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
-    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(0.2f));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.MELEE_CRITICAL_DEFENCE,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.RANGED_CRITICAL_DEFENCE,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.TACTICAL_CRITICAL_DEFENCE,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.PHYSICAL_MITIGATION,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.TACTICAL_MITIGATION,characterClass,Float.valueOf(0.2f));
+    _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.OCFW_MITIGATION,characterClass,Float.valueOf(0.2f));
     if (characterClass==CharacterClass.CHAMPION)
     {
-      _derivatedStatsManager.setFactor(WellKnownStat.MIGHT,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
+      _derivatedStatsManager.setFactor(WellKnownStat.MIGHT,WellKnownStat.OCFW_MITIGATION,characterClass,Integer.valueOf(1));
     }
-    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,new FixedDecimalsInteger(1));
-    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION_PERCENTAGE,WellKnownStat.OCFW_MITIGATION_PERCENTAGE,characterClass,new FixedDecimalsInteger(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION,WellKnownStat.OCFW_MITIGATION,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.TACTICAL_MASTERY,WellKnownStat.OUTGOING_HEALING,characterClass,Integer.valueOf(1));
+    _derivatedStatsManager.setFactor(WellKnownStat.PHYSICAL_MITIGATION_PERCENTAGE,WellKnownStat.OCFW_MITIGATION_PERCENTAGE,characterClass,Integer.valueOf(1));
   }
 
   private void loadTraits(ClassDescription description, PropertiesSet properties)
