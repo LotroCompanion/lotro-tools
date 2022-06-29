@@ -20,6 +20,7 @@ import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.characters.VirtueDataLoader;
+import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatRecipesLoader;
@@ -44,6 +45,7 @@ import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.others.MountsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
+import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicMeldingRecipesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
@@ -126,7 +128,8 @@ public class MainDatLoader
     // Emotes
     new MainDatEmotesLoader(_facade).doIt();
     // Quests and deeds
-    new MainDatAchievablesLoader(_facade).doIt();
+    DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
+    new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Associate deeds to faction levels
     MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
@@ -138,6 +141,8 @@ public class MainDatLoader
     new MountsLoader(_facade).doIt();
     // Cosmetic pets
     new CosmeticPetLoader(_facade).doIt();
+    // Collections
+    new MainDatCollectionsLoader(_facade,rewardsLoader).doIt();
     // Vendors & barterers
     new MainDatNpcLoader(_facade).doIt();
     // Private encounters

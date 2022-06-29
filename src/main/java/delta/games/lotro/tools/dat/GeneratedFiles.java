@@ -249,6 +249,10 @@ public class GeneratedFiles
    */
   public static final File PET_ICONS=new File("../lotro-data/pets/petIcons.zip").getAbsoluteFile();
   /**
+   * Collections.
+   */
+  public static final File COLLECTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.COLLECTIONS);
+  /**
    * Barterers.
    */
   public static final File BARTERS=LotroCoreConfig.getInstance().getFile(DataFiles.BARTERS);

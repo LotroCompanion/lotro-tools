@@ -82,15 +82,16 @@ public class MainDatAchievablesLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param rewardsLoader Rewards loader.
    */
-  public MainDatAchievablesLoader(DataFacade facade)
+  public MainDatAchievablesLoader(DataFacade facade, DatRewardsLoader rewardsLoader)
   {
     _facade=facade;
     _quests=new HashMap<Integer,QuestDescription>();
     _deeds=new HashMap<Integer,DeedDescription>();
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
     _deedUiTabName=_facade.getEnumsManager().getEnumMapper(587202588);
-    _rewardsLoader=new DatRewardsLoader(facade);
+    _rewardsLoader=rewardsLoader;
     _objectivesLoader=new DatObjectivesLoader(facade);
     _rolesLoader=new DatRolesLoader(facade);
     _requirementsLoader=new QuestRequirementsLoader(facade);
@@ -893,7 +894,8 @@ public class MainDatAchievablesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatAchievablesLoader(facade).doIt();
+    DatRewardsLoader rewardsLoader=new DatRewardsLoader(facade);
+    new MainDatAchievablesLoader(facade,rewardsLoader).doIt();
     facade.dispose();
   }
 }
