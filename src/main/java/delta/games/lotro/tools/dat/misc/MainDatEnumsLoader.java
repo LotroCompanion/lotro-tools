@@ -8,6 +8,7 @@ import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
+import delta.games.lotro.common.enums.CollectionCategory;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
@@ -67,6 +68,7 @@ public class MainDatEnumsLoader
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
     loadEnum(587202756,"BillingGroup",BillingGroup.class); // 0x230000C4
+    loadEnum(587203550,"CollectionCategory",CollectionCategory.class); // 0x230003DE
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)

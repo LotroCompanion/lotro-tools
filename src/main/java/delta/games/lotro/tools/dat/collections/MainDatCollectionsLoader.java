@@ -68,7 +68,11 @@ public class MainDatCollectionsLoader
       for(Object pieceObj : piecesList)
       {
         int pieceId=((Integer)pieceObj).intValue();
-        loadCollectionItem(pieceId,collectionCategory);
+        Collectable element=loadCollectionItem(pieceId,collectionCategory);
+        if (element!=null)
+        {
+          ret.addElement(element);
+        }
       }
       // Treasure
       int treasureId=((Integer)properties.getProperty("Collection_TreasureDID")).intValue();
