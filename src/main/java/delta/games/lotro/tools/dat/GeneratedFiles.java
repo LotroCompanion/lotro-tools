@@ -360,4 +360,8 @@ public class GeneratedFiles
    * Web store items.
    */
   public static final File WEB_STORE_ITEMS=LotroCoreConfig.getInstance().getFile(DataFiles.WEB_STORE_ITEMS);
+  /**
+   * Rewards tracks.
+   */
+  public static final File REWARDS_TRACKS=LotroCoreConfig.getInstance().getFile(DataFiles.REWARDS_TRACKS);
 }

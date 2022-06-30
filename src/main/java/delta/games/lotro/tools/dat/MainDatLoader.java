@@ -49,6 +49,7 @@ import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicMeldingRecipesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
+import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
@@ -168,6 +169,8 @@ public class MainDatLoader
     new MainDatAllegiancesLoader(_facade).doIt();
     // Billing groups
     new MainBillingGroupsLoader(_facade).doIt();
+    // Rewards tracks
+    new MainDatRewardsTracksLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -250,6 +253,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.EFFECT_ICONS);
     // Trait points
     deleteFile(GeneratedFiles.TRAIT_POINTS);
+    // Collections
+    deleteFile(GeneratedFiles.COLLECTIONS);
     // Mounts
     deleteFile(GeneratedFiles.MOUNTS);
     deleteFile(GeneratedFiles.MOUNT_ICONS);
@@ -283,6 +288,10 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
     // Billing groups
     deleteFile(GeneratedFiles.BILLING_GROUPS);
+    // Misc
+    deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
+    deleteFile(GeneratedFiles.WORLD_EVENTS);
+    deleteFile(GeneratedFiles.REWARDS_TRACKS);
 
     // Progressions
     deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
