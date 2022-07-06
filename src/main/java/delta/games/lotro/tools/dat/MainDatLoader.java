@@ -207,6 +207,7 @@ public class MainDatLoader
     // Items
     deleteFile(GeneratedFiles.ITEMS);
     deleteDirectory(GeneratedFiles.ITEM_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.ITEM_LARGE_ICONS_DIR);
     deleteFile(GeneratedFiles.PASSIVES);
     deleteFile(GeneratedFiles.PASSIVES_USAGE);
     deleteFile(GeneratedFiles.CONSUMABLES);

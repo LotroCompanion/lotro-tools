@@ -88,6 +88,10 @@ public class GeneratedFiles
    */
   public static final File ITEM_ICONS_DIR=new File("../lotro-icons/items").getAbsoluteFile();
   /**
+   * Item (large) icons.
+   */
+  public static final File ITEM_LARGE_ICONS_DIR=new File("../lotro-icons/largeItems").getAbsoluteFile();
+  /**
    * Item cosmetics.
    */
   public static final File ITEM_COSMETICS=LotroCoreConfig.getInstance().getFile(DataFiles.ITEM_COSMETICS);

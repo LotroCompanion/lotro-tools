@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.rewardsTrack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.rewardsTrack.RewardsTrack;
@@ -107,11 +109,29 @@ public class MainDatRewardsTracksLoader
     ret.setXpCostMultiplier(xpCostMultiplier);
     int uiElementID=((Integer)stepProps.getProperty("RewardTrack_Array_PipElement")).intValue();
     ret.setUiElementID(uiElementID);
+    // Reward item
     int rewardID=((Integer)stepProps.getProperty("RewardTrack_Array_Reward")).intValue();
     ItemsManager itemsMgr=ItemsManager.getInstance();
     Item item=itemsMgr.getItem(rewardID);
-    ret.setReward(item);
+    if (item!=null)
+    {
+      ret.setReward(item);
+      int largeIconID=loadItemIcon(item.getIdentifier());
+      ret.setLargeIconID(largeIconID);
+    }
     return ret;
+  }
+
+  private int loadItemIcon(int itemID)
+  {
+    PropertiesSet props=_facade.loadProperties(itemID+DATConstants.DBPROPERTIES_OFFSET);
+    int iconID=((Integer)props.getProperty("Icon_Layer_LargeImageDID")).intValue();
+    File iconFile=new File(GeneratedFiles.ITEM_LARGE_ICONS_DIR,iconID+".png").getAbsoluteFile();
+    if (!iconFile.exists())
+    {
+      DatIconsUtils.buildImageFile(_facade,iconID,iconFile);
+    }
+    return iconID;
   }
 
   /**
