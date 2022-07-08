@@ -99,6 +99,8 @@ public class MainDatLoader
     new MainSkillDataLoader(_facade).doIt();
     // Traits
     new MainTraitDataLoader(_facade).doIt();
+    // Emotes
+    new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
     new MainStatTomesLoader(_facade).doIt();
     // Character data
@@ -126,8 +128,6 @@ public class MainDatLoader
     new MainDatCraftingLoader(_facade).doIt();
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
-    // Emotes
-    new MainDatEmotesLoader(_facade).doIt();
     // Quests and deeds
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
     new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();

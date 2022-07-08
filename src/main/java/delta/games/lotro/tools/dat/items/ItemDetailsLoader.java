@@ -9,10 +9,14 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.lore.emotes.EmoteDescription;
+import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
@@ -31,6 +35,17 @@ public class ItemDetailsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(ItemDetailsLoader.class);
 
+  private DataFacade _facade;
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   */
+  public ItemDetailsLoader(DataFacade facade)
+  {
+    _facade=facade;
+  }
+
   /**
    * Handle an item.
    * @param item Item to use.
@@ -42,7 +57,7 @@ public class ItemDetailsLoader
     handleGrantedTrait(item,props,"Item_GrantedTrait",GrantType.TRAIT);
     handleItemXP(item,props);
     handleItemReputation(item,props);
-    handleItemVirtueXP(item,props);
+    handleEffects(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -174,7 +189,7 @@ Mount_SkillToGrantRaceArray:
     }
   }
 
-  private void handleItemVirtueXP(Item item, PropertiesSet props)
+  private void handleEffects(Item item, PropertiesSet props)
   {
 /*
 EffectGenerator_UsageEffectList: 
@@ -184,6 +199,10 @@ EffectGenerator_UsageEffectList:
         #1: Effect_GrantTraitRank_Grant_Node 
           Effect_GrantTraitRank_Grant_XP: 1000
     EffectGenerator_EffectID: 1879186818
+    EffectGenerator_EffectSpellcraft: -1.0
+
+  #1: EffectGenerator_EffectStruct 
+    EffectGenerator_EffectID: 1879187320
     EffectGenerator_EffectSpellcraft: -1.0
 */
     Object[] usageEffectList=(Object[])props.getProperty("EffectGenerator_UsageEffectList");
@@ -197,6 +216,16 @@ EffectGenerator_UsageEffectList:
   }
 
   private void handleEffect(Item item, PropertiesSet effectProps)
+  {
+    handleEffectDataList(item,effectProps);
+    Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
+    if (effectID!=null)
+    {
+      handleEffectID(item,effectID.intValue());
+    }
+  }
+
+  private void handleEffectDataList(Item item, PropertiesSet effectProps)
   {
     ArrayPropertyValue dataListValue=(ArrayPropertyValue)effectProps.getPropertyValueByName("EffectGenerator_EffectDataList");
     //Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
@@ -287,6 +316,21 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
       else
       {
         System.out.println("Unmanaged grant entry: "+grantEntryPropDef);
+      }
+    }
+  }
+
+  private void handleEffectID(Item item, int effectID)
+  {
+    PropertiesSet effectProps=_facade.loadProperties(effectID+DATConstants.DBPROPERTIES_OFFSET);
+    Integer grantedEmoteID=(Integer)effectProps.getProperty("Effect_EmoteToGrant");
+    if (grantedEmoteID!=null)
+    {
+      EmoteDescription emote=EmotesManager.getInstance().getEmote(grantedEmoteID.intValue());
+      if (emote!=null)
+      {
+        GrantedElement<EmoteDescription> grantedElement=new GrantedElement<EmoteDescription>(GrantType.EMOTE,emote);
+        Item.addDetail(item,grantedElement);
       }
     }
   }

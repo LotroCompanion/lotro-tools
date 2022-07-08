@@ -140,7 +140,7 @@ public class MainDatItemsLoader
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
-    _detailsLoader=new ItemDetailsLoader();
+    _detailsLoader=new ItemDetailsLoader(_facade);
     _cosmeticLoader=new CosmeticLoader();
   }
 
