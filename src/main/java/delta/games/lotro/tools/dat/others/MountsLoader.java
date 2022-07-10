@@ -11,8 +11,11 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -169,14 +172,17 @@ public class MountsLoader
     List<MountDescription> mounts=new ArrayList<MountDescription>();
     // MountDirectory
     PropertiesSet mountsDirectoryProps=_facade.loadProperties(0x70048B29+DATConstants.DBPROPERTIES_OFFSET);
-    Object[] mountSkillsList=(Object[])mountsDirectoryProps.getProperty("Mount_SkillList");
-    for(Object mountSkillObj : mountSkillsList)
+    ArrayPropertyValue skillListValue=(ArrayPropertyValue)mountsDirectoryProps.getPropertyValueByName("Mount_SkillList");
+    for(PropertyValue mountSkillEntry : skillListValue.getValues())
     {
-      // Use property name on each entry to get tall/short type
-      int mountSkillId=((Integer)mountSkillObj).intValue();
+      int mountSkillId=((Integer)(mountSkillEntry.getValue())).intValue();
+      PropertyDefinition propertyDef=mountSkillEntry.getDefinition();
+      String propertyName=propertyDef.getName();
+      boolean tall=("Mount_SkillToGrantTall".equals(propertyName));
       MountDescription mount=load(mountSkillId);
       if (mount!=null)
       {
+        mount.setTall(tall);
         mounts.add(mount);
       }
     }
