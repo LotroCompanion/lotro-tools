@@ -1,12 +1,16 @@
 package delta.games.lotro.tools.dat.utils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import delta.common.utils.misc.IntegerHolder;
+import delta.games.lotro.dat.archive.DATArchive;
+import delta.games.lotro.dat.archive.DirectoryEntry;
+import delta.games.lotro.dat.archive.FileEntry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -52,9 +56,9 @@ public class MainDatBrowser
       1879222091,1879222092,1879224296,1879232939,1879239108,1879267320,1879325961,1879381487};
       */
 
-  private List<Integer> ids=new ArrayList<Integer>();
+  private List<Long> ids=new ArrayList<Long>();
 
-  private void handleEntry(int id)
+  private void handleEntry(long id)
   {
     if (id%1000000==0) System.out.println("ID: "+id);
     byte[] data=_facade.loadData(id);
@@ -87,7 +91,7 @@ public class MainDatBrowser
           }
           holder.increment();
           System.out.println("Found "+id+" index="+index+", type="+type);
-          int propsId=(id<0x78FFFFFF)?id+0x9000000:id;
+          long propsId=(id<0x78FFFFFF)?id+0x9000000:id;
           PropertiesSet props=_facade.loadProperties(propsId);
           System.out.println("*********** entry "+id+"******************");
           if (props!=null)
@@ -98,7 +102,7 @@ public class MainDatBrowser
           {
             System.out.println("props is null");
           }
-          ids.add(Integer.valueOf(id));
+          ids.add(Long.valueOf(id));
           /*
           Progression prog=ProgressionFactory.buildProgression(id,props);
           if (prog!=null)
@@ -141,6 +145,35 @@ public class MainDatBrowser
     for(int id=0x70000000;id<0x7FFFFFFF;id++)
     {
       handleEntry(id);
+    }
+    /*
+    DATArchive archive=_facade.getDatFilesManager().getArchive(DATFilesConstants.HIGHRES);
+    DirectoryEntry rootEntry=archive.getRootEntry();
+    handleDirectory(archive,rootEntry);
+    */
+  }
+
+  void handleDirectory(DATArchive archive, DirectoryEntry dir)
+  {
+    try
+    {
+      archive.ensureLoaded(dir);
+      //System.out.println("Directory: "+dir);
+      List<FileEntry> entries=dir.getFiles();
+      for(FileEntry entry : entries)
+      {
+        long id=entry.getFileId();
+        handleEntry(id);
+      }
+      List<DirectoryEntry> dirEntries=dir.getDirectories();
+      for(DirectoryEntry dirEntry : dirEntries)
+      {
+        handleDirectory(archive,dirEntry);
+      }
+    }
+    catch(IOException ioe)
+    {
+      ioe.printStackTrace();
     }
   }
 
