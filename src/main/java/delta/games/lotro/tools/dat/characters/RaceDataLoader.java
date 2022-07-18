@@ -197,7 +197,7 @@ public class RaceDataLoader
   private File getIconFile(Race race, CharacterSex sex)
   {
     String raceIconPath=race.getIconPath();
-    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/races");
+    File rootDir=new File("../lotro-companion/src/main/resources/resources/gui/races");
     File iconFile=new File(rootDir,raceIconPath+"_"+sex.getKey().toLowerCase()+".png").getAbsoluteFile();
     return iconFile;
   }

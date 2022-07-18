@@ -140,7 +140,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
   private File getIconFile(CharacterClass characterClass, String size)
   {
     String classIconPath=characterClass.getIconPath();
-    File rootDir=new File("../lotro-companion/src/main/java/resources/gui/classes");
+    File rootDir=new File("../lotro-companion/src/main/resources/resources/gui/classes");
     File iconFile=new File(rootDir,size+"/"+classIconPath+".png").getAbsoluteFile();
     return iconFile;
   }

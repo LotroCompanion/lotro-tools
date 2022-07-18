@@ -81,7 +81,7 @@ public class SlotIconsLoader
             BufferedImage bufferedImage=new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics big = bufferedImage.getGraphics();
             big.drawImage(cropedIcon, 0, 0, null);
-            File to=new File("../lotro-companion/src/main/java/resources/gui/equipment/"+slot.name()+".png");
+            File to=new File("../lotro-companion/src/main/resources/resources/gui/equipment/"+slot.name()+".png");
             try
             {
               ImageIO.write(bufferedImage,"png",to);
