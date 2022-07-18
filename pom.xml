@@ -61,5 +61,10 @@
         <artifactId>jfreechart</artifactId>
         <version>1.0.13</version>
     </dependency>
+    <dependency>
+        <groupId>com.github.trilarion</groupId>
+        <artifactId>java-vorbis-support</artifactId>
+        <version>1.2.1</version>
+    </dependency>
   </dependencies>
 </project>
