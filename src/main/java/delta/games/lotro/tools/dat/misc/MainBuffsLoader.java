@@ -91,6 +91,12 @@ public class MainBuffsLoader
 
     // Scroll of Finesse
     buffs.add(loadBuff(1879216017,null));
+
+    // Veteran Fortitude
+    buffs.add(loadBuff(1879077245,null));
+    // Veteran Determination
+    buffs.add(loadBuff(1879139404,null));
+
     return buffs;
   }
 
