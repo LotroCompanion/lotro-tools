@@ -31,7 +31,6 @@ public class ConsumablesLoader
 {
   private DataFacade _facade;
   private Map<Integer,Effect> _parsedEffects;
-  private Consumable _currentConsumable;
   private Integer _spellcraftProperty;
   private List<Consumable> _consumables;
 
@@ -62,13 +61,8 @@ public class ConsumablesLoader
       {
         return;
       }
-      int id=item.getIdentifier();
-      String name=item.getName();
-      ItemClass itemClass=item.getItemClass();
-      String icon=item.getIcon();
 
-      _currentConsumable=new Consumable(id,name,icon,itemClass);
-
+      Consumable currentConsumable=initConsumable(item);
       // Look for a spellcraft property
       _spellcraftProperty=loadSpellcraftProperty(properties);
 
@@ -78,21 +72,34 @@ public class ConsumablesLoader
         PropertiesSet effectProps=(PropertiesSet)effectObj;
         int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
         Float spellCraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-        handleOnUseEffects(item,effectId,spellCraft);
+        handleOnUseEffects(item,currentConsumable,effectId,spellCraft);
       }
-      // Register consumable
-      StatsProvider statsProvider=_currentConsumable.getProvider();
-      int nbStatProviders=statsProvider.getNumberOfStatProviders();
-      int nbEffects=statsProvider.getSpecialEffects().size();
-      if ((nbStatProviders>0) || (nbEffects>0))
-      {
-        _consumables.add(_currentConsumable);
-        //BasicStatsSet stats=_currentConsumable.getProvider().getStats(1,120);
-        //System.out.println(_currentConsumable.getIdentifier()+"\t"+_currentConsumable.getName()+"\t"+_currentConsumable.getIcon()+"\t"+_currentConsumable.getCategory()+"\t"+stats);
-        _currentConsumable=null;
-      }
+      registerConsumable(currentConsumable);
     }
   }
+
+  private Consumable initConsumable(Item item)
+  {
+    int id=item.getIdentifier();
+    String name=item.getName();
+    ItemClass itemClass=item.getItemClass();
+    String icon=item.getIcon();
+
+    Consumable ret=new Consumable(id,name,icon,itemClass);
+    return ret;
+  }
+
+  private void registerConsumable(Consumable currentConsumable)
+  {
+    // Register consumable
+    StatsProvider statsProvider=currentConsumable.getProvider();
+    int nbStatProviders=statsProvider.getNumberOfStatProviders();
+    int nbEffects=statsProvider.getSpecialEffects().size();
+    if ((nbStatProviders>0) || (nbEffects>0))
+    {
+      _consumables.add(currentConsumable);
+    }
+ }
 
   private boolean useItem(Item item)
   {
@@ -115,8 +122,9 @@ public class ConsumablesLoader
     return propertyId;
   }
 
-  private void handleOnUseEffects(Item item, int effectGeneratorId, Float spellcraft)
+  private void handleOnUseEffects(Item item, Consumable currentConsumable, int effectGeneratorId, Float spellcraft)
   {
+    StatsProvider consumableStatsProvider=currentConsumable.getProvider();
     PropertiesSet effectProps=_facade.loadProperties(effectGeneratorId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] effects=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
     if (effects!=null)
@@ -125,16 +133,16 @@ public class ConsumablesLoader
       {
         PropertiesSet effectGeneratorProps=(PropertiesSet)effectGeneratorObj;
         int effectId=((Integer)effectGeneratorProps.getProperty("EffectGenerator_EffectID")).intValue();
-        handleUseEffect(item, effectId, spellcraft);
+        handleEffect(item, consumableStatsProvider, effectId, spellcraft);
       }
     }
     else
     {
-      handleUseEffect(item, effectGeneratorId, spellcraft);
+      handleEffect(item, consumableStatsProvider, effectGeneratorId, spellcraft);
     }
   }
 
-  private void handleUseEffect(Item item, int effectId, Float spellcraft)
+  private void handleEffect(Item item, StatsProvider consumableStatsProvider, int effectId, Float spellcraft)
   {
     Integer key=Integer.valueOf(effectId);
     Effect effect=_parsedEffects.get(key);
@@ -144,8 +152,15 @@ public class ConsumablesLoader
       // Remove icon: it is not interesting for consumable effects
       effect.setIconId(null);
       _parsedEffects.put(key,effect);
+      /*
+      StatsProvider statsProvider=effect.getStatsProvider();
+      if (statsProvider.getNumberOfStatProviders()>0)
+      {
+        System.out.println("Item: "+item+"  => "+effectId+((spellcraft!=null)?" (spellcraft: "+spellcraft+")":""));
+        System.out.println(effect);
+      }
+      */
     }
-    StatsProvider consumableStatsProvider=_currentConsumable.getProvider();
     StatsProvider statsProvider=effect.getStatsProvider();
     if (statsProvider.getNumberOfStatProviders()>0)
     {
@@ -188,6 +203,71 @@ public class ConsumablesLoader
     for(SpecialEffect specialEffect : statsProvider.getSpecialEffects())
     {
       consumableStatsProvider.addSpecialEffect(specialEffect);
+    }
+  }
+
+  /**
+   * Handle skill effects.
+   * @param item Parent items.
+   * @param properties Item properties.
+   */
+  public void handleSkillEffects(Item item, PropertiesSet properties)
+  {
+    Integer skillID=(Integer)properties.getProperty("Usage_SkillToExecute");
+    if (skillID==null)
+    {
+      return;
+    }
+    PropertiesSet skillProps=_facade.loadProperties(skillID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+    if (skillProps==null)
+    {
+      return;
+    }
+    handleSkillProps(item,skillProps);
+  }
+
+  private void handleSkillProps(Item item, PropertiesSet skillProps)
+  {
+    /*
+Skill_AttackHookList: 
+  #1: Skill_AttackHookInfo 
+    Skill_AttackHook_ActionDurationContributionMultiplier: 0.0
+    Skill_AttackHook_TargetEffectList: 
+     */
+    Object[] attackHookList=(Object[])skillProps.getProperty("Skill_AttackHookList");
+    if ((attackHookList==null) || (attackHookList.length==0))
+    {
+      return;
+    }
+    for(Object attackHookInfoObj : attackHookList)
+    {
+      PropertiesSet attackHookInfoProps=(PropertiesSet)attackHookInfoObj;
+      Object[] effectList=(Object[])attackHookInfoProps.getProperty("Skill_AttackHook_TargetEffectList");
+      if ((effectList!=null) && (effectList.length>0))
+      {
+        for(Object effectEntry : effectList)
+        {
+          PropertiesSet effectProps=(PropertiesSet)effectEntry;
+          handleSkillEffect(item,effectProps);
+        }
+      }
+    }
+  }
+
+  private void handleSkillEffect(Item item, PropertiesSet effectProps)
+  {
+    Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
+    if ((effectID!=null) && (effectID.intValue()!=0))
+    {
+      Consumable currentConsumable=initConsumable(item);
+      Float skillSpellcraft=(Float)effectProps.getProperty("Skill_EffectSpellcraft");
+      if ((skillSpellcraft!=null) && (skillSpellcraft.floatValue()<0))
+      {
+        skillSpellcraft=null;
+      }
+      //System.out.println("Item: "+item+"  => "+effectID+" (spellcraft: "+skillSpellcraft);
+      handleEffect(item,currentConsumable.getProvider(),effectID.intValue(),skillSpellcraft);
+      //registerConsumable(currentConsumable);
     }
   }
 
