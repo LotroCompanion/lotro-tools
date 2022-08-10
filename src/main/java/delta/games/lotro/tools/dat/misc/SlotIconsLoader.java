@@ -73,7 +73,7 @@ public class SlotIconsLoader
           if (data instanceof UIImage)
           {
             UIImage imageData=(UIImage)data;
-            int imageDID=imageData._imageDID;
+            int imageDID=imageData.getImageDID();
             BufferedImage image=DatIconsUtils.buildImage(_facade,new int[]{imageDID});
             Image cropedIcon=Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(image.getSource(),new CropImageFilter(6,6,32,32)));
             int width=cropedIcon.getWidth(null);

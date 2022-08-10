@@ -51,7 +51,7 @@ public class FrameIconsLoader
         if (data instanceof UIImage)
         {
           UIImage imageData=(UIImage)data;
-          int imageDID=imageData._imageDID;
+          int imageDID=imageData.getImageDID();
           File to=new File(stateData.getStateLabel()+".png");
           DatIconsUtils.buildImageFile(_facade,imageDID,to);
         }
