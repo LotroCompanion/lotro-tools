@@ -4,12 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
+import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
@@ -73,6 +80,11 @@ public class MountsLoader
       String name=DatUtils.getStringProperty(properties,"Skill_Name");
       name=StringUtils.fixName(name);
       ret.setName(name);
+
+      if (!useMount(ret))
+      {
+        return null;
+      }
       // Description
       String description=DatUtils.getStringProperty(properties,"Skill_Desc");
       ret.setDescription(description);
@@ -90,6 +102,13 @@ public class MountsLoader
       // Source description (null for war-steeds)
       String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
       ret.setSourceDescription(sourceDescription);
+      // Hide?
+      Integer hide=(Integer)properties.getProperty("Collection_Hide_Entry");
+      if ((hide!=null) && (hide.intValue()!=0))
+      {
+        //System.out.println("Hide: "+name);
+      }
+
       // Category
       int categoryCode=((Integer)properties.getProperty("Skill_Category")).intValue();
       if (categoryCode!=88) // Standard Mounts
@@ -136,6 +155,9 @@ public class MountsLoader
               break;
             }
           }
+          // Tall or small?
+          Object scale=effectProps.getProperty("Mounted_Player_Cosmetic_Slot_Scale");
+          ret.setTall(scale==null);
         }
       }
     }
@@ -144,6 +166,12 @@ public class MountsLoader
       LOGGER.warn("Could not handle mount skill ID="+indexDataId);
     }
     return ret;
+  }
+
+  private boolean useMount(MountDescription mount)
+  {
+    String mountName=mount.getName();
+    return (!mountName.contains("TBD"));
   }
 
   /**
@@ -169,7 +197,7 @@ public class MountsLoader
    */
   public void doIt()
   {
-    List<MountDescription> mounts=new ArrayList<MountDescription>();
+    Map<Integer,MountDescription> mounts=new HashMap<Integer,MountDescription>();
     // MountDirectory
     PropertiesSet mountsDirectoryProps=_facade.loadProperties(0x70048B29+DATConstants.DBPROPERTIES_OFFSET);
     ArrayPropertyValue skillListValue=(ArrayPropertyValue)mountsDirectoryProps.getPropertyValueByName("Mount_SkillList");
@@ -183,11 +211,34 @@ public class MountsLoader
       if (mount!=null)
       {
         mount.setTall(tall);
-        mounts.add(mount);
+        mounts.put(Integer.valueOf(mountSkillId),mount);
       }
     }
+    // Load missing mounts
+    findMissingMounts(mounts);
     LOGGER.info("Loaded "+mounts.size()+" mounts.");
-    saveMounts(mounts);
+    saveMounts(new ArrayList<MountDescription>(mounts.values()));
+  }
+
+  private void findMissingMounts(Map<Integer,MountDescription> mounts)
+  {
+    SkillsManager skillsMgr=SkillsManager.getInstance();
+    LotroEnum<SkillCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(SkillCategory.class);
+    SkillCategory category=categoryEnum.getEntry(88); // Mounts
+    List<SkillDescription> skills=skillsMgr.getSkillsByCategory(category);
+    for(SkillDescription skill : skills)
+    {
+      Integer key=Integer.valueOf(skill.getIdentifier());
+      MountDescription mount=mounts.get(key);
+      if (mount==null)
+      {
+        mount=load(key.intValue());
+        if (mount!=null)
+        {
+          mounts.put(key,mount);
+        }
+      }
+    }
   }
 
   /**
