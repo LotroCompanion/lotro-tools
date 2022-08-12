@@ -99,7 +99,7 @@ public class TraitLoader
 
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     // Category
-    Integer categoryCode=(Integer)traitProperties.getProperty("SkillCharacteristicCategory");
+    Integer categoryCode=(Integer)traitProperties.getProperty("Trait_Category");
     if ((categoryCode!=null) && (categoryCode.intValue()>0))
     {
       LotroEnum<SkillCategory> categoryMgr=registry.get(SkillCategory.class);
