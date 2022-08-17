@@ -42,7 +42,7 @@ public class TraitTreesDataLoader
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
   }
 
-  private TraitTree handleTraitTree(CharacterClass characterClass, int traitTreeId)
+  private TraitTree handleTraitTree(String traitTreeKey, int traitTreeId)
   {
     PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
@@ -59,8 +59,8 @@ public class TraitTreesDataLoader
       System.out.println("Branch description: "+branchDescription);
     }
     */
-    TraitTree tree=new TraitTree(characterClass);
-    LOGGER.info("Loading trait tree for class: "+characterClass);
+    TraitTree tree=new TraitTree(traitTreeKey);
+    LOGGER.info("Loading trait tree for class: "+traitTreeKey);
     //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
@@ -152,7 +152,8 @@ public class TraitTreesDataLoader
         for(Object traitTreeIdObj : traitTreeArray)
         {
           int traitTreeId=((Integer)traitTreeIdObj).intValue();
-          TraitTree tree=handleTraitTree(characterClass,traitTreeId);
+          String traitTreeKey=characterClass.getKey();
+          TraitTree tree=handleTraitTree(traitTreeKey,traitTreeId);
           for(ClassDescription description : classes)
           {
             if (description.getCharacterClass()==characterClass)
