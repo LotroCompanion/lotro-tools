@@ -43,7 +43,7 @@ public class ScriptsInspector
 
   private void inspectScriptNode(ScriptNode node)
   {
-    int nodeType=node.getNodeType();
+    ScriptNodeType nodeType=node.getNodeType();
     if (nodeType==ScriptNodeType.SOUND)
     {
       handleSoundNode(node);
@@ -56,8 +56,8 @@ public class ScriptsInspector
 
   private void inspectNodePort(ScriptNode parent, ScriptNodePort port)
   {
-    int nodeType=parent.getNodeType();
-    int portType=port.getPortType();
+    ScriptNodeType nodeType=parent.getNodeType();
+    ScriptPortType portType=port.getPortType();
     if ((nodeType==ScriptNodeType.SWITCH) && (portType==ScriptPortType.SWITCH_VALUE))
     {
       SwitchPortData data=(SwitchPortData)port.getData();
