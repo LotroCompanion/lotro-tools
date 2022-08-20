@@ -5,6 +5,7 @@ import java.util.List;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
@@ -17,6 +18,7 @@ import delta.games.lotro.lore.maps.GeoAreasManager;
 public class GeoMusicLoader
 {
   private DataFacade _facade;
+  private EnumMapper _musicMapper;
 
   /**
    * Constructor.
@@ -25,6 +27,7 @@ public class GeoMusicLoader
   public GeoMusicLoader(DataFacade facade)
   {
     _facade=facade;
+    _musicMapper=facade.getEnumsManager().getEnumMapper(587202880);
   }
 
   /**
@@ -52,7 +55,8 @@ public class GeoMusicLoader
     PropertiesSet itemProps=_facade.loadProperties(areaId+DATConstants.DBPROPERTIES_OFFSET);
     int musicType=((Integer)itemProps.getProperty("Ambient_MusicType")).intValue();
     int areaType=((Integer)itemProps.getProperty("Area_VisitedAreaType")).intValue();
-    System.out.println(area+" => music type="+musicType+", area type="+areaType);
+    String musicLabel=_musicMapper.getLabel(musicType);
+    System.out.println(area+" => Ambient_MusicType="+musicLabel+", area type="+areaType);
   }
 
   private void handleDungeons()
@@ -70,7 +74,8 @@ public class GeoMusicLoader
     int dungeonId=dungeon.getIdentifier();
     PropertiesSet itemProps=_facade.loadProperties(dungeonId+DATConstants.DBPROPERTIES_OFFSET);
     int musicType=((Integer)itemProps.getProperty("Dungeon_Music")).intValue();
-    System.out.println(dungeon+" => "+musicType);
+    String musicLabel=_musicMapper.getLabel(musicType);
+    System.out.println(dungeon+" => Dungeon_Music="+musicLabel);
   }
 
   /**
