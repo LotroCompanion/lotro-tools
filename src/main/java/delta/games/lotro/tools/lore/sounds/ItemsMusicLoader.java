@@ -6,7 +6,13 @@ import java.util.List;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.data.enums.AbstractMapper;
+import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.data.enums.MapperUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 
@@ -62,7 +68,31 @@ public class ItemsMusicLoader
     long category=((Long)itemProps.getProperty("Item_Decoration_Category")).longValue();
     int propertyId=((Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Name")).intValue();
     int propertyValue=((Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Value")).intValue();
-    System.out.println("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue);
+    EnumMapper enumMapper=findEnumForProperty(propertyId);
+    String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue):"?";
+    System.out.println("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue+" ("+valueLabel+")");
+  }
+
+  private EnumMapper findEnumForProperty(int propertyId)
+  {
+    PropertiesRegistry registry=_facade.getPropertiesRegistry();
+    PropertyDefinition propertyDef=registry.getPropertyDef(propertyId);
+    if (propertyDef==null)
+    {
+      return null;
+    }
+    PropertyType type=propertyDef.getPropertyType();
+    if (type!=PropertyType.ENUM_MAPPER)
+    {
+      return null;
+    }
+    int enumId=propertyDef.getData();
+    AbstractMapper mapper=MapperUtils.getEnum(_facade,enumId);
+    if (mapper instanceof EnumMapper)
+    {
+      return (EnumMapper)mapper;
+    }
+    return null;
   }
 
   /**
