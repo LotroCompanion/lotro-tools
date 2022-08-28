@@ -1,9 +1,14 @@
 package delta.games.lotro.tools.lore.sounds;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.script.Script;
 import delta.games.lotro.dat.data.script.ScriptNode;
 import delta.games.lotro.dat.data.script.ScriptNodeData;
@@ -17,9 +22,35 @@ import delta.games.lotro.dat.data.script.port.SwitchPortData;
  * Inspects scripts to find sounds with their context (area, house item...).
  * @author DAM
  */
-public class ScriptsInspector
+public class ScriptsInspectorForSounds
 {
-  private List<PropertyValue> _propertyValues;
+  private static final Logger LOGGER=Logger.getLogger(ScriptsInspectorForSounds.class);
+
+  // Context
+  private Deque<List<PropertyValue>> _context;
+  private SoundsDataAggregator _aggregator;
+
+  private EnumMapper _channel;
+
+  /**
+   * Constructor.
+   * @param channel Sound channel enum.
+   */
+  public ScriptsInspectorForSounds(EnumMapper channel)
+  {
+    _channel=channel;
+    _context=new LinkedList<List<PropertyValue>>();
+    _aggregator=new SoundsDataAggregator();
+  }
+
+  /**
+   * Get the sounds data aggregator.
+   * @return the sounds data aggregator.
+   */
+  public SoundsDataAggregator getAggregator()
+  {
+    return _aggregator;
+  }
 
   /**
    * Inspect a scripts table.
@@ -58,24 +89,65 @@ public class ScriptsInspector
   {
     ScriptNodeType nodeType=parent.getNodeType();
     ScriptPortType portType=port.getPortType();
+    boolean doContext=false;
     if ((nodeType==ScriptNodeType.SWITCH) && (portType==ScriptPortType.SWITCH_VALUE))
     {
       SwitchPortData data=(SwitchPortData)port.getData();
       List<PropertyValue> propertyValues=data.getProperties();
-      setContext(propertyValues);
+      addContext(propertyValues);
+      doContext=true;
     }
     // Context is active during child nodes inspection
     for(ScriptNode childNode : port.getNodes())
     {
       inspectScriptNode(childNode);
     }
-    // Clear context
-    setContext(null);
+    if (doContext)
+    {
+      // Clear context
+      removeContext();
+    }
   }
 
-  private void setContext(List<PropertyValue> propertyValues)
+  private void addContext(List<PropertyValue> propertyValues)
   {
-    _propertyValues=propertyValues;
+    _context.add(propertyValues);
+  }
+
+  private void removeContext()
+  {
+    _context.pop();
+  }
+
+  private void showContext()
+  {
+    int nb=getContextPropertiesCount();
+    if (nb>0)
+    {
+      System.out.println("With context:");
+      for(List<PropertyValue> values : _context)
+      {
+        System.out.println("#");
+        for(PropertyValue value : values)
+        {
+          System.out.println("\t"+value);
+        }
+      }
+    }
+    else
+    {
+      System.out.println("No context");
+    }
+  }
+
+  private int getContextPropertiesCount()
+  {
+    int nb=0;
+    for(List<PropertyValue> values : _context)
+    {
+      nb+=values.size();
+    }
+    return nb;
   }
 
   private void handleSoundNode(ScriptNode node)
@@ -85,15 +157,14 @@ public class ScriptsInspector
     {
       PropertiesSet props=data.getProperties();
       Integer soundID=(Integer)props.getProperty("SoundScript_SoundID");
-      System.out.println("Found sound ID: "+soundID);
-      if ((_propertyValues!=null) && (_propertyValues.size()>0))
+      Integer soundChannelID=(Integer)props.getProperty("SoundScript_Channel");
+      if (LOGGER.isDebugEnabled())
       {
-        System.out.println("With context:");
-        for(PropertyValue propertyValue : _propertyValues)
-        {
-          System.out.println("\t"+propertyValue);
-        }
+        String soundChannel=(soundChannelID!=null)?_channel.getLabel(soundChannelID.intValue()):null;
+        LOGGER.debug("Found sound ID: "+soundID+" ("+soundChannel+")");
+        showContext();
       }
+      _aggregator.handleSound(soundID.intValue(),soundChannelID.intValue(),_context);
     }
   }
 }
