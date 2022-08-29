@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -28,19 +29,20 @@ public class ScriptsInspectorForSounds
 
   // Context
   private Deque<List<PropertyValue>> _context;
+  // Data aggregator
   private SoundsDataAggregator _aggregator;
 
   private EnumMapper _channel;
 
   /**
    * Constructor.
-   * @param channel Sound channel enum.
+   * @param facade Date facade.
    */
-  public ScriptsInspectorForSounds(EnumMapper channel)
+  public ScriptsInspectorForSounds(DataFacade facade)
   {
-    _channel=channel;
+    _channel=facade.getEnumsManager().getEnumMapper(587203405);
     _context=new LinkedList<List<PropertyValue>>();
-    _aggregator=new SoundsDataAggregator();
+    _aggregator=new SoundsDataAggregator(facade);
   }
 
   /**
@@ -156,15 +158,15 @@ public class ScriptsInspectorForSounds
     if (data!=null)
     {
       PropertiesSet props=data.getProperties();
-      Integer soundID=(Integer)props.getProperty("SoundScript_SoundID");
-      Integer soundChannelID=(Integer)props.getProperty("SoundScript_Channel");
+      int soundID=((Integer)props.getProperty("SoundScript_SoundID")).intValue();
+      int soundChannelID=((Integer)props.getProperty("SoundScript_Channel")).intValue();
       if (LOGGER.isDebugEnabled())
       {
-        String soundChannel=(soundChannelID!=null)?_channel.getLabel(soundChannelID.intValue()):null;
+        String soundChannel=_channel.getLabel(soundChannelID);
         LOGGER.debug("Found sound ID: "+soundID+" ("+soundChannel+")");
         showContext();
       }
-      _aggregator.handleSound(soundID.intValue(),soundChannelID.intValue(),_context);
+      _aggregator.handleSound(soundID,soundChannelID,_context);
     }
   }
 }

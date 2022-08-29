@@ -8,22 +8,27 @@ import java.util.Map;
 
 import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.lotro.jukebox.core.model.SoundDescription;
 
 /**
- * @author dm
+ * Sounds data aggregator.
+ * @author DAM
  */
 public class SoundsDataAggregator
 {
+  private DataFacade _facade;
   private SoundsRegistry _soundsRegistry;
   private Map<PropertyDefinition,PropertySoundsRegistry> _propertyBasedRegistry;
 
   /**
    * Constructor.
+   * @param facade Date facade.
    */
-  public SoundsDataAggregator()
+  public SoundsDataAggregator(DataFacade facade)
   {
+    _facade=facade;
     _soundsRegistry=new SoundsRegistry();
     _propertyBasedRegistry=new HashMap<PropertyDefinition,PropertySoundsRegistry>();
   }
@@ -79,7 +84,7 @@ public class SoundsDataAggregator
     PropertySoundsRegistry registry=_propertyBasedRegistry.get(propertyDefinition);
     if (registry==null)
     {
-      registry=new PropertySoundsRegistry(propertyDefinition);
+      registry=new PropertySoundsRegistry(_facade,propertyDefinition);
       _propertyBasedRegistry.put(propertyDefinition,registry);
     }
     registry.registerSound(value,sound);
@@ -116,4 +121,3 @@ public class SoundsDataAggregator
     }
   }
 }
-

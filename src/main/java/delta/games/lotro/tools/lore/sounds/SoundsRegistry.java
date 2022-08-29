@@ -52,7 +52,7 @@ public class SoundsRegistry
       SoundType previousType=ret.getType();
       if (previousType!=type)
       {
-        LOGGER.warn("Sound ID "+soundID+" is used for channel "+previousType+" and "+type);
+        //LOGGER.warn("Sound ID "+soundID+" is used for channel "+previousType+" and "+type);
       }
     }
     return ret;

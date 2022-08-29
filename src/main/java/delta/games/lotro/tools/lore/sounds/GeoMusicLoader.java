@@ -57,6 +57,7 @@ public class GeoMusicLoader
     int areaType=((Integer)itemProps.getProperty("Area_VisitedAreaType")).intValue();
     String musicLabel=_musicMapper.getLabel(musicType);
     System.out.println(area+" => Ambient_MusicType="+musicLabel+", area type="+areaType);
+    // No Area_Music
   }
 
   private void handleDungeons()

@@ -16,12 +16,10 @@ public class MainSoundsDataLoader
   private static final Logger LOGGER=Logger.getLogger(MainSoundsDataLoader.class);
 
   private DataFacade _facade;
-  private EnumMapper _channel;
 
   private MainSoundsDataLoader()
   {
     _facade=new DataFacade();
-    _channel=_facade.getEnumsManager().getEnumMapper(587203405);
   }
 
   private ScriptsTable loadScript(int id)
@@ -46,7 +44,7 @@ public class MainSoundsDataLoader
         0x700042F, // Notes
         0x700000D, 0x700001C, 0x7000008, 0x7000000
     };
-    ScriptsInspectorForSounds inspector=new ScriptsInspectorForSounds(_channel);
+    ScriptsInspectorForSounds inspector=new ScriptsInspectorForSounds(_facade);
     for(int id : ids)
     {
       ScriptsTable table=loadScript(id);

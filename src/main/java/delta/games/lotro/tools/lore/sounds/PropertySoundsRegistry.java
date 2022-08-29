@@ -8,7 +8,11 @@ import java.util.Map;
 
 import delta.common.utils.id.IdentifiableComparator;
 import delta.common.utils.io.streams.IndentableStream;
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.data.enums.AbstractMapper;
+import delta.games.lotro.dat.data.enums.MapperUtils;
 import delta.lotro.jukebox.core.model.SoundDescription;
 
 /**
@@ -17,15 +21,18 @@ import delta.lotro.jukebox.core.model.SoundDescription;
  */
 public class PropertySoundsRegistry
 {
+  private DataFacade _facade;
   private PropertyDefinition _property;
   private Map<Integer,Map<Integer,SoundDescription>> _sounds;
 
   /**
    * Constructor.
+   * @param facade Date facade.
    * @param property Managed property.
    */
-  public PropertySoundsRegistry(PropertyDefinition property)
+  public PropertySoundsRegistry(DataFacade facade, PropertyDefinition property)
   {
+    _facade=facade;
     _property=property;
     _sounds=new HashMap<Integer,Map<Integer,SoundDescription>>();
   }
@@ -97,7 +104,8 @@ public class PropertySoundsRegistry
     List<Integer> values=getPropertyValues();
     for(Integer value : values)
     {
-      out.println("Value: "+value);
+      String meaning=getPropertyValueMeaning(value.intValue());
+      out.println("Value: "+value+((meaning!=null)?" ("+meaning+")":""));
       List<SoundDescription> sounds=getSoundsForValue(value.intValue());
       out.incrementIndendationLevel();
       for(SoundDescription sound : sounds)
@@ -108,4 +116,16 @@ public class PropertySoundsRegistry
     }
     out.decrementIndentationLevel();
   }
+
+  private String getPropertyValueMeaning(int value)
+  {
+    PropertyType type=_property.getPropertyType();
+    if (type==PropertyType.ENUM_MAPPER)
+    {
+      AbstractMapper mapper=MapperUtils.getEnum(_facade,_property.getData());
+      return mapper.getLabel(value);
+    }
+    return null;
+  }
 }
+
