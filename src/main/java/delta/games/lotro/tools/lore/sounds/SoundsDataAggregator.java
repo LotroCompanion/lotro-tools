@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import delta.common.utils.io.streams.IndentableStream;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.lotro.jukebox.core.model.SoundDescription;
+import delta.lotro.jukebox.core.model.SoundType;
 
 /**
  * Sounds data aggregator.
@@ -20,6 +21,7 @@ public class SoundsDataAggregator
 {
   private DataFacade _facade;
   private SoundsRegistry _soundsRegistry;
+  private SoundAnalyzer _analyzer;
   private Map<PropertyDefinition,PropertySoundsRegistry> _propertyBasedRegistry;
 
   /**
@@ -29,8 +31,18 @@ public class SoundsDataAggregator
   public SoundsDataAggregator(DataFacade facade)
   {
     _facade=facade;
+    _analyzer=new SoundAnalyzer(facade);
     _soundsRegistry=new SoundsRegistry();
     _propertyBasedRegistry=new HashMap<PropertyDefinition,PropertySoundsRegistry>();
+  }
+
+  /**
+   * Get the sounds registry.
+   * @return the sounds registry.
+   */
+  public SoundsRegistry getSoundsRegistry()
+  {
+    return _soundsRegistry;
   }
 
   /**
@@ -65,7 +77,7 @@ public class SoundsDataAggregator
       {
         continue;
       }
-      SoundDescription sound=_soundsRegistry.registerSound(soundID,soundChannel);
+      SoundDescription sound=getSound(soundID,soundChannel);
       for(PropertyValue propertyValue : values)
       {
         Object value=propertyValue.getValue();
@@ -77,6 +89,23 @@ public class SoundsDataAggregator
         }
       }
     }
+  }
+
+  private SoundDescription getSound(int soundID, int soundChannel)
+  {
+    SoundDescription sound=_soundsRegistry.getSound(soundID);
+    if (sound==null)
+    {
+      sound=_analyzer.handleSound(soundID);
+      if (sound==null)
+      {
+        return null;
+      }
+      _soundsRegistry.registerSound(soundID,sound);
+    }
+    SoundType type=SoundsRegistry.getSoundType(soundChannel);
+    sound.addType(type);
+    return sound;
   }
 
   private void registerSound(PropertyDefinition propertyDefinition, int value, SoundDescription sound)

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import delta.common.utils.id.IdentifiableComparator;
 import delta.lotro.jukebox.core.model.SoundDescription;
 import delta.lotro.jukebox.core.model.SoundType;
@@ -18,8 +16,6 @@ import delta.lotro.jukebox.core.model.SoundType;
  */
 public class SoundsRegistry
 {
-  private static final Logger LOGGER=Logger.getLogger(SoundsRegistry.class);
-
   private Map<Integer,SoundDescription> _sounds;
 
   /**
@@ -33,28 +29,23 @@ public class SoundsRegistry
   /**
    * Register a sound.
    * @param soundID Sound identifier.
-   * @param soundChannel Sound channel.
-   * @return A sound description.
+   * @param sound Sound to register.
    */
-  public SoundDescription registerSound(int soundID, int soundChannel)
+  public void registerSound(int soundID, SoundDescription sound)
   {
     Integer key=Integer.valueOf(soundID);
-    SoundType type=getSoundType(soundChannel);
+    _sounds.put(key,sound);
+  }
+
+  /**
+   * Get a sound using its identifier.
+   * @param soundID Sound identifier.
+   * @return A sound or <code>null<:code> if not found.
+   */
+  public SoundDescription getSound(int soundID)
+  {
+    Integer key=Integer.valueOf(soundID);
     SoundDescription ret=_sounds.get(key);
-    if (ret==null)
-    {
-      ret=new SoundDescription(soundID);
-      ret.setType(type);
-      _sounds.put(key,ret);
-    }
-    else
-    {
-      SoundType previousType=ret.getType();
-      if (previousType!=type)
-      {
-        //LOGGER.warn("Sound ID "+soundID+" is used for channel "+previousType+" and "+type);
-      }
-    }
     return ret;
   }
 
@@ -69,7 +60,12 @@ public class SoundsRegistry
     return ret;
   }
 
-  private SoundType getSoundType(int soundChannel)
+  /**
+   * Get the sound type from the channel ID.
+   * @param soundChannel Channel ID.
+   * @return A sound type or <code>null</code> if not found.
+   */
+  public static SoundType getSoundType(int soundChannel)
   {
     if (soundChannel==1) return SoundType.COMBAT;
     if (soundChannel==2) return SoundType.MUSIC;

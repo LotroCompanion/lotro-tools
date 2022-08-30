@@ -1,11 +1,16 @@
 package delta.games.lotro.tools.lore.sounds;
 
+import java.io.File;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.script.ScriptsTable;
 import delta.games.lotro.dat.loaders.script.ScriptTableLoader;
+import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.lotro.jukebox.core.model.SoundDescription;
+import delta.lotro.jukebox.core.model.io.xml.SoundsXMLWriter;
 
 /**
  * Loader for sounds data.
@@ -52,6 +57,10 @@ public class MainSoundsDataLoader
     }
     SoundsDataAggregator aggregator=inspector.getAggregator();
     aggregator.dump();
+    SoundsRegistry registry=aggregator.getSoundsRegistry();
+    List<SoundDescription> sounds=registry.getKnownSounds();
+    File toFile=GeneratedFiles.SOUNDS;
+    SoundsXMLWriter.writeSoundsFile(toFile,sounds);
   }
 
   /**

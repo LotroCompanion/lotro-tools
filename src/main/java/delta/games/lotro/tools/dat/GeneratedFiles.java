@@ -4,6 +4,7 @@ import java.io.File;
 
 import delta.games.lotro.config.DataFiles;
 import delta.games.lotro.config.LotroCoreConfig;
+import delta.lotro.jukebox.core.config.LotroJukeboxCoreConfig;
 
 /**
  * Constants for files used in the generation of data from the DAT files.
@@ -368,4 +369,11 @@ public class GeneratedFiles
    * Rewards tracks.
    */
   public static final File REWARDS_TRACKS=LotroCoreConfig.getInstance().getFile(DataFiles.REWARDS_TRACKS);
+
+  // For the jukebox
+  /**
+   * Sounds.
+   */
+  public static final File SOUNDS=LotroJukeboxCoreConfig.getInstance().getFile(delta.lotro.jukebox.core.config.DataFiles.SOUNDS);
+
 }

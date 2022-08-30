@@ -110,7 +110,7 @@ public class PropertySoundsRegistry
       out.incrementIndendationLevel();
       for(SoundDescription sound : sounds)
       {
-        out.println("Sound: ID="+sound.getIdentifier()+", channel: "+sound.getType());
+        out.println("Sound: ID="+sound.getIdentifier()+", channel: "+sound.getTypes());
       }
       out.decrementIndentationLevel();
     }
