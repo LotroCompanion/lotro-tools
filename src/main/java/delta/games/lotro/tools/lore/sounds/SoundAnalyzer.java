@@ -1,19 +1,14 @@
 package delta.games.lotro.tools.lore.sounds;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import com.github.trilarion.sound.vorbis.jcraft.jorbis.VorbisFile;
-
-import delta.common.utils.io.FileIO;
 import delta.games.lotro.dat.archive.DetailedFileEntry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.SoundInfo;
 import delta.games.lotro.dat.loaders.SoundInfoLoader;
 import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundFormat;
 
 /**
  * Sound analyzer.
@@ -63,55 +58,14 @@ public class SoundAnalyzer
       return null;
     }
     byte[] soundData=entry.getData();
-    int rawLength=soundData.length;
-    float duration=computeDuration(soundData);
+    byte[] rawSoundData=SoundInfoLoader.decodeSound(new ByteArrayInputStream(soundData));
+    int rawLength=rawSoundData.length;
     SoundDescription ret=new SoundDescription(soundID);
     ret.setName(soundName);
-    ret.setDuration((int)duration);
-    ret.setFormat(SoundFormat.OGG_VORBIS);
     ret.setRawSize(rawLength);
     long date=entry.getEntry().getTimestamp();
     ret.setTimestamp(date);
-    return ret;
-  }
-
-  /**
-   * Compute sound duration.
-   * @param soundData Raw sound data.
-   * @return A duration in seconds.
-   */
-  private float computeDuration(byte[] soundData)
-  {
-    float ret=0;
-    VorbisFile f=null;
-    try
-    {
-      File tmp=new File("tmp.ogg");
-      FileIO.writeFile(tmp,soundData);
-      f=new VorbisFile(tmp.getAbsolutePath());
-      ret=f.time_total(-1);
-    }
-    catch(Exception e)
-    {
-      LOGGER.warn("Error when computing sound duration", e);
-      e.printStackTrace();
-    }
-    finally
-    {
-      /*
-      if (f!=null)
-      {
-        try
-        {
-          f.close();
-        }
-        catch(IOException ioe)
-        {
-          LOGGER.warn("Error when closing sound file!", ioe);
-        }
-      }
-      */
-    }
+    SoundUtils.inspectSound(rawSoundData,ret);
     return ret;
   }
 }
