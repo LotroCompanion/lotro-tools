@@ -40,6 +40,7 @@ import delta.games.lotro.tools.dat.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
+import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
@@ -171,6 +172,8 @@ public class MainDatLoader
     new MainBillingGroupsLoader(_facade).doIt();
     // Rewards tracks
     new MainDatRewardsTracksLoader(_facade).doIt();
+    // Hobbies
+    new MainHobbiesLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -289,6 +292,10 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
     // Billing groups
     deleteFile(GeneratedFiles.BILLING_GROUPS);
+    // Hobbies
+    deleteFile(GeneratedFiles.HOBBIES);
+    deleteFile(GeneratedFiles.HOBBY_ICONS);
+    deleteDirectory(MainHobbiesLoader.HOBBY_ICONS_DIR);
     // Misc
     deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
     deleteFile(GeneratedFiles.WORLD_EVENTS);

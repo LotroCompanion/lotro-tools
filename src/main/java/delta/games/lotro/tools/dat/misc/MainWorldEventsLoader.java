@@ -25,7 +25,7 @@ public class MainWorldEventsLoader
   }
 
   /**
-   * Load specific buffs.
+   * Load world events.
    */
   public void doIt()
   {

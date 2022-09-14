@@ -369,6 +369,14 @@ public class GeneratedFiles
    * Rewards tracks.
    */
   public static final File REWARDS_TRACKS=LotroCoreConfig.getInstance().getFile(DataFiles.REWARDS_TRACKS);
+  /**
+   * Hobbies.
+   */
+  public static final File HOBBIES=LotroCoreConfig.getInstance().getFile(DataFiles.HOBBIES);
+  /**
+   * Hobby icons.
+   */
+  public static final File HOBBY_ICONS=new File("../lotro-data/hobbies/hobbyIcons.zip").getAbsoluteFile();
 
   // For the jukebox
   /**
