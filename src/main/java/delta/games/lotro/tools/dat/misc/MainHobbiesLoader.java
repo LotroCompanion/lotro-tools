@@ -15,8 +15,13 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.hobbies.HobbyDescription;
 import delta.games.lotro.lore.hobbies.HobbyTitleEntry;
 import delta.games.lotro.lore.hobbies.io.xml.HobbyDescriptionXMLWriter;
+import delta.games.lotro.lore.hobbies.rewards.HobbyRewardEntry;
+import delta.games.lotro.lore.hobbies.rewards.HobbyRewards;
+import delta.games.lotro.lore.hobbies.rewards.HobbyRewardsProfile;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.lore.maps.Territory;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -25,7 +30,7 @@ import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.utils.StringUtils;
 
 /**
- * Loader for world events.
+ * Loader for hobbies data.
  * @author DAM
  */
 public class MainHobbiesLoader
@@ -145,13 +150,47 @@ public class MainHobbiesLoader
       }
     }
     // Rewards
-    handleRewards(props);
+    handleRewards(props,ret.getRewards());
     return ret;
   }
 
-  private void handleRewards(PropertiesSet props)
+  private void handleRewards(PropertiesSet props, HobbyRewards rewards)
   {
-    // TODO
+    Object[] profilesArray=(Object[])props.getProperty("Hobby_TreasureProfileList");
+    for(Object profileObj : profilesArray)
+    {
+      PropertiesSet profileProps=(PropertiesSet)profileObj;
+      int territoryID=((Integer)profileProps.getProperty("Hobby_Territory")).intValue();
+      int profileID=((Integer)profileProps.getProperty("Hobby_TreasureProfile")).intValue();
+      HobbyRewardsProfile profile=null;
+      if (profileID!=0)
+      {
+        profile=handleProfile(profileID);
+      }
+      rewards.registerProfile(territoryID,profile);
+    }
+  }
+
+  private HobbyRewardsProfile handleProfile(int profileID)
+  {
+    HobbyRewardsProfile profile=new HobbyRewardsProfile();
+    PropertiesSet props=_facade.loadProperties(profileID+DATConstants.DBPROPERTIES_OFFSET);
+    Object[] itemsArray=(Object[])props.getProperty("HobbyRewardProfile_ItemArray");
+    for(Object itemObj : itemsArray)
+    {
+      PropertiesSet entryProps=(PropertiesSet)itemObj;
+      int itemID=((Integer)entryProps.getProperty("HobbyRewardProfile_Item")).intValue();
+      int minProficiency=((Integer)entryProps.getProperty("HobbyRewardProfile_MinProficiency")).intValue();
+      int maxProficiency=((Integer)entryProps.getProperty("HobbyRewardProfile_MaxProficiency")).intValue();
+      int weight=((Integer)entryProps.getProperty("HobbyRewardProfile_Weight")).intValue();
+      Item item=ItemsManager.getInstance().getItem(itemID);
+      if (item!=null)
+      {
+        HobbyRewardEntry entry=new HobbyRewardEntry(item,minProficiency,maxProficiency,weight);
+        profile.addEntry(entry);
+      }
+    }
+    return profile;
   }
 
   /**
