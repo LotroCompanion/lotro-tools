@@ -20,8 +20,6 @@ import delta.games.lotro.lore.hobbies.rewards.HobbyRewards;
 import delta.games.lotro.lore.hobbies.rewards.HobbyRewardsProfile;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.maps.GeoAreasManager;
-import delta.games.lotro.lore.maps.Territory;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -173,7 +171,7 @@ public class MainHobbiesLoader
 
   private HobbyRewardsProfile handleProfile(int profileID)
   {
-    HobbyRewardsProfile profile=new HobbyRewardsProfile();
+    HobbyRewardsProfile profile=new HobbyRewardsProfile(profileID);
     PropertiesSet props=_facade.loadProperties(profileID+DATConstants.DBPROPERTIES_OFFSET);
     Object[] itemsArray=(Object[])props.getProperty("HobbyRewardProfile_ItemArray");
     for(Object itemObj : itemsArray)
