@@ -55,6 +55,29 @@ public class LandblockLoader
       {
         ret.setParentArea(areaId.intValue());
       }
+      /*
+      {
+        Integer value=(Integer)props.getProperty("Ambient_MusicRegion");
+        if ((value!=null) && (value.intValue()>1))
+        {
+          System.out.println("R="+region+",BX="+blockX+",BY="+blockY+" => Ambient_MusicRegion="+value);
+        }
+      }
+      {
+        Integer value=(Integer)props.getProperty("Ambient_MusicType");
+        if ((value!=null) && (value.intValue()>1))
+        {
+          System.out.println("R="+region+",BX="+blockX+",BY="+blockY+" => Ambient_MusicType="+value);
+        }
+      }
+      {
+        Integer value=(Integer)props.getProperty("Ambient_SoundEnum_BlockMapOverride");
+        if ((value!=null) && (value.intValue()>1))
+        {
+          System.out.println("R="+region+",BX="+blockX+",BY="+blockY+" => Ambient_SoundEnum_BlockMapOverride="+value);
+        }
+      }
+      */
     }
     // Dungeon ID
     PropertiesSet lbiProps=lbi.getProps();

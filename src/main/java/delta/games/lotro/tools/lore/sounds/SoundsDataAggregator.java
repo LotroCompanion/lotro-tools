@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.lore.sounds;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyDefinitionComparator;
 import delta.lotro.jukebox.core.model.SoundDescription;
 import delta.lotro.jukebox.core.model.SoundType;
 
@@ -52,6 +54,7 @@ public class SoundsDataAggregator
   public List<PropertyDefinition> getProperties()
   {
     List<PropertyDefinition> ret=new ArrayList<PropertyDefinition>(_propertyBasedRegistry.keySet());
+    Collections.sort(ret,new PropertyDefinitionComparator());
     return ret;
   }
 
