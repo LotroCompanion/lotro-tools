@@ -56,11 +56,25 @@ public class MainSoundsDataLoader
       inspector.inspect(table);
     }
     SoundsDataAggregator aggregator=inspector.getAggregator();
-    aggregator.dump();
+    SoundContextManager contextMgr=aggregator.getSoundContextManager();
+    //aggregator.dump();
+    // Load context data
+    handleContextData(contextMgr);
+    // Write sounds
     SoundsRegistry registry=aggregator.getSoundsRegistry();
     List<SoundDescription> sounds=registry.getKnownSounds();
     File toFile=GeneratedFiles.SOUNDS;
     SoundsXMLWriter.writeSoundsFile(toFile,sounds);
+  }
+
+  private void handleContextData(SoundContextManager contextMgr)
+  {
+    // Items
+    ItemsMusicLoader itemsMusicLoader=new ItemsMusicLoader(_facade,contextMgr);
+    itemsMusicLoader.doIt();
+    // Areas
+    GeoMusicLoader geoMusicLoader=new GeoMusicLoader(_facade,contextMgr);
+    geoMusicLoader.doIt();
   }
 
   /**

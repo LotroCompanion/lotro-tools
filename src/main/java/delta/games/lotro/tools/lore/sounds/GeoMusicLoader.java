@@ -5,11 +5,13 @@ import java.util.List;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.lotro.jukebox.core.model.SoundDescription;
 
 /**
  * Loads music data for areas/dungeons. 
@@ -19,14 +21,17 @@ public class GeoMusicLoader
 {
   private DataFacade _facade;
   private EnumMapper _musicMapper;
+  private SoundContextManager _contextMgr;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param contextMgr Context manager.
    */
-  public GeoMusicLoader(DataFacade facade)
+  public GeoMusicLoader(DataFacade facade, SoundContextManager contextMgr)
   {
     _facade=facade;
+    _contextMgr=contextMgr;
     _musicMapper=facade.getEnumsManager().getEnumMapper(587202880);
   }
 
@@ -57,6 +62,13 @@ public class GeoMusicLoader
     int areaType=((Integer)itemProps.getProperty("Area_VisitedAreaType")).intValue();
     String musicLabel=_musicMapper.getLabel(musicType);
     System.out.println(area+" => Ambient_MusicType="+musicLabel+", area type="+areaType);
+    PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDefByName("Area_Music");
+    PropertySoundsRegistry registry=_contextMgr.getProperty(propertyDef);
+    List<SoundDescription> sounds=registry.getSoundsForValue(musicType);
+    for(SoundDescription sound : sounds)
+    {
+      System.out.println("\t"+sound);
+    }
     // No Area_Music
   }
 
@@ -77,17 +89,12 @@ public class GeoMusicLoader
     int musicType=((Integer)itemProps.getProperty("Dungeon_Music")).intValue();
     String musicLabel=_musicMapper.getLabel(musicType);
     System.out.println(dungeon+" => Dungeon_Music="+musicLabel);
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    GeoMusicLoader loader=new GeoMusicLoader(facade);
-    loader.doIt();
-    facade.dispose();
+    PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDefByName("Area_Music");
+    PropertySoundsRegistry registry=_contextMgr.getProperty(propertyDef);
+    List<SoundDescription> sounds=registry.getSoundsForValue(musicType);
+    for(SoundDescription sound : sounds)
+    {
+      System.out.println("\t"+sound);
+    }
   }
 }

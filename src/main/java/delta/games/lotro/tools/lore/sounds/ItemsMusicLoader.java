@@ -15,6 +15,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.enums.MapperUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.lotro.jukebox.core.model.SoundDescription;
 
 /**
  * Loads music data for items. 
@@ -23,14 +24,17 @@ import delta.games.lotro.lore.items.ItemsManager;
 public class ItemsMusicLoader
 {
   private DataFacade _facade;
+  private SoundContextManager _contextMgr;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param contextMgr Context manager.
    */
-  public ItemsMusicLoader(DataFacade facade)
+  public ItemsMusicLoader(DataFacade facade, SoundContextManager contextMgr)
   {
     _facade=facade;
+    _contextMgr=contextMgr;
   }
 
   /**
@@ -71,6 +75,19 @@ public class ItemsMusicLoader
     EnumMapper enumMapper=findEnumForProperty(propertyId);
     String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue):"?";
     System.out.println("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue+" ("+valueLabel+")");
+    List<SoundDescription> sounds=findSounds(propertyId,propertyValue);
+    for(SoundDescription sound : sounds)
+    {
+      System.out.println("\t"+sound);
+    }
+  }
+
+  private List<SoundDescription> findSounds(int propertyID, int value)
+  {
+    PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDef(propertyID);
+    PropertySoundsRegistry registry=_contextMgr.getProperty(propertyDef);
+    List<SoundDescription> sounds=registry.getSoundsForValue(value);
+    return sounds;
   }
 
   private EnumMapper findEnumForProperty(int propertyId)
@@ -93,17 +110,5 @@ public class ItemsMusicLoader
       return (EnumMapper)mapper;
     }
     return null;
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    ItemsMusicLoader loader=new ItemsMusicLoader(facade);
-    loader.doIt();
-    facade.dispose();
   }
 }
