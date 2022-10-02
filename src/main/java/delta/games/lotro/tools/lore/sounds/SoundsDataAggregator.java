@@ -1,19 +1,15 @@
 package delta.games.lotro.tools.lore.sounds;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.PropertyDefinitionComparator;
 import delta.lotro.jukebox.core.model.SoundDescription;
 import delta.lotro.jukebox.core.model.SoundType;
+import delta.lotro.jukebox.core.model.SoundsManager;
 
 /**
  * Sounds data aggregator.
@@ -24,7 +20,7 @@ public class SoundsDataAggregator
   private DataFacade _facade;
   private SoundsRegistry _soundsRegistry;
   private SoundAnalyzer _analyzer;
-  private Map<PropertyDefinition,PropertySoundsRegistry> _propertyBasedRegistry;
+  private SoundContextManager _contextManager;
 
   /**
    * Constructor.
@@ -35,7 +31,18 @@ public class SoundsDataAggregator
     _facade=facade;
     _analyzer=new SoundAnalyzer(facade);
     _soundsRegistry=new SoundsRegistry();
-    _propertyBasedRegistry=new HashMap<PropertyDefinition,PropertySoundsRegistry>();
+    _contextManager=new SoundContextManager();
+    init();
+  }
+
+  private void init()
+  {
+    // Use sounds manager first
+    List<SoundDescription> sounds=SoundsManager.getInstance().getAllSounds();
+    for(SoundDescription sound : sounds)
+    {
+      _soundsRegistry.registerSound(sound.getIdentifier(),sound);
+    }
   }
 
   /**
@@ -48,14 +55,12 @@ public class SoundsDataAggregator
   }
 
   /**
-   * Get the managed properties.
-   * @return the managed properties.
+   * Get the sound context manager.
+   * @return the sound context manager.
    */
-  public List<PropertyDefinition> getProperties()
+  public SoundContextManager getSoundContextManager()
   {
-    List<PropertyDefinition> ret=new ArrayList<PropertyDefinition>(_propertyBasedRegistry.keySet());
-    Collections.sort(ret,new PropertyDefinitionComparator());
-    return ret;
+    return _contextManager;
   }
 
   /**
@@ -88,7 +93,7 @@ public class SoundsDataAggregator
         {
           Number numberValue=(Number)value;
           int intValue=numberValue.intValue();
-          registerSound(propertyDef,intValue,sound);
+          _contextManager.registerSound(propertyDef,intValue,sound);
         }
       }
     }
@@ -96,30 +101,22 @@ public class SoundsDataAggregator
 
   private SoundDescription getSound(int soundID, int soundChannel)
   {
+    // Check local registry
     SoundDescription sound=_soundsRegistry.getSound(soundID);
     if (sound==null)
     {
+      // Fetch sound in the DAT files
       sound=_analyzer.handleSound(soundID);
       if (sound==null)
       {
         return null;
       }
+      // Register sound in the local registry
       _soundsRegistry.registerSound(soundID,sound);
     }
     SoundType type=SoundsRegistry.getSoundType(soundChannel);
     sound.addType(type);
     return sound;
-  }
-
-  private void registerSound(PropertyDefinition propertyDefinition, int value, SoundDescription sound)
-  {
-    PropertySoundsRegistry registry=_propertyBasedRegistry.get(propertyDefinition);
-    if (registry==null)
-    {
-      registry=new PropertySoundsRegistry(_facade,propertyDefinition);
-      _propertyBasedRegistry.put(propertyDefinition,registry);
-    }
-    registry.registerSound(value,sound);
   }
 
   private int getContextPropertiesCount(Deque<List<PropertyValue>> context)
@@ -145,11 +142,6 @@ public class SoundsDataAggregator
     IndentableStream out=new IndentableStream(System.out);
     int nbSounds=_soundsRegistry.getKnownSounds().size();
     out.println("Nb sounds: "+nbSounds);
-    out.println("Sounds sorted by property");
-    for(PropertyDefinition propertyDefinition : getProperties())
-    {
-      PropertySoundsRegistry registry=_propertyBasedRegistry.get(propertyDefinition);
-      registry.dump(out);
-    }
+    new SoundContextDump(_facade).dump(_contextManager);
   }
 }
