@@ -60,7 +60,7 @@ public class SoundAnalyzer
     byte[] soundData=entry.getData();
     byte[] rawSoundData=SoundInfoLoader.decodeSound(new ByteArrayInputStream(soundData));
     int rawLength=rawSoundData.length;
-    SoundDescription ret=new SoundDescription(soundID);
+    SoundDescription ret=new SoundDescription(soundInfoID);
     ret.setName(soundName);
     ret.setRawSize(rawLength);
     long date=entry.getEntry().getTimestamp();
