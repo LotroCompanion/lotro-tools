@@ -2,10 +2,8 @@ package delta.games.lotro.tools.dat.items.legendary;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,8 +25,6 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.WeaponType;
@@ -46,6 +42,7 @@ import delta.games.lotro.tools.dat.misc.ProgressionControlLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.WeaponTypesUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -64,9 +61,9 @@ public class LegaciesLoader
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
   private LegaciesManager _imbuedLegaciesManager;
-  private EnumMapper _equipmentCategory;
   private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
   private ProgressionControlLoader _progressionControl;
+  private WeaponTypesUtils _weaponUtils;
 
   /**
    * Constructor.
@@ -77,9 +74,9 @@ public class LegaciesLoader
     _facade=facade;
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
     _imbuedLegaciesManager=new LegaciesManager();
-    _equipmentCategory=_facade.getEnumsManager().getEnumMapper(587202636);
-    _progressionControl=new ProgressionControlLoader(_facade);
+    _progressionControl=new ProgressionControlLoader(facade);
     _progressionControl.loadProgressionData();
+    _weaponUtils=new WeaponTypesUtils(facade);
   }
 
   /**
@@ -238,7 +235,7 @@ public class LegaciesLoader
         ImbuedLegacy legacy=loadImbuedLegacy(legacyId);
         // Allowed equipment
         long equipmentCategory=((Long)legacyProps.getProperty("Item_EquipmentCategory")).longValue();
-        Set<WeaponType> weaponTypes=getAllowedEquipment(equipmentCategory);
+        Set<WeaponType> weaponTypes=_weaponUtils.getAllowedEquipment(equipmentCategory);
         if (!weaponTypes.isEmpty())
         {
           legacy.setAllowedWeaponTypes(weaponTypes);
@@ -520,56 +517,6 @@ public class LegaciesLoader
     if (code==24) return EquipmentLocation.CLASS_SLOT; // Burglar_IncomingHealing_65
     if (code==26) return EquipmentLocation.BRIDLE; // Mounted_MomentumMod
     if (code==28) return EquipmentLocation.CLASS_SLOT; // Beorning_HealingPS
-    return null;
-  }
-
-  private Set<WeaponType> getAllowedEquipment(long equipmentCategory)
-  {
-    BitSet equipementBitSet=BitSetUtils.getBitSetFromFlags(equipmentCategory);
-    if (LOGGER.isDebugEnabled())
-    {
-      String allowedEquipementTypes=BitSetUtils.getStringFromBitSet(equipementBitSet,_equipmentCategory, ",");
-      LOGGER.debug("Allowed equipment types:"+allowedEquipementTypes);
-    }
-    Set<WeaponType> ret=new HashSet<WeaponType>();
-    for(int i=0;i<equipementBitSet.size();i++)
-    {
-      if (equipementBitSet.get(i))
-      {
-        WeaponType weaponType=getWeaponType(i+1);
-        if (ret!=null)
-        {
-          ret.add(weaponType);
-        }
-      }
-    }
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("Decoded equipment types:"+ret);
-    }
-    return ret;
-  }
-
-  private WeaponType getWeaponType(int index)
-  {
-    if (index==3) return WeaponType.TWO_HANDED_SWORD;
-    if (index==4) return WeaponType.TWO_HANDED_CLUB;
-    if (index==6) return WeaponType.TWO_HANDED_AXE;
-    if (index==8) return WeaponType.BOW;
-    if (index==12) return WeaponType.ONE_HANDED_HAMMER;
-    if (index==13) return WeaponType.SPEAR;
-    if (index==14) return WeaponType.CROSSBOW;
-    if (index==15) return WeaponType.TWO_HANDED_HAMMER;
-    if (index==16) return WeaponType.HALBERD;
-    if (index==20) return WeaponType.DAGGER;
-    if (index==22) return WeaponType.STAFF;
-    if (index==24) return WeaponType.ONE_HANDED_AXE;
-    if (index==26) return WeaponType.ONE_HANDED_CLUB;
-    if (index==27) return WeaponType.ONE_HANDED_MACE;
-    if (index==28) return WeaponType.ONE_HANDED_SWORD;
-    if (index==39) return WeaponType.RUNE_STONE;
-    if (index==41) return WeaponType.JAVELIN;
-    //LOGGER.warn("Unmanaged weapon type: "+index);
     return null;
   }
 
