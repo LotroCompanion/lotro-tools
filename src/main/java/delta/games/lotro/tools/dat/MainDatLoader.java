@@ -17,6 +17,7 @@ import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
+import delta.games.lotro.tools.dat.characters.RaceDataLoader;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.characters.TraitLoader;
 import delta.games.lotro.tools.dat.characters.VirtueDataLoader;
@@ -104,15 +105,17 @@ public class MainDatLoader
     new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
     new MainStatTomesLoader(_facade).doIt();
-    // Character data
-    new MainCharacterDataLoader(_facade).doIt();
-    new MainProgressionsMerger().doIt();
+    // Race data
+    new RaceDataLoader(_facade).doIt();
     // Titles
     new MainDatTitlesLoader(_facade).doIt();
     // Factions
     new MainDatFactionsLoader(_facade).doIt();
     // Items
     new MainDatItemsLoader(_facade).doIt();
+    new MainProgressionsMerger().doIt();
+    // Character data
+    new MainCharacterDataLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade).doIt();

@@ -28,8 +28,6 @@ public class MainCharacterDataLoader
    */
   public void doIt()
   {
-    // Load race data
-    new RaceDataLoader(_facade).doIt();
     // Load character class data
     new CharacterClassDataLoader(_facade).doIt();
     // Load virtues data
