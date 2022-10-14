@@ -47,6 +47,7 @@ public class CharacterClassDataLoader
   private List<ClassDescription> _classes;
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
+  private ProficienciesLoader _proficiencies;
 
   /**
    * Constructor.
@@ -58,6 +59,7 @@ public class CharacterClassDataLoader
     _classes=new ArrayList<ClassDescription>();
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
+    _proficiencies=new ProficienciesLoader(facade);
   }
 
   private void handleClass(int classId)
@@ -118,6 +120,8 @@ public class CharacterClassDataLoader
         initialGear.addGearElement(element);
       }
     }
+    // Proficiencies
+    _proficiencies.handleClass(classDescription);
     // Default buffs
     /*
     if (characterClass==CharacterClass.CAPTAIN)

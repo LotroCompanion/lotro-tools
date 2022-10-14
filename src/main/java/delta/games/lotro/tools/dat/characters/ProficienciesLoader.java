@@ -5,9 +5,8 @@ import java.util.Set;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassTrait;
-import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -36,28 +35,20 @@ public class ProficienciesLoader
   }
 
   /**
-   * Load trait data.
+   * Handle a class.
+   * @param classDescription Class to use.
    */
-  public void doIt()
+  public void handleClass(ClassDescription classDescription)
   {
-    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
-    {
-      ClassDescription classDescription=ClassesManager.getInstance().getClassDescription(characterClass);
-      handleClass(classDescription);
-    }
-  }
-
-  private void handleClass(ClassDescription classDescription)
-  {
-    System.out.println("Class: "+classDescription.getCharacterClass().getLabel());
+    //System.out.println("Class: "+classDescription.getCharacterClass().getLabel());
     List<ClassTrait> classTraits=classDescription.getTraits();
     for(ClassTrait classTrait : classTraits)
     {
-      handleClassTrait(classTrait);
+      handleClassTrait(classDescription.getProficiencies(),classTrait);
     }
   }
 
-  private void handleClassTrait(ClassTrait classTrait)
+  private void handleClassTrait(ClassProficiencies proficiencies, ClassTrait classTrait)
   {
     TraitDescription trait=classTrait.getTrait();
     int level=classTrait.getRequiredLevel();
@@ -65,28 +56,25 @@ public class ProficienciesLoader
     Long category=(Long)props.getProperty("Trait_Granted_Category");
     if (category!=null)
     {
-      System.out.println("\tTrait: "+trait.getName()+" at level "+level+", Category: "+category);
+      //System.out.println("\tTrait: "+trait.getName()+" at level "+level+", Category: "+category);
       Set<WeaponType> weaponTypes=_weaponUtils.getAllowedEquipment(category.longValue());
       if (!weaponTypes.isEmpty())
       {
-        System.out.println("\t\t=> "+weaponTypes);
+        //System.out.println("\t\t=> "+weaponTypes);
+        for(WeaponType weaponType : weaponTypes)
+        {
+          proficiencies.getWeaponProficiencies().addEntry(weaponType,level);
+        }
       }
       Set<ArmourType> armourTypes=ArmourTypesUtils.getArmourTypes(category.longValue());
       if (!armourTypes.isEmpty())
       {
-        System.out.println("\t\t=> "+armourTypes);
+        //System.out.println("\t\t=> "+armourTypes);
+        for(ArmourType armourType : armourTypes)
+        {
+          proficiencies.getArmourProficiencies().addEntry(armourType,level);
+        }
       }
     }
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    DataFacade facade=new DataFacade();
-    new ProficienciesLoader(facade).doIt();
-    facade.dispose();
   }
 }
