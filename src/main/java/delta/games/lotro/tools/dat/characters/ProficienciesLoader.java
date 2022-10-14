@@ -6,6 +6,7 @@ import java.util.Set;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
+import delta.games.lotro.character.classes.proficiencies.TypedClassProficiencies;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -53,26 +54,62 @@ public class ProficienciesLoader
     TraitDescription trait=classTrait.getTrait();
     int level=classTrait.getRequiredLevel();
     PropertiesSet props=_facade.loadProperties(trait.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
+    // Category
     Long category=(Long)props.getProperty("Trait_Granted_Category");
     if (category!=null)
     {
-      //System.out.println("\tTrait: "+trait.getName()+" at level "+level+", Category: "+category);
-      Set<WeaponType> weaponTypes=_weaponUtils.getAllowedEquipment(category.longValue());
-      if (!weaponTypes.isEmpty())
+      addProficiencies(category,level,proficiencies);
+    }
+    // Stats modifiers
+    Object[] modArray=(Object[])props.getProperty("Mod_Array");
+    if (modArray!=null)
+    {
+      for(Object modArrayEntry : modArray)
       {
-        //System.out.println("\t\t=> "+weaponTypes);
-        for(WeaponType weaponType : weaponTypes)
+        PropertiesSet modEntryProps=(PropertiesSet)modArrayEntry;
+        Integer propertyID=(Integer)modEntryProps.getProperty("Mod_Modified");
+        if ((propertyID!=null) && (propertyID.intValue()==0x1000029C)) // Inventory_AllowedEquipmentCategories
         {
-          proficiencies.getWeaponProficiencies().addEntry(weaponType,level);
+          Long categories=(Long)modEntryProps.getProperty("Inventory_AllowedEquipmentCategories");
+          Integer op=(Integer)modEntryProps.getProperty("Mod_Op");
+          if ((categories!=null) && (op!=null))
+          {
+            if (op.intValue()==3) // OR
+            {
+              addProficiencies(categories,level,proficiencies);
+            }
+          }
         }
       }
-      Set<ArmourType> armourTypes=ArmourTypesUtils.getArmourTypes(category.longValue());
-      if (!armourTypes.isEmpty())
+    }
+  }
+
+  private void addProficiencies(Long category, int level, ClassProficiencies proficiencies)
+  {
+    //System.out.println("\tTrait: "+trait.getName()+" at level "+level+", Category: "+category);
+    Set<WeaponType> weaponTypes=_weaponUtils.getAllowedEquipment(category.longValue());
+    if (!weaponTypes.isEmpty())
+    {
+      //System.out.println("\t\t=> "+weaponTypes);
+      TypedClassProficiencies<WeaponType> weaponProficiencies=proficiencies.getWeaponProficiencies();
+      for(WeaponType weaponType : weaponTypes)
       {
-        //System.out.println("\t\t=> "+armourTypes);
-        for(ArmourType armourType : armourTypes)
+        if (!weaponProficiencies.getEntryValues().contains(weaponType))
         {
-          proficiencies.getArmourProficiencies().addEntry(armourType,level);
+          weaponProficiencies.addEntry(weaponType,level);
+        }
+      }
+    }
+    Set<ArmourType> armourTypes=ArmourTypesUtils.getArmourTypes(category.longValue());
+    if (!armourTypes.isEmpty())
+    {
+      //System.out.println("\t\t=> "+armourTypes);
+      TypedClassProficiencies<ArmourType> armourProficiencies=proficiencies.getArmourProficiencies();
+      for(ArmourType armourType : armourTypes)
+      {
+        if (!armourProficiencies.getEntryValues().contains(armourType))
+        {
+          armourProficiencies.addEntry(armourType,level);
         }
       }
     }
