@@ -2,7 +2,9 @@ package delta.games.lotro.tools.dat.characters;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -315,6 +317,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private void loadTraits(ClassDescription description, PropertiesSet properties)
   {
+    Set<String> knownTraits=new HashSet<String>();
     Object[] traitsProperties=(Object[])properties.getProperty("AdvTable_ClassCharacteristic_List");
     for(Object traitPropertiesObj : traitsProperties)
     {
@@ -323,10 +326,15 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
-      LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
-      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
-      ClassTrait classTrait=new ClassTrait(level,trait);
-      description.addTrait(classTrait);
+      String key=level+"#"+traitId;
+      if (!knownTraits.contains(key))
+      {
+        LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
+        TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+        ClassTrait classTrait=new ClassTrait(level,trait);
+        description.addTrait(classTrait);
+        knownTraits.add(key);
+      }
     }
   }
 
