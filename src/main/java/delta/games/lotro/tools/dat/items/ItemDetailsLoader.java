@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.dat.items;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.races.RaceDescription;
@@ -208,20 +211,18 @@ EffectGenerator_UsageEffectList:
     Object[] usageEffectList=(Object[])props.getProperty("EffectGenerator_UsageEffectList");
     if ((usageEffectList!=null) && (usageEffectList.length>0))
     {
+      Set<Integer> handleEffects=new HashSet<Integer>();
       for(Object entry : usageEffectList)
       {
-        handleEffect(item,(PropertiesSet)entry);
+        PropertiesSet effectProps=(PropertiesSet)entry;
+        handleEffectDataList(item,effectProps);
+        Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
+        if ((effectID!=null) && (!handleEffects.contains(effectID)))
+        {
+          handleEffectID(item,effectID.intValue());
+          handleEffects.add(effectID);
+        }
       }
-    }
-  }
-
-  private void handleEffect(Item item, PropertiesSet effectProps)
-  {
-    handleEffectDataList(item,effectProps);
-    Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
-    if (effectID!=null)
-    {
-      handleEffectID(item,effectID.intValue());
     }
   }
 
