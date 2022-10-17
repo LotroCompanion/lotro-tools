@@ -64,8 +64,9 @@ public class TraitTreesDataLoader
       System.out.println("Branch description: "+branchDescription);
     }
     */
+    TraitTree tree=new TraitTree(traitTreeId);
     int traitTreeType=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
-    TraitTree tree=new TraitTree(traitTreeType);
+    tree.setCode(traitTreeType);
     String traitTreeKey=_traitTreeType.getString(traitTreeType);
     tree.setKey(traitTreeKey);
     LOGGER.info("Loading trait tree for class: "+traitTreeKey);
