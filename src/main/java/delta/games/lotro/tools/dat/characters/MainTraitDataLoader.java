@@ -41,6 +41,8 @@ public class MainTraitDataLoader
   {
     loadPropertiesMap();
     loadTraits();
+    SkimirshTraitsLoader skirmishTraitsLoader=new SkimirshTraitsLoader(_facade);
+    skirmishTraitsLoader.doIt();
   }
 
   private void loadTraits()

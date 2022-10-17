@@ -49,6 +49,10 @@ public class GeneratedFiles
    */
   public static final File TRAIT_ICONS=new File("../lotro-data/traits/traitIcons.zip").getAbsoluteFile();
   /**
+   * Skirmish traits.
+   */
+  public static final File SKIRMISH_TRAITS=LotroCoreConfig.getInstance().getFile(DataFiles.SKIRMISH_TRAITS);
+  /**
    * Stat tomes.
    */
   public static final File STAT_TOMES=LotroCoreConfig.getInstance().getFile(DataFiles.STAT_TOMES);
