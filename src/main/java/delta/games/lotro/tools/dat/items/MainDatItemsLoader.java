@@ -10,10 +10,10 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -106,7 +106,6 @@ public class MainDatItemsLoader
   };
 
   private DataFacade _facade;
-  private int _currentId;
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
   private ConsumablesLoader _consumablesLoader;
@@ -119,6 +118,7 @@ public class MainDatItemsLoader
   private EnumMapper _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
   private LotroEnum<ItemClass> _itemClassEnum;
+  private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
 
@@ -140,12 +140,11 @@ public class MainDatItemsLoader
     _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
+    _equipmentCategoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
     _detailsLoader=new ItemDetailsLoader(_facade);
     _cosmeticLoader=new CosmeticLoader();
   }
 
-  private boolean _debug=false;
-  int nb=0;
   private Item load(int indexDataId, int type)
   {
     Item item=null;
@@ -153,18 +152,10 @@ public class MainDatItemsLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      _currentId=indexDataId;
-      _debug=(_currentId==1879000000);
-      if (_debug)
-      {
-        FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
-        System.out.println(properties.dump());
-      }
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
       String name=DatUtils.getStringProperty(properties,"Name");
       name=StringUtils.removeMarks(name);
       if (!useItem(name,itemClassCode)) return null;
-      nb++;
       item=buildItem(properties);
       _currentItem=item;
       // ID
@@ -408,7 +399,6 @@ public class MainDatItemsLoader
     {
       // Essences
       item.setEssenceSlots(nbSlots);
-      return;
     }
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
@@ -698,10 +688,23 @@ public class MainDatItemsLoader
     weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
   }
 
-  private long getEquipmentCategory(PropertiesSet properties)
+  private int getEquipmentCategory(PropertiesSet properties)
   {
-    Long ret=(Long)properties.getProperty("Item_EquipmentCategory");
-    return (ret!=null)?ret.longValue():0;
+    Long value=(Long)properties.getProperty("Item_EquipmentCategory");
+    long code=(value!=null)?value.longValue():0;
+    if (code!=0)
+    {
+      long mask=1;
+      for(int i=1;i<=64;i++)
+      {
+        if ((code&mask)!=0)
+        {
+          return i;
+        }
+        mask<<=1;
+      }
+    }
+    return 0;
   }
 
   private float computeDps(int itemLevel, ItemQuality quality, PropertiesSet properties)
@@ -744,182 +747,9 @@ public class MainDatItemsLoader
 
   private Item buildItem(PropertiesSet properties)
   {
-    WeaponType weaponType=null;
-    ArmourType armourType=null;
-    long equipmentCategory=getEquipmentCategory(properties);
-    if (equipmentCategory==0)
-    {
-      // Undefined
-    }
-    else if (equipmentCategory==1)
-    {
-      // Ear
-    }
-    else if (equipmentCategory==1L<<1)
-    {
-      // Pocket
-    }
-    else if (equipmentCategory==1L<<2)
-    {
-      weaponType=WeaponType.TWO_HANDED_SWORD;
-    }
-    else if (equipmentCategory==1L<<3)
-    {
-      weaponType=WeaponType.TWO_HANDED_CLUB;
-    }
-    else if (equipmentCategory==1L<<4)
-    {
-      //weaponType=WeaponType.TWO_HANDED_MACE;
-    }
-    else if (equipmentCategory==1L<<5)
-    {
-      weaponType=WeaponType.TWO_HANDED_AXE;
-    }
-    else if (equipmentCategory==1L<<6)
-    {
-      // Instrument
-    }
-    else if (equipmentCategory==1L<<7)
-    {
-      weaponType=WeaponType.BOW;
-    }
-    else if (equipmentCategory==1L<<8)
-    {
-      armourType=ArmourType.MEDIUM;
-    }
-    else if (equipmentCategory==1L<<9)
-    {
-      armourType=ArmourType.HEAVY;
-    }
-    else if (equipmentCategory==1L<<10)
-    {
-      armourType=ArmourType.HEAVY_SHIELD;
-    }
-    else if (equipmentCategory==1L<<11)
-    {
-      weaponType=WeaponType.ONE_HANDED_HAMMER;
-    }
-    else if (equipmentCategory==1L<<12)
-    {
-      weaponType=WeaponType.SPEAR;
-    }
-    else if (equipmentCategory==1L<<13)
-    {
-      weaponType=WeaponType.CROSSBOW;
-    }
-    else if (equipmentCategory==1L<<14)
-    {
-      weaponType=WeaponType.TWO_HANDED_HAMMER;
-    }
-    else if (equipmentCategory==1L<<15)
-    {
-      weaponType=WeaponType.HALBERD;
-    }
-    else if (equipmentCategory==1L<<16)
-    {
-      armourType=ArmourType.SHIELD;
-    }
-    else if (equipmentCategory==1L<<17)
-    {
-      armourType=ArmourType.LIGHT;
-    }
-    else if (equipmentCategory==1L<<18)
-    {
-      // Ring
-    }
-    else if (equipmentCategory==1L<<19)
-    {
-      weaponType=WeaponType.DAGGER;
-    }
-    else if (equipmentCategory==1L<<20)
-    {
-      // Craft Tool
-    }
-    else if (equipmentCategory==1L<<21)
-    {
-      weaponType=WeaponType.STAFF;
-    }
-    else if (equipmentCategory==1L<<22)
-    {
-      // Necklace
-    }
-    else if (equipmentCategory==1L<<23)
-    {
-      weaponType=WeaponType.ONE_HANDED_AXE;
-    }
-    else if (equipmentCategory==1L<<24)
-    {
-      // Class Item
-    }
-    else if (equipmentCategory==1L<<25)
-    {
-      weaponType=WeaponType.ONE_HANDED_CLUB;
-    }
-    else if (equipmentCategory==1L<<26)
-    {
-      weaponType=WeaponType.ONE_HANDED_MACE;
-    }
-    else if (equipmentCategory==1L<<27)
-    {
-      weaponType=WeaponType.ONE_HANDED_SWORD;
-    }
-    else if (equipmentCategory==1L<<28)
-    {
-      // Thrown Weapon
-    }
-    else if (equipmentCategory==1L<<29)
-    {
-      // Armband
-    }
-    else if (equipmentCategory==1L<<30) // Cloak
-    {
-      armourType=ArmourType.LIGHT;
-    }
-    else if (equipmentCategory==1L<<31)
-    {
-      // Cosmetic
-    }
-    else if (equipmentCategory==1L<<33)
-    {
-      // Two-handed implement
-    }
-    else if (equipmentCategory==1L<<36) 
-    {
-      // One-handed implement
-    }
-    else if (equipmentCategory==1L<<38)
-    {
-      weaponType=WeaponType.RUNE_STONE;
-    }
-    else if (equipmentCategory==1L<<39)
-    {
-      armourType=ArmourType.WARDEN_SHIELD;
-    }
-    else if (equipmentCategory==1L<<40)
-    {
-      weaponType=WeaponType.JAVELIN;
-    }
-    else if (equipmentCategory==1L<<42)
-    {
-      // Oath-bound Armaments
-    }
-    else if (equipmentCategory==1L<<43)
-    {
-      // War-steed Item
-    }
-    else if (equipmentCategory==1L<<46)
-    {
-      // Weapon Aura
-    }
-    else if (equipmentCategory==1L<<47)
-    {
-      // Battle gauntlets
-      weaponType=WeaponType.BATTLE_GAUNTLETS;
-    }
-    else
-    {
-      LOGGER.warn("Unmanaged equipment category " + equipmentCategory+" for: "+_currentId);
-    }
+    int equipmentCategoryCode=getEquipmentCategory(properties);
+    WeaponType weaponType=DatEnumsUtils.getWeaponTypeFromEquipmentCategory(equipmentCategoryCode);
+    ArmourType armourType=DatEnumsUtils.getArmourTypeFromEquipmentCategory(equipmentCategoryCode);
     // Legendary stuff?
     Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
     boolean isLegendary=((isAdvancementItem!=null) && (isAdvancementItem.intValue()==1));
@@ -959,7 +789,11 @@ public class MainDatItemsLoader
         ret=new Item();
       }
     }
-    //ret.setEquipmentLocation(slot);
+    if (equipmentCategoryCode!=0)
+    {
+      EquipmentCategory equipmentCategory=_equipmentCategoryEnum.getEntry(equipmentCategoryCode);
+      ret.setEquipmentCategory(equipmentCategory);
+    }
     return ret;
   }
 

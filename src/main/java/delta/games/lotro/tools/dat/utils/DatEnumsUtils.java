@@ -8,9 +8,11 @@ import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
 import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemQuality;
+import delta.games.lotro.lore.items.WeaponType;
 
 /**
  * Misc enum utils.
@@ -128,5 +130,51 @@ public class DatEnumsUtils
     Professions professions=crafting.getProfessionsRegistry();
     Profession profession=professions.getProfessionById(professionId);
     return profession;
+  }
+
+  /**
+   * Get a weapon type from an equipment category code.
+   * @param code Code to use.
+   * @return A weapon type or <code>null</code>.
+   */
+  public static WeaponType getWeaponTypeFromEquipmentCategory(int code)
+  {
+    if (code==3) return WeaponType.TWO_HANDED_SWORD;
+    if (code==4) return WeaponType.TWO_HANDED_CLUB;
+    //if (code==5) return WeaponType.TWO_HANDED_MACE;
+    if (code==6) return WeaponType.TWO_HANDED_AXE;
+    if (code==8) return WeaponType.BOW;
+    if (code==12) return WeaponType.ONE_HANDED_HAMMER;
+    if (code==13) return WeaponType.SPEAR;
+    if (code==14) return WeaponType.CROSSBOW;
+    if (code==15) return WeaponType.TWO_HANDED_HAMMER;
+    if (code==16) return WeaponType.HALBERD;
+    if (code==20) return WeaponType.DAGGER;
+    if (code==22) return WeaponType.STAFF;
+    if (code==24) return WeaponType.ONE_HANDED_AXE;
+    if (code==26) return WeaponType.ONE_HANDED_CLUB;
+    if (code==27) return WeaponType.ONE_HANDED_MACE;
+    if (code==28) return WeaponType.ONE_HANDED_SWORD;
+    if (code==39) return WeaponType.RUNE_STONE;
+    if (code==41) return WeaponType.JAVELIN;
+    if (code==48) return WeaponType.BATTLE_GAUNTLETS;
+    return null;
+  }
+
+  /**
+   * Get an armour type from an equipment category code.
+   * @param code Code to use.
+   * @return An armour type or <code>null</code>.
+   */
+  public static ArmourType getArmourTypeFromEquipmentCategory(int code)
+  {
+    if (code==9) return ArmourType.MEDIUM;
+    if (code==10) return ArmourType.HEAVY;
+    if (code==11) return ArmourType.HEAVY_SHIELD;
+    if (code==17) return ArmourType.SHIELD;
+    if (code==18) return ArmourType.LIGHT;
+    if (code==31) return ArmourType.LIGHT; // Cloak
+    if (code==40) return ArmourType.WARDEN_SHIELD;
+    return null;
   }
 }

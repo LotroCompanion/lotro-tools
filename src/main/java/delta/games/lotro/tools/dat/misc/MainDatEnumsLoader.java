@@ -10,6 +10,7 @@ import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
 import delta.games.lotro.common.enums.Difficulty;
+import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.ItemClass;
@@ -30,7 +31,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.utils.StringUtils;
 
 /**
- * Get difficulties from DAT files.
+ * Get enums from DAT files.
  * @author DAM
  */
 public class MainDatEnumsLoader
@@ -49,7 +50,7 @@ public class MainDatEnumsLoader
   }
 
   /**
-   * Load difficulties.
+   * Load enums.
    */
   public void doIt()
   {
@@ -69,6 +70,7 @@ public class MainDatEnumsLoader
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
     loadEnum(587202756,"BillingGroup",BillingGroup.class); // 0x230000C4
     loadEnum(587203550,"CollectionCategory",CollectionCategory.class); // 0x230003DE
+    loadEnum(587202636,"EquipmentCategory",EquipmentCategory.class); // 0x2300004C
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -97,7 +99,7 @@ public class MainDatEnumsLoader
     }
     else
     {
-      LOGGER.warn("Could not load difficulties enum");
+      LOGGER.warn("Could not load enum");
     }
   }
 
