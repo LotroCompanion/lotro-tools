@@ -239,8 +239,7 @@ public class MainDatLoader
     // Relics
     deleteFile(GeneratedFiles.RELICS);
     deleteFile(GeneratedFiles.RELIC_MELDING_RECIPES);
-    deleteFile(GeneratedFiles.RELIC_ICONS);
-    deleteDirectory(MainDatRelicsLoader.RELIC_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.RELIC_ICONS_DIR);
     // Recipes
     deleteFile(GeneratedFiles.RECIPES);
     // Emotes

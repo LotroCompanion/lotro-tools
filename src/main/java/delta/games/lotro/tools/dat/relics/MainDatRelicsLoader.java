@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.CharacterClass;
@@ -37,10 +36,6 @@ public class MainDatRelicsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
 
-  /**
-   * Relic icons directory.
-   */
-  public static final File RELIC_ICONS_DIR=new File("data\\relics\\tmp").getAbsoluteFile();
   private DataFacade _facade;
   private RelicsManager _relicsMgr;
   private EnumMapper _categories;
@@ -129,7 +124,7 @@ public class MainDatRelicsLoader
       //Integer shadowIconId=(Integer)properties.getProperty("Icon_Layer_ShadowDID");
       //Integer underlayIconId=(Integer)properties.getProperty("Icon_Layer_UnderlayDID");
       String iconFilename=imageIconId+"-"+backgroundIconId+".png";
-      File to=new File(RELIC_ICONS_DIR,"relicIcons/"+iconFilename).getAbsoluteFile();
+      File to=new File(GeneratedFiles.RELIC_ICONS_DIR,iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
         int[] imagesIDs=new int[]{backgroundIconId.intValue(),imageIconId.intValue()};
@@ -205,13 +200,6 @@ public class MainDatRelicsLoader
     if (ok)
     {
       System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
-    }
-    // Write relic icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.RELIC_ICONS,RELIC_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote relic icons archive: "+GeneratedFiles.RELIC_ICONS);
     }
     // Stats usage statistics
     System.out.println("Stats usage statistics (relics):");

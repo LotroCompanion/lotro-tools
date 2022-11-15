@@ -151,7 +151,7 @@ public class GeneratedFiles
   /**
    * Relic icons.
    */
-  public static final File RELIC_ICONS=new File("../lotro-relics/relicIcons.zip").getAbsoluteFile();
+  public static final File RELIC_ICONS_DIR=new File("../lotro-icons/relics").getAbsoluteFile();
   /**
    * Relic melding recipes.
    */
