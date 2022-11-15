@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
@@ -29,11 +28,6 @@ import delta.games.lotro.utils.StringUtils;
 public class SkillLoader
 {
   private static final Logger LOGGER=Logger.getLogger(SkillLoader.class);
-
-  /**
-   * Directory for skill icons.
-   */
-  public static final File SKILL_ICONS_DIR=new File("data\\skills\\tmp").getAbsoluteFile();
 
   /**
    * Load a skill.
@@ -70,7 +64,7 @@ public class SkillLoader
       }
       // Build icon file
       String iconFilename=iconId+".png";
-      File to=new File(SKILL_ICONS_DIR,"skillIcons/"+iconFilename).getAbsoluteFile();
+      File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
         boolean ok=DatIconsUtils.buildImageFile(facade,iconId,to);
@@ -147,13 +141,6 @@ public class SkillLoader
     if (ok)
     {
       System.out.println("Wrote skills file: "+GeneratedFiles.SKILLS);
-    }
-    // Write skill icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.SKILL_ICONS,SKILL_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote skill icons archive: "+GeneratedFiles.SKILL_ICONS);
     }
   }
 }

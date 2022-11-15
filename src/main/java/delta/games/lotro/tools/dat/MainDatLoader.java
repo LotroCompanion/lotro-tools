@@ -18,7 +18,6 @@ import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
-import delta.games.lotro.tools.dat.characters.SkillLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
@@ -192,8 +191,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
     deleteFile(GeneratedFiles.SKILLS);
-    deleteFile(GeneratedFiles.SKILL_ICONS);
-    deleteDirectory(SkillLoader.SKILL_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
     // - virtues
     deleteFile(GeneratedFiles.VIRTUES);
     // - traits
@@ -258,12 +256,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.COLLECTIONS);
     // Mounts
     deleteFile(GeneratedFiles.MOUNTS);
-    deleteFile(GeneratedFiles.MOUNT_ICONS);
-    deleteDirectory(MountsLoader.MOUNT_ICONS_DIR);
     // Cosmetic pets
     deleteFile(GeneratedFiles.PETS);
-    deleteFile(GeneratedFiles.PET_ICONS);
-    deleteDirectory(CosmeticPetLoader.PET_ICONS_DIR);
     // Vendors
     deleteFile(GeneratedFiles.VENDORS);
     // Barterers

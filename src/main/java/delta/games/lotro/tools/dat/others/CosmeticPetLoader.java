@@ -1,19 +1,16 @@
 package delta.games.lotro.tools.dat.others;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.lore.collections.pets.io.xml.CosmeticPetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -28,11 +25,6 @@ import delta.games.lotro.utils.StringUtils;
 public class CosmeticPetLoader
 {
   private static final Logger LOGGER=Logger.getLogger(CosmeticPetLoader.class);
-
-  /**
-   * Directory for pet icons.
-   */
-  public static final File PET_ICONS_DIR=new File("data\\pets\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _category;
@@ -80,8 +72,6 @@ public class CosmeticPetLoader
         LOGGER.warn("Icons mismatch: small="+smallIconId+"/regular="+iconId+"/large="+largeIconId);
       }
       ret.setIconId(iconId);
-      File to=new File(PET_ICONS_DIR,"petIcons/"+iconId+".png").getAbsoluteFile();
-      DatIconsUtils.buildImageFile(_facade,iconId,to);
       // Source description (null for war-steeds)
       String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
       ret.setSourceDescription(sourceDescription);
@@ -161,13 +151,6 @@ public class CosmeticPetLoader
     // Data
     Collections.sort(pets,new IdentifiableComparator<CosmeticPetDescription>());
     CosmeticPetXMLWriter.write(GeneratedFiles.PETS,pets);
-    // Icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    boolean ok=archiver.go(GeneratedFiles.PET_ICONS,PET_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote pet icons archive: "+GeneratedFiles.PET_ICONS);
-    }
   }
 
   /**

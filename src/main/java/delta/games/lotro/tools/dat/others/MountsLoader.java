@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.dat.others;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -10,7 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -25,7 +23,6 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
-import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
 import delta.games.lotro.lore.collections.mounts.io.xml.MountXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -39,11 +36,6 @@ import delta.games.lotro.utils.StringUtils;
 public class MountsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MountsLoader.class);
-
-  /**
-   * Directory for mount icons.
-   */
-  public static final File MOUNT_ICONS_DIR=new File("data\\mounts\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private EnumMapper _mountType;
@@ -97,8 +89,6 @@ public class MountsLoader
         LOGGER.warn("Icons mismatch: small="+smallIconId+"/regular="+iconId+"/large="+largeIconId);
       }
       ret.setIconId(iconId);
-      File to=new File(MOUNT_ICONS_DIR,"mountIcons/"+iconId+".png").getAbsoluteFile();
-      DatIconsUtils.buildImageFile(_facade,iconId,to);
       // Source description (null for war-steeds)
       String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
       ret.setSourceDescription(sourceDescription);
@@ -183,13 +173,6 @@ public class MountsLoader
     // Data
     Collections.sort(mounts,new IdentifiableComparator<MountDescription>());
     MountXMLWriter.write(GeneratedFiles.MOUNTS,mounts);
-    // Icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    boolean ok=archiver.go(GeneratedFiles.MOUNT_ICONS,MOUNT_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote mount icons archive: "+GeneratedFiles.MOUNT_ICONS);
-    }
   }
 
   /**
