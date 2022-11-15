@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
@@ -32,11 +31,6 @@ import delta.games.lotro.utils.StringUtils;
 public class TraitLoader
 {
   private static final Logger LOGGER=Logger.getLogger(TraitLoader.class);
-
-  /**
-   * Directory for trait icons.
-   */
-  public static final File TRAIT_ICONS_DIR=new File("data\\traits\\tmp").getAbsoluteFile();
 
   /**
    * Get a trait.
@@ -130,7 +124,7 @@ public class TraitLoader
     if (iconId!=null)
     {
       String iconFilename=iconId+".png";
-      File to=new File(TRAIT_ICONS_DIR,"traitIcons/"+iconFilename).getAbsoluteFile();
+      File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,"traits/"+iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
         boolean ok=DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
@@ -173,13 +167,6 @@ public class TraitLoader
     if (ok)
     {
       System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
-    }
-    // Write trait icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.TRAIT_ICONS,TRAIT_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote trait icons archive: "+GeneratedFiles.TRAIT_ICONS);
     }
   }
 }

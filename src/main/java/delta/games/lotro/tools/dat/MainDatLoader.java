@@ -19,8 +19,6 @@ import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
 import delta.games.lotro.tools.dat.characters.SkillLoader;
-import delta.games.lotro.tools.dat.characters.TraitLoader;
-import delta.games.lotro.tools.dat.characters.VirtueDataLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
@@ -198,12 +196,9 @@ public class MainDatLoader
     deleteDirectory(SkillLoader.SKILL_ICONS_DIR);
     // - virtues
     deleteFile(GeneratedFiles.VIRTUES);
-    deleteFile(GeneratedFiles.VIRTUE_ICONS);
-    deleteDirectory(VirtueDataLoader.VIRTUE_ICONS_DIR);
     // - traits
     deleteFile(GeneratedFiles.TRAITS);
-    deleteFile(GeneratedFiles.TRAIT_ICONS);
-    deleteDirectory(TraitLoader.TRAIT_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.TRAIT_ICONS_DIR);
     // - stat tomes
     deleteFile(GeneratedFiles.STAT_TOMES);
     // Titles

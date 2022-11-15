@@ -47,7 +47,7 @@ public class GeneratedFiles
   /**
    * Trait icons.
    */
-  public static final File TRAIT_ICONS=new File("../lotro-data/traits/traitIcons.zip").getAbsoluteFile();
+  public static final File TRAIT_ICONS_DIR=new File("../lotro-icons/traits").getAbsoluteFile();
   /**
    * Skirmish traits.
    */

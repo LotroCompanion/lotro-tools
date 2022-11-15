@@ -1,12 +1,10 @@
 package delta.games.lotro.tools.dat.characters;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -15,7 +13,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
-import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -28,11 +25,6 @@ import delta.games.lotro.utils.maths.Progression;
 public class VirtueDataLoader
 {
   private static final Logger LOGGER=Logger.getLogger(VirtueDataLoader.class);
-
-  /**
-   * Directory for virtue icons.
-   */
-  public static final File VIRTUE_ICONS_DIR=new File("data\\virtues\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
 
@@ -112,17 +104,6 @@ public class VirtueDataLoader
       DatStatUtils.STATS_USAGE_STATISTICS.reset();
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
       ret.setStatsProvider(statsProvider);
-      // Build icon file
-      String iconFilename=iconId+".png";
-      File to=new File(VIRTUE_ICONS_DIR,"virtueIcons/"+iconFilename).getAbsoluteFile();
-      if (!to.exists())
-      {
-        boolean ok=DatIconsUtils.buildImageFile(facade,iconId,to);
-        if (!ok)
-        {
-          LOGGER.warn("Could not build virtue icon: "+iconFilename);
-        }
-      }
       // Rank to level
       // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
       Progression rankToLevel=DatStatUtils.getProgression(facade,1879387583);
@@ -194,13 +175,6 @@ public class VirtueDataLoader
     if (ok)
     {
       System.out.println("Wrote virtues file: "+GeneratedFiles.VIRTUES);
-    }
-    // Write virtues icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.VIRTUE_ICONS,VIRTUE_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote virtue icons archive: "+GeneratedFiles.VIRTUE_ICONS);
     }
   }
 
