@@ -7,7 +7,7 @@ import delta.launcher.data.LauncherConfiguration;
 import delta.launcher.data.io.xml.LauncherConfigurationXmlIO;
 
 /**
- * Builds a launcher configuration fo LotroCompanion.
+ * Builds a launcher configuration for LotroCompanion.
  * @author DAM
  */
 public class LotroCompanionLauncherConfigurationBuilder
@@ -27,7 +27,7 @@ public class LotroCompanionLauncherConfigurationBuilder
     "pcap4j-core-1.8.2.jar",
     "pcap4j-packetfactory-static-1.8.2.jar",
     "jna-5.3.1.jar",
-    // JFeeChart
+    // JFreeChart
     "jcommon-1.0.16.jar",
     "jfreechart-1.0.13.jar",
     // Logging
@@ -40,13 +40,10 @@ public class LotroCompanionLauncherConfigurationBuilder
     "emoteIcons.zip",
     "icons.zip",
     "legaciesIcons.zip",
-    "mountIcons.zip",
-    "petIcons.zip",
     "relicIcons.zip",
     "skillIcons.zip",
     "titleIcons.zip",
     "traitIcons.zip",
-    "virtueIcons.zip",
     "miscIcons.zip"
   };
 
