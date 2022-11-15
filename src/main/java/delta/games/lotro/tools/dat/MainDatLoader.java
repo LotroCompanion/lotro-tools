@@ -237,8 +237,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.RECIPES);
     // Emotes
     deleteFile(GeneratedFiles.EMOTES);
-    deleteFile(GeneratedFiles.EMOTE_ICONS);
-    deleteDirectory(MainDatEmotesLoader.EMOTE_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.EMOTE_ICONS_DIR);
     // Factions
     deleteFile(GeneratedFiles.FACTIONS);
     // Quests and deeds

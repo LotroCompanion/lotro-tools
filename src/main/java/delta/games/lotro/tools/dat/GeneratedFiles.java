@@ -83,7 +83,7 @@ public class GeneratedFiles
   /**
    * Emote icons.
    */
-  public static final File EMOTE_ICONS=new File("../lotro-data/emotes/emoteIcons.zip").getAbsoluteFile();
+  public static final File EMOTE_ICONS_DIR=new File("../lotro-icons/emotes").getAbsoluteFile();
   /**
    * Items.
    */

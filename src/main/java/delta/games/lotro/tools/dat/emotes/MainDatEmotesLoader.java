@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
@@ -25,11 +24,6 @@ import delta.games.lotro.tools.dat.utils.DatUtils;
 public class MainDatEmotesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatEmotesLoader.class);
-
-  /**
-   * Directory for emote icons.
-   */
-  public static final File EMOTE_ICONS_DIR=new File("data\\emotes\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
 
@@ -89,7 +83,7 @@ Emote_SourceText:
       emote.setDescription(description);
       // Icon
       int iconId=((Integer)properties.getProperty("Emote_IconImage")).intValue();
-      File emoteIcon=new File(EMOTE_ICONS_DIR,"emoteIcons/"+iconId+".png").getAbsoluteFile();
+      File emoteIcon=new File(GeneratedFiles.EMOTE_ICONS_DIR,iconId+".png").getAbsoluteFile();
       if (!emoteIcon.exists())
       {
         DatIconsUtils.buildImageFile(_facade,iconId,emoteIcon);
@@ -145,13 +139,6 @@ Emote_SourceText:
     if (ok)
     {
       System.out.println("Wrote emotes file: "+GeneratedFiles.EMOTES);
-    }
-    // Write emote icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.EMOTE_ICONS,EMOTE_ICONS_DIR);
-    if (ok)
-    {
-      System.out.println("Wrote emote icons archive: "+GeneratedFiles.EMOTE_ICONS);
     }
   }
 
