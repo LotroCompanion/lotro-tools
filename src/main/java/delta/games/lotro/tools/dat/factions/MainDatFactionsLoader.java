@@ -360,8 +360,9 @@ Reputation_LowestTier: 1
     if (factionId==1879097420) return new String[]{category,"ELDGANG",FactionLevelTemplates.CLASSIC}; // The Eldgang
     if (factionId==1879413167) return new String[]{category,null,null}; // The League of the Axe
     if (factionId==1879413168) return new String[]{category,null,null}; // Woodcutter's Brotherhood
-    if (factionId==1879442863) return new String[]{category,null,null}; // Yondershire Bounders
-    if (factionId==1879443125) return new String[]{category,null,null}; // Defenders of The Angle
+    if (factionId==1879442863) return new String[]{category,null,null}; // Defenders of The Angle
+    if (factionId==1879443125) return new String[]{category,null,null}; // The Yonder-watch
+    if (factionId==1879448435) return new String[]{category,null,null}; // Dúnedain of Cardolan
     category="Rhovanion";
     if (factionId==1879143761) return new String[]{category,"MORIA_GUARDS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Guards
     if (factionId==1879143766) return new String[]{category,"MORIA_MINERS",FactionLevelTemplates.CLASSIC}; // Iron Garrison Miners
@@ -493,7 +494,7 @@ Reputation_LowestTier: 1
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
       // New ones
-      1879413167,1879413168,1879413559,1879416174,1879416935,1879442863,1879443125
+      1879413167,1879413168,1879413559,1879416174,1879416935,1879442863,1879443125,1879448435
     };
     return ret;
   }

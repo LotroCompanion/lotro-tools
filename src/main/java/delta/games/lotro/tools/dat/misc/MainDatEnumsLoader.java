@@ -139,6 +139,12 @@ public class MainDatEnumsLoader
         // Essences of War
         entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEssenceOfWarCode(tier),null,"Essence of War:Tier"+tier);
         lotroEnum.registerEntry(entry);
+        // Cloak Essences
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getCloakEssenceCode(tier),null,"Cloak Essence:Tier"+tier);
+        lotroEnum.registerEntry(entry);
+        // Necklace Essences
+        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getNecklaceEssenceCode(tier),null,"Necklace Essence:Tier"+tier);
+        lotroEnum.registerEntry(entry);
       }
     }
   }

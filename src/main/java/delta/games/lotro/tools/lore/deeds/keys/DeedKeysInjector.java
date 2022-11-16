@@ -251,6 +251,7 @@ public class DeedKeysInjector
     manualResolution("Discovery:_Northcotton_Farms",1879205935);
     manualResolution("Dual-slayer_of_North_Ithilien",1879338673);
     manualResolution("Dual-slayer_of_North_Ithilien_(Advanced)",1879338672);
+    manualResolution("Eglan",1879180379);
     manualResolution("Enraged_Stone-crusher_Slayer",1879161132);
     manualResolution("Enraged_Stone-crusher_Slayer_(Advanced)",1879161056);
     manualResolution("Ered_Mithrin_Beast-slayer_(Advanced)",1879378528);
@@ -281,6 +282,7 @@ public class DeedKeysInjector
     manualResolution("Kindred_to_the_Entwash_Vale",1879246628);
     manualResolution("Kindred_with_the_Council_of_the_North",1879190368);
     manualResolution("Known_to_the_Council_of_the_North",1879190365);
+    manualResolution("L%C3%B3rien_Lookout",1879152530);
     manualResolution("Master_of_Beasts_(Advanced)_(Sarn%C3%BAr)",1879093966);
     manualResolution("Master_of_Beasts_(Sarn%C3%BAr)",1879093965);
     manualResolution("Master_of_the_Forgotten_Lore",1879114138);

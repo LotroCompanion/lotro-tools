@@ -445,7 +445,7 @@ public class MainDatItemsLoader
   Item_Socket_Unlock_ILevel: 52
        */
       int socketType=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
-      if ((socketType!=1) && (socketType!=131072))
+      if ((socketType!=1) && (socketType!=131072) && (socketType!=262144) && (socketType!=524288))
       {
         return true;
       }
@@ -945,6 +945,14 @@ public class MainDatItemsLoader
     {
       return ItemClassUtils.getEssenceOfWarCode(tier);
     }
+    if (socketTypeCode==19)
+    {
+      return ItemClassUtils.getCloakEssenceCode(tier);
+    }
+    if (socketTypeCode==20)
+    {
+      return ItemClassUtils.getNecklaceEssenceCode(tier);
+    }
     handleTracery(item,socketType,properties);
     if (socketTypeCode==3)
     {
@@ -958,13 +966,16 @@ public class MainDatItemsLoader
     {
       return ItemClassUtils.getWordOfCraftCode(tier);
     }
-    else if (socketTypeCode==2)
+    // 6-16
+    else if ((socketTypeCode>=6) && (socketTypeCode<=16))
     {
-      LOGGER.warn("Unmanaged socket type 'Triangle' for item: "+item);
+      return ItemClassUtils.getWordOfMasteryCode(tier);
+    }
+    else //if (socketTypeCode==2)
+    {
+      LOGGER.warn("Unmanaged socket type "+socketTypeCode+" for item: "+item);
       return 0;
     }
-    // 6-16
-    return ItemClassUtils.getWordOfMasteryCode(tier);
   }
 
   private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
