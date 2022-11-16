@@ -124,7 +124,7 @@ public class TraitLoader
     if (iconId!=null)
     {
       String iconFilename=iconId+".png";
-      File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,"traits/"+iconFilename).getAbsoluteFile();
+      File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,iconFilename).getAbsoluteFile();
       if (!to.exists())
       {
         boolean ok=DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
