@@ -20,6 +20,8 @@ import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.geo.GeoBoundingBox;
 import delta.games.lotro.lore.maps.MapDescription;
+import delta.games.lotro.lore.maps.ParchmentMap;
+import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestsManager;
@@ -155,12 +157,18 @@ public class MainGeoDataInjector
   private List<MapDescription> buildMaps(AchievableGeoPointsManager pointsMgr)
   {
     List<MapDescription> maps=new ArrayList<MapDescription>();
+    ParchmentMapsManager mgr=ParchmentMapsManager.getInstance();
     // Map IDs
     List<Integer> mapIds=pointsMgr.getMapIds();
     for(Integer mapId : mapIds)
     {
       MapDescription map=new MapDescription();
       map.setMapId(mapId);
+      ParchmentMap parchmentMap=mgr.getMapById(mapId.intValue());
+      if (parchmentMap!=null)
+      {
+        map.setRegion(parchmentMap.getRegion());
+      }
       int mapIndex=maps.size();
       for(AchievableGeoPoint point : pointsMgr.getPointsForMap(mapId.intValue()))
       {
