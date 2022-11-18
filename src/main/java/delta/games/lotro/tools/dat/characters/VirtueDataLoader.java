@@ -16,6 +16,7 @@ import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -40,7 +41,7 @@ public class VirtueDataLoader
   private void loadVirtues()
   {
     List<VirtueDescription> virtues=new ArrayList<VirtueDescription>();
-    PropertiesSet properties=_facade.loadProperties(0x7900025B);
+    PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TraitControl");
     //System.out.println(properties.dump());
 
     int xpTableId=((Integer)properties.getProperty("Trait_Control_VirtueTierToExperience_AdvancementTable")).intValue();
