@@ -2,10 +2,11 @@ package delta.games.lotro.tools.dat.maps.landblocks;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.geo.HeightMap;
+import delta.games.lotro.dat.loaders.HeightMapDataLoader;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.maps.landblocks.Cell;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
-import delta.games.lotro.tools.dat.maps.data.HeightMap;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 
 /**
@@ -16,7 +17,7 @@ public class LandblockLoader
 {
   private LandblockInfoLoader _lbiLoader;
   private BlockMapLoader _blockMapLoader;
-  private LandblockDataLoader _lbdLoader;
+  private HeightMapDataLoader _heightDataLoader;
 
   /**
    * Constructor.
@@ -26,7 +27,7 @@ public class LandblockLoader
   {
     _lbiLoader=new LandblockInfoLoader(facade);
     _blockMapLoader=new BlockMapLoader(facade);
-    _lbdLoader=new LandblockDataLoader(facade);
+    _heightDataLoader=new HeightMapDataLoader(facade);
   }
 
   /**
@@ -87,7 +88,7 @@ public class LandblockLoader
       ret.setParentDungeon(dungeonDID.intValue());
     }
     // Heightmap
-    HeightMap heightmap=_lbdLoader.loadLandblockData(region,blockX,blockY);
+    HeightMap heightmap=_heightDataLoader.loadHeightMapData(region,blockX,blockY);
     if (heightmap!=null)
     {
       float centerHeight=heightmap.getCenterHeight();
