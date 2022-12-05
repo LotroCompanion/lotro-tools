@@ -9,7 +9,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
-import delta.games.lotro.dat.data.ui.UILayoutLoader;
+import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
 
 /**
  * Loads travel NPC for the stables collection UI.

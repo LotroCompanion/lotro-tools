@@ -21,7 +21,7 @@ import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UIFinder;
 import delta.games.lotro.dat.data.ui.UIImage;
 import delta.games.lotro.dat.data.ui.UILayout;
-import delta.games.lotro.dat.data.ui.UILayoutLoader;
+import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 
 /**
