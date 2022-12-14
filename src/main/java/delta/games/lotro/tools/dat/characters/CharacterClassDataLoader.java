@@ -14,6 +14,7 @@ import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.InitialGearDefinition;
 import delta.games.lotro.character.classes.InitialGearElement;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
+import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
@@ -31,6 +32,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -122,6 +124,10 @@ public class CharacterClassDataLoader
     }
     // Proficiencies
     _proficiencies.handleClass(classDescription);
+    // Armour type for mitigations
+    ArmourType armourType=getArmourTypeForMitigations(characterClass);
+    ClassProficiencies proficiencies=classDescription.getProficiencies();
+    proficiencies.setArmourTypeForMitigations(armourType);
     // Default buffs
     /*
     if (characterClass==CharacterClass.CAPTAIN)
@@ -141,6 +147,27 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     // Class deeds?
     // AdvTable_AccomplishmentDirectory: 1879064046
     _classes.add(classDescription);
+  }
+
+  private ArmourType getArmourTypeForMitigations(CharacterClass cClass)
+  {
+    /*
+     * See class properties:
+AdvTable_ArmorDefense_Points_CalcType: 14 (HeavyArmorDefense)
+AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
+     */
+    if ((cClass==CharacterClass.HUNTER) || (cClass==CharacterClass.BURGLAR)
+        || (cClass==CharacterClass.WARDEN))
+    {
+      return ArmourType.MEDIUM;
+    }
+    if ((cClass==CharacterClass.CHAMPION) || (cClass==CharacterClass.GUARDIAN)
+        || (cClass==CharacterClass.CAPTAIN) || (cClass==CharacterClass.BEORNING)
+        || (cClass==CharacterClass.BRAWLER) )
+    {
+      return ArmourType.HEAVY;
+    }
+    return ArmourType.LIGHT;
   }
 
   private File getIconFile(CharacterClass characterClass, String size)
