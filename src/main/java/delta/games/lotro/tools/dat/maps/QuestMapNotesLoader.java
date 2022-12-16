@@ -20,6 +20,7 @@ public class QuestMapNotesLoader
   private static final int QUEST_MAP_NOTES_DID=0x0E400000;
 
   private DataFacade _facade;
+  private DBPropertiesLoader _propsLoader;
   private MarkersLoadingUtils _markersUtils;
 
   /**
@@ -31,6 +32,7 @@ public class QuestMapNotesLoader
   {
     _facade=facade;
     _markersUtils=markersUtils;
+    _propsLoader=new DBPropertiesLoader(_facade);
   }
 
   private void loadQuestMapNote(ByteArrayInputStream bis)
@@ -46,18 +48,16 @@ public class QuestMapNotesLoader
     int noteDID=BufferUtils.readUInt32(bis);
 
     // Properties
-    DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
-
     // Get content layers properties (Object[] with Integers)
     Object[] contentLayersArray=null;
-    PropertyValue contentLayersProperties=propsLoader.decodeProperty(bis,false);
+    PropertyValue contentLayersProperties=_propsLoader.decodeProperty(bis,false);
     if (contentLayersProperties!=null)
     {
       contentLayersArray=(Object[])contentLayersProperties.getValue();
     }
 
     PropertiesSet questDispenserInfo=new PropertiesSet();
-    propsLoader.decodeProperties(bis,questDispenserInfo);
+    _propsLoader.decodeProperties(bis,questDispenserInfo);
 
     if (VERBOSE)
     {
