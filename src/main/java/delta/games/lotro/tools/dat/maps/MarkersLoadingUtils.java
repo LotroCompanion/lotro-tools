@@ -45,7 +45,7 @@ public class MarkersLoadingUtils
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
   private MapsDataManager _mapsDataManager;
-  private Map<String,IntegerHolder> _typesCount=new HashMap<String,IntegerHolder>();
+  private Map<Integer,IntegerHolder> _typesCount=new HashMap<Integer,IntegerHolder>();
   private LinksStorage _links;
 
   /**
@@ -80,11 +80,12 @@ public class MarkersLoadingUtils
     {
       // {Milestone=327, Landmark=2459, Waypoint=1308, DoorTemplate=874, IItem=857, Hotspot=267, NPCTemplate=4273}
       dataId=DataIdentificationTools.identify(_facade,noteDID);
-      IntegerHolder counter=_typesCount.get(dataId.getWClassName());
+      Integer key=Integer.valueOf(dataId.getClassIndex());
+      IntegerHolder counter=_typesCount.get(key);
       if (counter==null)
       {
         counter=new IntegerHolder();
-        _typesCount.put(dataId.getWClassName(),counter);
+        _typesCount.put(key,counter);
       }
       counter.increment();
     }
@@ -276,7 +277,7 @@ public class MarkersLoadingUtils
     {
       return;
     }
-    int classIndex=dataId.getWClass().getClassIndex();
+    int classIndex=dataId.getClassIndex();
     if ((classIndex!=815) && (classIndex!=1722))
     {
       LOGGER.warn("Link DID is not a Waypoint or a DoorTemplate");

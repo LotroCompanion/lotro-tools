@@ -3,7 +3,6 @@ package delta.games.lotro.tools.dat.maps;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.loaders.PositionDecoder;
-import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
@@ -51,12 +50,7 @@ public class MarkerUtils
     {
       return false;
     }
-    ClassDefinition classDef=dataId.getWClass();
-    if (classDef==null)
-    {
-      return false;
-    }
-    int classIndex=classDef.getClassIndex();
+    int classIndex=dataId.getClassIndex();
     if (classIndex==663) return false; // AIRemoteDetector
     if (classIndex==1113) return false; // Generator
     if (classIndex==1445) return false; // Relay
@@ -100,7 +94,7 @@ public class MarkerUtils
 
   private static int getCategoryCode(DataIdentification dataId)
   {
-    int classIndex=dataId.getWClass().getClassIndex();
+    int classIndex=dataId.getClassIndex();
     if (classIndex==1723) return CategoriesConstants.MONSTER; // MonsterTemplate
     if (classIndex==1724) return CategoriesConstants.NPC; // NPC
     if (classIndex==815) return CategoriesConstants.WAYPOINT; // Waypoint
