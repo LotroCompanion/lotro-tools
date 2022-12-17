@@ -10,6 +10,7 @@ import delta.games.lotro.dat.archive.DatFilesManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.tools.dat.maps.data.PropertiesDescriptor;
 
@@ -65,10 +66,11 @@ public class BlockMapLoader
     PropertiesSet props=new PropertiesSet();
     int count=BufferUtils.readTSize(bis);
     //System.out.println(count+" entries in this block map!");
+    boolean isLive=Context.isLive();
     for(int i=0;i<count;i++)
     {
       int key=BufferUtils.readUInt32(bis);
-      int index=BufferUtils.readUInt16(bis);
+      int index=isLive?BufferUtils.readUInt16(bis):BufferUtils.readUInt8(bis);
       PropertyValue value=descriptor.getPropertyValue(key,index);
       if (value!=null)
       {
