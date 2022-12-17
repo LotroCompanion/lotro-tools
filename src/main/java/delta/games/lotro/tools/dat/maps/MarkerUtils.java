@@ -51,6 +51,7 @@ public class MarkerUtils
       return false;
     }
     int classIndex=dataId.getClassIndex();
+    if (classIndex==0) return false;
     if (classIndex==663) return false; // AIRemoteDetector
     if (classIndex==1113) return false; // Generator
     if (classIndex==1445) return false; // Relay
