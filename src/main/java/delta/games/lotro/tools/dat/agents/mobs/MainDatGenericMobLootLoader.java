@@ -107,7 +107,7 @@ public class MainDatGenericMobLootLoader
     int subSpeciesCode=((Integer)entryProps.getProperty("Agent_Subspecies")).intValue();
     SubSpecies subspecies=subSpeciesMgr.getEntry(subSpeciesCode);
     // Table ID
-    int tableId=((Integer)entryProps.getProperty("LevelBasedLootTable_LevelTable")).intValue();
+    Integer tableId=(Integer)entryProps.getProperty("LevelBasedLootTable_LevelTable");
     // Mob Type
     LotroEnum<MobType> mobTypeMgr=registry.get(MobType.class);
     int mobTypeCode=((Integer)entryProps.getProperty("MonsterLevel_ExaminationModStatType")).intValue();
@@ -131,7 +131,10 @@ public class MainDatGenericMobLootLoader
       mobTypeLoot=new GenericMobLootSpec(species,subspecies,mobType);
       subSpeciesLoot.addMobTypeLoot(mobTypeLoot);
     }
-    handleLootTable(mobTypeLoot,tableId);
+    if ((tableId!=null) && (tableId.intValue()!=0))
+    {
+      handleLootTable(mobTypeLoot,tableId.intValue());
+    }
   }
 
   private void handleLootTable(GenericMobLootSpec mobTypeLoot, int tableId)

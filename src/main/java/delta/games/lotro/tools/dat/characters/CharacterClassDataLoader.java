@@ -87,10 +87,13 @@ public class CharacterClassDataLoader
     DatIconsUtils.buildImageFile(_facade,classIconId,classIconFile);
     classDescription.setIconId(classIconId);
     // Small size (32 pixels)
-    int classSmallIconId=((Integer)classInfo.getProperty("AdvTable_ClassSmallIcon")).intValue();
-    File smallClassIconFile=getIconFile(characterClass,"small");
-    DatIconsUtils.buildImageFile(_facade,classSmallIconId,smallClassIconFile);
-    classDescription.setSmallIconId(classIconId);
+    Integer classSmallIconId=(Integer)classInfo.getProperty("AdvTable_ClassSmallIcon");
+    if (classSmallIconId!=null)
+    {
+      File smallClassIconFile=getIconFile(characterClass,"small");
+      DatIconsUtils.buildImageFile(_facade,classSmallIconId.intValue(),smallClassIconFile);
+    classDescription.setSmallIconId(classSmallIconId.intValue());
+    }
     // Tactical DPS name
     String tacticalDpsName=DatUtils.getStringProperty(properties,"AdvTable_TacticalDPSName");
     classDescription.setTacticalDpsStatName(tacticalDpsName);
@@ -293,6 +296,10 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
   private void loadStatDerivations(CharacterClass characterClass, PropertiesSet properties)
   {
     Object[] derivedStatsProperties=(Object[])properties.getProperty("AdvTable_DerivedStat_Configuration");
+    if (derivedStatsProperties==null)
+    {
+      return;
+    }
     for(Object derivedStatPropertiesObj : derivedStatsProperties)
     {
       PropertiesSet derivedStatProperties=(PropertiesSet)derivedStatPropertiesObj;

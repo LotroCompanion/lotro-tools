@@ -182,6 +182,10 @@ public class GeoAreasLoader
   public void addMissingRegions()
   {
     PropertiesSet regionControlProps=_facade.loadProperties(1879146908+DATConstants.DBPROPERTIES_OFFSET); // 0x7001819C
+    if (regionControlProps==null)
+    {
+      return;
+    }
     Object[] regionArray=(Object[])regionControlProps.getProperty("Region_Map_List");
     for(Object regionObj : regionArray)
     {

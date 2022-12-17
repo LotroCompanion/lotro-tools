@@ -91,6 +91,10 @@ public class MainTraitDataLoader
     ClassInstance traitControl=(ClassInstance)wstate.getValueForReference(refs.get(0).intValue());
     _traitIds2PropMap=new HashMap<Integer,Integer>();
     Map<Integer,Integer> props2traitIdsMap=(Map<Integer,Integer>)traitControl.getAttributeValue("m_aahVirtues");
+    if (props2traitIdsMap==null)
+    {
+      props2traitIdsMap=(Map<Integer,Integer>)traitControl.getAttributeValue(0);
+    }
     for(Map.Entry<Integer,Integer> entry : props2traitIdsMap.entrySet())
     {
       Integer oldValue=_traitIds2PropMap.put(entry.getValue(),entry.getKey());

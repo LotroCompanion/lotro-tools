@@ -804,6 +804,10 @@ public class MainDatAchievablesLoader
   {
     PropertiesSet questArcsDirectory=_facade.loadProperties(0x7900E36F);
     //System.out.println(questArcsDirectory.dump());
+    if (questArcsDirectory==null)
+    {
+      return;
+    }
     Object[] list=(Object[])questArcsDirectory.getProperty("QuestArcDirectory_QuestArc_Array");
     for(Object obj : list)
     {

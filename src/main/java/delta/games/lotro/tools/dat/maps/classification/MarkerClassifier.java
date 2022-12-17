@@ -11,6 +11,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.agents.AgentClassification;
@@ -217,12 +218,14 @@ public class MarkerClassifier
       LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
       return null;
     }
-
-    Integer craftTierCode=(Integer)props.getProperty("Usage_RequiredCraftTier");
+    boolean live=Context.isLive();
+    String propertyName=live?"Usage_RequiredCraftTier":"Usage_RequiredCraftProficiency";
+    Integer craftTierCode=(Integer)props.getProperty(propertyName);
+    int craftTier=(craftTierCode!=null)?craftTierCode.intValue():1;
     int professionId=((Integer)props.getProperty("Usage_RequiredCraftProfession")).intValue();
     CraftingData craftingData=CraftingSystem.getInstance().getData();
     Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
-    CraftingLevel level=profession.getByTier(craftTierCode.intValue());
+    CraftingLevel level=profession.getByTier(craftTier);
     ResourceClassification c=new ResourceClassification(level);
     return c;
     /*

@@ -12,6 +12,7 @@ import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
 import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.maps.MapsDataLoader;
 import delta.games.lotro.tools.dat.maps.landblocks.MainLandblocksBuilder;
+import delta.games.lotro.tools.dat.utils.VersionFinder;
 
 /**
  * Global procedure to load geographic data from DAT files.
@@ -124,6 +125,7 @@ public class MainGeoDatLoader
    */
   public static void main(String[] args)
   {
+    VersionFinder.initVersion(args);
     DataFacade facade=new DataFacade();
     new MainGeoDatLoader(facade).doIt();
     facade.dispose();

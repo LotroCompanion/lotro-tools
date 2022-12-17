@@ -53,7 +53,7 @@ public class CosmeticLoader
           sb.append(',');
         }
         PropertiesSet entryProps=(PropertiesSet)entryObj;
-        int key=((Integer)entryProps.getProperty("Item_AppearanceKey")).intValue();
+        Integer key=(Integer)entryProps.getProperty("Item_AppearanceKey");
         sb.append(key).append('/');
         int sex=((Integer)entryProps.getProperty("Item_SexOfWearer")).intValue();
         sb.append(sex).append('/');

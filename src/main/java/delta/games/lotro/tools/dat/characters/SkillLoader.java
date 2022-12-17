@@ -52,8 +52,11 @@ public class SkillLoader
       String description=DatUtils.getStringProperty(skillProperties,"Skill_Desc");
       ret.setDescription(description);
       // Icon
-      int iconId=((Integer)skillProperties.getProperty("Skill_SmallIcon")).intValue();
-      ret.setIconId(iconId);
+      Integer iconId=(Integer)skillProperties.getProperty("Skill_SmallIcon");
+      if (iconId!=null)
+      {
+        ret.setIconId(iconId.intValue());
+      }
       // Category
       Integer categoryId=(Integer)skillProperties.getProperty("Skill_Category");
       if (categoryId!=null)
@@ -63,14 +66,17 @@ public class SkillLoader
         ret.setCategory(category);
       }
       // Build icon file
-      String iconFilename=iconId+".png";
-      File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
-      if (!to.exists())
+      if (iconId!=null)
       {
-        boolean ok=DatIconsUtils.buildImageFile(facade,iconId,to);
-        if (!ok)
+        String iconFilename=iconId+".png";
+        File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
+        if (!to.exists())
         {
-          LOGGER.warn("Could not build skill icon: "+iconFilename);
+          boolean ok=DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
+          if (!ok)
+          {
+            LOGGER.warn("Could not build skill icon: "+iconFilename);
+          }
         }
       }
       /*

@@ -60,6 +60,10 @@ public class RaceDataLoader
     RaceDescription raceDescription=new RaceDescription(race);
     // Description
     String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
+    if (description==null)
+    {
+      description="";
+    }
     description=description.trim();
     raceDescription.setDescription(description);
     // Short or tall?
@@ -170,12 +174,18 @@ public class RaceDataLoader
     // Icons
     int iconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
     gender.setIconId(iconId);
-    int largeIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_LargeIcon")).intValue();
-    gender.setLargeIconId(largeIconId);
-    File largeIconFile=getIconFile(race,sex);
-    DatIconsUtils.buildImageFile(_facade,largeIconId,largeIconFile);
-    int smallIconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon")).intValue();
-    gender.setSmallIconId(smallIconId);
+    Integer largeIconId=(Integer)genderProperties.getProperty("RaceTable_RaceSelect_LargeIcon");
+    if (largeIconId!=null)
+    {
+      gender.setLargeIconId(largeIconId.intValue());
+      File largeIconFile=getIconFile(race,sex);
+      DatIconsUtils.buildImageFile(_facade,largeIconId,largeIconFile);
+    }
+    Integer smallIconId=(Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon");
+    if (smallIconId!=null)
+    {
+      gender.setSmallIconId(smallIconId.intValue());
+    }
     // Avatar
     int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
     gender.setAvatarId(avatarId);
@@ -234,6 +244,10 @@ public class RaceDataLoader
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     //System.out.println(properties.dump());
     Object[] raceArrays=(Object[])properties.getProperty("Trait_Control_RaceArray");
+    if (raceArrays==null)
+    {
+      return;
+    }
     for(Object raceArrayObj : raceArrays)
     {
       PropertiesSet raceProps=(PropertiesSet)raceArrayObj;

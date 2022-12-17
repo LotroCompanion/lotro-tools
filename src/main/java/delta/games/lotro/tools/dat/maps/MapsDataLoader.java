@@ -11,6 +11,7 @@ import delta.games.lotro.dat.data.geo.ContentLayerGeoData;
 import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
@@ -69,6 +70,7 @@ public class MapsDataLoader
       System.out.println("Quest map notes took: "+(now2-now1)+"ms");
     }
     // Quest Event Target Locations
+    if (Context.isLive())
     {
       long now1=System.currentTimeMillis();
       System.out.println("Loading quest event target locations...");
@@ -104,7 +106,8 @@ public class MapsDataLoader
   {
     LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
     LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
-    int[] regions={1,2,3,4,14};
+    boolean isLive=Context.isLive();
+    int[] regions=isLive?new int[]{1,2,3,4,14}:new int[]{1};
     for(int region : regions)
     {
       System.out.println("Region "+region);

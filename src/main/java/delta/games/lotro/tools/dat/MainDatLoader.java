@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatGenericMobLootLoader;
@@ -51,6 +52,7 @@ import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
+import delta.games.lotro.tools.dat.utils.VersionFinder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
 import delta.games.lotro.tools.lore.tasks.MainTaskDataBuilder;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
@@ -83,6 +85,7 @@ public class MainDatLoader
 
   private void load()
   {
+    boolean live=Context.isLive();
     // Servers
     new MainServersBuilder().doIt();
     // Stats
@@ -116,15 +119,18 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade).doIt();
-    // Paper items
-    new MainDatPaperItemsLoader(_facade).doIt();
-    // Legendary data
-    new MainDatLegendarySystemLoader(_facade).doIt();
-    new MainDatLegendarySystem2Loader(_facade).doIt();
-    // Legendary titles
-    new MainDatLegendaryTitlesLoader(_facade).doIt();
-    // Relics
-    new MainDatRelicsLoader(_facade).doIt();
+    if (live)
+    {
+      // Paper items
+      new MainDatPaperItemsLoader(_facade).doIt();
+      // Legendary data
+      new MainDatLegendarySystemLoader(_facade).doIt();
+      new MainDatLegendarySystem2Loader(_facade).doIt();
+      // Legendary titles
+      new MainDatLegendaryTitlesLoader(_facade).doIt();
+      // Relics
+      new MainDatRelicsLoader(_facade).doIt();
+    }
     // Crafting
     new MainDatCraftingLoader(_facade).doIt();
     // Recipes
@@ -139,22 +145,31 @@ public class MainDatLoader
     new MainBuffsLoader(_facade).doIt();
     // Trait points
     new TraitPointsRegistryBuilder().doIt();
-    // Mounts
-    new MountsLoader(_facade).doIt();
-    // Cosmetic pets
-    new CosmeticPetLoader(_facade).doIt();
-    // Collections
-    new MainDatCollectionsLoader(_facade,rewardsLoader).doIt();
+    if (live)
+    {
+      // Mounts
+      new MountsLoader(_facade).doIt();
+      // Cosmetic pets
+      new CosmeticPetLoader(_facade).doIt();
+      // Collections
+      new MainDatCollectionsLoader(_facade,rewardsLoader).doIt();
+    }
     // Vendors & barterers
     new MainDatNpcLoader(_facade).doIt();
     // Private encounters
     new MainDatPrivateEncountersLoader(_facade).doIt();
     // Instances tree
-    new MainDatInstancesTreeLoader(_facade).doIt();
+    if (live)
+    {
+      new MainDatInstancesTreeLoader(_facade).doIt();
+    }
     // Containers
     new MainDatContainerLoader(_facade).doIt();
     // Disenchantment
-    new MainDatDisenchantmentsLoader(_facade).doIt();
+    if (live)
+    {
+      new MainDatDisenchantmentsLoader(_facade).doIt();
+    }
     // Mobs
     new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
     new MainDatGenericMobLootLoader(_facade,LootsManager.getInstance()).doIt();
@@ -164,16 +179,22 @@ public class MainDatLoader
     new ReferenceDataGenerator().doIt();
     // Tasks data
     new MainTaskDataBuilder().doIt();
-    // Relics melding recipes
-    new MainDatRelicMeldingRecipesLoader(_facade).doIt();
-    // Allegiances
-    new MainDatAllegiancesLoader(_facade).doIt();
+    if (live)
+    {
+      // Relics melding recipes
+      new MainDatRelicMeldingRecipesLoader(_facade).doIt();
+      // Allegiances
+      new MainDatAllegiancesLoader(_facade).doIt();
+    }
     // Billing groups
     new MainBillingGroupsLoader(_facade).doIt();
-    // Rewards tracks
-    new MainDatRewardsTracksLoader(_facade).doIt();
-    // Hobbies
-    new MainHobbiesLoader(_facade).doIt();
+    if (live)
+    {
+      // Rewards tracks
+      new MainDatRewardsTracksLoader(_facade).doIt();
+      // Hobbies
+      new MainHobbiesLoader(_facade).doIt();
+    }
   }
 
   private void cleanup()
@@ -326,6 +347,7 @@ public class MainDatLoader
    */
   public static void main(String[] args)
   {
+    VersionFinder.initVersion(args);
     DataFacade facade=new DataFacade();
     new MainDatLoader(facade).doIt();
     facade.dispose();

@@ -72,6 +72,10 @@ public class LootLoader
   {
     // LootGenControl:
     PropertiesSet properties=_facade.loadProperties(1879076022+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties==null)
+    {
+      return;
+    }
     Object[] tableArray=(Object[])properties.getProperty("LootGenControl_DropFrequencyTable");
     for(Object tableEntryObj : tableArray)
     {
@@ -563,6 +567,6 @@ public class LootLoader
   private float getProbability(int frequencyCode)
   {
     Float probability=_probabilities.get(Integer.valueOf(frequencyCode));
-    return probability.floatValue();
+    return (probability!=null)?probability.floatValue():0.0f;
   }
 }

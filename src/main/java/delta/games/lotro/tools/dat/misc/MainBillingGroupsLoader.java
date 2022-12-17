@@ -55,6 +55,10 @@ public class MainBillingGroupsLoader
   private void loadTitles()
   {
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"VersionAccountTitleBestow");
+    if (props==null)
+    {
+      return;
+    }
     Object[] partnerDataList=(Object[])props.getProperty("Version_TitleBestow_PartnerDataList");
     for(Object partnerDataObj : partnerDataList)
     {

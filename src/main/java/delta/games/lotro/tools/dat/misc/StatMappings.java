@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
+import delta.games.lotro.dat.misc.Context;
 
 /**
  * Adds legacy stats names to stat descriptions.
@@ -22,6 +23,7 @@ public class StatMappings
   public static void setupMappings(StatsRegistry stats)
   {
     _stats=stats;
+    boolean live=Context.isLive();
     //registerMapping("Combat_Agent_Armor_Value_Float","ARMOUR");
     registerMapping("Health_MaxLevel","MORALE");
     registerMapping("Power_MaxLevel","POWER");
@@ -30,6 +32,10 @@ public class StatMappings
     registerMapping("Stat_Will","WILL");
     registerMapping("Stat_Vitality","VITALITY");
     registerMapping("Stat_Fate","FATE");
+    if (live)
+    {
+      registerMapping("Combat_Class_CriticalPoints_Unified","CRITICAL_RATING");
+    }
     registerMapping("Combat_Class_CriticalPoints_Unified","CRITICAL_RATING");
     registerMapping("Combat_SuperCritical_Magnitude_PercentAddMod","DEVASTATE_MAGNITUDE_PERCENTAGE");
     registerMapping("Combat_CriticalHitChanceAddMod","CRITICAL_MELEE_PERCENTAGE");
@@ -72,8 +78,14 @@ public class StatMappings
     registerMapping("Combat_Modifier_OutgoingHealing_Points","OUTGOING_HEALING");
     registerMapping("Combat_Modifier_OutgoingHealing_Percent","OUTGOING_HEALING_PERCENTAGE");
     registerMapping("Combat_ArmorDefense_PointsModifier_UnifiedPhysical","PHYSICAL_MITIGATION");
-    //registerMapping("Combat_MitigationPercentage_Common","PHYSICAL_MITIGATION_PERCENTAGE"); // Should be only for common damage type
-    registerMapping("Combat_MitigationPercentage_UnifiedPhysical","PHYSICAL_MITIGATION_PERCENTAGE");
+    if (live)
+    {
+      registerMapping("Combat_MitigationPercentage_UnifiedPhysical","PHYSICAL_MITIGATION_PERCENTAGE");
+    }
+    else
+    {
+      registerMapping("Combat_MitigationPercentage_Common","PHYSICAL_MITIGATION_PERCENTAGE"); // Should be only for common damage type
+    }
     registerMapping("Combat_ArmorDefense_PointsModifier_UnifiedTactical","TACTICAL_MITIGATION");
     registerMapping("Combat_MitigationPercentage_UnifiedTactical","TACTICAL_MITIGATION_PERCENTAGE");
     registerMapping("Combat_ArmorDefense_PointsModifier_Frost","FROST_MITIGATION");

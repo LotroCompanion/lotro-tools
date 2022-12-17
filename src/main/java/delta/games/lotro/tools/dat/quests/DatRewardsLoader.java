@@ -706,14 +706,17 @@ public class DatRewardsLoader
     // QuestControl
     PropertiesSet questControlProps=_facade.loadProperties(1879048802+DATConstants.DBPROPERTIES_OFFSET);
     Object[] rewardMaps=(Object[])questControlProps.getProperty("QuestControl_RewardLevelDIDArray");
-    int index=1;
-    for(Object rewardMapObj : rewardMaps)
+    if (rewardMaps!=null)
     {
-      LOGGER.debug("Loading default rewards map for level: "+index);
-      Integer rewardLevelId=(Integer)rewardMapObj;
-      RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
-      _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);
-      index++;
+      int index=1;
+      for(Object rewardMapObj : rewardMaps)
+      {
+        LOGGER.debug("Loading default rewards map for level: "+index);
+        Integer rewardLevelId=(Integer)rewardMapObj;
+        RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
+        _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);
+        index++;
+      }
     }
   }
 }

@@ -59,11 +59,22 @@ UI_Map_MapNoteTypeArray:
       long mapNoteType=((Long)mapNoteTypeProps.getProperty("UI_Map_MapNoteType")).longValue();
       BitSet typeSet=BitSetUtils.getBitSetFromFlags(mapNoteType);
       int index=typeSet.nextSetBit(0)+1;
+      Integer imageId=null;
       PropertiesSet imageStruct=(PropertiesSet)mapNoteTypeProps.getProperty("UI_Map_MapNoteOnscreenImageStruct");
+      if (imageStruct!=null)
+      {
+        imageId=(Integer)imageStruct.getProperty("UI_Map_MapNoteImage");
+      }
+      else
+      {
+        imageId=(Integer)mapNoteTypeProps.getProperty("UI_Map_MapNoteImage");
+      }
       // Image
-      int imageId=((Integer)imageStruct.getProperty("UI_Map_MapNoteImage")).intValue();
-      File imageFile=new File(imagesDir,index+".png");
-      DatIconsUtils.buildImageFile(_facade,imageId,imageFile);
+      if (imageId!=null)
+      {
+        File imageFile=new File(imagesDir,index+".png");
+        DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
+      }
       /*
       // Menu image
       int menuImageId=((Integer)mapNoteTypeProps.getProperty("UI_Map_MapNoteMenuImage")).intValue();

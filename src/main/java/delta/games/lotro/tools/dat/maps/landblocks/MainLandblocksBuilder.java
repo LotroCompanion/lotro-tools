@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.maps.landblocks;
 
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
 import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.lore.maps.landblocks.io.xml.LandblocksXMLWriter;
@@ -32,7 +33,8 @@ public class MainLandblocksBuilder
     LandblockLoader landblockLoader=new LandblockLoader(_facade);
     LandblocksManager index=new LandblocksManager();
     int nbBlocks=0;
-    int[] regions={1,2,3,4,14};
+    boolean isLive=Context.isLive();
+    int[] regions=isLive?new int[]{1,2,3,4,14}:new int[]{1};
     for(int region : regions)
     {
       System.out.println("Region "+region);

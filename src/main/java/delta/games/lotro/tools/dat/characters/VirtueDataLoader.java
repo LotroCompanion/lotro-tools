@@ -13,6 +13,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -44,10 +45,16 @@ public class VirtueDataLoader
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TraitControl");
     //System.out.println(properties.dump());
 
-    int xpTableId=((Integer)properties.getProperty("Trait_Control_VirtueTierToExperience_AdvancementTable")).intValue();
-    WStateDataSet xpTableData=_facade.loadWState(xpTableId);
-    long[] xpTable=(long[])xpTableData.getValue(1);
-    Object[] freepTraitsArray=(Object[])properties.getProperty("Trait_Control_FreepTraits");
+    long[] xpTable=null;
+    Integer xpTableId=(Integer)properties.getProperty("Trait_Control_VirtueTierToExperience_AdvancementTable");
+    if (xpTableId!=null)
+    {
+      WStateDataSet xpTableData=_facade.loadWState(xpTableId.intValue());
+      xpTable=(long[])xpTableData.getValue(1);
+    }
+    boolean live=Context.isLive();
+    String propertyName=live?"Trait_Control_FreepTraits":"Trait_Control_Virtues_List";
+    Object[] freepTraitsArray=(Object[])properties.getProperty(propertyName);
     for(Object freepTraitObj : freepTraitsArray)
     {
       int traitId=((Integer)freepTraitObj).intValue();
@@ -60,9 +67,12 @@ public class VirtueDataLoader
       virtues.add(virtue);
       //System.out.println("Virtue: "+traitId+" - "+trait.getName());
       // Set XP table
-      for(int i=0;i<xpTable.length;i++)
+      if (xpTable!=null)
       {
-        virtue.setXpForTier(i,(int)xpTable[i]);
+        for(int i=0;i<xpTable.length;i++)
+        {
+          virtue.setXpForTier(i,(int)xpTable[i]);
+        }
       }
     }
     saveVirtues(virtues);
@@ -84,22 +94,32 @@ public class VirtueDataLoader
       ret.setIdentifier(id);
       // Name
       String traitName=DatUtils.getStringProperty(virtueProperties,"Trait_Name");
+      if (traitName==null)
+      {
+        traitName="?";
+      }
       ret.setName(traitName);
       // Description
       String description=DatUtils.getStringProperty(virtueProperties,"Trait_Description");
       ret.setDescription(description);
       // Icon
-      int iconId=((Integer)virtueProperties.getProperty("Trait_Icon")).intValue();
-      ret.setIconId(iconId);
+      Integer iconId=(Integer)virtueProperties.getProperty("Trait_Icon");
+      if (iconId!=null)
+      {
+        ret.setIconId(iconId.intValue());
+      }
       // Rank stat key
       PropertiesRegistry propsRegistry=facade.getPropertiesRegistry();
       int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
       String rankPropertyName=propsRegistry.getPropertyDef(rankPropertyId).getName();
       ret.setRankStatKey(rankPropertyName);
       // XP stat key
-      int xpPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_XP_PropertyName")).intValue();
-      String xpPropertyName=propsRegistry.getPropertyDef(xpPropertyId).getName();
-      ret.setXpPropertyName(xpPropertyName);
+      Integer xpPropertyId=(Integer)virtueProperties.getProperty("Trait_Virtue_XP_PropertyName");
+      if (xpPropertyId!=null)
+      {
+        String xpPropertyName=propsRegistry.getPropertyDef(xpPropertyId.intValue()).getName();
+        ret.setXpPropertyName(xpPropertyName);
+      }
       // Stats
       DatStatUtils._doFilterStats=false;
       DatStatUtils.STATS_USAGE_STATISTICS.reset();
@@ -113,13 +133,16 @@ public class VirtueDataLoader
         LOGGER.warn("Could not find progression rank->level for virtues");
       }
       // Character level to max virtue rank:
-      int charLevelToMaxRankProgId=((Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression")).intValue();
-      Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId);
-      if (charLevelToMaxRankProg==null)
+      Integer charLevelToMaxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
+      if (charLevelToMaxRankProgId!=null)
       {
-        LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
+        Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
+        if (charLevelToMaxRankProg==null)
+        {
+          LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
+        }
+        ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
       }
-      ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
 
       // Passives
       Object[] passives=(Object[])virtueProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
@@ -135,11 +158,14 @@ public class VirtueDataLoader
       }
 
       // Max rank progression
-      int maxRankProgId=((Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression")).intValue();
-      Progression maxRankProg=DatStatUtils.getProgression(facade,maxRankProgId);
-      if (maxRankProg!=null)
+      Integer maxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
+      if (maxRankProgId!=null)
       {
-        ret.setMaxRankForCharacterLevelProgression(maxRankProg);
+        Progression maxRankProg=DatStatUtils.getProgression(facade,maxRankProgId.intValue());
+        if (maxRankProg!=null)
+        {
+          ret.setMaxRankForCharacterLevelProgression(maxRankProg);
+        }
       }
 
       // Virtue key

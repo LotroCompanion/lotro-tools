@@ -56,51 +56,51 @@ public class MainBuffsLoader
   {
     List<EffectBuff> buffs=new ArrayList<EffectBuff>();
     // In Defence of Middle Earth
-    buffs.add(loadBuff(1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH"));
+    loadBuff(buffs,1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH");
     // Motivated
-    buffs.add(loadBuff(1879073072,"MOTIVATED"));
+    loadBuff(buffs,1879073072,"MOTIVATED");
     // Dissonance
-    buffs.add(loadBuff(1879095617,null));
+    loadBuff(buffs,1879095617,null);
     // Resonance
-    buffs.add(loadBuff(1879217087,null));
+    loadBuff(buffs,1879217087,null);
     // Enhanced Abilities
-    buffs.add(loadBuff(1879145605,null));
+    loadBuff(buffs,1879145605,null);
     // Peace and Quiet
-    //buffs.add(loadBuff(1879145606,null));
+    //loadBuff(buffs,1879145606,null));
     // A Quiet Calm (I)
-    buffs.add(loadBuff(1879145414,null));
+    loadBuff(buffs,1879145414,null);
     // A Quiet Calm (II)
-    buffs.add(loadBuff(1879239303,null));
+    loadBuff(buffs,1879239303,null);
     // Minstrel anthems:
     // Anthem of Composure
-    buffs.add(loadBuff(1879073122,null));
+    loadBuff(buffs,1879073122,null);
     // Anthem of Prowess
-    buffs.add(loadBuff(1879073120,null));
+    loadBuff(buffs,1879073120,null);
     // Anthem of War
-    buffs.add(loadBuff(1879060866,null));
+    loadBuff(buffs,1879060866,null);
     // Anthem of the Third Age - Resonance
-    buffs.add(loadBuff(1879205019,null));
+    loadBuff(buffs,1879205019,null);
     // Anthem of the Third Age - Dissonance
-    buffs.add(loadBuff(1879205020,null));
+    loadBuff(buffs,1879205020,null);
     // Anthem of the Third Age - Melody
-    buffs.add(loadBuff(1879217358,null));
+    loadBuff(buffs,1879217358,null);
     // Dwarves Endurance
-    buffs.add(loadBuff(1879073616,null));
+    loadBuff(buffs,1879073616,null);
     // Duty Bound
-    buffs.add(loadBuff(1879084065,null));
+    loadBuff(buffs,1879084065,null);
 
     // Scroll of Finesse
-    buffs.add(loadBuff(1879216017,null));
+    loadBuff(buffs,1879216017,null);
 
     // Veteran Fortitude
-    buffs.add(loadBuff(1879077245,null));
+    loadBuff(buffs,1879077245,null);
     // Veteran Determination
-    buffs.add(loadBuff(1879139404,null));
+    loadBuff(buffs,1879139404,null);
 
     return buffs;
   }
 
-  private EffectBuff loadBuff(int id, String key)
+  private void loadBuff(List<EffectBuff> buffs, int id, String key)
   {
     EffectBuff buff=null;
     Effect effect=DatEffectUtils.loadEffect(_facade,id);
@@ -129,7 +129,10 @@ public class MainBuffsLoader
         }
       }
     }
-    return buff;
+    if (buff!=null)
+    {
+      buffs.add(buff);
+    }
   }
 
   private void save(List<EffectBuff> buffs)

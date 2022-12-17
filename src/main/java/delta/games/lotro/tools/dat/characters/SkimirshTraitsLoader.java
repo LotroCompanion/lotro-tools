@@ -34,11 +34,14 @@ public class SkimirshTraitsLoader
     TraitsManager traitsMgr=TraitsManager.getInstance();
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TraitControl");
     Object[] skirmishTraitsArray=(Object[])properties.getProperty("Trait_Control_SkirmishTraits");
-    for(Object skirmishTraitObj : skirmishTraitsArray)
+    if (skirmishTraitsArray!=null)
     {
-      int traitId=((Integer)skirmishTraitObj).intValue();
-      TraitDescription trait=traitsMgr.getTrait(traitId);
-      traits.add(trait);
+      for(Object skirmishTraitObj : skirmishTraitsArray)
+      {
+        int traitId=((Integer)skirmishTraitObj).intValue();
+        TraitDescription trait=traitsMgr.getTrait(traitId);
+        traits.add(trait);
+      }
     }
     SkirmishTraitsXMLWriter.write(GeneratedFiles.SKIRMISH_TRAITS,traits);
   }

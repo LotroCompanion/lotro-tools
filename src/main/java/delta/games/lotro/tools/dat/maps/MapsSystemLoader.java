@@ -301,9 +301,16 @@ public class MapsSystemLoader
   {
     // Re-parent Deeping-coomb
     ParchmentMap helmsDeep=getMap(268449767);
-    Area deepingCoomb=helmsDeep.removeArea(1879277189);
+    Area deepingCoomb=null;
+    if (helmsDeep!=null)
+    {
+      deepingCoomb=helmsDeep.removeArea(1879277189);
+    }
     ParchmentMap westfold=getMap(268449758);
-    westfold.addArea(deepingCoomb);
+    if ((westfold!=null) && (deepingCoomb!=null))
+    {
+      westfold.addArea(deepingCoomb);
+    }
     // Remove areas from Eriador
     ParchmentMap eriador=getMap(268437557);
     eriador.removeAllAreas();

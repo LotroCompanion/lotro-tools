@@ -35,6 +35,10 @@ public class ProgressionControlLoader
   {
     // Load properties for ItemAdvancementControl (0x7900F24A)
     PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879110218+DATConstants.DBPROPERTIES_OFFSET);
+    if (itemAdvancementControlProps==null)
+    {
+      return;
+    }
     // Starting levels
     Object[] startingLevelTable=(Object[])itemAdvancementControlProps.getProperty("ProgressionControl_TypeStartingLevelTable");
     for(Object startingLevelObj : startingLevelTable)

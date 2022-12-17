@@ -66,17 +66,17 @@ public class MainDatMobsLoader
       _classificationLoader.loadClassification(properties,ret.getClassification());
       // Loot
       TrophyList barterTrophyList=null;
-      int barterTrophyListId=((Integer)properties.getProperty("LootGen_BarterTrophyList")).intValue();
-      if (barterTrophyListId!=0)
+      Integer barterTrophyListId=(Integer)properties.getProperty("LootGen_BarterTrophyList");
+      if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
       {
-        barterTrophyList=_lootLoader.getTrophyList(barterTrophyListId);
+        barterTrophyList=_lootLoader.getTrophyList(barterTrophyListId.intValue());
       }
       boolean generatesTrophy=(((Integer)properties.getProperty("LootGen_GeneratesTrophies")).intValue()!=0);
       TrophyList reputationTrophyList=null;
-      int reputationTrophyListId=((Integer)properties.getProperty("LootGen_ReputationTrophyList")).intValue();
-      if (reputationTrophyListId!=0)
+      Integer reputationTrophyListId=(Integer)properties.getProperty("LootGen_ReputationTrophyList");
+      if ((reputationTrophyListId!=null) && (reputationTrophyListId.intValue()!=0))
       {
-        reputationTrophyList=_lootLoader.getTrophyList(reputationTrophyListId);
+        reputationTrophyList=_lootLoader.getTrophyList(reputationTrophyListId.intValue());
       }
       TreasureList treasureList=null;
       int treasureListOverrideId=((Integer)properties.getProperty("LootGen_TreasureList_Override")).intValue();

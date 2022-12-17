@@ -37,10 +37,14 @@ public class ItemSortingDataLoader
 
   private void loadSortCriterias()
   {
-    PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
     // InventoryControl
     PropertiesSet props=_facade.loadProperties(0x79000230);
     Object[] sortInfoArray=(Object[])props.getProperty("InventoryControl_SmartSortInfo_Array");
+    if (sortInfoArray==null)
+    {
+      return;
+    }
+    PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
     for(Object sortInfoEntry : sortInfoArray)
     {
       PropertiesSet entryProps=(PropertiesSet)sortInfoEntry;

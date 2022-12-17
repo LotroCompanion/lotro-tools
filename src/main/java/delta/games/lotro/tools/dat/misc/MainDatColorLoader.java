@@ -61,8 +61,11 @@ public class MainDatColorLoader
       }
       // Color bit
       Long colorBitSet=(Long)colorProps.getProperty("Wardrobe_ItemClothingColorExt_Bit");
-      int position=Long.numberOfTrailingZeros(colorBitSet.longValue())+1;
-      color.setIntCode(position);
+      if (colorBitSet!=null)
+      {
+        int position=Long.numberOfTrailingZeros(colorBitSet.longValue())+1;
+        color.setIntCode(position);
+      }
       colors.add(color);
     }
     ColorXMLWriter.writeColorsFile(GeneratedFiles.COLORS,colors);

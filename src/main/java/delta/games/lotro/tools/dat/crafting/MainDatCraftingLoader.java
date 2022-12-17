@@ -55,10 +55,13 @@ public class MainDatCraftingLoader
     }
     // - guilds
     Object[] guildArray=(Object[])props.getProperty("CraftDirectory_CraftGuildArray");
-    for(Object guildObj : guildArray)
+    if (guildArray!=null)
     {
-      int guildId=((Integer)guildObj).intValue();
-      handleGuild(guildId);
+      for(Object guildObj : guildArray)
+      {
+        int guildId=((Integer)guildObj).intValue();
+        handleGuild(guildId);
+      }
     }
     // Icons
     RecipeIconsInitializer.setupRecipeIcons(_data);

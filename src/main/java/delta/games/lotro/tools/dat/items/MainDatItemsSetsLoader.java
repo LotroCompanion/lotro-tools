@@ -85,6 +85,10 @@ Set_Name:
     }
     // Name
     String name=DatUtils.getStringProperty(properties,"Set_Name");
+    if (name==null)
+    {
+      name="";
+    }
     boolean useIt=useIt(name);
     if (!useIt)
     {

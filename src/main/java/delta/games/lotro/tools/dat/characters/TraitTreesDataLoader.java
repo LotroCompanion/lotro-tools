@@ -165,6 +165,10 @@ public class TraitTreesDataLoader
     //System.out.println(properties.dump());
     Map<Integer,TraitTreeBranch> branchByCode=new HashMap<Integer,TraitTreeBranch>();
     Object[] traitNatures=(Object[])properties.getProperty("Trait_Control_PointBasedTraitNature_Array");
+    if (traitNatures==null)
+    {
+      return;
+    }
     for(Object traitNatureObj : traitNatures)
     {
       PropertiesSet traitNatureProps=(PropertiesSet)traitNatureObj;

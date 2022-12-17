@@ -29,6 +29,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Armour;
@@ -121,6 +122,7 @@ public class MainDatItemsLoader
   private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
+  private boolean _live;
 
   /**
    * Constructor.
@@ -129,6 +131,7 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
+    _live=Context.isLive();
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
@@ -541,8 +544,11 @@ public class MainDatItemsLoader
         provider.setDescriptionOverride("+10% Ranged Defence");
         statsProvider.addStatProvider(provider);
         // Critical defence
-        StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
-        statsProvider.addStatProvider(critDef);
+        if (_live)
+        {
+          StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
+          statsProvider.addStatProvider(critDef);
+        }
       }
     }
   }
@@ -1033,11 +1039,13 @@ public class MainDatItemsLoader
    */
   public void doIt()
   {
-    // Legacies
-    _legaciesLoader.loadLegacies();
-
-    // Offsets
-    _itemLevelOffsets=ItemLevelOffsetsUtils.buildOffsetsMap(_facade);
+    if (_live)
+    {
+      // Legacies
+      _legaciesLoader.loadLegacies();
+      // Offsets
+      _itemLevelOffsets=ItemLevelOffsetsUtils.buildOffsetsMap(_facade);
+    }
     // Items
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<Item> items=new ArrayList<Item>();
@@ -1089,7 +1097,10 @@ public class MainDatItemsLoader
     // Save consumables
     _consumablesLoader.saveConsumables();
     // Save legacies
-    _legaciesLoader.save();
+    if (_live)
+    {
+      _legaciesLoader.save();
+    }
     // Save value tables
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
     // Save item cosmetics

@@ -10,6 +10,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.tools.dat.maps.data.PropertiesDescriptor;
 
@@ -110,10 +111,13 @@ public class PropertyDescriptorsManager
   private void init()
   {
     handleRegion(1,0x18000000);
-    handleRegion(2,0x18000014);
-    handleRegion(3,0x18000015);
-    handleRegion(4,0x1800001a);
-    handleRegion(14,0x18000014);
+    if (Context.isLive())
+    {
+      handleRegion(2,0x18000014);
+      handleRegion(3,0x18000015);
+      handleRegion(4,0x1800001a);
+      handleRegion(14,0x18000014);
+    }
   }
 
   /**

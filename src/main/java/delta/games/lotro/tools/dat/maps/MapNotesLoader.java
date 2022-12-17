@@ -65,6 +65,15 @@ public class MapNotesLoader
     // Associated data ID
     int noteDID=BufferUtils.readUInt32(bis);
 
+    if ((areaDID==0) && (dungeonDID==0))
+    {
+      Integer parentZoneId=MapUtils.getParentZone(position);
+      if (parentZoneId!=null)
+      {
+        areaDID=parentZoneId.intValue();
+      }
+    }
+
     // Properties
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
 

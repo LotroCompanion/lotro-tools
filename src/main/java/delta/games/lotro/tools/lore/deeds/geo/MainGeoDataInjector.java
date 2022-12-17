@@ -253,6 +253,10 @@ public class MainGeoDataInjector
   {
     // Add geo data
     GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
+    if (data==null)
+    {
+      return;
+    }
     for(Achievable achievable : achievables)
     {
       handleAchievable(achievable,data);

@@ -48,10 +48,13 @@ public class MainDatCombatLoader
     // CombatControl
     PropertiesSet props=_facade.loadProperties(1879048757+DATConstants.DBPROPERTIES_OFFSET);
     Object[] calcControlInfoArray=(Object[])props.getProperty("Combat_Control_CalcControlInfoArray");
-    for(Object calcControlInfoObj : calcControlInfoArray)
+    if (calcControlInfoArray!=null)
     {
-      PropertiesSet calcControlProps=(PropertiesSet)calcControlInfoObj;
-      handleOneStat(calcControlProps);
+      for(Object calcControlInfoObj : calcControlInfoArray)
+      {
+        PropertiesSet calcControlProps=(PropertiesSet)calcControlInfoObj;
+        handleOneStat(calcControlProps);
+      }
     }
     save();
   }
