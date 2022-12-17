@@ -218,6 +218,7 @@ public class MainDatLoader
     // - traits
     deleteFile(GeneratedFiles.TRAITS);
     deleteDirectory(GeneratedFiles.TRAIT_ICONS_DIR);
+    deleteFile(GeneratedFiles.SKIRMISH_TRAITS);
     // - stat tomes
     deleteFile(GeneratedFiles.STAT_TOMES);
     // Titles
