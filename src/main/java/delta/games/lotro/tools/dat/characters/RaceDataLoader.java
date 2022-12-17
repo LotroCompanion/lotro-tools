@@ -179,7 +179,7 @@ public class RaceDataLoader
     {
       gender.setLargeIconId(largeIconId.intValue());
       File largeIconFile=getIconFile(race,sex);
-      DatIconsUtils.buildImageFile(_facade,largeIconId,largeIconFile);
+      DatIconsUtils.buildImageFile(_facade,largeIconId.intValue(),largeIconFile);
     }
     Integer smallIconId=(Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon");
     if (smallIconId!=null)
