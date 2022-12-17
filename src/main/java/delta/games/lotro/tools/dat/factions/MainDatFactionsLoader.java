@@ -225,7 +225,7 @@ Reputation_LowestTier: 1
         reputationTable[entry.getKey().intValue()]=entry.getValue().longValue();
       }
     }
-    System.out.println(Arrays.toString(reputationTable));
+    //System.out.println(Arrays.toString(reputationTable));
     return reputationTable;
   }
 
