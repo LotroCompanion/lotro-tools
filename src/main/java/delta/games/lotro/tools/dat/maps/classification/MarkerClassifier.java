@@ -111,6 +111,10 @@ public class MarkerClassifier
   private Classification getClassification(int did)
   {
     PropertiesSet props=_facade.loadProperties(did+DATConstants.DBPROPERTIES_OFFSET);
+    if (props==null)
+    {
+      return null;
+    }
     Classification rc=tryResourceNodeClassification(did,props);
     if (rc!=null)
     {
