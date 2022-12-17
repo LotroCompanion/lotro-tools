@@ -16,6 +16,6 @@ public class MainTestLandblocksLoader
   {
     DataFacade facade=new DataFacade();
     LandblockLoader loader=new LandblockLoader(facade);
-    /*ParentZoneLandblockData data=*/loader.buildLandblock(2,254,252);
+    /*Landblock landblock=*/loader.buildLandblock(2,254,252);
   }
 }

@@ -90,7 +90,7 @@ public class MainStatsLoader
     if (propertyType==PropertyType.BIT_FIELD32) return StatType.BITFIELD;
     if (propertyType==PropertyType.BITFIELD_64) return StatType.BITFIELD;
     if (propertyType==PropertyType.ARRAY) return StatType.ARRAY;
-    System.out.println(propertyType);
+    System.out.println("Unmanaged property type: "+propertyType);
     return StatType.OTHER;
   }
 

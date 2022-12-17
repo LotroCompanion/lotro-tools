@@ -99,7 +99,7 @@ public class MainDatEnumsLoader
     }
     else
     {
-      LOGGER.warn("Could not load enum");
+      LOGGER.warn("Could not load enum: "+name);
     }
   }
 
