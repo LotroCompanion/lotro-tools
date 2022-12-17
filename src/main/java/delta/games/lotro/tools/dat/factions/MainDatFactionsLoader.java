@@ -14,6 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
@@ -25,6 +26,7 @@ import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.ReputationDeedsFinder;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.VersionFinder;
 
 /**
  * Get faction definitions from DAT files.
@@ -102,20 +104,43 @@ Reputation_LowestTier: 1
     String description=DatUtils.getStringProperty(properties,"Reputation_Faction_Description");
     faction.setDescription(description);
 
-    // Tier names:
-    int tierNamesId=((Integer)properties.getProperty("Reputation_Faction_TierNameProgression")).intValue();
-    LOGGER.debug("Tier names table: "+tierNamesId);
-    Map<Integer,String> tierNames=getTierNames(tierNamesId);
-    LOGGER.debug(tierNames);
+    // Tier names
+    Map<Integer,String> tierNames=null;
+    Integer tierNamesId=(Integer)properties.getProperty("Reputation_Faction_TierNameProgression");
+    if (tierNamesId!=null)
+    {
+      LOGGER.debug("Tier names table: "+tierNamesId);
+      tierNames=getTierNames(tierNamesId.intValue());
+      LOGGER.debug(tierNames);
+    }
+    else
+    {
+      tierNames=new HashMap<Integer,String>();
+    }
+
+    // Faction advancement table
+    // Here we find the total amount of reputation points for each tier
+    int reputationTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
+    LOGGER.debug("Reputation table: "+reputationTableId);
+    WStateDataSet table=_facade.loadWState(reputationTableId);
+    long[] reputationTable=extractReputationTable(table);
+    LOGGER.debug(Arrays.toString(reputationTable));
 
     // Lowest/initial/highest tiers
-    int lowestTier=((Integer)properties.getProperty("Reputation_LowestTier")).intValue();
-    faction.setLowestTier(lowestTier);
-    int highestTier=((Integer)properties.getProperty("Reputation_HighestTier")).intValue();
-    faction.setHighestTier(highestTier);
+    Integer lowestTierInt=(Integer)properties.getProperty("Reputation_LowestTier");
+    int lowestTier=(lowestTierInt!=null)?lowestTierInt.intValue():0;
+    Integer highestTierInt=(Integer)properties.getProperty("Reputation_HighestTier");
+    int highestTier=(highestTierInt!=null)?highestTierInt.intValue():0;
     int defaultTier=((Integer)properties.getProperty("Reputation_Faction_DefaultTier")).intValue();
-    faction.setInitialTier(defaultTier);
+    if ((lowestTier==0) && (highestTier==0))
+    {
+      lowestTier=1;
+      highestTier=reputationTable.length-1;
+    }
     LOGGER.debug("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
+    faction.setLowestTier(lowestTier);
+    faction.setHighestTier(highestTier);
+    faction.setInitialTier(defaultTier);
 
     // Guild?
     boolean isGuild=isGuildFaction(factionId);
@@ -152,14 +177,6 @@ Reputation_LowestTier: 1
     }
     */
 
-    // Faction advancement table
-    // Here we find the total amount of reputation points for each tier
-    int reputationTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
-    LOGGER.debug("Reputation table: "+reputationTableId);
-    WStateDataSet table=_facade.loadWState(reputationTableId);
-    long[] reputationTable=(long[])table.getValue(1);
-    LOGGER.debug(Arrays.toString(reputationTable));
-
     List<FactionLevel> levels=buildFactionLevels(tierNames,reputationTable,lowestTier,highestTier);
     for(FactionLevel level : levels)
     {
@@ -188,6 +205,28 @@ Reputation_LowestTier: 1
       }
     }
     return faction;
+  }
+
+  private long[] extractReputationTable(WStateDataSet table)
+  {
+    long[] reputationTable=null;
+    if (Context.isLive())
+    {
+      reputationTable=(long[])table.getValue(1);
+    }
+    else
+    {
+      @SuppressWarnings("unchecked")
+      Map<Integer,Long> map=(Map<Integer,Long>)table.getValue(1);
+      int size=map.size();
+      reputationTable=new long[size+1];
+      for(Map.Entry<Integer,Long> entry : map.entrySet())
+      {
+        reputationTable[entry.getKey().intValue()]=entry.getValue().longValue();
+      }
+    }
+    System.out.println(Arrays.toString(reputationTable));
+    return reputationTable;
   }
 
   private Map<Integer,String> getTierNames(int tableId)
@@ -505,6 +544,7 @@ Reputation_LowestTier: 1
    */
   public static void main(String[] args)
   {
+    VersionFinder.initVersion(args);
     DataFacade facade=new DataFacade();
     new MainDatFactionsLoader(facade).doIt();
     MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
