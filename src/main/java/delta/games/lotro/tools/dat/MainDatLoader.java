@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.common.treasure.LootsManager;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
@@ -52,7 +53,6 @@ import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
-import delta.games.lotro.tools.dat.utils.VersionFinder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
 import delta.games.lotro.tools.lore.tasks.MainTaskDataBuilder;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
@@ -85,7 +85,7 @@ public class MainDatLoader
 
   private void load()
   {
-    boolean live=Context.isLive();
+    boolean live=LotroCoreConfig.isLive();
     // Servers
     new MainServersBuilder().doIt();
     // Stats
@@ -326,6 +326,11 @@ public class MainDatLoader
 
   private void deleteFile(File toDelete)
   {
+    if (toDelete==null)
+    {
+      LOGGER.warn("Cannot delete null file!");
+      return;
+    }
     if (toDelete.exists())
     {
       boolean ok=toDelete.delete();
@@ -338,6 +343,11 @@ public class MainDatLoader
 
   private void deleteDirectory(File toDelete)
   {
+    if (toDelete==null)
+    {
+      LOGGER.warn("Cannot delete null directory!");
+      return;
+    }
     FilesDeleter deleter=new FilesDeleter(toDelete,null,true);
     deleter.doIt();
   }
@@ -348,7 +358,7 @@ public class MainDatLoader
    */
   public static void main(String[] args)
   {
-    VersionFinder.initVersion(args);
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     new MainDatLoader(facade).doIt();
     facade.dispose();

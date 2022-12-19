@@ -11,6 +11,7 @@ import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.BlockMarkersManager;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
+import delta.games.lotro.tools.dat.maps.MapConstants;
 
 /**
  * Test class for the markers classifier.
@@ -40,7 +41,7 @@ public class MainTestMarkerClassifier
 
   void doBlocks()
   {
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     MapsManager maps=new MapsManager(rootDir);
     GlobalMarkersManager markersMgr=maps.getMarkersManager();
     Map<Integer,IntegerHolder> stats=new HashMap<Integer,IntegerHolder>();

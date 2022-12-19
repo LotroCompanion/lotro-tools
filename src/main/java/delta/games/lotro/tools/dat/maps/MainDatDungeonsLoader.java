@@ -24,7 +24,7 @@ public class MainDatDungeonsLoader
   public MainDatDungeonsLoader(DataFacade facade)
   {
     _facade=facade;
-    File rootDir=new File("../lotro-maps-db/maps");
+    File rootDir=MapConstants.getMapsDir();
     _basemapsManager=new GeoreferencedBasemapsManager(rootDir);
     _loader=new DungeonLoader(facade,_basemapsManager);
   }

@@ -78,7 +78,8 @@ public class MapCategoriesBuilder
   {
     DataFacade facade=new DataFacade();
     MapCategoriesBuilder loader=new MapCategoriesBuilder(facade);
-    File categoriesDir=new File("../lotro-maps-db/categories");
+    File rootDir=MapConstants.getRootDir();
+    File categoriesDir=new File(rootDir,"categories");
     CategoriesManager categoriesManager=new CategoriesManager(categoriesDir);
     loader.doIt(categoriesManager);
     categoriesManager.save();

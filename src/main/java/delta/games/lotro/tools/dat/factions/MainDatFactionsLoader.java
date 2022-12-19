@@ -26,7 +26,6 @@ import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.ReputationDeedsFinder;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.dat.utils.VersionFinder;
 
 /**
  * Get faction definitions from DAT files.
@@ -544,7 +543,6 @@ Reputation_LowestTier: 1
    */
   public static void main(String[] args)
   {
-    VersionFinder.initVersion(args);
     DataFacade facade=new DataFacade();
     new MainDatFactionsLoader(facade).doIt();
     MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());

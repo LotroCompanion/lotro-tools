@@ -15,6 +15,7 @@ import delta.games.lotro.maps.ui.BasemapPanelController;
 import delta.games.lotro.maps.ui.navigation.MapViewDefinition;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
 import delta.games.lotro.maps.ui.navigation.NavigationSupport;
+import delta.games.lotro.tools.dat.maps.MapConstants;
 
 /**
  * Link editor for maps.
@@ -30,7 +31,7 @@ public class MainLinkEditor
    */
   public static void main(String[] args)
   {
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     final MapsManager mapsManager=new MapsManager(rootDir);
     final GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
 

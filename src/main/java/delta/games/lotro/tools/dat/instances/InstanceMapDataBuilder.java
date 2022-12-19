@@ -25,6 +25,7 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
+import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 import delta.games.lotro.tools.dat.maps.MarkerUtils;
 
@@ -43,7 +44,7 @@ public class InstanceMapDataBuilder
   public InstanceMapDataBuilder()
   {
     _landblocksManager=LandblocksManager.getInstance();
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     _finder=mapsManager.getMarkersFinder();
   }

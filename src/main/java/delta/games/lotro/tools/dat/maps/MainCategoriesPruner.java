@@ -78,7 +78,7 @@ public class MainCategoriesPruner
    */
   public static void main(String[] args)
   {
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     new MainCategoriesPruner(mapsManager).doIt();
   }

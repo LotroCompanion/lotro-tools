@@ -18,7 +18,7 @@ public class MainMarkerDuplicatesRemover
 
   private MainMarkerDuplicatesRemover()
   {
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     _markersMgr=mapsManager.getMarkersManager();
     _remover=new MarkerDuplicatesRemover();

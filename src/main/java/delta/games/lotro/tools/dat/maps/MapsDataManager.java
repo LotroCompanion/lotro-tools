@@ -38,7 +38,7 @@ public class MapsDataManager
    */
   public MapsDataManager(DataFacade facade)
   {
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     _mapsManager=new MapsManager(rootDir);
     _index=new MarkersIndexesManager(rootDir);
     _didStore=new HashMap<Integer,MarkersStore>();

@@ -13,6 +13,7 @@ import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
+import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 
 /**
@@ -30,7 +31,7 @@ public class MapsFinder
    */
   public MapsFinder()
   {
-    File rootDir=new File("../lotro-maps-db/maps");
+    File rootDir=MapConstants.getMapsDir();
     _basemapsManager=new GeoreferencedBasemapsManager(rootDir);
   }
 

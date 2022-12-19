@@ -47,7 +47,7 @@ public class GeneratedFiles
   /**
    * Trait icons.
    */
-  public static final File TRAIT_ICONS_DIR=new File("../lotro-icons/traits").getAbsoluteFile();
+  public static final File TRAIT_ICONS_DIR=LotroCoreConfig.getInstance().getFile("traitIcons");
   /**
    * Skirmish traits.
    */
@@ -67,7 +67,7 @@ public class GeneratedFiles
   /**
    * Skill icons.
    */
-  public static final File SKILL_ICONS_DIR=new File("../lotro-icons/skills").getAbsoluteFile();
+  public static final File SKILL_ICONS_DIR=LotroCoreConfig.getInstance().getFile("skillIcons");
   /**
    * Titles.
    */
@@ -75,7 +75,7 @@ public class GeneratedFiles
   /**
    * Title icons.
    */
-  public static final File TITLE_ICONS=new File("../lotro-data/titles/titleIcons.zip").getAbsoluteFile();
+  public static final File TITLE_ICONS=LotroCoreConfig.getInstance().getFile("titleIcons");
   /**
    * Emotes.
    */
@@ -83,7 +83,7 @@ public class GeneratedFiles
   /**
    * Emote icons.
    */
-  public static final File EMOTE_ICONS_DIR=new File("../lotro-icons/emotes").getAbsoluteFile();
+  public static final File EMOTE_ICONS_DIR=LotroCoreConfig.getInstance().getFile("emoteIcons");
   /**
    * Items.
    */
@@ -91,11 +91,11 @@ public class GeneratedFiles
   /**
    * Item icons.
    */
-  public static final File ITEM_ICONS_DIR=new File("../lotro-icons/items").getAbsoluteFile();
+  public static final File ITEM_ICONS_DIR=LotroCoreConfig.getInstance().getFile("itemIcons");
   /**
    * Item (large) icons.
    */
-  public static final File ITEM_LARGE_ICONS_DIR=new File("../lotro-icons/largeItems").getAbsoluteFile();
+  public static final File ITEM_LARGE_ICONS_DIR=LotroCoreConfig.getInstance().getFile("largeItemIcons");
   /**
    * Item cosmetics.
    */
@@ -147,7 +147,7 @@ public class GeneratedFiles
   /**
    * Relic icons.
    */
-  public static final File RELIC_ICONS_DIR=new File("../lotro-icons/relics").getAbsoluteFile();
+  public static final File RELIC_ICONS_DIR=LotroCoreConfig.getInstance().getFile("relicIcons");
   /**
    * Relic melding recipes.
    */
@@ -171,7 +171,7 @@ public class GeneratedFiles
   /**
    * Legacies icons.
    */
-  public static final File LEGACIES_ICONS=new File("../lotro-data/legendary/legaciesIcons.zip").getAbsoluteFile();
+  public static final File LEGACIES_ICONS=LotroCoreConfig.getInstance().getFile("legaciesIcons");
   /**
    * Passives.
    */
@@ -240,7 +240,7 @@ public class GeneratedFiles
   /**
    * Effect icons.
    */
-  public static final File EFFECT_ICONS=new File("../lotro-data/effects/effectIcons.zip").getAbsoluteFile();
+  public static final File EFFECT_ICONS=LotroCoreConfig.getInstance().getFile("effectIcons");
   /**
    * Mounts.
    */
@@ -280,7 +280,7 @@ public class GeneratedFiles
   /**
    * Misc icons.
    */
-  public static final File MISC_ICONS=new File("../lotro-data/misc/miscIcons.zip").getAbsoluteFile();
+  public static final File MISC_ICONS=LotroCoreConfig.getInstance().getFile("miscIcons");
   /**
    * Servers.
    */
@@ -292,7 +292,7 @@ public class GeneratedFiles
   /**
    * Area icons.
    */
-  public static final File AREA_ICONS=new File("../lotro-data/maps/areaIcons.zip").getAbsoluteFile();
+  public static final File AREA_ICONS=LotroCoreConfig.getInstance().getFile("areaIcons");
   /**
    * Parchment maps.
    */
@@ -348,7 +348,7 @@ public class GeneratedFiles
   /**
    * Allegiance icons.
    */
-  public static final File ALLEGIANCES_ICONS=new File("../lotro-data/allegiances/allegianceIcons.zip").getAbsoluteFile();
+  public static final File ALLEGIANCES_ICONS=LotroCoreConfig.getInstance().getFile("allegianceIcons");
   /**
    * Billing groups descriptions.
    */
@@ -372,7 +372,7 @@ public class GeneratedFiles
   /**
    * Hobby icons.
    */
-  public static final File HOBBY_ICONS=new File("../lotro-data/hobbies/hobbyIcons.zip").getAbsoluteFile();
+  public static final File HOBBY_ICONS=LotroCoreConfig.getInstance().getFile("hobbyIcons");
 
   // For the jukebox
   /**

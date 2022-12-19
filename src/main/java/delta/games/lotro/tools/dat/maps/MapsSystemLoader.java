@@ -335,7 +335,7 @@ public class MapsSystemLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    File rootDir=new File("../lotro-maps-db");
+    File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     MapsSystemLoader loader=new MapsSystemLoader(facade,mapsManager);
     loader.doIt();
