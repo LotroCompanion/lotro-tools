@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.io.xml.DeedXMLParser;
+import delta.games.lotro.lore.deeds.io.xml.DeedsSaxParser;
 
 /**
  * Tool for injection of legacy deed keys into the deeds database.
@@ -36,8 +36,7 @@ public class DeedKeysInjector
 
   private void loadOldDeeds()
   {
-    DeedXMLParser parser=new DeedXMLParser();
-    List<DeedDescription> oldDeeds=parser.parseXML(OLD_FILE);
+    List<DeedDescription> oldDeeds=DeedsSaxParser.parseDeedsFile(OLD_FILE);
     _old.setDeeds(oldDeeds);
   }
 
