@@ -222,10 +222,18 @@ public class MarkerClassifier
       LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
       return null;
     }
+    int craftTier=0;
     boolean live=Context.isLive();
-    String propertyName=live?"Usage_RequiredCraftTier":"Usage_RequiredCraftProficiency";
-    Integer craftTierCode=(Integer)props.getProperty(propertyName);
-    int craftTier=(craftTierCode!=null)?craftTierCode.intValue():1;
+    if (live)
+    {
+      Integer craftTierCode=(Integer)props.getProperty("Usage_RequiredCraftTier");
+      craftTier=(craftTierCode!=null)?craftTierCode.intValue():1;
+    }
+    else
+    {
+      Integer craftTierCode=(Integer)props.getProperty("Usage_RequiredCraftProficiency");
+      craftTier=1+((craftTierCode!=null)?craftTierCode.intValue():0);
+    }
     int professionId=((Integer)props.getProperty("Usage_RequiredCraftProfession")).intValue();
     CraftingData craftingData=CraftingSystem.getInstance().getData();
     Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
