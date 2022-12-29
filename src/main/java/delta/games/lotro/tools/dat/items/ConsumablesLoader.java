@@ -267,7 +267,7 @@ Skill_AttackHookList:
       }
       //System.out.println("Item: "+item+"  => "+effectID+" (spellcraft: "+skillSpellcraft);
       handleEffect(item,currentConsumable.getProvider(),effectID.intValue(),skillSpellcraft);
-      //registerConsumable(currentConsumable);
+      registerConsumable(currentConsumable);
     }
   }
 

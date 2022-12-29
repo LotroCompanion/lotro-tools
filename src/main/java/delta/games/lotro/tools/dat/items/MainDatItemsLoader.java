@@ -577,7 +577,7 @@ public class MainDatItemsLoader
     // On use
     _consumablesLoader.handleOnUseEffects(_currentItem,properties);
     // Skills
-    //_consumablesLoader.handleSkillEffects(_currentItem,properties);
+    _consumablesLoader.handleSkillEffects(_currentItem,properties);
   }
 
   private StatsProvider handleEffect(int effectId)
