@@ -583,16 +583,31 @@ public class MainDatItemsLoader
   private StatsProvider handleEffect(int effectId)
   {
     PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
+    boolean useEffect=useEffect(effectProps);
+    if (useEffect)
+    {
+      return DatStatUtils.buildStatProviders(_facade,effectProps);
+    }
+    return null;
+  }
+
+  private boolean useEffect(PropertiesSet effectProps)
+  {
     Object probability=effectProps.getProperty("Effect_ConstantApplicationProbability");
     if ((probability!=null) && (probability.equals(Float.valueOf(1.0f))))
     {
       Integer permanent=(Integer)effectProps.getProperty("Effect_Duration_Permanent");
       if ((permanent!=null) && (permanent.intValue()==1))
       {
-        return DatStatUtils.buildStatProviders(_facade,effectProps);
+        return true;
+      }
+      Float constantInterval=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
+      if ((constantInterval!=null) && (constantInterval.intValue()>0))
+      {
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
   private void handleLegendaries(Item item, PropertiesSet properties)
