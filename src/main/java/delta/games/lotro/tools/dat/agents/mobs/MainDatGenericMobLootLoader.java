@@ -11,9 +11,11 @@ import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.agents.mobs.loot.GenericMobLootEntry;
 import delta.games.lotro.lore.agents.mobs.loot.GenericMobLootSpec;
 import delta.games.lotro.lore.agents.mobs.loot.SpeciesLoot;
@@ -37,6 +39,11 @@ public class MainDatGenericMobLootLoader
   private LootLoader _lootLoader;
   // Data
   private SpeciesLootsManager _mgr;
+  private String _levelTableProperty;
+  private String _lootTableProperty;
+  private String _levelProperty;
+  private String _treasureProfileProperty;
+  private String _trophyListProperty;
 
   /**
    * Constructor.
@@ -48,6 +55,13 @@ public class MainDatGenericMobLootLoader
     _facade=facade;
     _loots=lootsManager;
     _lootLoader=new LootLoader(facade,_loots);
+    boolean isLive=LotroCoreConfig.isLive();
+    String prefix=isLive?"LevelBasedLootTable":"SpeciesLevelLootTable";
+    _levelTableProperty=prefix+"_LevelTable";
+    _lootTableProperty=prefix+"_LootTable";
+    _levelProperty=prefix+"_Level";
+    _treasureProfileProperty=prefix+"_TreasureProfile";
+    _trophyListProperty=prefix+"_TrophyList";
   }
 
   private SpeciesLootsManager load()
@@ -107,7 +121,7 @@ public class MainDatGenericMobLootLoader
     int subSpeciesCode=((Integer)entryProps.getProperty("Agent_Subspecies")).intValue();
     SubSpecies subspecies=subSpeciesMgr.getEntry(subSpeciesCode);
     // Table ID
-    Integer tableId=(Integer)entryProps.getProperty("LevelBasedLootTable_LevelTable");
+    Integer tableId=(Integer)entryProps.getProperty(_levelTableProperty);
     // Mob Type
     LotroEnum<MobType> mobTypeMgr=registry.get(MobType.class);
     int mobTypeCode=((Integer)entryProps.getProperty("MonsterLevel_ExaminationModStatType")).intValue();
@@ -152,7 +166,7 @@ LevelBasedLootTable_LootTable:
     LevelBasedLootTable_TreasureProfile: 1879064739
     LevelBasedLootTable_TrophyList: 1879064740
      */
-    Object[] array=(Object[])properties.getProperty("LevelBasedLootTable_LootTable");
+    Object[] array=(Object[])properties.getProperty(_lootTableProperty);
     for(Object arrayItem : array)
     {
       PropertiesSet entryProps=(PropertiesSet)arrayItem;
@@ -163,9 +177,9 @@ LevelBasedLootTable_LootTable:
 
   private GenericMobLootEntry handleLevelTableEntry(PropertiesSet entryProps)
   {
-    int level=((Integer)entryProps.getProperty("LevelBasedLootTable_Level")).intValue();
+    int level=((Integer)entryProps.getProperty(_levelProperty)).intValue();
     TreasureList treasureList=null;
-    int treasureProfileId=((Integer)entryProps.getProperty("LevelBasedLootTable_TreasureProfile")).intValue();
+    int treasureProfileId=((Integer)entryProps.getProperty(_treasureProfileProperty)).intValue();
     if (treasureProfileId!=0)
     {
       treasureList=_lootLoader.getTreasureList(treasureProfileId);
@@ -175,7 +189,7 @@ LevelBasedLootTable_LootTable:
       }
     }
     TrophyList trophyList=null;
-    int trophyListId=((Integer)entryProps.getProperty("LevelBasedLootTable_TrophyList")).intValue();
+    int trophyListId=((Integer)entryProps.getProperty(_trophyListProperty)).intValue();
     if (trophyListId!=0)
     {
       trophyList=_lootLoader.getTrophyList(trophyListId);
@@ -212,6 +226,7 @@ LevelBasedLootTable_LootTable:
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     LootsManager lootsManager=new LootsManager();
     new MainDatGenericMobLootLoader(facade,lootsManager).doIt();

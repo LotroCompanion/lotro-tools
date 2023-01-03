@@ -9,10 +9,12 @@ import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobLoot;
@@ -174,6 +176,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     LootsManager lootsManager=new LootsManager();
     new MainDatMobsLoader(facade,lootsManager).doIt();
