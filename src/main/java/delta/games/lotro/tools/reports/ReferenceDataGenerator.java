@@ -9,6 +9,7 @@ import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.StringTools;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
@@ -22,6 +23,7 @@ import delta.games.lotro.dat.loaders.DataIdMapLoader;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
 import delta.games.lotro.dat.loaders.wstate.WSLUtils;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.WLibData;
 
@@ -245,6 +247,7 @@ public class ReferenceDataGenerator
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     new ReferenceDataGenerator().doIt();
   }
 }
