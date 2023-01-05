@@ -54,7 +54,7 @@ public class TraitKeyGenerator
     // Champion
     setup("CRIT_CHANCE_INCREASE",1879270411);
     setup("MIGHT_INCREASE",1879270409);
-    setup("FINESSE_INCREASE",1879270656);
+    setup("FINESSE_INCREASE",1879270418);
     // Guardian
     setup("OVERPOWER","Valorous Strength");
     setup("HEAVY_BLOWS","Heavy Blows");
