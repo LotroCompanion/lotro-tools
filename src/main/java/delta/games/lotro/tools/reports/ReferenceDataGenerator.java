@@ -59,6 +59,7 @@ public class ReferenceDataGenerator
     dumpMaps();
     dumpWLibClasses();
     dumpWLibClassesHierarchy();
+    dumpDATFilesIndex();
   }
 
   private void dumpWeenieContent()
@@ -231,6 +232,11 @@ public class ReferenceDataGenerator
     File wDir=new File(ROOT_DIR,"W");
     File to=new File(wDir,"classesTree.txt");
     writeFile(to,classTree);
+  }
+
+  private void dumpDATFilesIndex()
+  {
+    new DATFilesIndexBuilder().doIt();
   }
 
   private void writeFile(File to, String contents)
