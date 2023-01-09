@@ -300,6 +300,13 @@ public class DatStatUtils
     if (modOp==7) return StatOperator.ADD;
     if (modOp==8) return StatOperator.MULTIPLY;
     LOGGER.warn("Unmanaged operator: "+modOp);
+    // 1 => Difference
+    // 2 => Divide
+    // 3 => Or
+    // 4 => Random
+    // 10 => ArrayAdd
+    // 11 => And
+    // 12 => Xor
     return null;
   }
 
