@@ -15,12 +15,12 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -70,11 +70,11 @@ public class MainDatPrivateEncountersLoader
       ret=new PrivateEncounter(privateEncounterId);
     }
     // Name
-    String name=DatStringUtils.getStringProperty(props,"PrivateEncounterTemplate_Name");
+    String name=DatUtils.getStringProperty(props,"PrivateEncounterTemplate_Name");
     name=StringUtils.fixName(name);
     ret.setName(name);
     // Description
-    String description=DatStringUtils.getStringProperty(props,"PrivateEncounterTemplate_Description");
+    String description=DatUtils.getStringProperty(props,"PrivateEncounterTemplate_Description");
     ret.setDescription(description);
     // Content Layer ID
     int contentLayerId=((Integer)props.getProperty("PrivateEncounterTemplate_ContentLayer")).intValue();

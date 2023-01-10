@@ -18,6 +18,7 @@ import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.paper.PaperItem;
 import delta.games.lotro.lore.items.paper.io.xml.PaperItemsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get paper items details from DAT files.
@@ -82,7 +83,7 @@ public class MainDatPaperItemsLoader
     PaperItem ret=new PaperItem(itemId);
     PropertiesSet itemProps=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(itemProps.dump());
-    String name=DatStringUtils.getStringProperty(itemProps,"Name");
+    String name=DatUtils.getStringProperty(itemProps,"Name");
     name=DatStringUtils.fixName(name);
     ret.setName(name);
     Integer isBarter=(Integer)itemProps.getProperty("Barter_IsBarterItem");

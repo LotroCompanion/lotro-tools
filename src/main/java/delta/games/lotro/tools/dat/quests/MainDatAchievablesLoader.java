@@ -27,7 +27,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
@@ -174,7 +173,7 @@ public class MainDatAchievablesLoader
     // ID
     quest.setIdentifier(indexDataId);
     // Name
-    String nameFormat=DatStringUtils.getStringProperty(properties,"Quest_Name");
+    String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
     String renderedName=renderName(nameFormat);
     quest.setName(renderedName);
 
@@ -393,7 +392,7 @@ public class MainDatAchievablesLoader
     // ID
     deed.setIdentifier(indexDataId);
     // Name
-    String nameFormat=DatStringUtils.getStringProperty(properties,"Quest_Name");
+    String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
     String renderedName=renderName(nameFormat);
     deed.setName(renderedName);
     //System.out.println("Deed name: "+name);

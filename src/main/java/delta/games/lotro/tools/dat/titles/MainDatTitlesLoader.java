@@ -15,7 +15,6 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -80,7 +79,7 @@ Title_String:
       //System.out.println("************* "+indexDataId+" *****************");
       //System.out.println(properties.dump());
       // Name
-      String titleFormat=DatStringUtils.getStringProperty(properties,"Title_String");
+      String titleFormat=DatUtils.getStringProperty(properties,"Title_String");
       String renderedTitle=renderTitle(titleFormat);
       title.setName(renderedTitle);
       // Category
