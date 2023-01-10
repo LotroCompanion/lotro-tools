@@ -64,6 +64,10 @@ public class VirtueDataLoader
         continue;
       }
       VirtueDescription virtue=loadVirtue(_facade,traitId);
+      if (virtue==null)
+      {
+        continue;
+      }
       virtues.add(virtue);
       //System.out.println("Virtue: "+traitId+" - "+trait.getName());
       // Set XP table
@@ -86,99 +90,105 @@ public class VirtueDataLoader
    */
   public static VirtueDescription loadVirtue(DataFacade facade, int id)
   {
-    VirtueDescription ret=null;
     PropertiesSet virtueProperties=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    if (virtueProperties!=null)
+    if (virtueProperties==null)
     {
-      ret=new VirtueDescription();
-      ret.setIdentifier(id);
-      // Name
-      String traitName=DatUtils.getStringProperty(virtueProperties,"Trait_Name");
-      if (traitName==null)
-      {
-        traitName="?";
-      }
-      ret.setName(traitName);
-      // Description
-      String description=DatUtils.getStringProperty(virtueProperties,"Trait_Description");
-      ret.setDescription(description);
-      // Icon
-      Integer iconId=(Integer)virtueProperties.getProperty("Trait_Icon");
-      if (iconId!=null)
-      {
-        ret.setIconId(iconId.intValue());
-      }
-      // Rank stat key
-      PropertiesRegistry propsRegistry=facade.getPropertiesRegistry();
-      int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
-      String rankPropertyName=propsRegistry.getPropertyDef(rankPropertyId).getName();
-      ret.setRankStatKey(rankPropertyName);
-      // XP stat key
-      Integer xpPropertyId=(Integer)virtueProperties.getProperty("Trait_Virtue_XP_PropertyName");
-      if (xpPropertyId!=null)
-      {
-        String xpPropertyName=propsRegistry.getPropertyDef(xpPropertyId.intValue()).getName();
-        ret.setXpPropertyName(xpPropertyName);
-      }
-      // Stats
-      DatStatUtils._doFilterStats=false;
-      DatStatUtils.STATS_USAGE_STATISTICS.reset();
-      StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
-      ret.setStatsProvider(statsProvider);
-      // Rank to level
-      // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
-      Progression rankToLevel=DatStatUtils.getProgression(facade,1879387583);
-      if (rankToLevel==null)
-      {
-        LOGGER.warn("Could not find progression rank->level for virtues");
-      }
-      // Character level to max virtue rank:
-      Integer charLevelToMaxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
-      if (charLevelToMaxRankProgId!=null)
-      {
-        Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
-        if (charLevelToMaxRankProg==null)
-        {
-          LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
-        }
-        ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
-      }
-
-      // Passives
-      Object[] passives=(Object[])virtueProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
-      if (passives!=null)
-      {
-        for(Object passiveObj : passives)
-        {
-          PropertiesSet passiveProps=(PropertiesSet)passiveObj;
-          int effectId=((Integer)passiveProps.getProperty("EffectGenerator_EffectID")).intValue();
-          StatsProvider provider=handleEffect(facade,effectId);
-          ret.setPassiveStatsProvider(provider);
-        }
-      }
-
-      // Max rank progression
-      Integer maxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
-      if (maxRankProgId!=null)
-      {
-        Progression maxRankProg=DatStatUtils.getProgression(facade,maxRankProgId.intValue());
-        if (maxRankProg!=null)
-        {
-          ret.setMaxRankForCharacterLevelProgression(maxRankProg);
-        }
-      }
-
-      // Virtue key
-      String virtueKey=null;
-      if (id==1879072876) virtueKey="DETERMINATION"; 
-      else if (id==1879072876) virtueKey="LOYALTY"; 
-      else if (id==1879072876) virtueKey="VALOUR";
-      else
-      {
-        virtueKey=ret.getName().toUpperCase();
-      }
-      ret.setKey(virtueKey);
+      return null;
     }
+    //System.out.println(virtueProperties.dump());
+    Integer nature=(Integer)virtueProperties.getProperty("Trait_Nature");
+    if ((nature==null) || (nature.intValue()!=5))
+    {
+      return null;
+    }
+    VirtueDescription ret=new VirtueDescription();
+    ret.setIdentifier(id);
+    // Name
+    String traitName=DatUtils.getStringProperty(virtueProperties,"Trait_Name");
+    if (traitName==null)
+    {
+      traitName="?";
+    }
+    ret.setName(traitName);
+    // Description
+    String description=DatUtils.getStringProperty(virtueProperties,"Trait_Description");
+    ret.setDescription(description);
+    // Icon
+    Integer iconId=(Integer)virtueProperties.getProperty("Trait_Icon");
+    if (iconId!=null)
+    {
+      ret.setIconId(iconId.intValue());
+    }
+    // Rank stat key
+    PropertiesRegistry propsRegistry=facade.getPropertiesRegistry();
+    int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
+    String rankPropertyName=propsRegistry.getPropertyDef(rankPropertyId).getName();
+    ret.setRankStatKey(rankPropertyName);
+    // XP stat key
+    Integer xpPropertyId=(Integer)virtueProperties.getProperty("Trait_Virtue_XP_PropertyName");
+    if (xpPropertyId!=null)
+    {
+      String xpPropertyName=propsRegistry.getPropertyDef(xpPropertyId.intValue()).getName();
+      ret.setXpPropertyName(xpPropertyName);
+    }
+    // Stats
+    DatStatUtils._doFilterStats=false;
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
+    StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
+    ret.setStatsProvider(statsProvider);
+    // Rank to level
+    // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
+    Progression rankToLevel=DatStatUtils.getProgression(facade,1879387583);
+    if (rankToLevel==null)
+    {
+      LOGGER.warn("Could not find progression rank->level for virtues");
+    }
+    // Character level to max virtue rank:
+    Integer charLevelToMaxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
+    if (charLevelToMaxRankProgId!=null)
+    {
+      Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
+      if (charLevelToMaxRankProg==null)
+      {
+        LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
+      }
+      ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
+    }
+
+    // Passives
+    Object[] passives=(Object[])virtueProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
+    if (passives!=null)
+    {
+      for(Object passiveObj : passives)
+      {
+        PropertiesSet passiveProps=(PropertiesSet)passiveObj;
+        int effectId=((Integer)passiveProps.getProperty("EffectGenerator_EffectID")).intValue();
+        StatsProvider provider=handleEffect(facade,effectId);
+        ret.setPassiveStatsProvider(provider);
+      }
+    }
+
+    // Max rank progression
+    Integer maxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
+    if (maxRankProgId!=null)
+    {
+      Progression maxRankProg=DatStatUtils.getProgression(facade,maxRankProgId.intValue());
+      if (maxRankProg!=null)
+      {
+        ret.setMaxRankForCharacterLevelProgression(maxRankProg);
+      }
+    }
+
+    // Virtue key
+    String virtueKey=null;
+    if (id==1879072876) virtueKey="DETERMINATION"; 
+    else if (id==1879072876) virtueKey="LOYALTY"; 
+    else if (id==1879072876) virtueKey="VALOUR";
+    else
+    {
+      virtueKey=ret.getName().toUpperCase();
+    }
+    ret.setKey(virtueKey);
     return ret;
   }
 
