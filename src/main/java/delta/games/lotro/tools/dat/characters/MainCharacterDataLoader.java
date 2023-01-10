@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
@@ -62,6 +63,7 @@ public class MainCharacterDataLoader
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     new MainCharacterDataLoader(facade).doIt();
     // Stats usage statistics
