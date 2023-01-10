@@ -208,6 +208,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.STAT_CONTRIBS);
     deleteFile(GeneratedFiles.START_STATS);
     deleteFile(GeneratedFiles.CLASSES);
+    deleteFile(GeneratedFiles.TRAIT_TREES);
     deleteFile(GeneratedFiles.RACES);
     deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
