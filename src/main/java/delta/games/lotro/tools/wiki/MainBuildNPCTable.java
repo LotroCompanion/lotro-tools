@@ -3,8 +3,8 @@ package delta.games.lotro.tools.wiki;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.DATFilesConstants;
 import delta.games.lotro.dat.WStateClass;
+import delta.games.lotro.dat.archive.DATL10nSupport;
 import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -31,15 +31,15 @@ public class MainBuildNPCTable
   {
     // EN
     DatConfiguration enCfg=new DatConfiguration();
-    enCfg.setLocale(DATFilesConstants.LOCAL_ENGLISH);
+    enCfg.setLocale(DATL10nSupport.EN);
     _facade=new DataFacade();
     // FR
     DatConfiguration frCfg=new DatConfiguration();
-    frCfg.setLocale(DATFilesConstants.LOCAL_FRENCH);
+    frCfg.setLocale(DATL10nSupport.FR);
     _facadeFR=new DataFacade(frCfg);
     // DE
     DatConfiguration deCfg=new DatConfiguration();
-    deCfg.setLocale(DATFilesConstants.LOCAL_GERMAN);
+    deCfg.setLocale(DATL10nSupport.DE);
     _facadeDE=new DataFacade(deCfg);
   }
 
