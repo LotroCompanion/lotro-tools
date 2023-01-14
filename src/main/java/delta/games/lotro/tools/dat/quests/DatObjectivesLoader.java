@@ -51,11 +51,11 @@ import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.MobLoader;
 import delta.games.lotro.tools.dat.utils.NpcLoader;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.tools.dat.utils.ProxyBuilder;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -67,6 +67,7 @@ public class DatObjectivesLoader
   private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   private EnumMapper _monsterDivision;
   private EnumMapper _questEvent;
@@ -84,10 +85,12 @@ public class DatObjectivesLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param i18n I18n support.
    */
-  public DatObjectivesLoader(DataFacade facade)
+  public DatObjectivesLoader(DataFacade facade, I18nUtils i18n)
   {
     _facade=facade;
+    _i18n=i18n;
     _monsterDivision=_facade.getEnumsManager().getEnumMapper(587202657);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
@@ -123,16 +126,16 @@ public class DatObjectivesLoader
         int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
         objective.setIndex(objectiveIndex);
         // Description
-        String description=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveDescription");
+        String description=_i18n.getStringProperty(objectiveProps,"Quest_ObjectiveDescription");
         objective.setDescription(description);
         // Lore override
-        String loreOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveLoreOverride");
+        String loreOverride=_i18n.getStringProperty(objectiveProps,"Quest_ObjectiveLoreOverride");
         objective.setLoreOverride(loreOverride);
         // Progress override
-        String progressOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveProgressOverride");
+        String progressOverride=_i18n.getStringProperty(objectiveProps,"Quest_ObjectiveProgressOverride");
         objective.setProgressOverride(progressOverride);
         // Billboard override
-        String billboardOverride=DatUtils.getStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride");
+        String billboardOverride=_i18n.getStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride");
         objective.setBillboardOverride(billboardOverride);
         // Conditions (can have several conditions)
         ArrayPropertyValue completionConditionsArray=(ArrayPropertyValue)objectiveProps.getPropertyValueByName("Quest_CompletionConditionArray");
@@ -282,7 +285,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow billboard text: "+showBillboardTextInt);
     }
     // Billboard override
-    String billboardProgressOverride=DatUtils.getStringProperty(properties,"QuestEvent_BillboardProgressOverride");
+    String billboardProgressOverride=_i18n.getStringProperty(properties,"QuestEvent_BillboardProgressOverride");
     if (billboardProgressOverride!=null)
     {
       //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
@@ -296,7 +299,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tShow progress text: "+showProgressTextInt);
     }
     // Progress override
-    String progressOverride=DatUtils.getStringProperty(properties,"QuestEvent_ProgressOverride");
+    String progressOverride=_i18n.getStringProperty(properties,"QuestEvent_ProgressOverride");
     // Role constraint
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
     if (roleConstraint!=null)
@@ -304,7 +307,7 @@ public class DatObjectivesLoader
       //System.out.println("\t\tRole constraint: "+roleConstraint);
     }
     // Lore info
-    String loreInfo=DatUtils.getStringProperty(properties,"Accomplishment_LoreInfo");
+    String loreInfo=_i18n.getStringProperty(properties,"Accomplishment_LoreInfo");
     // Count
     Integer count=(Integer)properties.getProperty("QuestEvent_Number");
 

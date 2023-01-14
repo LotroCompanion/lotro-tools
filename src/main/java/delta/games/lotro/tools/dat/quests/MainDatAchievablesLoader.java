@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.collections.CompoundComparator;
-import delta.common.utils.io.FileIO;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
@@ -48,6 +47,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 import delta.games.lotro.utils.Proxy;
@@ -60,9 +60,8 @@ public class MainDatAchievablesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatAchievablesLoader.class);
 
-  private static final int DEBUG_ID=1879000000;
-
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private Map<Integer,QuestDescription> _quests;
   private Map<Integer,DeedDescription> _deeds;
   private EnumMapper _questCategory;
@@ -86,13 +85,14 @@ public class MainDatAchievablesLoader
   public MainDatAchievablesLoader(DataFacade facade, DatRewardsLoader rewardsLoader)
   {
     _facade=facade;
+    _i18n=new I18nUtils("quests",facade.getGlobalStringsManager());
     _quests=new HashMap<Integer,QuestDescription>();
     _deeds=new HashMap<Integer,DeedDescription>();
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
     _deedUiTabName=_facade.getEnumsManager().getEnumMapper(587202588);
     _rewardsLoader=rewardsLoader;
-    _objectivesLoader=new DatObjectivesLoader(facade);
-    _rolesLoader=new DatRolesLoader(facade);
+    _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
+    _rolesLoader=new DatRolesLoader(facade,_i18n);
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _logger=new AchievablesLogger(true,true,"achievables.txt");
@@ -105,7 +105,7 @@ public class MainDatAchievablesLoader
   private void handleArc(int arcId)
   {
     PropertiesSet arcProps=_facade.loadProperties(arcId+DATConstants.DBPROPERTIES_OFFSET);
-    String arcName=DatUtils.getStringProperty(arcProps,"QuestArc_Name");
+    String arcName=_i18n.getStringProperty(arcProps,"QuestArc_Name");
     Object[] list=(Object[])arcProps.getProperty("QuestArc_Quest_Array");
     for(Object obj : list)
     {
@@ -128,12 +128,6 @@ public class MainDatAchievablesLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      // Debug
-      if (indexDataId==DEBUG_ID)
-      {
-        FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
-        System.out.println(properties.dump());
-      }
       // Route: quest or deed?
       boolean isQuest=DatQuestDeedsUtils.isQuest(properties);
       if (isQuest)
@@ -180,7 +174,7 @@ public class MainDatAchievablesLoader
     //DatObjectivesLoader.currentName=name;
     //System.out.println("Quest name: "+name);
     // Description
-    String description=DatUtils.getStringProperty(properties,"Quest_Description");
+    String description=_i18n.getStringProperty(properties,"Quest_Description");
     quest.setDescription(description);
     // Category
     Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
@@ -398,7 +392,7 @@ public class MainDatAchievablesLoader
     //System.out.println("Deed name: "+name);
     //DatObjectivesLoader.currentName=name;
     // Description
-    String description=DatUtils.getStringProperty(properties,"Quest_Description");
+    String description=_i18n.getStringProperty(properties,"Quest_Description");
     deed.setDescription(description);
     // UI Tab
     Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
@@ -651,6 +645,7 @@ public class MainDatAchievablesLoader
 
     // Save
     doSave();
+    _i18n.save();
     _logger.finish();
   }
 

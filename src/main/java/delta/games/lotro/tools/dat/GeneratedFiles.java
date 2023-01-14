@@ -373,6 +373,10 @@ public class GeneratedFiles
    * Hobby icons.
    */
   public static final File HOBBY_ICONS=LotroCoreConfig.getInstance().getFile("hobbyIcons");
+  /**
+   * Labels dir.
+   */
+  public static final File LABELS=LotroCoreConfig.getInstance().getFile(DataFiles.LABELS);
 
   // For the jukebox
   /**

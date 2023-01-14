@@ -14,8 +14,8 @@ import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.lore.quests.dialogs.QuestCompletionComment;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.NpcLoader;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -27,15 +27,18 @@ public class DatRolesLoader
   private static final Logger LOGGER=Logger.getLogger(DatRolesLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private EnumMapper _questRoleAction;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param i18n I18n support.
    */
-  public DatRolesLoader(DataFacade facade)
+  public DatRolesLoader(DataFacade facade, I18nUtils i18n)
   {
     _facade=facade;
+    _i18n=i18n;
     _questRoleAction=facade.getEnumsManager().getEnumMapper(587202589);
   }
 
@@ -85,7 +88,7 @@ public class DatRolesLoader
         {
           System.out.println("\tdispenserRole Constraint: " +dispenserRoleConstraint);
         }
-        String successText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
+        String successText=_i18n.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
         System.out.println("\tSuccess text: "+successText);
         index++;
       }
@@ -106,8 +109,8 @@ public class DatRolesLoader
         Integer objectiveIndex=(Integer)roleProps.getProperty("Quest_ObjectiveIndex");
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
-        String successText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
-        String failureText=DatUtils.getStringProperty(roleProps,"QuestDispenser_RoleFailureText");
+        String successText=_i18n.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
+        String failureText=_i18n.getStringProperty(roleProps,"QuestDispenser_RoleFailureText");
         if ((objectiveIndex!=null) && (objectiveIndex.intValue()==0) && (dispenserAction==6)) // Bestow
         {
           DialogElement dialog=buildDialog(npcId,successText);
