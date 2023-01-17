@@ -65,9 +65,8 @@ import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -107,6 +106,7 @@ public class MainDatItemsLoader
   };
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
   private ConsumablesLoader _consumablesLoader;
@@ -131,6 +131,7 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("items",facade.getGlobalStringsManager());
     _live=Context.isLive();
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);
@@ -156,9 +157,11 @@ public class MainDatItemsLoader
     if (properties!=null)
     {
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
-      String name=DatUtils.getStringProperty(properties,"Name");
-      name=StringUtils.removeMarks(name);
-      if (!useItem(name,itemClassCode)) return null;
+      String name=_i18n.getNameStringProperty(properties,"Name",indexDataId);
+      if (!useItem(name,itemClassCode))
+      {
+        return null;
+      }
       item=buildItem(properties);
       _currentItem=item;
       // ID
@@ -196,14 +199,6 @@ public class MainDatItemsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
-      // Loot
-      /*
-      Integer lootId=(Integer)properties.getProperty("LootGen_CustomSkirmishLootLookupTable");
-      if ((lootId!=null) && (lootId.intValue()!=0))
-      {
-        System.out.println(lootId+" => "+item);
-      }
-      */
       // Item level tweak
       Integer itemLevelOffset=getItemLevelOffset(item,properties);
       item.setItemLevelOffset(itemLevelOffset);
@@ -272,8 +267,7 @@ public class MainDatItemsLoader
         item.setSturdiness(getSturdiness(durabilityEnum.intValue()));
       }
       // Description
-      String description=DatUtils.getStringProperty(properties,"Description");
-      description=StringUtils.removeMarks(description);
+      String description=_i18n.getStringProperty(properties,"Description");
       item.setDescription(description);
       // Requirements
       // - class
@@ -1120,6 +1114,8 @@ public class MainDatItemsLoader
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
     // Save item cosmetics
     _cosmeticLoader.save();
+    // Save labels
+    _i18n.save();
   }
 
   /**
