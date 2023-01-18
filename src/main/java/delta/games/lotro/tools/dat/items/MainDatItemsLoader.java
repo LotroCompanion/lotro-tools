@@ -157,7 +157,7 @@ public class MainDatItemsLoader
     if (properties!=null)
     {
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
-      String name=_i18n.getNameStringProperty(properties,"Name",indexDataId);
+      String name=_i18n.getNameStringProperty(properties,"Name",indexDataId,I18nUtils.OPTION_REMOVE_MARKS);
       if (!useItem(name,itemClassCode))
       {
         return null;
@@ -267,7 +267,7 @@ public class MainDatItemsLoader
         item.setSturdiness(getSturdiness(durabilityEnum.intValue()));
       }
       // Description
-      String description=_i18n.getStringProperty(properties,"Description");
+      String description=_i18n.getStringProperty(properties,"Description",I18nUtils.OPTION_REMOVE_MARKS);
       item.setDescription(description);
       // Requirements
       // - class

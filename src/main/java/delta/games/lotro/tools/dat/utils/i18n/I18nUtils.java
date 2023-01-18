@@ -18,6 +18,14 @@ import delta.games.lotro.utils.StringUtils;
  */
 public class I18nUtils
 {
+  /**
+   * Remove all [] marks.
+   */
+  public static final int OPTION_REMOVE_MARKS=1;
+  /**
+   * Remove only the trailing mark, if any.
+   */
+  public static final int OPTION_REMOVE_TRAILING_MARK=2;
   private String _setKey;
   private LabelsStorage _storage;
   private GlobalStringsManager _stringsMgr;
@@ -42,9 +50,10 @@ public class I18nUtils
    * @param props Source properties.
    * @param propertyName Property name.
    * @param id Identifier (used as i18n key).
+   * @param options Options to apply on the loaded strings.
    * @return A non-localized string or a string in the default locale.
    */
-  public String getNameStringProperty(PropertiesSet props, String propertyName, int id)
+  public String getNameStringProperty(PropertiesSet props, String propertyName, int id, int options)
   {
     PropertyValue propertyValue=props.getPropertyValueByName(propertyName);
     if (propertyValue==null)
@@ -56,8 +65,8 @@ public class I18nUtils
     {
       String key=String.valueOf(id);
       TableEntryStringInfo stringInfo=(TableEntryStringInfo)complement;
-      String defaultValue=getDefaultValue(stringInfo,true);
-      handleStringInfo(stringInfo,key,defaultValue,true);
+      String defaultValue=getDefaultValue(stringInfo,options);
+      handleStringInfo(stringInfo,key,defaultValue,options);
       return defaultValue;
     }
     Object value=propertyValue.getValue();
@@ -73,6 +82,19 @@ public class I18nUtils
    */
   public String getStringProperty(PropertiesSet props, String propertyName)
   {
+    return getStringProperty(props,propertyName,0);
+  }
+
+  /**
+   * Get the value of a string property.
+   * As a side-effect, resolve the localized strings if any.
+   * @param props Source properties.
+   * @param propertyName Property name.
+   * @param options Options to apply on the loaded strings.
+   * @return A non-localized string or a localization key.
+   */
+  public String getStringProperty(PropertiesSet props, String propertyName, int options)
+  {
     PropertyValue propertyValue=props.getPropertyValueByName(propertyName);
     if (propertyValue==null)
     {
@@ -83,23 +105,19 @@ public class I18nUtils
     {
       TableEntryStringInfo stringInfo=(TableEntryStringInfo)complement;
       String key=getKey(stringInfo);
-      String defaultValue=getDefaultValue(stringInfo,false);
-      boolean useLocalisation=handleStringInfo(stringInfo,key,defaultValue,false);
+      String defaultValue=getDefaultValue(stringInfo,options);
+      boolean useLocalisation=handleStringInfo(stringInfo,key,defaultValue,options);
       return useLocalisation?key:"";
     }
     Object value=propertyValue.getValue();
     return DatStringUtils.getString(value);
   }
 
-  private String getDefaultValue(TableEntryStringInfo stringInfo, boolean removeMarks)
+  private String getDefaultValue(TableEntryStringInfo stringInfo, int options)
   {
     StringsManager defaultStringsMgr=_stringsMgr.getDefaultStringsManager();
     String defaultValue=StringInfoUtils.buildStringFormat(defaultStringsMgr,stringInfo);
-    if (removeMarks)
-    {
-      defaultValue=StringUtils.removeMarks(defaultValue);
-    }
-    defaultValue=DatStringUtils.cleanupString(defaultValue);
+    defaultValue=filterValue(defaultValue,options);
     return defaultValue;
   }
 
@@ -108,10 +126,10 @@ public class I18nUtils
    * @param stringInfo String info to handle.
    * @param key Localization key to use.
    * @param defaultValue Default value if localized label is not found.
-   * @param removeMarks Remove marks or not.
+   * @param options Options to apply on the loaded strings.
    * @return <code>null</code> to use localization, <code>false</code> otherwise.
    */
-  private boolean handleStringInfo(TableEntryStringInfo stringInfo, String key, String defaultValue, boolean removeMarks)
+  private boolean handleStringInfo(TableEntryStringInfo stringInfo, String key, String defaultValue, int options)
   {
     if (defaultValue==null)
     {
@@ -126,11 +144,7 @@ public class I18nUtils
       {
         value=defaultValue;
       }
-      if (removeMarks)
-      {
-        value=StringUtils.removeMarks(value);
-      }
-      value=DatStringUtils.cleanupString(value);
+      value=filterValue(value,options);
       if (value.length()>0)
       {
         _storage.setLabel(locale,key,value);
@@ -138,6 +152,20 @@ public class I18nUtils
       }
     }
     return hasLabel;
+  }
+
+  private String filterValue(String value, int options)
+  {
+    value=DatStringUtils.cleanupString(value);
+    if ((options&OPTION_REMOVE_MARKS)!=0)
+    {
+      value=StringUtils.removeMarks(value);
+    }
+    if ((options&OPTION_REMOVE_TRAILING_MARK)!=0)
+    {
+      value=DatStringUtils.fixName(value);
+    }
+    return value;
   }
 
   private String getKey(TableEntryStringInfo stringInfo)

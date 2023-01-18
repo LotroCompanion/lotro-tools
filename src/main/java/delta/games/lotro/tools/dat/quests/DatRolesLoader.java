@@ -242,6 +242,7 @@ public class DatRolesLoader
 
     for(Object textObj : textArray)
     {
+      // TODO L10n
       String comment=DatStringUtils.getString(textObj);
       ret.addWhat(comment);
     }
