@@ -7,10 +7,12 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.common.enums.AllegianceGroup;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
@@ -37,7 +39,7 @@ public class MainDatAllegiancesLoader
   public static final File ALLEGIANCE_ICONS_DIR=new File("data\\allegiances\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
-  private EnumMapper _groups;
+  private LotroEnum<AllegianceGroup> _groups;
 
   /**
    * Constructor.
@@ -46,7 +48,7 @@ public class MainDatAllegiancesLoader
   public MainDatAllegiancesLoader(DataFacade facade)
   {
     _facade=facade;
-    _groups=_facade.getEnumsManager().getEnumMapper(587203638);
+    _groups=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
   }
 
   private AllegianceDescription load(int allegianceID)
@@ -65,7 +67,7 @@ public class MainDatAllegiancesLoader
     ret.setName(name);
     // Group
     int groupID=((Integer)properties.getProperty("Allegiance_Groups")).intValue();
-    String group=_groups.getString(groupID);
+    AllegianceGroup group=_groups.getEntry(groupID);
     ret.setGroup(group);
     // Description
     String description=DatUtils.getStringProperty(properties,"Allegiance_Description");
