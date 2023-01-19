@@ -24,6 +24,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -64,6 +65,7 @@ public class RaceDataLoader
     RaceDescription raceDescription=new RaceDescription(racePropertiesId,raceId,key,legacyLabel);
     // Name
     String name=_speciesCode.getLabel(raceId);
+    name=DatStringUtils.fixName(name);
     raceDescription.setName(name);
     // Description
     String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
