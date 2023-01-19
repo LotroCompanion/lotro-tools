@@ -2,8 +2,9 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.config.LotroCoreConfig;
@@ -89,7 +90,7 @@ public class RequirementsLoadingUtils
       for(Object raceReq : raceReqs)
       {
         int raceId=((Integer)raceReq).intValue();
-        Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
+        RaceDescription race=RacesManager.getInstance().getByCode(raceId);
         if (race!=null)
         {
           requirements.addAllowedRace(race);

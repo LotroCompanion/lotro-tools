@@ -11,7 +11,6 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
@@ -28,7 +27,6 @@ import delta.games.lotro.lore.items.details.ItemXP;
 import delta.games.lotro.lore.items.details.VirtueXP;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
  * Loader for item details.
@@ -107,10 +105,8 @@ Mount_SkillToGrantRaceArray:
       if (skill!=null)
       {
         int raceCode=((Integer)entryProps.getProperty("Usage_RequiredRaceEntry")).intValue();
-        Race race=DatEnumsUtils.getRaceFromRaceId(raceCode);
-        RacesManager racesMgr=RacesManager.getInstance();
-        RaceDescription raceDescription=racesMgr.getRaceDescription(race);
-        boolean tall=raceDescription.isTall();
+        RaceDescription race=RacesManager.getInstance().getByCode(raceCode);
+        boolean tall=race.isTall();
         GrantType grantType=tall?GrantType.TALL_MOUNT:GrantType.SHORT_MOUNT;
         GrantedElement<SkillDescription> grantedElement=new GrantedElement<SkillDescription>(grantType,skill);
         Item.addDetail(item,grantedElement);

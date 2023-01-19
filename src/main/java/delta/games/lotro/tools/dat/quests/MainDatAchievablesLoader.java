@@ -12,11 +12,12 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.LockType;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
@@ -819,7 +820,7 @@ public class MainDatAchievablesLoader
       int raceId=((Integer)raceIdObj).intValue();
       PropertiesSet raceProps=_facade.loadProperties(raceId+DATConstants.DBPROPERTIES_OFFSET);
       int raceCode=((Integer)raceProps.getProperty("RaceTable_Race")).intValue();
-      Race race=DatEnumsUtils.getRaceFromRaceId(raceCode);
+      RaceDescription race=RacesManager.getInstance().getByCode(raceCode);
       int accomplishmentDirectoryId=((Integer)raceProps.getProperty("RaceTable_AccomplishmentDirectory")).intValue();
       PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");

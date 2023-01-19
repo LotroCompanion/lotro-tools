@@ -17,7 +17,6 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Identifiable;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
@@ -143,10 +142,9 @@ public class SkillConstraintsComputer
   {
     Map<Integer,List<RaceDescription>> ret=new HashMap<Integer,List<RaceDescription>>();
     RacesManager mgr=RacesManager.getInstance();
-    for(Race race : Race.ALL_RACES)
+    for(RaceDescription race : mgr.getAll())
     {
-      RaceDescription raceDescription=mgr.getRaceDescription(race);
-      List<RaceTrait> raceTraits=raceDescription.getTraits();
+      List<RaceTrait> raceTraits=race.getTraits();
       for(RaceTrait raceTrait : raceTraits)
       {
         TraitDescription trait=raceTrait.getTrait();
@@ -157,9 +155,9 @@ public class SkillConstraintsComputer
           races=new ArrayList<RaceDescription>();
           ret.put(key,races);
         }
-        races.add(raceDescription);
+        races.add(race);
       }
-      for(TraitDescription trait : raceDescription.getEarnableTraits())
+      for(TraitDescription trait : race.getEarnableTraits())
       {
         Integer key=Integer.valueOf(trait.getIdentifier());
         List<RaceDescription> races=ret.get(key);
@@ -168,7 +166,7 @@ public class SkillConstraintsComputer
           races=new ArrayList<RaceDescription>();
           ret.put(key,races);
         }
-        races.add(raceDescription);
+        races.add(race);
       }
     }
     return ret;
@@ -256,7 +254,7 @@ public class SkillConstraintsComputer
       for(RaceDescription raceDescription : races)
       {
         ret=new UsageRequirement();
-        ret.addAllowedRace(raceDescription.getRace());
+        ret.addAllowedRace(raceDescription);
         //System.out.println("\t\tRace: "+raceDescription.getRace());
       }
     }

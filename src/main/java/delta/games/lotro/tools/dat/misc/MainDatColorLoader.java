@@ -7,11 +7,11 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.io.xml.ColorXMLWriter;
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
  * Get color definitions from DAT files.
@@ -37,9 +37,8 @@ public class MainDatColorLoader
    */
   public void doIt()
   {
-    // ItemMungingControl
-    long itemMungingPropsId=1879048786+DATConstants.DBPROPERTIES_OFFSET;
-    PropertiesSet properties=_facade.loadProperties(itemMungingPropsId);
+    // ItemMungingControl 0x70000252 (1879048786)
+    PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"ItemMungingControl");
     if (properties==null)
     {
       LOGGER.warn("Could not load item munging control properties");

@@ -15,6 +15,8 @@ import delta.games.lotro.character.classes.InitialGearDefinition;
 import delta.games.lotro.character.classes.InitialGearElement;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
@@ -24,7 +26,6 @@ import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXM
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -119,7 +120,7 @@ public class CharacterClassDataLoader
         int raceId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_RequiredRace")).intValue();
         if (raceId!=0)
         {
-          Race race=DatEnumsUtils.getRaceFromRaceId(raceId);
+          RaceDescription race=RacesManager.getInstance().getByCode(raceId);
           element.setRequiredRace(race);
         }
         initialGear.addGearElement(element);

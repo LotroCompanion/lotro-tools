@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.io.xml.DeedsSaxParser;
 
@@ -215,8 +215,8 @@ public class DeedKeysInjector
         List<DeedDescription> candidateDeeds=_new.getDeedsByName(newDeedName);
         for(DeedDescription candidateDeed : candidateDeeds)
         {
-          Race requiredRace=candidateDeed.getUsageRequirement().getRequiredRace();
-          if ((requiredRace!=null) && (requiredRace.getLabel().equals(fixedRace)))
+          RaceDescription requiredRace=candidateDeed.getUsageRequirement().getRequiredRace();
+          if ((requiredRace!=null) && (requiredRace.getName().equals(fixedRace)))
           {
             return candidateDeed;
           }

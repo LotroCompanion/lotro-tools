@@ -3,7 +3,6 @@ package delta.games.lotro.tools.dat.utils;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
 import delta.games.lotro.lore.crafting.Profession;
@@ -60,16 +59,6 @@ public class DatEnumsUtils
   public static CharacterClass getCharacterClassFromId(int id)
   {
     return delta.games.lotro.utils.dat.DatEnumsUtils.getCharacterClassFromId(id);
-  }
-
-  /**
-   * Get a race from a DAT enum code.
-   * @param raceId Input code.
-   * @return A race or <code>null</code> if not supported.
-   */
-  public static Race getRaceFromRaceId(int raceId)
-  {
-    return delta.games.lotro.utils.dat.DatEnumsUtils.getRaceFromRaceId(raceId);
   }
 
   /**
