@@ -18,6 +18,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.containers.ContainerBindingPolicy;
+import delta.games.lotro.lore.items.containers.ContainerOpenPolicy;
 import delta.games.lotro.lore.items.containers.ItemsContainer;
 import delta.games.lotro.lore.items.containers.LootTables;
 import delta.games.lotro.lore.items.containers.LootType;
@@ -130,14 +132,28 @@ public class MainDatContainerLoader
           LOGGER.warn("No or empty preview list for "+item);
         }
       }
-      /*
-      Integer action=(Integer)properties.getProperty("Usage_Action");
-      Integer weenieType=(Integer)properties.getProperty("WeenieType");
+      int action=((Integer)properties.getProperty("Usage_Action")).intValue();
+      if (action==1879303890)
+      {
+        itemsContainer.setOpenPolicy(ContainerOpenPolicy.USER_SELECTION);
+      }
+      //Integer weenieType=(Integer)properties.getProperty("WeenieType");
       Integer bind2Acc=(Integer)properties.getProperty("PackageItem_BindAllItemsToAccount");
+      if ((bind2Acc!=null) && (bind2Acc.intValue()==1))
+      {
+        itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_ACCOUNT);
+      }
       Integer bind2Char=(Integer)properties.getProperty("PackageItem_BindAllItemsToCharacter");
+      if ((bind2Char!=null) && (bind2Char.intValue()==1))
+      {
+        itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_CHARACTER);
+      }
       Integer playerForMunging=(Integer)properties.getProperty("PackageItem_UsePlayerAsContainerForMunging");
+      if ((playerForMunging!=null) && (playerForMunging.intValue()==1))
+      {
+        itemsContainer.setUseCharacterForMunging(true);
+      }
       //System.out.println(item+"\t"+action+"\t"+weenieType+"\t"+bind2Acc+"\t"+bind2Char+"\t"+previewable+"\t"+playerForMunging);
-      */
     }
 
     // Relics?
