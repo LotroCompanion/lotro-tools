@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
 import delta.games.lotro.character.classes.traitTree.TraitTreeCell;
@@ -15,7 +17,6 @@ import delta.games.lotro.character.classes.traitTree.TraitTreeCellDependency;
 import delta.games.lotro.character.classes.traitTree.TraitTreeProgression;
 import delta.games.lotro.character.classes.traitTree.io.xml.TraitTreeXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -179,12 +180,12 @@ public class TraitTreesDataLoader
         int traitTreeId=((Integer)traitTreeIdObj).intValue();
         TraitTree tree=handleTraitTree(traitTreeId);
         traitTrees.add(tree);
-        CharacterClass characterClass=getCharacterClassFromTraitNatureKey(traitNatureKey);
+        ClassDescription characterClass=getCharacterClassFromTraitNatureKey(traitNatureKey);
         if (characterClass!=null)
         {
           for(ClassDescription description : classes)
           {
-            if (description.getCharacterClass()==characterClass)
+            if (description==characterClass)
             {
               description.setTraitTree(tree);
               for(TraitTreeBranch branch : tree.getBranches())
@@ -226,19 +227,29 @@ public class TraitTreesDataLoader
     }
   }
 
-  private CharacterClass getCharacterClassFromTraitNatureKey(int traitNatureKey)
+  private ClassDescription getCharacterClassFromTraitNatureKey(int traitNatureKey)
   {
-    if (traitNatureKey==19) return CharacterClass.BURGLAR;
-    if (traitNatureKey==20) return CharacterClass.LORE_MASTER;
-    if (traitNatureKey==21) return CharacterClass.HUNTER;
-    if (traitNatureKey==22) return CharacterClass.MINSTREL;
-    if (traitNatureKey==23) return CharacterClass.CHAMPION;
-    if (traitNatureKey==24) return CharacterClass.RUNE_KEEPER;
-    if (traitNatureKey==25) return CharacterClass.WARDEN;
-    if (traitNatureKey==26) return CharacterClass.CAPTAIN;
-    if (traitNatureKey==27) return CharacterClass.GUARDIAN;
-    if (traitNatureKey==31) return CharacterClass.BEORNING;
-    if (traitNatureKey==32) return CharacterClass.BRAWLER;
+    String classKey=getCharacterClassKeyFromTraitNatureKey(traitNatureKey);
+    if (classKey!=null)
+    {
+      return ClassesManager.getInstance().getByKey(classKey);
+    }
+    return null;
+  }
+
+  private String getCharacterClassKeyFromTraitNatureKey(int traitNatureKey)
+  {
+    if (traitNatureKey==19) return WellKnownCharacterClassKeys.BURGLAR;
+    if (traitNatureKey==20) return WellKnownCharacterClassKeys.LORE_MASTER;
+    if (traitNatureKey==21) return WellKnownCharacterClassKeys.HUNTER;
+    if (traitNatureKey==22) return WellKnownCharacterClassKeys.MINSTREL;
+    if (traitNatureKey==23) return WellKnownCharacterClassKeys.CHAMPION;
+    if (traitNatureKey==24) return WellKnownCharacterClassKeys.RUNE_KEEPER;
+    if (traitNatureKey==25) return WellKnownCharacterClassKeys.WARDEN;
+    if (traitNatureKey==26) return WellKnownCharacterClassKeys.CAPTAIN;
+    if (traitNatureKey==27) return WellKnownCharacterClassKeys.GUARDIAN;
+    if (traitNatureKey==31) return WellKnownCharacterClassKeys.BEORNING;
+    if (traitNatureKey==32) return WellKnownCharacterClassKeys.BRAWLER;
     return null;
   }
 }

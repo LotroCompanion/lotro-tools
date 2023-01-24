@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
 import delta.games.lotro.lore.crafting.Profession;
@@ -49,16 +48,6 @@ public class DatEnumsUtils
     // 65407 ALL
     LOGGER.warn("Unmanaged damage type: "+damageTypeEnum);
     return null;
-  }
-
-  /**
-   * Get a character class from a DAT enum code.
-   * @param id Input code.
-   * @return A character class or <code>null</code> if not supported.
-   */
-  public static CharacterClass getCharacterClassFromId(int id)
-  {
-    return delta.games.lotro.utils.dat.DatEnumsUtils.getCharacterClassFromId(id);
   }
 
   /**

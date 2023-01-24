@@ -9,7 +9,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.QuestRequirement;
@@ -36,7 +37,6 @@ import delta.games.lotro.lore.trade.vendor.SellList;
 import delta.games.lotro.lore.trade.vendor.VendorNpc;
 import delta.games.lotro.lore.trade.vendor.io.xml.VendorXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
@@ -157,8 +157,8 @@ public class MainDatNpcLoader
     {
       for(Object requiredClassObj : requiredClassArray)
       {
-        Integer requiredClass=(Integer)requiredClassObj;
-        CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(requiredClass.intValue());
+        int classCode=((Integer)requiredClassObj).intValue();
+        ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
         if (characterClass!=null)
         {
           if (ret==null)
@@ -169,7 +169,7 @@ public class MainDatNpcLoader
         }
         else
         {
-          LOGGER.warn("Unsupported class: "+requiredClass);
+          LOGGER.warn("Unsupported class: "+characterClass);
         }
       }
     }

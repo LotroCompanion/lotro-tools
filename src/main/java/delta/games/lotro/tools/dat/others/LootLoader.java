@@ -7,7 +7,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
 import delta.games.lotro.common.treasure.FilteredTrophyTableEntry;
@@ -36,7 +37,6 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProxyBuilder;
 import delta.games.lotro.utils.Proxy;
@@ -235,8 +235,8 @@ public class LootLoader
           Object[] classIdsArray=(Object[])filterArray[0];
           for(Object classIdObj : classIdsArray)
           {
-            int classId=((Integer)classIdObj).intValue();
-            CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+            int classCode=((Integer)classIdObj).intValue();
+            ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
             if (characterClass!=null)
             {
               requirements.addAllowedClass(characterClass);

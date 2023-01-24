@@ -11,7 +11,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.archives.DirectoryArchiver;
-import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.constraints.ClassAndSlot;
 import delta.games.lotro.common.effects.Effect;
@@ -40,7 +42,6 @@ import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacy;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.ProgressionControlLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.WeaponTypesUtils;
 import delta.games.lotro.utils.maths.Progression;
@@ -336,8 +337,8 @@ public class LegaciesLoader
     for(Object reforgeTableItemObj : reforgeTableItems)
     {
       PropertiesSet reforgeTableItemProps=(PropertiesSet)reforgeTableItemObj;
-      int classId=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
-      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+      int classCode=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
+      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
       //System.out.println("Class: "+characterClass);
       Object[] reforgeGroups=(Object[])reforgeTableItemProps.getProperty("ItemAdvancement_ReforgeGroup_Array");
       for(Object reforgeGroupObj : reforgeGroups)
@@ -348,7 +349,7 @@ public class LegaciesLoader
     }
   }
 
-  private void handleReforgeGroup(CharacterClass characterClass, EquipmentLocation slot, int reforgeGroupId)
+  private void handleReforgeGroup(ClassDescription characterClass, EquipmentLocation slot, int reforgeGroupId)
   {
     //System.out.println("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
     PropertiesSet props=_facade.loadProperties(reforgeGroupId+DATConstants.DBPROPERTIES_OFFSET);
@@ -480,23 +481,34 @@ public class LegaciesLoader
     return null;
   }
 
-  private CharacterClass getClassFromCombatPropertyType(int code)
+  private ClassDescription getClassFromCombatPropertyType(int code)
+  {
+    String classKey=getClassKeyFromCombatPropertyType(code);
+    ClassDescription ret=null;
+    if (classKey!=null)
+    {
+      ret=ClassesManager.getInstance().getByKey(classKey);
+    }
+    return ret;
+  }
+
+  private String getClassKeyFromCombatPropertyType(int code)
   {
     if (code==3) return null; // TacticalDPS
-    if (code==6) return CharacterClass.MINSTREL; // Minstrel_TacticalDPS
-    if (code==22) return CharacterClass.LORE_MASTER; // Loremaster_TacticalDPS
-    if (code==15) return CharacterClass.GUARDIAN; // Guardian_TacticalDPS
-    if (code==5) return CharacterClass.RUNE_KEEPER; // Runekeeper_TacticalDPS
-    if (code==7) return CharacterClass.MINSTREL; // Minstrel_HealingPS
-    if (code==21) return CharacterClass.LORE_MASTER; // Loremaster_HealingPS
-    if (code==8) return CharacterClass.CAPTAIN; // Captain_HealingPS
-    if (code==13) return CharacterClass.RUNE_KEEPER; // Runekeeper_HealingPS
-    if (code==16) return CharacterClass.CHAMPION; // Champion_IncomingHealing
-    if (code==23) return CharacterClass.BURGLAR; // Burglar_IncomingHealing
-    if (code==25) return CharacterClass.CHAMPION; // Champion_IncomingHealing_65
-    if (code==24) return CharacterClass.BURGLAR; // Burglar_IncomingHealing_65
+    if (code==6) return WellKnownCharacterClassKeys.MINSTREL; // Minstrel_TacticalDPS
+    if (code==22) return WellKnownCharacterClassKeys.LORE_MASTER; // Loremaster_TacticalDPS
+    if (code==15) return WellKnownCharacterClassKeys.GUARDIAN; // Guardian_TacticalDPS
+    if (code==5) return WellKnownCharacterClassKeys.RUNE_KEEPER; // Runekeeper_TacticalDPS
+    if (code==7) return WellKnownCharacterClassKeys.MINSTREL; // Minstrel_HealingPS
+    if (code==21) return WellKnownCharacterClassKeys.LORE_MASTER; // Loremaster_HealingPS
+    if (code==8) return WellKnownCharacterClassKeys.CAPTAIN; // Captain_HealingPS
+    if (code==13) return WellKnownCharacterClassKeys.RUNE_KEEPER; // Runekeeper_HealingPS
+    if (code==16) return WellKnownCharacterClassKeys.CHAMPION; // Champion_IncomingHealing
+    if (code==23) return WellKnownCharacterClassKeys.BURGLAR; // Burglar_IncomingHealing
+    if (code==25) return WellKnownCharacterClassKeys.CHAMPION; // Champion_IncomingHealing_65
+    if (code==24) return WellKnownCharacterClassKeys.BURGLAR; // Burglar_IncomingHealing_65
     if (code==26) return null; // Mounted_MomentumMod
-    if (code==28) return CharacterClass.BEORNING; // Beorning_HealingPS
+    if (code==28) return WellKnownCharacterClassKeys.BEORNING; // Beorning_HealingPS
     return null;
   }
 
@@ -526,7 +538,7 @@ public class LegaciesLoader
     //showProps(tableId,"legacies tables",props);
 
     LegacyType type=DatLegendaryUtils.getLegacyTypeFromCombatPropertyType(combatPropertyType);
-    CharacterClass characterClass=getClassFromCombatPropertyType(combatPropertyType);
+    ClassDescription characterClass=getClassFromCombatPropertyType(combatPropertyType);
     EquipmentLocation slot=getSlotFromCombatPropertyType(combatPropertyType);
 
     // Imbued legacy
@@ -581,7 +593,7 @@ public class LegaciesLoader
   }
 
   private DefaultNonImbuedLegacy buildDefaultLegacy(int effectId, LegacyType type, int quality,
-      CharacterClass characterClass, EquipmentLocation slot)
+      ClassDescription characterClass, EquipmentLocation slot)
   {
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
     if (legacy==null)
@@ -610,10 +622,15 @@ public class LegaciesLoader
     return legacy;
   }
 
-  private void patchStats(StatsProvider statsProvider, CharacterClass characterClass, EquipmentLocation slot)
+  private void patchStats(StatsProvider statsProvider, ClassDescription characterClass, EquipmentLocation slot)
   {
+    if (characterClass==null)
+    {
+      return;
+    }
     // Guardian belts do have a special stat
-    if ((characterClass==CharacterClass.GUARDIAN) && (slot==EquipmentLocation.CLASS_SLOT))
+    
+    if ((WellKnownCharacterClassKeys.GUARDIAN.equals(characterClass.getKey())) && (slot==EquipmentLocation.CLASS_SLOT))
     {
       StatProvider provider=statsProvider.getStatProvider(0);
       StatsRegistry stats=StatsRegistry.getInstance();

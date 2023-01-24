@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.NationalitiesManager;
 import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.character.races.RaceDescription;
@@ -17,7 +19,6 @@ import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.NationalityDescriptionXMLWriter;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -26,7 +27,6 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
@@ -266,8 +266,8 @@ public class RaceDataLoader
     for(Object classCodeObj : classCodesArray)
     {
       int classCode=((Integer)classCodeObj).intValue();
-      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
-      description.addAllowedClass(characterClass);
+      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+      description.addAllowedClass(characterClass.getKey());
     }
   }
 

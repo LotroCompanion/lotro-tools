@@ -12,10 +12,12 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.ChallengeLevel;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Repeatability;
@@ -43,7 +45,6 @@ import delta.games.lotro.lore.worldEvents.io.xml.WorldEventsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
@@ -453,57 +454,57 @@ public class MainDatAchievablesLoader
       else if (typeCode==2)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.CAPTAIN);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CAPTAIN);
       }
       else if (typeCode==3)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.GUARDIAN);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.GUARDIAN);
       }
       else if (typeCode==5)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.MINSTREL);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.MINSTREL);
       }
       else if (typeCode==6)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.BURGLAR);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BURGLAR);
       }
       else if (typeCode==26)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.HUNTER);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.HUNTER);
       }
       else if (typeCode==28)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.CHAMPION);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CHAMPION);
       }
       else if (typeCode==30)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.LORE_MASTER);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.LORE_MASTER);
       }
       else if (typeCode==35)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.WARDEN);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.WARDEN);
       }
       else if (typeCode==36)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.RUNE_KEEPER);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.RUNE_KEEPER);
       }
       else if (typeCode==38)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.BEORNING);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BEORNING);
       }
       else if (typeCode==40)
       {
         type=DeedType.CLASS;
-        deed.setRequiredClass(CharacterClass.BRAWLER);
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BRAWLER);
       }
       else if (typeCode==34)
       {
@@ -543,6 +544,12 @@ public class MainDatAchievablesLoader
       }
     }
     deed.setType(type);
+  }
+
+  private void setClassRequirementForDeed(DeedDescription deed, String classKey)
+  {
+    ClassDescription characterClass=ClassesManager.getInstance().getByKey(classKey);
+    deed.setRequiredClass(characterClass);
   }
 
   private void findRequirements(Achievable achievable, PropertiesSet properties)
@@ -851,7 +858,7 @@ public class MainDatAchievablesLoader
       int classId=((Integer)classIdObj).intValue();
       PropertiesSet classProps=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
       int classCode=((Integer)classProps.getProperty("AdvTable_Class")).intValue();
-      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
+      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
       int accomplishmentDirectoryId=((Integer)classProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
       PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");
@@ -877,7 +884,7 @@ public class MainDatAchievablesLoader
     }
   }
 
-  private void handleClassRequirementForDeed(Integer deedId, CharacterClass characterClass)
+  private void handleClassRequirementForDeed(Integer deedId, ClassDescription characterClass)
   {
     DeedDescription deed=_deeds.get(deedId);
     if (deed!=null)

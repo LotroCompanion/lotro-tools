@@ -7,8 +7,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -23,7 +24,6 @@ import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
@@ -113,7 +113,7 @@ public class MainDatRelicsLoader
         for(Object classIdObj : classIdObjArray)
         {
           int classId=((Integer)classIdObj).intValue();
-          CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classId);
+          ClassDescription characterClass=ClassesManager.getInstance().getByCode(classId);
           relic.getUsageRequirement().addAllowedClass(characterClass);
         }
       }

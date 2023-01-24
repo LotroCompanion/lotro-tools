@@ -13,6 +13,7 @@ import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.InitialGearDefinition;
 import delta.games.lotro.character.classes.InitialGearElement;
+import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
 import delta.games.lotro.character.races.RaceDescription;
@@ -25,7 +26,6 @@ import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -35,7 +35,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
@@ -70,10 +69,16 @@ public class CharacterClassDataLoader
     PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("AdvTable_ClassInfo");
+    // Code
     int classCode=((Integer)properties.getProperty("AdvTable_Class")).intValue();
-    CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
-    ClassDescription classDescription=new ClassDescription(characterClass);
-    LOGGER.info("Handling class: "+characterClass);
+    // Key
+    String classKey=getClassKeyFromId(classCode);
+    ClassDescription classDescription=new ClassDescription(classId,classCode,classKey);
+    LOGGER.info("Handling class: "+classKey);
+    // Name
+    String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
+    classDescription.setName(className);
+    // Abbreviation
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
     LOGGER.debug("Class abbreviation: "+classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
@@ -84,23 +89,23 @@ public class CharacterClassDataLoader
     // Icons
     // Normal size (48 pixels)
     int classIconId=((Integer)classInfo.getProperty("AdvTable_ClassIcon")).intValue();
-    File classIconFile=getIconFile(characterClass,"compact");
+    File classIconFile=getIconFile(classKey,"compact");
     DatIconsUtils.buildImageFile(_facade,classIconId,classIconFile);
     classDescription.setIconId(classIconId);
     // Small size (32 pixels)
     Integer classSmallIconId=(Integer)classInfo.getProperty("AdvTable_ClassSmallIcon");
     if (classSmallIconId!=null)
     {
-      File smallClassIconFile=getIconFile(characterClass,"small");
+      File smallClassIconFile=getIconFile(classKey,"small");
       DatIconsUtils.buildImageFile(_facade,classSmallIconId.intValue(),smallClassIconFile);
-    classDescription.setSmallIconId(classSmallIconId.intValue());
+      classDescription.setSmallIconId(classSmallIconId.intValue());
     }
     // Tactical DPS name
     String tacticalDpsName=DatUtils.getStringProperty(properties,"AdvTable_TacticalDPSName");
     classDescription.setTacticalDpsStatName(tacticalDpsName);
 
-    loadInitialStats(characterClass,properties);
-    loadStatDerivations(characterClass,properties);
+    loadInitialStats(classDescription,properties);
+    loadStatDerivations(classDescription,properties);
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
     // Initial gear:
@@ -129,7 +134,8 @@ public class CharacterClassDataLoader
     // Proficiencies
     _proficiencies.handleClass(classDescription);
     // Armour type for mitigations
-    ArmourType armourType=getArmourTypeForMitigations(characterClass);
+    int calcType=((Integer)properties.getProperty("AdvTable_ArmorDefense_Points_CalcType")).intValue();
+    ArmourType armourType=getArmourTypeForMitigations(calcType);
     ClassProficiencies proficiencies=classDescription.getProficiencies();
     proficiencies.setArmourTypeForMitigations(armourType);
     // Default buffs
@@ -153,36 +159,25 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     _classes.add(classDescription);
   }
 
-  private ArmourType getArmourTypeForMitigations(CharacterClass cClass)
+  private ArmourType getArmourTypeForMitigations(int calcType)
   {
-    /*
-     * See class properties:
-AdvTable_ArmorDefense_Points_CalcType: 14 (HeavyArmorDefense)
-AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
-     */
-    if ((cClass==CharacterClass.HUNTER) || (cClass==CharacterClass.BURGLAR)
-        || (cClass==CharacterClass.WARDEN))
-    {
-      return ArmourType.MEDIUM;
-    }
-    if ((cClass==CharacterClass.CHAMPION) || (cClass==CharacterClass.GUARDIAN)
-        || (cClass==CharacterClass.CAPTAIN) || (cClass==CharacterClass.BEORNING)
-        || (cClass==CharacterClass.BRAWLER) )
-    {
-      return ArmourType.HEAVY;
-    }
-    return ArmourType.LIGHT;
+    // AdvTable_ArmorDefense_Points_CalcType: 14 (HeavyArmorDefense)
+    // AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
+    if (calcType==12) return ArmourType.LIGHT;
+    if (calcType==13) return ArmourType.MEDIUM;
+    if (calcType==14) return ArmourType.HEAVY;
+    return null;
   }
 
-  private File getIconFile(CharacterClass characterClass, String size)
+  private File getIconFile(String classKey, String size)
   {
-    String classIconPath=characterClass.getIconPath();
+    String classIconPath=classKey.toLowerCase();
     File rootDir=new File("../lotro-companion/src/main/resources/resources/gui/classes");
     File iconFile=new File(rootDir,size+"/"+classIconPath+".png").getAbsoluteFile();
     return iconFile;
   }
 
-  private void loadInitialStats(CharacterClass characterClass, PropertiesSet properties)
+  private void loadInitialStats(ClassDescription characterClass, PropertiesSet properties)
   {
     Object[] levelsProperties=(Object[])properties.getProperty("AdvTable_LevelEntryList");
     for(Object levelPropertiesObj : levelsProperties)
@@ -232,13 +227,14 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
         }
       }
       // Regen
+      String classKey=characterClass.getKey();
       // ICPR
-      if (characterClass!=CharacterClass.BEORNING)
+      if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
       {
         stats.setStat(WellKnownStat.ICPR,Integer.valueOf(240));
       }
       // OCPR
-      if (characterClass!=CharacterClass.BEORNING)
+      if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
       {
         int ocpr=75;
         if (level>=3) ocpr=90;
@@ -247,7 +243,9 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
         stats.setStat(WellKnownStat.OCPR,Integer.valueOf(ocpr));
       }
       // OCMR
-      if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
+      if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
       {
         int ocmr=120;
         if (level>=4) ocmr=180;
@@ -255,7 +253,9 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
         if (level>=31) ocmr=300;
         stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
       }
-      else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
+      else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
       {
         int ocmr=60;
         if (level>=2) ocmr=120;
@@ -271,11 +271,15 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
       }
       // ICMR
       int icmr;
-      if ((characterClass==CharacterClass.CHAMPION) || (characterClass==CharacterClass.GUARDIAN) || (characterClass==CharacterClass.WARDEN))
+      if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
       {
         icmr=(int)(91.25 + level * 0.75);
       }
-      else if ((characterClass==CharacterClass.BEORNING) || (characterClass==CharacterClass.CAPTAIN) || (characterClass==CharacterClass.HUNTER))
+      else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
+          (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
       {
         icmr=(int)(80.5 + level * (2.0/3));
       }
@@ -294,7 +298,7 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
     return true;
   }
 
-  private void loadStatDerivations(CharacterClass characterClass, PropertiesSet properties)
+  private void loadStatDerivations(ClassDescription characterClass, PropertiesSet properties)
   {
     Object[] derivedStatsProperties=(Object[])properties.getProperty("AdvTable_DerivedStat_Configuration");
     if (derivedStatsProperties==null)
@@ -337,7 +341,7 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
     addImplicitDerivations(characterClass);
   }
 
-  private void addImplicitDerivations(CharacterClass characterClass)
+  private void addImplicitDerivations(ClassDescription characterClass)
   {
     _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.MELEE_CRITICAL_DEFENCE,characterClass,Integer.valueOf(1));
     _derivatedStatsManager.setFactor(WellKnownStat.CRITICAL_DEFENCE_PERCENTAGE,WellKnownStat.RANGED_CRITICAL_DEFENCE,characterClass,Integer.valueOf(1));
@@ -345,7 +349,8 @@ AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.PHYSICAL_MITIGATION,characterClass,Integer.valueOf(1));
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.TACTICAL_MITIGATION,characterClass,Float.valueOf(0.2f));
     _derivatedStatsManager.setFactor(WellKnownStat.ARMOUR,WellKnownStat.OCFW_MITIGATION,characterClass,Float.valueOf(0.2f));
-    if (characterClass==CharacterClass.CHAMPION)
+    String classKey=characterClass.getKey();
+    if (WellKnownCharacterClassKeys.CHAMPION.equals(classKey))
     {
       _derivatedStatsManager.setFactor(WellKnownStat.MIGHT,WellKnownStat.OCFW_MITIGATION,characterClass,Integer.valueOf(1));
     }
@@ -456,6 +461,36 @@ AdvTable_AvailableSkillEntryList:
     if (statType==27) return WellKnownStat.PHYSICAL_MASTERY;
     System.out.println("Unsupported stat type: "+statType);
     return null;
+  }
+
+  /**
+   * Get a character class key from a DAT enum code.
+   * @param id Input code.
+   * @return A character class key or <code>null</code> if not supported.
+   */
+  public static String getClassKeyFromId(int id)
+  {
+    if (id==214) return WellKnownCharacterClassKeys.BEORNING;
+    if (id==40) return WellKnownCharacterClassKeys.BURGLAR;
+    if (id==215) return WellKnownCharacterClassKeys.BRAWLER;
+    if (id==24) return WellKnownCharacterClassKeys.CAPTAIN;
+    if (id==172) return WellKnownCharacterClassKeys.CHAMPION;
+    if (id==23) return WellKnownCharacterClassKeys.GUARDIAN;
+    if (id==162) return WellKnownCharacterClassKeys.HUNTER;
+    if (id==185) return WellKnownCharacterClassKeys.LORE_MASTER;
+    if (id==31) return WellKnownCharacterClassKeys.MINSTREL;
+    if (id==193) return WellKnownCharacterClassKeys.RUNE_KEEPER;
+    if (id==194) return WellKnownCharacterClassKeys.WARDEN;
+    // Monster Play
+    /*
+    if (id==71) return CharacterClass.REAVER;
+    if (id==128) return CharacterClass.DEFILER;
+    if (id==127) return CharacterClass.WEAVER;
+    if (id==179) return CharacterClass.BLACKARROW;
+    if (id==52) return CharacterClass.WARLEADER;
+    if (id==126) return CharacterClass.STALKER;
+    */
+    return "Unknown";
   }
 
   /**

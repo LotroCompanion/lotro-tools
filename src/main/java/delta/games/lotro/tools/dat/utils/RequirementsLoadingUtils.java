@@ -2,9 +2,10 @@ package delta.games.lotro.tools.dat.utils;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.config.LotroCoreConfig;
@@ -61,8 +62,8 @@ public class RequirementsLoadingUtils
     {
       for(Object classReq : classReqs)
       {
-        int characterClassId=((Integer)classReq).intValue();
-        CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(characterClassId);
+        int classCode=((Integer)classReq).intValue();
+        ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
         if (characterClass!=null)
         {
           requirements.addAllowedClass(characterClass);

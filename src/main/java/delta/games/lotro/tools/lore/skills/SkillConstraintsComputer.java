@@ -15,7 +15,6 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -67,10 +66,8 @@ public class SkillConstraintsComputer
   private Map<Integer,List<ClassDescription>> loadClassSkills()
   {
     Map<Integer,List<ClassDescription>> ret=new HashMap<Integer,List<ClassDescription>>();
-    ClassesManager mgr=ClassesManager.getInstance();
-    for(CharacterClass cClass : CharacterClass.ALL_CLASSES)
+    for(ClassDescription classDescription : ClassesManager.getInstance().getAll())
     {
-      ClassDescription classDescription=mgr.getClassDescription(cClass);
       List<ClassSkill> classSkills=classDescription.getSkills();
       for(ClassSkill classSkill : classSkills)
       {
@@ -190,7 +187,7 @@ public class SkillConstraintsComputer
       ret=new UsageRequirement();
       for(ClassDescription characterClass : classes)
       {
-        ret.addAllowedClass(characterClass.getCharacterClass());
+        ret.addAllowedClass(characterClass);
       }
     }
     // Item granted skills

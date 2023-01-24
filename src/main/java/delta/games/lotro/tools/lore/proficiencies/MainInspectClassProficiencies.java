@@ -6,7 +6,6 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.enums.SkillCategory;
 
 /**
@@ -15,10 +14,9 @@ import delta.games.lotro.common.enums.SkillCategory;
  */
 public class MainInspectClassProficiencies
 {
-  private void doClass(CharacterClass characterClass)
+  private void doClass(ClassDescription characterClass)
   {
-    ClassDescription classDescription=ClassesManager.getInstance().getClassDescription(characterClass);
-    List<ClassTrait> traits=classDescription.getTraits();
+    List<ClassTrait> traits=characterClass.getTraits();
     for(ClassTrait classTrait : traits)
     {
       int level=classTrait.getRequiredLevel();
@@ -32,9 +30,9 @@ public class MainInspectClassProficiencies
 
   private void doIt()
   {
-    for(CharacterClass characterClass : CharacterClass.ALL_CLASSES)
+    for(ClassDescription characterClass : ClassesManager.getInstance().getAll())
     {
-      System.out.println("************ Class : "+characterClass.getLabel());
+      System.out.println("************ Class : "+characterClass.getName());
       doClass(characterClass);
     }
   }

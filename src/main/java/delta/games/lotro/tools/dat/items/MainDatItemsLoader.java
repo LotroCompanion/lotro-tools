@@ -10,8 +10,10 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.stats.BasicStatsSet;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
@@ -400,20 +402,20 @@ public class MainDatItemsLoader
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
 
-  private CharacterClass getRequiredClass(SocketType socketType)
+  private static String getRequiredClassKey(SocketType socketType)
   {
     int code=socketType.getCode();
-    if (code==6) return CharacterClass.BEORNING;
-    if (code==7) return CharacterClass.BRAWLER;
-    if (code==8) return CharacterClass.BURGLAR;
-    if (code==9) return CharacterClass.CAPTAIN;
-    if (code==10) return CharacterClass.CHAMPION;
-    if (code==11) return CharacterClass.GUARDIAN;
-    if (code==12) return CharacterClass.HUNTER;
-    if (code==13) return CharacterClass.LORE_MASTER;
-    if (code==14) return CharacterClass.MINSTREL;
-    if (code==15) return CharacterClass.RUNE_KEEPER;
-    if (code==16) return CharacterClass.WARDEN;
+    if (code==6) return WellKnownCharacterClassKeys.BEORNING;
+    if (code==7) return WellKnownCharacterClassKeys.BRAWLER;
+    if (code==8) return WellKnownCharacterClassKeys.BURGLAR;
+    if (code==9) return WellKnownCharacterClassKeys.CAPTAIN;
+    if (code==10) return WellKnownCharacterClassKeys.CHAMPION;
+    if (code==11) return WellKnownCharacterClassKeys.GUARDIAN;
+    if (code==12) return WellKnownCharacterClassKeys.HUNTER;
+    if (code==13) return WellKnownCharacterClassKeys.LORE_MASTER;
+    if (code==14) return WellKnownCharacterClassKeys.MINSTREL;
+    if (code==15) return WellKnownCharacterClassKeys.RUNE_KEEPER;
+    if (code==16) return WellKnownCharacterClassKeys.WARDEN;
     return null;
   }
 
@@ -1007,8 +1009,12 @@ public class MainDatItemsLoader
     }
     Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement,setId,uniquenessChannel);
     _traceries.add(tracery);
-    CharacterClass requiredClass=getRequiredClass(socketType);
-    item.setRequiredClass(requiredClass);
+    String requiredClassKey=getRequiredClassKey(socketType);
+    if (requiredClassKey!=null)
+    {
+      ClassDescription requiredClass=ClassesManager.getInstance().getByKey(requiredClassKey);
+      item.setRequiredClass(requiredClass);
+    }
   }
 
   private void handleEnhancementRune(Item item, PropertiesSet props)
