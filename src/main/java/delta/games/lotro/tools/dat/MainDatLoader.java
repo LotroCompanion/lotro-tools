@@ -15,6 +15,8 @@ import delta.games.lotro.tools.dat.agents.mobs.MainDatGenericMobLootLoader;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
 import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
 import delta.games.lotro.tools.dat.allegiances.MainDatAllegiancesLoader;
+import delta.games.lotro.tools.dat.characters.CharacterClassDataLoader;
+import delta.games.lotro.tools.dat.characters.InitialGearLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
@@ -105,6 +107,8 @@ public class MainDatLoader
     new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
     new MainStatTomesLoader(_facade).doIt();
+    // Character class data
+    new CharacterClassDataLoader(_facade).doIt();
     // Race data
     new RaceDataLoader(_facade).doIt();
     // Titles
@@ -116,6 +120,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
+    // Initial gear
+    new InitialGearLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade).doIt();
@@ -209,6 +215,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.START_STATS);
     deleteFile(GeneratedFiles.CLASSES);
     deleteFile(GeneratedFiles.TRAIT_TREES);
+    deleteFile(GeneratedFiles.INITIAL_GEAR);
     deleteFile(GeneratedFiles.RACES);
     deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills

@@ -21,6 +21,10 @@ public class GeneratedFiles
    */
   public static final File TRAIT_TREES=LotroCoreConfig.getInstance().getFile(DataFiles.TRAIT_TREES);
   /**
+   * Initial gear.
+   */
+  public static final File INITIAL_GEAR=LotroCoreConfig.getInstance().getFile(DataFiles.INITIAL_GEAR);
+  /**
    * Start stats.
    */
   public static final File START_STATS=LotroCoreConfig.getInstance().getFile(DataFiles.START_STATS);

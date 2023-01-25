@@ -30,8 +30,6 @@ public class MainCharacterDataLoader
    */
   public void doIt()
   {
-    // Load character class data
-    new CharacterClassDataLoader(_facade).doIt();
     // Load virtues data
     new VirtueDataLoader(_facade).doIt();
     // Load progression of class trait points with character level (expect 1879271247)

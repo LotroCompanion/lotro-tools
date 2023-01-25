@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
@@ -180,12 +179,12 @@ public class TraitTreesDataLoader
         int traitTreeId=((Integer)traitTreeIdObj).intValue();
         TraitTree tree=handleTraitTree(traitTreeId);
         traitTrees.add(tree);
-        ClassDescription characterClass=getCharacterClassFromTraitNatureKey(traitNatureKey);
-        if (characterClass!=null)
+        String classKey=getCharacterClassKeyFromTraitNatureKey(traitNatureKey);
+        if (classKey!=null)
         {
           for(ClassDescription description : classes)
           {
-            if (description==characterClass)
+            if (classKey.equals(description.getKey()))
             {
               description.setTraitTree(tree);
               for(TraitTreeBranch branch : tree.getBranches())
@@ -225,16 +224,6 @@ public class TraitTreesDataLoader
         branch.setMainTrait(trait);
       }
     }
-  }
-
-  private ClassDescription getCharacterClassFromTraitNatureKey(int traitNatureKey)
-  {
-    String classKey=getCharacterClassKeyFromTraitNatureKey(traitNatureKey);
-    if (classKey!=null)
-    {
-      return ClassesManager.getInstance().getByKey(classKey);
-    }
-    return null;
   }
 
   private String getCharacterClassKeyFromTraitNatureKey(int traitNatureKey)

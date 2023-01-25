@@ -11,13 +11,9 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassTrait;
-import delta.games.lotro.character.classes.InitialGearDefinition;
-import delta.games.lotro.character.classes.InitialGearElement;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
-import delta.games.lotro.character.races.RaceDescription;
-import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
@@ -108,29 +104,6 @@ public class CharacterClassDataLoader
     loadStatDerivations(classDescription,properties);
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
-    // Initial gear:
-    InitialGearDefinition initialGear=classDescription.getInitialGear();
-    // AdvTable_StartingInventory_List: initial gear at level 1
-    Object[] inventory=(Object[])properties.getProperty("AdvTable_StartingInventory_List");
-    for(Object inventoryElement : inventory)
-    {
-      PropertiesSet inventoryElementProps=(PropertiesSet)inventoryElement;
-      int startsEquipped=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_StartsEquipped")).intValue();
-      int quantity=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_Quantity")).intValue();
-      if ((startsEquipped>0) && (quantity==1))
-      {
-        int itemId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_Item")).intValue();
-        InitialGearElement element=new InitialGearElement();
-        element.setItemId(itemId);
-        int raceId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_RequiredRace")).intValue();
-        if (raceId!=0)
-        {
-          RaceDescription race=RacesManager.getInstance().getByCode(raceId);
-          element.setRequiredRace(race);
-        }
-        initialGear.addGearElement(element);
-      }
-    }
     // Proficiencies
     _proficiencies.handleClass(classDescription);
     // Armour type for mitigations
@@ -509,8 +482,9 @@ AdvTable_AvailableSkillEntryList:
 
     // Save start stats
     StartStatsXMLWriter.write(GeneratedFiles.START_STATS,_startStatsManager);
-    DerivedStatsContributionsXMLWriter.write(GeneratedFiles.STAT_CONTRIBS,_derivatedStatsManager);
     // Save classes descriptions
     ClassDescriptionXMLWriter.write(GeneratedFiles.CLASSES,_classes);
+    // Save derived stats
+    DerivedStatsContributionsXMLWriter.write(GeneratedFiles.STAT_CONTRIBS,_derivatedStatsManager);
   }
 }
