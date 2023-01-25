@@ -338,7 +338,7 @@ public class LegaciesLoader
     {
       PropertiesSet reforgeTableItemProps=(PropertiesSet)reforgeTableItemObj;
       int classCode=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
-      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+      ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
       //System.out.println("Class: "+characterClass);
       Object[] reforgeGroups=(Object[])reforgeTableItemProps.getProperty("ItemAdvancement_ReforgeGroup_Array");
       for(Object reforgeGroupObj : reforgeGroups)
@@ -487,7 +487,7 @@ public class LegaciesLoader
     ClassDescription ret=null;
     if (classKey!=null)
     {
-      ret=ClassesManager.getInstance().getByKey(classKey);
+      ret=ClassesManager.getInstance().getCharacterClassByKey(classKey);
     }
     return ret;
   }

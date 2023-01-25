@@ -17,6 +17,10 @@ public class GeneratedFiles
    */
   public static final File CLASSES=LotroCoreConfig.getInstance().getFile(DataFiles.CLASSES);
   /**
+   * Monster classes.
+   */
+  public static final File MONSTER_CLASSES=LotroCoreConfig.getInstance().getFile(DataFiles.MONSTER_CLASSES);
+  /**
    * Class icons.
    */
   public static final File CLASS_ICONS_DIR=LotroCoreConfig.getInstance().getFile("classIcons");

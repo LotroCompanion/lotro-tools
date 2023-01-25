@@ -548,7 +548,7 @@ public class MainDatAchievablesLoader
 
   private void setClassRequirementForDeed(DeedDescription deed, String classKey)
   {
-    ClassDescription characterClass=ClassesManager.getInstance().getByKey(classKey);
+    ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByKey(classKey);
     deed.setRequiredClass(characterClass);
   }
 
@@ -858,7 +858,7 @@ public class MainDatAchievablesLoader
       int classId=((Integer)classIdObj).intValue();
       PropertiesSet classProps=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
       int classCode=((Integer)classProps.getProperty("AdvTable_Class")).intValue();
-      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+      ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
       int accomplishmentDirectoryId=((Integer)classProps.getProperty("AdvTable_AccomplishmentDirectory")).intValue();
       PropertiesSet accomplishmentDirProps=_facade.loadProperties(accomplishmentDirectoryId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] accomplishmentList=(Object[])accomplishmentDirProps.getProperty("Accomplishment_List");

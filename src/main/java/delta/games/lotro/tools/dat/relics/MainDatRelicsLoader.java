@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.FileIO;
-import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -113,8 +113,8 @@ public class MainDatRelicsLoader
         for(Object classIdObj : classIdObjArray)
         {
           int classId=((Integer)classIdObj).intValue();
-          ClassDescription characterClass=ClassesManager.getInstance().getByCode(classId);
-          relic.getUsageRequirement().addAllowedClass(characterClass);
+          AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classId);
+          relic.getUsageRequirement().addAllowedClass(abstractClass);
         }
       }
       // Icons

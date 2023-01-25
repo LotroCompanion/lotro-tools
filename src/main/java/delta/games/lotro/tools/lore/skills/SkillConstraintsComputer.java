@@ -66,7 +66,7 @@ public class SkillConstraintsComputer
   private Map<Integer,List<ClassDescription>> loadClassSkills()
   {
     Map<Integer,List<ClassDescription>> ret=new HashMap<Integer,List<ClassDescription>>();
-    for(ClassDescription classDescription : ClassesManager.getInstance().getAll())
+    for(ClassDescription classDescription : ClassesManager.getInstance().getAllCharacterClasses())
     {
       List<ClassSkill> classSkills=classDescription.getSkills();
       for(ClassSkill classSkill : classSkills)

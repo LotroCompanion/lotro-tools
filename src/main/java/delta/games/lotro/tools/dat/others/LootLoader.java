@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
@@ -236,10 +236,10 @@ public class LootLoader
           for(Object classIdObj : classIdsArray)
           {
             int classCode=((Integer)classIdObj).intValue();
-            ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
-            if (characterClass!=null)
+            AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
+            if (abstractClass!=null)
             {
-              requirements.addAllowedClass(characterClass);
+              requirements.addAllowedClass(abstractClass);
             }
           }
         }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
@@ -158,18 +158,18 @@ public class MainDatNpcLoader
       for(Object requiredClassObj : requiredClassArray)
       {
         int classCode=((Integer)requiredClassObj).intValue();
-        ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
-        if (characterClass!=null)
+        AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
+        if (abstractClass!=null)
         {
           if (ret==null)
           {
             ret=new ClassRequirement();
           }
-          ret.addAllowedClass(characterClass);
+          ret.addAllowedClass(abstractClass);
         }
         else
         {
-          LOGGER.warn("Unsupported class: "+characterClass);
+          LOGGER.warn("Unsupported class: "+abstractClass);
         }
       }
     }

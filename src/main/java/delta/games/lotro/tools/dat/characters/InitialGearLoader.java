@@ -41,7 +41,7 @@ public class InitialGearLoader
   public void doIt()
   {
     List<InitialGearDefinition> gearDefinitions=new ArrayList<InitialGearDefinition>();
-    for(ClassDescription characterClass : ClassesManager.getInstance().getAll())
+    for(ClassDescription characterClass : ClassesManager.getInstance().getAllCharacterClasses())
     {
       int classId=characterClass.getIdentifier();
       String classKey=characterClass.getKey();

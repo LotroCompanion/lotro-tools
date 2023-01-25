@@ -21,6 +21,7 @@ import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
+import delta.games.lotro.tools.dat.characters.MonsterClassDataLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
@@ -109,6 +110,8 @@ public class MainDatLoader
     new MainStatTomesLoader(_facade).doIt();
     // Character class data
     new CharacterClassDataLoader(_facade).doIt();
+    // Monster class data
+    new MonsterClassDataLoader(_facade).doIt();
     // Race data
     new RaceDataLoader(_facade).doIt();
     // Titles
@@ -214,6 +217,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.STAT_CONTRIBS);
     deleteFile(GeneratedFiles.START_STATS);
     deleteFile(GeneratedFiles.CLASSES);
+    deleteFile(GeneratedFiles.MONSTER_CLASSES);
     deleteDirectory(GeneratedFiles.CLASS_ICONS_DIR);
     deleteFile(GeneratedFiles.TRAIT_TREES);
     deleteFile(GeneratedFiles.INITIAL_GEAR);

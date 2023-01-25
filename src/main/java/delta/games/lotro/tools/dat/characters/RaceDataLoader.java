@@ -266,7 +266,7 @@ public class RaceDataLoader
     for(Object classCodeObj : classCodesArray)
     {
       int classCode=((Integer)classCodeObj).intValue();
-      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+      ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
       description.addAllowedClass(characterClass.getKey());
     }
   }

@@ -1012,7 +1012,7 @@ public class MainDatItemsLoader
     String requiredClassKey=getRequiredClassKey(socketType);
     if (requiredClassKey!=null)
     {
-      ClassDescription requiredClass=ClassesManager.getInstance().getByKey(requiredClassKey);
+      ClassDescription requiredClass=ClassesManager.getInstance().getCharacterClassByKey(requiredClassKey);
       item.setRequiredClass(requiredClass);
     }
   }

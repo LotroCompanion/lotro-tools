@@ -30,7 +30,7 @@ public class MainInspectClassProficiencies
 
   private void doIt()
   {
-    for(ClassDescription characterClass : ClassesManager.getInstance().getAll())
+    for(ClassDescription characterClass : ClassesManager.getInstance().getAllCharacterClasses())
     {
       System.out.println("************ Class : "+characterClass.getName());
       doClass(characterClass);
