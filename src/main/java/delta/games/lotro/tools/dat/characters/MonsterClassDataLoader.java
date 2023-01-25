@@ -52,9 +52,15 @@ public class MonsterClassDataLoader
     //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("MonsterPlay_MonsterInfo");
     // Code
-    int classCode=((Integer)properties.getProperty("MonsterPlay_Class")).intValue();
+    int classCode=((Integer)classInfo.getProperty("MonsterPlay_Class")).intValue();
     // Key
     String classKey=getClassKeyFromId(classCode);
+    if (classKey==null)
+    {
+      String className=DatUtils.getStringProperty(classInfo,"MonsterPlay_MonsterName");
+      LOGGER.warn("Unmanaged monster class: "+className);
+      return;
+    }
     MonsterClassDescription classDescription=new MonsterClassDescription(classId,classCode,classKey);
     LOGGER.info("Handling class: "+classKey);
     // Name
@@ -77,6 +83,7 @@ public class MonsterClassDataLoader
 
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
+    _classes.add(classDescription);
   }
 
   private File getIconFile(int iconID)
@@ -154,7 +161,7 @@ MonsterPlay_SkillList:
     if (id==179) return WellKnownMonsterClassKeys.BLACKARROW;
     if (id==52) return WellKnownMonsterClassKeys.WARLEADER;
     if (id==126) return WellKnownMonsterClassKeys.STALKER;
-    return "Unknown";
+    return null;
   }
 
   /**
