@@ -17,6 +17,10 @@ public class GeneratedFiles
    */
   public static final File CLASSES=LotroCoreConfig.getInstance().getFile(DataFiles.CLASSES);
   /**
+   * Class icons.
+   */
+  public static final File CLASS_ICONS_DIR=LotroCoreConfig.getInstance().getFile("classIcons");
+  /**
    * Trait trees.
    */
   public static final File TRAIT_TREES=LotroCoreConfig.getInstance().getFile(DataFiles.TRAIT_TREES);

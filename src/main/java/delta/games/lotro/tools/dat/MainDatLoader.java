@@ -214,6 +214,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.STAT_CONTRIBS);
     deleteFile(GeneratedFiles.START_STATS);
     deleteFile(GeneratedFiles.CLASSES);
+    deleteDirectory(GeneratedFiles.CLASS_ICONS_DIR);
     deleteFile(GeneratedFiles.TRAIT_TREES);
     deleteFile(GeneratedFiles.INITIAL_GEAR);
     deleteFile(GeneratedFiles.RACES);
