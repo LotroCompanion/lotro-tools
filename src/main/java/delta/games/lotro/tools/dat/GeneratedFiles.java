@@ -45,6 +45,10 @@ public class GeneratedFiles
    */
   public static final File RACES=LotroCoreConfig.getInstance().getFile(DataFiles.RACES);
   /**
+   * Race icons.
+   */
+  public static final File RACE_ICONS_DIR=LotroCoreConfig.getInstance().getFile("raceIcons");
+  /**
    * Nationalities.
    */
   public static final File NATIONALITIES=LotroCoreConfig.getInstance().getFile(DataFiles.NATIONALITIES);

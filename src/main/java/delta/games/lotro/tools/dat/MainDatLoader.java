@@ -222,6 +222,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.TRAIT_TREES);
     deleteFile(GeneratedFiles.INITIAL_GEAR);
     deleteFile(GeneratedFiles.RACES);
+    deleteDirectory(GeneratedFiles.RACE_ICONS_DIR);
     deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
     deleteFile(GeneratedFiles.SKILLS);

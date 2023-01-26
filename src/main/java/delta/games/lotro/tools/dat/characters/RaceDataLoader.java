@@ -206,17 +206,21 @@ public class RaceDataLoader
     // Icons
     int iconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
     gender.setIconId(iconId);
+    File iconFile=getIconFile(iconId);
+    DatIconsUtils.buildImageFile(_facade,iconId,iconFile);
     Integer largeIconId=(Integer)genderProperties.getProperty("RaceTable_RaceSelect_LargeIcon");
     if (largeIconId!=null)
     {
       gender.setLargeIconId(largeIconId.intValue());
-      File largeIconFile=getIconFile(race,sex);
+      File largeIconFile=getIconFile(largeIconId.intValue());
       DatIconsUtils.buildImageFile(_facade,largeIconId.intValue(),largeIconFile);
     }
     Integer smallIconId=(Integer)genderProperties.getProperty("RaceTable_RaceSelect_SmallIcon");
     if (smallIconId!=null)
     {
       gender.setSmallIconId(smallIconId.intValue());
+      File smallIconFile=getIconFile(smallIconId.intValue());
+      DatIconsUtils.buildImageFile(_facade,smallIconId.intValue(),smallIconFile);
     }
     // Avatar
     int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
@@ -236,11 +240,9 @@ public class RaceDataLoader
     System.out.println("ICMR="+icmr+", OCMR="+ocmr+", ICPR="+icpr+", OCPR="+ocpr);
   }
 
-  private File getIconFile(RaceDescription race, CharacterSex sex)
+  private File getIconFile(int iconID)
   {
-    String raceIconPath=race.getKey();
-    File rootDir=new File("../lotro-companion/src/main/resources/resources/gui/races");
-    File iconFile=new File(rootDir,raceIconPath+"_"+sex.getKey().toLowerCase()+".png").getAbsoluteFile();
+    File iconFile=new File(GeneratedFiles.RACE_ICONS_DIR,iconID+".png").getAbsoluteFile();
     return iconFile;
   }
 
