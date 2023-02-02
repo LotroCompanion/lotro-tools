@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
@@ -41,6 +42,7 @@ public class MainDatRecipesLoader
   private Map<Integer,Integer> _xpMapping;
   private Map<Integer,Float> _cooldownMapping;
   private RecipeItemsLoader _recipeItemsLoader;
+  private EnumMapper _category;
 
   /**
    * Constructor.
@@ -51,6 +53,7 @@ public class MainDatRecipesLoader
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
     _recipeItemsLoader=new RecipeItemsLoader(_facade);
+    _category=facade.getEnumsManager().getEnumMapper(CRAFTING_UI_CATEGORY);
   }
 
   private Recipe load(int indexDataId)
@@ -72,7 +75,7 @@ public class MainDatRecipesLoader
       Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
       if (categoryIndex!=null)
       {
-        String category=getCategory(categoryIndex.intValue());
+        String category=_category.getLabel(categoryIndex.intValue());
         recipe.setCategory(category);
       }
       // XP
@@ -281,11 +284,6 @@ public class MainDatRecipesLoader
       }
     }
     return version;
-  }
-
-  private String getCategory(int key)
-  {
-    return _facade.getEnumsManager().resolveEnum(CRAFTING_UI_CATEGORY,key);
   }
 
   private Profession getProfessionFromProfessionId(int id)

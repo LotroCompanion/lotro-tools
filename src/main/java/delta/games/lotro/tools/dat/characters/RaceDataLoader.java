@@ -25,9 +25,9 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -41,6 +41,7 @@ public class RaceDataLoader
   private DataFacade _facade;
   private Map<Integer,RaceDescription> _racesById;
   private EnumMapper _speciesCode;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -49,6 +50,7 @@ public class RaceDataLoader
   public RaceDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("races",facade.getGlobalStringsManager());
     _racesById=new HashMap<Integer,RaceDescription>();
     _speciesCode=_facade.getEnumsManager().getEnumMapper(587202571);
     loadNationalities();
@@ -64,16 +66,14 @@ public class RaceDataLoader
     String legacyLabel=getRaceLegacyLabel(raceId);
     RaceDescription raceDescription=new RaceDescription(racePropertiesId,raceId,key,legacyLabel);
     // Name
-    String name=_speciesCode.getLabel(raceId);
-    name=DatStringUtils.fixName(name);
+    String name=_i18n.getEnumValue(_speciesCode,raceId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     raceDescription.setName(name);
     // Description
-    String description=DatUtils.getStringProperty(properties,"RaceTable_Description");
+    String description=_i18n.getStringProperty(properties,"RaceTable_Description");
     if (description==null)
     {
       description="";
     }
-    description=description.trim();
     raceDescription.setDescription(description);
     // Short or tall?
     Integer isTall=(Integer)properties.getProperty("RaceTable_IsTallRace");
@@ -201,7 +201,7 @@ public class RaceDataLoader
   {
     RaceGender gender=new RaceGender();
     // Name
-    String name=DatUtils.getStringProperty(genderProperties,"RaceTable_Gender_Name");
+    String name=_i18n.getStringProperty(genderProperties,"RaceTable_Gender_Name");
     gender.setName(name);
     // Icons
     int iconId=((Integer)genderProperties.getProperty("RaceTable_RaceSelect_Icon")).intValue();
@@ -326,5 +326,18 @@ public class RaceDataLoader
       races.add(_racesById.get(raceId));
     }
     RaceDescriptionXMLWriter.write(GeneratedFiles.RACES,races);
+    // Save labels
+    _i18n.save();
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=new DataFacade();
+    new RaceDataLoader(facade).doIt();
+    facade.dispose();
   }
 }

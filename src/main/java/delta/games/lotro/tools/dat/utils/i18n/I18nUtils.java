@@ -4,7 +4,9 @@ import java.util.Set;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.GlobalStringsManager;
+import delta.games.lotro.dat.data.strings.StringInfo;
 import delta.games.lotro.dat.data.strings.StringInfoUtils;
 import delta.games.lotro.dat.data.strings.StringsManager;
 import delta.games.lotro.dat.data.strings.TableEntryStringInfo;
@@ -111,6 +113,28 @@ public class I18nUtils
     }
     Object value=propertyValue.getValue();
     return DatStringUtils.getString(value);
+  }
+
+  /**
+   * Get the value of an enum entry.
+   * As a side-effect, resolve the localized strings if any.
+   * @param enumMapper Enum mapper.
+   * @param token Enum entry code.
+   * @param options Options to apply on the loaded strings.
+   * @return A non-localized string or a localization key.
+   */
+  public String getEnumValue(EnumMapper enumMapper, int token, int options)
+  {
+    StringInfo enumValue=enumMapper.getStringInfo(token);
+    if (enumValue instanceof TableEntryStringInfo)
+    {
+      TableEntryStringInfo stringInfo=(TableEntryStringInfo)enumValue;
+      String key=getKey(stringInfo);
+      String defaultValue=getDefaultValue(stringInfo,options);
+      boolean useLocalisation=handleStringInfo(stringInfo,key,defaultValue,options);
+      return useLocalisation?key:"";
+    }
+    return enumMapper.getLabel(token);
   }
 
   private String getDefaultValue(TableEntryStringInfo stringInfo, int options)

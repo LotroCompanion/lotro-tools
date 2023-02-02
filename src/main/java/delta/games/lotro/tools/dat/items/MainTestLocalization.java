@@ -3,6 +3,8 @@ package delta.games.lotro.tools.dat.items;
 import java.io.File;
 
 import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.character.races.RacesManager;
+import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
@@ -24,6 +26,7 @@ public class MainTestLocalization
     doItems();
     doDeeds();
     doQuests();
+    doRaces();
   }
 
   private void doItems()
@@ -50,6 +53,12 @@ public class MainTestLocalization
       AchievableProxiesResolver.getInstance().resolveDeed(deed);
     }
     new DeedXMLWriter().writeDeeds(new File("deeds.xml"),mgr.getAll(),EncodingNames.UTF_8);
+  }
+
+  private void doRaces()
+  {
+    RacesManager mgr=RacesManager.getInstance();
+    RaceDescriptionXMLWriter.write(new File("races.xml"),mgr.getAll());
   }
 
   /**
