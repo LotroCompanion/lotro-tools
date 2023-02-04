@@ -5,10 +5,12 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.WJEncounterCategory;
+import delta.games.lotro.common.enums.WJEncounterType;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.instances.InstanceCategory;
 import delta.games.lotro.lore.instances.InstancesTree;
 import delta.games.lotro.lore.instances.PrivateEncounter;
@@ -16,6 +18,7 @@ import delta.games.lotro.lore.instances.PrivateEncountersManager;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.InstancesTreeXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
  * Loads instance categories (similar to the ones in the Instance Finder)
@@ -27,14 +30,30 @@ public class MainDatInstancesTreeLoader
    * "Seasonal" category name.
    */
   private static final String SEASONAL="Seasonal";
+  /**
+   * "Epic Battles" category name.
+   */
+  private static final String EPIC_BATTLES="Epic Battles";
+  /**
+   * "Non-scaling Instance" category name.
+   */
+  private static final String NON_SCALING_INSTANCES="Non-scaling Instance";
+  /**
+   * "(Scaling)Instance" category name.
+   */
+  private static final String SCALING_INSTANCES="Instance";
+  /**
+   * "Skirmish" category name.
+   */
+  private static final String SKIRMISH="Skirmish";
 
   private static final Logger LOGGER=Logger.getLogger(MainDatInstancesTreeLoader.class);
 
   private DataFacade _facade;
-  private EnumMapper _instanceGroups;
-  private EnumMapper _encounterCategory;
-  private InstancesTree _categories;
-  private Set<String> _seasonalCategories;
+  //private LotroEnum<WJInstanceGroup> _instanceGroups;
+  private LotroEnum<WJEncounterCategory> _encounterCategory;
+  private InstancesTree _tree;
+  private Set<WJEncounterCategory> _seasonalCategories;
 
   /**
    * Constructor.
@@ -43,10 +62,10 @@ public class MainDatInstancesTreeLoader
   public MainDatInstancesTreeLoader(DataFacade facade)
   {
     _facade=facade;
-    _categories=new InstancesTree();
-    _instanceGroups=facade.getEnumsManager().getEnumMapper(0x230003D1);
-    _encounterCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
-    _seasonalCategories=new HashSet<String>();
+    _tree=new InstancesTree();
+    //_instanceGroups=LotroEnumsRegistry.getInstance().get(WJInstanceGroup.class);
+    _encounterCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
+    _seasonalCategories=new HashSet<WJEncounterCategory>();
   }
 
   /*
@@ -66,7 +85,7 @@ public class MainDatInstancesTreeLoader
   public void doIt()
   {
     // WorldJoinControl
-    PropertiesSet props=_facade.loadProperties(0x7001B7CE+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"WorldJoinControl"); // 0x7001B7CE
     loadCategories(props);
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     // Featured instances
@@ -88,9 +107,16 @@ public class MainDatInstancesTreeLoader
       }
     }
     */
+    InstanceCategory seasonal=new InstanceCategory(SEASONAL);
+    _tree.addCategory(seasonal);
+    InstanceCategory nonScalingInstances=new InstanceCategory(NON_SCALING_INSTANCES);
+    _tree.addCategory(nonScalingInstances);
+    InstanceCategory instances=new InstanceCategory(SCALING_INSTANCES);
+    _tree.addCategory(instances);
+    InstanceCategory skirmishes=new InstanceCategory(SKIRMISH);
+    _tree.addCategory(skirmishes);
     // Available instances
     //System.out.println("Available instances:");
-    String[] path={"",""};
     Object[] availablePEsArray=(Object[])props.getProperty("WorldJoin_AvailablePETemplates_Array");
     for(Object availablePEObj : availablePEsArray)
     {
@@ -106,33 +132,32 @@ public class MainDatInstancesTreeLoader
           continue;
         }
         SkirmishPrivateEncounter skirmishPE=(SkirmishPrivateEncounter)pe;
-        String categoryName=skirmishPE.getCategory();
-        path[1]=categoryName;
+        WJEncounterCategory encounterCategory=skirmishPE.getCategory();
+        WJEncounterType encounterType=skirmishPE.getType();
+        InstanceCategory categoryToUse=instances;
         boolean scalable=skirmishPE.isScalable();
         if (!scalable)
         {
-          path[0]="Non-scaling Instance";
+          categoryToUse=nonScalingInstances;
         }
-        else if (_seasonalCategories.contains(categoryName))
+        else if (_seasonalCategories.contains(encounterCategory))
         {
-          path[0]=SEASONAL;
+          categoryToUse=seasonal;
         }
-        else
+        else if (encounterType.getCode()==3)
         {
-          // "Instance" or "Skirmish" ATM
-          path[0]=skirmishPE.getType();
+          categoryToUse=skirmishes;
         }
-        InstanceCategory category=_categories.getFromPath(path);
-        category.addPrivateEncounter(skirmishPE);
+        categoryToUse.addPrivateEncounter(skirmishPE);
       }
       else
       {
         LOGGER.warn("Private encounter not found: "+privateEncounterId);
       }
     }
-    _categories.dump();
+    _tree.dump();
     // Save instances tree
-    boolean ok=InstancesTreeXMLWriter.writeInstancesTreeFile(GeneratedFiles.INSTANCES_TREE,_categories);
+    boolean ok=InstancesTreeXMLWriter.writeInstancesTreeFile(GeneratedFiles.INSTANCES_TREE,_tree);
     if (ok)
     {
       System.out.println("Wrote instances tree file: "+GeneratedFiles.INSTANCES_TREE);
@@ -145,7 +170,7 @@ public class MainDatInstancesTreeLoader
 
     // Epic battles
     {
-      String[] path={"Epic Battles","",""};
+      InstanceCategory category=new InstanceCategory(EPIC_BATTLES);
       /*
       WorldJoinControl_InstanceGroups: 
         #1: 
@@ -157,20 +182,17 @@ public class MainDatInstancesTreeLoader
       for(Object instanceGroupObj : instanceGroupsArray)
       {
         PropertiesSet instanceGroupProps=(PropertiesSet)instanceGroupObj;
-        int labelCode=((Integer)instanceGroupProps.getProperty("WorldJoinControl_Instance_Group_Label")).intValue();
-        String label=_instanceGroups.getLabel(labelCode);
-        path[2]=label;
+        //int labelCode=((Integer)instanceGroupProps.getProperty("WorldJoinControl_Instance_Group_Label")).intValue();
+        //WJInstanceGroup label=_instanceGroups.getEntry(labelCode);
         Object[] instanceIdsArray=(Object[])instanceGroupProps.getProperty("WorldJoinControl_Grouped_Instance_List");
         for(Object instanceIdObj : instanceIdsArray)
         {
           int instanceId=((Integer)instanceIdObj).intValue();
           SkirmishPrivateEncounter skirmishPE=(SkirmishPrivateEncounter)peMgr.getPrivateEncounterById(instanceId);
-          String categoryName=skirmishPE.getCategory();
-          path[1]=categoryName;
-          InstanceCategory category=_categories.getFromPath(path);
           category.addPrivateEncounter(skirmishPE);
         }
       }
+      _tree.addCategory(category);
     }
     //Unused: WorldJoin_Capped_EncounterCategory: 29 (Minas Morgul)
     // Seasonal categories
@@ -182,15 +204,12 @@ public class MainDatInstancesTreeLoader
         #3: 27 (Harvestmath)
         #4: 24 (Yule)
         */
-      String[] path={SEASONAL,""};
       Object[] seasonalCategoryArray=(Object[])props.getProperty("WorldJoin_Seasonal_EncounterCategory_Array");
       for(Object seasonalCategoryObj : seasonalCategoryArray)
       {
         int categoryId=((Integer)seasonalCategoryObj).intValue();
-        String categoryName=_encounterCategory.getLabel(categoryId);
-        path[1]=categoryName;
-        _categories.getFromPath(path);
-        _seasonalCategories.add(categoryName);
+        WJEncounterCategory category=_encounterCategory.getEntry(categoryId);
+        _seasonalCategories.add(category);
       }
     }
   }

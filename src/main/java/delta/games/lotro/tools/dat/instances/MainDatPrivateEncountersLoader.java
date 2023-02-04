@@ -10,10 +10,11 @@ import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.WJEncounterCategory;
+import delta.games.lotro.common.enums.WJEncounterType;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.PrivateEncounter;
@@ -34,8 +35,8 @@ public class MainDatPrivateEncountersLoader
   private DataFacade _facade;
   private List<PrivateEncounter> _data;
   private InstanceMapDataBuilder _mapDataBuilder;
-  private EnumMapper _worldJoinType;
-  private EnumMapper _worldJoinCategory;
+  private LotroEnum<WJEncounterType> _worldJoinType;
+  private LotroEnum<WJEncounterCategory> _worldJoinCategory;
 
   /**
    * Constructor.
@@ -46,8 +47,8 @@ public class MainDatPrivateEncountersLoader
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
     _mapDataBuilder=new InstanceMapDataBuilder();
-    _worldJoinType=facade.getEnumsManager().getEnumMapper(0x23000309);
-    _worldJoinCategory=facade.getEnumsManager().getEnumMapper(0x23000350);
+    _worldJoinType=LotroEnumsRegistry.getInstance().get(WJEncounterType.class);
+    _worldJoinCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -214,31 +215,17 @@ public class MainDatPrivateEncountersLoader
     skirmishPE.setLevelScale(minLevelScale,maxLevelScale);
     // - category
     // WorldJoin_EncounterCategory: 11 (Dol Guldur)
-    Integer categoryCode=(Integer)props.getProperty("WorldJoin_EncounterCategory");
-    if (categoryCode!=null)
-    {
-      String category=_worldJoinCategory.getString(categoryCode.intValue());
-      if (categoryCode.intValue()==0)
-      {
-        category="Other";
-      }
-      skirmishPE.setCategory(category);
-    }
-    else
-    {
-      //LOGGER.warn("No category code: "+skirmishPE.getName());
-    }
+    Integer categoryCodeValue=(Integer)props.getProperty("WorldJoin_EncounterCategory");
+    int categoryCode=(categoryCodeValue!=null)?categoryCodeValue.intValue():0;
+    WJEncounterCategory category=_worldJoinCategory.getEntry(categoryCode);
+    skirmishPE.setCategory(category);
     // - type
     // WorldJoin_EncounterType: 4 (Classic)
     Integer typeCode=(Integer)props.getProperty("WorldJoin_EncounterType");
     if (typeCode!=null)
     {
-      String type=_worldJoinType.getString(typeCode.intValue());
+      WJEncounterType type=_worldJoinType.getEntry(typeCode.intValue());
       skirmishPE.setType(type);
-    }
-    else
-    {
-      //LOGGER.warn("No type code: "+skirmishPE.getName());
     }
 
     Integer levelScaling=(Integer)props.getProperty("Skirmish_Template_LevelScalingLevel");

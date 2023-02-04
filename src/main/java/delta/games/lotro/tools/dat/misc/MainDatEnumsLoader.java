@@ -155,6 +155,11 @@ public class MainDatEnumsLoader
         lotroEnum.registerEntry(entry);
       }
     }
+    else if (enumId==0x23000350)
+    {
+      T entry=lotroEnum.buildEntryInstance(0,null,"Other");
+      lotroEnum.registerEntry(entry);
+    }
   }
 
   private String getKey(Class<? extends LotroEnumEntry> implClass, int code)
