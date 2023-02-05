@@ -21,8 +21,7 @@ import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get private encounters (instances) from DAT files.
@@ -37,6 +36,7 @@ public class MainDatPrivateEncountersLoader
   private InstanceMapDataBuilder _mapDataBuilder;
   private LotroEnum<WJEncounterType> _worldJoinType;
   private LotroEnum<WJEncounterCategory> _worldJoinCategory;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -49,6 +49,7 @@ public class MainDatPrivateEncountersLoader
     _mapDataBuilder=new InstanceMapDataBuilder();
     _worldJoinType=LotroEnumsRegistry.getInstance().get(WJEncounterType.class);
     _worldJoinCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
+    _i18n=new I18nUtils("instances",facade.getGlobalStringsManager());
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -71,11 +72,10 @@ public class MainDatPrivateEncountersLoader
       ret=new PrivateEncounter(privateEncounterId);
     }
     // Name
-    String name=DatUtils.getStringProperty(props,"PrivateEncounterTemplate_Name");
-    name=StringUtils.fixName(name);
+    String name=_i18n.getNameStringProperty(props,"PrivateEncounterTemplate_Name",privateEncounterId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     ret.setName(name);
     // Description
-    String description=DatUtils.getStringProperty(props,"PrivateEncounterTemplate_Description");
+    String description=_i18n.getStringProperty(props,"PrivateEncounterTemplate_Description");
     ret.setDescription(description);
     // Content Layer ID
     int contentLayerId=((Integer)props.getProperty("PrivateEncounterTemplate_ContentLayer")).intValue();
@@ -295,6 +295,8 @@ public class MainDatPrivateEncountersLoader
     {
       System.out.println("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
     }
+    // Save labels
+    _i18n.save();
   }
 
   /**
