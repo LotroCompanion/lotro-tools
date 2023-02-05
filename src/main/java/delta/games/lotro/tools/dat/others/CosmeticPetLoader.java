@@ -15,8 +15,7 @@ import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.lore.collections.pets.io.xml.CosmeticPetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
-import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get definition of cosmetic pets from DAT files.
@@ -29,6 +28,7 @@ public class CosmeticPetLoader
   private DataFacade _facade;
   private EnumMapper _category;
   private ClassificationLoader _classificationLoader;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -39,6 +39,7 @@ public class CosmeticPetLoader
     _facade=facade;
     _category=facade.getEnumsManager().getEnumMapper(587202586);
     _classificationLoader=new ClassificationLoader(facade);
+    _i18n=new I18nUtils("pets",facade.getGlobalStringsManager());
   }
 
   /**
@@ -57,11 +58,10 @@ public class CosmeticPetLoader
       // Hidden?
       //int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
       // Name
-      String name=DatUtils.getStringProperty(properties,"Skill_Name");
-      name=StringUtils.fixName(name);
+      String name=_i18n.getNameStringProperty(properties,"Skill_Name",indexDataId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       ret.setName(name);
       // Description
-      String description=DatUtils.getStringProperty(properties,"Skill_Desc");
+      String description=_i18n.getStringProperty(properties,"Skill_Desc");
       ret.setDescription(description);
       // Icon
       int iconId=((Integer)properties.getProperty("Skill_Icon")).intValue();
@@ -73,7 +73,7 @@ public class CosmeticPetLoader
       }
       ret.setIconId(iconId);
       // Source description (null for war-steeds)
-      String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
+      String sourceDescription=_i18n.getStringProperty(properties,"Collection_Piece_SourceDesc");
       ret.setSourceDescription(sourceDescription);
       // Category (shall be cosmetic pets)
       int categoryCode=((Integer)properties.getProperty("Skill_Category")).intValue();
@@ -126,7 +126,7 @@ public class CosmeticPetLoader
     //CosmeticEntity_Following_Speed: 10.0
     //CosmeticEntity_MovementType: 2 (Following)
     // Initial Name
-    String initialName=DatUtils.getStringProperty(sourceProps,"CosmeticEntity_Name_Initial");
+    String initialName=_i18n.getStringProperty(sourceProps,"CosmeticEntity_Name_Initial",I18nUtils.OPTION_REMOVE_MARKS);
     pet.setInitialName(initialName);
 
     Integer cosmeticEntityId=(Integer)sourceProps.getProperty("CosmeticEntity_CosmeticEntity");
@@ -151,6 +151,8 @@ public class CosmeticPetLoader
     // Data
     Collections.sort(pets,new IdentifiableComparator<CosmeticPetDescription>());
     CosmeticPetXMLWriter.write(GeneratedFiles.PETS,pets);
+    // Labels
+    _i18n.save();
   }
 
   /**
