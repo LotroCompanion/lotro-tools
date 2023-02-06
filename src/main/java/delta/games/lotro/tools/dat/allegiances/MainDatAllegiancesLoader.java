@@ -23,7 +23,7 @@ import delta.games.lotro.lore.allegiances.io.xml.AllegianceXMLWriter;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get allegiances definitions from DAT files.
@@ -40,6 +40,7 @@ public class MainDatAllegiancesLoader
 
   private DataFacade _facade;
   private LotroEnum<AllegianceGroup> _groups;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -49,6 +50,7 @@ public class MainDatAllegiancesLoader
   {
     _facade=facade;
     _groups=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
+    _i18n=new I18nUtils("allegiances",facade.getGlobalStringsManager());
   }
 
   private AllegianceDescription load(int allegianceID)
@@ -63,14 +65,14 @@ public class MainDatAllegiancesLoader
     //System.out.println("************* "+allegianceID+" *****************");
     //System.out.println(properties.dump());
     // Name
-    String name=DatUtils.getStringProperty(properties,"Allegiance_Name");
+    String name=_i18n.getNameStringProperty(properties,"Allegiance_Name",allegianceID,0);
     ret.setName(name);
     // Group
     int groupID=((Integer)properties.getProperty("Allegiance_Groups")).intValue();
     AllegianceGroup group=_groups.getEntry(groupID);
     ret.setGroup(group);
     // Description
-    String description=DatUtils.getStringProperty(properties,"Allegiance_Description");
+    String description=_i18n.getStringProperty(properties,"Allegiance_Description");
     ret.setDescription(description);
     // Min Level
     Integer minLevel=(Integer)properties.getProperty("Allegiance_MinimumLeveltoStart");
@@ -152,11 +154,13 @@ public class MainDatAllegiancesLoader
       Points2LevelCurve curve=loadCurve(curveID);
       mgr.getCurvesManager().addCurve(curve);
     }
+    // Save
     boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,mgr);
     if (ok)
     {
       System.out.println("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
     }
+    _i18n.save();
     // Write allegiances icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.ALLEGIANCES_ICONS,ALLEGIANCE_ICONS_DIR);
