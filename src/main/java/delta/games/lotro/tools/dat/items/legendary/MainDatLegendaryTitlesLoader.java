@@ -7,12 +7,16 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.common.enums.Genus;
+import delta.games.lotro.common.enums.LegendaryTitleCategory;
+import delta.games.lotro.common.enums.LegendaryTitleTier;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.items.DamageType;
@@ -33,8 +37,9 @@ public class MainDatLegendaryTitlesLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatLegendaryTitlesLoader.class);
 
   private DataFacade _facade;
-  private EnumMapper _category;
-  private EnumMapper _genus;
+  private LotroEnum<LegendaryTitleCategory> _category;
+  private LotroEnum<Genus> _genus;
+  private LotroEnum<LegendaryTitleTier> _tier;
 
   /**
    * Constructor.
@@ -43,8 +48,10 @@ public class MainDatLegendaryTitlesLoader
   public MainDatLegendaryTitlesLoader(DataFacade facade)
   {
     _facade=facade;
-    _category=_facade.getEnumsManager().getEnumMapper(587203267);
-    _genus=_facade.getEnumsManager().getEnumMapper(587202570);
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    _category=registry.get(LegendaryTitleCategory.class);
+    _genus=registry.get(Genus.class);
+    _tier=registry.get(LegendaryTitleTier.class);
   }
 
   /*
@@ -101,11 +108,12 @@ Mod_Array:
       String name=DatUtils.getStringProperty(properties,"Name");
       ret.setName(name);
       // Category
-      int category=((Integer)properties.getProperty("ItemAdvancement_IATitle_Category")).intValue();
-      String categoryName=_category.getString(category);
-      ret.setCategory(categoryName);
+      int categoryCode=((Integer)properties.getProperty("ItemAdvancement_IATitle_Category")).intValue();
+      LegendaryTitleCategory category=_category.getEntry(categoryCode);
+      ret.setCategory(category);
       // Tier
-      int tier=((Integer)properties.getProperty("ItemAdvancement_IATitle_Tier")).intValue();
+      int tierCode=((Integer)properties.getProperty("ItemAdvancement_IATitle_Tier")).intValue();
+      LegendaryTitleTier tier=_tier.getEntry(tierCode);
       ret.setTier(tier);
       // Damage type
       int damageTypeCode=((Integer)properties.getProperty("ItemAdvancement_Title_DamageType")).intValue();
@@ -116,7 +124,8 @@ Mod_Array:
       if ((slayerGenusType!=null) && (slayerGenusType.intValue()!=0))
       {
         BitSet flags=BitSetUtils.getBitSetFromFlags(slayerGenusType.intValue());
-        String genus=BitSetUtils.getStringFromBitSet(flags,_genus,",");
+        int index=flags.nextSetBit(0)+1;
+        Genus genus=_genus.getEntry(index);
         ret.setSlayerGenusType(genus);
       }
       // Stats
