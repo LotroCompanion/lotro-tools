@@ -26,7 +26,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get legendary titles definitions from DAT files.
@@ -40,6 +40,7 @@ public class MainDatLegendaryTitlesLoader
   private LotroEnum<LegendaryTitleCategory> _category;
   private LotroEnum<Genus> _genus;
   private LotroEnum<LegendaryTitleTier> _tier;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -48,6 +49,7 @@ public class MainDatLegendaryTitlesLoader
   public MainDatLegendaryTitlesLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("legendaryTitles",facade.getGlobalStringsManager());
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _category=registry.get(LegendaryTitleCategory.class);
     _genus=registry.get(Genus.class);
@@ -105,7 +107,7 @@ Mod_Array:
       // ID
       ret.setIdentifier(indexDataId);
       // Name
-      String name=DatUtils.getStringProperty(properties,"Name");
+      String name=_i18n.getNameStringProperty(properties,"Name",indexDataId,I18nUtils.OPTION_REMOVE_MARKS);
       ret.setName(name);
       // Category
       int categoryCode=((Integer)properties.getProperty("ItemAdvancement_IATitle_Category")).intValue();
@@ -203,6 +205,7 @@ Mod_Array:
     {
       System.out.println("Wrote titles file: "+GeneratedFiles.LEGENDARY_TITLES);
     }
+    _i18n.save();
   }
 
   /**
