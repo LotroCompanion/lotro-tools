@@ -15,10 +15,10 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.io.xml.EmoteXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
- * Get emotes definitions from DAT files.
+ * Get emote definitions from DAT files.
  * @author DAM
  */
 public class MainDatEmotesLoader
@@ -26,6 +26,7 @@ public class MainDatEmotesLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatEmotesLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -34,6 +35,7 @@ public class MainDatEmotesLoader
   public MainDatEmotesLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("emotes",facade.getGlobalStringsManager());
   }
 
   /*
@@ -73,13 +75,11 @@ Emote_SourceText:
     {
       emote=new EmoteDescription();
       emote.setIdentifier(indexDataId);
-      //System.out.println("************* "+indexDataId+" *****************");
-      //System.out.println(properties.dump());
       // Command
-      String command=DatUtils.getStringProperty(properties,"Emote_CommandString");
+      String command=_i18n.getNameStringProperty(properties,"Emote_CommandString",indexDataId,0);
       emote.setCommand(command);
       // Description
-      String description=DatUtils.getStringProperty(properties,"Emote_Description");
+      String description=_i18n.getStringProperty(properties,"Emote_Description");
       emote.setDescription(description);
       // Icon
       int iconId=((Integer)properties.getProperty("Emote_IconImage")).intValue();
@@ -105,7 +105,6 @@ Emote_SourceText:
     byte[] data=_facade.loadData(id);
     if (data!=null)
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       return (classDefIndex==WStateClass.EMOTE);
     }
@@ -127,7 +126,6 @@ Emote_SourceText:
         EmoteDescription emote=load(id);
         if (emote!=null)
         {
-          //System.out.println("Emote: "+emote);
           emotes.add(emote);
         }
       }
@@ -140,6 +138,7 @@ Emote_SourceText:
     {
       System.out.println("Wrote emotes file: "+GeneratedFiles.EMOTES);
     }
+    _i18n.save();
   }
 
   /**
