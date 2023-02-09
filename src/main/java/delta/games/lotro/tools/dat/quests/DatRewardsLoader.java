@@ -44,7 +44,7 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
-import delta.games.lotro.tools.dat.characters.TraitLoader;
+import delta.games.lotro.tools.dat.characters.TraitUtils;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
@@ -314,7 +314,7 @@ public class DatRewardsLoader
   private void handleTrait(int traitId, List<RewardElement> rewards)
   {
     //System.out.println("Trait: "+traitId);
-    TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+    TraitDescription trait=TraitUtils.getTrait(traitId);
     if (trait!=null)
     {
       Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();

@@ -116,7 +116,7 @@ public class TraitTreesDataLoader
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
       String cellId=_traitCell.getString(traitLocation);
       //System.out.println("Cell: "+cell);
-      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+      TraitDescription trait=TraitUtils.getTrait(traitId);
       TraitTreeCell cell=new TraitTreeCell(cellId,trait);
       // Dependencies
       Object[] depArray=(Object[])traitProps.getProperty("Trait_TraitTree_TraitDependencyArray");
@@ -149,7 +149,7 @@ public class TraitTreesDataLoader
       int nbPoints=nbPointsValue.intValue();
       //System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
-      TraitDescription description=TraitLoader.getTrait(_facade,traitId);
+      TraitDescription description=TraitUtils.getTrait(traitId);
       progression.addStep(nbPoints,description);
     }
   }
@@ -220,7 +220,7 @@ public class TraitTreesDataLoader
         int branchId=((Integer)traitProps.getProperty("Trait_TraitTree_Branch")).intValue();
         TraitTreeBranch branch=branchByCode.get(Integer.valueOf(branchId));
         int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
-        TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+        TraitDescription trait=TraitUtils.getTrait(traitId);
         branch.setMainTrait(trait);
       }
     }

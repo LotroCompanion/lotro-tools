@@ -1,18 +1,33 @@
 package delta.games.lotro.tools.dat.characters;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.SkillCategory;
+import delta.games.lotro.common.enums.TraitNature;
+import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
+import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get trait definitions from DAT files.
@@ -23,6 +38,7 @@ public class MainTraitDataLoader
   private static final Logger LOGGER=Logger.getLogger(MainTraitDataLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private Map<Integer,Integer> _traitIds2PropMap;
 
   /**
@@ -32,6 +48,7 @@ public class MainTraitDataLoader
   public MainTraitDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
   }
 
   /**
@@ -61,7 +78,7 @@ public class MainTraitDataLoader
             (classDefIndex==1494) || (classDefIndex==2525) || (classDefIndex==3438) || (classDefIndex==3509))
         {
           // Traits
-          TraitDescription trait=TraitLoader.loadTrait(_facade,did);
+          TraitDescription trait=loadTrait(did);
           if (trait!=null)
           {
             Integer propertyId=_traitIds2PropMap.get(Integer.valueOf(trait.getIdentifier()));
@@ -75,7 +92,7 @@ public class MainTraitDataLoader
         }
       }
     }
-    TraitLoader.saveTraits();
+    saveTraits();
   }
 
   @SuppressWarnings("unchecked")
@@ -103,6 +120,127 @@ public class MainTraitDataLoader
         LOGGER.warn("Multiple properties for trait: "+oldValue);
       }
     }
+  }
+
+
+  /**
+   * Load a trait.
+   * @param traitId Trait identifier.
+   * @return the loaded trait description or <code>null</code> if not found.
+   */
+  private TraitDescription loadTrait(int traitId)
+  {
+    PropertiesSet traitProperties=_facade.loadProperties(traitId+DATConstants.DBPROPERTIES_OFFSET);
+    if (traitProperties==null)
+    {
+      return null;
+    }
+    //System.out.println("*********** Trait: "+traitId+" ****************");
+    TraitDescription ret=new TraitDescription();
+    ret.setIdentifier(traitId);
+    // Name
+    String traitName=_i18n.getNameStringProperty(traitProperties,"Trait_Name",traitId,I18nUtils.OPTION_REMOVE_MARKS);
+    ret.setName(traitName);
+    // Description
+    String description=_i18n.getStringProperty(traitProperties,"Trait_Description");
+    ret.setDescription(description);
+    // Icon
+    Integer iconId=(Integer)traitProperties.getProperty("Trait_Icon");
+    if (iconId!=null)
+    {
+      ret.setIconId(iconId.intValue());
+    }
+    // Min level
+    Integer minLevelInt=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
+    int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
+    ret.setMinLevel(minLevel);
+    // Tier
+    //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();
+    Integer maxTier=(Integer)traitProperties.getProperty("Trait_Virtue_Maximum_Rank");
+    if ((maxTier!=null) && (maxTier.intValue()>1))
+    {
+      ret.setTiersCount(maxTier.intValue());
+    }
+
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    // Category
+    Integer categoryCode=(Integer)traitProperties.getProperty("Trait_Category");
+    if ((categoryCode!=null) && (categoryCode.intValue()>0))
+    {
+      LotroEnum<SkillCategory> categoryMgr=registry.get(SkillCategory.class);
+      SkillCategory category=categoryMgr.getEntry(categoryCode.intValue());
+      ret.setCategory(category);
+    }
+    // Nature
+    Integer natureCode=(Integer)traitProperties.getProperty("Trait_Nature");
+    if ((natureCode!=null) && (natureCode.intValue()>0))
+    {
+      LotroEnum<TraitNature> natureMgr=registry.get(TraitNature.class);
+      TraitNature nature=natureMgr.getEntry(natureCode.intValue());
+      ret.setNature(nature);
+    }
+    // Tooltip
+    String tooltip=_i18n.getStringProperty(traitProperties,"Trait_Tooltip");
+    ret.setTooltip(tooltip);
+    // Cosmetic
+    Integer cosmeticCode=(Integer)traitProperties.getProperty("Trait_Cosmetic");
+    boolean cosmetic=((cosmeticCode!=null) && (cosmeticCode.intValue()!=0));
+    ret.setCosmetic(cosmetic);
+    // Stats
+    DatStatUtils._doFilterStats=false;
+    DatStatUtils.STATS_USAGE_STATISTICS.reset();
+    StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,traitProperties);
+    ret.setStatsProvider(statsProvider);
+    // Build icon file
+    if (iconId!=null)
+    {
+      String iconFilename=iconId+".png";
+      File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,iconFilename).getAbsoluteFile();
+      if (!to.exists())
+      {
+        boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
+        if (!ok)
+        {
+          LOGGER.warn("Could not build trait icon: "+iconFilename);
+        }
+      }
+    }
+    // Skills
+    Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
+    if (skillArray!=null) 
+    {
+      SkillsManager skillsMgr=SkillsManager.getInstance();
+      for(Object skillIdObj : skillArray)
+      {
+        int skillId=((Integer)skillIdObj).intValue();
+        SkillDescription skill=skillsMgr.getSkill(skillId);
+        if (skill!=null)
+        {
+          ret.addSkill(skill);
+        }
+      }
+    }
+    return ret;
+  }
+
+  /**
+   * Save traits to disk.
+   */
+  private void saveTraits()
+  {
+    TraitsManager traitsManager=TraitsManager.getInstance();
+    new TraitKeyGenerator(traitsManager).setup();
+    List<TraitDescription> traits=traitsManager.getAll();
+    int nbTraits=traits.size();
+    LOGGER.info("Writing "+nbTraits+" traits");
+    // Write traits file
+    boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
+    if (ok)
+    {
+      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
+    }
+    // Labels
+    _i18n.save();
   }
 
   /**

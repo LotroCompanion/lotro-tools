@@ -345,7 +345,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       if (!knownTraits.contains(key))
       {
         LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
-        TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+        TraitDescription trait=TraitUtils.getTrait(traitId);
         ClassTrait classTrait=new ClassTrait(level,trait);
         description.addTrait(classTrait);
         knownTraits.add(key);

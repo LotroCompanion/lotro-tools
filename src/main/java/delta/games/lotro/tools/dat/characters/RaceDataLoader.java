@@ -256,7 +256,7 @@ public class RaceDataLoader
       //Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       //System.out.println("Level: "+level+" (rank="+rank+")");
-      TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+      TraitDescription trait=TraitUtils.getTrait(traitId);
       RaceTrait raceTrait=new RaceTrait(level,trait);
       description.addTrait(raceTrait);
     }
@@ -294,7 +294,7 @@ public class RaceDataLoader
         for(Object traitObj : traitsArray)
         {
           int traitId=((Integer)traitObj).intValue();
-          TraitDescription trait=TraitLoader.getTrait(_facade,traitId);
+          TraitDescription trait=TraitUtils.getTrait(traitId);
           description.addEarnableTrait(trait);
         }
       }
