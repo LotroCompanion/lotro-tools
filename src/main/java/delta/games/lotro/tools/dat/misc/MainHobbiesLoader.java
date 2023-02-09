@@ -23,9 +23,8 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for hobbies data.
@@ -41,6 +40,7 @@ public class MainHobbiesLoader
   public static final File HOBBY_ICONS_DIR=new File("data\\hobbies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -49,6 +49,7 @@ public class MainHobbiesLoader
   public MainHobbiesLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("hobbies",facade.getGlobalStringsManager());
   }
 
   /**
@@ -79,17 +80,16 @@ public class MainHobbiesLoader
     // ID
     ret.setIdentifier(hobbyId);
     // Name
-    String name=DatUtils.getStringProperty(props,"Hobby_Name");
-    name=StringUtils.fixName(name);
+    String name=_i18n.getNameStringProperty(props,"Hobby_Name",hobbyId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     ret.setName(name);
     // Type
     int type=((Integer)props.getProperty("Hobby_Type")).intValue();
     ret.setHobbyType(type);
     // Description
-    String description=DatUtils.getStringProperty(props,"Hobby_Description");
+    String description=_i18n.getStringProperty(props,"Hobby_Description");
     ret.setDescription(description);
     // Trainer display info
-    String trainerDisplayInfo=DatUtils.getStringProperty(props,"Hobby_TrainerDisplayInfo");
+    String trainerDisplayInfo=_i18n.getStringProperty(props,"Hobby_TrainerDisplayInfo");
     ret.setTrainerDisplayInfo(trainerDisplayInfo);
     // Icon
     int iconId=((Integer)props.getProperty("Hobby_Icon")).intValue();
@@ -212,6 +212,8 @@ public class MainHobbiesLoader
     {
       System.out.println("Wrote hobby icons archive: "+GeneratedFiles.HOBBY_ICONS);
     }
+    // Labels
+    _i18n.save();
   }
 
   /**
