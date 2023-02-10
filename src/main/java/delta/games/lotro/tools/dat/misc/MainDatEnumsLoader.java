@@ -21,6 +21,7 @@ import delta.games.lotro.common.enums.LegendaryTitleTier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
+import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
@@ -83,6 +84,7 @@ public class MainDatEnumsLoader
     loadEnum(587203537,"WJInstanceGroup",WJInstanceGroup.class); // 0x230003D1
     loadEnum(587203267,"IATitleCategory",LegendaryTitleCategory.class); // 0x230002C3
     loadEnum(587203238,"IATitleTier",LegendaryTitleTier.class); // 0x230002A6
+    loadEnum(587203350,"PaperItemCategory",PaperItemCategory.class); // 0x23000316
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
