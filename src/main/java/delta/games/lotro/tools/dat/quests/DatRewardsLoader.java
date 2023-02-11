@@ -1,13 +1,11 @@
 package delta.games.lotro.tools.dat.quests;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
@@ -58,13 +56,10 @@ public class DatRewardsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DatRewardsLoader.class);
 
-  private static final int DEBUG_ID=1879000000;
-
   private static final int TIER_ARTISAN=4;
 
   private DataFacade _facade;
   private ItemsManager _itemsMgr;
-  //private EnumMapper _billingGroup;
   private FactionsRegistry _factions;
   private Map<Integer,RewardsMap> _rewardLevels;
   private Map<Integer,RewardsMap> _defaultRewardMaps;
@@ -78,7 +73,6 @@ public class DatRewardsLoader
   {
     _facade=facade;
     _itemsMgr=ItemsManager.getInstance();
-    //_billingGroup=_facade.getEnumsManager().getEnumMapper(587202756);
     _factions=FactionsRegistry.getInstance();
     _rewardLevels=new HashMap<Integer,RewardsMap>();
     _defaultRewardMaps=new HashMap<Integer,RewardsMap>();
@@ -94,7 +88,6 @@ public class DatRewardsLoader
    */
   public ChallengeLevel fillRewards(PropertiesSet properties, Rewards rewards)
   {
-    //System.out.println(properties.getPropertyNames());
     // Challenge level
     ChallengeLevel challengeLevel=findChallengeLevel(properties);
 
@@ -138,12 +131,6 @@ public class DatRewardsLoader
   public void loadRewards(Rewards rewards, int questTreasureId, RewardsMap rewardsMap)
   {
     PropertiesSet props=_facade.loadProperties(questTreasureId+DATConstants.DBPROPERTIES_OFFSET);
-
-    if (questTreasureId==DEBUG_ID)
-    {
-      FileIO.writeFile(new File(questTreasureId+".props"),props.dump().getBytes());
-      System.out.println(props.dump());
-    }
 
     // Traits
     handleTraits(rewards,props);
@@ -280,7 +267,6 @@ public class DatRewardsLoader
 
   private void handleEmote(int emoteId, List<RewardElement> rewards)
   {
-    //System.out.println("Emote: "+emoteId);
     EmotesManager emotesMgr=EmotesManager.getInstance();
     EmoteDescription emote=emotesMgr.getEmote(emoteId);
     if (emote!=null)
@@ -313,7 +299,6 @@ public class DatRewardsLoader
 
   private void handleTrait(int traitId, List<RewardElement> rewards)
   {
-    //System.out.println("Trait: "+traitId);
     TraitDescription trait=TraitUtils.getTrait(traitId);
     if (trait!=null)
     {
@@ -340,11 +325,10 @@ public class DatRewardsLoader
         PropertiesSet itemProps=(PropertiesSet)itemObj;
         int itemId=((Integer)itemProps.getProperty("QuestTreasure_Item")).intValue();
         Integer quantityValue=(Integer)itemProps.getProperty("QuestTreasure_ItemQuantity");
-        //System.out.println("Item: "+itemId+", quantity: "+quantityValue);
         Item item=_itemsMgr.getItem(itemId);
         if (item!=null)
         {
-          String name=(item!=null)?item.getName():"???";
+          String name=item.getName();
           Proxy<Item> itemProxy=new Proxy<Item>();
           itemProxy.setObject(item);
           itemProxy.setName(name);
@@ -390,14 +374,13 @@ public class DatRewardsLoader
 
   private void handleRelic(int relicId, Integer quantityValue, List<RewardElement> rewards)
   {
-    //System.out.println("Relic: "+relicId);
     RelicsManager relicsMgr=RelicsManager.getInstance();
-    Relic item=relicsMgr.getById(relicId);
-    if (item!=null)
+    Relic relic=relicsMgr.getById(relicId);
+    if (relic!=null)
     {
-      String name=(item!=null)?item.getName():"???";
+      String name=relic.getName();
       Proxy<Relic> itemProxy=new Proxy<Relic>();
-      itemProxy.setObject(item);
+      itemProxy.setObject(relic);
       itemProxy.setName(name);
       itemProxy.setId(relicId);
       int quantity=(quantityValue!=null?quantityValue.intValue():1);
@@ -459,7 +442,6 @@ public class DatRewardsLoader
           Integer repValue=rewardsMap.getReputationMap().getValue(repTier.intValue());
           reputationValue=(repValue!=null)?repValue.intValue():0;
         }
-        //System.out.println("Reputation: faction="+factionId+", tier="+repTier+", value="+reputationValue);
         if (reputationValue!=0)
         {
           Faction faction=_factions.getById(factionId.intValue());
@@ -535,7 +517,6 @@ public class DatRewardsLoader
     if (goldTier!=null)
     {
       Integer gold=rewardsMap.getMoneyMap().getValue(goldTier.intValue());
-      //System.out.println("Gold tier: "+goldTier+" => "+gold);
       if (gold!=null)
       {
         rewards.getMoney().setRawValue(gold.intValue());
@@ -546,7 +527,6 @@ public class DatRewardsLoader
     if (xpTier!=null)
     {
       Integer xp=rewardsMap.getXpMap().getValue(xpTier.intValue());
-      //System.out.println("XP tier: "+xpTier+" => "+xp);
       if (xp!=null)
       {
         rewards.setXp(xp.intValue());
@@ -557,7 +537,6 @@ public class DatRewardsLoader
     if (itemXpTier!=null)
     {
       Integer itemXp=rewardsMap.getItemXpMap().getValue(itemXpTier.intValue());
-      //System.out.println("Item XP tier: "+itemXpTier+" => "+itemXp);
       if (itemXp!=null)
       {
         rewards.setItemXp(itemXp.intValue());
@@ -568,7 +547,6 @@ public class DatRewardsLoader
     if (mountXpTier!=null)
     {
       Integer mountXp=rewardsMap.getMountXpMap().getValue(mountXpTier.intValue());
-      //System.out.println("Mount XP tier: "+mountXpTier+" => "+mountXp);
       if (mountXp!=null)
       {
         rewards.setMountXp(mountXp.intValue());
@@ -597,7 +575,6 @@ public class DatRewardsLoader
     if (gloryTier!=null)
     {
       Integer glory=rewardsMap.getGloryMap().getValue(gloryTier.intValue());
-      //System.out.println("Glory tier: "+gloryTier+" => "+glory);
       if (glory!=null)
       {
         rewards.setGlory(glory.intValue());
@@ -665,10 +642,6 @@ public class DatRewardsLoader
       {
         //LOGGER.warn("No challenge level property!");
       }
-    }
-    else
-    {
-      //System.out.println("Challenge level is: "+challengeLevel);
     }
     /*
     Quest_ChallengeLevel: 100
