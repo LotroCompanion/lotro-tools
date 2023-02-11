@@ -10,6 +10,7 @@ import delta.games.lotro.common.enums.AllegianceGroup;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
+import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.Genus;
@@ -23,6 +24,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.PaperItemCategory;
+import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
@@ -91,6 +93,8 @@ public class MainDatEnumsLoader
     loadEnum(587203433,"PointBasedTraitTree",TraitTreeType.class); // 0x23000369
     loadEnum(587203489,"PointBasedTraitTreeBranch",TraitTreeBranchType.class); // 0x230003A1
     loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
+    loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
+    loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)

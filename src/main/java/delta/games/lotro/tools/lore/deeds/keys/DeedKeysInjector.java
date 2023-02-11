@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.io.xml.DeedsSaxParser;
 
@@ -169,25 +170,26 @@ public class DeedKeysInjector
   private String[] REGIONS = { "Angmar", "Bree-land", "Dunland", "Enedwaith", "Ered Luin", "Eregion", "Evendim", 
       "Forochel", "Great River", "Lone-lands", "Lothlórien", "Misty Mountains",
       "Moria", "North Downs", "Southern Mirkwood", "The Shire", "The Trollshaws" };
+  private int[] DEED_CATEGORY_CODES= {
+      11, 7, 37, 34, 3, 19, 12, 15, 39, 8, 18, 4, 17, 2, 25, 5, 1
+  };
 
   private DeedDescription handleRegionSuffix(DeedDescription deed)
   {
     String name=deed.getName();
-    for(String region : REGIONS)
+    int nbRegions=REGIONS.length;
+    for(int i=0;i<nbRegions;i++)
     {
+      String region=REGIONS[i];
       String suffix="("+region+")";
       if (name.endsWith(suffix))
       {
-        String fixedRegionName=region;
-        if ("The Trollshaws".equals(region)) fixedRegionName="Trollshaws";
-        if ("The Shire".equals(region)) fixedRegionName="Shire";
-
         String newDeedName=name.substring(0,name.length()-suffix.length()).trim();
         List<DeedDescription> candidateDeeds=_new.getDeedsByName(newDeedName);
         for(DeedDescription candidateDeed : candidateDeeds)
         {
-          String category=candidateDeed.getCategory();
-          if (fixedRegionName.equals(category))
+          DeedCategory category=candidateDeed.getCategory();
+          if ((category!=null) && (category.getCode()==DEED_CATEGORY_CODES[i]))
           {
             return candidateDeed;
           }

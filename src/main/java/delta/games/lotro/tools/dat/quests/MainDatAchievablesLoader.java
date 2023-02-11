@@ -22,12 +22,15 @@ import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Repeatability;
 import delta.games.lotro.common.Size;
+import delta.games.lotro.common.enums.DeedCategory;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -66,8 +69,8 @@ public class MainDatAchievablesLoader
   private I18nUtils _i18n;
   private Map<Integer,QuestDescription> _quests;
   private Map<Integer,DeedDescription> _deeds;
-  private EnumMapper _questCategory;
-  private EnumMapper _deedUiTabName;
+  private LotroEnum<QuestCategory> _questCategory;
+  private LotroEnum<DeedCategory> _deedUiTabName;
   private DatRewardsLoader _rewardsLoader;
   private DatObjectivesLoader _objectivesLoader;
   private DatRolesLoader _rolesLoader;
@@ -90,8 +93,9 @@ public class MainDatAchievablesLoader
     _i18n=new I18nUtils("quests",facade.getGlobalStringsManager());
     _quests=new HashMap<Integer,QuestDescription>();
     _deeds=new HashMap<Integer,DeedDescription>();
-    _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
-    _deedUiTabName=_facade.getEnumsManager().getEnumMapper(587202588);
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    _questCategory=registry.get(QuestCategory.class);
+    _deedUiTabName=registry.get(DeedCategory.class);
     _rewardsLoader=rewardsLoader;
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
     _rolesLoader=new DatRolesLoader(facade,_i18n);
@@ -182,7 +186,7 @@ public class MainDatAchievablesLoader
     Integer categoryId=((Integer)properties.getProperty("Quest_Category"));
     if (categoryId!=null)
     {
-      String category=_questCategory.getString(categoryId.intValue());
+      QuestCategory category=_questCategory.getEntry(categoryId.intValue());
       quest.setCategory(category);
     }
     // Max times
@@ -398,7 +402,7 @@ public class MainDatAchievablesLoader
     deed.setDescription(description);
     // UI Tab
     Integer uiTab=((Integer)properties.getProperty("Accomplishment_UITab"));
-    String uiTabName=_deedUiTabName.getString(uiTab.intValue());
+    DeedCategory uiTabName=_deedUiTabName.getEntry(uiTab.intValue());
     deed.setCategory(uiTabName);
     // Deed type
     handleDeedType(deed,properties);

@@ -3,6 +3,7 @@ package delta.games.lotro.tools.lore.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.quests.QuestDescription;
@@ -21,15 +22,17 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class MainTaskDataBuilder
 {
+  private static final int TASK=112;
+
   private List<QuestDescription> getTaskQuests()
   {
     List<QuestDescription> ret=new ArrayList<QuestDescription>();
     QuestsManager qm=QuestsManager.getInstance();
     for(QuestDescription quest : qm.getAll())
     {
-      String category=quest.getCategory();
+      QuestCategory category=quest.getCategory();
       // TODO l10n. Use code 112 when available
-      if ("Task".equals(category))
+      if ((category!=null) && (category.getCode()==TASK))
       {
         ret.add(quest);
       }
