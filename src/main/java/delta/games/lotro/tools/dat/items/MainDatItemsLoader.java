@@ -18,6 +18,7 @@ import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
+import delta.games.lotro.common.enums.ItemUniquenessChannel;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
@@ -30,7 +31,6 @@ import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -118,7 +118,7 @@ public class MainDatItemsLoader
   private LotroEnum<SocketType> _socketTypes;
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
-  private EnumMapper _uniquenessChannel;
+  private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
   private LotroEnum<ItemClass> _itemClassEnum;
   private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
@@ -143,7 +143,7 @@ public class MainDatItemsLoader
     _socketTypes=enumsRegistry.get(SocketType.class);
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
-    _uniquenessChannel=facade.getEnumsManager().getEnumMapper(587203643);
+    _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
     _equipmentCategoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
@@ -1001,11 +1001,11 @@ public class MainDatItemsLoader
     int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
     int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
     int setId=((Integer)props.getProperty("Item_PropertySet")).intValue();
-    String uniquenessChannel=null;
+    ItemUniquenessChannel uniquenessChannel=null;
     Integer uniquenessChannelCode=(Integer)props.getProperty("Item_UniquenessChannel");
     if ((uniquenessChannelCode!=null) && (uniquenessChannelCode.intValue()!=0))
     {
-      uniquenessChannel=_uniquenessChannel.getLabel(uniquenessChannelCode.intValue());
+      uniquenessChannel=_uniquenessChannel.getEntry(uniquenessChannelCode.intValue());
     }
     Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement,setId,uniquenessChannel);
     _traceries.add(tracery);
