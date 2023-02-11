@@ -485,4 +485,13 @@ AdvTable_AvailableSkillEntryList:
     // Save derived stats
     DerivedStatsContributionsXMLWriter.write(GeneratedFiles.STAT_CONTRIBS,_derivatedStatsManager);
   }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    new CharacterClassDataLoader(new DataFacade()).doIt();
+  }
 }

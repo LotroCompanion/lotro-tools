@@ -27,6 +27,8 @@ import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.common.enums.TraitNature;
+import delta.games.lotro.common.enums.TraitTreeBranchType;
+import delta.games.lotro.common.enums.TraitTreeType;
 import delta.games.lotro.common.enums.TravelLink;
 import delta.games.lotro.common.enums.WJEncounterCategory;
 import delta.games.lotro.common.enums.WJEncounterType;
@@ -85,6 +87,8 @@ public class MainDatEnumsLoader
     loadEnum(587203267,"IATitleCategory",LegendaryTitleCategory.class); // 0x230002C3
     loadEnum(587203238,"IATitleTier",LegendaryTitleTier.class); // 0x230002A6
     loadEnum(587203350,"PaperItemCategory",PaperItemCategory.class); // 0x23000316
+    loadEnum(587203433,"PointBasedTraitTree",TraitTreeType.class); // 0x23000369
+    loadEnum(587203489,"PointBasedTraitTreeBranch",TraitTreeBranchType.class); // 0x230003A1
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)

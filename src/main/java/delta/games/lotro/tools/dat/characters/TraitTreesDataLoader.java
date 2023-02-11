@@ -16,6 +16,10 @@ import delta.games.lotro.character.classes.traitTree.TraitTreeCellDependency;
 import delta.games.lotro.character.classes.traitTree.TraitTreeProgression;
 import delta.games.lotro.character.classes.traitTree.io.xml.TraitTreeXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.TraitTreeBranchType;
+import delta.games.lotro.common.enums.TraitTreeType;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -31,9 +35,7 @@ public class TraitTreesDataLoader
   private static final Logger LOGGER=Logger.getLogger(TraitTreesDataLoader.class);
 
   private DataFacade _facade;
-  private EnumMapper _traitTreeBranch;
   private EnumMapper _traitCell;
-  private EnumMapper _traitTreeType;
 
   /**
    * Constructor.
@@ -42,9 +44,7 @@ public class TraitTreesDataLoader
   public TraitTreesDataLoader(DataFacade facade)
   {
     _facade=facade;
-    _traitTreeBranch=_facade.getEnumsManager().getEnumMapper(0x230003A1);
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
-    _traitTreeType=_facade.getEnumsManager().getEnumMapper(0x23000369);
   }
 
   private TraitTree handleTraitTree(int traitTreeId)
@@ -64,15 +64,16 @@ public class TraitTreesDataLoader
       System.out.println("Branch description: "+branchDescription);
     }
     */
-    TraitTree tree=new TraitTree(traitTreeId);
-    int traitTreeType=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
-    tree.setCode(traitTreeType);
-    String traitTreeKey=_traitTreeType.getString(traitTreeType);
-    tree.setKey(traitTreeKey);
-    LOGGER.info("Loading trait tree for class: "+traitTreeKey);
+    int traitTreeTypeCode=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    LotroEnum<TraitTreeType> traitTreeTypeEnum=registry.get(TraitTreeType.class);
+    TraitTreeType traiTreeType=traitTreeTypeEnum.getEntry(traitTreeTypeCode);
+    TraitTree tree=new TraitTree(traitTreeId,traiTreeType);
+    LOGGER.info("Loading trait tree with type: "+traiTreeType);
     //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
+    LotroEnum<TraitTreeBranchType> traitTreeBranchTypeEnum=registry.get(TraitTreeBranchType.class);
     Object[] specializations=(Object[])properties.getProperty("Trait_TraitTree_SpecializationsArray");
     if (specializations!=null)
     {
@@ -80,9 +81,8 @@ public class TraitTreesDataLoader
       {
         PropertiesSet specializationProps=(PropertiesSet)specializationObj;
         int branchId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationBranch")).intValue();
-        String branchName=_traitTreeBranch.getString(branchId);
-        //System.out.println("Branch name: "+branchName);
-        TraitTreeBranch branch=new TraitTreeBranch(branchId,branchName);
+        TraitTreeBranchType branchType=traitTreeBranchTypeEnum.getEntry(branchId);
+        TraitTreeBranch branch=new TraitTreeBranch(branchType);
         branchesById.put(Integer.valueOf(branchId),branch);
         tree.addBranch(branch);
         TraitTreeProgression progression=branch.getProgression();
@@ -106,9 +106,8 @@ public class TraitTreesDataLoader
       TraitTreeBranch branch=branchesById.get(Integer.valueOf(branchId));
       if (branch==null)
       {
-        String branchName=_traitTreeBranch.getString(branchId);
-        //System.out.println("Branch name: "+branchName);
-        branch=new TraitTreeBranch(branchId,branchName);
+        TraitTreeBranchType branchType=traitTreeBranchTypeEnum.getEntry(branchId);
+        branch=new TraitTreeBranch(branchType);
         branchesById.put(Integer.valueOf(branchId),branch);
         tree.addBranch(branch);
       }
