@@ -22,6 +22,7 @@ import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.MonsterClassDataLoader;
+import delta.games.lotro.tools.dat.characters.NationalitiesLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
@@ -112,6 +113,8 @@ public class MainDatLoader
     new CharacterClassDataLoader(_facade).doIt();
     // Monster class data
     new MonsterClassDataLoader(_facade).doIt();
+    // Nationalities
+    new NationalitiesLoader(_facade).doIt();
     // Race data
     new RaceDataLoader(_facade).doIt();
     // Titles

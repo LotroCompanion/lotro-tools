@@ -16,7 +16,6 @@ import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RaceGender;
 import delta.games.lotro.character.races.RaceTrait;
-import delta.games.lotro.character.races.io.xml.NationalityDescriptionXMLWriter;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterSex;
@@ -26,9 +25,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
-import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get race definitions from DAT files.
@@ -53,7 +50,6 @@ public class RaceDataLoader
     _i18n=new I18nUtils("races",facade.getGlobalStringsManager());
     _racesById=new HashMap<Integer,RaceDescription>();
     _speciesCode=_facade.getEnumsManager().getEnumMapper(587202571);
-    loadNationalities();
   }
 
   private void handleRace(int racePropertiesId)
@@ -115,72 +111,6 @@ public class RaceDataLoader
     if (raceId==117) return "High Elf";
     if (raceId==120) return "Stout-axe Dwarf";
     return null;
-  }
-
-  private void loadNationalities()
-  {
-    List<NationalityDescription> nationalities=new ArrayList<NationalityDescription>();
-    PropertiesSet properties=_facade.loadProperties(0x79000210);
-    Object[] nationalityIdsArray=(Object[])properties.getProperty("NationalityTable_NationalityTableList");
-    for(Object nationalityIdObj : nationalityIdsArray)
-    {
-      int nationalityId=((Integer)nationalityIdObj).intValue();
-      NationalityDescription nationality=handleNationality(nationalityId);
-      nationalities.add(nationality);
-      int nationalityCode=nationality.getIdentifier();
-      // Aliases
-      if (nationalityCode==16) nationality.addAlias("Dale");
-      if (nationalityCode==12) nationality.addAlias("Lonely Mountain");
-      if (nationalityCode==18) nationality.addAlias("Fallohides");
-      if (nationalityCode==13) nationality.addAlias("Stoors");
-      if (nationalityCode==27) nationality.addAlias("Mordor Mountains");
-    }
-    NationalityDescriptionXMLWriter.write(GeneratedFiles.NATIONALITIES,nationalities);
-  }
-
-  private NationalityDescription handleNationality(int nationalityId)
-  {
-    PropertiesSet properties=_facade.loadProperties(nationalityId+DATConstants.DBPROPERTIES_OFFSET);
-    // Code
-    int code=((Integer)properties.getProperty("NationalityTable_Nationality")).intValue();
-    NationalityDescription ret=new NationalityDescription(code);
-    // Name
-    String name=DatUtils.getStringProperty(properties,"NationalityTable_Name");
-    name=StringUtils.fixName(name);
-    ret.setName(name);
-    // Description
-    String description=DatUtils.getStringProperty(properties,"NationalityTable_Desc");
-    ret.setDescription(description);
-    // Icon ID
-    int iconID=((Integer)properties.getProperty("NationalityTable_Icon")).intValue();
-    ret.setIconID(iconID);
-    // Guidelines
-    Object[] guidelinesArray=(Object[])properties.getProperty("NationalityTable_Naming_Guideline_Array");
-    for(Object guidelineEntryObj : guidelinesArray)
-    {
-      PropertiesSet guidelineProps=(PropertiesSet)guidelineEntryObj;
-      String guideline=DatUtils.getStringProperty(guidelineProps,"NationalityTable_Naming_Guideline");
-      int sexCode=((Integer)guidelineProps.getProperty("NationalityTable_Sex")).intValue();
-      if (sexCode==4096)
-      {
-        ret.setNamingGuidelineMale(guideline);
-      }
-      else if (sexCode==8192)
-      {
-        ret.setNamingGuidelineFemale(guideline);
-      }
-      else
-      {
-        LOGGER.warn("Unmanaged gender code: "+sexCode);
-      }
-    }
-    // Title
-    Integer titleID=(Integer)properties.getProperty("NationalityTable_Title");
-    if (titleID!=null)
-    {
-      ret.setTitleID(titleID);
-    }
-    return ret;
   }
 
   private void loadGenders(RaceDescription race, PropertiesSet properties)
