@@ -16,7 +16,7 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for combat data.
@@ -27,6 +27,7 @@ public class MainDatCraftingLoader
   private DataFacade _facade;
   private EnumMapper _tier;
   private CraftingData _data;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -35,6 +36,7 @@ public class MainDatCraftingLoader
   public MainDatCraftingLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("crafting",facade.getGlobalStringsManager());
     _tier=_facade.getEnumsManager().getEnumMapper(587202659);
     _data=new CraftingData();
   }
@@ -74,10 +76,10 @@ public class MainDatCraftingLoader
     ret.setIdentifier(vocationId);
     PropertiesSet vocationProps=_facade.loadProperties(vocationId+DATConstants.DBPROPERTIES_OFFSET);
     // - name
-    String name=DatUtils.getStringProperty(vocationProps,"CraftVocation_Name");
+    String name=_i18n.getNameStringProperty(vocationProps,"CraftVocation_Name",vocationId,0);
     ret.setName(name);
     // - description
-    String description=DatUtils.getStringProperty(vocationProps,"CraftVocation_Description");
+    String description=_i18n.getStringProperty(vocationProps,"CraftVocation_Description");
     ret.setDescription(description);
     // - professions
     Object[] professionsArray=(Object[])vocationProps.getProperty("CraftVocation_ProfessionArray");
@@ -115,10 +117,10 @@ CraftVocation_LearnString:
       PropertiesSet professionProps=_facade.loadProperties(professionId+DATConstants.DBPROPERTIES_OFFSET);
       ret.setIdentifier(professionId);
       // - name
-      String name=DatUtils.getStringProperty(professionProps,"CraftProfession_Name");
+      String name=_i18n.getNameStringProperty(professionProps,"CraftProfession_Name",professionId,0);
       ret.setName(name);
       // - description
-      String description=DatUtils.getStringProperty(professionProps,"CraftProfession_Description");
+      String description=_i18n.getStringProperty(professionProps,"CraftProfession_Description");
       ret.setDescription(description);
       // - tiers
       CraftingLevel beginner=buildBeginnerLevel(ret);
@@ -209,8 +211,6 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
 
   private CraftingLevel handleProfessionTier(Profession profession, PropertiesSet tierProps)
   {
-    //System.out.println(tierProps.dump());
-
     // Tier
     int tier=((Integer)tierProps.getProperty("CraftProfession_Tier")).intValue();
 
@@ -293,7 +293,10 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
    */
   private void save()
   {
+    // Data
     CraftingXMLWriter.write(GeneratedFiles.CRAFTING_DATA,_data);
+    // Labels
+    _i18n.save();
   }
 
   /**
