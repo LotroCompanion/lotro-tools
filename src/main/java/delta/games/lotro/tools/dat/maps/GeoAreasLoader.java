@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.File;
 
+import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -10,6 +11,8 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.Region;
 import delta.games.lotro.lore.maps.Territory;
+import delta.games.lotro.lore.maps.io.xml.GeoAreasXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -36,15 +39,6 @@ public class GeoAreasLoader
     _facade=facade;
     _geoMgr=new GeoAreasManager();
     _i18n=new I18nUtils("geoAreas",facade.getGlobalStringsManager());
-  }
-
-  /**
-   * Get the geo manager.
-   * @return the geo manager.
-   */
-  public GeoAreasManager getGeoManager()
-  {
-    return _geoMgr;
   }
 
   /**
@@ -191,10 +185,32 @@ public class GeoAreasLoader
       Region region=_geoMgr.getRegionByCode(regionCode);
       if (region==null)
       {
-        String regionName=(String)regionProps.getProperty("Region_Name");
+        String regionName=_i18n.getNameStringProperty(regionProps,"Region_Name",regionCode,0);
         Region newRegion=new Region(regionCode,regionCode,regionName);
         _geoMgr.addRegion(newRegion);
       }
     }
+  }
+
+  /**
+   * Save loader data.
+   */
+  public void save()
+  {
+    // Data
+    boolean ok=GeoAreasXMLWriter.writeGeoAreasFile(GeneratedFiles.GEO_AREAS,_geoMgr);
+    if (ok)
+    {
+      System.out.println("Wrote geographic areas file: "+GeneratedFiles.GEO_AREAS);
+    }
+    // Icons
+    DirectoryArchiver archiver=new DirectoryArchiver();
+    ok=archiver.go(GeneratedFiles.AREA_ICONS,GeoAreasLoader.AREA_ICONS_DIR);
+    if (ok)
+    {
+      System.out.println("Wrote area icons archive: "+GeneratedFiles.AREA_ICONS);
+    }
+    // Labels
+    _i18n.save();
   }
 }
