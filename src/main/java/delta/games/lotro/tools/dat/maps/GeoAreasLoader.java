@@ -10,7 +10,7 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.Region;
 import delta.games.lotro.lore.maps.Territory;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for geographic areas.
@@ -25,6 +25,7 @@ public class GeoAreasLoader
 
   private DataFacade _facade;
   private GeoAreasManager _geoMgr;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -34,6 +35,7 @@ public class GeoAreasLoader
   {
     _facade=facade;
     _geoMgr=new GeoAreasManager();
+    _i18n=new I18nUtils("geoAreas",facade.getGlobalStringsManager());
   }
 
   /**
@@ -71,14 +73,12 @@ public class GeoAreasLoader
     {
       return null;
     }
-    //System.out.println(areaProps.dump());
     // Name
-    String areaName=DatUtils.getStringProperty(areaProps,"Area_Name");
+    String areaName=_i18n.getNameStringProperty(areaProps,"Area_Name",areaId,0);
     if (areaName==null)
     {
       return null;
     }
-    //System.out.println("\tArea name: "+areaName);
     // Icon
     Integer imageId=(Integer)areaProps.getProperty("Area_Icon");
     if ((imageId!=null) && (imageId.intValue()>0))
@@ -138,8 +138,7 @@ public class GeoAreasLoader
   {
     PropertiesSet territoryProps=_facade.loadProperties(territoryId+DATConstants.DBPROPERTIES_OFFSET);
     // Name
-    String areaName=DatUtils.getStringProperty(territoryProps,"Area_Name");
-    //System.out.println("\t\t\tName: "+areaName);
+    String areaName=_i18n.getNameStringProperty(territoryProps,"Area_Name",territoryId,0);
     // Region ID
     int regionId=((Integer)territoryProps.getProperty("Area_Region")).intValue();
     Region region=getRegion(regionId);
@@ -167,11 +166,9 @@ public class GeoAreasLoader
   {
     PropertiesSet regionProps=_facade.loadProperties(regionId+DATConstants.DBPROPERTIES_OFFSET);
     // Name
-    String areaName=DatUtils.getStringProperty(regionProps,"Area_Name");
-    //System.out.println("\t\t\tName: "+areaName);
+    String areaName=_i18n.getNameStringProperty(regionProps,"Area_Name",regionId,0);
     // Region code
     int regionCode=((Integer)regionProps.getProperty("Area_RegionID")).intValue();
-    //System.out.println("\t\t\tCode: "+regionCode);
     Region region=new Region(regionId,regionCode,areaName);
     return region;
   }
