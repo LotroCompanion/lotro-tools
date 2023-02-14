@@ -14,6 +14,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.webStore.WebStoreItem;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for web store items.
@@ -24,6 +25,7 @@ public class WebStoreItemsLoader
   private DataFacade _facade;
   private Map<Integer,WebStoreItem> _registry;
   private LotroEnum<BillingGroup> _billingGroups;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -34,6 +36,7 @@ public class WebStoreItemsLoader
     _facade=facade;
     _registry=new HashMap<Integer,WebStoreItem>();
     _billingGroups=LotroEnumsRegistry.getInstance().get(BillingGroup.class);
+    _i18n=new I18nUtils("webStoreItems",facade.getGlobalStringsManager());
   }
 
   /**
@@ -76,7 +79,7 @@ public class WebStoreItemsLoader
     //System.out.println(props.dump());
     WebStoreItem ret=new WebStoreItem(webStoreItemID);
     // Name
-    String name=(String)props.getProperty("WebStoreItem_Name");
+    String name=_i18n.getNameStringProperty(props,"WebStoreItem_Name",webStoreItemID,0);
     ret.setName(name);
     // SKU
     String sku=(String)props.getProperty("WebStoreItem_SKU");
