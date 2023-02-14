@@ -26,7 +26,7 @@ import delta.games.lotro.maps.data.GeoReference;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for dungeons.
@@ -39,6 +39,7 @@ public class DungeonLoader
   private DataFacade _facade;
   private GeoreferencedBasemapsManager _basemapsManager;
   private Map<Integer,Dungeon> _data;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -50,6 +51,7 @@ public class DungeonLoader
     _facade=facade;
     _basemapsManager=basemapsManager;
     _data=new HashMap<Integer,Dungeon>();
+    _i18n=new I18nUtils("dungeons",facade.getGlobalStringsManager());
   }
 
   /**
@@ -106,9 +108,8 @@ Dungeon_Name:
   #1: Crafting Bunker
 Dungeon_ParentDungeon: 0
      */
-    //System.out.println(areaProps.dump());
     // Name
-    String name=DatUtils.getStringProperty(dungeonProps,"Dungeon_Name");
+    String name=_i18n.getNameStringProperty(dungeonProps,"Dungeon_Name",dungeonId,0);
     if (name==null)
     {
       return null;
@@ -119,7 +120,7 @@ Dungeon_ParentDungeon: 0
     PropertiesSet imageProps=_facade.loadProperties(imagePropsId);
     PropertiesSet mapUiProps=(PropertiesSet)imageProps.getProperty("UI_Map_GameMap");
     /*
-{UI_Map_GameMap=UI_Map_BlockOffsetX: 254
+  UI_Map_GameMap=UI_Map_BlockOffsetX: 254
   UI_Map_BlockOffsetY: 174
   UI_Map_FogOfWar: 0
   UI_Map_FogOfWar_Color: 
@@ -130,7 +131,7 @@ Dungeon_ParentDungeon: 0
   UI_Map_MapImage: 1091530932
   UI_Map_PixelOffsetX: 372
   UI_Map_PixelOffsetY: 254
-  UI_Map_Scale: 3.0000002} 
+  UI_Map_Scale: 3.0000002
      */
     int mapId=dungeonId;
     int imageId=((Integer)mapUiProps.getProperty("UI_Map_MapImage")).intValue();
@@ -148,7 +149,6 @@ Dungeon_ParentDungeon: 0
     }
 
     float scale=((Float)mapUiProps.getProperty("UI_Map_Scale")).floatValue();
-    //System.out.println("\tScale: "+scale);
     GeoPoint origin=MapUtils.getOrigin(name,scale,mapUiProps);
     float geo2pixel=scale*200;
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
@@ -191,11 +191,11 @@ Dungeon_ParentDungeon: 0
   }
 
   /**
-   * Write dungeons file.
+   * Save dungeons data.
    */
   public void save()
   {
-    // Save dungeons
+    // Data
     List<Dungeon> dungeons=new ArrayList<Dungeon>(_data.values());
     Collections.sort(dungeons,new IdentifiableComparator<Dungeon>());
     boolean ok=DungeonXMLWriter.writeDungeonsFile(GeneratedFiles.DUNGEONS,dungeons);
@@ -203,6 +203,8 @@ Dungeon_ParentDungeon: 0
     {
       System.out.println("Wrote dungeons file: "+GeneratedFiles.DUNGEONS);
     }
+    // Labels
+    _i18n.save();
   }
 
   /**
