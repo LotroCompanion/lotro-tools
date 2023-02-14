@@ -10,18 +10,17 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.paper.PaperItem;
 import delta.games.lotro.lore.items.paper.io.xml.PaperItemsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 
 /**
  * Get paper items details from DAT files.
@@ -32,7 +31,6 @@ public class MainDatPaperItemsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatPaperItemsLoader.class);
 
   private DataFacade _facade;
-  private LotroEnum<ItemClass> _itemClass;
   private LotroEnum<PaperItemCategory> _paperItemCategory;
 
   /**
@@ -43,7 +41,6 @@ public class MainDatPaperItemsLoader
   {
     _facade=facade;
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
-    _itemClass=registry.get(ItemClass.class);
     _paperItemCategory=registry.get(PaperItemCategory.class);
   }
 
@@ -84,19 +81,14 @@ public class MainDatPaperItemsLoader
 
   private PaperItem inspectItem(int itemId)
   {
-    PaperItem ret=new PaperItem(itemId);
+    Item item=ItemsManager.getInstance().getItem(itemId);
+    PaperItem ret=new PaperItem(item);
     PropertiesSet itemProps=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
-    String name=DatUtils.getStringProperty(itemProps,"Name");
-    name=DatStringUtils.fixName(name);
-    ret.setName(name);
     Integer isBarter=(Integer)itemProps.getProperty("Barter_IsBarterItem");
     if ((isBarter==null) || (isBarter.intValue()!=1))
     {
       LOGGER.warn("Is barter is: "+isBarter+" for item ID="+itemId);
     }
-    Integer itemClassCode=(Integer)itemProps.getProperty("Item_Class");
-    ItemClass itemClass=_itemClass.getEntry(itemClassCode.intValue());
-    ret.setItemClass(itemClass);
     Integer paperItemCategoryCode=(Integer)itemProps.getProperty("PaperItem_Category");
     PaperItemCategory paperItemCategory=_paperItemCategory.getEntry(paperItemCategoryCode.intValue());
     ret.setCategory(paperItemCategory);
