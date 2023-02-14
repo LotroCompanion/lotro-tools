@@ -1,11 +1,13 @@
 package delta.games.lotro.tools.dat.misc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -14,6 +16,8 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.webStore.WebStoreItem;
+import delta.games.lotro.lore.webStore.io.xml.WebStoreItemsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -104,5 +108,22 @@ public class WebStoreItemsLoader
     WebStoreItem_SKU: RegionWildwood
     */
     return ret;
+  }
+
+  /**
+   * Save data.
+   */
+  public void save()
+  {
+    // Data
+    WebStoreItemsXMLWriter webStoreItemsWriter=new WebStoreItemsXMLWriter();
+    File webStoreItemsFile=GeneratedFiles.WEB_STORE_ITEMS;
+    boolean ok=webStoreItemsWriter.write(webStoreItemsFile,getWebStoreItems(),EncodingNames.UTF_8);
+    if (ok)
+    {
+      System.out.println("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
+    }
+    // Labels
+    _i18n.save();
   }
 }

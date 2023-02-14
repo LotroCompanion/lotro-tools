@@ -42,7 +42,6 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.lore.webStore.WebStoreItem;
-import delta.games.lotro.lore.webStore.io.xml.WebStoreItemsXMLWriter;
 import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.lore.worldEvents.io.xml.WorldEventsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -756,15 +755,7 @@ public class MainDatAchievablesLoader
       }
     }
     // Save web store items
-    {
-      WebStoreItemsXMLWriter webStoreItemsWriter=new WebStoreItemsXMLWriter();
-      File webStoreItemsFile=GeneratedFiles.WEB_STORE_ITEMS;
-      boolean ok=webStoreItemsWriter.write(webStoreItemsFile,_webStoreItemsLoader.getWebStoreItems(),EncodingNames.UTF_8);
-      if (ok)
-      {
-        System.out.println("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
-      }
-    }
+    _webStoreItemsLoader.save();
   }
 
   private void sortDeeds(List<DeedDescription> deeds)
