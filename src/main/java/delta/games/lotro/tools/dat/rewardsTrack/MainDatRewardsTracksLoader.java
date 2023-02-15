@@ -19,7 +19,7 @@ import delta.games.lotro.lore.rewardsTrack.RewardsTrack;
 import delta.games.lotro.lore.rewardsTrack.RewardsTrackStep;
 import delta.games.lotro.lore.rewardsTrack.io.xml.RewardsTracksXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get definition of rewards tracks from DAT files.
@@ -30,6 +30,7 @@ public class MainDatRewardsTracksLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatRewardsTracksLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -38,6 +39,7 @@ public class MainDatRewardsTracksLoader
   public MainDatRewardsTracksLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("rewardsTracks",facade.getGlobalStringsManager());
   }
 
   private String getPropertyName(PropertiesSet properties, String propertyName)
@@ -60,10 +62,10 @@ public class MainDatRewardsTracksLoader
     {
       ret=new RewardsTrack(rewardsTrackID);
       // Name
-      String name=DatUtils.getStringProperty(properties,"Name");
+      String name=_i18n.getNameStringProperty(properties,"Name",rewardsTrackID,0);
       ret.setName(name);
       // Description
-      String description=DatUtils.getStringProperty(properties,"Description");
+      String description=_i18n.getStringProperty(properties,"Description");
       ret.setDescription(description);
       // Progression
       int progressionID=((Integer)properties.getProperty("RewardTrack_RewardIntervalProgression")).intValue();
@@ -161,12 +163,15 @@ public class MainDatRewardsTracksLoader
    */
   private void saveRewardsTracks(List<RewardsTrack> rewardsTracks)
   {
+    // Data
     Collections.sort(rewardsTracks,new IdentifiableComparator<RewardsTrack>());
     boolean ok=RewardsTracksXMLWriter.writeRewardsTracksFile(GeneratedFiles.REWARDS_TRACKS,rewardsTracks);
     if (ok)
     {
       LOGGER.info("Wrote rewards tracks file: "+GeneratedFiles.REWARDS_TRACKS);
     }
+    // Labels
+    _i18n.save();
   }
 
   /**
