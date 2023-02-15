@@ -18,8 +18,8 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get titles definitions from DAT files.
@@ -38,6 +38,7 @@ public class MainDatTitlesLoader
   private EnumMapper _category;
   private StringRenderer _customRenderer;
   private EnumMapper _exclusionGroup;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -49,6 +50,7 @@ public class MainDatTitlesLoader
     _category=_facade.getEnumsManager().getEnumMapper(587202682);
     _customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
     _exclusionGroup=_facade.getEnumsManager().getEnumMapper(587202883);
+    _i18n=new I18nUtils("titles",facade.getGlobalStringsManager());
   }
 
   /*
@@ -67,19 +69,17 @@ Title_String:
   #4: , Honorary Shirriff
    */
 
-  private TitleDescription load(int indexDataId)
+  private TitleDescription load(int titleID)
   {
     TitleDescription title=null;
-    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=titleID+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
       title=new TitleDescription();
-      title.setIdentifier(indexDataId);
-      //System.out.println("************* "+indexDataId+" *****************");
-      //System.out.println(properties.dump());
+      title.setIdentifier(titleID);
       // Name
-      String titleFormat=DatUtils.getStringProperty(properties,"Title_String");
+      String titleFormat=_i18n.getNameStringProperty(properties,"Title_String",titleID,0);
       String renderedTitle=renderTitle(titleFormat);
       title.setName(renderedTitle);
       // Category
@@ -87,7 +87,7 @@ Title_String:
       String category=_category.getString(categoryId);
       title.setCategory(category);
       // Description
-      String description=DatUtils.getStringProperty(properties,"Title_Description");
+      String description=_i18n.getStringProperty(properties,"Title_Description");
       title.setDescription(description);
       // Exclusion group
       Integer exclusionGroupId=(Integer)properties.getProperty("Title_Exclusion_Group");
@@ -100,7 +100,7 @@ Title_String:
         title.setPriority(Integer.valueOf(priority));
         if (priority<1)
         {
-          LOGGER.warn("Unexpected priority value: "+priority+" for title ID="+indexDataId);
+          LOGGER.warn("Unexpected priority value: "+priority+" for title ID="+titleID);
         }
       }
       // Icon
@@ -114,7 +114,7 @@ Title_String:
     }
     else
     {
-      LOGGER.warn("Could not handle title ID="+indexDataId);
+      LOGGER.warn("Could not handle title ID="+titleID);
     }
     return title;
   }
@@ -160,6 +160,12 @@ Title_String:
       }
     }
     // Save titles
+    save(titles);
+  }
+
+  private void save(List<TitleDescription> titles)
+  {
+    // Data
     int nbTitles=titles.size();
     LOGGER.info("Writing "+nbTitles+" titles");
     boolean ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES,titles);
@@ -167,13 +173,15 @@ Title_String:
     {
       System.out.println("Wrote titles file: "+GeneratedFiles.TITLES);
     }
-    // Write title icons
+    // Icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.TITLE_ICONS,TITLE_ICONS_DIR);
     if (ok)
     {
       System.out.println("Wrote title icons archive: "+GeneratedFiles.TITLE_ICONS);
     }
+    // Labels
+    _i18n.save();
   }
 
   /**
