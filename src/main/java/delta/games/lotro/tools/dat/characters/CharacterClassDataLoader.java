@@ -32,6 +32,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get class definitions from DAT files.
@@ -46,6 +47,7 @@ public class CharacterClassDataLoader
   private StartStatsManager _startStatsManager;
   private DerivedStatsContributionsMgr _derivatedStatsManager;
   private ProficienciesLoader _proficiencies;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -58,6 +60,7 @@ public class CharacterClassDataLoader
     _startStatsManager=new StartStatsManager();
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
     _proficiencies=new ProficienciesLoader(facade);
+    _i18n=new I18nUtils("classes",facade.getGlobalStringsManager());
   }
 
   private void handleClass(int classId)
@@ -72,14 +75,14 @@ public class CharacterClassDataLoader
     ClassDescription classDescription=new ClassDescription(classId,classCode,classKey);
     LOGGER.info("Handling class: "+classKey);
     // Name
-    String className=DatUtils.getStringProperty(classInfo,"AdvTable_ClassName");
+    String className=_i18n.getNameStringProperty(classInfo,"AdvTable_ClassName",classId,0);
     classDescription.setName(className);
     // Abbreviation
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
     LOGGER.debug("Class abbreviation: "+classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
     // Class description
-    String description=DatUtils.getStringProperty(classInfo,"AdvTable_ClassDesc");
+    String description=_i18n.getStringProperty(classInfo,"AdvTable_ClassDesc");
     LOGGER.debug("Class description: "+description);
     classDescription.setDescription(description);
     // Icons
@@ -477,13 +480,20 @@ AdvTable_AvailableSkillEntryList:
     }
     // Load trait trees
     new TraitTreesDataLoader(_facade).doIt(_classes);
+    // Save
+    save();
+  }
 
+  private void save()
+  {
     // Save start stats
     StartStatsXMLWriter.write(GeneratedFiles.START_STATS,_startStatsManager);
     // Save classes descriptions
     ClassDescriptionXMLWriter.write(GeneratedFiles.CLASSES,_classes);
     // Save derived stats
     DerivedStatsContributionsXMLWriter.write(GeneratedFiles.STAT_CONTRIBS,_derivatedStatsManager);
+    // Labels
+    _i18n.save();
   }
 
   /**
