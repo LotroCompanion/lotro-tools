@@ -25,7 +25,7 @@ import delta.games.lotro.lore.reputation.ReputationDeed;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.ReputationDeedsFinder;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get faction definitions from DAT files.
@@ -37,6 +37,7 @@ public class MainDatFactionsLoader
 
   private DataFacade _facade;
   private FactionLevelTemplates _templates;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -46,6 +47,7 @@ public class MainDatFactionsLoader
   {
     _facade=facade;
     _templates=new FactionLevelTemplates();
+    _i18n=new I18nUtils("factions",facade.getGlobalStringsManager());
   }
 
   /*
@@ -78,8 +80,7 @@ Reputation_LowestTier: 1
       return null;
     }
     // Name
-    String name=DatUtils.getStringProperty(properties,"Reputation_Faction_Name");
-    name=name.trim();
+    String name=_i18n.getNameStringProperty(properties,"Reputation_Faction_Name",factionId,0);
     if (name.startsWith("TBD"))
     {
       return null;
@@ -100,7 +101,7 @@ Reputation_LowestTier: 1
     }
 
     // Description
-    String description=DatUtils.getStringProperty(properties,"Reputation_Faction_Description");
+    String description=_i18n.getStringProperty(properties,"Reputation_Faction_Description");
     faction.setDescription(description);
 
     // Tier names
@@ -271,6 +272,8 @@ Reputation_LowestTier: 1
     }
     buildFactionDeeds(registry);
     save(registry);
+    // Labels
+    _i18n.save();
   }
 
   private List<Faction> buildFactions()
@@ -319,7 +322,7 @@ Reputation_LowestTier: 1
   }
 
   /**
-   * Find deeds associuated to faction levels.
+   * Find deeds associated to faction levels.
    * @param registry Factions registry to use.
    */
   public static void associateDeeds(FactionsRegistry registry)
