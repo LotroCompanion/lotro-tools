@@ -10,6 +10,7 @@ import delta.games.lotro.common.enums.AllegianceGroup;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
+import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EquipmentCategory;
@@ -95,6 +96,7 @@ public class MainDatEnumsLoader
     loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
+    loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -174,6 +176,11 @@ public class MainDatEnumsLoader
     else if (enumId==0x23000350)
     {
       T entry=lotroEnum.buildEntryInstance(0,null,"Other");
+      lotroEnum.registerEntry(entry);
+    }
+    else if (enumId==0x23000063) // CraftTier
+    {
+      T entry=lotroEnum.buildEntryInstance(0,null,"Beginner");
       lotroEnum.registerEntry(entry);
     }
   }

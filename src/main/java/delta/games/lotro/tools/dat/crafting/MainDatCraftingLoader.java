@@ -1,10 +1,12 @@
 package delta.games.lotro.tools.dat.crafting;
 
+import delta.games.lotro.common.enums.CraftTier;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.crafting.CraftingLevelTier;
@@ -25,7 +27,7 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 public class MainDatCraftingLoader
 {
   private DataFacade _facade;
-  private EnumMapper _tier;
+  private LotroEnum<CraftTier> _tierEnum;
   private CraftingData _data;
   private I18nUtils _i18n;
 
@@ -37,7 +39,7 @@ public class MainDatCraftingLoader
   {
     _facade=facade;
     _i18n=new I18nUtils("crafting",facade.getGlobalStringsManager());
-    _tier=_facade.getEnumsManager().getEnumMapper(587202659);
+    _tierEnum=LotroEnumsRegistry.getInstance().get(CraftTier.class);
     _data=new CraftingData();
   }
 
@@ -204,20 +206,18 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
 
   private CraftingLevel buildBeginnerLevel(Profession profession)
   {
-    CraftingLevel ret=new CraftingLevel(profession,0);
-    ret.setName("Beginner");
+    CraftTier tier=_tierEnum.getEntry(0);
+    CraftingLevel ret=new CraftingLevel(profession,tier);
     return ret;
   }
 
   private CraftingLevel handleProfessionTier(Profession profession, PropertiesSet tierProps)
   {
     // Tier
-    int tier=((Integer)tierProps.getProperty("CraftProfession_Tier")).intValue();
+    int tierCode=((Integer)tierProps.getProperty("CraftProfession_Tier")).intValue();
 
+    CraftTier tier=_tierEnum.getEntry(tierCode);
     CraftingLevel ret=new CraftingLevel(profession,tier);
-
-    String tierName=_tier.getString(tier);
-    ret.setName(tierName);
 
     // Level cap gate (no more used?)
     //int levelCapGate=((Integer)tierProps.getProperty("CraftProfession_TierLevelCapGate")).intValue();
