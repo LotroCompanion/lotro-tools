@@ -20,6 +20,7 @@ import delta.games.lotro.lore.titles.io.xml.TitleXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.dat.utils.i18n.StringProcessor;
 
 /**
  * Get titles definitions from DAT files.
@@ -39,6 +40,7 @@ public class MainDatTitlesLoader
   private StringRenderer _customRenderer;
   private EnumMapper _exclusionGroup;
   private I18nUtils _i18n;
+  private StringProcessor _titleProcessor;
 
   /**
    * Constructor.
@@ -51,6 +53,7 @@ public class MainDatTitlesLoader
     _customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
     _exclusionGroup=_facade.getEnumsManager().getEnumMapper(587202883);
     _i18n=new I18nUtils("titles",facade.getGlobalStringsManager());
+    _titleProcessor=buildTitlesProcessor();
   }
 
   /*
@@ -79,9 +82,10 @@ Title_String:
       title=new TitleDescription();
       title.setIdentifier(titleID);
       // Name
-      String titleFormat=_i18n.getNameStringProperty(properties,"Title_String",titleID,0);
-      String renderedTitle=renderTitle(titleFormat);
-      title.setName(renderedTitle);
+      String name=_i18n.getNameStringProperty(properties,"Title_String",titleID,_titleProcessor);
+      title.setName(name);
+      String rawName=_i18n.getStringProperty(properties,"Title_String");
+      title.setRawName(rawName);
       // Category
       int categoryId=((Integer)properties.getProperty("Title_Category")).intValue();
       String category=_category.getString(categoryId);
@@ -117,6 +121,19 @@ Title_String:
       LOGGER.warn("Could not handle title ID="+titleID);
     }
     return title;
+  }
+
+  private StringProcessor buildTitlesProcessor()
+  {
+    StringProcessor p=new StringProcessor()
+    {
+      @Override
+      public String processString(String input)
+      {
+        return renderTitle(input);
+      }
+    };
+    return p;
   }
 
   private String renderTitle(String titleFormat)
