@@ -1,11 +1,13 @@
 package delta.games.lotro.tools.dat.misc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -17,6 +19,8 @@ import delta.games.lotro.lore.worldEvents.BooleanWorldEvent;
 import delta.games.lotro.lore.worldEvents.ConditionWorldEvent;
 import delta.games.lotro.lore.worldEvents.IntegerWorldEvent;
 import delta.games.lotro.lore.worldEvents.WorldEvent;
+import delta.games.lotro.lore.worldEvents.io.xml.WorldEventsXMLWriter;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 
 /**
@@ -44,7 +48,7 @@ public class WorldEventsLoader
    * Get the managed world events.
    * @return a list of world events, sorted by identifier.
    */
-  public List<WorldEvent> getWorldEvents()
+  private List<WorldEvent> getWorldEvents()
   {
     List<WorldEvent> ret=new ArrayList<WorldEvent>();
     ret.addAll(_registry.values());
@@ -131,5 +135,19 @@ public class WorldEventsLoader
       ret.setProgress(progress);
     }
     return ret;
+  }
+
+  /**
+   * Save.
+   */
+  public void save()
+  {
+    WorldEventsXMLWriter worldEventsWriter=new WorldEventsXMLWriter();
+    File worldEventsFile=GeneratedFiles.WORLD_EVENTS;
+    boolean ok=worldEventsWriter.write(worldEventsFile,getWorldEvents(),EncodingNames.UTF_8);
+    if (ok)
+    {
+      System.out.println("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
+    }
   }
 }

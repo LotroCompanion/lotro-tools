@@ -47,7 +47,7 @@ public class WebStoreItemsLoader
    * Get the managed web store items.
    * @return a list of web store items, sorted by identifier.
    */
-  public List<WebStoreItem> getWebStoreItems()
+  private List<WebStoreItem> getWebStoreItems()
   {
     List<WebStoreItem> ret=new ArrayList<WebStoreItem>();
     ret.addAll(_registry.values());

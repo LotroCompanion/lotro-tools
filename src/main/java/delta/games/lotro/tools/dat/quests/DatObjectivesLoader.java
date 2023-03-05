@@ -94,7 +94,6 @@ public class DatObjectivesLoader
     _monsterDivision=_facade.getEnumsManager().getEnumMapper(587202657);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
-    //_deedCategory=_facade.getEnumsManager().getEnumMapper(587202587);
     _mobLoader=new MobLoader(facade);
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
   }
