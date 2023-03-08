@@ -120,7 +120,7 @@ public class MainDatLoader
     // Titles
     new MainDatTitlesLoader(_facade).doIt();
     // Factions
-    new MainDatFactionsLoader(_facade).doIt();
+    FactionsRegistry factionsRegistry=new MainDatFactionsLoader(_facade).doIt();
     // Items
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -152,7 +152,7 @@ public class MainDatLoader
     new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Associate deeds to faction levels
-    MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
+    MainDatFactionsLoader.associateDeeds(factionsRegistry);
     // Buffs
     new MainBuffsLoader(_facade).doIt();
     // Trait points

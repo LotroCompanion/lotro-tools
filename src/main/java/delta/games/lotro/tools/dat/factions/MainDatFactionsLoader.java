@@ -260,8 +260,9 @@ Reputation_LowestTier: 1
 
   /**
    * Load factions.
+   * @return the loaded data.
    */
-  public void doIt()
+  public FactionsRegistry doIt()
   {
     List<Faction> factions=buildFactions();
     factions=sortFactions(factions);
@@ -274,6 +275,7 @@ Reputation_LowestTier: 1
     save(registry);
     // Labels
     _i18n.save();
+    return registry;
   }
 
   private List<Faction> buildFactions()
