@@ -34,11 +34,11 @@ public class DefaultStringProcessor implements StringProcessor
     String value=DatStringUtils.cleanupString(input);
     if ((_options&I18nUtils.OPTION_REMOVE_MARKS)!=0)
     {
-      value=StringUtils.removeMarks(input);
+      value=StringUtils.removeMarks(value);
     }
     if ((_options&I18nUtils.OPTION_REMOVE_TRAILING_MARK)!=0)
     {
-      value=DatStringUtils.fixName(input);
+      value=StringUtils.fixName(value);
     }
     return value;
   }
