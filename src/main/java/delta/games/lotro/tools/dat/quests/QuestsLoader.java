@@ -83,7 +83,6 @@ public class QuestsLoader
     boolean useIt=useQuest(questID,properties);
     if (!useIt)
     {
-      //System.out.println("Ignored ID="+indexDataId+", name="+name);
       return;
     }
     QuestDescription quest=new QuestDescription();
@@ -94,8 +93,6 @@ public class QuestsLoader
     String renderedName=_utils.renderName(nameFormat);
     quest.setName(renderedName);
 
-    //DatObjectivesLoader.currentName=name;
-    //System.out.println("Quest name: "+name);
     // Description
     String description=_i18n.getStringProperty(properties,"Quest_Description");
     quest.setDescription(description);
@@ -164,7 +161,6 @@ public class QuestsLoader
       Proxy<Achievable> proxy=new Proxy<Achievable>();
       proxy.setId(nextQuestId.intValue());
       quest.setNextQuest(proxy);
-      //System.out.println("Next quest: "+nextQuestId);
     }
     // Flags
     handleFlags(quest,properties);
@@ -194,7 +190,7 @@ public class QuestsLoader
     // Dialogs
     _rolesLoader.loadRoles(quest,properties);
 
-    // Web Store (needed xpack/region): WebStoreAccountItem_DataID
+    // Web Store (needed x-pack/region): WebStoreAccountItem_DataID
     Integer webStoreItemID=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
     if (webStoreItemID!=null)
     {
