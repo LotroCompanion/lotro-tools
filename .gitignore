@@ -1,4 +1,8 @@
 /target/
+/bin/
+/.settings/
+/.classpath
+/.project
 /data/deeds/tmp
 /data/emotes/tmp/emoteIcons
 /data/items/tmp/items-rc.xml
