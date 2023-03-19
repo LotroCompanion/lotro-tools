@@ -69,7 +69,7 @@ public class MountsLoader
     // Hidden?
     //int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
     // Source description (null for war-steeds)
-    String sourceDescription=DatUtils.getStringProperty(properties,"Collection_Piece_SourceDesc");
+    String sourceDescription=_i18n.getStringProperty(properties,"Collection_Piece_SourceDesc");
     ret.setSourceDescription(sourceDescription);
     // Hide?
     Integer hide=(Integer)properties.getProperty("Collection_Hide_Entry");
@@ -101,6 +101,7 @@ public class MountsLoader
         // Initial Name
         String initialName=DatUtils.getStringProperty(effectProps,"Mount_Name_Initial");
         if (initialName==null) continue;
+        initialName=_i18n.getStringProperty(effectProps,"Mount_Name_Initial",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
         ret.setInitialName(initialName);
         // Mount type
         int mountTypeCode=((Integer)effectProps.getProperty("Mount_Type")).intValue();
