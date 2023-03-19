@@ -22,7 +22,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
- * Get trait definitions from DAT files.
+ * Get skill definitions from DAT files.
  * @author DAM
  */
 public class MainSkillDataLoader

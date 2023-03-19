@@ -109,7 +109,7 @@ public class MountsLoader
       // Sub category
       int subCategoryCode=((Integer)properties.getProperty("Skill_SubCategory")).intValue();
       String subCategory=_subCategory.getString(subCategoryCode);
-      ret.setCategory(subCategory);
+      ret.setMountCategory(subCategory);
       // Peer mount
       Integer peerMountId=(Integer)properties.getProperty("Skill_MountRacialConversionAnalog");
       if (peerMountId!=null)
