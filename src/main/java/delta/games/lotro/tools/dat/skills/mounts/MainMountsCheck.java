@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.others;
+package delta.games.lotro.tools.dat.skills.mounts;
 
 import java.util.List;
 

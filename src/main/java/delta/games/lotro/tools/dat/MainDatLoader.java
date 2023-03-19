@@ -18,7 +18,6 @@ import delta.games.lotro.tools.dat.allegiances.MainDatAllegiancesLoader;
 import delta.games.lotro.tools.dat.characters.CharacterClassDataLoader;
 import delta.games.lotro.tools.dat.characters.InitialGearLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
-import delta.games.lotro.tools.dat.characters.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.MonsterClassDataLoader;
@@ -48,13 +47,13 @@ import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
-import delta.games.lotro.tools.dat.others.MountsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicMeldingRecipesLoader;
 import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
+import delta.games.lotro.tools.dat.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
@@ -159,8 +158,6 @@ public class MainDatLoader
     new TraitPointsRegistryBuilder().doIt();
     if (live)
     {
-      // Mounts
-      new MountsLoader(_facade).doIt();
       // Cosmetic pets
       new CosmeticPetLoader(_facade).doIt();
       // Collections

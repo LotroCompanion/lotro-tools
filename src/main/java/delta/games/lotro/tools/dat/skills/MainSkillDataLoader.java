@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.characters;
+package delta.games.lotro.tools.dat.skills;
 
 import java.io.File;
 import java.util.List;
@@ -18,7 +18,9 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.lore.collections.mounts.MountDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.skills.mounts.MountsLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -31,6 +33,7 @@ public class MainSkillDataLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
+  private MountsLoader _mountsLoader;
 
   /**
    * Constructor.
@@ -40,6 +43,7 @@ public class MainSkillDataLoader
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
+    _mountsLoader=new MountsLoader(facade,_i18n);
   }
 
   /**
@@ -48,6 +52,8 @@ public class MainSkillDataLoader
   public void doIt()
   {
     loadSkills();
+    _mountsLoader.loadSizeData();
+    _mountsLoader.saveMounts();
   }
 
   private void loadSkills()
@@ -142,6 +148,10 @@ public class MainSkillDataLoader
         }
       }
       */
+      if (ret instanceof MountDescription)
+      {
+        _mountsLoader.loadMountData(skillProperties,(MountDescription)ret);
+      }
     }
     return ret;
   }
@@ -152,6 +162,11 @@ public class MainSkillDataLoader
     if (travelType!=null)
     {
       return new TravelSkill(travelType);
+    }
+    Integer categoryCode=(Integer)properties.getProperty("Skill_Category");
+    if ((categoryCode!=null) && (categoryCode.intValue()==88)) // Standard Mounts
+    {
+      return new MountDescription();
     }
     return new SkillDescription();
   }
