@@ -10,13 +10,16 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.MountType;
+import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
 import delta.games.lotro.lore.collections.mounts.io.xml.MountXMLWriter;
@@ -34,8 +37,8 @@ public class MountsLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
-  private EnumMapper _mountType;
-  private EnumMapper _subCategory;
+  private LotroEnum<MountType> _mountType;
+  private LotroEnum<SkillCharacteristicSubCategory> _subCategory;
   private Map<Integer,MountDescription> _mounts=new HashMap<Integer,MountDescription>();
 
   /**
@@ -47,8 +50,9 @@ public class MountsLoader
   {
     _facade=facade;
     _i18n=i18n;
-    _mountType=facade.getEnumsManager().getEnumMapper(587203200);
-    _subCategory=facade.getEnumsManager().getEnumMapper(587203478);
+    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
+    _mountType=registry.get(MountType.class);
+    _subCategory=registry.get(SkillCharacteristicSubCategory.class);
   }
 
   /**
@@ -76,7 +80,7 @@ public class MountsLoader
 
     // Sub category
     int subCategoryCode=((Integer)properties.getProperty("Skill_SubCategory")).intValue();
-    String subCategory=_subCategory.getString(subCategoryCode);
+    SkillCharacteristicSubCategory subCategory=_subCategory.getEntry(subCategoryCode);
     ret.setMountCategory(subCategory);
     // Peer mount
     Integer peerMountId=(Integer)properties.getProperty("Skill_MountRacialConversionAnalog");
@@ -101,8 +105,13 @@ public class MountsLoader
         // Mount type
         int mountTypeCode=((Integer)effectProps.getProperty("Mount_Type")).intValue();
         BitSet mountTypesBitSet=BitSetUtils.getBitSetFromFlags(mountTypeCode);
-        String mountTypes=BitSetUtils.getStringFromBitSet(mountTypesBitSet,_mountType,"/");
-        ret.setMountType(mountTypes);
+        List<MountType> mountTypes=_mountType.getFromBitSet(mountTypesBitSet);
+        MountType mountType=mountTypes.get(0);
+        ret.setMountType(mountType);
+        if (mountTypes.size()>1)
+        {
+          LOGGER.warn("More than one mount type: "+mountTypes);
+        }
         // Morale
         int morale=((Integer)effectProps.getProperty("Mount_Durability_Base_Max")).intValue();
         ret.setMorale(morale);

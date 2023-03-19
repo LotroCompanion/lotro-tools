@@ -24,9 +24,11 @@ import delta.games.lotro.common.enums.LegendaryTitleTier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
+import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.SkillCategory;
+import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
@@ -97,6 +99,8 @@ public class MainDatEnumsLoader
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
+    loadEnum(587203200,"MountType",MountType.class); // 0x23000280
+    loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
