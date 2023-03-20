@@ -258,10 +258,6 @@ public class GeneratedFiles
    */
   public static final File EFFECT_ICONS=LotroCoreConfig.getInstance().getFile("effectIcons");
   /**
-   * Cosmetic pets.
-   */
-  public static final File PETS=LotroCoreConfig.getInstance().getFile(DataFiles.PETS);
-  /**
    * Collections.
    */
   public static final File COLLECTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.COLLECTIONS);

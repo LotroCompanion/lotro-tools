@@ -46,7 +46,6 @@ import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
-import delta.games.lotro.tools.dat.others.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
@@ -158,8 +157,6 @@ public class MainDatLoader
     new TraitPointsRegistryBuilder().doIt();
     if (live)
     {
-      // Cosmetic pets
-      new CosmeticPetLoader(_facade).doIt();
       // Collections
       new MainDatCollectionsLoader(_facade,rewardsLoader).doIt();
     }
@@ -289,8 +286,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.TRAIT_POINTS);
     // Collections
     deleteFile(GeneratedFiles.COLLECTIONS);
-    // Cosmetic pets
-    deleteFile(GeneratedFiles.PETS);
     // Vendors
     deleteFile(GeneratedFiles.VENDORS);
     // Barterers

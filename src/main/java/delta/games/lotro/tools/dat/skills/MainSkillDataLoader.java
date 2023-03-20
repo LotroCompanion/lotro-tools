@@ -21,8 +21,10 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
+import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.skills.mounts.MountsLoader;
+import delta.games.lotro.tools.dat.skills.pets.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -37,6 +39,7 @@ public class MainSkillDataLoader
   private I18nUtils _i18n;
   private List<SkillDescription> _skills;
   private MountsLoader _mountsLoader;
+  private CosmeticPetLoader _petsLoader;
 
   /**
    * Constructor.
@@ -48,6 +51,7 @@ public class MainSkillDataLoader
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
     _skills=new ArrayList<SkillDescription>();
     _mountsLoader=new MountsLoader(facade,_i18n);
+    _petsLoader=new CosmeticPetLoader(facade,_i18n);
   }
 
   /**
@@ -161,6 +165,11 @@ public class MainSkillDataLoader
           ret=null;
         }
       }
+      if (ret instanceof CosmeticPetDescription)
+      {
+        CosmeticPetDescription pet=(CosmeticPetDescription)ret;
+        _petsLoader.loadPetData(skillProperties,pet);
+      }
     }
     return ret;
   }
@@ -176,6 +185,10 @@ public class MainSkillDataLoader
     if ((categoryCode!=null) && (categoryCode.intValue()==88)) // Standard Mounts
     {
       return new MountDescription();
+    }
+    if ((categoryCode!=null) && (categoryCode.intValue()==145)) // Pets
+    {
+      return new CosmeticPetDescription();
     }
     return new SkillDescription();
   }
