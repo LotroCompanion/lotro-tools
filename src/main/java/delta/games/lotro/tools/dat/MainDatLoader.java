@@ -289,8 +289,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.TRAIT_POINTS);
     // Collections
     deleteFile(GeneratedFiles.COLLECTIONS);
-    // Mounts
-    deleteFile(GeneratedFiles.MOUNTS);
     // Cosmetic pets
     deleteFile(GeneratedFiles.PETS);
     // Vendors

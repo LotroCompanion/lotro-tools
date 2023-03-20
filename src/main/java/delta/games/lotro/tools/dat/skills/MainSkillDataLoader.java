@@ -1,14 +1,16 @@
 package delta.games.lotro.tools.dat.skills;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
-import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
@@ -33,6 +35,7 @@ public class MainSkillDataLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
+  private List<SkillDescription> _skills;
   private MountsLoader _mountsLoader;
 
   /**
@@ -43,6 +46,7 @@ public class MainSkillDataLoader
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
+    _skills=new ArrayList<SkillDescription>();
     _mountsLoader=new MountsLoader(facade,_i18n);
   }
 
@@ -53,13 +57,11 @@ public class MainSkillDataLoader
   {
     loadSkills();
     _mountsLoader.loadSizeData();
-    _mountsLoader.saveMounts();
+    saveSkills();
   }
 
   private void loadSkills()
   {
-    SkillsManager skillsMgr=SkillsManager.getInstance();
-
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
@@ -72,12 +74,11 @@ public class MainSkillDataLoader
           SkillDescription skill=loadSkill(_facade,did);
           if (skill!=null)
           {
-            skillsMgr.registerSkill(skill);
+            _skills.add(skill);
           }
         }
       }
     }
-    saveSkills(skillsMgr);
   }
 
   /**
@@ -150,7 +151,15 @@ public class MainSkillDataLoader
       */
       if (ret instanceof MountDescription)
       {
-        _mountsLoader.loadMountData(skillProperties,(MountDescription)ret);
+        MountDescription mount=(MountDescription)ret;
+        if (_mountsLoader.useMount(mount))
+        {
+          _mountsLoader.loadMountData(skillProperties,mount);
+        }
+        else
+        {
+          ret=null;
+        }
       }
     }
     return ret;
@@ -194,15 +203,14 @@ public class MainSkillDataLoader
 
   /**
    * Save skills to disk.
-   * @param skillsManager Skills manager.
    */
-  private void saveSkills(SkillsManager skillsManager)
+  private void saveSkills()
   {
-    List<SkillDescription> skills=skillsManager.getAll();
-    int nbSkills=skills.size();
+    int nbSkills=_skills.size();
     LOGGER.info("Writing "+nbSkills+" skills");
     // Write skills file
-    boolean ok=SkillDescriptionXMLWriter.write(GeneratedFiles.SKILLS,skills);
+    Collections.sort(_skills,new IdentifiableComparator<SkillDescription>());
+    boolean ok=new SkillDescriptionXMLWriter().write(GeneratedFiles.SKILLS,_skills);
     if (ok)
     {
       System.out.println("Wrote skills file: "+GeneratedFiles.SKILLS);

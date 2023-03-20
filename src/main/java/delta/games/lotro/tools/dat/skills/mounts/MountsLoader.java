@@ -1,15 +1,12 @@
 package delta.games.lotro.tools.dat.skills.mounts;
 
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.MountType;
@@ -22,8 +19,6 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
-import delta.games.lotro.lore.collections.mounts.io.xml.MountXMLWriter;
-import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
@@ -39,7 +34,7 @@ public class MountsLoader
   private I18nUtils _i18n;
   private LotroEnum<MountType> _mountType;
   private LotroEnum<SkillCharacteristicSubCategory> _subCategory;
-  private Map<Integer,MountDescription> _mounts=new HashMap<Integer,MountDescription>();
+  private Map<Integer,MountDescription> _mounts;
 
   /**
    * Constructor.
@@ -53,6 +48,7 @@ public class MountsLoader
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _mountType=registry.get(MountType.class);
     _subCategory=registry.get(SkillCharacteristicSubCategory.class);
+    _mounts=new HashMap<Integer,MountDescription>();
   }
 
   /**
@@ -137,21 +133,15 @@ public class MountsLoader
     _mounts.put(Integer.valueOf(ret.getIdentifier()),ret);
   }
 
-  private boolean useMount(MountDescription mount)
+  /**
+   * Use mount or not.
+   * @param mount Mount to test.
+   * @return <code>true</code> to use it, <code>false</code> otherwise.
+   */
+  public boolean useMount(MountDescription mount)
   {
     String mountName=mount.getName();
     return (!mountName.contains("TBD"));
-  }
-
-  /**
-   * Save the loaded mounts to a file.
-   */
-  public void saveMounts()
-  {
-    LOGGER.info("Loaded "+_mounts.size()+" mounts.");
-    List<MountDescription> mounts=new ArrayList<MountDescription>(_mounts.values());
-    Collections.sort(mounts,new IdentifiableComparator<MountDescription>());
-    MountXMLWriter.write(GeneratedFiles.MOUNTS,mounts);
   }
 
   /**
