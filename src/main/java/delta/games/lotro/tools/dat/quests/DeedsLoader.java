@@ -2,14 +2,12 @@ package delta.games.lotro.tools.dat.quests;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.collections.CompoundComparator;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -27,8 +25,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
-import delta.games.lotro.lore.deeds.comparators.DeedDescriptionComparator;
-import delta.games.lotro.lore.deeds.comparators.DeedNameComparator;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.webStore.WebStoreItem;
@@ -341,21 +337,11 @@ public class DeedsLoader
   {
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     deeds.addAll(_deeds.values());
-    sortDeeds(deeds);
+    Collections.sort(deeds,new IdentifiableComparator<DeedDescription>());
     // - deed keys injection
     DeedKeysInjector injector=new DeedKeysInjector();
     injector.doIt(deeds);
     return deeds;
-  }
-
-  private void sortDeeds(List<DeedDescription> deeds)
-  {
-    List<Comparator<DeedDescription>> comparators=new ArrayList<Comparator<DeedDescription>>();
-    comparators.add(new IdentifiableComparator<DeedDescription>());
-    comparators.add(new DeedNameComparator());
-    comparators.add(new DeedDescriptionComparator());
-    CompoundComparator<DeedDescription> comparator=new CompoundComparator<DeedDescription>(comparators);
-    Collections.sort(deeds,comparator);
   }
 
   /**
@@ -387,7 +373,7 @@ public class DeedsLoader
     int nbDeeds=_deeds.size();
     System.out.println("Nb deeds: "+nbDeeds);
     // Write deeds file
-    sortDeeds(deeds);
+    Collections.sort(deeds,new IdentifiableComparator<DeedDescription>());
     DeedXMLWriter writer=new DeedXMLWriter();
     boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
     if (ok)
