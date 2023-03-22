@@ -1,15 +1,20 @@
 package delta.games.lotro.tools.lore.deeds.keys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
+import delta.common.utils.xml.DOMParsingTools;
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.lore.deeds.DeedDescription;
-import delta.games.lotro.lore.deeds.io.xml.DeedsSaxParser;
+import delta.games.lotro.lore.deeds.io.xml.DeedXMLConstants;
+import delta.games.lotro.lore.quests.io.xml.AchievableXMLConstants;
 
 /**
  * Tool for injection of legacy deed keys into the deeds database.
@@ -20,7 +25,6 @@ public class DeedKeysInjector
   private static final Logger LOGGER=Logger.getLogger(DeedKeysInjector.class);
 
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
-  //private static final File OLD_FILE_NO_ID=new File("../lotro-deeds-db/deeds_no_id.xml").getAbsoluteFile();
 
   private DeedsBundle _old;
   private DeedsBundle _new;
@@ -37,7 +41,19 @@ public class DeedKeysInjector
 
   private void loadOldDeeds()
   {
-    List<DeedDescription> oldDeeds=DeedsSaxParser.parseDeedsFile(OLD_FILE);
+    List<DeedDescription> oldDeeds=new ArrayList<DeedDescription>();
+    Element root=DOMParsingTools.parse(OLD_FILE);
+    List<Element> deedTags=DOMParsingTools.getChildTagsByName(root,DeedXMLConstants.DEED_TAG);
+    for(Element deedTag : deedTags)
+    {
+      NamedNodeMap attrs=deedTag.getAttributes();
+      String name=DOMParsingTools.getStringAttribute(attrs,AchievableXMLConstants.NAME_ATTR,"");
+      String key=DOMParsingTools.getStringAttribute(attrs,DeedXMLConstants.DEED_KEY_ATTR,"");
+      DeedDescription oldDeed=new DeedDescription();
+      oldDeed.setName(name);
+      oldDeed.setKey(key);
+      oldDeeds.add(oldDeed);
+    }
     _old.setDeeds(oldDeeds);
   }
 
