@@ -202,6 +202,11 @@ public class DeedsLoader
         type=DeedType.CLASS;
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BRAWLER);
       }
+      else if (typeCode==41)
+      {
+        type=DeedType.CLASS;
+        setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CORSAIR);
+      }
       else if (typeCode==34)
       {
         type=DeedType.EVENT;

@@ -455,6 +455,7 @@ AdvTable_AvailableSkillEntryList:
     if (id==31) return WellKnownCharacterClassKeys.MINSTREL;
     if (id==193) return WellKnownCharacterClassKeys.RUNE_KEEPER;
     if (id==194) return WellKnownCharacterClassKeys.WARDEN;
+    if (id==216) return WellKnownCharacterClassKeys.CORSAIR;
     // Monster Play
     /*
     if (id==71) return CharacterClass.REAVER;
