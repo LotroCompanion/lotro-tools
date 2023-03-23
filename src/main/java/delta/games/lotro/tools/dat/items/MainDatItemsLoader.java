@@ -983,8 +983,8 @@ public class MainDatItemsLoader
     {
       return ItemClassUtils.getWordOfCraftCode(tier);
     }
-    // 6-16
-    else if ((socketTypeCode>=6) && (socketTypeCode<=16))
+    // 6-16+21
+    else if (((socketTypeCode>=6) && (socketTypeCode<=16)) || (socketTypeCode==21))
     {
       return ItemClassUtils.getWordOfMasteryCode(tier);
     }
