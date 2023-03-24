@@ -238,6 +238,7 @@ public class TraitTreesDataLoader
     if (traitNatureKey==27) return WellKnownCharacterClassKeys.GUARDIAN;
     if (traitNatureKey==31) return WellKnownCharacterClassKeys.BEORNING;
     if (traitNatureKey==32) return WellKnownCharacterClassKeys.BRAWLER;
+    if (traitNatureKey==33) return WellKnownCharacterClassKeys.CORSAIR;
     return null;
   }
 }
