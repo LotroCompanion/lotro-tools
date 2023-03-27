@@ -92,6 +92,8 @@ public class QuestsLoader
     String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
     String renderedName=_utils.renderName(nameFormat);
     quest.setName(renderedName);
+    String rawName=_i18n.getStringProperty(properties,"Quest_Name");
+    quest.setRawName(rawName);
 
     // Description
     String description=_i18n.getStringProperty(properties,"Quest_Description");

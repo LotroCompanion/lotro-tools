@@ -87,6 +87,8 @@ public class DeedsLoader
     String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
     String renderedName=_utils.renderName(nameFormat);
     deed.setName(renderedName);
+    String rawName=_i18n.getStringProperty(properties,"Quest_Name");
+    deed.setRawName(rawName);
     //System.out.println("Deed name: "+name);
     //DatObjectivesLoader.currentName=name;
     // Description
