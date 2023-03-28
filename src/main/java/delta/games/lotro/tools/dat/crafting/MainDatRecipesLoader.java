@@ -18,6 +18,7 @@ import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.crafting.recipes.CraftingResult;
 import delta.games.lotro.lore.crafting.recipes.Ingredient;
+import delta.games.lotro.lore.crafting.recipes.IngredientPack;
 import delta.games.lotro.lore.crafting.recipes.Recipe;
 import delta.games.lotro.lore.crafting.recipes.RecipeVersion;
 import delta.games.lotro.lore.crafting.recipes.RecipesManager;
@@ -108,6 +109,19 @@ public class MainDatRecipesLoader
       List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
       // Optional ingredients
       List<Ingredient> optionalIngredients=getIngredientsList(properties,"CraftRecipe_OptionalIngredientList",true);
+      // Ingredient pack
+      Integer ingredientPackID=(Integer)properties.getProperty("CraftRecipe_IngredientPack");
+      if (ingredientPackID!=null)
+      {
+        Integer packQuantity=(Integer)properties.getProperty("CraftRecipe_IngredientPackQuantity");
+        int count=(packQuantity!=null)?packQuantity.intValue():1;
+        Item item=_itemsManager.getItem(ingredientPackID.intValue());
+        if (item!=null)
+        {
+          IngredientPack ingredientPack=new IngredientPack(item,count);
+          recipe.setIngredientPack(ingredientPack);
+        }
+      }
       // Results
       RecipeVersion firstResult=buildVersion(properties);
       firstResult.getIngredients().addAll(ingredients);
@@ -127,8 +141,9 @@ public class MainDatRecipesLoader
           Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
           if ((resultId!=null) && (resultId.intValue()>0))
           {
+            CraftingResult regular=newVersion.getRegular();
             Item resultItem=_itemsManager.getItem(resultId.intValue());
-            newVersion.getRegular().setItem(resultItem);
+            regular.setItem(resultItem);
           }
           // - critical result
           Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
