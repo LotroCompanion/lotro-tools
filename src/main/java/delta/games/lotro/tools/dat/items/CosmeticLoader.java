@@ -80,7 +80,6 @@ public class CosmeticLoader
   public void save()
   {
     ItemCosmetics cosmetics=new ItemCosmetics();
-    int cosmeticID=0;
     List<String> stringIDs=new ArrayList<String>(_map.keySet());
     Collections.sort(stringIDs);
     for(String stringID : stringIDs)
@@ -91,8 +90,7 @@ public class CosmeticLoader
       {
         itemIDs[i]=items.get(i).getIdentifier();
       }
-      cosmetics.addEntry(cosmeticID,itemIDs);
-      cosmeticID++;
+      cosmetics.addEntry(itemIDs);
     }
     ItemCosmeticsXMLWriter.write(GeneratedFiles.ITEM_COSMETICS,cosmetics);
   }
