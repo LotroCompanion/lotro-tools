@@ -7,10 +7,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.enums.CraftingUICategory;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingSystem;
@@ -36,14 +38,12 @@ public class MainDatRecipesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatRecipesLoader.class);
 
-  private static final int CRAFTING_UI_CATEGORY=0x23000065;
-
   private DataFacade _facade;
   private ItemsManager _itemsManager;
   private Map<Integer,Integer> _xpMapping;
   private Map<Integer,Float> _cooldownMapping;
   private RecipeItemsLoader _recipeItemsLoader;
-  private EnumMapper _category;
+  private LotroEnum<CraftingUICategory> _category;
 
   /**
    * Constructor.
@@ -54,7 +54,7 @@ public class MainDatRecipesLoader
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
     _recipeItemsLoader=new RecipeItemsLoader(_facade);
-    _category=facade.getEnumsManager().getEnumMapper(CRAFTING_UI_CATEGORY);
+    _category=LotroEnumsRegistry.getInstance().get(CraftingUICategory.class);
   }
 
   private Recipe load(int indexDataId)
@@ -76,7 +76,7 @@ public class MainDatRecipesLoader
       Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
       if (categoryIndex!=null)
       {
-        String category=_category.getLabel(categoryIndex.intValue());
+        CraftingUICategory category=_category.getEntry(categoryIndex.intValue());
         recipe.setCategory(category);
       }
       // XP

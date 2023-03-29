@@ -11,6 +11,7 @@ import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
 import delta.games.lotro.common.enums.CraftTier;
+import delta.games.lotro.common.enums.CraftingUICategory;
 import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EquipmentCategory;
@@ -101,6 +102,7 @@ public class MainDatEnumsLoader
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
     loadEnum(587203200,"MountType",MountType.class); // 0x23000280
     loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
+    loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
