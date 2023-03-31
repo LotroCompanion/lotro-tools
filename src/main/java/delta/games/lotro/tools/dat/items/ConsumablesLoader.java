@@ -176,7 +176,7 @@ public class ConsumablesLoader
       else
       {
         Integer itemLevel=item.getItemLevel();
-        if (itemLevel!=null)
+        if ((itemLevel!=null) && (itemLevel.intValue()>1))
         {
           level=itemLevel.intValue();
         }
