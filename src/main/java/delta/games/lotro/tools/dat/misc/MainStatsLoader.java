@@ -23,7 +23,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get stats from DAT files.
@@ -39,6 +39,7 @@ public class MainStatsLoader
   public static StatsRegistry _stats=new StatsRegistry();
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private PropertiesRegistry _registry;
 
   /**
@@ -48,6 +49,7 @@ public class MainStatsLoader
   public MainStatsLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("stats",facade.getGlobalStringsManager());
     _registry=_facade.getPropertiesRegistry();
   }
 
@@ -60,10 +62,10 @@ public class MainStatsLoader
       LOGGER.warn("Could not handle property metadata ID="+indexDataId);
       return;
     }
-    // Name
-    String propertyName=DatUtils.getStringProperty(properties,"PropertyMetaData_Name");
     // Property ID
     int propertyId=((Integer)properties.getProperty("PropertyMetaData_Property")).intValue();
+    // Name
+    String statName=_i18n.getNameStringProperty(properties,"PropertyMetaData_Name",propertyId,0);
     // Property definition
     PropertyDefinition propertyDefinition=_registry.getPropertyDef(propertyId);
     String propertyKey=propertyDefinition.getName();
@@ -72,7 +74,7 @@ public class MainStatsLoader
     boolean isPercentage=((percentage!=null) && (percentage.intValue()==1));
 
     // Add stat
-    StatDescription stat=addDatStat(propertyId,propertyKey,propertyName,isPercentage);
+    StatDescription stat=addDatStat(propertyId,propertyKey,statName,isPercentage);
     // Set stat type
     StatType type=getTypeFromPropertyType(propertyDefinition.getPropertyType());
     stat.setType(type);
@@ -125,6 +127,8 @@ public class MainStatsLoader
     // Checks
     checks();
     checkNameDuplicates();
+    // Save labels
+    _i18n.save();
   }
 
   private void addLegacyData()
