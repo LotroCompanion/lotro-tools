@@ -17,6 +17,7 @@ import delta.games.lotro.common.stats.StatsSorter;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.archive.DATL10nSupport;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -41,6 +42,7 @@ public class MainStatsLoader
   private DataFacade _facade;
   private I18nUtils _i18n;
   private PropertiesRegistry _registry;
+  private OldStatsLabels _oldStatsLabels;
 
   /**
    * Constructor.
@@ -51,6 +53,7 @@ public class MainStatsLoader
     _facade=facade;
     _i18n=new I18nUtils("stats",facade.getGlobalStringsManager());
     _registry=_facade.getPropertiesRegistry();
+    _oldStatsLabels=new OldStatsLabels();
   }
 
   private void load(int indexDataId)
@@ -136,18 +139,33 @@ public class MainStatsLoader
     int index=0;
     for(OldStatEnum oldStat : OldStatEnum.values())
     {
-      String legacyKey=oldStat.getKey();
+      String legacyKey=oldStat.name();
       StatDescription stat=_stats.getByKey(legacyKey);
       if (stat!=null)
       {
         // Add legacy name
-        String legacyName=oldStat.getName();
-        String statName=stat.getName();
-        if (statName.equals(legacyName))
+        boolean hasLegacyLabel=false;
+        for(String locale : DATL10nSupport.LOCALE_KEYS)
         {
-          legacyName=null;
+          String label=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
+          if (label!=null)
+          {
+            int id=stat.getIdentifier();
+            String key="legacy:"+id;
+            _i18n.defineLabel(locale,key,label);
+            hasLegacyLabel=true;
+          }
         }
-        stat.setLegacyName(legacyName);
+        if (hasLegacyLabel)
+        {
+          String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
+          String statName=stat.getName();
+          if (("".equals(legacyName)) || (statName.equals(legacyName)))
+          {
+            legacyName=null;
+          }
+          stat.setLegacyName(legacyName);
+        }
         // Set percentage
         stat.setPercentage(oldStat.isPercentage());
         // Add index
@@ -266,17 +284,19 @@ public class MainStatsLoader
     return stat;
   }
 
-  private void addCustomStatFromOldStat(int id, OldStatEnum oldStat, StatType type)
+  private void addCustomStat(int id, String legacyKey, boolean isPercentage, StatType type)
   {
-    String legacyKey=oldStat.name();
-    boolean isPercentage=oldStat.isPercentage();
-    String legacyName=oldStat.getName();
+    for(String locale : DATL10nSupport.LOCALE_KEYS)
+    {
+      String label=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
+      if (label!=null)
+      {
+        String key="legacy:"+id;
+        _i18n.defineLabel(locale,key,label);
+      }
+    }
+    String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
     //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
-    addCustomStat(id,legacyKey,legacyName,isPercentage,type);
-  }
-
-  private void addCustomStat(int id, String legacyKey, String legacyName, boolean isPercentage, StatType type)
-  {
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
@@ -290,18 +310,18 @@ public class MainStatsLoader
   {
     int id=-1000;
     // Add missing well known stats from the old stats enum
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_MELEE_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_RANGED_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.DEVASTATE_TACTICAL_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.FINESSE_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.RESISTANCE_PERCENTAGE,StatType.FLOAT);
-    addCustomStatFromOldStat(id--,OldStatEnum.ARMOUR,StatType.INTEGER);
+    addCustomStat(id--,"DEVASTATE_MELEE_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"DEVASTATE_RANGED_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"DEVASTATE_TACTICAL_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_MELEE_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_RANGED_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"CRIT_DEVASTATE_MAGNITUDE_TACTICAL_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"FINESSE_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"RESISTANCE_PERCENTAGE",true,StatType.FLOAT);
+    addCustomStat(id--,"ARMOUR",false,StatType.INTEGER);
     // Add other stats
-    addCustomStat(id--,"DPS","DPS",false,StatType.FLOAT);
-    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1","Shield Use Rank",false,StatType.FLOAT);
+    addCustomStat(id--,"DPS",false,StatType.FLOAT);
+    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1",false,StatType.FLOAT);
   }
 
   /**

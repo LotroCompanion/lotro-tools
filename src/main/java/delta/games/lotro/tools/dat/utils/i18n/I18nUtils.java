@@ -228,6 +228,17 @@ public class I18nUtils
   }
 
   /**
+   * Define a label.
+   * @param locale Locale (see constants in DATL10nSupport.LOCALE_KEYS).
+   * @param key I18n key.
+   * @param value Label to use.
+   */
+  public void defineLabel(String locale, String key, String value)
+  {
+    _storage.setLabel(locale,key,value);
+  }
+
+  /**
    * Save loaded data.
    */
   public void save()
