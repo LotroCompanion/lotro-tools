@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.config.LotroCoreConfig;
+import delta.games.lotro.dat.archive.DATL10nSupport;
+import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
@@ -182,7 +184,7 @@ public class MainDatLoader
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data
-    new ReferenceDataGenerator().doIt();
+    new ReferenceDataGenerator(_facade).doIt();
     // Tasks data
     new MainTaskDataBuilder().doIt();
     if (live)
@@ -366,7 +368,9 @@ public class MainDatLoader
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    DataFacade facade=new DataFacade();
+    DatConfiguration cfg=new DatConfiguration();
+    cfg.setLocale(DATL10nSupport.EN);
+    DataFacade facade=new DataFacade(cfg);
     new MainDatLoader(facade).doIt();
     facade.dispose();
   }

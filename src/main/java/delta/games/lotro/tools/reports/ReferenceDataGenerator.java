@@ -11,6 +11,8 @@ import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.StringTools;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.archive.DATL10nSupport;
+import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -41,10 +43,11 @@ public class ReferenceDataGenerator
 
   /**
    * Constructor.
+   * @param facade Data facade.
    */
-  public ReferenceDataGenerator()
+  public ReferenceDataGenerator(DataFacade facade)
   {
-    _facade=new DataFacade();
+    _facade=facade;
   }
 
   /**
@@ -254,6 +257,9 @@ public class ReferenceDataGenerator
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    new ReferenceDataGenerator().doIt();
+    DatConfiguration cfg=new DatConfiguration();
+    cfg.setLocale(DATL10nSupport.EN);
+    DataFacade facade=new DataFacade(cfg);
+    new ReferenceDataGenerator(facade).doIt();
   }
 }
