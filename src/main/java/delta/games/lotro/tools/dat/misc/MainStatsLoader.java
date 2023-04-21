@@ -35,6 +35,10 @@ public class MainStatsLoader
   private static final Logger LOGGER=Logger.getLogger(MainStatsLoader.class);
 
   /**
+   * Get all the locale keys.
+   */
+  private static final String[] LOCALE_KEYS={DATL10nSupport.EN,DATL10nSupport.FR,DATL10nSupport.DE};
+  /**
    * Stats registry.
    */
   public static StatsRegistry _stats=new StatsRegistry();
@@ -143,28 +147,23 @@ public class MainStatsLoader
       StatDescription stat=_stats.getByKey(legacyKey);
       if (stat!=null)
       {
-        // Add legacy name
-        boolean hasLegacyLabel=false;
-        for(String locale : DATL10nSupport.LOCALE_KEYS)
+        for(String locale : LOCALE_KEYS)
         {
-          String label=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
-          if (label!=null)
+          int id=stat.getIdentifier();
+          String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
+          if ((legacyName!=null) && (legacyName.length()>0))
           {
-            int id=stat.getIdentifier();
-            String key="legacy:"+id;
-            _i18n.defineLabel(locale,key,label);
-            hasLegacyLabel=true;
+            String statName=_i18n.getLabelsStorage().getLabel(locale,String.valueOf(id));
+            if (!legacyName.equals(statName))
+            {
+              String key="legacy:"+id;
+              _i18n.defineLabel(locale,key,legacyName);
+              if (DATL10nSupport.EN.equals(locale))
+              {
+                stat.setLegacyName(legacyName);
+              }
+            }
           }
-        }
-        if (hasLegacyLabel)
-        {
-          String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
-          String statName=stat.getName();
-          if (("".equals(legacyName)) || (statName.equals(legacyName)))
-          {
-            legacyName=null;
-          }
-          stat.setLegacyName(legacyName);
         }
         // Set percentage
         stat.setPercentage(oldStat.isPercentage());
@@ -286,21 +285,21 @@ public class MainStatsLoader
 
   private void addCustomStat(int id, String legacyKey, boolean isPercentage, StatType type)
   {
-    for(String locale : DATL10nSupport.LOCALE_KEYS)
+    for(String locale : LOCALE_KEYS)
     {
       String label=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
       if (label!=null)
       {
-        String key="legacy:"+id;
+        String key=String.valueOf(id);
         _i18n.defineLabel(locale,key,label);
       }
     }
-    String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
+    String statName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
     //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
-    stat.setInternalName(legacyName);
+    stat.setInternalName(statName);
     stat.setPercentage(isPercentage);
     stat.setType(type);
     _stats.addStat(stat);

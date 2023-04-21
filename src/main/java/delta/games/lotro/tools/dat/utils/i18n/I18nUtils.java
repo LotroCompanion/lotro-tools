@@ -48,6 +48,15 @@ public class I18nUtils
   }
 
   /**
+   * Get the managed labels storage.
+   * @return the managed labels storage.
+   */
+  public LabelsStorage getLabelsStorage()
+  {
+    return _storage;
+  }
+
+  /**
    * Get the value of a string property.
    * As a side-effect, resolve the localized strings if any.
    * @param props Source properties.

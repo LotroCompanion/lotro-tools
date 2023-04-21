@@ -25,6 +25,18 @@ public class LabelsStorage
   }
 
   /**
+   * Get a label.
+   * @param locale Locale.
+   * @param key Key.
+   * @return A label or <code>null</code> if not found.
+   */
+  public String getLabel(String locale, String key)
+  {
+    SingleLocaleLabelsManager mgr=getLabelsMgr(locale);
+    return mgr.getLabel(key);
+  }
+
+  /**
    * Set the label for a given locale and key.
    * @param locale Locale.
    * @param key Key.
@@ -32,13 +44,19 @@ public class LabelsStorage
    */
   public void setLabel(String locale, String key, String value)
   {
+    SingleLocaleLabelsManager mgr=getLabelsMgr(locale);
+    mgr.addLabel(key,value);
+  }
+
+  private SingleLocaleLabelsManager getLabelsMgr(String locale)
+  {
     SingleLocaleLabelsManager mgr=_labelsMgr.get(locale);
     if (mgr==null)
     {
       mgr=new SingleLocaleLabelsManager(locale);
       _labelsMgr.put(locale,mgr);
     }
-    mgr.addLabel(key,value);
+    return mgr;
   }
 
   /**
