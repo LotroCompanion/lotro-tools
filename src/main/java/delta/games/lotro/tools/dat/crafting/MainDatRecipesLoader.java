@@ -28,6 +28,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -431,7 +432,7 @@ public class MainDatRecipesLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new MainDatRecipesLoader(facade).doIt();
     facade.dispose();
   }

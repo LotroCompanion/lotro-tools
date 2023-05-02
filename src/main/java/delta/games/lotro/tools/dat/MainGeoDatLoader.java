@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.config.LotroCoreConfig;
-import delta.games.lotro.dat.archive.DATL10nSupport;
-import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
@@ -17,6 +15,7 @@ import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapsDataLoader;
 import delta.games.lotro.tools.dat.maps.landblocks.MainLandblocksBuilder;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 
 /**
  * Global procedure to load geographic data from DAT files.
@@ -146,9 +145,7 @@ public class MainGeoDatLoader
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    DatConfiguration cfg=new DatConfiguration();
-    cfg.setLocale(DATL10nSupport.EN);
-    DataFacade facade=new DataFacade(cfg);
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new MainGeoDatLoader(facade).doIt();
     facade.dispose();
   }
