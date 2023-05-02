@@ -18,7 +18,6 @@ import delta.games.lotro.character.races.RaceGender;
 import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -117,17 +116,17 @@ public class RaceDataLoader
   {
     Object[] gendersProperties=(Object[])properties.getProperty("RaceTable_GenderList");
     PropertiesSet maleProperties=(PropertiesSet)gendersProperties[0];
-    RaceGender male=buildGender(race,CharacterSex.MALE,maleProperties);
+    RaceGender male=buildGender(maleProperties);
     race.setMaleGender(male);
     if (gendersProperties.length>1)
     {
       PropertiesSet femaleProperties=(PropertiesSet)gendersProperties[1];
-      RaceGender female=buildGender(race,CharacterSex.FEMALE,femaleProperties);
+      RaceGender female=buildGender(femaleProperties);
       race.setFemaleGender(female);
     }
   }
 
-  private RaceGender buildGender(RaceDescription race, CharacterSex sex, PropertiesSet genderProperties)
+  private RaceGender buildGender(PropertiesSet genderProperties)
   {
     RaceGender gender=new RaceGender();
     // Name
@@ -162,7 +161,6 @@ public class RaceDataLoader
   void loadAvatar(int avatarId)
   {
     PropertiesSet properties=_facade.loadProperties(avatarId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(properties.dump());
     float icmr=((Float)properties.getProperty("Vital_HealthCombatBaseRegen")).floatValue();
     float ocmr=((Float)properties.getProperty("Vital_HealthPeaceBaseRegen")).floatValue();
     float icpr=((Float)properties.getProperty("Vital_PowerCombatBaseRegen")).floatValue();
@@ -206,7 +204,6 @@ public class RaceDataLoader
   private void loadRaceEarnableTraits()
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
-    //System.out.println(properties.dump());
     Object[] raceArrays=(Object[])properties.getProperty("Trait_Control_RaceArray");
     if (raceArrays==null)
     {
