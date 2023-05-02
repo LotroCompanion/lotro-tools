@@ -44,7 +44,7 @@ import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get enums from DAT files.
@@ -111,14 +111,15 @@ public class MainDatEnumsLoader
     EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(enumId);
     if (enumMapper!=null)
     {
+      String labelsSetName="enum-"+implClass.getSimpleName();
+      I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
       for(Integer code : enumMapper.getTokens())
       {
         if ((code.intValue()==0) && (!useZero(enumId)))
         {
           continue;
         }
-        String label=enumMapper.getLabel(code.intValue());
-        label=StringUtils.fixName(label);
+        String label=i18n.getEnumValue(enumMapper,code.intValue(),I18nUtils.OPTION_REMOVE_TRAILING_MARK);
         String key=getKey(implClass,code.intValue());
         T entry=lotroEnum.buildEntryInstance(code.intValue(),key,label);
         lotroEnum.registerEntry(entry);
@@ -128,6 +129,7 @@ public class MainDatEnumsLoader
       String fileName=implClass.getSimpleName()+".xml";
       File enumFile=new File(enumsDir,fileName);
       new EnumXMLWriter<T>().writeEnum(enumFile,lotroEnum);
+      i18n.save();
     }
     else
     {
@@ -179,7 +181,7 @@ public class MainDatEnumsLoader
         lotroEnum.registerEntry(entry);
       }
     }
-    else if (enumId==0x23000350)
+    else if (enumId==0x23000350) // WJEncounterCategory
     {
       T entry=lotroEnum.buildEntryInstance(0,null,"Other");
       lotroEnum.registerEntry(entry);
