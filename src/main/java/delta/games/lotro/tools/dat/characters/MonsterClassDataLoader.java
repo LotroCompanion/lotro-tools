@@ -20,9 +20,12 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
@@ -35,6 +38,7 @@ public class MonsterClassDataLoader
 
   private DataFacade _facade;
   private List<MonsterClassDescription> _classes;
+  private EnumMapper _characterClasses;
 
   /**
    * Constructor.
@@ -44,6 +48,7 @@ public class MonsterClassDataLoader
   {
     _facade=facade;
     _classes=new ArrayList<MonsterClassDescription>();
+    _characterClasses=_facade.getEnumsManager().getEnumMapper(587202574);
   }
 
   private void handleClass(int classId)
@@ -66,6 +71,10 @@ public class MonsterClassDataLoader
     // Name
     String className=DatUtils.getStringProperty(classInfo,"MonsterPlay_MonsterName");
     classDescription.setName(className);
+    // Tag
+    String classFullName=_characterClasses.getLabel(classCode);
+    String tag=DatStringUtils.extractTag(classFullName);
+    classDescription.setTag(tag);
     // Abbreviation
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"MonsterPlay_AbbreviatedMonsterName");
     LOGGER.debug("Class abbreviation: "+classAbbreviation);
@@ -177,5 +186,15 @@ MonsterPlay_SkillList:
     }
     // Save classes descriptions
     ClassDescriptionXMLWriter.write(GeneratedFiles.MONSTER_CLASSES,_classes);
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    new MonsterClassDataLoader(facade).doIt();
   }
 }

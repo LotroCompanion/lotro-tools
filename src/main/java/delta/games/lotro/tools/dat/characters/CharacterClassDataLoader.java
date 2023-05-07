@@ -28,10 +28,13 @@ import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -48,6 +51,7 @@ public class CharacterClassDataLoader
   private DerivedStatsContributionsMgr _derivatedStatsManager;
   private ProficienciesLoader _proficiencies;
   private I18nUtils _i18n;
+  private EnumMapper _characterClasses;
 
   /**
    * Constructor.
@@ -61,6 +65,7 @@ public class CharacterClassDataLoader
     _derivatedStatsManager=new DerivedStatsContributionsMgr();
     _proficiencies=new ProficienciesLoader(facade);
     _i18n=new I18nUtils("classes",facade.getGlobalStringsManager());
+    _characterClasses=_facade.getEnumsManager().getEnumMapper(587202574);
   }
 
   private void handleClass(int classId)
@@ -77,6 +82,10 @@ public class CharacterClassDataLoader
     // Name
     String className=_i18n.getNameStringProperty(classInfo,"AdvTable_ClassName",classId,0);
     classDescription.setName(className);
+    // Tag
+    String classFullName=_characterClasses.getLabel(classCode);
+    String tag=DatStringUtils.extractTag(classFullName);
+    classDescription.setTag(tag);
     // Abbreviation
     String classAbbreviation=DatUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
     LOGGER.debug("Class abbreviation: "+classAbbreviation);
@@ -503,6 +512,7 @@ AdvTable_AvailableSkillEntryList:
    */
   public static void main(String[] args)
   {
-    new CharacterClassDataLoader(new DataFacade()).doIt();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    new CharacterClassDataLoader(facade).doIt();
   }
 }
