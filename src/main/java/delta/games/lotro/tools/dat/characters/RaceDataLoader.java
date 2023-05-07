@@ -23,6 +23,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
@@ -63,6 +64,10 @@ public class RaceDataLoader
     // Name
     String name=_i18n.getEnumValue(_speciesCode,raceId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     raceDescription.setName(name);
+    // Tag
+    String raceName=_speciesCode.getLabel(raceId);
+    String tag=DatStringUtils.extractTag(raceName);
+    raceDescription.setTag(tag);
     // Description
     String description=_i18n.getStringProperty(properties,"RaceTable_Description");
     if (description==null)
