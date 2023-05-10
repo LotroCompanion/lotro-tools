@@ -48,6 +48,7 @@ import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -234,7 +235,8 @@ public class MainDatEnumsLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new MainDatEnumsLoader(facade).doIt();
     facade.dispose();
   }
