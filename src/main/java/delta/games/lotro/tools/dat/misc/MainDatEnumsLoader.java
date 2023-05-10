@@ -1,9 +1,13 @@
 package delta.games.lotro.tools.dat.misc;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.i18n.MultilocalesTranslator;
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.AllegianceGroup;
@@ -55,6 +59,7 @@ public class MainDatEnumsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatEnumsLoader.class);
 
   private DataFacade _facade;
+  private MultilocalesTranslator _translator;
 
   /**
    * Constructor.
@@ -63,6 +68,11 @@ public class MainDatEnumsLoader
   public MainDatEnumsLoader(DataFacade facade)
   {
     _facade=facade;
+    List<Locale> locales=new ArrayList<Locale>();
+    locales.add(Locale.ENGLISH);
+    locales.add(Locale.FRENCH);
+    locales.add(Locale.GERMAN);
+    _translator=new MultilocalesTranslator(getClass().getPackage().getName()+".enum",locales);
   }
 
   /**
@@ -124,7 +134,7 @@ public class MainDatEnumsLoader
         T entry=lotroEnum.buildEntryInstance(code.intValue(),key,label);
         lotroEnum.registerEntry(entry);
       }
-      handleAdditionalEntries(enumId,lotroEnum,implClass);
+      handleAdditionalEntries(i18n,enumId,lotroEnum);
       File enumsDir=GeneratedFiles.ENUMS_DIR;
       String fileName=implClass.getSimpleName()+".xml";
       File enumFile=new File(enumsDir,fileName);
@@ -142,43 +152,32 @@ public class MainDatEnumsLoader
     return (enumId==0x23000036);
   }
 
-  private <T extends LotroEnumEntry> void handleAdditionalEntries(int enumId, LotroEnum<T> lotroEnum, Class<T> implClass)
+  private <T extends LotroEnumEntry> void handleAdditionalEntries(I18nUtils i18n, int enumId, LotroEnum<T> lotroEnum)
   {
     if (enumId==0x23000036) // ItemClass
     {
       // Box of Essences
-      int code=ItemClassUtils.getBoxOfEssenceCode();
-      T entry=lotroEnum.buildEntryInstance(code,null,"Box of Essences");
-      lotroEnum.registerEntry(entry);
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getBoxOfEssenceCode(),"BoxOfEssences",0);
       for(int tier=1;tier<=14;tier++)
       {
         // Essences
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEssenceCode(tier),null,"Essence:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEssenceCode(tier),"Essence",tier);
         // Enhancement runes
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEnhancementRuneCode(tier),null,"Enhancement Rune:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(tier),"EnhancementRune:Tier",tier);
         // Heraldric Traceries
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getHeraldicTraceryCode(tier),null,"Heraldric Tracery:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getHeraldicTraceryCode(tier),"HeraldricTracery",tier);
         // Words of Power
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfPowerCode(tier),null,"Word of Power:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfPowerCode(tier),"WoPower",tier);
         // Words of Mastery
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfMasteryCode(tier),null,"Word of Mastery:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfMasteryCode(tier),"WoMastery",tier);
         // Words of Craft
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getWordOfCraftCode(tier),null,"Word of Craft:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfCraftCode(tier),"WoCraft",tier);
         // Essences of War
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getEssenceOfWarCode(tier),null,"Essence of War:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEssenceOfWarCode(tier),"EssenceWar",tier);
         // Cloak Essences
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getCloakEssenceCode(tier),null,"Cloak Essence:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getCloakEssenceCode(tier),"CloakEssence",tier);
         // Necklace Essences
-        entry=lotroEnum.buildEntryInstance(ItemClassUtils.getNecklaceEssenceCode(tier),null,"Necklace Essence:Tier"+tier);
-        lotroEnum.registerEntry(entry);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getNecklaceEssenceCode(tier),"NecklaceEssence",tier);
       }
     }
     else if (enumId==0x23000350) // WJEncounterCategory
@@ -191,6 +190,22 @@ public class MainDatEnumsLoader
       T entry=lotroEnum.buildEntryInstance(0,null,"Beginner");
       lotroEnum.registerEntry(entry);
     }
+  }
+
+  private <T extends LotroEnumEntry> void handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, int tier)
+  {
+    // Define localized labels
+    String key=baseKey+((tier>0)?("-"+tier):"");
+    Object[] params=new Object[] {Integer.valueOf(tier)};
+    for(Locale locale : _translator.getLocales())
+    {
+      String value=_translator.translate(key,params,locale);
+      i18n.defineLabel(locale.getLanguage(),key,value);
+    }
+    // Define entry
+    String label=_translator.translate(key,params,Locale.ENGLISH);
+    T entry=lotroEnum.buildEntryInstance(code,key,label);
+    lotroEnum.registerEntry(entry);
   }
 
   private String getKey(Class<? extends LotroEnumEntry> implClass, int code)

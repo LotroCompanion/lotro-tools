@@ -222,7 +222,7 @@ public class I18nUtils
       value=processor.processString(value);
       if (value.length()>0)
       {
-        _storage.setLabel(locale,key,value);
+        defineLabel(locale,key,value);
         hasLabel=true;
       }
     }
