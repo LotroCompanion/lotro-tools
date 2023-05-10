@@ -163,7 +163,7 @@ public class MainDatEnumsLoader
         // Essences
         handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEssenceCode(tier),"Essence",tier);
         // Enhancement runes
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(tier),"EnhancementRune:Tier",tier);
+        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(tier),"EnhancementRune",tier);
         // Heraldric Traceries
         handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getHeraldicTraceryCode(tier),"HeraldricTracery",tier);
         // Words of Power
@@ -199,12 +199,12 @@ public class MainDatEnumsLoader
     Object[] params=new Object[] {Integer.valueOf(tier)};
     for(Locale locale : _translator.getLocales())
     {
-      String value=_translator.translate(key,params,locale);
+      String value=_translator.translate(baseKey,params,locale);
       i18n.defineLabel(locale.getLanguage(),key,value);
     }
     // Define entry
-    String label=_translator.translate(key,params,Locale.ENGLISH);
-    T entry=lotroEnum.buildEntryInstance(code,key,label);
+    String label=_translator.translate(baseKey,params,Locale.ENGLISH);
+    T entry=lotroEnum.buildEntryInstance(code,null,label);
     lotroEnum.registerEntry(entry);
   }
 
