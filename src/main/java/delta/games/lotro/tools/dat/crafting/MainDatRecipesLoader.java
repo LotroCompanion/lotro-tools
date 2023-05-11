@@ -29,6 +29,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -45,6 +46,7 @@ public class MainDatRecipesLoader
   private Map<Integer,Float> _cooldownMapping;
   private RecipeItemsLoader _recipeItemsLoader;
   private LotroEnum<CraftingUICategory> _category;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -56,6 +58,7 @@ public class MainDatRecipesLoader
     _itemsManager=ItemsManager.getInstance();
     _recipeItemsLoader=new RecipeItemsLoader(_facade);
     _category=LotroEnumsRegistry.getInstance().get(CraftingUICategory.class);
+    _i18n=new I18nUtils("recipes",facade.getGlobalStringsManager());
   }
 
   private Recipe load(int indexDataId)
@@ -70,8 +73,7 @@ public class MainDatRecipesLoader
       // ID
       recipe.setIdentifier(indexDataId);
       // Name
-      String name=DatUtils.getStringProperty(properties,"CraftRecipe_Name");
-      name=StringUtils.fixName(name);
+      String name=_i18n.getNameStringProperty(properties,"CraftRecipe_Name",indexDataId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       recipe.setName(name);
       // Category
       Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
@@ -332,6 +334,8 @@ public class MainDatRecipesLoader
     {
       LOGGER.info("Wrote recipes file: "+GeneratedFiles.RECIPES);
     }
+    // Labels
+    _i18n.save();
   }
 
   private void scanAll(RecipesManager recipesManager)
