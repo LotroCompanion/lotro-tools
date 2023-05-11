@@ -181,7 +181,7 @@ public class MainDatRecipesLoader
       // Fixes
       if (name==null)
       {
-        name=recipe.getVersions().get(0).getRegular().getItem().getName();
+        name=recipe.getDefaultName();
         recipe.setName(name);
       }
       Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
