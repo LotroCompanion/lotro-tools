@@ -183,13 +183,11 @@ public class MainDatEnumsLoader
     }
     else if (enumId==0x23000350) // WJEncounterCategory
     {
-      T entry=lotroEnum.buildEntryInstance(0,null,"Other");
-      lotroEnum.registerEntry(entry);
+      handleCustomEntry(lotroEnum,i18n,0,"OtherInstanceCategory",0);
     }
     else if (enumId==0x23000063) // CraftTier
     {
-      T entry=lotroEnum.buildEntryInstance(0,null,"Beginner");
-      lotroEnum.registerEntry(entry);
+      handleCustomEntry(lotroEnum,i18n,0,"Beginner",0);
     }
   }
 
