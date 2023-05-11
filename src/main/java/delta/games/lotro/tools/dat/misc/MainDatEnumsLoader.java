@@ -204,8 +204,7 @@ public class MainDatEnumsLoader
       i18n.defineLabel(locale.getLanguage(),key,value);
     }
     // Define entry
-    String label=_translator.translate(baseKey,params,Locale.ENGLISH);
-    T entry=lotroEnum.buildEntryInstance(code,null,label);
+    T entry=lotroEnum.buildEntryInstance(code,null,key);
     lotroEnum.registerEntry(entry);
   }
 
