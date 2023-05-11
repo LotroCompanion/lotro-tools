@@ -27,10 +27,8 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
-import delta.games.lotro.utils.StringUtils;
 
 /**
  * Get recipe definitions from DAT files.
