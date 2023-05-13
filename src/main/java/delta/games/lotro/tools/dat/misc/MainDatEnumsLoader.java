@@ -237,8 +237,8 @@ public class MainDatEnumsLoader
     LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(0,"Gender",implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    CharacterSex male=handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE",0);
-    CharacterSex female=handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE",0);
+    handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE",0);
+    handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE",0);
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
