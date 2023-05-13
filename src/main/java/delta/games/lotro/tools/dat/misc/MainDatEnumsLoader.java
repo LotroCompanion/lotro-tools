@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.i18n.MultilocalesTranslator;
+import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.AllegianceGroup;
@@ -114,6 +115,8 @@ public class MainDatEnumsLoader
     loadEnum(587203200,"MountType",MountType.class); // 0x23000280
     loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
+    // Custom enums
+     buildGenderEnum();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -136,11 +139,7 @@ public class MainDatEnumsLoader
         lotroEnum.registerEntry(entry);
       }
       handleAdditionalEntries(i18n,enumId,lotroEnum);
-      File enumsDir=GeneratedFiles.ENUMS_DIR;
-      String fileName=implClass.getSimpleName()+".xml";
-      File enumFile=new File(enumsDir,fileName);
-      new EnumXMLWriter<T>().writeEnum(enumFile,lotroEnum);
-      i18n.save();
+      saveEnumFile(lotroEnum,implClass,i18n);
     }
     else
     {
@@ -191,19 +190,25 @@ public class MainDatEnumsLoader
     }
   }
 
-  private <T extends LotroEnumEntry> void handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, int tier)
+  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, int tier)
+  {
+    return handleCustomEntry(lotroEnum,i18n,code,baseKey,null,tier);
+  }
+
+  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, String key, int tier)
   {
     // Define localized labels
-    String key=baseKey+((tier>0)?("-"+tier):"");
+    String i18nKey=baseKey+((tier>0)?("-"+tier):"");
     Object[] params=new Object[] {Integer.valueOf(tier)};
     for(Locale locale : _translator.getLocales())
     {
       String value=_translator.translate(baseKey,params,locale);
-      i18n.defineLabel(locale.getLanguage(),key,value);
+      i18n.defineLabel(locale.getLanguage(),i18nKey,value);
     }
     // Define entry
-    T entry=lotroEnum.buildEntryInstance(code,null,key);
+    T entry=lotroEnum.buildEntryInstance(code,key,i18nKey);
     lotroEnum.registerEntry(entry);
+    return entry;
   }
 
   private String getKey(Class<? extends LotroEnumEntry> implClass, int code)
@@ -224,6 +229,26 @@ public class MainDatEnumsLoader
     if (code==12) return "RAID12";
     if (code==24) return "RAID24";
     return "";
+  }
+
+  private void buildGenderEnum()
+  {
+    Class<CharacterSex> implClass=CharacterSex.class;
+    LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(0,"Gender",implClass);
+    String labelsSetName="enum-"+implClass.getSimpleName();
+    I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
+    CharacterSex male=handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE",0);
+    CharacterSex female=handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE",0);
+    saveEnumFile(lotroEnum,implClass,i18n);
+  }
+
+  private <T extends LotroEnumEntry> void saveEnumFile(LotroEnum<T> lotroEnum, Class<T> implClass, I18nUtils i18n)
+  {
+    File enumsDir=GeneratedFiles.ENUMS_DIR;
+    String fileName=implClass.getSimpleName()+".xml";
+    File enumFile=new File(enumsDir,fileName);
+    new EnumXMLWriter<T>().writeEnum(enumFile,lotroEnum);
+    i18n.save();
   }
 
   /**
