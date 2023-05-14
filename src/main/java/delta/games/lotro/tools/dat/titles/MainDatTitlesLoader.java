@@ -37,7 +37,6 @@ public class MainDatTitlesLoader
 
   private DataFacade _facade;
   private EnumMapper _category;
-  private StringRenderer _customRenderer;
   private EnumMapper _exclusionGroup;
   private I18nUtils _i18n;
   private StringProcessor _titleProcessor;
@@ -50,7 +49,6 @@ public class MainDatTitlesLoader
   {
     _facade=facade;
     _category=_facade.getEnumsManager().getEnumMapper(587202682);
-    _customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
     _exclusionGroup=_facade.getEnumsManager().getEnumMapper(587202883);
     _i18n=new I18nUtils("titles",facade.getGlobalStringsManager());
     _titleProcessor=buildTitlesProcessor();
@@ -125,24 +123,20 @@ Title_String:
 
   private StringProcessor buildTitlesProcessor()
   {
+    StringRenderer customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
     StringProcessor p=new StringProcessor()
     {
       @Override
       public String processString(String input)
       {
-        return renderTitle(input);
+        String renderedTitle=customRenderer.render(input);
+        renderedTitle=renderedTitle.replace(" ,","");
+        renderedTitle=renderedTitle.replace("  "," ");
+        renderedTitle=renderedTitle.trim();
+        return renderedTitle;
       }
     };
     return p;
-  }
-
-  private String renderTitle(String titleFormat)
-  {
-    String renderedTitle=_customRenderer.render(titleFormat);
-    renderedTitle=renderedTitle.replace(" ,","");
-    renderedTitle=renderedTitle.replace("  "," ");
-    renderedTitle=renderedTitle.trim();
-    return renderedTitle;
   }
 
   private boolean useId(int id)

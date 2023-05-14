@@ -23,14 +23,16 @@ import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.webStore.WebStoreItem;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.dat.utils.i18n.StringProcessor;
 import delta.games.lotro.tools.lore.deeds.keys.DeedKeysInjector;
 
 /**
@@ -47,6 +49,7 @@ public class DeedsLoader
   private I18nUtils _i18n;
   private DatObjectivesLoader _objectivesLoader;
   private AchievablesLoadingUtils _utils;
+  private StringProcessor _processor;
 
   /**
    * Constructor.
@@ -62,6 +65,7 @@ public class DeedsLoader
     _i18n=new I18nUtils("deeds",facade.getGlobalStringsManager());
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
     _utils=utils;
+    _processor=buildProcessor();
   }
 
   /**
@@ -84,13 +88,11 @@ public class DeedsLoader
     // ID
     deed.setIdentifier(deedID);
     // Name
-    String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
-    String renderedName=_utils.renderName(nameFormat);
-    deed.setName(renderedName);
+    String name=_i18n.getNameStringProperty(properties,"Quest_Name",deedID,_processor);
+    deed.setName(name);
     String rawName=_i18n.getStringProperty(properties,"Quest_Name");
     deed.setRawName(rawName);
-    //System.out.println("Deed name: "+name);
-    //DatObjectivesLoader.currentName=name;
+
     // Description
     String description=_i18n.getStringProperty(properties,"Quest_Description");
     deed.setDescription(description);
@@ -136,6 +138,24 @@ public class DeedsLoader
     }
     // Registration
     _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
+  }
+
+  private StringProcessor buildProcessor()
+  {
+    StringRenderer customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
+    StringProcessor p=new StringProcessor()
+    {
+      @Override
+      public String processString(String input)
+      {
+        String renderedTitle=customRenderer.render(input);
+        renderedTitle=renderedTitle.replace(" ,","");
+        renderedTitle=renderedTitle.replace("  "," ");
+        renderedTitle=renderedTitle.trim();
+        return renderedTitle;
+      }
+    };
+    return p;
   }
 
   private void handleDeedType(DeedDescription deed, PropertiesSet properties)

@@ -20,6 +20,7 @@ import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
@@ -27,7 +28,9 @@ import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.lore.webStore.WebStoreItem;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.dat.utils.i18n.StringProcessor;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -45,6 +48,7 @@ public class QuestsLoader
   private DatRolesLoader _rolesLoader;
   private DatObjectivesLoader _objectivesLoader;
   private AchievablesLoadingUtils _utils;
+  private StringProcessor _processor;
 
   /**
    * Constructor.
@@ -61,6 +65,7 @@ public class QuestsLoader
     _i18n=new I18nUtils("quests",facade.getGlobalStringsManager());
     _rolesLoader=new DatRolesLoader(facade,_i18n);
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
+    _processor=buildProcessor();
   }
 
   /**
@@ -89,9 +94,8 @@ public class QuestsLoader
     // ID
     quest.setIdentifier(questID);
     // Name
-    String nameFormat=DatUtils.getStringProperty(properties,"Quest_Name");
-    String renderedName=_utils.renderName(nameFormat);
-    quest.setName(renderedName);
+    String name=_i18n.getNameStringProperty(properties,"Quest_Name",questID,_processor);
+    quest.setName(name);
     String rawName=_i18n.getStringProperty(properties,"Quest_Name");
     quest.setRawName(rawName);
 
@@ -201,6 +205,24 @@ public class QuestsLoader
     }
     // Registration
     _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
+  }
+
+  private StringProcessor buildProcessor()
+  {
+    StringRenderer customRenderer=StringRenderingUtils.buildAllOptionsRenderer();
+    StringProcessor p=new StringProcessor()
+    {
+      @Override
+      public String processString(String input)
+      {
+        String renderedTitle=customRenderer.render(input);
+        renderedTitle=renderedTitle.replace(" ,","");
+        renderedTitle=renderedTitle.replace("  "," ");
+        renderedTitle=renderedTitle.trim();
+        return renderedTitle;
+      }
+    };
+    return p;
   }
 
   /*
