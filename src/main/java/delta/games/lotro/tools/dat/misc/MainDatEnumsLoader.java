@@ -49,6 +49,7 @@ import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -116,6 +117,7 @@ public class MainDatEnumsLoader
     loadEnum(587203200,"MountType",MountType.class); // 0x23000280
     loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
+    loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
     // Custom enums
      buildGenderEnum();
      buildDeedTypeEnum();
@@ -219,6 +221,10 @@ public class MainDatEnumsLoader
     {
       return getGroupSizeKey(code);
     }
+    else if (implClass==DamageType.class)
+    {
+      return getDamageTypeKey(code);
+    }
     return null;
   }
 
@@ -230,6 +236,20 @@ public class MainDatEnumsLoader
     if (code==6) return "FELLOWSHIP";
     if (code==12) return "RAID12";
     if (code==24) return "RAID24";
+    return "";
+  }
+
+  private String getDamageTypeKey(int code)
+  {
+    if (code==1) return "COMMON";
+    if (code==2) return "WESTERNESSE";
+    if (code==4) return "ANCIENT_DWARF";
+    if (code==8) return "BELERIAND";
+    if (code==16) return "FIRE";
+    if (code==32) return "SHADOW";
+    if (code==64) return "LIGHT";
+    if (code==512) return "LIGHTNING";
+    if (code==256) return "FROST";
     return "";
   }
 
