@@ -49,7 +49,7 @@ public class WeaponTypesUtils
     {
       if (equipementBitSet.get(i))
       {
-        WeaponType weaponType=getWeaponType(i+1);
+        WeaponType weaponType=DatEnumsUtils.getWeaponTypeFromEquipmentCategory(i+1);
         if (weaponType!=null)
         {
           ret.add(weaponType);
@@ -61,29 +61,5 @@ public class WeaponTypesUtils
       LOGGER.debug("Decoded equipment types:"+ret);
     }
     return ret;
-  }
-
-  private WeaponType getWeaponType(int index)
-  {
-    if (index==3) return WeaponType.TWO_HANDED_SWORD;
-    if (index==4) return WeaponType.TWO_HANDED_CLUB;
-    if (index==6) return WeaponType.TWO_HANDED_AXE;
-    if (index==8) return WeaponType.BOW;
-    if (index==12) return WeaponType.ONE_HANDED_HAMMER;
-    if (index==13) return WeaponType.SPEAR;
-    if (index==14) return WeaponType.CROSSBOW;
-    if (index==15) return WeaponType.TWO_HANDED_HAMMER;
-    if (index==16) return WeaponType.HALBERD;
-    if (index==20) return WeaponType.DAGGER;
-    if (index==22) return WeaponType.STAFF;
-    if (index==24) return WeaponType.ONE_HANDED_AXE;
-    if (index==26) return WeaponType.ONE_HANDED_CLUB;
-    if (index==27) return WeaponType.ONE_HANDED_MACE;
-    if (index==28) return WeaponType.ONE_HANDED_SWORD;
-    if (index==39) return WeaponType.RUNE_STONE;
-    if (index==41) return WeaponType.JAVELIN;
-    if (index==48) return WeaponType.BATTLE_GAUNTLETS;
-    //LOGGER.warn("Unmanaged weapon type: "+index);
-    return null;
   }
 }
