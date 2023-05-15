@@ -48,6 +48,7 @@ import delta.games.lotro.common.enums.WJInstanceGroup;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -117,6 +118,7 @@ public class MainDatEnumsLoader
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
     // Custom enums
      buildGenderEnum();
+     buildDeedTypeEnum();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -239,6 +241,23 @@ public class MainDatEnumsLoader
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE",0);
     handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE",0);
+    saveEnumFile(lotroEnum,implClass,i18n);
+  }
+
+  private void buildDeedTypeEnum()
+  {
+    Class<DeedType> implClass=DeedType.class;
+    String enumName="DeedType";
+    LotroEnum<DeedType> lotroEnum=new LotroEnum<DeedType>(0,enumName,implClass);
+    String labelsSetName="enum-"+implClass.getSimpleName();
+    I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
+    handleCustomEntry(lotroEnum,i18n,100,enumName+".CLASS","CLASS",0);
+    handleCustomEntry(lotroEnum,i18n,101,enumName+".RACE","RACE",0);
+    handleCustomEntry(lotroEnum,i18n,102,enumName+".EVENT","EVENT",0);
+    handleCustomEntry(lotroEnum,i18n,103,enumName+".EXPLORER","EXPLORER",0);
+    handleCustomEntry(lotroEnum,i18n,104,enumName+".LORE","LORE",0);
+    handleCustomEntry(lotroEnum,i18n,105,enumName+".REPUTATION","REPUTATION",0);
+    handleCustomEntry(lotroEnum,i18n,106,enumName+".SLAYER","SLAYER",0);
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 

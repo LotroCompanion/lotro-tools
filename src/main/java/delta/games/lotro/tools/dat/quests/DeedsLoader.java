@@ -50,6 +50,7 @@ public class DeedsLoader
   private DatObjectivesLoader _objectivesLoader;
   private AchievablesLoadingUtils _utils;
   private StringProcessor _processor;
+  private LotroEnum<DeedType> _deedTypeEnum;
 
   /**
    * Constructor.
@@ -66,6 +67,7 @@ public class DeedsLoader
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
     _utils=utils;
     _processor=buildProcessor();
+    _deedTypeEnum=LotroEnumsRegistry.getInstance().get(DeedType.class);
   }
 
   /**
@@ -167,91 +169,91 @@ public class DeedsLoader
       int typeCode=categoryId.intValue();
       if (typeCode==22)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
       }
       else if (typeCode==2)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CAPTAIN);
       }
       else if (typeCode==3)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.GUARDIAN);
       }
       else if (typeCode==5)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.MINSTREL);
       }
       else if (typeCode==6)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BURGLAR);
       }
       else if (typeCode==26)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.HUNTER);
       }
       else if (typeCode==28)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CHAMPION);
       }
       else if (typeCode==30)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.LORE_MASTER);
       }
       else if (typeCode==35)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.WARDEN);
       }
       else if (typeCode==36)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.RUNE_KEEPER);
       }
       else if (typeCode==38)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BEORNING);
       }
       else if (typeCode==40)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BRAWLER);
       }
       else if (typeCode==41)
       {
-        type=DeedType.CLASS;
+        type=_deedTypeEnum.getByKey("CLASS");
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CORSAIR);
       }
       else if (typeCode==34)
       {
-        type=DeedType.EVENT;
+        type=_deedTypeEnum.getByKey("EVENT");
       }
       else if (typeCode==1)
       {
-        type=DeedType.EXPLORER;
+        type=_deedTypeEnum.getByKey("EXPLORER");
       }
       else if (typeCode==33)
       {
-        type=DeedType.LORE;
+        type=_deedTypeEnum.getByKey("LORE");
       }
       else if (typeCode==25)
       {
-        type=DeedType.RACE;
+        type=_deedTypeEnum.getByKey("RACE");
       }
       else if (typeCode==11)
       {
-        type=DeedType.REPUTATION;
+        type=_deedTypeEnum.getByKey("REPUTATION");
       }
       else if (typeCode==20)
       {
-        type=DeedType.SLAYER;
+        type=_deedTypeEnum.getByKey("SLAYER");
       }
       else
       {
