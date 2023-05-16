@@ -50,6 +50,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -121,6 +122,7 @@ public class MainDatEnumsLoader
     // Custom enums
      buildGenderEnum();
      buildDeedTypeEnum();
+     buildBindingEnum();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -278,6 +280,19 @@ public class MainDatEnumsLoader
     handleCustomEntry(lotroEnum,i18n,104,enumName+".LORE","LORE",0);
     handleCustomEntry(lotroEnum,i18n,105,enumName+".REPUTATION","REPUTATION",0);
     handleCustomEntry(lotroEnum,i18n,106,enumName+".SLAYER","SLAYER",0);
+    saveEnumFile(lotroEnum,implClass,i18n);
+  }
+
+  private void buildBindingEnum()
+  {
+    Class<ItemBinding> implClass=ItemBinding.class;
+    LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,"ItemBinding",implClass);
+    String labelsSetName="enum-"+implClass.getSimpleName();
+    I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
+    handleCustomEntry(lotroEnum,i18n,100,"BIND_ON_EQUIP","BIND_ON_EQUIP",0);
+    handleCustomEntry(lotroEnum,i18n,101,"BIND_ON_ACQUIRE","BIND_ON_ACQUIRE",0);
+    handleCustomEntry(lotroEnum,i18n,102,"BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE",0);
+    handleCustomEntry(lotroEnum,i18n,103,"NONE","NONE",0);
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
