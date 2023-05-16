@@ -286,13 +286,14 @@ public class MainDatEnumsLoader
   private void buildBindingEnum()
   {
     Class<ItemBinding> implClass=ItemBinding.class;
-    LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,"ItemBinding",implClass);
+    String enumName="ItemBinding";
+    LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,enumName,implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    handleCustomEntry(lotroEnum,i18n,100,"BIND_ON_EQUIP","BIND_ON_EQUIP",0);
-    handleCustomEntry(lotroEnum,i18n,101,"BIND_ON_ACQUIRE","BIND_ON_ACQUIRE",0);
-    handleCustomEntry(lotroEnum,i18n,102,"BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE",0);
-    handleCustomEntry(lotroEnum,i18n,103,"NONE","NONE",0);
+    handleCustomEntry(lotroEnum,i18n,100,enumName+".BIND_ON_EQUIP","BIND_ON_EQUIP",0);
+    handleCustomEntry(lotroEnum,i18n,101,enumName+".BIND_ON_ACQUIRE","BIND_ON_ACQUIRE",0);
+    handleCustomEntry(lotroEnum,i18n,102,enumName+".BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE",0);
+    handleCustomEntry(lotroEnum,i18n,103,enumName+".NONE","NONE",0);
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
