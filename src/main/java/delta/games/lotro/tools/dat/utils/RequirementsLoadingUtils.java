@@ -6,10 +6,16 @@ import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
+import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.requirements.FactionRequirement;
+import delta.games.lotro.common.requirements.ProfessionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.crafting.CraftingLevel;
+import delta.games.lotro.lore.crafting.CraftingSystem;
+import delta.games.lotro.lore.crafting.Profession;
+import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 
@@ -128,6 +134,45 @@ public class RequirementsLoadingUtils
       else
       {
         LOGGER.debug("Incomplete faction requirement: factionId="+factionId+", tier="+tier);
+      }
+    }
+  }
+
+  /**
+   * Load profession requirement.
+   * @param properties Source properties.
+   * @param requirements Storage for loaded data.
+   */
+  public static void loadRequiredProfession(PropertiesSet properties, UsageRequirement requirements)
+  {
+    Integer professionId=(Integer)properties.getProperty("Usage_RequiredCraftProfession");
+    if (professionId!=null)
+    {
+      Professions professions=CraftingSystem.getInstance().getData().getProfessionsRegistry();
+      Profession profession=professions.getProfessionById(professionId.intValue());
+      if (profession!=null)
+      {
+        // For permission blob (DefaultPermissionBlobStruct)
+        Integer proficiency=(Integer)properties.getProperty("Usage_RequiredCraftProficiency");
+        CraftTier tier=null;
+        if (proficiency!=null)
+        {
+          CraftingLevel level=profession.getByTier(proficiency.intValue());
+          tier=level.getCraftTier();
+        }
+        // For items
+        proficiency=(Integer)properties.getProperty("Usage_RequiredCraftTier");
+        if (proficiency!=null)
+        {
+          CraftingLevel level=profession.getByTier(proficiency.intValue());
+          tier=level.getCraftTier();
+        }
+        ProfessionRequirement professionRequirement=new ProfessionRequirement(profession,tier);
+        requirements.setProfessionRequirement(professionRequirement);
+      }
+      else
+      {
+        LOGGER.warn("Profession not found: "+professionId);
       }
     }
   }

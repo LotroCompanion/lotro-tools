@@ -25,6 +25,8 @@ public class UsageRequirementsLoader
     RequirementsLoadingUtils.loadRequiredClasses(permissions,storage);
     // - faction
     RequirementsLoadingUtils.loadRequiredFaction(permissions,storage);
+    // - profession
+    RequirementsLoadingUtils.loadRequiredProfession(permissions,storage);
     // TODO: Usage_RequiredAccountToken
   }
 }

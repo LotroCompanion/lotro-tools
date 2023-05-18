@@ -120,6 +120,8 @@ public class MainDatLoader
     new MainDatTitlesLoader(_facade).doIt();
     // Factions
     FactionsRegistry factionsRegistry=new MainDatFactionsLoader(_facade).doIt();
+    // Crafting
+    new MainDatCraftingLoader(_facade).doIt();
     // Items
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -142,8 +144,6 @@ public class MainDatLoader
       // Relics
       new MainDatRelicsLoader(_facade).doIt();
     }
-    // Crafting
-    new MainDatCraftingLoader(_facade).doIt();
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
     // Quests and deeds

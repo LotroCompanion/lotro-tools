@@ -279,6 +279,8 @@ public class MainDatItemsLoader
       RequirementsLoadingUtils.loadRequiredRaces(properties,item.getUsageRequirements());
       // - faction
       RequirementsLoadingUtils.loadRequiredFaction(properties,item.getUsageRequirements());
+      // - profession
+      RequirementsLoadingUtils.loadRequiredProfession(properties,item.getUsageRequirements());
       // Stats providers
       DatStatUtils._doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
