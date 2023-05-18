@@ -23,6 +23,7 @@ import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
+import delta.games.lotro.lore.items.ItemBindings;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.ItemDetailsManager;
@@ -223,7 +224,7 @@ public class SkillConstraintsComputer
       UsageRequirement itemReq=null;
       //System.out.println("\tItem: "+item);
       ItemBinding binding=item.getBinding();
-      if (binding==ItemBinding.BIND_ON_ACQUIRE)
+      if (binding==ItemBindings.BIND_ON_ACQUIRE)
       {
         itemReq=analyzeRequirements(item.getUsageRequirements());
       }

@@ -39,6 +39,7 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
+import delta.games.lotro.lore.items.ItemBindings;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
@@ -895,12 +896,12 @@ public class MainDatItemsLoader
       Integer bindToAccount=(Integer)properties.getProperty("Inventory_BindToAccount");
       if ((bindToAccount!=null) && (bindToAccount.intValue()==1))
       {
-        return ItemBinding.BOUND_TO_ACCOUNT_ON_ACQUIRE;
+        return ItemBindings.BOUND_TO_ACCOUNT_ON_ACQUIRE;
       }
-      return ItemBinding.BIND_ON_ACQUIRE;
+      return ItemBindings.BIND_ON_ACQUIRE;
     }
     Integer bindOnEquip=(Integer)properties.getProperty("Inventory_BindOnEquip");
-    if ((bindOnEquip!=null) && (bindOnEquip.intValue()==1)) return ItemBinding.BIND_ON_EQUIP;
+    if ((bindOnEquip!=null) && (bindOnEquip.intValue()==1)) return ItemBindings.BIND_ON_EQUIP;
     return null;
   }
 
