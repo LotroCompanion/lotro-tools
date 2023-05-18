@@ -116,16 +116,19 @@ public class MainDatItemsLoader
   private LegaciesLoader _legaciesLoader;
   private ItemValueLoader _valueLoader;
   private Map<Integer,Integer> _itemLevelOffsets;
-  private LotroEnum<SocketType> _socketTypes;
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
-  private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
   private ItemSortingDataLoader _sortDataLoader;
-  private LotroEnum<ItemClass> _itemClassEnum;
-  private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
   private boolean _live;
+
+  // Enums
+  private LotroEnum<SocketType> _socketTypes;
+  private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
+  private LotroEnum<ItemClass> _itemClassEnum;
+  private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
+  private LotroEnum<ItemSturdiness> _itemSturdinessEnum;
 
   /**
    * Constructor.
@@ -140,16 +143,18 @@ public class MainDatItemsLoader
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
-    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
-    _socketTypes=enumsRegistry.get(SocketType.class);
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
-    _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
     _sortDataLoader=new ItemSortingDataLoader(facade);
-    _itemClassEnum=LotroEnumsRegistry.getInstance().get(ItemClass.class);
-    _equipmentCategoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
     _detailsLoader=new ItemDetailsLoader(_facade);
     _cosmeticLoader=new CosmeticLoader();
+    // Enums
+    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    _socketTypes=enumsRegistry.get(SocketType.class);
+    _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
+    _itemClassEnum=enumsRegistry.get(ItemClass.class);
+    _equipmentCategoryEnum=enumsRegistry.get(EquipmentCategory.class);
+    _itemSturdinessEnum=enumsRegistry.get(ItemSturdiness.class);
   }
 
   private Item load(int indexDataId, int type)
@@ -267,7 +272,8 @@ public class MainDatItemsLoader
       Integer durabilityEnum=(Integer)properties.getProperty("Item_DurabilityEnum");
       if (durabilityEnum!=null)
       {
-        item.setSturdiness(getSturdiness(durabilityEnum.intValue()));
+        ItemSturdiness itemSturdiness=_itemSturdinessEnum.getEntry(durabilityEnum.intValue());
+        item.setSturdiness(itemSturdiness);
       }
       // Description
       String description=_i18n.getStringProperty(properties,"Description",I18nUtils.OPTION_REMOVE_MARKS);
@@ -874,20 +880,6 @@ public class MainDatItemsLoader
     if (quality==ItemQuality.UNCOMMON) return 4;
     if (quality==ItemQuality.COMMON) return 5;
     return 0;
-  }
-
-  private ItemSturdiness getSturdiness(int durabilityEnum)
-  {
-    //{0=Undef, 1=Substantial, 2=Brittle, 3=Normal, 4=Tough, 5=Flimsy, 6=, 7=Weak}
-    //if (durabilityEnum==0) return ItemSturdiness.UNDEFINED;
-    if (durabilityEnum==1) return ItemSturdiness.SUBSTANTIAL;
-    if (durabilityEnum==2) return ItemSturdiness.BRITTLE;
-    if (durabilityEnum==3) return ItemSturdiness.NORMAL;
-    if (durabilityEnum==4) return ItemSturdiness.TOUGH;
-    //if (durabilityEnum==5) return ItemSturdiness.FLIMSY;
-    //if (durabilityEnum==6) return ???;
-    if (durabilityEnum==7) return ItemSturdiness.WEAK;
-    return null;
   }
 
   private ItemBinding getBinding(PropertiesSet properties)

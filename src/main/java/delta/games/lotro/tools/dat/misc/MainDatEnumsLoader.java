@@ -51,6 +51,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.ItemBinding;
+import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -119,6 +120,7 @@ public class MainDatEnumsLoader
     loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
     loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
+    loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
     // Custom enums
      buildGenderEnum();
      buildDeedTypeEnum();
@@ -227,6 +229,10 @@ public class MainDatEnumsLoader
     {
       return getDamageTypeKey(code);
     }
+    else if (implClass==ItemSturdiness.class)
+    {
+      return getItemSturdinessKey(code);
+    }
     return null;
   }
 
@@ -252,7 +258,18 @@ public class MainDatEnumsLoader
     if (code==64) return "LIGHT";
     if (code==512) return "LIGHTNING";
     if (code==256) return "FROST";
-    return "";
+    return null;
+  }
+
+  private String getItemSturdinessKey(int code)
+  {
+    if (code==1) return "SUBSTANTIAL";
+    if (code==2) return "BRITTLE";
+    if (code==3) return "NORMAL";
+    if (code==4) return "TOUGH";
+    if (code==5) return "FLIMSY";
+    if (code==7) return "WEAK";
+    return null;
   }
 
   private void buildGenderEnum()
