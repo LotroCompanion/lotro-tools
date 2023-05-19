@@ -6,6 +6,8 @@ import java.util.Set;
 
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.ArmourTypes;
+import delta.games.lotro.lore.items.ShieldTypes;
 
 /**
  * Utility methods related to armour types.
@@ -36,17 +38,22 @@ public class ArmourTypesUtils
     return ret;
   }
 
-  private static ArmourType getArmourType(int index)
+  /**
+   * Get an armour type from an equipment category code.
+   * @param code Code to use.
+   * @return An armour type or <code>null</code>.
+   */
+  public static ArmourType getArmourType(int code)
   {
     // Shields
-    if (index==11) return ArmourType.HEAVY_SHIELD;
-    if (index==17) return ArmourType.SHIELD;
-    if (index==40) return ArmourType.WARDEN_SHIELD;
+    if (code==11) return ShieldTypes.HEAVY_SHIELD;
+    if (code==17) return ShieldTypes.SHIELD;
+    if (code==40) return ShieldTypes.WARDEN_SHIELD;
     // Armour
-    if (index==9) return ArmourType.MEDIUM;
-    if (index==10) return ArmourType.HEAVY;
-    if (index==18) return ArmourType.LIGHT;
-    if (index==31) return ArmourType.LIGHT; // Cloak
+    if (code==9) return ArmourTypes.MEDIUM;
+    if (code==10) return ArmourTypes.HEAVY;
+    if (code==18) return ArmourTypes.LIGHT;
+    if (code==31) return ArmourTypes.LIGHT; // Cloak
     return null;
   }
 }

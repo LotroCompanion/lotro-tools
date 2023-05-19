@@ -43,6 +43,7 @@ import delta.games.lotro.lore.items.ItemBindings;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
+import delta.games.lotro.lore.items.ShieldTypes;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.carryalls.CarryAll;
@@ -66,6 +67,7 @@ import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
+import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
@@ -542,7 +544,7 @@ public class MainDatItemsLoader
     {
       Armour armour=(Armour)item;
       ArmourType armourType=armour.getArmourType();
-      if ((armourType==ArmourType.HEAVY_SHIELD) || (armourType==ArmourType.SHIELD) || (armourType==ArmourType.WARDEN_SHIELD))
+      if ((armourType==ShieldTypes.HEAVY_SHIELD) || (armourType==ShieldTypes.SHIELD) || (armourType==ShieldTypes.WARDEN_SHIELD))
       {
         // +10% Ranged defence
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
@@ -775,7 +777,7 @@ public class MainDatItemsLoader
   {
     int equipmentCategoryCode=getEquipmentCategory(properties);
     WeaponType weaponType=DatEnumsUtils.getWeaponTypeFromEquipmentCategory(equipmentCategoryCode);
-    ArmourType armourType=DatEnumsUtils.getArmourTypeFromEquipmentCategory(equipmentCategoryCode);
+    ArmourType armourType=ArmourTypesUtils.getArmourType(equipmentCategoryCode);
     // Legendary stuff?
     Integer isAdvancementItem=(Integer)properties.getProperty("ItemAdvancement_Item");
     boolean isLegendary=((isAdvancementItem!=null) && (isAdvancementItem.intValue()==1));

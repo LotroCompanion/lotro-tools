@@ -49,6 +49,7 @@ import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
+import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemSturdiness;
@@ -121,10 +122,30 @@ public class MainDatEnumsLoader
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
     loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
     loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
+    // Derivated enums
+    // From EquipmentCategory:
+    // - ArmourType
+    {
+      int[] sourceCodes=new int[] {
+          // Armour types
+          10, 9, 18,
+          // Shield types
+          40, 11, 17
+      };
+      int[] codes=new int[] {
+          2,1,0,5,4,3
+      };
+      String[] keys={
+          "HEAVY", "MEDIUM", "LIGHT",
+          "WARDEN_SHIELD", "HEAVY_SHIELD", "SHIELD"
+      };
+      buildSubEnum(587202636,"ArmourType",ArmourType.class,sourceCodes,codes,keys);
+    }
+
     // Custom enums
-     buildGenderEnum();
-     buildDeedTypeEnum();
-     buildBindingEnum();
+    buildGenderEnum();
+    buildDeedTypeEnum();
+    buildBindingEnum();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -147,6 +168,33 @@ public class MainDatEnumsLoader
         lotroEnum.registerEntry(entry);
       }
       handleAdditionalEntries(i18n,enumId,lotroEnum);
+      saveEnumFile(lotroEnum,implClass,i18n);
+    }
+    else
+    {
+      LOGGER.warn("Could not load enum: "+name);
+    }
+  }
+
+  private <T extends LotroEnumEntry> void buildSubEnum(int sourceEnumId, String name, Class<T> implClass,
+      int[] sourceCodes, int[] codes, String[] keys)
+  {
+    LotroEnum<T> lotroEnum=new LotroEnum<T>(0,name,implClass);
+    EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(sourceEnumId);
+    if (enumMapper!=null)
+    {
+      String labelsSetName="enum-"+implClass.getSimpleName();
+      I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
+      int nbCodes=sourceCodes.length;
+      for(int i=0;i<nbCodes;i++)
+      {
+        int sourceCode=sourceCodes[i];
+        int code=codes[i];
+        String key=keys[i];
+        String label=i18n.getEnumValue(enumMapper,sourceCode,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+        T entry=lotroEnum.buildEntryInstance(code,key,label);
+        lotroEnum.registerEntry(entry);
+      }
       saveEnumFile(lotroEnum,implClass,i18n);
     }
     else

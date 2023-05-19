@@ -32,6 +32,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.ArmourTypes;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
@@ -148,9 +149,9 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
   {
     // AdvTable_ArmorDefense_Points_CalcType: 14 (HeavyArmorDefense)
     // AdvTable_ArmorDefense_Points_NonCommon_CalcType: 14 (HeavyArmorDefense)
-    if (calcType==12) return ArmourType.LIGHT;
-    if (calcType==13) return ArmourType.MEDIUM;
-    if (calcType==14) return ArmourType.HEAVY;
+    if (calcType==12) return ArmourTypes.LIGHT;
+    if (calcType==13) return ArmourTypes.MEDIUM;
+    if (calcType==14) return ArmourTypes.HEAVY;
     return null;
   }
 

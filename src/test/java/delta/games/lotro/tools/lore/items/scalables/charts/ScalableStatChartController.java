@@ -26,6 +26,7 @@ import org.jfree.ui.RectangleEdge;
 
 import delta.common.ui.swing.GuiFactory;
 import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.ArmourTypes;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemQuality;
 
@@ -194,7 +195,7 @@ public class ScalableStatChartController
    */
   public static void main(String[] args)
   {
-    ArmourType[] types={ArmourType.HEAVY, ArmourType.MEDIUM, ArmourType.LIGHT};
+    ArmourType[] types={ArmourTypes.HEAVY, ArmourTypes.MEDIUM, ArmourTypes.LIGHT};
     EquipmentLocation[] locations={EquipmentLocation.FEET, EquipmentLocation.LEGS, EquipmentLocation.CHEST,
         EquipmentLocation.SHOULDER, EquipmentLocation.HEAD, EquipmentLocation.HAND, EquipmentLocation.BACK
     };
