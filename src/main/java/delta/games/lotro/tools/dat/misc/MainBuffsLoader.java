@@ -97,6 +97,9 @@ public class MainBuffsLoader
     // Veteran Determination
     loadBuff(buffs,1879139404,null);
 
+    // Guardian's Ward
+    loadBuff(buffs,1879060192,null);
+
     return buffs;
   }
 
