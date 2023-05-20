@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import delta.common.utils.misc.IntegerHolder;
+import delta.games.lotro.common.enums.comparator.LotroEnumEntryNameComparator;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -16,7 +17,6 @@ import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.comparators.ArmourTypeComparator;
 import delta.games.lotro.lore.items.comparators.EquipmentLocationComparator;
 import delta.games.lotro.lore.items.comparators.ItemQualityComparator;
-import delta.games.lotro.lore.items.comparators.WeaponTypeComparator;
 
 /**
  * Computes and display statistics on a collection of items.
@@ -188,7 +188,7 @@ public class ItemStatistics
     // Weapons
     System.out.println("Weapons: " + _weaponsCount);
     List<WeaponType> weaponTypes=new ArrayList<WeaponType>(_weaponsByType.keySet());
-    Collections.sort(weaponTypes,new WeaponTypeComparator());
+    Collections.sort(weaponTypes,new LotroEnumEntryNameComparator<WeaponType>());
     for(WeaponType weaponType : weaponTypes)
     {
       IntegerHolder count=_weaponsByType.get(weaponType);

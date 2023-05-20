@@ -93,25 +93,6 @@ public class DatEnumsUtils
    */
   public static WeaponType getWeaponTypeFromEquipmentCategory(int code)
   {
-    if (code==3) return WeaponType.TWO_HANDED_SWORD;
-    if (code==4) return WeaponType.TWO_HANDED_CLUB;
-    //if (code==5) return WeaponType.TWO_HANDED_MACE;
-    if (code==6) return WeaponType.TWO_HANDED_AXE;
-    if (code==8) return WeaponType.BOW;
-    if (code==12) return WeaponType.ONE_HANDED_HAMMER;
-    if (code==13) return WeaponType.SPEAR;
-    if (code==14) return WeaponType.CROSSBOW;
-    if (code==15) return WeaponType.TWO_HANDED_HAMMER;
-    if (code==16) return WeaponType.HALBERD;
-    if (code==20) return WeaponType.DAGGER;
-    if (code==22) return WeaponType.STAFF;
-    if (code==24) return WeaponType.ONE_HANDED_AXE;
-    if (code==26) return WeaponType.ONE_HANDED_CLUB;
-    if (code==27) return WeaponType.ONE_HANDED_MACE;
-    if (code==28) return WeaponType.ONE_HANDED_SWORD;
-    if (code==39) return WeaponType.RUNE_STONE;
-    if (code==41) return WeaponType.JAVELIN;
-    if (code==48) return WeaponType.BATTLE_GAUNTLETS;
-    return null;
+    return LotroEnumsRegistry.getInstance().get(WeaponType.class).getEntry(code);
   }
 }

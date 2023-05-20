@@ -53,6 +53,7 @@ import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemSturdiness;
+import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -141,6 +142,19 @@ public class MainDatEnumsLoader
       };
       buildSubEnum(587202636,"ArmourType",ArmourType.class,sourceCodes,codes,keys);
     }
+    // - WeaponType
+    {
+      int[] sourceCodes=new int[] {
+          28, 3, 24, 6, 12, 15, 26, 4, 27, 5, 20, 22, 16, 8, 14, 41, 13, 39, 48
+      };
+      String[] keys={
+          "ONE_HANDED_SWORD", "TWO_HANDED_SWORD", "ONE_HANDED_AXE", "TWO_HANDED_AXE",
+          "ONE_HANDED_HAMMER", "TWO_HANDED_HAMMER", "ONE_HANDED_CLUB", "TWO_HANDED_CLUB",
+          "ONE_HANDED_MACE", "TWO_HANDED_MACE",
+          "DAGGER", "STAFF", "HALBERD", "BOW", "CROSSBOW", "JAVELIN", "SPEAR", "RUNE_STONE","BATTLE_GAUNTLETS"
+      };
+      buildSubEnum(587202636,"WeaponType",WeaponType.class,sourceCodes,null,keys);
+    }
 
     // Custom enums
     buildGenderEnum();
@@ -189,7 +203,7 @@ public class MainDatEnumsLoader
       for(int i=0;i<nbCodes;i++)
       {
         int sourceCode=sourceCodes[i];
-        int code=codes[i];
+        int code=(codes!=null)?codes[i]:sourceCodes[i];
         String key=keys[i];
         String label=i18n.getEnumValue(enumMapper,sourceCode,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
         T entry=lotroEnum.buildEntryInstance(code,key,label);

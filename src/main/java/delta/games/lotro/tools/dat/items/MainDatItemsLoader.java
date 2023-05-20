@@ -46,6 +46,7 @@ import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.ShieldTypes;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.WeaponTypes;
 import delta.games.lotro.lore.items.carryalls.CarryAll;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.Legendary;
@@ -527,13 +528,13 @@ public class MainDatItemsLoader
     {
       Weapon weapon=(Weapon)item;
       WeaponType weaponType=weapon.getWeaponType();
-      if (weaponType==WeaponType.ONE_HANDED_SWORD)
+      if (weaponType==WeaponTypes.ONE_HANDED_SWORD)
       {
         // +1% parry
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,1);
         statsProvider.addStatProvider(provider);
       }
-      else if (weaponType==WeaponType.TWO_HANDED_SWORD)
+      else if (weaponType==WeaponTypes.TWO_HANDED_SWORD)
       {
         // +2% parry
         ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,2);
