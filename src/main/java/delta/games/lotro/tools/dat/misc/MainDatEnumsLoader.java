@@ -52,6 +52,7 @@ import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.ItemBinding;
+import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -123,6 +124,7 @@ public class MainDatEnumsLoader
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
     loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
     loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
+    loadEnum(587202663,"ItemQualities",ItemQuality.class); // 0x23000067
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType
@@ -295,6 +297,10 @@ public class MainDatEnumsLoader
     {
       return getItemSturdinessKey(code);
     }
+    else if (implClass==ItemQuality.class)
+    {
+      return getItemQualityKey(code);
+    }
     return null;
   }
 
@@ -331,6 +337,16 @@ public class MainDatEnumsLoader
     if (code==4) return "TOUGH";
     if (code==5) return "FLIMSY";
     if (code==7) return "WEAK";
+    return null;
+  }
+
+  private String getItemQualityKey(int code)
+  {
+    if (code==1) return "LEGENDARY";
+    if (code==2) return "RARE";
+    if (code==3) return "INCOMPARABLE";
+    if (code==4) return "UNCOMMON";
+    if (code==5) return "COMMON";
     return null;
   }
 

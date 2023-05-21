@@ -28,6 +28,7 @@ import delta.common.ui.swing.GuiFactory;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ArmourTypes;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.ItemQualities;
 import delta.games.lotro.lore.items.ItemQuality;
 
 /**
@@ -152,7 +153,7 @@ public class ScalableStatChartController
 
   private XYSeriesCollection createDataset()
   {
-    ItemQuality[] qualities={ ItemQuality.UNCOMMON, ItemQuality.RARE, ItemQuality.INCOMPARABLE, ItemQuality.LEGENDARY};
+    ItemQuality[] qualities={ ItemQualities.UNCOMMON, ItemQualities.RARE, ItemQualities.INCOMPARABLE, ItemQualities.LEGENDARY};
     XYSeriesCollection data=new XYSeriesCollection();
     for(ItemQuality quality : qualities)
     {

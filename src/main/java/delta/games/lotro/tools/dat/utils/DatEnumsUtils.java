@@ -33,12 +33,7 @@ public class DatEnumsUtils
    */
   public static ItemQuality getQuality(int qualityCode)
   {
-    if (qualityCode==1) return ItemQuality.LEGENDARY;
-    if (qualityCode==2) return ItemQuality.RARE;
-    if (qualityCode==3) return ItemQuality.INCOMPARABLE;
-    if (qualityCode==4) return ItemQuality.UNCOMMON;
-    if (qualityCode==5) return ItemQuality.COMMON;
-    return null;
+    return LotroEnumsRegistry.getInstance().get(ItemQuality.class).getEntry(qualityCode);
   }
 
   /**

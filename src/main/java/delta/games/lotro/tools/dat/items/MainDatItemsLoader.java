@@ -749,7 +749,7 @@ public class MainDatItemsLoader
       Object[] qualityFactors=(Object[])dpsLutProperties.getProperty("Combat_QualityModArray");
       if (qualityFactors!=null)
       {
-        int qualityEnum=getQualityEnum(quality);
+        int qualityEnum=quality.getCode();
         for(int i=0;i<qualityFactors.length;i++)
         {
           PropertiesSet qualityProps=(PropertiesSet)qualityFactors[i];
@@ -873,16 +873,6 @@ public class MainDatItemsLoader
       }
     }
     return ret;
-  }
-
-  private int getQualityEnum(ItemQuality quality)
-  {
-    if (quality==ItemQuality.LEGENDARY) return 1;
-    if (quality==ItemQuality.RARE) return 2;
-    if (quality==ItemQuality.INCOMPARABLE) return 3;
-    if (quality==ItemQuality.UNCOMMON) return 4;
-    if (quality==ItemQuality.COMMON) return 5;
-    return 0;
   }
 
   private ItemBinding getBinding(PropertiesSet properties)
