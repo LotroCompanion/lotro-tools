@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat;
 
 import java.io.File;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
@@ -368,6 +369,7 @@ public class MainDatLoader
   {
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new MainDatLoader(facade).doIt();
     facade.dispose();
   }
