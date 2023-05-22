@@ -141,12 +141,12 @@ public class MainStatsLoader
   private void addLegacyData()
   {
     int index=0;
-    for(OldStatEnum oldStat : OldStatEnum.values())
+    for(String legacyKey : _oldStatsLabels.getKeys())
     {
-      String legacyKey=oldStat.name();
       StatDescription stat=_stats.getByKey(legacyKey);
       if (stat!=null)
       {
+        // Legacy labels
         for(String locale : LOCALE_KEYS)
         {
           int id=stat.getIdentifier();
@@ -166,7 +166,7 @@ public class MainStatsLoader
           }
         }
         // Set percentage
-        stat.setPercentage(oldStat.isPercentage());
+        stat.setPercentage(_oldStatsLabels.isPercentage(legacyKey));
         // Add index
         stat.setIndex(Integer.valueOf(index));
       }
@@ -177,11 +177,7 @@ public class MainStatsLoader
   private void checks()
   {
     // Old STATs
-    Set<String> oldStatsKeys=new HashSet<String>();
-    for(OldStatEnum oldEnum : OldStatEnum.values())
-    {
-      oldStatsKeys.add(oldEnum.getKey());
-    }
+    List<String> oldStatsKeys=_oldStatsLabels.getKeys();
     LOGGER.info("Old stats count: "+oldStatsKeys.size());
     // Well-known stats
     List<StatDescription> wellKnownStats=WellKnownStat.getAllWellKnownStats();
@@ -212,6 +208,7 @@ public class MainStatsLoader
     {
       Set<String> allKnown=new HashSet<String>(wellKnownStatsKeys);
       allKnown.addAll(notWellKnownStatsKeys);
+      allKnown.add("Combat_TacticalDPS_Modifier#1");
       Set<String> oldOrphans=new HashSet<String>(oldStatsKeys);
       oldOrphans.removeAll(allKnown);
       if (oldOrphans.size()>0)
