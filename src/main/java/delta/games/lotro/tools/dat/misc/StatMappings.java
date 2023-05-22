@@ -36,7 +36,6 @@ public class StatMappings
     {
       registerMapping("Combat_Class_CriticalPoints_Unified","CRITICAL_RATING");
     }
-    registerMapping("Combat_Class_CriticalPoints_Unified","CRITICAL_RATING");
     registerMapping("Combat_SuperCritical_Magnitude_PercentAddMod","DEVASTATE_MAGNITUDE_PERCENTAGE");
     registerMapping("Combat_CriticalHitChanceAddMod","CRITICAL_MELEE_PERCENTAGE");
     registerMapping("Combat_RangedCriticalHitChanceAddMod","CRITICAL_RANGED_PERCENTAGE");
