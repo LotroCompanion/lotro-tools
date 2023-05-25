@@ -52,7 +52,7 @@ import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.utils.MobLoader;
-import delta.games.lotro.tools.dat.utils.NpcLoader;
+import delta.games.lotro.tools.dat.utils.NPCUtils;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.tools.dat.utils.ProxyBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -664,10 +664,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer npcId=(Integer)properties.getProperty("QuestEvent_NPCTalk");
     if (npcId!=null)
     {
-      String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
-      Proxy<NpcDescription> proxy=new Proxy<NpcDescription>();
-      proxy.setId(npcId.intValue());
-      proxy.setName(npcName);
+      Proxy<NpcDescription> proxy=NPCUtils.buildNPCProxy(npcId.intValue());
       condition.setProxy(proxy);
     }
     // TODO
@@ -1238,10 +1235,7 @@ QuestEvent_ShowProgressText: 0
     if (wstateClass==WStateClass.NPC)
     {
       int npcId=id.intValue();
-      String npcName=NpcLoader.loadNPC(_facade,npcId);
-      npcProxy=new Proxy<NpcDescription>();
-      npcProxy.setId(npcId);
-      npcProxy.setName(npcName);
+      npcProxy=NPCUtils.buildNPCProxy(npcId);
     }
     else if (wstateClass==WStateClass.MOB)
     {

@@ -14,7 +14,7 @@ import delta.games.lotro.dat.utils.hash.KnownVariablesManager;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatGenericMobLootLoader;
 import delta.games.lotro.tools.dat.agents.mobs.MainDatMobsLoader;
-import delta.games.lotro.tools.dat.agents.npcs.MainDatNpcLoader;
+import delta.games.lotro.tools.dat.agents.npcs.MainDatNPCsLoader;
 import delta.games.lotro.tools.dat.allegiances.MainDatAllegiancesLoader;
 import delta.games.lotro.tools.dat.characters.CharacterClassDataLoader;
 import delta.games.lotro.tools.dat.characters.InitialGearLoader;
@@ -55,6 +55,7 @@ import delta.games.lotro.tools.dat.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.dat.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
+import delta.games.lotro.tools.dat.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
@@ -147,6 +148,8 @@ public class MainDatLoader
     }
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
+    // NPCs
+    new MainDatNPCsLoader(_facade).doIt();
     // Quests and deeds
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
     new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();
@@ -163,7 +166,7 @@ public class MainDatLoader
       new MainDatCollectionsLoader(_facade,rewardsLoader).doIt();
     }
     // Vendors & barterers
-    new MainDatNpcLoader(_facade).doIt();
+    new MainDatTradeLoader(_facade).doIt();
     // Private encounters
     new MainDatPrivateEncountersLoader(_facade).doIt();
     // Instances tree
@@ -305,6 +308,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.DISENCHANTMENTS);
     // Mobs
     deleteFile(GeneratedFiles.MOBS);
+    // NPCs
+    deleteFile(GeneratedFiles.NPCS);
     // Misc icons
     deleteFile(GeneratedFiles.MISC_ICONS);
     deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);

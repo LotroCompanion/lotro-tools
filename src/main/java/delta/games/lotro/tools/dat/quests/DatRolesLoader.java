@@ -14,7 +14,7 @@ import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.lore.quests.dialogs.QuestCompletionComment;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
-import delta.games.lotro.tools.dat.utils.NpcLoader;
+import delta.games.lotro.tools.dat.utils.NPCUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -26,7 +26,6 @@ public class DatRolesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DatRolesLoader.class);
 
-  private DataFacade _facade;
   private I18nUtils _i18n;
   private EnumMapper _questRoleAction;
 
@@ -37,7 +36,6 @@ public class DatRolesLoader
    */
   public DatRolesLoader(DataFacade facade, I18nUtils i18n)
   {
-    _facade=facade;
     _i18n=i18n;
     _questRoleAction=facade.getEnumsManager().getEnumMapper(587202589);
   }
@@ -75,7 +73,8 @@ public class DatRolesLoader
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
         {
-          String npcName=NpcLoader.loadNPC(_facade,npcId.intValue());
+          Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId.intValue());
+          String npcName=npc.getName();
           System.out.println("\tNPC: "+npcName);
         }
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
@@ -232,7 +231,7 @@ public class DatRolesLoader
       else
       {
         int npcId=((Integer)npcObj).intValue();
-        Proxy<NpcDescription> npc=buildNpcProxy(npcId);
+        Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId);
         if (npc.getName()!=null)
         {
           ret.addWho(npc);
@@ -268,20 +267,11 @@ public class DatRolesLoader
       ret=new DialogElement();
       if (npcId!=null)
       {
-        Proxy<NpcDescription> npc=buildNpcProxy(npcId.intValue());
+        Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId.intValue());
         ret.setWho(npc);
       }
       ret.setWhat(successText);
     }
     return ret;
-  }
-
-  private Proxy<NpcDescription> buildNpcProxy(int npcId)
-  {
-    String npcName=NpcLoader.loadNPC(_facade,npcId);
-    Proxy<NpcDescription> npc=new Proxy<NpcDescription>();
-    npc.setId(npcId);
-    npc.setName(npcName);
-    return npc;
   }
 }

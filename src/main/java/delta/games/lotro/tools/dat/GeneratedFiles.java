@@ -330,6 +330,10 @@ public class GeneratedFiles
    */
   public static final File GENERIC_MOB_LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.GENERIC_MOB_LOOTS);
   /**
+   * NPCs.
+   */
+  public static final File NPCS=LotroCoreConfig.getInstance().getFile(DataFiles.NPCS);
+  /**
    * Resources maps.
    */
   public static final File RESOURCES_MAPS=LotroCoreConfig.getInstance().getFile(DataFiles.RESOURCES_MAPS);

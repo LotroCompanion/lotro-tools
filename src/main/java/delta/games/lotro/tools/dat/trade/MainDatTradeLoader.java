@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.agents.npcs;
+package delta.games.lotro.tools.dat.trade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +17,9 @@ import delta.games.lotro.common.requirements.QuestRequirement;
 import delta.games.lotro.common.requirements.QuestStatus;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -40,18 +39,16 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.Proxy;
-import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
- * Get NPC definitions from DAT files.
+ * Get trading data from DAT files.
  * @author DAM
  */
-public class MainDatNpcLoader
+public class MainDatTradeLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatNpcLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(MainDatTradeLoader.class);
 
-  private static final int DEBUG_ID=0;
   private DataFacade _facade;
   private ItemsManager _itemsManager;
   // Barterers
@@ -65,7 +62,7 @@ public class MainDatNpcLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatNpcLoader(DataFacade facade)
+  public MainDatTradeLoader(DataFacade facade)
   {
     _facade=facade;
     _itemsManager=ItemsManager.getInstance();
@@ -75,8 +72,9 @@ public class MainDatNpcLoader
     _sells=new HashMap<Integer,SellList>();
   }
 
-  private void handleNpc(int npcId)
+  private void handleNpc(NpcDescription npc)
   {
+    int npcId=npc.getIdentifier();
     // Ignore test NPC
     if (npcId==1879074078)
     {
@@ -85,18 +83,14 @@ public class MainDatNpcLoader
     PropertiesSet properties=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      if (npcId==DEBUG_ID)
-      {
-        System.out.println(properties.dump());
-      }
       // Barter
-      BarterNpc barterer=loadBarterData(npcId,properties);
+      BarterNpc barterer=loadBarterData(npc,properties);
       if (barterer!=null)
       {
         _barterers.add(barterer);
       }
       // Vendor
-      VendorNpc vendor=loadVendorData(npcId,properties);
+      VendorNpc vendor=loadVendorData(npc,properties);
       if (vendor!=null)
       {
         _vendors.add(vendor);
@@ -108,7 +102,7 @@ public class MainDatNpcLoader
     }
   }
 
-  private BarterNpc loadBarterData(int npcId, PropertiesSet properties)
+  private BarterNpc loadBarterData(NpcDescription npc, PropertiesSet properties)
   {
     BarterNpc barterer=null;
     // Barter_Profile_UseTabs
@@ -123,7 +117,6 @@ public class MainDatNpcLoader
     Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
     if (barterProfiles!=null)
     {
-      NpcDescription npc=buildNpc(npcId,properties);
       barterer=new BarterNpc(npc);
       // Requirements
       loadRequirements(properties,barterer.getRequirements());
@@ -363,14 +356,13 @@ public class MainDatNpcLoader
     return 0;
   }
 
-  private VendorNpc loadVendorData(int npcId, PropertiesSet properties)
+  private VendorNpc loadVendorData(NpcDescription npc, PropertiesSet properties)
   {
     boolean hasVendorData=(properties.getProperty("Vendor_InventoryList")!=null);
     if (!hasVendorData)
     {
       return null;
     }
-    NpcDescription npc=buildNpc(npcId,properties);
     VendorNpc ret=new VendorNpc(npc);
     // Sells lists
     Set<Integer> allSells=new HashSet<Integer>();
@@ -478,36 +470,15 @@ public class MainDatNpcLoader
     return ret;
   }
 
-  private NpcDescription buildNpc(int npcId, PropertiesSet properties)
-  {
-    // Name
-    String npcName=DatUtils.getStringProperty(properties,"Name");
-    npcName=StringUtils.removeMarks(npcName);
-    NpcDescription npc=new NpcDescription(npcId,npcName);
-    // Title
-    String title=DatUtils.getStringProperty(properties,"OccupationTitle");
-    title=StringUtils.fixName(title);
-    npc.setTitle(title);
-    return npc;
-  }
-
   /**
    * Load barter and vendor data.
    */
   public void doIt()
   {
-    // Scan for NPCs
-    for(int i=0x70000000;i<=0x77FFFFFF;i++)
+    NPCsManager npcsManager=NPCsManager.getInstance();
+    for(NpcDescription npc : npcsManager.getNPCs())
     {
-      byte[] data=_facade.loadData(i);
-      if (data!=null)
-      {
-        int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        if (classDefIndex==WStateClass.NPC)
-        {
-          handleNpc(i);
-        }
-      }
+      handleNpc(npc);
     }
     // Save data
     save();
@@ -528,7 +499,7 @@ public class MainDatNpcLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatNpcLoader(facade).doIt();
+    new MainDatTradeLoader(facade).doIt();
     facade.dispose();
   }
 }
