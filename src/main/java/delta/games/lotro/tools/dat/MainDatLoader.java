@@ -148,6 +148,12 @@ public class MainDatLoader
     }
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
+    // Private encounters
+    new MainDatPrivateEncountersLoader(_facade).doIt();
+    // Containers
+    new MainDatContainerLoader(_facade).doIt();
+    // Mobs
+    new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
     // NPCs
     new MainDatNPCsLoader(_facade).doIt();
     // Quests and deeds
@@ -167,22 +173,17 @@ public class MainDatLoader
     }
     // Vendors & barterers
     new MainDatTradeLoader(_facade).doIt();
-    // Private encounters
-    new MainDatPrivateEncountersLoader(_facade).doIt();
     // Instances tree
     if (live)
     {
       new MainDatInstancesTreeLoader(_facade).doIt();
     }
-    // Containers
-    new MainDatContainerLoader(_facade).doIt();
     // Disenchantment
     if (live)
     {
       new MainDatDisenchantmentsLoader(_facade).doIt();
     }
-    // Mobs
-    new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
+    // Mobs loot
     new MainDatGenericMobLootLoader(_facade,LootsManager.getInstance()).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();

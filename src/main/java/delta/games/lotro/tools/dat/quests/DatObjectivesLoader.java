@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.common.Interactable;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
@@ -664,7 +665,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer npcId=(Integer)properties.getProperty("QuestEvent_NPCTalk");
     if (npcId!=null)
     {
-      Proxy<NpcDescription> proxy=NPCUtils.buildNPCProxy(npcId.intValue());
+      Proxy<Interactable> proxy=NPCUtils.buildInteractableProxy(npcId.intValue());
       condition.setProxy(proxy);
     }
     // TODO
@@ -1228,6 +1229,7 @@ QuestEvent_ShowProgressText: 0
   private ConditionTarget getTarget(Integer id)
   {
     ConditionTarget target=null;
+    // TODO Use an Interactable
     Proxy<NpcDescription> npcProxy=null;
     Proxy<MobDescription> mobProxy=null;
     int wstateClass=LoaderUtils.getWStateClass(_facade,id.intValue());

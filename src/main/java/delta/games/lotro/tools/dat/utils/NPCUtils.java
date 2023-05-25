@@ -1,7 +1,9 @@
 package delta.games.lotro.tools.dat.utils;
 
+import delta.games.lotro.common.Interactable;
 import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
+import delta.games.lotro.lore.utils.InteractableUtils;
 import delta.games.lotro.utils.Proxy;
 
 /**
@@ -24,6 +26,22 @@ public class NPCUtils
     proxy.setId(npcId);
     proxy.setName(npcName);
     proxy.setObject(npc);
+    return proxy;
+  }
+
+  /**
+   * Build a proxy to an interactable.
+   * @param id Object identifier.
+   * @return A proxy.
+   */
+  public static Proxy<Interactable> buildInteractableProxy(int id)
+  {
+    Interactable interactable=InteractableUtils.findInteractable(id);
+    String name=(interactable!=null)?interactable.getName():null;
+    Proxy<Interactable> proxy=new Proxy<Interactable>();
+    proxy.setId(id);
+    proxy.setName(name);
+    proxy.setObject(interactable);
     return proxy;
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.Interactable;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -208,7 +209,7 @@ public class DatRolesLoader
         String npcStr=(String)npcObj;
         if ("QuestDispenser_NPC".equals(npcStr))
         {
-          Proxy<NpcDescription> npc=getQuestBestower(quest);
+          Proxy<Interactable> npc=getQuestBestower(quest);
           if (npc!=null)
           {
             ret.addWho(npc);
@@ -231,7 +232,7 @@ public class DatRolesLoader
       else
       {
         int npcId=((Integer)npcObj).intValue();
-        Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId);
+        Proxy<Interactable> npc=NPCUtils.buildInteractableProxy(npcId);
         if (npc.getName()!=null)
         {
           ret.addWho(npc);
@@ -248,7 +249,7 @@ public class DatRolesLoader
     return ret;
   }
 
-  private Proxy<NpcDescription> getQuestBestower(QuestDescription quest)
+  private Proxy<Interactable> getQuestBestower(QuestDescription quest)
   {
     List<DialogElement> bestowers=quest.getBestowers();
     if (bestowers.size()==1)
@@ -267,7 +268,7 @@ public class DatRolesLoader
       ret=new DialogElement();
       if (npcId!=null)
       {
-        Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId.intValue());
+        Proxy<Interactable> npc=NPCUtils.buildInteractableProxy(npcId.intValue());
         ret.setWho(npc);
       }
       ret.setWhat(successText);
