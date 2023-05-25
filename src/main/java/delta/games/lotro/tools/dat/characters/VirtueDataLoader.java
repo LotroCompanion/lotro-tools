@@ -110,15 +110,6 @@ public class VirtueDataLoader
       traitName="?";
     }
     ret.setName(traitName);
-    // Description
-    String description=DatUtils.getStringProperty(virtueProperties,"Trait_Description");
-    ret.setDescription(description);
-    // Icon
-    Integer iconId=(Integer)virtueProperties.getProperty("Trait_Icon");
-    if (iconId!=null)
-    {
-      ret.setIconId(iconId.intValue());
-    }
     // Rank stat key
     PropertiesRegistry propsRegistry=facade.getPropertiesRegistry();
     int rankPropertyId=((Integer)virtueProperties.getProperty("Trait_Virtue_Rank_PropertyName")).intValue();
