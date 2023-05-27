@@ -19,6 +19,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
@@ -166,10 +167,10 @@ public class MainDatRelicsLoader
   private List<EquipmentLocation> getSlots(int slotsCode)
   {
     List<EquipmentLocation> slots=new ArrayList<EquipmentLocation>();
-    if ((slotsCode&1L<<16)!=0) slots.add(EquipmentLocation.MAIN_HAND);
-    if ((slotsCode&1L<<18)!=0) slots.add(EquipmentLocation.RANGED_ITEM);
-    if ((slotsCode&1L<<20)!=0) slots.add(EquipmentLocation.CLASS_SLOT);
-    if ((slotsCode&1L<<21)!=0) slots.add(EquipmentLocation.BRIDLE);
+    if ((slotsCode&1L<<16)!=0) slots.add(EquipmentLocations.MAIN_HAND);
+    if ((slotsCode&1L<<18)!=0) slots.add(EquipmentLocations.RANGED_ITEM);
+    if ((slotsCode&1L<<20)!=0) slots.add(EquipmentLocations.CLASS_SLOT);
+    if ((slotsCode&1L<<21)!=0) slots.add(EquipmentLocations.BRIDLE);
     return slots;
   }
 

@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.i18n.MultilocalesTranslator;
+import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
@@ -49,6 +50,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
@@ -153,11 +155,28 @@ public class MainDatEnumsLoader
       };
       buildSubEnum(587202636,"WeaponType",WeaponType.class,sourceCodes,null,keys);
     }
+    // From ContainerSlot
+    // - GearSlot
+    {
+      int[] sourceCodes=new int[] {
+          2,3,4,5,6,7,8,
+          9,10,11,12,13,14,15,
+          16,17,18,19,20,21,23,24,25
+      };
+      String[] keys={
+          "HEAD", "BREAST", "LEGS", "HANDS", "FEET", "SHOULDER", "BACK",
+          "LEFT_WRIST", "RIGHT_WRIST", "NECK", "LEFT_FINGER", "RIGHT_FINGER", "LEFT_EAR", "RIGHT_EAR",
+          "POCKET", "MAIN_MELEE", "OTHER_MELEE", "RANGED", "TOOL", "CLASS_ITEM",
+          "MAIN_HAND_AURA", "OFF_HAND_AURA", "RANGED_AURA"
+      };
+      buildSubEnum(587202798,"GearSlot",GearSlot.class,sourceCodes,null,keys);
+    }
 
     // Custom enums
     buildGenderEnum();
     buildDeedTypeEnum();
     buildBindingEnum();
+    buildEquipmentSlotEnum();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -385,6 +404,37 @@ public class MainDatEnumsLoader
     handleCustomEntry(lotroEnum,i18n,101,enumName+".BIND_ON_ACQUIRE","BIND_ON_ACQUIRE",0);
     handleCustomEntry(lotroEnum,i18n,102,enumName+".BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE",0);
     handleCustomEntry(lotroEnum,i18n,103,enumName+".NONE","NONE",0);
+    saveEnumFile(lotroEnum,implClass,i18n);
+  }
+
+  private void buildEquipmentSlotEnum()
+  {
+    Class<EquipmentLocation> implClass=EquipmentLocation.class;
+    String enumName="EquipmentLocation";
+    LotroEnum<EquipmentLocation> lotroEnum=new LotroEnum<EquipmentLocation>(0,enumName,implClass);
+    String labelsSetName="enum-"+implClass.getSimpleName();
+    I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
+    handleCustomEntry(lotroEnum,i18n,0,enumName+".HEAD","HEAD",0);
+    handleCustomEntry(lotroEnum,i18n,1,enumName+".SHOULDER","SHOULDER",0);
+    handleCustomEntry(lotroEnum,i18n,2,enumName+".BACK","BACK",0);
+    handleCustomEntry(lotroEnum,i18n,3,enumName+".CHEST","CHEST",0);
+    handleCustomEntry(lotroEnum,i18n,4,enumName+".HAND","HAND",0);
+    handleCustomEntry(lotroEnum,i18n,5,enumName+".LEGS","LEGS",0);
+    handleCustomEntry(lotroEnum,i18n,6,enumName+".FEET","FEET",0);
+    handleCustomEntry(lotroEnum,i18n,7,enumName+".EAR","EAR",0);
+    handleCustomEntry(lotroEnum,i18n,8,enumName+".NECK","NECK",0);
+    handleCustomEntry(lotroEnum,i18n,9,enumName+".WRIST","WRIST",0);
+    handleCustomEntry(lotroEnum,i18n,10,enumName+".FINGER","FINGER",0);
+    handleCustomEntry(lotroEnum,i18n,11,enumName+".POCKET","POCKET",0);
+    handleCustomEntry(lotroEnum,i18n,12,enumName+".MAIN_HAND","MAIN_HAND",0);
+    handleCustomEntry(lotroEnum,i18n,13,enumName+".OFF_HAND","OFF_HAND",0);
+    handleCustomEntry(lotroEnum,i18n,14,enumName+".RANGED_ITEM","RANGED_ITEM",0);
+    handleCustomEntry(lotroEnum,i18n,15,enumName+".TOOL","TOOL",0);
+    handleCustomEntry(lotroEnum,i18n,16,enumName+".CLASS_SLOT","CLASS_SLOT",0);
+    handleCustomEntry(lotroEnum,i18n,17,enumName+".BRIDLE","BRIDLE",0);
+    handleCustomEntry(lotroEnum,i18n,18,enumName+".MAIN_HAND_AURA","MAIN_HAND_AURA",0);
+    handleCustomEntry(lotroEnum,i18n,19,enumName+".OFF_HAND_AURA","OFF_HAND_AURA",0);
+    handleCustomEntry(lotroEnum,i18n,20,enumName+".RANGED_AURA","RANGED_AURA",0);
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 

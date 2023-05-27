@@ -29,6 +29,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.AbstractLegacy;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
@@ -363,7 +364,7 @@ public class LegaciesLoader
       //System.out.println("List: "+progressionListId+", weight="+weight);
 
       Boolean major=null;
-      if (slot!=EquipmentLocation.BRIDLE)
+      if (slot!=EquipmentLocations.BRIDLE)
       {
         if (index==0) major=Boolean.FALSE;
         if (index==5) major=Boolean.TRUE;
@@ -474,10 +475,10 @@ public class LegaciesLoader
 
   private EquipmentLocation getSlotFromCode(int code)
   {
-    if (code==0x10000) return EquipmentLocation.MAIN_HAND;
-    else if (code==0x40000) return EquipmentLocation.RANGED_ITEM;
-    else if (code==0x100000) return EquipmentLocation.CLASS_SLOT;
-    else if (code==0x200000) return EquipmentLocation.BRIDLE;
+    if (code==0x10000) return EquipmentLocations.MAIN_HAND;
+    else if (code==0x40000) return EquipmentLocations.RANGED_ITEM;
+    else if (code==0x100000) return EquipmentLocations.CLASS_SLOT;
+    else if (code==0x200000) return EquipmentLocations.BRIDLE;
     return null;
   }
 
@@ -515,20 +516,20 @@ public class LegaciesLoader
   private EquipmentLocation getSlotFromCombatPropertyType(int code)
   {
     if (code==3) return null; // TacticalDPS
-    if (code==6) return EquipmentLocation.MAIN_HAND; // Minstrel_TacticalDPS
-    if (code==22) return EquipmentLocation.MAIN_HAND; // Loremaster_TacticalDPS
-    if (code==15) return EquipmentLocation.CLASS_SLOT; // Guardian_TacticalDPS
-    if (code==5) return EquipmentLocation.MAIN_HAND; // Runekeeper_TacticalDPS
-    if (code==7) return EquipmentLocation.CLASS_SLOT; // Minstrel_HealingPS
-    if (code==21) return EquipmentLocation.CLASS_SLOT; // Loremaster_HealingPS
-    if (code==8) return EquipmentLocation.CLASS_SLOT; // Captain_HealingPS
-    if (code==13) return EquipmentLocation.CLASS_SLOT; // Runekeeper_HealingPS
-    if (code==16) return EquipmentLocation.CLASS_SLOT; // Champion_IncomingHealing
-    if (code==23) return EquipmentLocation.CLASS_SLOT; // Burglar_IncomingHealing
-    if (code==25) return EquipmentLocation.CLASS_SLOT; // Champion_IncomingHealing_65
-    if (code==24) return EquipmentLocation.CLASS_SLOT; // Burglar_IncomingHealing_65
-    if (code==26) return EquipmentLocation.BRIDLE; // Mounted_MomentumMod
-    if (code==28) return EquipmentLocation.CLASS_SLOT; // Beorning_HealingPS
+    if (code==6) return EquipmentLocations.MAIN_HAND; // Minstrel_TacticalDPS
+    if (code==22) return EquipmentLocations.MAIN_HAND; // Loremaster_TacticalDPS
+    if (code==15) return EquipmentLocations.CLASS_SLOT; // Guardian_TacticalDPS
+    if (code==5) return EquipmentLocations.MAIN_HAND; // Runekeeper_TacticalDPS
+    if (code==7) return EquipmentLocations.CLASS_SLOT; // Minstrel_HealingPS
+    if (code==21) return EquipmentLocations.CLASS_SLOT; // Loremaster_HealingPS
+    if (code==8) return EquipmentLocations.CLASS_SLOT; // Captain_HealingPS
+    if (code==13) return EquipmentLocations.CLASS_SLOT; // Runekeeper_HealingPS
+    if (code==16) return EquipmentLocations.CLASS_SLOT; // Champion_IncomingHealing
+    if (code==23) return EquipmentLocations.CLASS_SLOT; // Burglar_IncomingHealing
+    if (code==25) return EquipmentLocations.CLASS_SLOT; // Champion_IncomingHealing_65
+    if (code==24) return EquipmentLocations.CLASS_SLOT; // Burglar_IncomingHealing_65
+    if (code==26) return EquipmentLocations.BRIDLE; // Mounted_MomentumMod
+    if (code==28) return EquipmentLocations.CLASS_SLOT; // Beorning_HealingPS
     return null;
   }
 
@@ -630,7 +631,7 @@ public class LegaciesLoader
     }
     // Guardian belts do have a special stat
     
-    if ((WellKnownCharacterClassKeys.GUARDIAN.equals(characterClass.getKey())) && (slot==EquipmentLocation.CLASS_SLOT))
+    if ((WellKnownCharacterClassKeys.GUARDIAN.equals(characterClass.getKey())) && (slot==EquipmentLocations.CLASS_SLOT))
     {
       StatProvider provider=statsProvider.getStatProvider(0);
       StatsRegistry stats=StatsRegistry.getInstance();

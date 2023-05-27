@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.gear.GearSlot;
+import delta.games.lotro.character.gear.GearSlots;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.ui.UIData;
@@ -81,7 +82,7 @@ public class SlotIconsLoader
             BufferedImage bufferedImage=new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics big = bufferedImage.getGraphics();
             big.drawImage(cropedIcon, 0, 0, null);
-            File to=new File("../lotro-companion/src/main/resources/resources/gui/equipment/"+slot.name()+".png");
+            File to=new File("../lotro-companion/src/main/resources/resources/gui/equipment/"+slot.getKey()+".png");
             try
             {
               ImageIO.write(bufferedImage,"png",to);
@@ -98,29 +99,29 @@ public class SlotIconsLoader
 
   private GearSlot getSlotFromId(String slotId)
   {
-    if ("BackSlotParent".equals(slotId)) return GearSlot.BACK;
-    if ("BootsSlotParent".equals(slotId)) return GearSlot.FEET;
-    if ("Bracelet1SlotParent".equals(slotId)) return GearSlot.LEFT_WRIST;
-    if ("Bracelet2SlotParent".equals(slotId)) return GearSlot.RIGHT_WRIST;
-    if ("Weapon1SlotParent".equals(slotId)) return GearSlot.MAIN_MELEE;
-    if ("Weapon2SlotParent".equals(slotId)) return GearSlot.OTHER_MELEE;
-    if ("WeaponRangedSlotParent".equals(slotId)) return GearSlot.RANGED;
-    if ("Earring1SlotParent".equals(slotId)) return GearSlot.LEFT_EAR;
-    if ("Earring2SlotParent".equals(slotId)) return GearSlot.RIGHT_EAR;
-    if ("HeadSlotParent".equals(slotId)) return GearSlot.HEAD;
-    if ("ShoulderSlotParent".equals(slotId)) return GearSlot.SHOULDER;
-    if ("Pocket1SlotParent".equals(slotId)) return GearSlot.POCKET;
-    if ("NecklaceSlotParent".equals(slotId)) return GearSlot.NECK;
-    if ("CraftToolSlotParent".equals(slotId)) return GearSlot.TOOL;
-    if ("ChestSlotParent".equals(slotId)) return GearSlot.BREAST;
-    if ("LegsSlotParent".equals(slotId)) return GearSlot.LEGS;
-    if ("GlovesSlotParent".equals(slotId)) return GearSlot.HANDS;
-    if ("Ring1SlotParent".equals(slotId)) return GearSlot.LEFT_FINGER;
-    if ("Ring2SlotParent".equals(slotId)) return GearSlot.RIGHT_FINGER;
-    if ("ClassSlotParent".equals(slotId)) return GearSlot.CLASS_ITEM;
-    if ("Weapon1FXSlotParent".equals(slotId)) return GearSlot.MAIN_HAND_AURA;
-    if ("Weapon2FXSlotParent".equals(slotId)) return GearSlot.OFF_HAND_AURA;
-    if ("WeaponRangedFXSlotParent".equals(slotId)) return GearSlot.RANGED_AURA;
+    if ("BackSlotParent".equals(slotId)) return GearSlots.BACK;
+    if ("BootsSlotParent".equals(slotId)) return GearSlots.FEET;
+    if ("Bracelet1SlotParent".equals(slotId)) return GearSlots.LEFT_WRIST;
+    if ("Bracelet2SlotParent".equals(slotId)) return GearSlots.RIGHT_WRIST;
+    if ("Weapon1SlotParent".equals(slotId)) return GearSlots.MAIN_MELEE;
+    if ("Weapon2SlotParent".equals(slotId)) return GearSlots.OTHER_MELEE;
+    if ("WeaponRangedSlotParent".equals(slotId)) return GearSlots.RANGED;
+    if ("Earring1SlotParent".equals(slotId)) return GearSlots.LEFT_EAR;
+    if ("Earring2SlotParent".equals(slotId)) return GearSlots.RIGHT_EAR;
+    if ("HeadSlotParent".equals(slotId)) return GearSlots.HEAD;
+    if ("ShoulderSlotParent".equals(slotId)) return GearSlots.SHOULDER;
+    if ("Pocket1SlotParent".equals(slotId)) return GearSlots.POCKET;
+    if ("NecklaceSlotParent".equals(slotId)) return GearSlots.NECK;
+    if ("CraftToolSlotParent".equals(slotId)) return GearSlots.TOOL;
+    if ("ChestSlotParent".equals(slotId)) return GearSlots.BREAST;
+    if ("LegsSlotParent".equals(slotId)) return GearSlots.LEGS;
+    if ("GlovesSlotParent".equals(slotId)) return GearSlots.HANDS;
+    if ("Ring1SlotParent".equals(slotId)) return GearSlots.LEFT_FINGER;
+    if ("Ring2SlotParent".equals(slotId)) return GearSlots.RIGHT_FINGER;
+    if ("ClassSlotParent".equals(slotId)) return GearSlots.CLASS_ITEM;
+    if ("Weapon1FXSlotParent".equals(slotId)) return GearSlots.MAIN_HAND_AURA;
+    if ("Weapon2FXSlotParent".equals(slotId)) return GearSlots.OFF_HAND_AURA;
+    if ("WeaponRangedFXSlotParent".equals(slotId)) return GearSlots.RANGED_AURA;
     return null;
   }
 }

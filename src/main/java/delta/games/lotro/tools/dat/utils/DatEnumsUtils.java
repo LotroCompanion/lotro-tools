@@ -7,6 +7,7 @@ import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.WeaponType;
 
@@ -43,27 +44,27 @@ public class DatEnumsUtils
    */
   public static EquipmentLocation getSlot(int slotCode)
   {
-    if ((slotCode&1L<<1)!=0) return EquipmentLocation.HEAD;
-    if ((slotCode&1L<<2)!=0) return EquipmentLocation.CHEST;
-    if ((slotCode&1L<<3)!=0) return EquipmentLocation.LEGS;
-    if ((slotCode&1L<<4)!=0) return EquipmentLocation.HAND;
-    if ((slotCode&1L<<5)!=0) return EquipmentLocation.FEET;
-    if ((slotCode&1L<<6)!=0) return EquipmentLocation.SHOULDER;
-    if ((slotCode&1L<<7)!=0) return EquipmentLocation.BACK;
-    if (((slotCode&1L<<8)!=0) || ((slotCode&1L<<9)!=0)) return EquipmentLocation.WRIST;
-    if ((slotCode&1L<<10)!=0) return EquipmentLocation.NECK;
-    if (((slotCode&1L<<11)!=0) || ((slotCode&1L<<12)!=0)) return EquipmentLocation.FINGER;
-    if (((slotCode&1L<<13)!=0) || ((slotCode&1L<<14)!=0)) return EquipmentLocation.EAR;
-    if ((slotCode&1L<<15)!=0) return EquipmentLocation.POCKET;
-    if ((slotCode&1L<<16)!=0) return EquipmentLocation.MAIN_HAND;
-    if ((slotCode&1L<<17)!=0) return EquipmentLocation.OFF_HAND;
-    if ((slotCode&1L<<18)!=0) return EquipmentLocation.RANGED_ITEM;
-    if ((slotCode&1L<<19)!=0) return EquipmentLocation.TOOL;
-    if ((slotCode&1L<<20)!=0) return EquipmentLocation.CLASS_SLOT;
-    if ((slotCode&1L<<21)!=0) return EquipmentLocation.BRIDLE;
-    if ((slotCode&1L<<22)!=0) return EquipmentLocation.MAIN_HAND_AURA;
-    if ((slotCode&1L<<23)!=0) return EquipmentLocation.OFF_HAND_AURA;
-    if ((slotCode&1L<<24)!=0) return EquipmentLocation.RANGED_AURA;
+    if ((slotCode&1L<<1)!=0) return EquipmentLocations.HEAD;
+    if ((slotCode&1L<<2)!=0) return EquipmentLocations.CHEST;
+    if ((slotCode&1L<<3)!=0) return EquipmentLocations.LEGS;
+    if ((slotCode&1L<<4)!=0) return EquipmentLocations.HAND;
+    if ((slotCode&1L<<5)!=0) return EquipmentLocations.FEET;
+    if ((slotCode&1L<<6)!=0) return EquipmentLocations.SHOULDER;
+    if ((slotCode&1L<<7)!=0) return EquipmentLocations.BACK;
+    if (((slotCode&1L<<8)!=0) || ((slotCode&1L<<9)!=0)) return EquipmentLocations.WRIST;
+    if ((slotCode&1L<<10)!=0) return EquipmentLocations.NECK;
+    if (((slotCode&1L<<11)!=0) || ((slotCode&1L<<12)!=0)) return EquipmentLocations.FINGER;
+    if (((slotCode&1L<<13)!=0) || ((slotCode&1L<<14)!=0)) return EquipmentLocations.EAR;
+    if ((slotCode&1L<<15)!=0) return EquipmentLocations.POCKET;
+    if ((slotCode&1L<<16)!=0) return EquipmentLocations.MAIN_HAND;
+    if ((slotCode&1L<<17)!=0) return EquipmentLocations.OFF_HAND;
+    if ((slotCode&1L<<18)!=0) return EquipmentLocations.RANGED_ITEM;
+    if ((slotCode&1L<<19)!=0) return EquipmentLocations.TOOL;
+    if ((slotCode&1L<<20)!=0) return EquipmentLocations.CLASS_SLOT;
+    if ((slotCode&1L<<21)!=0) return EquipmentLocations.BRIDLE;
+    if ((slotCode&1L<<22)!=0) return EquipmentLocations.MAIN_HAND_AURA;
+    if ((slotCode&1L<<23)!=0) return EquipmentLocations.OFF_HAND_AURA;
+    if ((slotCode&1L<<24)!=0) return EquipmentLocations.RANGED_AURA;
 
     return null;
   }

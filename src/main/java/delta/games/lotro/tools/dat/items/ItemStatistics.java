@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import delta.common.utils.misc.IntegerHolder;
+import delta.games.lotro.common.enums.comparator.LotroEnumEntryCodeComparator;
 import delta.games.lotro.common.enums.comparator.LotroEnumEntryNameComparator;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
@@ -15,7 +16,6 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.comparators.ArmourTypeComparator;
-import delta.games.lotro.lore.items.comparators.EquipmentLocationComparator;
 import delta.games.lotro.lore.items.comparators.ItemQualityComparator;
 
 /**
@@ -170,7 +170,7 @@ public class ItemStatistics
     // - slot
     System.out.println("- by slot:");
     List<EquipmentLocation> locations=new ArrayList<EquipmentLocation>(_itemsBySlot.keySet());
-    Collections.sort(locations,new EquipmentLocationComparator());
+    Collections.sort(locations,new LotroEnumEntryCodeComparator<EquipmentLocation>());
     for(EquipmentLocation location : locations)
     {
       IntegerHolder count=_itemsBySlot.get(location);

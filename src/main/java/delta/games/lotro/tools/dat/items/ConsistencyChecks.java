@@ -8,6 +8,7 @@ import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
@@ -89,7 +90,7 @@ public class ConsistencyChecks
     EquipmentLocation location=item.getEquipmentLocation();
     if (location!=null)
     {
-      boolean isLegendary = ((item instanceof Legendary) || (location==EquipmentLocation.BRIDLE));
+      boolean isLegendary = ((item instanceof Legendary) || (location==EquipmentLocations.BRIDLE));
       if (isLegendary)
       {
         _nbLegendaryItems++;
