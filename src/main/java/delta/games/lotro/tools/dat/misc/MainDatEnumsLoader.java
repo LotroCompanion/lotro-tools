@@ -1,8 +1,6 @@
 package delta.games.lotro.tools.dat.misc;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
@@ -58,6 +56,7 @@ import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.dat.utils.i18n.TranslationUtils;
 
 /**
  * Get enums from DAT files.
@@ -77,11 +76,8 @@ public class MainDatEnumsLoader
   public MainDatEnumsLoader(DataFacade facade)
   {
     _facade=facade;
-    List<Locale> locales=new ArrayList<Locale>();
-    locales.add(Locale.ENGLISH);
-    locales.add(Locale.FRENCH);
-    locales.add(Locale.GERMAN);
-    _translator=new MultilocalesTranslator(getClass().getPackage().getName()+".enum",locales);
+    String bundleName=getClass().getPackage().getName()+".enum";
+    _translator=TranslationUtils.buildMultilocalesTranslator(bundleName);
   }
 
   /**

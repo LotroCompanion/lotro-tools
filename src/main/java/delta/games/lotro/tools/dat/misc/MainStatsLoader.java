@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -37,16 +38,16 @@ public class MainStatsLoader
   /**
    * Get all the locale keys.
    */
-  private static final String[] LOCALE_KEYS={DATL10nSupport.EN,DATL10nSupport.FR,DATL10nSupport.DE};
-  /**
-   * Stats registry.
-   */
-  public static StatsRegistry _stats=new StatsRegistry();
+  private static final Locale[] LOCALES={Locale.ENGLISH,Locale.FRENCH,Locale.GERMAN};
 
   private DataFacade _facade;
   private I18nUtils _i18n;
   private PropertiesRegistry _registry;
-  private OldStatsLabels _oldStatsLabels;
+  private StatLoadingUtils _oldStatsLabels;
+  /**
+   * Stats registry.
+   */
+  private StatsRegistry _stats;
 
   /**
    * Constructor.
@@ -57,7 +58,8 @@ public class MainStatsLoader
     _facade=facade;
     _i18n=new I18nUtils("stats",facade.getGlobalStringsManager());
     _registry=_facade.getPropertiesRegistry();
-    _oldStatsLabels=new OldStatsLabels();
+    _oldStatsLabels=new StatLoadingUtils();
+    _stats=new StatsRegistry();
   }
 
   private void load(int indexDataId)
@@ -119,8 +121,12 @@ public class MainStatsLoader
     addCustomStats();
     // Add legacy mappings
     StatMappings.setupMappings(_stats);
-    // Add legacy data (name, index)
-    addLegacyData();
+    // Define 'premium' stats (those with an index)
+    definePremiumStats();
+    // Add custom labels
+    addCustomLabels();
+    // Fix percentage stats
+    fixPercentageStats();
     // Sort stats
     List<StatDescription> stats=_stats.getAll();
     Collections.sort(stats,new StatDescriptionComparator());
@@ -138,27 +144,41 @@ public class MainStatsLoader
     _i18n.save();
   }
 
-  private void addLegacyData()
+  private void definePremiumStats()
   {
-    int index=0;
-    for(String legacyKey : _oldStatsLabels.getKeys())
+    List<String> premiumKeys=_oldStatsLabels.getPremiumKeys();
+    int nbPremiumKeys=premiumKeys.size();
+    for(int i=0;i<nbPremiumKeys;i++)
     {
-      StatDescription stat=_stats.getByKey(legacyKey);
+      StatDescription stat=_stats.getByKey(premiumKeys.get(i));
       if (stat!=null)
       {
-        // Legacy labels
-        for(String locale : LOCALE_KEYS)
+        stat.setIndex(Integer.valueOf(i));
+      }
+    }
+  }
+
+  private void addCustomLabels()
+  {
+    for(Locale locale : LOCALES)
+    {
+      String localeCode=locale.getLanguage();
+      for(String legacyKey : _oldStatsLabels.getLabelKeys(locale))
+      {
+        StatDescription stat=_stats.getByKey(legacyKey);
+        if (stat!=null)
         {
+          // Legacy labels
           int id=stat.getIdentifier();
           String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
           if ((legacyName!=null) && (legacyName.length()>0))
           {
-            String statName=_i18n.getLabelsStorage().getLabel(locale,String.valueOf(id));
+            String statName=_i18n.getLabelsStorage().getLabel(localeCode,String.valueOf(id));
             if (!legacyName.equals(statName))
             {
               String key="legacy:"+id;
-              _i18n.defineLabel(locale,key,legacyName);
-              if (DATL10nSupport.EN.equals(locale))
+              _i18n.defineLabel(localeCode,key,legacyName);
+              if (DATL10nSupport.EN.equals(localeCode))
               {
                 stat.setLegacyName(legacyName);
               }
@@ -166,19 +186,26 @@ public class MainStatsLoader
           }
         }
         // Set percentage
-        stat.setPercentage(_oldStatsLabels.isPercentage(legacyKey));
-        // Add index
-        stat.setIndex(Integer.valueOf(index));
+        //stat.setPercentage(_oldStatsLabels.isPercentage(legacyKey));
       }
-      index++;
+    }
+  }
+
+  private void fixPercentageStats()
+  {
+    List<String> keys=_oldStatsLabels.getPercentageStats();
+    for(String legacyKey : keys)
+    {
+      StatDescription stat=_stats.getByKey(legacyKey);
+      if (stat!=null)
+      {
+        stat.setPercentage(true);
+      }
     }
   }
 
   private void checks()
   {
-    // Old STATs
-    List<String> oldStatsKeys=_oldStatsLabels.getKeys();
-    LOGGER.info("Old stats count: "+oldStatsKeys.size());
     // Well-known stats
     List<StatDescription> wellKnownStats=WellKnownStat.getAllWellKnownStats();
     Set<String> wellKnownStatsKeys=new HashSet<String>();
@@ -203,24 +230,6 @@ public class MainStatsLoader
       {
         LOGGER.warn("Well-known and not well-known do intersect: "+intersection);
       }
-    }
-    // Check that old stats are covered by well-known and not-well known
-    {
-      Set<String> allKnown=new HashSet<String>(wellKnownStatsKeys);
-      allKnown.addAll(notWellKnownStatsKeys);
-      allKnown.add("Combat_TacticalDPS_Modifier#1");
-      Set<String> oldOrphans=new HashSet<String>(oldStatsKeys);
-      oldOrphans.removeAll(allKnown);
-      if (oldOrphans.size()>0)
-      {
-        LOGGER.warn("Old stats have orphans: "+oldOrphans);
-      }
-    }
-    // Show well-known stats not found in old stats
-    {
-      Set<String> rest=new HashSet<String>(wellKnownStatsKeys);
-      rest.removeAll(oldStatsKeys);
-      LOGGER.info("New well-known stats: "+rest);
     }
   }
 
@@ -282,16 +291,17 @@ public class MainStatsLoader
 
   private void addCustomStat(int id, String legacyKey, boolean isPercentage, StatType type)
   {
-    for(String locale : LOCALE_KEYS)
+    for(Locale locale : LOCALES)
     {
       String label=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
       if (label!=null)
       {
+        String localeCode=locale.getLanguage();
         String key=String.valueOf(id);
-        _i18n.defineLabel(locale,key,label);
+        _i18n.defineLabel(localeCode,key,label);
       }
     }
-    String statName=_oldStatsLabels.getStatLegacyName(legacyKey,DATL10nSupport.EN);
+    String statName=_oldStatsLabels.getStatLegacyName(legacyKey,Locale.ENGLISH);
     //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
