@@ -23,8 +23,8 @@ import delta.games.lotro.lore.collections.mounts.MountsManager;
 import delta.games.lotro.lore.collections.pets.CosmeticPetsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get definition of collections from DAT files.
@@ -36,6 +36,7 @@ public class MainDatCollectionsLoader
 
   private DataFacade _facade;
   private DatRewardsLoader _rewardsLoader;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -46,6 +47,7 @@ public class MainDatCollectionsLoader
   {
     _facade=facade;
     _rewardsLoader=rewardsLoader;
+    _i18n=new I18nUtils("collections",facade.getGlobalStringsManager());
   }
 
   private CollectionDescription loadCollection(int collectionId)
@@ -56,7 +58,7 @@ public class MainDatCollectionsLoader
     {
       ret=new CollectionDescription(collectionId);
       // Name
-      String name=DatUtils.getStringProperty(properties,"Collection_Name");
+      String name=_i18n.getNameStringProperty(properties,"Collection_Name",collectionId,0);
       ret.setName(name);
       // Category
       int collectionCategory=((Integer)properties.getProperty("Collection_Category")).intValue();
@@ -127,7 +129,11 @@ public class MainDatCollectionsLoader
       }
     }
     LOGGER.info("Loaded "+collections.size()+" collections.");
+    // Save
+    // - data
     saveCollections(collections);
+    // - labels
+    _i18n.save();
   }
 
   /**
