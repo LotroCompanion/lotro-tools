@@ -24,7 +24,7 @@ import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get items sets definitions from DAT files.
@@ -35,6 +35,7 @@ public class MainDatItemsSetsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsSetsLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -43,6 +44,7 @@ public class MainDatItemsSetsLoader
   public MainDatItemsSetsLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("itemsSets",facade.getGlobalStringsManager());
   }
 
   /*
@@ -73,18 +75,18 @@ Set_Name:
   #1: Armour of the White Flame
    */
 
-  private ItemsSet load(int indexDataId)
+  private ItemsSet load(int setId)
   {
-    long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
+    long dbPropertiesId=setId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
-      LOGGER.warn("Properties not found: "+indexDataId);
-      LOGGER.warn("Could not handle items set ID="+indexDataId);
+      LOGGER.warn("Properties not found: "+setId);
+      LOGGER.warn("Could not handle items set ID="+setId);
       return null;
     }
     // Name
-    String name=DatUtils.getStringProperty(properties,"Set_Name");
+    String name=_i18n.getNameStringProperty(properties,"Set_Name",setId,0);
     if (name==null)
     {
       name="";
@@ -95,7 +97,7 @@ Set_Name:
       return null;
     }
     ItemsSet set=new ItemsSet();
-    set.setIdentifier(indexDataId);
+    set.setIdentifier(setId);
     set.setName(name);
     // Class
     Integer classCode=(Integer)properties.getProperty("Set_TraitSet_Class");
@@ -123,7 +125,7 @@ Set_Name:
       set.setRequiredMaxLevel(maxCharacterLevel);
     }
     // Description
-    String description=DatUtils.getStringProperty(properties,"Set_Description");
+    String description=_i18n.getStringProperty(properties,"Set_Description");
     set.setDescription(description);
     // Members
     Object[] membersArray=(Object[])properties.getProperty("Set_MemberList");
@@ -269,6 +271,8 @@ Set_Name:
     }
     // Save progressions
     DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
+    // Save labels
+    _i18n.save();
   }
 
   /**
