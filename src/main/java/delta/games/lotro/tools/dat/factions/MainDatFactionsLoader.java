@@ -10,12 +10,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.misc.Context;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.reputation.Faction;
@@ -234,11 +235,11 @@ Reputation_LowestTier: 1
     PropertiesSet tierNamesProps=_facade.loadProperties(tableId+DATConstants.DBPROPERTIES_OFFSET);
     Map<Integer,String> ret=new HashMap<Integer,String>();
     int minIndex=((Integer)tierNamesProps.getProperty("Progression_MinimumIndexValue")).intValue();
-    Object[] tierPropsArray=(Object[])tierNamesProps.getProperty("StringInfoProgression_Array");
+    ArrayPropertyValue tierPropsArray=(ArrayPropertyValue)tierNamesProps.getPropertyValueByName("StringInfoProgression_Array");
     int index=minIndex;
-    for(Object tierPropsObj : tierPropsArray)
+    for(PropertyValue tierPropsObj : tierPropsArray.getValues())
     {
-      String tierName=DatStringUtils.getString(tierPropsObj);
+      String tierName=_i18n.getStringProperty(tierPropsObj,0);
       ret.put(Integer.valueOf(index),tierName);
       index++;
     }

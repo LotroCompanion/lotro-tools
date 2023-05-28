@@ -143,6 +143,30 @@ public class I18nUtils
   public String getStringProperty(PropertiesSet props, String propertyName, String keyToSet, StringProcessor processor)
   {
     PropertyValue propertyValue=props.getPropertyValueByName(propertyName);
+    return getStringProperty(propertyValue,keyToSet,processor);
+  }
+
+  /**
+   * Get the value of a string property.
+   * @param propertyValue Property value.
+   * @param options Options to apply on the loaded strings.
+   * @return A non-localized string or a localization key.
+   */
+  public String getStringProperty(PropertyValue propertyValue, int options)
+  {
+    _processor.setOptions(options);
+    return getStringProperty(propertyValue,null,_processor);
+  }
+
+  /**
+   * Get the value of a string property.
+   * @param propertyValue Property value.
+   * @param keyToSet Key to use (<code>null</code> to use default key generation).
+   * @param processor Processor to apply on the loaded strings.
+   * @return A non-localized string or a localization key.
+   */
+  public String getStringProperty(PropertyValue propertyValue, String keyToSet, StringProcessor processor)
+  {
     if (propertyValue==null)
     {
       return null;
