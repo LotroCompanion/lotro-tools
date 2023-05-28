@@ -22,8 +22,7 @@ import delta.games.lotro.lore.agents.mobs.io.xml.MobsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
 import delta.games.lotro.tools.dat.others.LootLoader;
-import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get mobs definitions from DAT files.
@@ -34,6 +33,7 @@ public class MainDatMobsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatMobsLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   // Classification
   private ClassificationLoader _classificationLoader;
   // Loots
@@ -48,21 +48,21 @@ public class MainDatMobsLoader
   public MainDatMobsLoader(DataFacade facade, LootsManager lootsManager)
   {
     _facade=facade;
+    _i18n=new I18nUtils("mobs",facade.getGlobalStringsManager());
     _classificationLoader=new ClassificationLoader(facade);
     _loots=lootsManager;
     _lootLoader=new LootLoader(facade,_loots);
   }
 
-  private MobDescription load(int indexDataId)
+  private MobDescription load(int mobId)
   {
     MobDescription ret=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet properties=_facade.loadProperties(mobId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
       // Name
-      String name=DatUtils.getStringProperty(properties,"Name");
-      name=StringUtils.fixName(name);
-      ret=new MobDescription(indexDataId,name);
+      String name=_i18n.getNameStringProperty(properties,"Name",mobId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+      ret=new MobDescription(mobId,name);
       //System.out.println("ID="+indexDataId+", Name: "+name);
       // Classification
       _classificationLoader.loadClassification(properties,ret.getClassification());
@@ -124,7 +124,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
     }
     else
     {
-      LOGGER.warn("Could not handle mob ID="+indexDataId);
+      LOGGER.warn("Could not handle mob ID="+mobId);
     }
     return ret;
   }
@@ -168,6 +168,8 @@ Quest_MonsterDivision: 245 => HallOfMirror
     }
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
+    // Save labels
+    _i18n.save();
   }
 
   /**
