@@ -557,10 +557,10 @@ public class DatRewardsLoader
     if (craftXpTier!=null)
     {
       Integer craftXp=rewardsMap.getCraftXpMap().getValue(craftXpTier.intValue());
-      if (craftXp!=null)
+      Integer professionId=(Integer)properties.getProperty("Quest_CraftProfessionDID");
+      if ((craftXp!=null) && (professionId!=null))
       {
-        int professionId=((Integer)properties.getProperty("Quest_CraftProfessionDID")).intValue();
-        Profession profession=DatEnumsUtils.getProfessionFromId(professionId);
+        Profession profession=DatEnumsUtils.getProfessionFromId(professionId.intValue());
         int craftingTier=TIER_ARTISAN;
         CraftingXpReward craftingXpReward=new CraftingXpReward(profession,craftingTier,craftXp.intValue());
         rewards.addRewardElement(craftingXpReward);

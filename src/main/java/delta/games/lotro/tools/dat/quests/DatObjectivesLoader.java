@@ -838,6 +838,7 @@ QuestEvent_ShowBillboardText: 0
     */
 
     SkillUsedCondition ret=new SkillUsedCondition();
+    // See also: QuestEvent_SkillQuestFlags
     Integer skillId=(Integer)properties.getProperty("QuestEvent_SkillDID");
     if (skillId!=null)
     {

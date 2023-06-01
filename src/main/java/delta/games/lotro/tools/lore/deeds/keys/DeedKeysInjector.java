@@ -348,6 +348,7 @@ public class DeedKeysInjector
     manualResolution("The_Ranger%27s_Offensive:_Tier_Three",0);
     manualResolution("The_Ranger%27s_Offensive:_Tier_Two",0);
     manualResolution("The_Ruins_of_Breeland",1879071672);
+    manualResolution("The_Stone_Giant%27s_Demise",1879259021);
     manualResolution("The_Townsfolk",1879239040);
     manualResolution("Throne_of_the_Dread_Terror:_Enslaved_of_Minas_Morgul_--_Tier_1",1879334071);
     manualResolution("Throne_of_the_Dread_Terror:_Enslaved_of_Minas_Morgul_--_Tier_2",1879334072);
