@@ -461,6 +461,7 @@ Reputation_LowestTier: 1
     if (factionId==1879322612) return new String[]{category,"RANGERS_ITHILIEN",FactionLevelTemplates.CLASSIC}; // Rangers of Ithilien
     if (factionId==1879326961) return new String[]{category,"MINAS_TIRITH",FactionLevelTemplates.EXTENDED_CLASSIC}; // Defenders of Minas Tirith
     if (factionId==1879330539) return new String[]{category,"RIDERS_ROHAN",FactionLevelTemplates.CLASSIC}; // Riders of Rohan
+    if (factionId==1879463136) return new String[]{category,null,null}; // The Renewal of Gondor
     category="Mordor";
     if (factionId==1879334719) return new String[]{category,"HOST_OF_THE_WEST",FactionLevelTemplates.EXTENDED_CLASSIC}; // Host of the West
     if (factionId==1879341949) return new String[]{category,"HOW_ARMOUR",FactionLevelTemplates.HOW}; // Host of the West: Armour
@@ -477,6 +478,7 @@ Reputation_LowestTier: 1
     if (factionId==1879182957) return new String[]{category,"ALE_ASSOCIATION",FactionLevelTemplates.CLASSIC}; // The Ale Association
     if (factionId==1879103953) return new String[]{category,"INN_LEAGUE",FactionLevelTemplates.CLASSIC}; // The Inn League
     if (factionId==1879305436) return new String[]{category,"HOBNANIGANS",FactionLevelTemplates.HOBNANIGANS}; // Chicken Chasing League of Eriador
+    if (factionId==1879464285) return new String[]{category,null,null}; // The Path of Valour
     category="Guild";
     if (factionId==1879124448) return new String[]{category,"GUILD_COOK",FactionLevelTemplates.GUILD}; // Cook's Guild
     if (factionId==1879124449) return new String[]{category,"GUILD_JEWELLER",FactionLevelTemplates.GUILD}; // Jeweller's Guild
@@ -529,11 +531,11 @@ Reputation_LowestTier: 1
       // Dol Amroth
       1879306071,1879308442,1879308438,1879308441,1879308436,1879308443,1879308440,1879308439,1879308437,
       // Gondor
-      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,
+      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,1879463136,
       // Mordor
       1879334719,1879341949,1879341953,1879341952,1879345136,
       // Misc
-      1879182957,1879103953,1879305436,
+      1879182957,1879103953,1879305436,1879464285,
       // Mordor again
       1879345134,1879345135,1879345132,1879389871,1879389868,1879389872,
       // Guilds
