@@ -8,7 +8,6 @@ import java.util.Map;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
-import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
@@ -62,7 +61,7 @@ public class ConsumablesLoader
         return;
       }
 
-      Consumable currentConsumable=initConsumable(item);
+      Consumable currentConsumable=new Consumable(item);
       // Look for a spellcraft property
       _spellcraftProperty=loadSpellcraftProperty(properties);
 
@@ -76,17 +75,6 @@ public class ConsumablesLoader
       }
       registerConsumable(currentConsumable);
     }
-  }
-
-  private Consumable initConsumable(Item item)
-  {
-    int id=item.getIdentifier();
-    String name=item.getName();
-    ItemClass itemClass=item.getItemClass();
-    String icon=item.getIcon();
-
-    Consumable ret=new Consumable(id,name,icon,itemClass);
-    return ret;
   }
 
   private void registerConsumable(Consumable currentConsumable)
@@ -259,7 +247,7 @@ Skill_AttackHookList:
     Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
     if ((effectID!=null) && (effectID.intValue()!=0))
     {
-      Consumable currentConsumable=initConsumable(item);
+      Consumable currentConsumable=new Consumable(item);
       Float skillSpellcraft=(Float)effectProps.getProperty("Skill_EffectSpellcraft");
       if ((skillSpellcraft!=null) && (skillSpellcraft.floatValue()<0))
       {
