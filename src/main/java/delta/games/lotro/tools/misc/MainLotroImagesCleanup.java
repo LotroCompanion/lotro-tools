@@ -142,7 +142,7 @@ public class MainLotroImagesCleanup
   void cleanEffects()
   {
     File effectsFile=LotroCoreConfig.getInstance().getFile(DataFiles.BUFFS);
-    List<EffectBuff> buffs=EffectBuffXMLParser.parseEffectsFile(effectsFile);
+    List<EffectBuff> buffs=new EffectBuffXMLParser().parseEffectsFile(effectsFile);
     for(EffectBuff buff : buffs)
     {
       Integer iconId=buff.getEffect().getIconId();
