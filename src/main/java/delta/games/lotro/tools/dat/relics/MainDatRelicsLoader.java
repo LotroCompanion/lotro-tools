@@ -6,16 +6,17 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.io.FileIO;
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.EquipmentLocation;
@@ -39,7 +40,7 @@ public class MainDatRelicsLoader
 
   private DataFacade _facade;
   private RelicsManager _relicsMgr;
-  private EnumMapper _categories;
+  private LotroEnum<RunicTier> _tiers;
 
   /**
    * Constructor.
@@ -49,28 +50,19 @@ public class MainDatRelicsLoader
   {
     _facade=facade;
     _relicsMgr=new RelicsManager();
+    _tiers=LotroEnumsRegistry.getInstance().get(RunicTier.class);
   }
 
-  private boolean _debug=false;
-  private int _currentId;
-
-  private void loadRelic(int indexDataId)
+  private void loadRelic(int relicId)
   {
-    //System.out.println(indexDataId);
     Relic relic=null;
-    PropertiesSet properties=_facade.loadProperties(indexDataId+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet properties=_facade.loadProperties(relicId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties!=null)
     {
-      _currentId=indexDataId;
-      _debug=(_currentId==1879000000);
-      if (_debug)
-      {
-        FileIO.writeFile(new File(indexDataId+".props"),properties.dump().getBytes());
-      }
       // Name
       String name=DatUtils.getStringProperty(properties,"Runic_Name");
       name=StringUtils.fixName(name);
-      relic=new Relic(indexDataId,name);
+      relic=new Relic(relicId,name);
       // Type
       int relicType=((Integer)properties.getProperty("Runic_Type")).intValue();
       List<RelicType> types=getRelicTypes(relicType);
@@ -86,11 +78,9 @@ public class MainDatRelicsLoader
         relic.addAllowedSlot(slot);
       }
       // Category
-      int categoryCode=((Integer)properties.getProperty("Runic_Tier")).intValue();
-      RelicsCategory category=_relicsMgr.getRelicCategory(categoryCode,true);
-      String categoryName=_categories.getString(categoryCode);
-      category.setName(categoryName);
-      relic.setCategory(category);
+      int tierCode=((Integer)properties.getProperty("Runic_Tier")).intValue();
+      RunicTier tier=_tiers.getEntry(tierCode);
+      relic.setTier(tier);
       // Level
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
@@ -136,22 +126,14 @@ public class MainDatRelicsLoader
         }
       }
       relic.setIconFilename(iconFilename);
-      // Check and add
-      boolean useIt=checkRelic(category,relic);
-      if (useIt)
-      {
-        category.addRelic(relic);
-      }
+      // Register relic
+      RelicsCategory category=_relicsMgr.getRelicCategory(tier,true);
+      category.addRelic(relic);
     }
     else
     {
-      LOGGER.warn("Could not handle relic ID="+indexDataId);
+      LOGGER.warn("Could not handle relic ID="+relicId);
     }
-  }
-
-  private boolean checkRelic(RelicsCategory category, Relic relic)
-  {
-    return true;
   }
 
   private List<RelicType> getRelicTypes(int relicTypeEnum)
@@ -181,7 +163,6 @@ public class MainDatRelicsLoader
   {
     DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
-    _categories=_facade.getEnumsManager().getEnumMapper(587203232);
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       byte[] data=_facade.loadData(id);

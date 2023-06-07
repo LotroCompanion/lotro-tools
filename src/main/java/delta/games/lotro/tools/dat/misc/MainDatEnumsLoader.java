@@ -32,6 +32,7 @@ import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
 import delta.games.lotro.common.enums.SocketType;
@@ -123,6 +124,7 @@ public class MainDatEnumsLoader
     loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
     loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
     loadEnum(587202663,"ItemQualities",ItemQuality.class); // 0x23000067
+    loadEnum(587203232,"RunicTier",RunicTier.class); // 0x230002A0
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType
