@@ -15,8 +15,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.agents.npcs.io.xml.NPCsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get NPCs definitions from DAT files.
@@ -27,6 +26,7 @@ public class MainDatNPCsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatNPCsLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -35,6 +35,7 @@ public class MainDatNPCsLoader
   public MainDatNPCsLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("npc",facade.getGlobalStringsManager());
   }
 
   private NpcDescription load(int npcId)
@@ -44,12 +45,10 @@ public class MainDatNPCsLoader
     if (properties!=null)
     {
       // Name
-      String npcName=DatUtils.getStringProperty(properties,"Name");
-      npcName=StringUtils.removeMarks(npcName);
+      String npcName=_i18n.getNameStringProperty(properties,"Name",npcId,I18nUtils.OPTION_REMOVE_MARKS);
       ret=new NpcDescription(npcId,npcName);
       // Title
-      String title=DatUtils.getStringProperty(properties,"OccupationTitle");
-      title=StringUtils.fixName(title);
+      String title=_i18n.getStringProperty(properties,"OccupationTitle",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       ret.setTitle(title);
     }
     else
@@ -88,12 +87,15 @@ public class MainDatNPCsLoader
         }
       }
     }
-    // Save mobs
+    // Save
+    // - data
     boolean ok=NPCsXMLWriter.writeNPCsFile(GeneratedFiles.NPCS,npcs);
     if (ok)
     {
       System.out.println("Wrote NPCs file: "+GeneratedFiles.NPCS);
     }
+    // - labels
+    _i18n.save();
   }
 
   /**
