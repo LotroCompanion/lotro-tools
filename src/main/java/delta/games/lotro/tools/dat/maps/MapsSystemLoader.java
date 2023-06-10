@@ -28,7 +28,7 @@ import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.links.LinksManager;
 import delta.games.lotro.maps.data.links.MapLink;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for the maps system.
@@ -39,6 +39,7 @@ public class MapsSystemLoader
   private static final Logger LOGGER=Logger.getLogger(MapsSystemLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private UILayout _uiLayout;
   private EnumMapper _uiElementId;
   private List<ParchmentMap> _maps;
@@ -52,6 +53,7 @@ public class MapsSystemLoader
   public MapsSystemLoader(DataFacade facade, MapsManager mapsManager)
   {
     _facade=facade;
+    _i18n=new I18nUtils("parchmentMaps",facade.getGlobalStringsManager());
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _maps=new ArrayList<ParchmentMap>();
     _mapsManager=mapsManager;
@@ -105,10 +107,10 @@ public class MapsSystemLoader
     //System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
 
     // Map name
-    String mapName=DatUtils.getStringProperty(props,"UI_Map_MenuName");
+    String mapName=_i18n.getNameStringProperty(props,"UI_Map_MenuName",parchmentMapId,0);
     if (mapName==null)
     {
-      mapName="?";
+      mapName="";
     }
     //System.out.println("Map name: "+mapName);
     for(int i=0;i<level;i++) System.out.print("\t");
@@ -268,12 +270,15 @@ public class MapsSystemLoader
     setLabels();
     // Fix some maps
     fixMaps();
-    // Save parchment maps
+    // Save
+    // - parchment maps data
     boolean ok=ParchmentMapsXMLWriter.writeParchmentMapsFile(GeneratedFiles.PARCHMENT_MAPS,_maps);
     if (ok)
     {
       System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
     }
+    // - labels
+    _i18n.save();
   }
 
   private void setLabels()
