@@ -56,6 +56,7 @@ import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.WeaponType;
+import delta.games.lotro.lore.items.legendary.relics.RelicType;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -125,6 +126,7 @@ public class MainDatEnumsLoader
     loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
     loadEnum(587202663,"ItemQualities",ItemQuality.class); // 0x23000067
     loadEnum(587203232,"RunicTier",RunicTier.class); // 0x230002A0
+    loadEnum(587203222,"RunicType",RelicType.class); // 0x23000296
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType
@@ -318,6 +320,10 @@ public class MainDatEnumsLoader
     {
       return getItemQualityKey(code);
     }
+    else if (implClass==RelicType.class)
+    {
+      return getRelicTypeKey(code);
+    }
     return null;
   }
 
@@ -364,6 +370,15 @@ public class MainDatEnumsLoader
     if (code==3) return "INCOMPARABLE";
     if (code==4) return "UNCOMMON";
     if (code==5) return "COMMON";
+    return null;
+  }
+
+  private String getRelicTypeKey(int code)
+  {
+    if (code==1) return "RUNE";
+    if (code==2) return "SETTING";
+    if (code==3) return "GEM";
+    if (code==4) return "CRAFTED_RELIC";
     return null;
   }
 

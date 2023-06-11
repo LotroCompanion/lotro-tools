@@ -23,6 +23,7 @@ import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
+import delta.games.lotro.lore.items.legendary.relics.RelicTypes;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -139,10 +140,10 @@ public class MainDatRelicsLoader
   private List<RelicType> getRelicTypes(int relicTypeEnum)
   {
     List<RelicType> types=new ArrayList<RelicType>();
-    if ((relicTypeEnum&1)!=0) types.add(RelicType.RUNE);
-    if ((relicTypeEnum&2)!=0) types.add(RelicType.SETTING);
-    if ((relicTypeEnum&4)!=0) types.add(RelicType.GEM);
-    if ((relicTypeEnum&8)!=0) types.add(RelicType.CRAFTED_RELIC);
+    if ((relicTypeEnum&1)!=0) types.add(RelicTypes.RUNE);
+    if ((relicTypeEnum&2)!=0) types.add(RelicTypes.SETTING);
+    if ((relicTypeEnum&4)!=0) types.add(RelicTypes.GEM);
+    if ((relicTypeEnum&8)!=0) types.add(RelicTypes.CRAFTED_RELIC);
     return types;
   }
 
