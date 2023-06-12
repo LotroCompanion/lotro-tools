@@ -37,7 +37,7 @@ import delta.games.lotro.lore.trade.vendor.VendorNpc;
 import delta.games.lotro.lore.trade.vendor.io.xml.VendorXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -50,6 +50,7 @@ public class MainDatTradeLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatTradeLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private ItemsManager _itemsManager;
   // Barterers
   private List<BarterNpc> _barterers;
@@ -65,6 +66,7 @@ public class MainDatTradeLoader
   public MainDatTradeLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("barterers",facade.getGlobalStringsManager());
     _itemsManager=ItemsManager.getInstance();
     _barterers=new ArrayList<BarterNpc>();
     _profiles=new HashMap<Integer,BarterProfile>();
@@ -231,7 +233,7 @@ public class MainDatTradeLoader
 
     profile=new BarterProfile(profileId);
     // Profile name
-    String profileName=DatUtils.getStringProperty(properties,"Barter_Profile_Name");
+    String profileName=_i18n.getNameStringProperty(properties,"Barter_Profile_Name",profileId,0);
     profile.setName(profileName);
     // Requirements
     PropertiesSet permissionsProps=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
@@ -488,6 +490,8 @@ public class MainDatTradeLoader
   {
     // Barter tables
     BarterXMLWriter.writeBarterTablesFile(GeneratedFiles.BARTERS,_barterers);
+    // Bareter labels
+    _i18n.save();
     // Vendors
     VendorXMLWriter.writeVendorsFile(GeneratedFiles.VENDORS,_vendors);
   }
