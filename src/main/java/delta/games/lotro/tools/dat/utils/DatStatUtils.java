@@ -33,30 +33,53 @@ public class DatStatUtils
 {
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
+  private DataFacade _facade;
+  private StatsUsageStatistics _statistics;
+
   /**
-   * Stats usage statistics.
+   * Constructor.
+   * @param facade Data facade.
    */
-  public static final StatsUsageStatistics STATS_USAGE_STATISTICS=new StatsUsageStatistics();
+  public DatStatUtils(DataFacade facade)
+  {
+    _facade=facade;
+    _statistics=new StatsUsageStatistics();
+  }
+
+  /**
+   * Get the data facade.
+   * @return the data facade.
+   */
+  public DataFacade getFacade()
+  {
+    return _facade;
+  }
+
+  /**
+   * Constructor.
+   */
+  public void showStatistics()
+  {
+    _statistics.showResults();
+  }
 
   /**
    * Load a set of stats from some properties.
-   * @param facade Data facade.
    * @param properties Properties to use to get stats.
    * @return A stats provider.
    */
-  public static StatsProvider buildStatProviders(DataFacade facade, PropertiesSet properties)
+  public StatsProvider buildStatProviders(PropertiesSet properties)
   {
-    return buildStatProviders(null,facade,properties);
+    return buildStatProviders(null,properties);
   }
 
   /**
    * Load a set of stats from some properties.
    * @param propsPrefix Prefix for properties to use, default is <code>null</code>.
-   * @param facade Data facade.
    * @param properties Properties to use to get stats.
    * @return A stats provider.
    */
-  public static StatsProvider buildStatProviders(String propsPrefix, DataFacade facade, PropertiesSet properties)
+  public StatsProvider buildStatProviders(String propsPrefix, PropertiesSet properties)
   {
     String arrayPropName="Mod_Array";
     String progressionPropName="Mod_Progression";
@@ -74,7 +97,7 @@ public class DatStatUtils
       for(int i=0;i<mods.length;i++)
       {
         PropertiesSet statProperties=(PropertiesSet)mods[i];
-        StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties,statsProvider);
+        StatProvider provider=buildStatProvider(propsPrefix,statProperties,statsProvider);
         if (provider==null)
         {
           continue;
@@ -116,10 +139,10 @@ public class DatStatUtils
     return statsProvider;
   }
 
-  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties, StatsProvider statsProvider)
+  private StatProvider buildStatProvider(String propsPrefix, PropertiesSet statProperties, StatsProvider statsProvider)
   {
     String descriptionOverride=getDescriptionOverride(statProperties);
-    StatProvider provider=buildStatProvider(propsPrefix,facade,statProperties);
+    StatProvider provider=buildStatProvider(propsPrefix,statProperties);
     if (provider!=null)
     {
       // Descriptor override
@@ -128,8 +151,8 @@ public class DatStatUtils
         provider.setDescriptionOverride(descriptionOverride);
       }
       StatDescription stat=provider.getStat();
-      STATS_USAGE_STATISTICS.registerStatUsage(stat);
-      provider=handleSpecificCases(provider,facade,statsProvider,descriptionOverride);
+      _statistics.registerStatUsage(stat);
+      provider=handleSpecificCases(provider,statsProvider,descriptionOverride);
       return provider;
     }
     // Effect label only
@@ -145,7 +168,7 @@ public class DatStatUtils
     return null;
   }
 
-  private static StatProvider handleSpecificCases(StatProvider provider, DataFacade facade, StatsProvider statsProvider, String descriptionOverride)
+  private StatProvider handleSpecificCases(StatProvider provider, StatsProvider statsProvider, String descriptionOverride)
   {
     StatDescription stat=provider.getStat();
     if (isSpecialStat(stat))
@@ -154,7 +177,7 @@ public class DatStatUtils
       String label=descriptionOverride;
       if (descriptionOverride==null)
       {
-        label=handleSpecialStat(facade,(ConstantStatProvider)provider);
+        label=handleSpecialStat((ConstantStatProvider)provider);
       }
       if (!StatUtils.NO_DESCRIPTION.equals(label))
       {
@@ -197,18 +220,18 @@ public class DatStatUtils
     return false;
   }
 
-  private static String handleSpecialStat(DataFacade facade, ConstantStatProvider provider)
+  private String handleSpecialStat(ConstantStatProvider provider)
   {
     StatDescription stat=provider.getStat();
     String statName=stat.getName();
     float value=provider.getValue();
-    EnumMapper mapper=facade.getEnumsManager().getEnumMapper(587202600);
+    EnumMapper mapper=_facade.getEnumsManager().getEnumMapper(587202600);
     String valueName=mapper.getLabel((int)value);
     String result="Set "+statName+" to "+valueName;
     return result;
   }
 
-  private static StatProvider buildStatProvider(String propsPrefix, DataFacade facade, PropertiesSet statProperties)
+  private StatProvider buildStatProvider(String propsPrefix, PropertiesSet statProperties)
   {
     StatProvider provider=null;
 
@@ -225,7 +248,7 @@ public class DatStatUtils
     {
       return null;
     }
-    PropertyDefinition def=facade.getPropertiesRegistry().getPropertyDef(statId);
+    PropertyDefinition def=_facade.getPropertiesRegistry().getPropertyDef(statId);
     StatDescription stat=getStatDescription(def);
     if (stat==null)
     {
@@ -245,7 +268,7 @@ public class DatStatUtils
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
     {
-      provider=buildStatProvider(facade,stat,progressId.intValue());
+      provider=buildStatProvider(stat,progressId.intValue());
     }
     else
     {
@@ -316,33 +339,31 @@ public class DatStatUtils
 
   /**
    * Build a stat provider from the given progression identifier.
-   * @param facade Data facade.
    * @param stat Targeted stat.
    * @param progressId Progression ID.
    * @return A stat provider.
    */
-  public static StatProvider buildStatProvider(DataFacade facade, StatDescription stat, int progressId)
+  public StatProvider buildStatProvider(StatDescription stat, int progressId)
   {
     if (progressId==0) return null;
-    PropertiesSet properties=facade.loadProperties(progressId+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet properties=_facade.loadProperties(progressId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
     if (progressionIds!=null)
     {
-      return getTieredProgression(facade,stat,properties);
+      return getTieredProgression(stat,properties);
     }
-    Progression progression=ProgressionUtils.getProgression(facade,progressId);
+    Progression progression=ProgressionUtils.getProgression(_facade,progressId);
     ScalableStatProvider scalableStat=new ScalableStatProvider(stat,progression);
     return scalableStat;
   }
 
   /**
    * Get a progression curve.
-   * @param facade Data facade.
    * @param stat Involved stat.
    * @param properties Progression properties.
    * @return A progression curve or <code>null</code> if not found.
    */
-  private static TieredScalableStatProvider getTieredProgression(DataFacade facade, StatDescription stat, PropertiesSet properties)
+  private TieredScalableStatProvider getTieredProgression(StatDescription stat, PropertiesSet properties)
   {
     Object[] progressionIds=(Object[])properties.getProperty("DataIDProgression_Array");
     int nbTiers=progressionIds.length;
@@ -351,7 +372,7 @@ public class DatStatUtils
     for(Object progressionIdObj : progressionIds)
     {
       int progressionId=((Integer)progressionIdObj).intValue();
-      Progression progression=ProgressionUtils.getProgression(facade,progressionId);
+      Progression progression=ProgressionUtils.getProgression(_facade,progressionId);
       ret.setProgression(tier,progression);
       tier++;
     }

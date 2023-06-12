@@ -62,6 +62,7 @@ public class LegaciesLoader
   public static final File LEGACIES_ICONS_DIR=new File("data\\legacies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
   private LegaciesManager _imbuedLegaciesManager;
   private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
@@ -75,6 +76,7 @@ public class LegaciesLoader
   public LegaciesLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
     _imbuedLegaciesManager=new LegaciesManager();
     _progressionControl=new ProgressionControlLoader(facade);
@@ -87,7 +89,6 @@ public class LegaciesLoader
    */
   public void loadLegacies()
   {
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     loadNonImbuedLegacies();
     loadImbuedLegacies();
   }
@@ -137,7 +138,7 @@ public class LegaciesLoader
     Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
     if (imbuedEffect!=null)
     {
-      StatsProvider provider=DatEffectUtils.loadEffectStats(_facade,imbuedEffect.intValue());
+      StatsProvider provider=DatEffectUtils.loadEffectStats(_statUtils,imbuedEffect.intValue());
       ret.setStatsProvider(provider);
     }
 
@@ -404,7 +405,7 @@ public class LegaciesLoader
   private NonImbuedLegacyTier buildTieredLegacy(int effectId, Boolean major)
   {
     NonImbuedLegacyTier legacyTier=null;
-    Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
+    Effect effect=DatEffectUtils.loadEffect(_statUtils,effectId);
     // Remove name: it is not interesting for tiered legacies
     effect.setName(null);
     // Remove icon: it is not interesting for tiered legacies
@@ -599,7 +600,7 @@ public class LegaciesLoader
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
     if (legacy==null)
     {
-      Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
+      Effect effect=DatEffectUtils.loadEffect(_statUtils,effectId);
       if (effect!=null)
       {
         // Remove name: it is not interesting for non imbued legacies

@@ -6,7 +6,6 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 
 /**
@@ -65,8 +64,6 @@ public class MainCharacterDataLoader
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     new MainCharacterDataLoader(facade).doIt();
-    // Stats usage statistics
-    DatStatUtils.STATS_USAGE_STATISTICS.showResults();
     facade.dispose();
   }
 }

@@ -39,6 +39,7 @@ public class MainDatRelicsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private I18nUtils _i18n;
   private RelicsManager _relicsMgr;
   private LotroEnum<RunicTier> _tiers;
@@ -50,6 +51,7 @@ public class MainDatRelicsLoader
   public MainDatRelicsLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("relics",facade.getGlobalStringsManager());
     _relicsMgr=new RelicsManager();
     _tiers=LotroEnumsRegistry.getInstance().get(RunicTier.class);
@@ -85,11 +87,11 @@ public class MainDatRelicsLoader
       // Level
       Integer level=(Integer)properties.getProperty("Runic_Level");
       // Stats
-      StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       BasicStatsSet stats=statsProvider.getStats(1,level.intValue());
       relic.getStats().addStats(stats);
       // Runic stats
-      StatsProvider runicStatsProvider=DatStatUtils.buildStatProviders("Runic_",_facade,properties);
+      StatsProvider runicStatsProvider=_statUtils.buildStatProviders("Runic_",properties);
       if (runicStatsProvider.getNumberOfStatProviders()>0)
       {
         BasicStatsSet runicStats=runicStatsProvider.getStats(1,level.intValue());
@@ -162,7 +164,6 @@ public class MainDatRelicsLoader
    */
   public void doIt()
   {
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       byte[] data=_facade.loadData(id);
@@ -188,7 +189,7 @@ public class MainDatRelicsLoader
     _i18n.save();
     // Stats usage statistics
     System.out.println("Stats usage statistics (relics):");
-    DatStatUtils.STATS_USAGE_STATISTICS.showResults();
+    _statUtils.showStatistics();
   }
 
   /**

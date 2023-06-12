@@ -16,6 +16,7 @@ import delta.games.lotro.lore.buffs.EffectBuff;
 import delta.games.lotro.lore.buffs.io.xml.EffectBuffXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
@@ -33,6 +34,7 @@ public class MainBuffsLoader
   private static File EFFECT_ICONS_DIR=new File("data\\effects\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private I18nUtils _i18n;
 
   /**
@@ -42,6 +44,7 @@ public class MainBuffsLoader
   public MainBuffsLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("buffs",facade.getGlobalStringsManager());
   }
 
@@ -112,7 +115,7 @@ public class MainBuffsLoader
   private void loadBuff(List<EffectBuff> buffs, int id, String key)
   {
     EffectBuff buff=null;
-    Effect effect=DatEffectUtils.loadEffect(_facade,id,_i18n);
+    Effect effect=DatEffectUtils.loadEffect(_statUtils,id,_i18n);
     if (effect!=null)
     {
       buff=new EffectBuff();

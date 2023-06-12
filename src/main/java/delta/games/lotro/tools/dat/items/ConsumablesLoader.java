@@ -21,6 +21,7 @@ import delta.games.lotro.lore.consumables.io.xml.ConsumableXMLWriter;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Loader for consumables.
@@ -29,6 +30,7 @@ import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 public class ConsumablesLoader
 {
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private Map<Integer,Effect> _parsedEffects;
   private Integer _spellcraftProperty;
   private List<Consumable> _consumables;
@@ -42,6 +44,7 @@ public class ConsumablesLoader
   public ConsumablesLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _parsedEffects=new HashMap<Integer,Effect>();
     _consumables=new ArrayList<Consumable>();
   }
@@ -136,7 +139,7 @@ public class ConsumablesLoader
     Effect effect=_parsedEffects.get(key);
     if (effect==null)
     {
-      effect=DatEffectUtils.loadEffect(_facade,effectId);
+      effect=DatEffectUtils.loadEffect(_statUtils,effectId);
       // Remove icon: it is not interesting for consumable effects
       effect.setIconId(null);
       _parsedEffects.put(key,effect);

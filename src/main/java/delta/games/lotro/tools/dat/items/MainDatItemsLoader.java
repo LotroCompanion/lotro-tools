@@ -113,6 +113,7 @@ public class MainDatItemsLoader
   };
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private I18nUtils _i18n;
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
@@ -141,6 +142,7 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("items",facade.getGlobalStringsManager());
     _live=Context.isLive();
     _passivesLoader=new PassivesLoader(_facade);
@@ -263,7 +265,7 @@ public class MainDatItemsLoader
         Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
         if (armourProgressId!=null)
         {
-          armorStatProvider=DatStatUtils.buildStatProvider(_facade,WellKnownStat.ARMOUR,armourProgressId.intValue());
+          armorStatProvider=_statUtils.buildStatProvider(WellKnownStat.ARMOUR,armourProgressId.intValue());
           int statsLevel=item.getItemLevelForStats().intValue();
           Float computedArmourValue=armorStatProvider.getStatValue(1,statsLevel);
           if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
@@ -292,7 +294,7 @@ public class MainDatItemsLoader
       // - profession
       RequirementsLoadingUtils.loadRequiredProfession(properties,item.getUsageRequirements());
       // Stats providers
-      StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+      StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       if (armorStatProvider!=null)
       {
         // Handle special case of the 3 "Shield of the Hammerhand"
@@ -553,7 +555,7 @@ public class MainDatItemsLoader
         // Critical defence
         if (_live)
         {
-          StatProvider critDef=DatStatUtils.buildStatProvider(_facade,WellKnownStat.CRITICAL_DEFENCE,1879260945);
+          StatProvider critDef=_statUtils.buildStatProvider(WellKnownStat.CRITICAL_DEFENCE,1879260945);
           statsProvider.addStatProvider(critDef);
         }
       }
@@ -593,7 +595,7 @@ public class MainDatItemsLoader
     boolean useEffect=useEffect(effectProps);
     if (useEffect)
     {
-      return DatStatUtils.buildStatProviders(_facade,effectProps);
+      return _statUtils.buildStatProviders(effectProps);
     }
     return null;
   }
@@ -1049,7 +1051,6 @@ public class MainDatItemsLoader
       _itemLevelOffsets=ItemLevelOffsetsUtils.buildOffsetsMap(_facade);
     }
     // Items
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<Item> items=new ArrayList<Item>();
     List<Legendary2> legendaryItems=new ArrayList<Legendary2>();
     HashMap<Integer,Item> mapById=new HashMap<Integer,Item>();
@@ -1093,7 +1094,7 @@ public class MainDatItemsLoader
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
     System.out.println("Stats usage statistics (items):");
-    DatStatUtils.STATS_USAGE_STATISTICS.showResults();
+    _statUtils.showStatistics();
     // Save passives
     _passivesLoader.savePassives();
     // Save consumables

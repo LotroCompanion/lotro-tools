@@ -17,6 +17,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 public class MainDatEffectsLoader
 {
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
 
   /**
    * Constructor.
@@ -25,11 +26,12 @@ public class MainDatEffectsLoader
   public MainDatEffectsLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
   }
 
   private Effect load(int effectId)
   {
-    Effect ret=DatEffectUtils.loadEffect(_facade,effectId);
+    Effect ret=DatEffectUtils.loadEffect(_statUtils,effectId);
     if (ret!=null)
     {
       String name=ret.getName();
@@ -58,7 +60,6 @@ public class MainDatEffectsLoader
 
   private void doIt()
   {
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
       boolean useIt=useId(id);

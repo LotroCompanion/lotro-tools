@@ -30,6 +30,7 @@ public class VirtueDataLoader
   private static final Logger LOGGER=Logger.getLogger(VirtueDataLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
 
   /**
    * Constructor.
@@ -38,6 +39,7 @@ public class VirtueDataLoader
   public VirtueDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
   }
 
   private void loadVirtues()
@@ -81,6 +83,7 @@ public class VirtueDataLoader
       }
     }
     saveVirtues(virtues);
+    _statUtils.showStatistics();
   }
 
   /**
@@ -89,7 +92,7 @@ public class VirtueDataLoader
    * @param id Virtue identifier.
    * @return the loaded virtue description.
    */
-  public static VirtueDescription loadVirtue(DataFacade facade, int id)
+  private VirtueDescription loadVirtue(DataFacade facade, int id)
   {
     PropertiesSet virtueProperties=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     if (virtueProperties==null)
@@ -124,8 +127,7 @@ public class VirtueDataLoader
       ret.setXpPropertyName(xpPropertyName);
     }
     // Stats
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
-    StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
+    StatsProvider statsProvider=_statUtils.buildStatProviders(virtueProperties);
     ret.setStatsProvider(statsProvider);
     // Rank to level
     // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
@@ -183,10 +185,10 @@ public class VirtueDataLoader
     return ret;
   }
 
-  private static StatsProvider handleEffect(DataFacade facade, int effectId)
+  private StatsProvider handleEffect(DataFacade facade, int effectId)
   {
     PropertiesSet effectProperties=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
-    StatsProvider provider=DatStatUtils.buildStatProviders(facade,effectProperties);
+    StatsProvider provider=_statUtils.buildStatProviders(effectProperties);
     return provider;
   }
 

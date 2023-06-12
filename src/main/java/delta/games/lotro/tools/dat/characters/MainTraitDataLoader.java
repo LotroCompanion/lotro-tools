@@ -38,6 +38,7 @@ public class MainTraitDataLoader
   private static final Logger LOGGER=Logger.getLogger(MainTraitDataLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private I18nUtils _i18n;
   private Map<Integer,Integer> _traitIds2PropMap;
 
@@ -48,6 +49,7 @@ public class MainTraitDataLoader
   public MainTraitDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
   }
 
@@ -187,8 +189,7 @@ public class MainTraitDataLoader
     boolean cosmetic=((cosmeticCode!=null) && (cosmeticCode.intValue()!=0));
     ret.setCosmetic(cosmetic);
     // Stats
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
-    StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,traitProperties);
+    StatsProvider statsProvider=_statUtils.buildStatProviders(traitProperties);
     ret.setStatsProvider(statsProvider);
     // Build icon file
     if (iconId!=null)

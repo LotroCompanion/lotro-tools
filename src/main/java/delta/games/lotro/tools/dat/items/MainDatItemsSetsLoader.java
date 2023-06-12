@@ -36,6 +36,7 @@ public class MainDatItemsSetsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsSetsLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private I18nUtils _i18n;
 
   /**
@@ -45,6 +46,7 @@ public class MainDatItemsSetsLoader
   public MainDatItemsSetsLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("itemsSets",facade.getGlobalStringsManager());
   }
 
@@ -180,7 +182,7 @@ Set_Name:
     {
       return null;
     }
-    StatsProvider provider=DatStatUtils.buildStatProviders(_facade,properties);
+    StatsProvider provider=_statUtils.buildStatProviders(properties);
     if (provider==null)
     {
       return null;
@@ -195,7 +197,7 @@ Set_Name:
         PropertiesSet effectProps=(PropertiesSet)effectObj;
         // EffectGenerator_EffectSpellcraft
         int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-        Effect effect=DatEffectUtils.loadEffect(_facade,effectId);
+        Effect effect=DatEffectUtils.loadEffect(_statUtils,effectId);
         StatsProvider effectStats=effect.getStatsProvider();
         int nbEffectStats=effectStats.getNumberOfStatProviders();
         for(int i=0;i<nbEffectStats;i++)
@@ -244,7 +246,6 @@ Set_Name:
    */
   public void doIt()
   {
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 
     PropertiesSet props=_facade.loadProperties(0x79009869); // GameSetDirectory

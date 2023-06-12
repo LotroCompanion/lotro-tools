@@ -37,6 +37,7 @@ public class MainDatLegendaryTitlesLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatLegendaryTitlesLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private LotroEnum<LegendaryTitleCategory> _category;
   private LotroEnum<Genus> _genus;
   private LotroEnum<LegendaryTitleTier> _tier;
@@ -49,6 +50,7 @@ public class MainDatLegendaryTitlesLoader
   public MainDatLegendaryTitlesLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("legendaryTitles",facade.getGlobalStringsManager());
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _category=registry.get(LegendaryTitleCategory.class);
@@ -133,7 +135,7 @@ Mod_Array:
       // Stats
       // - Private stats
       {
-        StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
+        StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
         if (statsProvider.getNumberOfStatProviders()>0)
         {
           // Level does not matter because it's only constant stats
@@ -150,7 +152,7 @@ Mod_Array:
           PropertiesSet effectProps=(PropertiesSet)effectObj;
           int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
           Float spellCraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-          StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_facade,effectId);
+          StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_statUtils,effectId);
           int level=spellCraft.intValue();
           BasicStatsSet stats=statsProvider.getStats(1,level);
           ret.getStats().addStats(stats);
@@ -182,7 +184,6 @@ Mod_Array:
    */
   public void doIt()
   {
-    DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<LegendaryTitle> titles=new ArrayList<LegendaryTitle>();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {

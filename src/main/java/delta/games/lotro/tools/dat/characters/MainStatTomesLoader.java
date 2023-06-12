@@ -15,6 +15,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Get stat tomes from DAT files.
@@ -25,6 +26,7 @@ public class MainStatTomesLoader
   private static final Logger LOGGER=Logger.getLogger(MainStatTomesLoader.class);
 
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private StatTomesManager _tomesManager;
 
   /**
@@ -34,6 +36,7 @@ public class MainStatTomesLoader
   public MainStatTomesLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _tomesManager=new StatTomesManager();
   }
 
@@ -78,7 +81,7 @@ public class MainStatTomesLoader
       PropertiesSet traitEffectProps=(PropertiesSet)traitEffects[0];
       int effectId=((Integer)traitEffectProps.getProperty("EffectGenerator_EffectID")).intValue();
       Float spellcraft=(Float)traitEffectProps.getProperty("EffectGenerator_EffectSpellcraft");
-      StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_facade,effectId);
+      StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_statUtils,effectId);
       int level=spellcraft.intValue();
       BasicStatsSet stats=statsProvider.getStats(1,level);
       registerStatTome(tomeTraitId,rank,stats);

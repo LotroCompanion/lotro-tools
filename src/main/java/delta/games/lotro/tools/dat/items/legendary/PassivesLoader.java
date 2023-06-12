@@ -16,6 +16,7 @@ import delta.games.lotro.lore.items.legendary.passives.PassivesGroup;
 import delta.games.lotro.lore.items.legendary.passives.io.xml.PassivesGroupsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 
 /**
  * Loader for legendary passives.
@@ -24,6 +25,7 @@ import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 public class PassivesLoader
 {
   private DataFacade _facade;
+  private DatStatUtils _statUtils;
   private Map<Integer,PassivesGroup> _loadedGroups;
   private Map<Integer,Effect> _parsedEffects;
 
@@ -34,6 +36,7 @@ public class PassivesLoader
   public PassivesLoader(DataFacade facade)
   {
     _facade=facade;
+    _statUtils=new DatStatUtils(facade);
     _loadedGroups=new HashMap<Integer,PassivesGroup>();
     _parsedEffects=new HashMap<Integer,Effect>();
   }
@@ -79,7 +82,7 @@ public class PassivesLoader
         Effect effect=_parsedEffects.get(effectId);
         if (effect==null)
         {
-          effect=DatEffectUtils.loadEffect(_facade,effectId.intValue());
+          effect=DatEffectUtils.loadEffect(_statUtils,effectId.intValue());
           // Remove name: it is not interesting for passives
           effect.setName(null);
           // Remove icon: it is not interesting for passives

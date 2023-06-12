@@ -19,38 +19,40 @@ public class DatEffectUtils
 
   /**
    * Load stats for an effect.
-   * @param facade Data facade.
+   * @param statUtils Stat utilities.
    * @param effectId Effect identifier.
    * @return A stats provider.
    */
-  public static StatsProvider loadEffectStats(DataFacade facade, int effectId)
+  public static StatsProvider loadEffectStats(DatStatUtils statUtils, int effectId)
   {
+    DataFacade facade=statUtils.getFacade();
     PropertiesSet effectProps=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
-    StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,effectProps);
+    StatsProvider statsProvider=statUtils.buildStatProviders(effectProps);
     return statsProvider;
   }
 
   /**
    * Load an effect.
-   * @param facade Data facade.
+   * @param statUtils Stat utils.
    * @param effectId Effect identifier.
    * @return An effect or <code>null</code> if not found.
    */
-  public static Effect loadEffect(DataFacade facade, int effectId)
+  public static Effect loadEffect(DatStatUtils statUtils, int effectId)
   {
-    return loadEffect(facade,effectId,null);
+    return loadEffect(statUtils,effectId,null);
   }
 
   /**
    * Load an effect.
-   * @param facade Data facade.
+   * @param statUtils Stat utils.
    * @param effectId Effect identifier.
    * @param i18nUtils I18N utilities.
    * @return An effect or <code>null</code> if not found.
    */
-  public static Effect loadEffect(DataFacade facade, int effectId, I18nUtils i18nUtils)
+  public static Effect loadEffect(DatStatUtils statUtils, int effectId, I18nUtils i18nUtils)
   {
     Effect ret=null;
+    DataFacade facade=statUtils.getFacade();
     PropertiesSet effectProps=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     if (effectProps!=null)
     {
@@ -77,7 +79,7 @@ public class DatEffectUtils
         ret.setIconId(effectIconId);
       }
       // Stats
-      StatsProvider provider=DatStatUtils.buildStatProviders(facade,effectProps);
+      StatsProvider provider=statUtils.buildStatProviders(effectProps);
       ret.setStatsProvider(provider);
     }
     else
