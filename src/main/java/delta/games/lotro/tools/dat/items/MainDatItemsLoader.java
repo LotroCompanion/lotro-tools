@@ -291,7 +291,6 @@ public class MainDatItemsLoader
       // - profession
       RequirementsLoadingUtils.loadRequiredProfession(properties,item.getUsageRequirements());
       // Stats providers
-      DatStatUtils._doFilterStats=false;
       StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,properties);
       if (armorStatProvider!=null)
       {
@@ -325,7 +324,6 @@ public class MainDatItemsLoader
         loadCarryAllSpecifics((CarryAll)item,properties);
       }
       // Handle legendaries
-      DatStatUtils._doFilterStats=false;
       handleLegendaries(item, properties);
       // Value
       handleItemValue(item,properties);

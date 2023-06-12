@@ -123,7 +123,6 @@ public class VirtueDataLoader
       ret.setXpPropertyName(xpPropertyName);
     }
     // Stats
-    DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(facade,virtueProperties);
     ret.setStatsProvider(statsProvider);

@@ -187,7 +187,6 @@ public class MainTraitDataLoader
     boolean cosmetic=((cosmeticCode!=null) && (cosmeticCode.intValue()!=0));
     ret.setCosmetic(cosmetic);
     // Stats
-    DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     StatsProvider statsProvider=DatStatUtils.buildStatProviders(_facade,traitProperties);
     ret.setStatsProvider(statsProvider);

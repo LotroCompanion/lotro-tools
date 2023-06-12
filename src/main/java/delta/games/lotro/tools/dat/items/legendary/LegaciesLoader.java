@@ -86,7 +86,6 @@ public class LegaciesLoader
    */
   public void loadLegacies()
   {
-    DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     loadNonImbuedLegacies();
     loadImbuedLegacies();

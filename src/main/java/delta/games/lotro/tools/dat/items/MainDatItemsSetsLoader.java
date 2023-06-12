@@ -243,7 +243,6 @@ Set_Name:
    */
   public void doIt()
   {
-    DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     List<ItemsSet> sets=new ArrayList<ItemsSet>();
 

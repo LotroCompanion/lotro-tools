@@ -35,11 +35,6 @@ public class DatStatUtils
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
   /**
-   * Flag to indicate if stats shall be filtered or not.
-   */
-  public static boolean _doFilterStats=true;
-
-  /**
    * Progressions manager.
    */
   public static final ProgressionsManager PROGRESSIONS_MGR=new ProgressionsManager();
@@ -413,39 +408,6 @@ public class DatStatUtils
       return false;
     }
     //System.out.println("Type: "+type);
-    if (_doFilterStats)
-    {
-      return stat.isPremium();
-    }
     return true;
   }
-
-  /*
-  private static boolean old_useStat(String key)
-  {
-    if ("AI_PetEffect_HeraldBaseWC_Override".equals(key)) return false;
-    if ("AI_PetEffect_ArcherBaseWC_Override".equals(key)) return false;
-    if ("AI_PetEffect_HeraldHopeWC_Override".equals(key)) return false;
-    if ("AI_PetEffect_HeraldVictoryWC_Override".equals(key)) return false;
-    if ("Trait_Loremaster_PetModStat_Slot2".equals(key)) return false;
-    if ("Trait_Captain_PetModStat_Slot4".equals(key)) return false;
-    // Only on a test item
-    if ("Skill_RiftSet_Absorb_Fire".equals(key)) return false;
-    // Gives affinity for RK stones: fire, frost or lightning
-    if ("ForwardSource_Combat_TraitCombo".equals(key)) return false;
-    if ("Item_Runekeeper_PreludeofHope_Cleanse".equals(key)) return false;
-    if ("Skill_EffectOverride_Burglar_ExploitOpening".equals(key)) return false;
-    if ("Combat_MeleeDmgQualifier_WeaponProcEffect".equals(key)) return false;
-    if ("Item_Minstrel_Oathbreaker_Damagetype".equals(key)) return false;
-
-    if ("Trait_PvMP_BattleRank".equals(key)) return false;
-    if ("Skill_VitalCost_Champion_AOEMod".equals(key)) return false;
-    if ("Skill_VitalCost_Champion_StrikeMod".equals(key)) return false;
-    if ("Skill_InductionDuration_ResearchingMod".equals(key)) return false;
-    if ("TotalThreatModifier_Player".equals(key)) return false;
-    if ("Skill_InductionDuration_AllSkillsMod".equals(key)) return false;
-
-    return true;
-  }
-  */
 }

@@ -50,7 +50,6 @@ public class MainBuffsLoader
    */
   public void doIt()
   {
-    DatStatUtils._doFilterStats=false;
     List<EffectBuff> buffs=loadBuffs();
     // Save
     // - data

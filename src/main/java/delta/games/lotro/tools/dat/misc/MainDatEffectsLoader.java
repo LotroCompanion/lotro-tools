@@ -58,7 +58,6 @@ public class MainDatEffectsLoader
 
   private void doIt()
   {
-    DatStatUtils._doFilterStats=false;
     DatStatUtils.STATS_USAGE_STATISTICS.reset();
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
     {
