@@ -28,8 +28,7 @@ import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get relic definitions from DAT files.
@@ -40,6 +39,7 @@ public class MainDatRelicsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private RelicsManager _relicsMgr;
   private LotroEnum<RunicTier> _tiers;
 
@@ -50,6 +50,7 @@ public class MainDatRelicsLoader
   public MainDatRelicsLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("relics",facade.getGlobalStringsManager());
     _relicsMgr=new RelicsManager();
     _tiers=LotroEnumsRegistry.getInstance().get(RunicTier.class);
   }
@@ -61,8 +62,7 @@ public class MainDatRelicsLoader
     if (properties!=null)
     {
       // Name
-      String name=DatUtils.getStringProperty(properties,"Runic_Name");
-      name=StringUtils.fixName(name);
+      String name=_i18n.getNameStringProperty(properties,"Runic_Name",relicId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       relic=new Relic(relicId,name);
       // Type
       int relicType=((Integer)properties.getProperty("Runic_Type")).intValue();
@@ -178,12 +178,15 @@ public class MainDatRelicsLoader
         }
       }
     }
-    // Write result file
+    // Save
+    // - data file
     boolean ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS);
     if (ok)
     {
       System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
     }
+    // - labels
+    _i18n.save();
     // Stats usage statistics
     System.out.println("Stats usage statistics (relics):");
     DatStatUtils.STATS_USAGE_STATISTICS.showResults();
