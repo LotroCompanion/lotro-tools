@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.progression.ProgressionsManager;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
@@ -33,11 +32,6 @@ import delta.games.lotro.utils.maths.Progression;
 public class DatStatUtils
 {
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
-
-  /**
-   * Progressions manager.
-   */
-  public static final ProgressionsManager PROGRESSIONS_MGR=new ProgressionsManager();
 
   /**
    * Stats usage statistics.
@@ -321,31 +315,6 @@ public class DatStatUtils
   }
 
   /**
-   * Get a progression curve.
-   * @param facade Data facade.
-   * @param progressId Progression ID.
-   * @return A progression curve or <code>null</code> if not found.
-   */
-  public static Progression getProgression(DataFacade facade, int progressId)
-  {
-    Progression ret=PROGRESSIONS_MGR.getProgression(progressId);
-    if (ret==null)
-    {
-      long progressPropertiesId=progressId+DATConstants.DBPROPERTIES_OFFSET;
-      PropertiesSet progressProperties=facade.loadProperties(progressPropertiesId);
-      if (progressProperties!=null)
-      {
-        ret=ProgressionFactory.buildProgression(progressId, progressProperties);
-        if (ret!=null)
-        {
-          PROGRESSIONS_MGR.registerProgression(progressId,ret);
-        }
-      }
-    }
-    return ret;
-  }
-
-  /**
    * Build a stat provider from the given progression identifier.
    * @param facade Data facade.
    * @param stat Targeted stat.
@@ -361,7 +330,7 @@ public class DatStatUtils
     {
       return getTieredProgression(facade,stat,properties);
     }
-    Progression progression=getProgression(facade,progressId);
+    Progression progression=ProgressionUtils.getProgression(facade,progressId);
     ScalableStatProvider scalableStat=new ScalableStatProvider(stat,progression);
     return scalableStat;
   }
@@ -382,7 +351,7 @@ public class DatStatUtils
     for(Object progressionIdObj : progressionIds)
     {
       int progressionId=((Integer)progressionIdObj).intValue();
-      Progression progression=getProgression(facade,progressionId);
+      Progression progression=ProgressionUtils.getProgression(facade,progressionId);
       ret.setProgression(tier,progression);
       tier++;
     }
@@ -394,7 +363,7 @@ public class DatStatUtils
    * @param propertyDefinition Property definition.
    * @return A stat description.
    */
-  public static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
+  private static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
   {
     return delta.games.lotro.utils.dat.DatStatUtils.getStatDescription(propertyDefinition.getPropertyId(),propertyDefinition.getName());
   }

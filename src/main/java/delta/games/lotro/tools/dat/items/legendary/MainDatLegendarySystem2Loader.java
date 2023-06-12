@@ -6,7 +6,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.legendary2.global.LegendaryData2;
 import delta.games.lotro.lore.items.legendary2.global.io.xml.LegendaryData2XMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -56,7 +56,7 @@ public class MainDatLegendarySystem2Loader
 
     // Character level to item level progression
     int progressionID=((Integer)itemAdvancementControlProps.getProperty("ItemAdvancement_MaxILevelProgression")).intValue();
-    Progression progression=DatStatUtils.getProgression(_facade,progressionID);
+    Progression progression=ProgressionUtils.getProgression(_facade,progressionID);
     _data.setCharacterLevel2ItemLevelProgression(progression);
   }
 
@@ -64,7 +64,7 @@ public class MainDatLegendarySystem2Loader
   {
     LegendaryData2XMLWriter.write(GeneratedFiles.LEGENDARY_DATA2,_data);
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
   }
 
   /**

@@ -16,7 +16,7 @@ import delta.games.lotro.lore.buffs.EffectBuff;
 import delta.games.lotro.lore.buffs.io.xml.EffectBuffXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -149,7 +149,7 @@ public class MainBuffsLoader
     // Buffs file
     saveBuffs(buffs);
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_BUFFS);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     // Write effect icons archive
     DirectoryArchiver archiver=new DirectoryArchiver();
     boolean ok=archiver.go(GeneratedFiles.EFFECT_ICONS,EFFECT_ICONS_DIR);

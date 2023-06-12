@@ -53,7 +53,7 @@ public class StatsUsageStatistics
    * Get the list of used stats.
    * @return A list of stats, ordered by decreasing usage count.
    */
-  public List<StatDescription> getUsedStats()
+  private List<StatDescription> getUsedStats()
   {
     List<StatDescription> stats=new ArrayList<StatDescription>(_data.keySet());
     Comparator<StatDescription> c=new Comparator<StatDescription>()

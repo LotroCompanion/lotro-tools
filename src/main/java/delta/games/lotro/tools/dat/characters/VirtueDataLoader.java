@@ -17,6 +17,7 @@ import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -128,7 +129,7 @@ public class VirtueDataLoader
     ret.setStatsProvider(statsProvider);
     // Rank to level
     // ID to be loaded from TraitControl:Trait_Control_VirtueTierToItemLevelProgression
-    Progression rankToLevel=DatStatUtils.getProgression(facade,1879387583);
+    Progression rankToLevel=ProgressionUtils.getProgression(facade,1879387583);
     if (rankToLevel==null)
     {
       LOGGER.warn("Could not find progression rank->level for virtues");
@@ -137,7 +138,7 @@ public class VirtueDataLoader
     Integer charLevelToMaxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
     if (charLevelToMaxRankProgId!=null)
     {
-      Progression charLevelToMaxRankProg=DatStatUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
+      Progression charLevelToMaxRankProg=ProgressionUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
       if (charLevelToMaxRankProg==null)
       {
         LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
@@ -162,7 +163,7 @@ public class VirtueDataLoader
     Integer maxRankProgId=(Integer)virtueProperties.getProperty("Trait_Virtue_Maximum_Rank_PlayerPropertyName_Progression");
     if (maxRankProgId!=null)
     {
-      Progression maxRankProg=DatStatUtils.getProgression(facade,maxRankProgId.intValue());
+      Progression maxRankProg=ProgressionUtils.getProgression(facade,maxRankProgId.intValue());
       if (maxRankProg!=null)
       {
         ret.setMaxRankForCharacterLevelProgression(maxRankProg);

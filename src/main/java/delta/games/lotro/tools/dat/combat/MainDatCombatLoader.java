@@ -14,7 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -67,13 +67,13 @@ public class MainDatCombatLoader
     {
       // Hard cap
       int hardCapId=((Integer)calcControlProps.getProperty("Combat_Control_Hard_Cap")).intValue();
-      Progression hardCapProg=DatStatUtils.getProgression(_facade,hardCapId);
+      Progression hardCapProg=ProgressionUtils.getProgression(_facade,hardCapId);
       // Rating
       int ratingId=((Integer)calcControlProps.getProperty("Combat_Control_Rating")).intValue();
-      Progression ratingProg=DatStatUtils.getProgression(_facade,ratingId);
+      Progression ratingProg=ProgressionUtils.getProgression(_facade,ratingId);
       // Target cap
       int targetCapId=((Integer)calcControlProps.getProperty("Combat_Control_Target_Cap")).intValue();
-      Progression targetCapProg=DatStatUtils.getProgression(_facade,targetCapId);
+      Progression targetCapProg=ProgressionUtils.getProgression(_facade,targetCapId);
 
       ProgressionRatingCurveImpl curve=new ProgressionRatingCurveImpl(hardCapProg,ratingProg,targetCapProg);
       _data.getRatingsMgr().setCurve(id,curve);
@@ -177,7 +177,7 @@ public class MainDatCombatLoader
   {
     CombatDataXMLWriter.write(GeneratedFiles.COMBAT_DATA,_data);
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_COMBAT);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_COMBAT);
   }
 
   /**

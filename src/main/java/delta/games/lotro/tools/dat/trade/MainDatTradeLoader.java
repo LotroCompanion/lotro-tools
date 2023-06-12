@@ -36,7 +36,7 @@ import delta.games.lotro.lore.trade.vendor.SellList;
 import delta.games.lotro.lore.trade.vendor.VendorNpc;
 import delta.games.lotro.lore.trade.vendor.io.xml.VendorXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.Progression;
@@ -313,7 +313,7 @@ public class MainDatTradeLoader
         Integer lookupTableId=(Integer)itemProps.getProperty("Barter_ItemQuantity_LookupTable");
         if (lookupTableId!=null)
         {
-          Progression progression=DatStatUtils.getProgression(_facade,lookupTableId.intValue());
+          Progression progression=ProgressionUtils.getProgression(_facade,lookupTableId.intValue());
           if (level!=null)
           {
             Float yValue=progression.getValue(level.intValue());

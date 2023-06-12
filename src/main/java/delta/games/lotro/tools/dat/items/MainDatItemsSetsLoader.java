@@ -24,6 +24,7 @@ import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -269,7 +270,7 @@ Set_Name:
       LOGGER.info("Wrote sets file: "+to);
     }
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
     // Save labels
     _i18n.save();
   }

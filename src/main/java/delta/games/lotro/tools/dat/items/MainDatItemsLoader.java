@@ -71,6 +71,7 @@ import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
@@ -846,7 +847,7 @@ public class MainDatItemsLoader
       Progression progression=null;
       if (progressionId!=null)
       {
-        progression=DatStatUtils.getProgression(_facade,progressionId.intValue());
+        progression=ProgressionUtils.getProgression(_facade,progressionId.intValue());
       }
       Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
       String mungingSpec=munging.asString();
@@ -1089,7 +1090,7 @@ public class MainDatItemsLoader
     Collections.sort(_enhancementRunes,new IdentifiableComparator<EnhancementRune>());
     EnhancementRunesXMLWriter.write(GeneratedFiles.ENHANCEMENT_RUNES,_enhancementRunes);
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
     System.out.println("Stats usage statistics (items):");
     DatStatUtils.STATS_USAGE_STATISTICS.showResults();

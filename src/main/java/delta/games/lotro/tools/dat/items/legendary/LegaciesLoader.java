@@ -44,6 +44,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.ProgressionControlLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.WeaponTypesUtils;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -184,7 +185,7 @@ public class LegaciesLoader
   private StatsProvider loadDpsLut(int id)
   {
     StatsProvider ret=new StatsProvider();
-    Progression progression=DatStatUtils.getProgression(_facade,id);
+    Progression progression=ProgressionUtils.getProgression(_facade,id);
     ScalableStatProvider dps=new ScalableStatProvider(WellKnownStat.DPS,progression);
     ret.addStatProvider(dps);
     return ret;

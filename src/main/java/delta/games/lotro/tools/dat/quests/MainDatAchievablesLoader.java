@@ -12,7 +12,7 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 
 /**
@@ -127,7 +127,7 @@ public class MainDatAchievablesLoader
     // Save deeds
     _deedsLoader.save();
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     // Save others
     _utils.save();
   }

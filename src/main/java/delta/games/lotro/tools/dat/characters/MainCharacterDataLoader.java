@@ -7,6 +7,7 @@ import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 
 /**
  * Loader for character data: classes, races, trait trees.
@@ -36,11 +37,11 @@ public class MainCharacterDataLoader
     Integer progressionId=getLevelToTraitPointsProgressionId();
     if (progressionId!=null)
     {
-      DatStatUtils.getProgression(_facade,progressionId.intValue());
+      ProgressionUtils.getProgression(_facade,progressionId.intValue());
     }
 
     // Save progressions
-    DatStatUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
     // Load gear icons
     if (Context.isLive())
     {
