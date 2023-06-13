@@ -46,8 +46,8 @@ public class MainDatItemsSetsLoader
   public MainDatItemsSetsLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("itemsSets",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
   }
 
   /*

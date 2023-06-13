@@ -49,8 +49,8 @@ public class MainTraitDataLoader
   public MainTraitDataLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
   }
 
   /**

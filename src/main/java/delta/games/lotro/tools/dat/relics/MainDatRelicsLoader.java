@@ -51,8 +51,8 @@ public class MainDatRelicsLoader
   public MainDatRelicsLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("relics",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
     _relicsMgr=new RelicsManager();
     _tiers=LotroEnumsRegistry.getInstance().get(RunicTier.class);
   }

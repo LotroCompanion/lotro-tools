@@ -142,8 +142,8 @@ public class MainDatItemsLoader
   public MainDatItemsLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("items",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
     _live=Context.isLive();
     _passivesLoader=new PassivesLoader(_facade);
     _consumablesLoader=new ConsumablesLoader(_facade);

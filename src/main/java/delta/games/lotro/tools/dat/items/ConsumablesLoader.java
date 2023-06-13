@@ -22,6 +22,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for consumables.
@@ -30,6 +31,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 public class ConsumablesLoader
 {
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private DatStatUtils _statUtils;
   private Map<Integer,Effect> _parsedEffects;
   private Integer _spellcraftProperty;
@@ -44,7 +46,8 @@ public class ConsumablesLoader
   public ConsumablesLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
+    _i18n=new I18nUtils("consumables",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
     _parsedEffects=new HashMap<Integer,Effect>();
     _consumables=new ArrayList<Consumable>();
   }
@@ -267,7 +270,10 @@ Skill_AttackHookList:
    */
   public void saveConsumables()
   {
+    // Data
     Collections.sort(_consumables,new IdentifiableComparator<Consumable>());
     ConsumableXMLWriter.write(GeneratedFiles.CONSUMABLES,_consumables);
+    // Labels
+    _i18n.save();
   }
 }

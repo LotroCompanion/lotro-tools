@@ -22,7 +22,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -34,6 +34,7 @@ public class DatStatUtils
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18nUtils;
   private StatsUsageStatistics _statistics;
 
   /**
@@ -42,7 +43,18 @@ public class DatStatUtils
    */
   public DatStatUtils(DataFacade facade)
   {
+    this(facade,null);
+  }
+
+  /**
+   * Constructor.
+   * @param facade Data facade.
+   * @param i18nUtils I18N utilities.
+   */
+  public DatStatUtils(DataFacade facade, I18nUtils i18nUtils)
+  {
     _facade=facade;
+    _i18nUtils=i18nUtils;
     _statistics=new StatsUsageStatistics();
   }
 
@@ -322,17 +334,15 @@ public class DatStatUtils
     return null;
   }
 
-  private static String getDescriptionOverride(PropertiesSet statProperties)
+  private String getDescriptionOverride(PropertiesSet statProperties)
   {
-    String ret=null;
-    Object propertyValue=statProperties.getProperty("Mod_DescriptionOverride");
-    if (propertyValue!=null)
+    String ret=_i18nUtils.getStringProperty(statProperties,"Mod_DescriptionOverride");
+    if(ret==null)
     {
-      ret=DatStringUtils.getString(propertyValue);
-    }
-    else if (statProperties.hasProperty("Mod_DescriptionOverride"))
-    {
-      ret=StatUtils.NO_DESCRIPTION;
+      if (statProperties.hasProperty("Mod_DescriptionOverride"))
+      {
+        ret=StatUtils.NO_DESCRIPTION;
+      }
     }
     return ret;
   }

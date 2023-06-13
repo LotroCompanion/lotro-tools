@@ -50,8 +50,8 @@ public class MainDatLegendaryTitlesLoader
   public MainDatLegendaryTitlesLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("legendaryTitles",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _category=registry.get(LegendaryTitleCategory.class);
     _genus=registry.get(Genus.class);

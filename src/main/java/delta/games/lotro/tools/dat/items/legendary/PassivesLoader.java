@@ -17,6 +17,7 @@ import delta.games.lotro.lore.items.legendary.passives.io.xml.PassivesGroupsXMLW
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for legendary passives.
@@ -25,6 +26,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 public class PassivesLoader
 {
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private DatStatUtils _statUtils;
   private Map<Integer,PassivesGroup> _loadedGroups;
   private Map<Integer,Effect> _parsedEffects;
@@ -36,7 +38,8 @@ public class PassivesLoader
   public PassivesLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
+    _i18n=new I18nUtils("passives",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
     _loadedGroups=new HashMap<Integer,PassivesGroup>();
     _parsedEffects=new HashMap<Integer,Effect>();
   }
@@ -114,5 +117,7 @@ public class PassivesLoader
       groups.add(_loadedGroups.get(groupId));
     }
     PassivesGroupsXMLWriter.write(GeneratedFiles.PASSIVES_USAGE,groups);
+    // Stats
+    _i18n.save();
   }
 }

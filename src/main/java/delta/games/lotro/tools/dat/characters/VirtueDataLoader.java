@@ -19,6 +19,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -30,6 +31,7 @@ public class VirtueDataLoader
   private static final Logger LOGGER=Logger.getLogger(VirtueDataLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private DatStatUtils _statUtils;
 
   /**
@@ -39,10 +41,11 @@ public class VirtueDataLoader
   public VirtueDataLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
+    _i18n=new I18nUtils("virtues",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
   }
 
-  private void loadVirtues()
+  private List<VirtueDescription> loadVirtues()
   {
     List<VirtueDescription> virtues=new ArrayList<VirtueDescription>();
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TraitControl");
@@ -82,8 +85,7 @@ public class VirtueDataLoader
         }
       }
     }
-    saveVirtues(virtues);
-    _statUtils.showStatistics();
+    return virtues;
   }
 
   /**
@@ -213,6 +215,9 @@ public class VirtueDataLoader
    */
   public void doIt()
   {
-    loadVirtues();
+    List<VirtueDescription> virtues=loadVirtues();
+    saveVirtues(virtues);
+    _statUtils.showStatistics();
+    _i18n.save();
   }
 }

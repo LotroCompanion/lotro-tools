@@ -44,8 +44,8 @@ public class MainBuffsLoader
   public MainBuffsLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _i18n=new I18nUtils("buffs",facade.getGlobalStringsManager());
+    _statUtils=new DatStatUtils(facade,_i18n);
   }
 
   /**

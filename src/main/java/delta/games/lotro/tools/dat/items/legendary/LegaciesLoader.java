@@ -46,6 +46,7 @@ import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.WeaponTypesUtils;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -62,9 +63,12 @@ public class LegaciesLoader
   public static final File LEGACIES_ICONS_DIR=new File("data\\legacies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
-  private DatStatUtils _statUtils;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
+  private I18nUtils _i18nNonImbued;
+  private DatStatUtils _statUtilsNonImbued;
   private LegaciesManager _imbuedLegaciesManager;
+  private I18nUtils _i18nImbued;
+  private DatStatUtils _statUtilsImbued;
   private Map<Integer,NonImbuedLegacyTier> _loadedEffects=new HashMap<Integer,NonImbuedLegacyTier>();
   private ProgressionControlLoader _progressionControl;
   private WeaponTypesUtils _weaponUtils;
@@ -76,9 +80,12 @@ public class LegaciesLoader
   public LegaciesLoader(DataFacade facade)
   {
     _facade=facade;
-    _statUtils=new DatStatUtils(facade);
     _nonImbuedLegaciesManager=new NonImbuedLegaciesManager();
+    _i18nNonImbued=new I18nUtils("nonImbuedLegacies",facade.getGlobalStringsManager());
+    _statUtilsNonImbued=new DatStatUtils(facade,_i18nNonImbued);
     _imbuedLegaciesManager=new LegaciesManager();
+    _i18nImbued=new I18nUtils("legacies",facade.getGlobalStringsManager());
+    _statUtilsImbued=new DatStatUtils(facade,_i18nImbued);
     _progressionControl=new ProgressionControlLoader(facade);
     _progressionControl.loadProgressionData();
     _weaponUtils=new WeaponTypesUtils(facade);
@@ -98,8 +105,13 @@ public class LegaciesLoader
    */
   public void save()
   {
+    // Non-imbued
     save(_nonImbuedLegaciesManager);
+    _i18nNonImbued.save();
+    // Imbued
     save(_imbuedLegaciesManager);
+    _i18nImbued.save();
+    // Icons
     saveIcons();
   }
 
@@ -138,7 +150,7 @@ public class LegaciesLoader
     Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
     if (imbuedEffect!=null)
     {
-      StatsProvider provider=DatEffectUtils.loadEffectStats(_statUtils,imbuedEffect.intValue());
+      StatsProvider provider=DatEffectUtils.loadEffectStats(_statUtilsImbued,imbuedEffect.intValue());
       ret.setStatsProvider(provider);
     }
 
@@ -405,7 +417,7 @@ public class LegaciesLoader
   private NonImbuedLegacyTier buildTieredLegacy(int effectId, Boolean major)
   {
     NonImbuedLegacyTier legacyTier=null;
-    Effect effect=DatEffectUtils.loadEffect(_statUtils,effectId);
+    Effect effect=DatEffectUtils.loadEffect(_statUtilsNonImbued,effectId);
     // Remove name: it is not interesting for tiered legacies
     effect.setName(null);
     // Remove icon: it is not interesting for tiered legacies
@@ -600,7 +612,7 @@ public class LegaciesLoader
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
     if (legacy==null)
     {
-      Effect effect=DatEffectUtils.loadEffect(_statUtils,effectId);
+      Effect effect=DatEffectUtils.loadEffect(_statUtilsNonImbued,effectId);
       if (effect!=null)
       {
         // Remove name: it is not interesting for non imbued legacies

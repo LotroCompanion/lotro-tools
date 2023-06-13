@@ -171,6 +171,10 @@ public class I18nUtils
     {
       return null;
     }
+    if (propertyValue.getValue()==null)
+    {
+      return null;
+    }
     Object complement=propertyValue.getComplement();
     if (complement instanceof TableEntryStringInfo)
     {
