@@ -32,6 +32,7 @@ import delta.games.lotro.tools.dat.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
 import delta.games.lotro.tools.dat.instances.MainDatInstancesTreeLoader;
 import delta.games.lotro.tools.dat.instances.MainDatPrivateEncountersLoader;
+import delta.games.lotro.tools.dat.items.GenericItemEffectsLoader;
 import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
@@ -125,6 +126,7 @@ public class MainDatLoader
     // Crafting
     new MainDatCraftingLoader(_facade).doIt();
     // Items
+    new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Character data
@@ -243,6 +245,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.TITLE_ICONS);
     deleteDirectory(MainDatTitlesLoader.TITLE_ICONS_DIR);
     // Items
+    deleteFile(GeneratedFiles.GENERIC_ITEM_EFFECTS);
     deleteFile(GeneratedFiles.ITEMS);
     deleteDirectory(GeneratedFiles.ITEM_ICONS_DIR);
     deleteDirectory(GeneratedFiles.ITEM_LARGE_ICONS_DIR);

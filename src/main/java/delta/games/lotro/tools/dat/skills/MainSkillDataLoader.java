@@ -75,7 +75,7 @@ public class MainSkillDataLoader
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
         if (classDefIndex==827)
         {
-          SkillDescription skill=loadSkill(_facade,did);
+          SkillDescription skill=loadSkill(did);
           if (skill!=null)
           {
             _skills.add(skill);
@@ -87,14 +87,13 @@ public class MainSkillDataLoader
 
   /**
    * Load a skill.
-   * @param facade Data facade.
    * @param skillId Skill identifier.
    * @return the loaded skill description.
    */
-  private SkillDescription loadSkill(DataFacade facade, int skillId)
+  private SkillDescription loadSkill(int skillId)
   {
     SkillDescription ret=null;
-    PropertiesSet skillProperties=facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
     if (skillProperties!=null)
     {
       //System.out.println("*********** Skill: "+skillId+" ****************");
@@ -127,7 +126,7 @@ public class MainSkillDataLoader
         File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
         if (!to.exists())
         {
-          boolean ok=DatIconsUtils.buildImageFile(facade,iconId.intValue(),to);
+          boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
           if (!ok)
           {
             LOGGER.warn("Could not build skill icon: "+iconFilename);
