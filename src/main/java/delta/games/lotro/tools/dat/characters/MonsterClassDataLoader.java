@@ -27,6 +27,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get monster class definitions from DAT files.
@@ -37,6 +38,7 @@ public class MonsterClassDataLoader
   private static final Logger LOGGER=Logger.getLogger(MonsterClassDataLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
   private List<MonsterClassDescription> _classes;
   private EnumMapper _characterClasses;
 
@@ -47,6 +49,7 @@ public class MonsterClassDataLoader
   public MonsterClassDataLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("monsterClasses",facade.getGlobalStringsManager());
     _classes=new ArrayList<MonsterClassDescription>();
     _characterClasses=_facade.getEnumsManager().getEnumMapper(587202574);
   }
@@ -69,7 +72,7 @@ public class MonsterClassDataLoader
     MonsterClassDescription classDescription=new MonsterClassDescription(classId,classCode,classKey);
     LOGGER.info("Handling class: "+classKey);
     // Name
-    String className=DatUtils.getStringProperty(classInfo,"MonsterPlay_MonsterName");
+    String className=_i18n.getNameStringProperty(classInfo,"MonsterPlay_MonsterName",classId,0);
     classDescription.setName(className);
     // Tag
     String classFullName=_characterClasses.getLabel(classCode);
@@ -80,7 +83,7 @@ public class MonsterClassDataLoader
     LOGGER.debug("Class abbreviation: "+classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
     // Class description
-    String description=DatUtils.getStringProperty(classInfo,"MonsterPlay_MonsterDesc");
+    String description=_i18n.getStringProperty(classInfo,"MonsterPlay_MonsterDesc");
     LOGGER.debug("Class description: "+description);
     classDescription.setDescription(description);
     // Icons
@@ -178,14 +181,18 @@ MonsterPlay_SkillList:
    */
   public void doIt()
   {
+    // Load
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"MPLevelTableDirectory");
     Object[] classIds=(Object[])properties.getProperty("AdvTable_EvilMLTList");
     for(Object classId : classIds)
     {
       handleClass(((Integer)classId).intValue());
     }
-    // Save classes descriptions
+    // Save
+    // - class descriptions
     ClassDescriptionXMLWriter.write(GeneratedFiles.MONSTER_CLASSES,_classes);
+    // - labels
+    _i18n.save();
   }
 
   /**
