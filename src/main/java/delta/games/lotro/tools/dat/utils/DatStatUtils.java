@@ -22,6 +22,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -336,7 +337,19 @@ public class DatStatUtils
 
   private String getDescriptionOverride(PropertiesSet statProperties)
   {
-    String ret=_i18nUtils.getStringProperty(statProperties,"Mod_DescriptionOverride");
+    String ret=null;
+    if (_i18nUtils!=null)
+    {
+      ret=_i18nUtils.getStringProperty(statProperties,"Mod_DescriptionOverride");
+    }
+    else
+    {
+      Object propertyValue=statProperties.getProperty("Mod_DescriptionOverride");
+      if (propertyValue!=null)
+      {
+        ret=DatStringUtils.getString(propertyValue);
+      }
+    }
     if(ret==null)
     {
       if (statProperties.hasProperty("Mod_DescriptionOverride"))
