@@ -216,6 +216,7 @@ public class MarkerDuplicatesRemover
     if ((category1==74) && (category2==58)) return Integer.valueOf(74); // Trader/Landmark=>Landmark (once at MT Skirmish Camp)
     if ((category1==43) && (category2==39)) return Integer.valueOf(43);
     if ((category1==55) && (category2==57)) return Integer.valueOf(57);
+    if ((category1==27) && (category2==73)) return Integer.valueOf(27);
     return null;
   }
 
