@@ -48,19 +48,25 @@ public class GenericItemEffectsLoader
   {
     List<GenericItemEffects> allEffects=new ArrayList<GenericItemEffects>();
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"InventoryControl");
+    // Equipper effects
+    handleEquipperEffects(props,allEffects);
+    // Save
+    save(allEffects);
+  }
+
+  private void handleEquipperEffects(PropertiesSet props, List<GenericItemEffects> allEffects)
+  {
     Object[] propsArray=(Object[])props.getProperty("InventoryControl_DefaultEquipperEffectList");
     for(Object propsEntry : propsArray)
     {
       PropertiesSet entryProps=(PropertiesSet)propsEntry;
-      GenericItemEffects effects=handleEntry(entryProps);
+      GenericItemEffects effects=handleEquipperEntry(entryProps);
       allEffects.add(effects);
     }
-    // Save
-    GenericItemEffectsXMLWriter.write(GeneratedFiles.GENERIC_ITEM_EFFECTS,allEffects);
-    _i18n.save();
+    
   }
 
-  private GenericItemEffects handleEntry(PropertiesSet props)
+  private GenericItemEffects handleEquipperEntry(PropertiesSet props)
   {
 /*
   #1: InventoryControl_DefaultEquipperEffectData 
@@ -87,6 +93,12 @@ public class GenericItemEffectsLoader
       ret.addEffect(effect);
     }
     return ret;
+  }
+
+  private void save(List<GenericItemEffects> allEffects)
+  {
+    GenericItemEffectsXMLWriter.write(GeneratedFiles.GENERIC_ITEM_EFFECTS,allEffects);
+    _i18n.save();
   }
 
   /**

@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
-import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
@@ -24,7 +23,6 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.money.QualityBasedValueLookupTable;
 import delta.games.lotro.common.money.io.xml.ValueTablesXMLWriter;
-import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -43,10 +41,8 @@ import delta.games.lotro.lore.items.ItemBindings;
 import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
-import delta.games.lotro.lore.items.ShieldTypes;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.WeaponTypes;
 import delta.games.lotro.lore.items.carryalls.CarryAll;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.Legendary;
@@ -309,19 +305,12 @@ public class MainDatItemsLoader
       item.setStatsProvider(statsProvider);
       // Effects
       handleEffects(properties);
-      // Item fixes
-      itemFixes(item,statsProvider);
-      // Stats
-      if (level!=null)
-      {
-        int statsLevel=item.getItemLevelForStats().intValue();
-        BasicStatsSet stats=statsProvider.getStats(1,statsLevel);
-        item.getStats().addStats(stats);
-      }
+      // Weapon specifics
       if (item instanceof Weapon)
       {
         loadWeaponSpecifics((Weapon)item,properties);
       }
+      // Carry-all specifics
       if (item instanceof CarryAll)
       {
         loadCarryAllSpecifics((CarryAll)item,properties);
@@ -521,45 +510,6 @@ public class MainDatItemsLoader
     //int itemClass=itemClassInt.intValue();
     //if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
     return true;
-  }
-
-  private void itemFixes(Item item, StatsProvider statsProvider)
-  {
-    if (item instanceof Weapon)
-    {
-      Weapon weapon=(Weapon)item;
-      WeaponType weaponType=weapon.getWeaponType();
-      if (weaponType==WeaponTypes.ONE_HANDED_SWORD)
-      {
-        // +1% parry
-        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,1);
-        statsProvider.addStatProvider(provider);
-      }
-      else if (weaponType==WeaponTypes.TWO_HANDED_SWORD)
-      {
-        // +2% parry
-        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.PARRY_PERCENTAGE,2);
-        statsProvider.addStatProvider(provider);
-      }
-    }
-    else if (item instanceof Armour)
-    {
-      Armour armour=(Armour)item;
-      ArmourType armourType=armour.getArmourType();
-      if ((armourType==ShieldTypes.HEAVY_SHIELD) || (armourType==ShieldTypes.SHIELD) || (armourType==ShieldTypes.WARDEN_SHIELD))
-      {
-        // +10% Ranged defence
-        ConstantStatProvider provider=new ConstantStatProvider(WellKnownStat.RANGED_DEFENCE_PERCENTAGE,-10);
-        provider.setDescriptionOverride("+10% Ranged Defence");
-        statsProvider.addStatProvider(provider);
-        // Critical defence
-        if (_live)
-        {
-          StatProvider critDef=_statUtils.buildStatProvider(WellKnownStat.CRITICAL_DEFENCE,1879260945);
-          statsProvider.addStatProvider(critDef);
-        }
-      }
-    }
   }
 
   private void handleEffects(PropertiesSet properties)
