@@ -407,7 +407,7 @@ public class DeedsLoader
     boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Wrote deeds file: "+GeneratedFiles.DEEDS);
+      LOGGER.info("Wrote deeds file: "+GeneratedFiles.DEEDS);
     }
   }
 }

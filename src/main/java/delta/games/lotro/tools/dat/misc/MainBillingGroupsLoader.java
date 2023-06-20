@@ -159,7 +159,7 @@ public class MainBillingGroupsLoader
     boolean ok=new BillingGroupsXMLWriter().write(GeneratedFiles.BILLING_GROUPS,billingGroupsDescriptions,EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Wrote billing groups file: "+GeneratedFiles.BILLING_GROUPS);
+      LOGGER.info("Wrote billing groups file: "+GeneratedFiles.BILLING_GROUPS);
     }
   }
 

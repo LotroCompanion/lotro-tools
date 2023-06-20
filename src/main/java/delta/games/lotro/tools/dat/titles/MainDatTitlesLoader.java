@@ -182,14 +182,14 @@ Title_String:
     boolean ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES,titles);
     if (ok)
     {
-      System.out.println("Wrote titles file: "+GeneratedFiles.TITLES);
+      LOGGER.info("Wrote titles file: "+GeneratedFiles.TITLES);
     }
     // Icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.TITLE_ICONS,TITLE_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote title icons archive: "+GeneratedFiles.TITLE_ICONS);
+      LOGGER.info("Wrote title icons archive: "+GeneratedFiles.TITLE_ICONS);
     }
     // Labels
     _i18n.save();

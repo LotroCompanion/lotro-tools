@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -21,6 +23,8 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
  */
 public class GeoAreasLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(GeoAreasLoader.class);
+
   /**
    * Directory for area icons.
    */
@@ -201,14 +205,14 @@ public class GeoAreasLoader
     boolean ok=GeoAreasXMLWriter.writeGeoAreasFile(GeneratedFiles.GEO_AREAS,_geoMgr);
     if (ok)
     {
-      System.out.println("Wrote geographic areas file: "+GeneratedFiles.GEO_AREAS);
+      LOGGER.info("Wrote geographic areas file: "+GeneratedFiles.GEO_AREAS);
     }
     // Icons
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.AREA_ICONS,GeoAreasLoader.AREA_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote area icons archive: "+GeneratedFiles.AREA_ICONS);
+      LOGGER.info("Wrote area icons archive: "+GeneratedFiles.AREA_ICONS);
     }
     // Labels
     _i18n.save();

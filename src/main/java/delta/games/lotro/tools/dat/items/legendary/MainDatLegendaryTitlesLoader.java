@@ -203,7 +203,7 @@ Mod_Array:
     boolean ok=LegendaryTitleXMLWriter.writeLegendaryTitlesFile(GeneratedFiles.LEGENDARY_TITLES,titles);
     if (ok)
     {
-      System.out.println("Wrote titles file: "+GeneratedFiles.LEGENDARY_TITLES);
+      LOGGER.info("Wrote titles file: "+GeneratedFiles.LEGENDARY_TITLES);
     }
     _i18n.save();
   }

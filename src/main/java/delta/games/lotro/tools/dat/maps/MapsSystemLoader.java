@@ -275,7 +275,7 @@ public class MapsSystemLoader
     boolean ok=ParchmentMapsXMLWriter.writeParchmentMapsFile(GeneratedFiles.PARCHMENT_MAPS,_maps);
     if (ok)
     {
-      System.out.println("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
+      LOGGER.info("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
     }
     // - labels
     _i18n.save();

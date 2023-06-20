@@ -92,7 +92,7 @@ public class MainDatNPCsLoader
     boolean ok=NPCsXMLWriter.writeNPCsFile(GeneratedFiles.NPCS,npcs);
     if (ok)
     {
-      System.out.println("Wrote NPCs file: "+GeneratedFiles.NPCS);
+      LOGGER.info("Wrote NPCs file: "+GeneratedFiles.NPCS);
     }
     // - labels
     _i18n.save();

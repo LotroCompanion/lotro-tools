@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.BillingGroup;
@@ -26,6 +28,8 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
  */
 public class WebStoreItemsLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(WebStoreItemsLoader.class);
+
   private DataFacade _facade;
   private Map<Integer,WebStoreItem> _registry;
   private LotroEnum<BillingGroup> _billingGroups;
@@ -121,7 +125,7 @@ public class WebStoreItemsLoader
     boolean ok=webStoreItemsWriter.write(webStoreItemsFile,getWebStoreItems(),EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
+      LOGGER.info("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
     }
     // Labels
     _i18n.save();

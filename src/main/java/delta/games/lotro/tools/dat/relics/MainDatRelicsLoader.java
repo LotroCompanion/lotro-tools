@@ -183,7 +183,7 @@ public class MainDatRelicsLoader
     boolean ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS);
     if (ok)
     {
-      System.out.println("Wrote relics file: "+GeneratedFiles.RELICS);
+      LOGGER.info("Wrote relics file: "+GeneratedFiles.RELICS);
     }
     // - labels
     _i18n.save();

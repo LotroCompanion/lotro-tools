@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.misc;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 
@@ -11,6 +13,8 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class MiscIconsManager
 {
+  private static final Logger LOGGER=Logger.getLogger(MiscIconsManager.class);
+
   /**
    * Directory for misc icons.
    */
@@ -26,7 +30,7 @@ public class MiscIconsManager
     boolean ok=archiver.go(GeneratedFiles.MISC_ICONS,MISC_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote misc icons archive: "+GeneratedFiles.MISC_ICONS);
+      LOGGER.info("Wrote misc icons archive: "+GeneratedFiles.MISC_ICONS);
     }
   }
 }

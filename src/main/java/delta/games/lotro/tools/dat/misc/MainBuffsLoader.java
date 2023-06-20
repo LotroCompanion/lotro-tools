@@ -158,7 +158,7 @@ public class MainBuffsLoader
     boolean ok=archiver.go(GeneratedFiles.EFFECT_ICONS,EFFECT_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote effects icons archive: "+GeneratedFiles.EFFECT_ICONS);
+      LOGGER.info("Wrote effects icons archive: "+GeneratedFiles.EFFECT_ICONS);
     }
   }
 

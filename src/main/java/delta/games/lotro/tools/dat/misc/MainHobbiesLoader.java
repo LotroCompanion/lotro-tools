@@ -203,14 +203,14 @@ public class MainHobbiesLoader
     boolean ok=HobbyDescriptionXMLWriter.write(GeneratedFiles.HOBBIES,hobbies);
     if (ok)
     {
-      System.out.println("Wrote hobbies file: "+GeneratedFiles.HOBBIES);
+      LOGGER.info("Wrote hobbies file: "+GeneratedFiles.HOBBIES);
     }
     // Write hobby icons archive
     DirectoryArchiver archiver=new DirectoryArchiver();
     ok=archiver.go(GeneratedFiles.HOBBY_ICONS,HOBBY_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote hobby icons archive: "+GeneratedFiles.HOBBY_ICONS);
+      LOGGER.info("Wrote hobby icons archive: "+GeneratedFiles.HOBBY_ICONS);
     }
     // Labels
     _i18n.save();

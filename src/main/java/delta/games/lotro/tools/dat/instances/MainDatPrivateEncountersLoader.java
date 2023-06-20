@@ -293,7 +293,7 @@ public class MainDatPrivateEncountersLoader
     boolean ok=PrivateEncountersXMLWriter.writePrivateEncountersFile(GeneratedFiles.PRIVATE_ENCOUNTERS,_data);
     if (ok)
     {
-      System.out.println("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
+      LOGGER.info("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
     }
     // Save labels
     _i18n.save();

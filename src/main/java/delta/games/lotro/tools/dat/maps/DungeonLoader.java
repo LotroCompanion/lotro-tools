@@ -201,7 +201,7 @@ Dungeon_ParentDungeon: 0
     boolean ok=DungeonXMLWriter.writeDungeonsFile(GeneratedFiles.DUNGEONS,dungeons);
     if (ok)
     {
-      System.out.println("Wrote dungeons file: "+GeneratedFiles.DUNGEONS);
+      LOGGER.info("Wrote dungeons file: "+GeneratedFiles.DUNGEONS);
     }
     // Labels
     _i18n.save();

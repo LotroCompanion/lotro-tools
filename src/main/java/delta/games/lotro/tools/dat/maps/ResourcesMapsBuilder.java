@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.maps;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.items.Item;
@@ -16,6 +18,8 @@ import delta.games.lotro.utils.Proxy;
  */
 public class ResourcesMapsBuilder
 {
+  private static final Logger LOGGER=Logger.getLogger(ResourcesMapsBuilder.class);
+
   private ResourcesMapsManager _mapsManager;
 
   /**
@@ -77,7 +81,7 @@ public class ResourcesMapsBuilder
     boolean ok=ResourcesMapsXMLWriter.writeResourcesMapsFile(GeneratedFiles.RESOURCES_MAPS,_mapsManager.getResourcesMaps());
     if (ok)
     {
-      System.out.println("Wrote resources maps file: "+GeneratedFiles.RESOURCES_MAPS);
+      LOGGER.info("Wrote resources maps file: "+GeneratedFiles.RESOURCES_MAPS);
     }
   }
 }

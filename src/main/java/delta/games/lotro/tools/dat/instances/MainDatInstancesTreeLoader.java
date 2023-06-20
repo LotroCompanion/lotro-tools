@@ -160,7 +160,7 @@ public class MainDatInstancesTreeLoader
     boolean ok=InstancesTreeXMLWriter.writeInstancesTreeFile(GeneratedFiles.INSTANCES_TREE,_tree);
     if (ok)
     {
-      System.out.println("Wrote instances tree file: "+GeneratedFiles.INSTANCES_TREE);
+      LOGGER.info("Wrote instances tree file: "+GeneratedFiles.INSTANCES_TREE);
     }
   }
 

@@ -184,7 +184,7 @@ public class MainDatRelicMeldingRecipesLoader
     boolean ok=writer.write(GeneratedFiles.RELIC_MELDING_RECIPES,recipes,EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Wrote relic melding recipes file: "+GeneratedFiles.RELIC_MELDING_RECIPES);
+      LOGGER.info("Wrote relic melding recipes file: "+GeneratedFiles.RELIC_MELDING_RECIPES);
     }
   }
 

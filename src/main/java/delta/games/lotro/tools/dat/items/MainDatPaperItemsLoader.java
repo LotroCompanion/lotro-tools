@@ -176,7 +176,7 @@ PaperItemControl_VersionArray:
     boolean ok=PaperItemsXMLWriter.write(to,sortedItems);
     if (ok)
     {
-      System.out.println("Wrote paper items file: "+to);
+      LOGGER.info("Wrote paper items file: "+to);
     }
   }
 

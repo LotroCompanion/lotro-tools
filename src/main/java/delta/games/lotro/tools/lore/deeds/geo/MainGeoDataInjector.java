@@ -183,7 +183,7 @@ public class MainGeoDataInjector
     for(List<BlockReference> group : groups)
     {
       GeoBoundingBox boundingBox=buildBoundingBox(group);
-      System.out.println("Box: "+boundingBox);
+      LOGGER.info("Box: "+boundingBox);
       MapDescription map=new MapDescription();
       map.setRegion(group.get(0).getRegion());
       map.setBoundingBox(boundingBox);

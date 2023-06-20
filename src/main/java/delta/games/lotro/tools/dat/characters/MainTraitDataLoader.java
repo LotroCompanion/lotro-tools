@@ -237,7 +237,7 @@ public class MainTraitDataLoader
     boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
     if (ok)
     {
-      System.out.println("Wrote traits file: "+GeneratedFiles.TRAITS);
+      LOGGER.info("Wrote traits file: "+GeneratedFiles.TRAITS);
     }
     // Labels
     _i18n.save();

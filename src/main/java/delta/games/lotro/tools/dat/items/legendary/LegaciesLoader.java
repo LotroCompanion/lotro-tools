@@ -281,7 +281,7 @@ public class LegaciesLoader
     boolean ok=LegacyXMLWriter.write(GeneratedFiles.LEGACIES,legacies);
     if (ok)
     {
-      System.out.println("Wrote legacies file: "+GeneratedFiles.LEGACIES);
+      LOGGER.info("Wrote legacies file: "+GeneratedFiles.LEGACIES);
     }
   }
 
@@ -298,7 +298,7 @@ public class LegaciesLoader
     boolean ok=LegacyXMLWriter.write(GeneratedFiles.NON_IMBUED_LEGACIES,all);
     if (ok)
     {
-      System.out.println("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
+      LOGGER.info("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
     }
   }
 
@@ -309,7 +309,7 @@ public class LegaciesLoader
     boolean ok=archiver.go(GeneratedFiles.LEGACIES_ICONS,LEGACIES_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote legacies icons archive: "+GeneratedFiles.LEGACIES_ICONS);
+      LOGGER.info("Wrote legacies icons archive: "+GeneratedFiles.LEGACIES_ICONS);
     }
   }
 

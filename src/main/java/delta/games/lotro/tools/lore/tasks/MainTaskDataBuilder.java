@@ -3,6 +3,8 @@ package delta.games.lotro.tools.lore.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -22,6 +24,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class MainTaskDataBuilder
 {
+  private static final Logger LOGGER=Logger.getLogger(MainTaskDataBuilder.class);
   private static final int TASK=112;
 
   private List<QuestDescription> getTaskQuests()
@@ -129,7 +132,7 @@ public class MainTaskDataBuilder
     boolean ok=TasksXMLWriter.write(GeneratedFiles.TASKS,tasks);
     if (ok)
     {
-      System.out.println("Wrote tasks file: "+GeneratedFiles.TASKS);
+      LOGGER.info("Wrote tasks file: "+GeneratedFiles.TASKS);
     }
   }
 

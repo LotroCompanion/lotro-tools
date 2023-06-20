@@ -136,7 +136,7 @@ Emote_SourceText:
     boolean ok=EmoteXMLWriter.writeEmotesFile(GeneratedFiles.EMOTES,emotes);
     if (ok)
     {
-      System.out.println("Wrote emotes file: "+GeneratedFiles.EMOTES);
+      LOGGER.info("Wrote emotes file: "+GeneratedFiles.EMOTES);
     }
     _i18n.save();
   }

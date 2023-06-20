@@ -164,7 +164,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
     boolean ok=MobsXMLWriter.writeMobsFile(GeneratedFiles.MOBS,mobs);
     if (ok)
     {
-      System.out.println("Wrote mobs file: "+GeneratedFiles.MOBS);
+      LOGGER.info("Wrote mobs file: "+GeneratedFiles.MOBS);
     }
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);

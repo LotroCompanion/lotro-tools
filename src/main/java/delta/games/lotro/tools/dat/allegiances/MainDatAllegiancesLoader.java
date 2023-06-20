@@ -158,7 +158,7 @@ public class MainDatAllegiancesLoader
     boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,mgr);
     if (ok)
     {
-      System.out.println("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
+      LOGGER.info("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
     }
     _i18n.save();
     // Write allegiances icons
@@ -166,7 +166,7 @@ public class MainDatAllegiancesLoader
     ok=archiver.go(GeneratedFiles.ALLEGIANCES_ICONS,ALLEGIANCE_ICONS_DIR);
     if (ok)
     {
-      System.out.println("Wrote allegiance icons archive: "+GeneratedFiles.ALLEGIANCES_ICONS);
+      LOGGER.info("Wrote allegiance icons archive: "+GeneratedFiles.ALLEGIANCES_ICONS);
     }
   }
 

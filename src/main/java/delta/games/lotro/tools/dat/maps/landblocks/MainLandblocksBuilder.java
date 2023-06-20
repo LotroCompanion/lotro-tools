@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.maps.landblocks;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
@@ -13,6 +15,8 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class MainLandblocksBuilder
 {
+  private static final Logger LOGGER=Logger.getLogger(MainLandblocksBuilder.class);
+
   private DataFacade _facade;
 
   /**
@@ -66,7 +70,7 @@ public class MainLandblocksBuilder
     boolean ok=LandblocksXMLWriter.writeLandblocksFile(GeneratedFiles.LANDBLOCKS,index);
     if (ok)
     {
-      System.out.println("Wrote landblocks file: "+GeneratedFiles.LANDBLOCKS);
+      LOGGER.info("Wrote landblocks file: "+GeneratedFiles.LANDBLOCKS);
     }
   }
 

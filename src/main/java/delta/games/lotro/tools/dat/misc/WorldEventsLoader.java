@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
@@ -29,6 +31,8 @@ import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
  */
 public class WorldEventsLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(WorldEventsLoader.class);
+
   private DataFacade _facade;
   private Map<Integer,WorldEvent> _registry;
   private WorldEventConditionsLoader _weConditionsLoader;
@@ -147,7 +151,7 @@ public class WorldEventsLoader
     boolean ok=worldEventsWriter.write(worldEventsFile,getWorldEvents(),EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
+      LOGGER.info("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
     }
   }
 }

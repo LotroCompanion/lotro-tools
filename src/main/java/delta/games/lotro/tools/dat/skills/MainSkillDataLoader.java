@@ -225,7 +225,7 @@ public class MainSkillDataLoader
     boolean ok=new SkillDescriptionXMLWriter().write(GeneratedFiles.SKILLS,_skills);
     if (ok)
     {
-      System.out.println("Wrote skills file: "+GeneratedFiles.SKILLS);
+      LOGGER.info("Wrote skills file: "+GeneratedFiles.SKILLS);
     }
     // Labels
     _i18n.save();

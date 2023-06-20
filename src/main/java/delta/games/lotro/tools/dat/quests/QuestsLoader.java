@@ -428,7 +428,7 @@ public class QuestsLoader
     boolean ok=QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
     if (ok)
     {
-      System.out.println("Wrote quests file: "+GeneratedFiles.QUESTS);
+      LOGGER.info("Wrote quests file: "+GeneratedFiles.QUESTS);
     }
   }
 }

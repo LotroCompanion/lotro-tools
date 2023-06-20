@@ -214,7 +214,7 @@ LevelBasedLootTable_LootTable:
     boolean ok=GenericMobLootXMLWriter.writeMobLootFile(GeneratedFiles.GENERIC_MOB_LOOTS,lootsMgr);
     if (ok)
     {
-      System.out.println("Wrote generic mobs loot file: "+GeneratedFiles.GENERIC_MOB_LOOTS);
+      LOGGER.info("Wrote generic mobs loot file: "+GeneratedFiles.GENERIC_MOB_LOOTS);
     }
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);

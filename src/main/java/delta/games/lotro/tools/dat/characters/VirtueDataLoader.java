@@ -206,7 +206,7 @@ public class VirtueDataLoader
     boolean ok=VirtueDescriptionXMLWriter.write(GeneratedFiles.VIRTUES,virtues);
     if (ok)
     {
-      System.out.println("Wrote virtues file: "+GeneratedFiles.VIRTUES);
+      LOGGER.info("Wrote virtues file: "+GeneratedFiles.VIRTUES);
     }
   }
 
