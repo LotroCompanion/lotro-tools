@@ -67,9 +67,11 @@ import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -167,7 +169,8 @@ public class MainDatItemsLoader
     if (properties!=null)
     {
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
-      String name=_i18n.getNameStringProperty(properties,"Name",indexDataId,I18nUtils.OPTION_REMOVE_MARKS);
+      String name=DatUtils.getStringProperty(properties,"Name");
+      name=StringUtils.removeMarks(name);
       if (!useItem(name,itemClassCode))
       {
         return null;
@@ -177,6 +180,7 @@ public class MainDatItemsLoader
       // ID
       item.setIdentifier(indexDataId);
       // Name
+      name=_i18n.getNameStringProperty(properties,"Name",indexDataId,I18nUtils.OPTION_REMOVE_MARKS);
       item.setName(name);
       // Sort data
       _sortDataLoader.handleItem(item,properties);
