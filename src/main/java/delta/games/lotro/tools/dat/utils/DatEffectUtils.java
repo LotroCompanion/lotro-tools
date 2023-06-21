@@ -69,6 +69,18 @@ public class DatEffectUtils
         effectName=DatUtils.getStringProperty(effectProps,"Effect_Name");
       }
       ret.setName(effectName);
+      // Description
+      String description;
+      if (i18nUtils!=null)
+      {
+        description=i18nUtils.getStringProperty(effectProps,"Effect_Definition_Description");
+      }
+      else
+      {
+        description=DatUtils.getStringProperty(effectProps,"Effect_Definition_Description");
+      }
+      ret.setDescription(description);
+      // TODO: use Effect_Applied_Description too!
       // Duration
       Float duration=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
       ret.setDuration(duration);
