@@ -6,6 +6,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.GlobalStringsManager;
+import delta.games.lotro.dat.data.strings.LiteralStringInfo;
 import delta.games.lotro.dat.data.strings.StringInfo;
 import delta.games.lotro.dat.data.strings.StringInfoUtils;
 import delta.games.lotro.dat.data.strings.StringsManager;
@@ -87,10 +88,10 @@ public class I18nUtils
     {
       return null;
     }
+    String key=String.valueOf(id);
     Object complement=propertyValue.getComplement();
     if (complement instanceof TableEntryStringInfo)
     {
-      String key=String.valueOf(id);
       if (processor==null)
       {
         _processor.setOptions(0);
@@ -100,6 +101,11 @@ public class I18nUtils
       String defaultValue=getDefaultValue(stringInfo,processor);
       handleStringInfo(stringInfo,key,defaultValue,processor);
       return defaultValue;
+    }
+    else if (complement instanceof LiteralStringInfo)
+    {
+      String literal=((LiteralStringInfo)complement).getLiteral();
+      handleLiteral(literal,key,processor);
     }
     Object value=propertyValue.getValue();
     return DatStringUtils.getString(value);
@@ -255,6 +261,24 @@ public class I18nUtils
       }
     }
     return hasLabel;
+  }
+
+  /**
+   * Handle a string info.
+   * @param literal Literal string..
+   * @param key Localization key to use.
+   * @param processor String processor to apply on the loaded strings.
+   */
+  private void handleLiteral(String literal, String key, StringProcessor processor)
+  {
+    literal=processor.processString(literal);
+    if (literal.length()>0)
+    {
+      for(String locale : _locales)
+      {
+        defineLabel(locale,key,literal);
+      }
+    }
   }
 
   private String getKey(TableEntryStringInfo stringInfo)
