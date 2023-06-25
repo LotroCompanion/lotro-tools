@@ -1,67 +1,45 @@
 package delta.games.lotro.tools.dat.utils;
 
 import java.util.BitSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
-import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.EntityClassification;
-import delta.games.lotro.utils.StringUtils;
+import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.mobs.MobsManager;
+import delta.games.lotro.utils.Proxy;
 
 /**
- * Mobs loader.
+ * Utility methods related to mobs.
  * @author DAM
  */
-public class MobLoader
+public class MobUtils
 {
-  //private static final Logger LOGGER=Logger.getLogger(MobLoader.class);
-
-  private Map<Integer,String> _names=new HashMap<Integer,String>();
-
-  private DataFacade _facade;
-  private LotroEnum<Genus> _genus;
-  private LotroEnum<Species> _species;
-  private LotroEnum<SubSpecies> _subSpecies;
   /**
-   * Constructor.
-   * @param facade Data facade.
-   */
-  public MobLoader(DataFacade facade)
-  {
-    _facade=facade;
-    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
-    _genus=enumsRegistry.get(Genus.class);
-    _species=enumsRegistry.get(Species.class);
-    _subSpecies=enumsRegistry.get(SubSpecies.class);
-  }
-
-  /**
-   * Load a mob.
+   * Build a proxy to a mob.
    * @param mobId Mob identifier.
-   * @return the mob name.
+   * @return A proxy or <code>null</code> if not found.
    */
-  public String loadMob(int mobId)
+  public static Proxy<MobDescription> buildMobProxy(int mobId)
   {
-    String ret=_names.get(Integer.valueOf(mobId));
-    if (ret==null)
+    MobsManager mobsManager=MobsManager.getInstance();
+    MobDescription mob=mobsManager.getMobById(mobId);
+    if (mob!=null)
     {
-      PropertiesSet properties=_facade.loadProperties(mobId+DATConstants.DBPROPERTIES_OFFSET);
-      if (properties!=null)
-      {
-        ret=DatUtils.getStringProperty(properties,"Name");
-        ret=StringUtils.fixName(ret);
-      }
+      String mobName=mob.getName();
+      Proxy<MobDescription> proxy=new Proxy<MobDescription>();
+      proxy.setId(mobId);
+      proxy.setName(mobName);
+      proxy.setObject(mob);
+      return proxy;
     }
-    return ret;
+    return null;
   }
 
   /**
@@ -69,19 +47,23 @@ public class MobLoader
    * @param mobProps Properties.
    * @return a mob reference or <code>null</code> if data is insufficient.
    */
-  public EntityClassification buildMobReference(PropertiesSet mobProps)
+  public static EntityClassification buildMobReference(PropertiesSet mobProps)
   {
+    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    LotroEnum<Genus> genusEnum=enumsRegistry.get(Genus.class);
+    LotroEnum<Species> speciesEnum=enumsRegistry.get(Species.class);
+    LotroEnum<SubSpecies> subSpeciesEnum=enumsRegistry.get(SubSpecies.class);
     Integer subSpeciesId=(Integer)mobProps.getProperty("Quest_MonsterSubspecies");
     SubSpecies subSpecies=null;
     if (subSpeciesId!=null)
     {
-      subSpecies=_subSpecies.getEntry(subSpeciesId.intValue());
+      subSpecies=subSpeciesEnum.getEntry(subSpeciesId.intValue());
     }
     Integer speciesId=(Integer)mobProps.getProperty("Quest_MonsterSpecies");
     Species species=null;
     if (speciesId!=null)
     {
-      species=_species.getEntry(speciesId.intValue());
+      species=speciesEnum.getEntry(speciesId.intValue());
     }
     Integer genusId=(Integer)mobProps.getProperty("Quest_MonsterGenus");
     EntityClassification mobRef=null;
@@ -91,7 +73,7 @@ public class MobLoader
       if (genusId!=null)
       {
         BitSet bitset=BitSetUtils.getBitSetFromFlags(genusId.intValue());
-        List<Genus> genus=_genus.getFromBitSet(bitset);
+        List<Genus> genus=genusEnum.getFromBitSet(bitset);
         mobRef.setGenus(genus);
       }
       mobRef.setSpecies(species);

@@ -16,6 +16,7 @@ import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.mobs.MobsManager;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
@@ -52,7 +53,7 @@ import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
-import delta.games.lotro.tools.dat.utils.MobLoader;
+import delta.games.lotro.tools.dat.utils.MobUtils;
 import delta.games.lotro.tools.dat.utils.NPCUtils;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.tools.dat.utils.ProxyBuilder;
@@ -75,7 +76,6 @@ public class DatObjectivesLoader
   private EnumMapper _questCategory;
   //private EnumMapper _deedCategory;
 
-  private MobLoader _mobLoader;
   @SuppressWarnings("unused")
   private GeoData _geoData;
 
@@ -95,7 +95,6 @@ public class DatObjectivesLoader
     _monsterDivision=_facade.getEnumsManager().getEnumMapper(587202657);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
-    _mobLoader=new MobLoader(facade);
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
   }
 
@@ -747,7 +746,7 @@ QuestEvent_ShowBillboardText: 0
           where=concat(where,landmarkName);
         }
         // What
-        EntityClassification mobReference=_mobLoader.buildMobReference(monsterGenusProps);
+        EntityClassification mobReference=MobUtils.buildMobReference(monsterGenusProps);
         MobSelection selection=new MobSelection();
         selection.setWhere(where);
         selection.setWhat(mobReference);
@@ -759,9 +758,8 @@ QuestEvent_ShowBillboardText: 0
       Integer mobId=(Integer)properties.getProperty("QuestEvent_MonsterDID");
       if (mobId!=null)
       {
-        String mobName=_mobLoader.loadMob(mobId.intValue());
-        ret.setMobId(mobId);
-        ret.setMobName(mobName);
+        MobDescription mob=MobsManager.getInstance().getMobById(mobId.intValue());
+        ret.setMob(mob);
       }
     }
     return ret;
@@ -1243,10 +1241,7 @@ QuestEvent_ShowProgressText: 0
     else if (wstateClass==WStateClass.MOB)
     {
       int mobId=id.intValue();
-      String mobName=_mobLoader.loadMob(mobId);
-      mobProxy=new Proxy<MobDescription>();
-      mobProxy.setId(mobId);
-      mobProxy.setName(mobName);
+      mobProxy=MobUtils.buildMobProxy(mobId);
     }
     else
     {
