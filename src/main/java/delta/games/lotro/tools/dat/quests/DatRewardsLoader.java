@@ -46,7 +46,6 @@ import delta.games.lotro.tools.dat.characters.TraitUtils;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for quest/deed rewards from DAT files.
@@ -227,11 +226,7 @@ public class DatRewardsLoader
     TitleDescription title=titlesMgr.getTitle(titleId);
     if (title!=null)
     {
-      Proxy<TitleDescription> proxy=new Proxy<TitleDescription>();
-      proxy.setId(title.getIdentifier());
-      proxy.setName(title.getName());
-      proxy.setObject(title);
-      TitleReward titleReward=new TitleReward(proxy);
+      TitleReward titleReward=new TitleReward(title);
       rewards.add(titleReward);
     }
     else
@@ -271,11 +266,7 @@ public class DatRewardsLoader
     EmoteDescription emote=emotesMgr.getEmote(emoteId);
     if (emote!=null)
     {
-      Proxy<EmoteDescription> proxy=new Proxy<EmoteDescription>();
-      proxy.setId(emote.getIdentifier());
-      proxy.setName(emote.getCommand());
-      proxy.setObject(emote);
-      EmoteReward emoteReward=new EmoteReward(proxy);
+      EmoteReward emoteReward=new EmoteReward(emote);
       rewards.add(emoteReward);
     }
     else
@@ -302,11 +293,7 @@ public class DatRewardsLoader
     TraitDescription trait=TraitUtils.getTrait(traitId);
     if (trait!=null)
     {
-      Proxy<TraitDescription> proxy=new Proxy<TraitDescription>();
-      proxy.setId(trait.getIdentifier());
-      proxy.setName(trait.getName());
-      proxy.setObject(trait);
-      TraitReward traitReward=new TraitReward(proxy);
+      TraitReward traitReward=new TraitReward(trait);
       rewards.add(traitReward);
     }
     else
@@ -328,13 +315,8 @@ public class DatRewardsLoader
         Item item=_itemsMgr.getItem(itemId);
         if (item!=null)
         {
-          String name=item.getName();
-          Proxy<Item> itemProxy=new Proxy<Item>();
-          itemProxy.setObject(item);
-          itemProxy.setName(name);
-          itemProxy.setId(itemId);
           int quantity=(quantityValue!=null?quantityValue.intValue():1);
-          ItemReward itemReward=new ItemReward(itemProxy,quantity);
+          ItemReward itemReward=new ItemReward(item,quantity);
           rewards.add(itemReward);
         }
         else
@@ -378,14 +360,9 @@ public class DatRewardsLoader
     Relic relic=relicsMgr.getById(relicId);
     if (relic!=null)
     {
-      String name=relic.getName();
-      Proxy<Relic> itemProxy=new Proxy<Relic>();
-      itemProxy.setObject(relic);
-      itemProxy.setName(name);
-      itemProxy.setId(relicId);
       int quantity=(quantityValue!=null?quantityValue.intValue():1);
-      RelicReward itemReward=new RelicReward(itemProxy,quantity);
-      rewards.add(itemReward);
+      RelicReward relicReward=new RelicReward(relic,quantity);
+      rewards.add(relicReward);
     }
     else
     {
