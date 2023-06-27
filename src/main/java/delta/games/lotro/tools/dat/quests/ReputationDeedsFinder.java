@@ -106,7 +106,12 @@ public class ReputationDeedsFinder
         if (condition instanceof FactionLevelCondition)
         {
           FactionLevelCondition factionLevelCondition=(FactionLevelCondition)condition;
-          int factionId=factionLevelCondition.getFaction().getIdentifier();
+          Faction faction=factionLevelCondition.getFaction();
+          if (faction==null)
+          {
+            continue;
+          }
+          int factionId=faction.getIdentifier();
           if ((currentFactionId==null) || (currentFactionId.intValue()==factionId))
           {
             currentFactionId=Integer.valueOf(factionId);
