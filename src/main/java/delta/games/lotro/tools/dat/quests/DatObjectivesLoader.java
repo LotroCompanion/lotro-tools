@@ -14,14 +14,16 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
+import delta.games.lotro.lore.agents.AgentDescription;
 import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
-import delta.games.lotro.lore.agents.npcs.NpcDescription;
+import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionTarget;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
@@ -53,10 +55,9 @@ import delta.games.lotro.lore.quests.objectives.SkillUsedCondition;
 import delta.games.lotro.lore.quests.objectives.TimeExpiredCondition;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.lore.utils.InteractableUtils;
 import delta.games.lotro.tools.dat.utils.MobUtils;
-import delta.games.lotro.tools.dat.utils.NPCUtils;
 import delta.games.lotro.tools.dat.utils.PlaceLoader;
-import delta.games.lotro.tools.dat.utils.ProxyBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -628,8 +629,8 @@ public class DatObjectivesLoader
   {
     if (itemId!=null)
     {
-      Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
-      ret.setProxy(itemProxy);
+      Item item=ItemsManager.getInstance().getItem(itemId.intValue());
+      ret.setItem(item);
     }
   }
 
@@ -664,8 +665,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer npcId=(Integer)properties.getProperty("QuestEvent_NPCTalk");
     if (npcId!=null)
     {
-      Proxy<Interactable> proxy=NPCUtils.buildInteractableProxy(npcId.intValue());
-      condition.setProxy(proxy);
+      Interactable npc=InteractableUtils.findInteractable(npcId.intValue());
+      condition.setNpc(npc);
     }
     // TODO
     //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
@@ -773,11 +774,7 @@ QuestEvent_ShowBillboardText: 0
     EmoteDescription emote=EmotesManager.getInstance().getEmote(emoteId);
     if (emote!=null)
     {
-      Proxy<EmoteDescription> emoteProxy=new Proxy<EmoteDescription>();
-      emoteProxy.setId(emoteId);
-      emoteProxy.setName(emote.getCommand());
-      emoteProxy.setObject(emote);
-      ret.setProxy(emoteProxy);
+      ret.setEmote(emote);
     }
     else
     {
@@ -842,14 +839,9 @@ QuestEvent_ShowBillboardText: 0
     {
       SkillsManager skillsMgr=SkillsManager.getInstance();
       SkillDescription skill=skillsMgr.getSkill(skillId.intValue());
-      Proxy<SkillDescription> proxy=null;
       if (skill!=null)
       {
-        proxy=new Proxy<SkillDescription>();
-        proxy.setId(skill.getIdentifier());
-        proxy.setName(skill.getName());
-        proxy.setObject(skill);
-        ret.setProxy(proxy);
+        ret.setSkill(skill);
       }
       else
       {
@@ -1001,8 +993,8 @@ QuestEvent_ShowBillboardText: 0
     //int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     HobbyCondition ret=new HobbyCondition();
-    Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId.intValue());
-    ret.setProxy(itemProxy);
+    Item item=ItemsManager.getInstance().getItem(itemId.intValue());
+    ret.setItem(item);
     return ret;
   }
 
@@ -1017,12 +1009,8 @@ QuestEvent_ShowBillboardText: 0
     int factionId=((Integer)properties.getProperty("QuestEvent_FactionDID")).intValue();
     int tier=((Integer)properties.getProperty("QuestEvent_ReputationTier")).intValue();
     FactionLevelCondition ret=new FactionLevelCondition();
-    Proxy<Faction> factionProxy=new Proxy<Faction>();
-    factionProxy.setId(factionId);
     Faction faction=FactionsRegistry.getInstance().getById(factionId);
-    String factionName=(faction!=null)?faction.getName():"?";
-    factionProxy.setName(factionName);
-    ret.setProxy(factionProxy);
+    ret.setFaction(faction);
     ret.setTier(tier);
     return ret;
   }
@@ -1228,30 +1216,27 @@ QuestEvent_ShowProgressText: 0
   private ConditionTarget getTarget(Integer id)
   {
     ConditionTarget target=null;
-    // TODO Use an Interactable
-    Proxy<NpcDescription> npcProxy=null;
-    Proxy<MobDescription> mobProxy=null;
+    AgentDescription agent=null;
     int wstateClass=LoaderUtils.getWStateClass(_facade,id.intValue());
     // Mostly 1723 (mob) or 1724 (NPC)
     if (wstateClass==WStateClass.NPC)
     {
       int npcId=id.intValue();
-      npcProxy=NPCUtils.buildNPCProxy(npcId);
+      agent=NPCsManager.getInstance().getNPCById(npcId);
     }
     else if (wstateClass==WStateClass.MOB)
     {
       int mobId=id.intValue();
-      mobProxy=MobUtils.buildMobProxy(mobId);
+      agent=MobsManager.getInstance().getMobById(mobId);
     }
     else
     {
       LOGGER.warn("Unmanaged target element: "+id+". WStateClass="+wstateClass);
     }
-    if ((npcProxy!=null) || (mobProxy!=null))
+    if (agent!=null)
     {
       target=new ConditionTarget();
-      target.setNpcProxy(npcProxy);
-      target.setMobProxy(mobProxy);
+      target.setAgent(agent);
     }
     return target;
   }

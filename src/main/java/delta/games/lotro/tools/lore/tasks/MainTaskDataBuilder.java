@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
@@ -53,11 +52,10 @@ public class MainTaskDataBuilder
       return null;
     }
     int count=itemCondition.getCount();
-    int itemId=itemCondition.getProxy().getId();
-    String name=itemCondition.getProxy().getName();
+    Item item=itemCondition.getItem();
+    String name=item.getName();
     System.out.println("\t"+name+" x"+count);
     Task ret=new Task(quest);
-    Item item=ItemsManager.getInstance().getItem(itemId);
     ret.setRequiredItems(item,count);
     /*
     Rewards rewards=task.getRewards();
@@ -87,9 +85,9 @@ public class MainTaskDataBuilder
     }
     if (nbConditions>1)
     {
-      int itemID=inventoryItemConditions.get(0).getProxy().getId();
+      int itemID=inventoryItemConditions.get(0).getItem().getIdentifier();
       int count=inventoryItemConditions.get(0).getCount();
-      int itemID2=inventoryItemConditions.get(1).getProxy().getId();
+      int itemID2=inventoryItemConditions.get(1).getItem().getIdentifier();
       int count2=inventoryItemConditions.get(1).getCount();
       if (itemID!=itemID2)
       {

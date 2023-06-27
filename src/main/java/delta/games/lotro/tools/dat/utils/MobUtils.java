@@ -11,9 +11,6 @@ import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.EntityClassification;
-import delta.games.lotro.lore.agents.mobs.MobDescription;
-import delta.games.lotro.lore.agents.mobs.MobsManager;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Utility methods related to mobs.
@@ -21,27 +18,6 @@ import delta.games.lotro.utils.Proxy;
  */
 public class MobUtils
 {
-  /**
-   * Build a proxy to a mob.
-   * @param mobId Mob identifier.
-   * @return A proxy or <code>null</code> if not found.
-   */
-  public static Proxy<MobDescription> buildMobProxy(int mobId)
-  {
-    MobsManager mobsManager=MobsManager.getInstance();
-    MobDescription mob=mobsManager.getMobById(mobId);
-    if (mob!=null)
-    {
-      String mobName=mob.getName();
-      Proxy<MobDescription> proxy=new Proxy<MobDescription>();
-      proxy.setId(mobId);
-      proxy.setName(mobName);
-      proxy.setObject(mob);
-      return proxy;
-    }
-    return null;
-  }
-
   /**
    * Build a mob reference from the given properties.
    * @param mobProps Properties.

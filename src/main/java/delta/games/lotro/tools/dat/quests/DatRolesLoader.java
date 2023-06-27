@@ -9,15 +9,13 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatStringUtils;
-import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.lore.quests.dialogs.QuestCompletionComment;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
-import delta.games.lotro.tools.dat.utils.NPCUtils;
+import delta.games.lotro.lore.utils.InteractableUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for roles data from DAT files.
@@ -74,7 +72,7 @@ public class DatRolesLoader
         Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
         if (npcId!=null)
         {
-          Proxy<NpcDescription> npc=NPCUtils.buildNPCProxy(npcId.intValue());
+          Interactable npc=InteractableUtils.findInteractable(npcId.intValue());
           String npcName=npc.getName();
           System.out.println("\tNPC: "+npcName);
         }
@@ -209,7 +207,7 @@ public class DatRolesLoader
         String npcStr=(String)npcObj;
         if ("QuestDispenser_NPC".equals(npcStr))
         {
-          Proxy<Interactable> npc=getQuestBestower(quest);
+          Interactable npc=getQuestBestower(quest);
           if (npc!=null)
           {
             ret.addWho(npc);
@@ -232,8 +230,8 @@ public class DatRolesLoader
       else
       {
         int npcId=((Integer)npcObj).intValue();
-        Proxy<Interactable> npc=NPCUtils.buildInteractableProxy(npcId);
-        if (npc.getName()!=null)
+        Interactable npc=InteractableUtils.findInteractable(npcId);
+        if (npc!=null)
         {
           ret.addWho(npc);
         }
@@ -249,7 +247,7 @@ public class DatRolesLoader
     return ret;
   }
 
-  private Proxy<Interactable> getQuestBestower(QuestDescription quest)
+  private Interactable getQuestBestower(QuestDescription quest)
   {
     List<DialogElement> bestowers=quest.getBestowers();
     if (bestowers.size()==1)
@@ -268,7 +266,7 @@ public class DatRolesLoader
       ret=new DialogElement();
       if (npcId!=null)
       {
-        Proxy<Interactable> npc=NPCUtils.buildInteractableProxy(npcId.intValue());
+        Interactable npc=InteractableUtils.findInteractable(npcId.intValue());
         ret.setWho(npc);
       }
       ret.setWhat(successText);

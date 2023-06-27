@@ -13,7 +13,6 @@ import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
 import delta.games.lotro.lore.reputation.Faction;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Finds reputation deeds.
@@ -56,8 +55,8 @@ public class ReputationDeedsFinder
     FactionLevelCondition condition=getFactionLevelCondition(deed);
     if (condition!=null)
     {
-      Proxy<Faction> factionProxy=condition.getProxy();
-      int factionId=factionProxy.getId();
+      Faction faction=condition.getFaction();
+      int factionId=faction.getIdentifier();
       int tier=condition.getTier();
       registerDeed(factionId,tier,deed);
     }
@@ -107,7 +106,7 @@ public class ReputationDeedsFinder
         if (condition instanceof FactionLevelCondition)
         {
           FactionLevelCondition factionLevelCondition=(FactionLevelCondition)condition;
-          int factionId=factionLevelCondition.getProxy().getId();
+          int factionId=factionLevelCondition.getFaction().getIdentifier();
           if ((currentFactionId==null) || (currentFactionId.intValue()==factionId))
           {
             currentFactionId=Integer.valueOf(factionId);
