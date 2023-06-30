@@ -33,7 +33,6 @@ public class MainTaskDataBuilder
     for(QuestDescription quest : qm.getAll())
     {
       QuestCategory category=quest.getCategory();
-      // TODO l10n. Use code 112 when available
       if ((category!=null) && (category.getCode()==TASK))
       {
         ret.add(quest);
