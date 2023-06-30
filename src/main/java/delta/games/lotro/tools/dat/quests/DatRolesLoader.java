@@ -5,10 +5,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Interactable;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
-import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.dialogs.DialogElement;
 import delta.games.lotro.lore.quests.dialogs.QuestCompletionComment;
@@ -194,8 +195,8 @@ public class DatRolesLoader
     {
       return null;
     }
-    Object[] textArray=(Object[])properties.getProperty("QuestDispenser_TextArray");
-    if (textArray==null)
+    ArrayPropertyValue textArrayValue=(ArrayPropertyValue)properties.getPropertyValueByName("QuestDispenser_TextArray");
+    if (textArrayValue==null)
     {
       return null;
     }
@@ -238,10 +239,9 @@ public class DatRolesLoader
       }
     }
 
-    for(Object textObj : textArray)
+    for(PropertyValue textValue : textArrayValue.getValues())
     {
-      // TODO L10n
-      String comment=DatStringUtils.getString(textObj);
+      String comment=_i18n.getStringProperty(textValue,0);
       ret.addWhat(comment);
     }
     return ret;
