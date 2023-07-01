@@ -96,7 +96,7 @@ public class MainGeoDataInjector
       }
       ObjectiveCondition condition=conditions.get(conditionIndex.intValue());
       condition.removeAllPoints();
-      if (!useCondition(condition))
+      if (!useCondition(achievable,condition))
       {
         continue;
       }
@@ -228,11 +228,17 @@ public class MainGeoDataInjector
     return new GeoBoundingBox(startLatLon[0],startLatLon[1],endLatLon[0],endLatLon[1]);
   }
 
-  private boolean useCondition(ObjectiveCondition condition)
+  private boolean useCondition(Achievable achievable, ObjectiveCondition condition)
   {
     if (condition instanceof NpcTalkCondition)
     {
-      return false;
+      if (achievable instanceof QuestDescription)
+      {
+        QuestDescription quest=(QuestDescription)achievable;
+        int code=quest.getCategory().getCode();
+        return code!=112; // Ignore tasks
+      }
+      return true;
     }
     if (condition instanceof MonsterDiedCondition)
     {
