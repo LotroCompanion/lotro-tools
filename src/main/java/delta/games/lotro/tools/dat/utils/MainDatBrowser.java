@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.utils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class MainDatBrowser
 {
   private DataFacade _facade;
   private Map<Integer,IntegerHolder> _countByType;
-  private byte[] _toSearch;
+  private byte[][] _toSearch;
 
   private byte[] intToByteArray(int value)
   {
@@ -60,63 +61,53 @@ public class MainDatBrowser
 
   private void handleEntry(long id)
   {
-    if (id%1000000==0) System.out.println("ID: "+id);
+    if (id%10000000==0) System.out.println("ID: "+id);
     byte[] data=_facade.loadData(id);
     if ((data!=null) && (data.length>=8))
     {
-      int type=getType(data);
-      Integer typeKey=Integer.valueOf(type);
+      boolean found=true;
       // Select
-      /*
-      if ((type!=WStateClass.CLOTHING) && (type!=WStateClass.CHISEL) && (type!=WStateClass.SHIELD) && (type!=WStateClass.WEAPON) && (type!=WStateClass.JEWEL) &&
-          (type!=WStateClass.PROGRESSION) && (type!=WStateClass.PROGRESSION_ARRAY) && (type!=WStateClass.FLOAT_PROGRESSION_ARRAY) && 
-          (type!=WStateClass.QUEST) && (type!=WStateClass.RELIC) &&
-          //(type!=SKILL) && (type!=TRAIT) && (type!=STEED_TRAIT) &&
-          //(type!=EFFECT) && (type!=EFFECT2) && (type!=EFFECT3) && (type!=EFFECT4) && (type!=EFFECT5) &&
-          (type!=WStateClass.VIRTUE) && (type!=WStateClass.PROPERTY_METADATA) && (type!=WStateClass.PROPERTY_METADATA_LIST) &&
-          (type!=WStateClass.QUEST_TREASURE) && (type!=WStateClass.LOOT) && (type!=WStateClass.LOOT2) && (type!=WStateClass.SKIRMISH_LOOT) &&
-          (type!=WStateClass.SET) && (type!=WStateClass.IA_LEGACY) && (type!=WStateClass.IA_EFFECT) &&
-          (type!=WStateClass.WEB_STORE_ITEM))
-          */
+      for(byte[] toSearch : _toSearch)
       {
-        int index=findBuffer(data,_toSearch);
-        if (index!=-1)
+        int index=findBuffer(data,toSearch);
+        if (index==-1)
         {
-          // Count by type
-          IntegerHolder holder=_countByType.get(typeKey);
-          if (holder==null)
-          {
-            holder=new IntegerHolder();
-            _countByType.put(typeKey,holder);
-          }
-          holder.increment();
-          System.out.println("Found "+id+" index="+index+", type="+type);
-          long propsId=(id<0x78FFFFFF)?id+0x9000000:id;
-          PropertiesSet props=_facade.loadProperties(propsId);
-          System.out.println("*********** entry "+id+"******************");
-          if (props!=null)
-          {
-            System.out.println(props.dump());
-          }
-          else
-          {
-            System.out.println("props is null");
-          }
-          ids.add(Long.valueOf(id));
-          /*
-          Progression prog=ProgressionFactory.buildProgression(id,props);
-          if (prog!=null)
-          {
-            Float value=prog.getValue(120);
-            if ((value!=null) && (Math.abs(value.floatValue()-3)<0.1))
-            {
-              System.out.println(props.dump());
-            }
-          }
-          */
+          found=false;
+          break;
         }
       }
+      if (found)
+      {
+        handleBuffer(id,data);
+      }
     }
+  }
+
+  private void handleBuffer(long id, byte[] data)
+  {
+    int type=getType(data);
+    Integer typeKey=Integer.valueOf(type);
+    // Count by type
+    IntegerHolder holder=_countByType.get(typeKey);
+    if (holder==null)
+    {
+      holder=new IntegerHolder();
+      _countByType.put(typeKey,holder);
+    }
+    holder.increment();
+    System.out.println("Found "+id);
+    long propsId=(id<0x78FFFFFF)?id+0x9000000:id;
+    PropertiesSet props=_facade.loadProperties(propsId);
+    System.out.println("*********** entry "+id+"******************");
+    if (props!=null)
+    {
+      System.out.println(props.dump());
+    }
+    else
+    {
+      System.out.println("props is null");
+    }
+    ids.add(Long.valueOf(id));
   }
 
   private int findBuffer(byte[] buffer, byte[] toFind)
@@ -130,19 +121,20 @@ public class MainDatBrowser
     return classDefIndex;
   }
 
-  private void searchId(int idToSearch) {
-    int propId=idToSearch;
-    //int propId=268435801;
-    //int propId=1879085275;
-    _toSearch=intToByteArray(propId);
-    int revert=BufferUtils.readUInt32(new ByteArrayInputStream(_toSearch));
-    if (revert!=propId)
-    {
-      System.out.println("Bad int->byte[] conversion!");
+  private void searchId(int[] idToSearch) {
+    _toSearch=new byte[idToSearch.length][];
+    for(int i=0;i<idToSearch.length;i++) {
+      _toSearch[i]=intToByteArray(idToSearch[i]);
+      int revert=BufferUtils.readUInt32(new ByteArrayInputStream(_toSearch[i]));
+      if (revert!=idToSearch[i])
+      {
+        System.out.println("Bad int->byte[] conversion!");
+      }
     }
-    System.out.println("************** searching id=" + idToSearch + "******************");
-    // Iterate on wstates
-    for(int id=0x70000000;id<0x7FFFFFFF;id++)
+    System.out.println("************** searching ids=" + Arrays.toString(idToSearch) + "******************");
+    // Iterate on keys
+    //for(int id=0x70000000;id<0x7FFFFFFF;id++)
+    for(long id=0x00000000L;id<0x9FFFFFFFL;id++)
     {
       handleEntry(id);
     }
@@ -179,61 +171,7 @@ public class MainDatBrowser
 
   private void doIt()
   {
-    //searchId(268435801); // Vital_PowerCombatRegenAddMod
-    //searchId(268438584); // Vital_HealthCombatRegenAddMod
-    //searchId(268439070); // Vital_HealthCombatBaseRegen
-    //searchId(268445007); // Trait_MP_Virtue_Core_Rank_Health_Regen
-    //searchId(268437690); // Health_RegenRate
-    //searchId(268435576); // Vital_HealthCombatCurrentRegen
-    //searchId(1879141759); // Effect for IA_Minstrel_CalltoFate_CriticalMagnitude
-    //searchId(268444877); // IA_Minstrel_CalltoFate_CriticalMagnitude
-    //searchId(1879112405); // Item Boots of the Lady's Discernment
-    //searchId(268438673); // Property: Item_QualityModLevel
-    //searchId(268458123); // Property: LevelScalingControl_Quality_To_ItemLevelProgression_Hash
-    //searchId(268457979); // Property: Examination_ItemLevel_Struct
-    // Deed "Enmity of the Dourhands" for high-elves
-    //searchId(1879346407);
-    // A table it is found in...
-    //searchId(1879346401);
-    // Anfalas Star-lit Crystal
-    //searchId(1879313853);
-    // Property: 268438022 Version_VersionNumberDataList
-    //searchId(268438022);
-
-    // Effect: 'In Defence of Middle-earth'
-    //searchId(1879053032);
-    // Effect: 'DNT - In Defence of Middle-earth'
-    //searchId(1879220578);
-    // Effect: 'DNT - Improved Motivating Speech'
-    //1879279091
-    // Skill: 'In Defence of Middle-earth'
-    //searchId(1879053069); // 0x7000130D
-    // Found in "Version_UntrainSkills_DataArray" (1879287393)
-    // searchId(1879287393);
-    // Found in "2030043677": Version_VersionNumberDataList #39 / Version_Number: 1203
-
-    //searchId(0x411BC61B); // = 1092339227 a interior map
-    // Found in 2013290723 // 0x780060E3
-    // searchId(0x780060E3);
-    // Found in 0x7904BA81
-    //searchId(0x7904BA81);
-
-    // Another one: 4119330B.jpg
-    // 4115B5CC.jpg a landscape
-    // 4116B614.jpg Middle Earth map
-
-    //searchId(0x410D9A54); // 1091410516 Map of the Bree-land Homesteads
-    //searchId(0x410E8708); // 1091471112 Map of Moria, found in 1092239022 = 411A3EAE
-
-    //searchId(268435789);
-    searchId(268444327);
-
-    /*
-    for(int id: IDS)
-    {
-      searchId(id);
-    }
-    */
+    searchId(new int[] {0x10000053, 0x73C4A39});
     System.out.println(_countByType);
     System.out.println(ids);
   }
