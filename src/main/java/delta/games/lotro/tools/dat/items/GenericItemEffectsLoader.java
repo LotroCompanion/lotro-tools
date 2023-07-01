@@ -50,6 +50,7 @@ public class GenericItemEffectsLoader
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"InventoryControl");
     // Equipper effects
     handleEquipperEffects(props,allEffects);
+    //handleTargetEffects(props,allEffects);
     // Save
     save(allEffects);
   }
@@ -85,6 +86,47 @@ public class GenericItemEffectsLoader
     GenericItemEffects ret=new GenericItemEffects(category);
     // Effects
     Object[] effectsList=(Object[])props.getProperty("EffectGenerator_EquipperEffectList");
+    for(Object effectEntry : effectsList)
+    {
+      PropertiesSet effectProps=(PropertiesSet)effectEntry;
+      int effectID=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
+      Effect effect=DatEffectUtils.loadEffect(_statUtils,effectID,_i18n);
+      ret.addEffect(effect);
+    }
+    return ret;
+  }
+
+  void handleTargetEffects(PropertiesSet props, List<GenericItemEffects> allEffects)
+  {
+    Object[] propsArray=(Object[])props.getProperty("InventoryControl_DefaultTargetEffectList");
+    for(Object propsEntry : propsArray)
+    {
+      PropertiesSet entryProps=(PropertiesSet)propsEntry;
+      GenericItemEffects effects=handleTargetEntry(entryProps);
+      allEffects.add(effects);
+    }
+    
+  }
+
+  private GenericItemEffects handleTargetEntry(PropertiesSet props)
+  {
+/*
+  #1: InventoryControl_DefaultTargetEffectData 
+    EffectGenerator_TargetEffectList: 
+      #1: EffectGenerator_EffectStruct 
+        EffectGenerator_EffectID: 1879049208
+    InventoryControl_EquipmentCategory: 8192 (Crossbow[E])
+ */
+    // Category
+    long categoryBits=((Long)props.getProperty("InventoryControl_EquipmentCategory")).longValue();
+    BitSet bitset=BitSetUtils.getBitSetFromFlags(categoryBits);
+    int index=bitset.nextSetBit(0);
+    LotroEnum<EquipmentCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
+    EquipmentCategory category=categoryEnum.getEntry(index+1);
+    //System.out.println("Category: "+category);
+    GenericItemEffects ret=new GenericItemEffects(category);
+    // Effects
+    Object[] effectsList=(Object[])props.getProperty("EffectGenerator_TargetEffectList");
     for(Object effectEntry : effectsList)
     {
       PropertiesSet effectProps=(PropertiesSet)effectEntry;
