@@ -314,6 +314,10 @@ public class GeneratedFiles
    */
   public static final File DUNGEONS=LotroCoreConfig.getInstance().getFile(DataFiles.DUNGEONS);
   /**
+   * Landmarks.
+   */
+  public static final File LANDMARKS=LotroCoreConfig.getInstance().getFile(DataFiles.LANDMARKS);
+  /**
    * Private encounters.
    */
   public static final File PRIVATE_ENCOUNTERS=LotroCoreConfig.getInstance().getFile(DataFiles.PRIVATE_ENCOUNTERS);

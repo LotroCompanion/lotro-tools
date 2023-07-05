@@ -8,7 +8,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 
 /**
- * Get private encounters (instances) from DAT files.
+ * Get dungeons definitions from DAT files.
  * @author DAM
  */
 public class MainDatDungeonsLoader
