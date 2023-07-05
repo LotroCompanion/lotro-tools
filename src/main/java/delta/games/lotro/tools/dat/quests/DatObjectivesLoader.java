@@ -24,6 +24,8 @@ import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.geo.LandmarkDescription;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.lore.maps.LandDivision;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.ConditionTarget;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
@@ -41,8 +43,9 @@ import delta.games.lotro.lore.quests.objectives.ItemTalkCondition;
 import delta.games.lotro.lore.quests.objectives.ItemUsedCondition;
 import delta.games.lotro.lore.quests.objectives.LandmarkDetectionCondition;
 import delta.games.lotro.lore.quests.objectives.LevelCondition;
+import delta.games.lotro.lore.quests.objectives.MobLocation;
+import delta.games.lotro.lore.quests.objectives.MobSelection;
 import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition;
-import delta.games.lotro.lore.quests.objectives.MonsterDiedCondition.MobSelection;
 import delta.games.lotro.lore.quests.objectives.NpcCondition;
 import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.NpcUsedCondition;
@@ -727,29 +730,29 @@ QuestEvent_ShowBillboardText: 0
       {
         PropertiesSet monsterGenusProps=(PropertiesSet)monsterGenusArray[i];
         // Where
-        Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
+        String divisionStr=null;
+        LandDivision landDivision=null;
+        String landmarkName=null;
         Integer mobDivision=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
-        Integer landmarkId=(Integer)monsterGenusProps.getProperty("QuestEvent_LandmarkDID");
-        String where=null;
         if (mobDivision!=null)
         {
-          String divisionStr=_monsterDivision.getString(mobDivision.intValue());
-          where=concat(where,divisionStr);
+          divisionStr=_monsterDivision.getString(mobDivision.intValue());
         }
+        Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
         if (regionId!=null)
         {
-          String regionName=PlaceLoader.loadPlace(_facade,regionId.intValue());
-          where=concat(where,regionName);
+          landDivision=GeoAreasManager.getInstance().getLandById(regionId.intValue());
         }
+        Integer landmarkId=(Integer)monsterGenusProps.getProperty("QuestEvent_LandmarkDID");
         if (landmarkId!=null)
         {
-          String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
-          where=concat(where,landmarkName);
+          landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
         }
         // What
         EntityClassification mobReference=MobUtils.buildMobReference(monsterGenusProps);
         MobSelection selection=new MobSelection();
-        selection.setWhere(where);
+        MobLocation location=new MobLocation(divisionStr,landDivision,landmarkName);
+        selection.setWhere(location);
         selection.setWhat(mobReference);
         ret.getMobSelections().add(selection);
       }
@@ -1239,11 +1242,5 @@ QuestEvent_ShowProgressText: 0
       target.setAgent(agent);
     }
     return target;
-  }
-
-  private String concat(String base, String add)
-  {
-    if (base==null) return add;
-    return base+"/"+add;
   }
 }
