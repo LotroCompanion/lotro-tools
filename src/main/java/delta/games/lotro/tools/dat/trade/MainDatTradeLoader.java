@@ -38,7 +38,6 @@ import delta.games.lotro.lore.trade.vendor.io.xml.VendorXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
-import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -262,7 +261,7 @@ public class MainDatTradeLoader
         if (itemToReceive instanceof ItemBarterEntryElement)
         {
           ItemBarterEntryElement itemReward=(ItemBarterEntryElement)itemToReceive;
-          Item item=itemReward.getItemProxy().getObject();
+          Item item=itemReward.getItem();
           Integer itemLevel=item.getItemLevel();
           Integer minLevel=item.getMinLevel();
           level=useMinLevel?minLevel:itemLevel;
@@ -323,11 +322,7 @@ public class MainDatTradeLoader
       }
       if (quantity!=null)
       {
-        Proxy<Item> itemProxy=new Proxy<Item>();
-        itemProxy.setId(item.getIdentifier());
-        itemProxy.setName(item.getName());
-        itemProxy.setObject(item);
-        ret=new ItemBarterEntryElement(itemProxy,quantity.intValue());
+        ret=new ItemBarterEntryElement(item,quantity.intValue());
       }
       else
       {
@@ -375,9 +370,9 @@ public class MainDatTradeLoader
       {
         int sellListId=((Integer)inventoryObj).intValue();
         SellList sellList=getSellsList(sellListId);
-        for(Proxy<Item> entry : sellList.getItems())
+        for(Item entry : sellList.getItems())
         {
-          allSells.add(Integer.valueOf(entry.getId()));
+          allSells.add(Integer.valueOf(entry.getIdentifier()));
         }
         ret.addSellList(sellList);
       }
@@ -457,11 +452,7 @@ public class MainDatTradeLoader
         Item item=_itemsManager.getItem(itemId.intValue());
         if (item!=null)
         {
-          Proxy<Item> itemProxy=new Proxy<Item>();
-          itemProxy.setId(item.getIdentifier());
-          itemProxy.setName(item.getName());
-          itemProxy.setObject(item);
-          ret.addItem(itemProxy);
+          ret.addItem(item);
         }
         else
         {

@@ -145,7 +145,7 @@ public class MainRecipesDataBuilder
         if (toReceive instanceof ItemBarterEntryElement)
         {
           ItemBarterEntryElement itemEntry=(ItemBarterEntryElement)toReceive;
-          int itemId=itemEntry.getItemProxy().getId();
+          int itemId=itemEntry.getItem().getIdentifier();
           itemIds.add(Integer.valueOf(itemId));
         }
       }
