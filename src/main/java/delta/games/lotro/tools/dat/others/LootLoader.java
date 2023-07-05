@@ -34,12 +34,11 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.games.lotro.tools.dat.utils.ProxyBuilder;
-import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -333,18 +332,18 @@ public class LootLoader
       float probability=getProbability(frequencyCode);
       // Quantity
       int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
-      Proxy<Item> itemProxy=null;
+      Item item=null;
       TreasureGroupProfile treasureGroup=null;
       String itemName=getItemName(itemOrProfile);
       if (itemName!=null)
       {
         // Item
-        itemProxy=ProxyBuilder.buildItemProxy(itemOrProfile);
-        if (itemProxy!=null)
+        item=ItemsManager.getInstance().getItem(itemOrProfile);
+        if (item!=null)
         {
           Integer quantityInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_ItemQuantity");
           int quantity=(quantityInt!=null)?quantityInt.intValue():1;
-          entry=new TrophyListEntry(probability,itemProxy,quantity);
+          entry=new TrophyListEntry(probability,item,quantity);
         }
       }
       else
@@ -449,10 +448,10 @@ public class LootLoader
       int itemId=((Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Item")).intValue();
       Integer quantityInt=(Integer)entryProps.getProperty("TreasureGroupProfile_ItemTable_Quantity");
       int quantity=(quantityInt!=null)?quantityInt.intValue():1;
-      Proxy<Item> itemProxy=ProxyBuilder.buildItemProxy(itemId);
-      if (itemProxy!=null)
+      Item item=ItemsManager.getInstance().getItem(itemId);
+      if (item!=null)
       {
-        ItemsTableEntry entry=new ItemsTableEntry(weight,itemProxy,quantity);
+        ItemsTableEntry entry=new ItemsTableEntry(weight,item,quantity);
         ret.addEntry(entry);
       }
     }
