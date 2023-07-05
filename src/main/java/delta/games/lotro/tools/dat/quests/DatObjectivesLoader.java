@@ -22,6 +22,7 @@ import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.geo.landmarks.LandmarkDescription;
+import delta.games.lotro.lore.geo.landmarks.LandmarksManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
@@ -60,7 +61,6 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.utils.InteractableUtils;
 import delta.games.lotro.tools.dat.utils.MobUtils;
-import delta.games.lotro.tools.dat.utils.PlaceLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -693,11 +693,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     Integer landmarkId=(Integer)properties.getProperty("QuestEvent_LandmarkDID");
     if (landmarkId!=null)
     {
-      String landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
-      Proxy<LandmarkDescription> landmark=new Proxy<LandmarkDescription>();
-      landmark.setId(landmarkId.intValue());
-      landmark.setName(landmarkName);
-      ret.setLandmarkProxy(landmark);
+      LandmarkDescription landmark=LandmarksManager.getInstance().getLandmarkById(landmarkId.intValue());
+      ret.setLandmark(landmark);
     }
     /*List<DatPosition> positions=*/
     //getPositions(landmarkId,null,objective.getIndex());
@@ -726,27 +723,27 @@ QuestEvent_ShowBillboardText: 0
         PropertiesSet monsterGenusProps=(PropertiesSet)monsterGenusArray[i];
         // Where
         String divisionStr=null;
-        LandDivision landDivision=null;
-        String landmarkName=null;
         Integer mobDivision=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
         if (mobDivision!=null)
         {
           divisionStr=_monsterDivision.getString(mobDivision.intValue());
         }
+        LandDivision landDivision=null;
         Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
         if (regionId!=null)
         {
           landDivision=GeoAreasManager.getInstance().getLandById(regionId.intValue());
         }
+        LandmarkDescription landmark=null;
         Integer landmarkId=(Integer)monsterGenusProps.getProperty("QuestEvent_LandmarkDID");
         if (landmarkId!=null)
         {
-          landmarkName=PlaceLoader.loadLandmark(_facade,landmarkId.intValue());
+          landmark=LandmarksManager.getInstance().getLandmarkById(landmarkId.intValue());
         }
         // What
         EntityClassification mobReference=MobUtils.buildMobReference(monsterGenusProps);
         MobSelection selection=new MobSelection();
-        MobLocation location=new MobLocation(divisionStr,landDivision,landmarkName);
+        MobLocation location=new MobLocation(divisionStr,landDivision,landmark);
         selection.setWhere(location);
         selection.setWhat(mobReference);
         ret.getMobSelections().add(selection);
