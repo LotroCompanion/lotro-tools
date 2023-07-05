@@ -5,12 +5,11 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.maps.resources.ResourcesMapDescriptor;
 import delta.games.lotro.lore.maps.resources.ResourcesMapsManager;
 import delta.games.lotro.lore.maps.resources.io.xml.ResourcesMapsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.ProxyBuilder;
-import delta.games.lotro.utils.Proxy;
 
 /**
  * Builder for resources map descriptors.
@@ -46,7 +45,7 @@ public class ResourcesMapsBuilder
     }
     if (!mapDescriptor.hasItem(itemId))
     {
-      Proxy<Item> item=ProxyBuilder.buildItemProxy(itemId);
+      Item item=ItemsManager.getInstance().getItem(itemId);
       mapDescriptor.addItem(item);
     }
     Identifiable map=MapUtils.findMapForZone(parentZoneId);
