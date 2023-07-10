@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import delta.games.lotro.common.comparators.NamedComparator;
 import delta.games.lotro.config.DataFiles;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
@@ -16,7 +17,6 @@ import delta.games.lotro.lore.instances.InstancesTree;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
-import delta.games.lotro.lore.instances.comparators.PrivateEncounterNameComparator;
 import delta.games.lotro.lore.items.Container;
 import delta.games.lotro.lore.items.ContainersManager;
 import delta.games.lotro.lore.items.Item;
@@ -108,7 +108,7 @@ public class InstanceChestsFinder
       Item item=itemsMgr.getItem(containerId.intValue());
       System.out.println("Container: "+item+" was found in:");
       List<PrivateEncounter> pes=new ArrayList<PrivateEncounter>(_mapByContainer.get(containerId));
-      Collections.sort(pes,new PrivateEncounterNameComparator());
+      Collections.sort(pes,new NamedComparator());
       for(PrivateEncounter pe : pes)
       {
         System.out.println("\t"+pe.getName());
