@@ -15,6 +15,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.TravelLink;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -60,7 +61,11 @@ public class MainSkillDataLoader
   public void doIt()
   {
     loadSkills();
-    _mountsLoader.loadSizeData();
+    boolean live=LotroCoreConfig.isLive();
+    if (live)
+    {
+      _mountsLoader.loadSizeData();
+    }
     saveSkills();
   }
 

@@ -46,6 +46,7 @@ import delta.games.lotro.common.enums.WJEncounterCategory;
 import delta.games.lotro.common.enums.WJEncounterType;
 import delta.games.lotro.common.enums.WJInstanceGroup;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.lore.deeds.DeedType;
@@ -89,8 +90,12 @@ public class MainDatEnumsLoader
    */
   public void doIt()
   {
-    loadEnum(587203292,"SkirmishDifficultyTier",Difficulty.class); // 0x230002DC
-    loadEnum(587203290,"SkirmishGroupSize",GroupSize.class); // 0x230002DA
+    boolean live=LotroCoreConfig.isLive();
+    if (live)
+    {
+      loadEnum(587203292,"SkirmishDifficultyTier",Difficulty.class); // 0x230002DC
+      loadEnum(587203290,"SkirmishGroupSize",GroupSize.class); // 0x230002DA
+    }
     loadEnum(587202570,"GenusType",Genus.class); // 0x2300000A
     loadEnum(587202571,"Agent_Species",Species.class); // 0x2300000B
     loadEnum(587202572,"SubspeciesType",SubSpecies.class); // 0x2300000C
@@ -100,33 +105,48 @@ public class MainDatEnumsLoader
     loadEnum(587202672,"ExaminationModStatType",MobType.class); // 0x23000070
     loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class); // 0x2300001A
     loadEnum(587202647,"TraitNature",TraitNature.class); // 0x23000057
-    loadEnum(587203634,"ItemSocketType",SocketType.class); // 0x23000432
+    if (live)
+    {
+      loadEnum(587203634,"ItemSocketType",SocketType.class); // 0x23000432
+    }
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
     loadEnum(587202756,"BillingGroup",BillingGroup.class); // 0x230000C4
-    loadEnum(587203550,"CollectionCategory",CollectionCategory.class); // 0x230003DE
+    if (live)
+    {
+      loadEnum(587203550,"CollectionCategory",CollectionCategory.class); // 0x230003DE
+    }
     loadEnum(587202636,"EquipmentCategory",EquipmentCategory.class); // 0x2300004C
-    loadEnum(587203638,"AllegianceGroup",AllegianceGroup.class); // 0x23000436
-    loadEnum(587203337,"WJEncounterType",WJEncounterType.class); // 0x23000309
-    loadEnum(587203408,"WJEncounterCategory",WJEncounterCategory.class); // 0x23000350
-    loadEnum(587203537,"WJInstanceGroup",WJInstanceGroup.class); // 0x230003D1
-    loadEnum(587203267,"IATitleCategory",LegendaryTitleCategory.class); // 0x230002C3
-    loadEnum(587203238,"IATitleTier",LegendaryTitleTier.class); // 0x230002A6
-    loadEnum(587203350,"PaperItemCategory",PaperItemCategory.class); // 0x23000316
-    loadEnum(587203433,"PointBasedTraitTree",TraitTreeType.class); // 0x23000369
-    loadEnum(587203489,"PointBasedTraitTreeBranch",TraitTreeBranchType.class); // 0x230003A1
-    loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
+    if (live)
+    {
+      loadEnum(587203638,"AllegianceGroup",AllegianceGroup.class); // 0x23000436
+      loadEnum(587203337,"WJEncounterType",WJEncounterType.class); // 0x23000309
+      loadEnum(587203408,"WJEncounterCategory",WJEncounterCategory.class); // 0x23000350
+      loadEnum(587203537,"WJInstanceGroup",WJInstanceGroup.class); // 0x230003D1
+      loadEnum(587203267,"IATitleCategory",LegendaryTitleCategory.class); // 0x230002C3
+      loadEnum(587203238,"IATitleTier",LegendaryTitleTier.class); // 0x230002A6
+      loadEnum(587203350,"PaperItemCategory",PaperItemCategory.class); // 0x23000316
+      loadEnum(587203433,"PointBasedTraitTree",TraitTreeType.class); // 0x23000369
+      loadEnum(587203489,"PointBasedTraitTreeBranch",TraitTreeBranchType.class); // 0x230003A1
+      loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
+    }
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
-    loadEnum(587203200,"MountType",MountType.class); // 0x23000280
-    loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
+    if (live)
+    {
+      loadEnum(587203200,"MountType",MountType.class); // 0x23000280
+      loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
+    }
     loadEnum(587202661,"CraftUICategory",CraftingUICategory.class); // 0x23000065
     loadEnum(587202600,"DamageType",DamageType.class); // 0x23000028
     loadEnum(587202810,"ItemSturdiness",ItemSturdiness.class); // 0x230000FA
     loadEnum(587202663,"ItemQualities",ItemQuality.class); // 0x23000067
-    loadEnum(587203232,"RunicTier",RunicTier.class); // 0x230002A0
-    loadEnum(587203222,"RunicType",RelicType.class); // 0x23000296
+    if (live)
+    {
+      loadEnum(587203232,"RunicTier",RunicTier.class); // 0x230002A0
+      loadEnum(587203222,"RunicType",RelicType.class); // 0x23000296
+    }
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType

@@ -116,20 +116,23 @@ MonsterPlay_TraitList:
  */
     Set<String> knownTraits=new HashSet<String>();
     Object[] traitsProperties=(Object[])properties.getProperty("MonsterPlay_TraitList");
-    for(Object traitPropertiesObj : traitsProperties)
+    if (traitsProperties!=null)
     {
-      PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      int level=((Integer)traitProperties.getProperty("MonsterPlay_TraitMinLevel")).intValue();
-      Integer rank=(Integer)traitProperties.getProperty("MonsterPlay_TraitMinRank");
-      int traitId=((Integer)traitProperties.getProperty("MonsterPlay_Trait")).intValue();
-      String key=level+"#"+traitId;
-      if (!knownTraits.contains(key))
+      for(Object traitPropertiesObj : traitsProperties)
       {
-        LOGGER.debug("Level: "+level+" (rank="+rank+")");
-        TraitDescription trait=TraitUtils.getTrait(traitId);
-        ClassTrait classTrait=new ClassTrait(level,trait);
-        description.addTrait(classTrait);
-        knownTraits.add(key);
+        PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
+        int level=((Integer)traitProperties.getProperty("MonsterPlay_TraitMinLevel")).intValue();
+        Integer rank=(Integer)traitProperties.getProperty("MonsterPlay_TraitMinRank");
+        int traitId=((Integer)traitProperties.getProperty("MonsterPlay_Trait")).intValue();
+        String key=level+"#"+traitId;
+        if (!knownTraits.contains(key))
+        {
+          LOGGER.debug("Level: "+level+" (rank="+rank+")");
+          TraitDescription trait=TraitUtils.getTrait(traitId);
+          ClassTrait classTrait=new ClassTrait(level,trait);
+          description.addTrait(classTrait);
+          knownTraits.add(key);
+        }
       }
     }
   }

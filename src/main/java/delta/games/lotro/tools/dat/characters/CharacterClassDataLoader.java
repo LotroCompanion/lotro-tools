@@ -120,10 +120,13 @@ public class CharacterClassDataLoader
     // Proficiencies
     _proficiencies.handleClass(classDescription);
     // Armour type for mitigations
-    int calcType=((Integer)properties.getProperty("AdvTable_ArmorDefense_Points_CalcType")).intValue();
-    ArmourType armourType=getArmourTypeForMitigations(calcType);
-    ClassProficiencies proficiencies=classDescription.getProficiencies();
-    proficiencies.setArmourTypeForMitigations(armourType);
+    Integer calcType=(Integer)properties.getProperty("AdvTable_ArmorDefense_Points_CalcType");
+    if (calcType!=null)
+    {
+      ArmourType armourType=getArmourTypeForMitigations(calcType);
+      ClassProficiencies proficiencies=classDescription.getProficiencies();
+      proficiencies.setArmourTypeForMitigations(armourType);
+    }
     // Default buffs
     /*
     if (characterClass==CharacterClass.CAPTAIN)
