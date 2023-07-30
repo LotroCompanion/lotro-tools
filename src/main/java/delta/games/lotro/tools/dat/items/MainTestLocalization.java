@@ -1,10 +1,13 @@
 package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
+import java.util.Locale;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
@@ -67,6 +70,8 @@ public class MainTestLocalization
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
+    Locale.setDefault(Locale.ENGLISH);
     new MainTestLocalization().doIt();
   }
 }
