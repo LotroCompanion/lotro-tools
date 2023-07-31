@@ -156,20 +156,21 @@ public class MarkerClassifier
 
   private ResourceClassification tryResourceCropClassification(int did, PropertiesSet props)
   {
-    /*
+    boolean ok=false;
     Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
-    if (craftResourceTypeCode==null)
+    if ((craftResourceTypeCode!=null) && (craftResourceTypeCode.intValue()==4))
     {
-      return null;
+      ok=true;
     }
-    int typeCode=craftResourceTypeCode.intValue();
-    if (typeCode!=4) // Crop (4)
+    else
     {
-      return null;
+      Integer usedInCrafting=(Integer)props.getProperty("Craft_UsedInCrafting");
+      if ((usedInCrafting!=null) && (usedInCrafting.intValue()==1))
+      {
+        ok=true;
+      }
     }
-    */
-    Integer usedInCrafting=(Integer)props.getProperty("Craft_UsedInCrafting");
-    if ((usedInCrafting==null) || (usedInCrafting.intValue()!=1))
+    if (!ok)
     {
       return null;
     }
@@ -180,17 +181,15 @@ public class MarkerClassifier
       return null;
     }
 
-    Integer craftTierCode=(Integer)props.getProperty("CraftTrinket_Tier");
-    if (craftTierCode==null)
-    {
-      return null;
-    }
-    int professionId=((Integer)props.getProperty("CraftTrinket_Profession")).intValue();
+    Integer craftTierCodeInt=(Integer)props.getProperty("CraftTrinket_Tier");
+    int craftTierCode=(craftTierCodeInt!=null)?craftTierCodeInt.intValue():getTierFromDID(did);
+    Integer professionIdInt=(Integer)props.getProperty("CraftTrinket_Profession");
+    int professionId=(professionIdInt!=null)?professionIdInt.intValue():getProfessionFromDID(did);
     // Fix Farmer -> Cook
     if (professionId==1879062816) professionId=1879061252;
     CraftingData craftingData=CraftingSystem.getInstance().getData();
     Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
-    CraftingLevel level=profession.getByTier(craftTierCode.intValue());
+    CraftingLevel level=profession.getByTier(craftTierCode);
     CropClassification c=new CropClassification(level);
     return c;
     /*
@@ -200,6 +199,30 @@ public class MarkerClassifier
     Craft_UsedInCrafting: 1
     WeenieType: 129 (Item)
      */
+  }
+
+  private int getTierFromDID(int did)
+  {
+    // Scholar tier 1
+    if ((did==1879054949) || (did==1879066722) || (did==1879070248)) return 1;
+    // Cook tier 2
+    if ((did==1879061257) || (did==1879061342) || (did==1879061395) || (did==1879061345)) return 2;
+    // Cook tier 3
+    if (did==1879061259) return 3;
+    // Cook tier 4
+    if ((did==1879061415) || (did==1879061417)) return 4;
+    // Cook tier 5
+    if ((did==1879061399) || (did==1879061414) || (did==1879061416) || (did==1879061418)) return 5;
+    System.out.println("unmanaged DID: "+did);
+    return 0;
+  }
+
+  private int getProfessionFromDID(int did)
+  {
+    // Scholar
+    if ((did==1879054949) || (did==1879066722) || (did==1879070248)) return 1879054946;
+    // Otherwise, cook
+    return 1879061252;
   }
 
   private ResourceClassification tryResourceNodeClassification(int did, PropertiesSet props)
