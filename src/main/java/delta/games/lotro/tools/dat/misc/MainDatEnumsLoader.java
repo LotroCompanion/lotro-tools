@@ -49,6 +49,7 @@ import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
@@ -133,8 +134,8 @@ public class MainDatEnumsLoader
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
-    if (live)
     {
+      // Filled for live, empty for SoA, 
       loadEnum(587203200,"MountType",MountType.class); // 0x23000280
       loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
     }
@@ -206,11 +207,11 @@ public class MainDatEnumsLoader
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
   {
     LotroEnum<T> lotroEnum=new LotroEnum<T>(enumId,name,implClass);
+    String labelsSetName="enum-"+implClass.getSimpleName();
+    I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(enumId);
     if (enumMapper!=null)
     {
-      String labelsSetName="enum-"+implClass.getSimpleName();
-      I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
       for(Integer code : enumMapper.getTokens())
       {
         if ((code.intValue()==0) && (!useZero(enumId)))
@@ -223,12 +224,12 @@ public class MainDatEnumsLoader
         lotroEnum.registerEntry(entry);
       }
       handleAdditionalEntries(i18n,enumId,lotroEnum);
-      saveEnumFile(lotroEnum,implClass,i18n);
     }
     else
     {
       LOGGER.warn("Could not load enum: "+name);
     }
+    saveEnumFile(lotroEnum,implClass,i18n);
   }
 
   private <T extends LotroEnumEntry> void buildSubEnum(int sourceEnumId, String name, Class<T> implClass,
@@ -490,6 +491,7 @@ public class MainDatEnumsLoader
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     Locale.setDefault(Locale.ENGLISH);
     new MainDatEnumsLoader(facade).doIt();

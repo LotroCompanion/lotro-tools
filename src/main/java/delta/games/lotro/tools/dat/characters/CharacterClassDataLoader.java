@@ -123,7 +123,7 @@ public class CharacterClassDataLoader
     Integer calcType=(Integer)properties.getProperty("AdvTable_ArmorDefense_Points_CalcType");
     if (calcType!=null)
     {
-      ArmourType armourType=getArmourTypeForMitigations(calcType);
+      ArmourType armourType=getArmourTypeForMitigations(calcType.intValue());
       ClassProficiencies proficiencies=classDescription.getProficiencies();
       proficiencies.setArmourTypeForMitigations(armourType);
     }
