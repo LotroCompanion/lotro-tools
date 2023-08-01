@@ -106,10 +106,7 @@ public class MainDatEnumsLoader
     loadEnum(587202672,"ExaminationModStatType",MobType.class); // 0x23000070
     loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class); // 0x2300001A
     loadEnum(587202647,"TraitNature",TraitNature.class); // 0x23000057
-    if (live)
-    {
-      loadEnum(587203634,"ItemSocketType",SocketType.class); // 0x23000432
-    }
+    loadEnum(587203634,"ItemSocketType",SocketType.class); // 0x23000432
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
     loadEnum(587202756,"BillingGroup",BillingGroup.class); // 0x230000C4
@@ -129,8 +126,8 @@ public class MainDatEnumsLoader
       loadEnum(587203350,"PaperItemCategory",PaperItemCategory.class); // 0x23000316
       loadEnum(587203433,"PointBasedTraitTree",TraitTreeType.class); // 0x23000369
       loadEnum(587203489,"PointBasedTraitTreeBranch",TraitTreeBranchType.class); // 0x230003A1
-      loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
     }
+    loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
