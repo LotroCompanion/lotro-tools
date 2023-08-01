@@ -127,7 +127,8 @@ public class MainDatLoader
     // Factions
     FactionsRegistry factionsRegistry=new MainDatFactionsLoader(_facade).doIt();
     // Crafting
-    new MainDatCraftingLoader(_facade).doIt();
+    MainDatCraftingLoader craftingLoader=new MainDatCraftingLoader(_facade);
+    craftingLoader.doIt();
     // Items
     new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade).doIt();
@@ -153,6 +154,7 @@ public class MainDatLoader
     }
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
+    craftingLoader.updateRecipeIcons();
     // Private encounters
     new MainDatPrivateEncountersLoader(_facade).doIt();
     // Containers

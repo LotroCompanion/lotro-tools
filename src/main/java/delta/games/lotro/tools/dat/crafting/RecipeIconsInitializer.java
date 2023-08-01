@@ -1,13 +1,17 @@
 package delta.games.lotro.tools.dat.crafting;
 
-import java.util.Collections;
 import java.util.List;
 
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.crafting.Profession;
-import delta.games.lotro.lore.crafting.ProfessionComparator;
 import delta.games.lotro.lore.crafting.Professions;
+import delta.games.lotro.lore.crafting.io.xml.CraftingXMLWriter;
+import delta.games.lotro.lore.crafting.recipes.Recipe;
+import delta.games.lotro.lore.crafting.recipes.RecipesManager;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 
 /**
  * Tool to setup recipe icons.
@@ -15,28 +19,6 @@ import delta.games.lotro.lore.crafting.Professions;
  */
 public class RecipeIconsInitializer
 {
-  private static final String[][] recipeIcons= {
-      {"1091476021-1090522692","1091476001-1090522692","1091476026-1090522692","1091475976-1090522692","1091476028-1090522692",
-          "1091476055-1090522692","1091662499-1090522692","1091742480-1090522692","1091804714-1090522692"},
-      {"1091475986-1090522692","1091475993-1090522692","1091475995-1090522692","1091475997-1090522692","1091475999-1090522692",
-          "1091476069-1090522692","1091662502-1090522692","1091742482-1090522692","1091804717-1090522692"},
-      {"1091585932-1090522692","1091476052-1090522692","1091585928-1090522692","1091585924-1090522692","1091585933-1090522692",
-          "1091585935-1090522692","1091662505-1090522692","1091742486-1090522692","1091804719-1090522692"},
-      {"1091476050-1090522692","1091476038-1090522692","1091476040-1090522692","1091476048-1090522692","1091476046-1090522692",
-          "1091476057-1090522692","1091662508-1090522692","1091742492-1090522692","1091804721-1090522692"},
-      {"1091476051-1090522692","1091476044-1090522692","1091476032-1090522692","1091476003-1090522692","1091476005-1090522692",
-          "1091476061-1090522692","1091662511-1090522692","1091742494-1090522692","1091804725-1090522692"},
-      {"1091585917-1090522692","1091585930-1090522692","1091585920-1090522692","1091585918-1090522692","1091585922-1090522692",
-          "1091585926-1090522692","1091662514-1090522692","1091742493-1090522692","1091804728-1090522692"},
-      {"1091476013-1090522692","1091476018-1090522692","1091476011-1090522692","1091476014-1090522692","1091476016-1090522692",
-          "1091476059-1090522692","1091662517-1090522692","1091742501-1090522692","1091804732-1090522692"},
-      {"1091476020-1090522692","1091476009-1090522692","1091476007-1090522692","1091475978-1090522692","1091475982-1090522692",
-          "1091476063-1090522692","1091662520-1090522692","1091742499-1090522692","1091804734-1090522692"},
-      {"1091476071-1090522692","1091476036-1090522692","1091476042-1090522692","1091476030-1090522692","1091476034-1090522692",
-          "1091476065-1090522692","1091662523-1090522692","1091742477-1090522692","1091804738-1090522692"},
-      {"1091476054-1090522692","1091476022-1090522692","1091476024-1090522692","1091475980-1090522692","1091475984-1090522692",
-          "1091476067-1090522692","1091662526-1090522692","1091742535-1090522692","1091804739-1090522692"}};
-
   /**
    * Setup recipe icons.
    * @param crafting Crafting data to update.
@@ -45,23 +27,77 @@ public class RecipeIconsInitializer
   {
     Professions professionsRegistry=crafting.getProfessionsRegistry();
     List<Profession> professions=professionsRegistry.getAll();
-    Collections.sort(professions,new ProfessionComparator());
-    int professionIndex=0;
+    RecipesManager recipesMgr=RecipesManager.getInstance();
     for(Profession profession : professions)
     {
       for(CraftingLevel level : profession.getLevels())
       {
-        String[] recipeIconsForProfession=recipeIcons[professionIndex];
         int tier=level.getTier();
-        if (tier>0)
+        String iconId=getDefaultIcon(profession.getKey(),tier);
+        if (iconId.isEmpty())
         {
-          // Icons for Anorien,Doomfold,Ironfold,... are the same as for Westemnet...
-          int iconIndex=Math.min(level.getTier(),recipeIconsForProfession.length)-1;
-          String icon=recipeIconsForProfession[iconIndex];
-          level.setIcon(icon);
+          List<Recipe> recipes=recipesMgr.getRecipes(profession,tier);
+          for(Recipe recipe : recipes)
+          {
+            Item scroll=recipe.getRecipeScroll();
+            if (scroll!=null)
+            {
+              iconId=scroll.getIcon();
+              break;
+            }
+          }
         }
+        level.setIcon(iconId);
       }
-      professionIndex++;
     }
+    // Save
+    CraftingXMLWriter.write(GeneratedFiles.CRAFTING_DATA,crafting);
+  }
+
+  private static String getDefaultIcon(String key, int tier)
+  {
+    boolean isLive=LotroCoreConfig.isLive();
+    if (isLive)
+    {
+      return getDefaultIconLive(key,tier);
+    }
+    return getDefaultIconSoA(key,tier);
+  }
+
+  private static String getDefaultIconLive(String key, int tier)
+  {
+    if ("FARMER".equals(key))
+    {
+      if ((tier==10) || (tier==11) || (tier==14)) return "1091804717-1090522692";
+    }
+    else if ("FORESTER".equals(key))
+    {
+      if ((tier>=10) && (tier<=14)) return "1091804719-1090522692";
+    }
+    else if ("PROSPECTOR".equals(key))
+    {
+      if ((tier>=10) && (tier<=14)) return "1091804728-1090522692";
+    }
+    else if ("JEWELLER".equals(key))
+    {
+      if (tier==9)
+      {
+        return "1091804721-1090522692";
+      }
+    }
+    return "";
+  }
+
+  private static String getDefaultIconSoA(String key, int tier)
+  {
+    if ("FORESTER".equals(key))
+    {
+      return "1091388632-1090522692-1091388623";
+    }
+    else if ("PROSPECTOR".equals(key))
+    {
+      return "1090536809-1090522692-1090536810";
+    }
+    return "";
   }
 }

@@ -67,8 +67,6 @@ public class MainDatCraftingLoader
         handleGuild(guildId);
       }
     }
-    // Icons
-    RecipeIconsInitializer.setupRecipeIcons(_data);
     save();
   }
 
@@ -286,6 +284,14 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     CraftGuild_QuestCategory: 94 (Crafting Guild: Cook)
     CraftGuild_RequiredCraftTier: 2 (Journeyman)
     */
+  }
+
+  /**
+   * Update recipe icons.
+   */
+  public void updateRecipeIcons()
+  {
+    RecipeIconsInitializer.setupRecipeIcons(_data);
   }
 
   /**
