@@ -1,11 +1,14 @@
 package delta.games.lotro.tools.dat.characters;
 
+import java.util.Locale;
+
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 
 /**
@@ -62,7 +65,8 @@ public class MainCharacterDataLoader
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    DataFacade facade=new DataFacade();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new MainCharacterDataLoader(facade).doIt();
     facade.dispose();
   }

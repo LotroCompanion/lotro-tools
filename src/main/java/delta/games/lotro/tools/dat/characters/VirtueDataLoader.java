@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.misc.Context;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
@@ -184,7 +186,61 @@ public class VirtueDataLoader
       virtueKey=ret.getName().toUpperCase();
     }
     ret.setKey(virtueKey);
+
+    // Icons (SoA)
+    handleIcons(virtueProperties,virtueKey);
+
     return ret;
+  }
+
+  private void handleIcons(PropertiesSet properties, String virtueKey)
+  {
+    Integer progressionID=(Integer)properties.getProperty("Trait_Icon_Progression");
+    if (progressionID==null)
+    {
+      return;
+    }
+    PropertiesSet iconProgression=_facade.loadProperties(progressionID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+    //System.out.println(iconProgression.dump());
+    /*
+PropertyProgression_Array: 
+  #1: Trait_Icon 1090553359
+  #2: Trait_Icon 1090553360
+  #3: Trait_Icon 1090553361
+  #4: Trait_Icon 1090553362
+  #5: Trait_Icon 1090553363
+  #6: Trait_Icon 1090553364
+  #7: Trait_Icon 1090553365
+  #8: Trait_Icon 1090553366
+  #9: Trait_Icon 1090553367
+  #10: Trait_Icon 1090553368
+     */
+    Object[] iconIDsArray=(Object[])iconProgression.getProperty("PropertyProgression_Array");
+    if (iconIDsArray!=null)
+    {
+      int nbEntries=iconIDsArray.length;
+      int tier=1;
+      for(int i=0;i<nbEntries;i++)
+      {
+        int iconID=((Integer)iconIDsArray[i]).intValue();
+        loadIcon(tier,virtueKey,iconID);
+        tier++;
+      }
+    }
+  }
+
+  private void loadIcon(int tier, String virtueKey, int iconID)
+  {
+    String iconFilename=virtueKey+"-"+tier+".png";
+    File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,iconFilename).getAbsoluteFile();
+    if (!to.exists())
+    {
+      boolean ok=DatIconsUtils.buildImageFile(_facade,iconID,to);
+      if (!ok)
+      {
+        LOGGER.warn("Could not build virtue icon: "+iconFilename);
+      }
+    }
   }
 
   private StatsProvider handleEffect(DataFacade facade, int effectId)
