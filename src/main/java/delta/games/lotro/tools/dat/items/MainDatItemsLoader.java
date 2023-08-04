@@ -21,11 +21,11 @@ import delta.games.lotro.common.enums.ItemUniquenessChannel;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
-import delta.games.lotro.common.money.QualityBasedValueLookupTable;
-import delta.games.lotro.common.money.io.xml.ValueTablesXMLWriter;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.WellKnownStat;
+import delta.games.lotro.common.utils.valueTables.QualityBasedValuesTable;
+import delta.games.lotro.common.utils.valueTables.io.xml.ValueTablesXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -118,6 +118,7 @@ public class MainDatItemsLoader
   private ConsumablesLoader _consumablesLoader;
   private LegaciesLoader _legaciesLoader;
   private ItemValueLoader _valueLoader;
+  private DPSValueLoader _dpsLoader;
   private Map<Integer,Integer> _itemLevelOffsets;
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
@@ -147,6 +148,7 @@ public class MainDatItemsLoader
     _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
+    _dpsLoader=new DPSValueLoader(_facade);
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
     _sortDataLoader=new ItemSortingDataLoader(facade);
@@ -219,6 +221,7 @@ public class MainDatItemsLoader
       handleMunging(properties);
       if (level!=null)
       {
+        /*
         Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
         if (minScaledLevel!=null)
         {
@@ -229,6 +232,7 @@ public class MainDatItemsLoader
             item.setItemLevel(level);
           }
         }
+        */
       }
       // Min Level
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
@@ -465,17 +469,17 @@ public class MainDatItemsLoader
     Integer itemValueTableId=(Integer)properties.getProperty("Item_ValueLookupTable");
     if ((itemValueTableId!=null) && (itemValueTableId.intValue()!=0))
     {
-      QualityBasedValueLookupTable table=_valueLoader.getTable(itemValueTableId.intValue());
+      QualityBasedValuesTable table=_valueLoader.getTable(itemValueTableId.intValue());
       if (table!=null)
       {
         ItemQuality quality=item.getQuality();
         Integer itemLevel=item.getItemLevel();
         if (itemLevel!=null)
         {
-          Integer valueFromTable=table.getValue(quality,itemLevel.intValue());
+          Float valueFromTable=table.getValue(quality,itemLevel.intValue());
           if (valueFromTable!=null)
           {
-            itemValueFromTable=Integer.valueOf(valueFromTable.intValue());
+            itemValueFromTable=Integer.valueOf(Math.round(valueFromTable.floatValue()));
           }
           else
           {
@@ -634,42 +638,70 @@ public class MainDatItemsLoader
 
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
   {
-    int itemLevel=weapon.getItemLevel().intValue();
-    float baseDPS=((Float)properties.getProperty("Combat_BaseDPS")).floatValue();
-    // Checks
-    {
-      int levelForChecks=itemLevel;
-      Integer level=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
-      if (level!=null)
-      {
-        levelForChecks=itemLevel;
-      }
-      else
-      {
-        Integer levelDelta=(Integer)properties.getProperty("Item_MaxLevelUpgrades");
-        if (levelDelta!=null)
-        {
-          levelForChecks-=levelDelta.intValue();
-        }
-      }
-      float computedDps=computeDps(levelForChecks,weapon.getQuality(),properties);
-      if (Math.abs(baseDPS-computedDps)>0.01)
-      {
-        //System.out.println("Bad DPS computation: got "+computedDps+", expected: "+baseDPS);
-      }
-    }
-    weapon.setDPS(baseDPS);
-    // Max DPS
+    // DPS
+    handleDPS(weapon,properties);
+    // Max Damage
     float maxDamage=((Float)properties.getProperty("Combat_Damage")).floatValue();
     weapon.setMaxDamage(Math.round(maxDamage));
     //Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
-    // Min DPS
+    // Min Damage
     float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();
     float minDamage=maxDamage*(1-variance);
     weapon.setMinDamage(Math.round(minDamage));
     // Damage type
     int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
     weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
+  }
+
+  private void handleDPS(Weapon weapon, PropertiesSet properties)
+  {
+    computeDps(weapon,properties);
+    // Check
+    float expectedDPS=((Float)properties.getProperty("Combat_BaseDPS")).floatValue();
+    float computedDPS=weapon.getDPS();
+    if (Math.abs(expectedDPS-computedDPS)>0.01)
+    {
+      int id=weapon.getIdentifier();
+      String name=weapon.getName();
+      System.out.println("Name="+name+", id="+id);
+      Integer iLevel=weapon.getItemLevel();
+      Integer offset=weapon.getItemLevelOffset();
+      System.out.println("\tItem level="+iLevel+", offset="+offset);
+      System.out.println("\tBad DPS computation: got "+computedDPS+", expected: "+expectedDPS);
+    }
+    weapon.setDPS(expectedDPS);
+  }
+
+  private void computeDps(Weapon weapon, PropertiesSet properties)
+  {
+    Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
+    if (dpsLut==null)
+    {
+      LOGGER.warn("No DPS LUT for item: "+weapon);
+      return;
+    }
+
+    // Compute item level to use
+    int itemLevel=weapon.getItemLevel().intValue();
+    Integer dpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
+    int itemLevelForDPS=itemLevel;
+    if (dpsLevel!=null)
+    {
+      itemLevelForDPS=dpsLevel.intValue();
+    }
+    else
+    {
+      Integer offset=weapon.getItemLevelOffset();
+      if (offset!=null)
+      {
+        itemLevelForDPS+=offset.intValue();
+      }
+    }
+    ItemQuality quality=weapon.getQuality();
+    QualityBasedValuesTable table=_dpsLoader.getTable(dpsLut.intValue());
+    weapon.setDPSTable(table);
+    float dps=table.getValue(quality,itemLevelForDPS).floatValue();
+    weapon.setDPS(dps);
   }
 
   private int getEquipmentCategory(PropertiesSet properties)
@@ -689,36 +721,6 @@ public class MainDatItemsLoader
       }
     }
     return 0;
-  }
-
-  private float computeDps(int itemLevel, ItemQuality quality, PropertiesSet properties)
-  {
-    float ret=0;
-    // Compute DPS from the DPS LUT table...
-    Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
-    if (dpsLut!=null)
-    {
-      PropertiesSet dpsLutProperties=_facade.loadProperties(dpsLut.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      Object[] dpsArray=(Object[])dpsLutProperties.getProperty("Combat_BaseDPSArray");
-      float baseDPSFromTable=((Float)(dpsArray[itemLevel-1])).floatValue();
-      Object[] qualityFactors=(Object[])dpsLutProperties.getProperty("Combat_QualityModArray");
-      if (qualityFactors!=null)
-      {
-        int qualityEnum=quality.getCode();
-        for(int i=0;i<qualityFactors.length;i++)
-        {
-          PropertiesSet qualityProps=(PropertiesSet)qualityFactors[i];
-          if (qualityEnum==((Integer)qualityProps.getProperty("Combat_Quality")).intValue())
-          {
-            float dpsFactor=((Float)qualityProps.getProperty("Combat_DPSMod")).floatValue();
-            baseDPSFromTable*=dpsFactor;
-            break;
-          }
-        }
-      }
-      ret=baseDPSFromTable;
-    }
-    return ret;
   }
 
   private void loadCarryAllSpecifics(CarryAll carryAll, PropertiesSet properties)
@@ -1060,6 +1062,8 @@ public class MainDatItemsLoader
     }
     // Save value tables
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.VALUE_TABLES,_valueLoader.getTables());
+    // Save DPS tables
+    ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.DPS_TABLES,_dpsLoader.getTables());
     // Save item cosmetics
     _cosmeticLoader.save();
     // Save labels

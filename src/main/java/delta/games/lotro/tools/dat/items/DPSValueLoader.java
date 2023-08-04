@@ -15,12 +15,12 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 
 /**
- * Loader for item value tables.
+ * Loader for DPS tables.
  * @author DAM
  */
-public class ItemValueLoader
+public class DPSValueLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemValueLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(DPSValueLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,QualityBasedValuesTable> _valueTables;
@@ -29,7 +29,7 @@ public class ItemValueLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public ItemValueLoader(DataFacade facade)
+  public DPSValueLoader(DataFacade facade)
   {
     _facade=facade;
     _valueTables=new HashMap<Integer,QualityBasedValuesTable>();
@@ -77,22 +77,21 @@ public class ItemValueLoader
       ret=new QualityBasedValuesTable();
       ret.setIdentifier(tableId);
       // Qualities
-      Object[] qualityArray=(Object[])properties.getProperty("Item_QualityArray");
+      Object[] qualityArray=(Object[])properties.getProperty("Combat_QualityModArray");
       for(Object qualityObj : qualityArray)
       {
         PropertiesSet qualityProps=(PropertiesSet)qualityObj;
-        int qualityCode=((Integer)qualityProps.getProperty("Item_Quality")).intValue();
+        int qualityCode=((Integer)qualityProps.getProperty("Combat_Quality")).intValue();
         ItemQuality quality=DatEnumsUtils.getQuality(qualityCode);
-        float factor=((Float)qualityProps.getProperty("Item_QualityModVal")).floatValue();
+        float factor=((Float)qualityProps.getProperty("Combat_DPSMod")).floatValue();
         ret.addQualityFactor(quality,factor);
       }
       // Base values
-      Object[] baseValueArray=(Object[])properties.getProperty("Item_BaseValArray");
+      Object[] baseValueArray=(Object[])properties.getProperty("Combat_BaseDPSArray");
       int level=1;
       for(Object baseValueObj : baseValueArray)
       {
-        PropertiesSet baseValueProps=(PropertiesSet)baseValueObj;
-        float baseValue=((Float)baseValueProps.getProperty("Item_BaseVal")).floatValue();
+        float baseValue=((Float)baseValueObj).floatValue();
         ret.addBaseValue(level,baseValue);
         level++;
       }

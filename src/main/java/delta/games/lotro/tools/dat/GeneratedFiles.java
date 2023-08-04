@@ -278,6 +278,10 @@ public class GeneratedFiles
    */
   public static final File VALUE_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.VALUE_TABLES);
   /**
+   * DPS tables.
+   */
+  public static final File DPS_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.DPS_TABLES);
+  /**
    * Loots.
    */
   public static final File LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.LOOTS);
