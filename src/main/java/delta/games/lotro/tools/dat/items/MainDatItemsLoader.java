@@ -38,7 +38,6 @@ import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemBindings;
-import delta.games.lotro.lore.items.ItemPropertyNames;
 import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
@@ -802,14 +801,19 @@ public class MainDatItemsLoader
         || ((maxMungingLevel!=null) && (maxMungingLevel.intValue()>0))
         || (progressionId!=null))
     {
+      // Remove entries with min=-1,max=-1 (and progression ID!=null)
+      if ((minMungingLevel!=null) && (minMungingLevel.intValue()<0) &&
+          (maxMungingLevel!=null) && (maxMungingLevel.intValue()<0))
+      {
+        return;
+      }
       Progression progression=null;
       if (progressionId!=null)
       {
         progression=ProgressionUtils.getProgression(_facade,progressionId.intValue());
       }
       Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
-      String mungingSpec=munging.asString();
-      _currentItem.setProperty(ItemPropertyNames.MUNGING,mungingSpec);
+      _currentItem.setMunging(munging);
       //String name=_currentItem.getName();
       //Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
