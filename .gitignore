@@ -46,3 +46,6 @@
 /data/allegiances/tmp/allegianceIcons
 /*.ogg
 /data/hobbies/tmp/hobbyIcons
+/tools/voicesExtractor/.classpath
+/tools/voicesExtractor/.project
+/tools/voicesExtractor/.settings/*.prefs

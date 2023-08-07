@@ -1,19 +1,17 @@
-package delta.games.lotro.tools.forOthers.voicesExtractor;
+package delta.games.lotro.tools.voicesExtractor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.lore.agents.npcs.NPCsManager;
-import delta.games.lotro.lore.agents.npcs.NpcDescription;
-import delta.games.lotro.lore.quests.QuestDescription;
-import delta.games.lotro.lore.quests.QuestsManager;
-import delta.games.lotro.tools.forOthers.voicesExtractor.QuestAnalyzer.ResultElement;
-import delta.games.lotro.tools.lore.sounds.SoundExtractor;
+import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.tools.voicesExtractor.QuestAnalyzer.ResultElement;
 
 /**
  * Tool to extract quest NPC voices.
@@ -32,7 +30,7 @@ public class MainVoicesExtractor
     DatConfiguration cfg=new DatConfiguration();
     cfg.setLocale("fr");
     _facade=new DataFacade(cfg);
-    _rootDir=new File("d:\\tmp\\sounds");
+    _rootDir=new File("d:\\tmp\\sounds2");
     _soundsExtractor=new SoundExtractor(_facade);
     _questAnalyzer=new QuestAnalyzer();
     _elements=new ArrayList<ResultElement>();
@@ -40,11 +38,18 @@ public class MainVoicesExtractor
 
   private void doIt()
   {
-    List<Integer> questIDs=findQuests();
-    System.out.println("Found "+questIDs);
-    for(Integer questID : questIDs)
+    for(int id=0x70000000;id<=0x77FFFFFF;id++)
+    //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
-      handleQuest(questID.intValue());
+      byte[] data=_facade.loadData(id);
+      if (data!=null)
+      {
+        int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
+        if (classDefIndex==WStateClass.ACCOMPLISHMENT)
+        {
+          handleQuest(id);
+        }
+      }
     }
     for(ResultElement element : _elements)
     {
@@ -55,39 +60,32 @@ public class MainVoicesExtractor
   private void handleQuest(int questID)
   {
     PropertiesSet props=_facade.loadProperties(questID+DATConstants.DBPROPERTIES_OFFSET);
-    _questAnalyzer.handleQuest(props,_elements);
+    _questAnalyzer.handleQuest(questID,props,_elements);
   }
 
   private void handleElement(ResultElement element)
   {
-    NpcDescription npc=findNPC(element.npcID);
-    if (npc==null)
+    String npcName=findNPCName(element.npcID);
+    if (npcName==null)
     {
       return;
     }
-    String name=npc.getName();
-    File rootDir=new File(_rootDir,name);
+    File rootDir=new File(_rootDir,npcName);
     rootDir.mkdirs();
-    _soundsExtractor.saveSound(rootDir,element.soundID);
+    _soundsExtractor.saveSound(rootDir,element.questID,element.soundID);
   }
 
-  private NpcDescription findNPC(int id)
+  private String findNPCName(int npcId)
   {
-    return NPCsManager.getInstance().getNPCById(id);
-  }
-
-  private List<Integer> findQuests()
-  {
-    List<Integer> ret=new ArrayList<Integer>();
-    for(QuestDescription quest : QuestsManager.getInstance().getAll())
+    PropertiesSet properties=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
+    if (properties!=null)
     {
-      // 14=Ered Luin, 150=Epic - Vol. III, Book 6: Mists of Anduin
-      //if (quest.getCategory().getCode()==150)
-      {
-        ret.add(Integer.valueOf(quest.getIdentifier()));
-      }
+      // Name
+      String npcName=DatStringUtils.getStringProperty(properties,"Name");
+      npcName=DatStringUtils.fixName(npcName);
+      return npcName;
     }
-    return ret;
+    return null;
   }
 
   /**

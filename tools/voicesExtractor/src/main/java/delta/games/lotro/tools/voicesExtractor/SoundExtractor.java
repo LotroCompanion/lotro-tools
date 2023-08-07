@@ -1,7 +1,12 @@
-package delta.games.lotro.tools.lore.sounds;
+package delta.games.lotro.tools.voicesExtractor;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFileFormat.Type;
+import javax.sound.sampled.AudioSystem;
 
 import org.apache.log4j.Logger;
 
@@ -10,8 +15,6 @@ import delta.games.lotro.dat.archive.DetailedFileEntry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.SoundInfo;
 import delta.games.lotro.dat.loaders.SoundInfoLoader;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundFormat;
 
 /**
  * Sound extractor.
@@ -35,10 +38,11 @@ public class SoundExtractor
   /**
    * Extract and save a sound file.
    * @param toDir Target directory.
+   * @param questID Quest identifier.
    * @param soundInfoID Sound info identifier.
    * @return <code>true</code> if it succeeded, <code>false</code> otherwise..
    */
-  public boolean saveSound(File toDir, int soundInfoID)
+  public boolean saveSound(File toDir, int questID, int soundInfoID)
   {
     byte[] data=_facade.loadData(soundInfoID);
     if (data==null)
@@ -63,21 +67,46 @@ public class SoundExtractor
     }
     byte[] soundData=entry.getData();
     byte[] rawSoundData=SoundInfoLoader.decodeSound(new ByteArrayInputStream(soundData));
-    int rawLength=rawSoundData.length;
     SoundDescription ret=new SoundDescription(soundInfoID);
     ret.setName(soundName);
-    ret.setRawSize(rawLength);
-    long date=entry.getEntry().getTimestamp();
-    ret.setTimestamp(date);
-    SoundUtils.inspectSound(rawSoundData,ret);
-    SoundFormat format=ret.getFormat();
+    SoundFormat format=inspectFormat(rawSoundData);
     String extension;
     if (format==SoundFormat.WAV) extension=".wav";
     else if (format==SoundFormat.OGG_VORBIS) extension=".ogg";
     else extension=".unknown";
-    if ((soundName==null) || (soundName.isEmpty())) soundName=String.valueOf(soundID);
-    File f=new File(toDir,soundName+extension);
+    if (soundName==null) soundName="";
+    String filename=""+questID+"-"+soundID+((soundName.length()>0)?"-"+soundName:"");
+    File f=new File(toDir,filename+extension);
     boolean ok=FileIO.writeFile(f,rawSoundData);
     return ok;
+  }
+
+  private static SoundFormat inspectFormat(byte[] soundData)
+  {
+    AudioFileFormat format=null;
+    try
+    {
+      InputStream is=new ByteArrayInputStream(soundData);
+      format=AudioSystem.getAudioFileFormat(is);
+    }
+    catch (Exception e)
+    {
+      return SoundFormat.OGG_VORBIS;
+    }
+    Type type=format.getType();
+    if (type==null)
+    {
+      return null;
+    }
+    if ("WAVE".equals(type.toString()))
+    {
+      return SoundFormat.WAV;
+    }
+    LOGGER.warn("Could not get format of sound: unsupported type!");
+    return null;
+    // System.out.println("Format: "+format.getFormat());
+    // System.out.println("Byte length: "+format.getByteLength());
+    // System.out.println("Frame length: "+format.getFrameLength());
+    // System.out.println("Properties: "+format.properties());
   }
 }

@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.forOthers.voicesExtractor;
+package delta.games.lotro.tools.voicesExtractor;
 
 import java.util.List;
 
@@ -17,6 +17,10 @@ public class QuestAnalyzer
   public class ResultElement
   {
     /**
+     * Quest ID.
+     */
+    public int questID;
+    /**
      * NPC identifier.
      */
     public int npcID;
@@ -28,10 +32,11 @@ public class QuestAnalyzer
 
   /**
    * Handle a single quest.
+   * @param questID Quest ID.
    * @param properties Quest properties.
    * @param results Storage for results.
    */
-  public void handleQuest(PropertiesSet properties, List<ResultElement> results)
+  public void handleQuest(int questID, PropertiesSet properties, List<ResultElement> results)
   {
     // Quest_RoleArray
     Object[] roles=(Object[])properties.getProperty("Quest_RoleArray");
@@ -57,6 +62,7 @@ public class QuestAnalyzer
       if ((npcId!=null) && (npcId.intValue()!=0) && (soundID!=null) && (soundID.intValue()!=0))
       {
         ResultElement element=new ResultElement();
+        element.questID=questID;
         element.npcID=npcId.intValue();
         element.soundID=soundID.intValue();
         results.add(element);
