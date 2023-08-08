@@ -8,6 +8,7 @@ import delta.common.utils.files.FilesFinder;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.archive.DATArchive;
 import delta.games.lotro.dat.archive.DATArchiveIndexBuilder;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.ClientPathUtils;
 
 /**
@@ -16,7 +17,16 @@ import delta.games.lotro.dat.utils.ClientPathUtils;
  */
 public class DATFilesIndexBuilder
 {
-  private static final File ROOT_DIR=new File("../lotro-companion-private-doc/dat");
+  private File _rootDir;
+
+  /**
+   * Constructor.
+   * @param rootDir Root directory for produced data.
+   */
+  public DATFilesIndexBuilder(File rootDir)
+  {
+    _rootDir=rootDir;
+  }
 
   private File findClientDir()
   {
@@ -40,8 +50,7 @@ public class DATFilesIndexBuilder
     archive.open();
     String name=datFile.getName();
     name=name.substring(0,name.indexOf('.'));
-    boolean isLive=LotroCoreConfig.isLive();
-    File dir=new File(ROOT_DIR,isLive?"index":"index-soa");
+    File dir=new File(_rootDir,"index");
     String indexName=name+".index.txt";
     File indexFile=new File(dir,indexName);
     indexFile.getParentFile().mkdirs();
@@ -83,6 +92,8 @@ public class DATFilesIndexBuilder
    */
   public static void main(String[] args)
   {
-    new DATFilesIndexBuilder().doIt();
+    Context.init(LotroCoreConfig.getMode());
+    File rootDir=ReportsContants.getReportsRootDir();
+    new DATFilesIndexBuilder(rootDir).doIt();
   }
 }

@@ -36,9 +36,8 @@ public class ReferenceDataGenerator
 {
   private static final Logger LOGGER=Logger.getLogger(ReferenceDataGenerator.class);
 
-  private static final File ROOT_DIR=new File("../lotro-companion-private-doc/dat");
-
   private DataFacade _facade;
+  private File _rootDir;
 
   /**
    * Constructor.
@@ -47,6 +46,7 @@ public class ReferenceDataGenerator
   public ReferenceDataGenerator(DataFacade facade)
   {
     _facade=facade;
+    _rootDir=ReportsContants.getReportsRootDir();
   }
 
   /**
@@ -78,7 +78,7 @@ public class ReferenceDataGenerator
       {
         if (subLabel.startsWith("\u0000\u0000")) continue;
         int subDataId=subMap.getDataIdForLabel(subLabel).intValue();
-        File toDir=new File(ROOT_DIR,"WeenieContent");
+        File toDir=new File(_rootDir,"WeenieContent");
         File to=new File(toDir,subLabel+".txt");
         dumpProperties(subDataId,to);
         //File toWState=new File(toDir,subLabel+".wsl.txt");
@@ -129,7 +129,7 @@ public class ReferenceDataGenerator
     for(Object classId : classIds)
     {
       int propsId=((Integer)classId).intValue();
-      File toDir=new File(ROOT_DIR,"LevelTables");
+      File toDir=new File(_rootDir,"LevelTables");
       File to=new File(toDir,"LevelTable-"+propsId+".txt");
       dumpProperties(propsId,to);
     }
@@ -182,7 +182,7 @@ public class ReferenceDataGenerator
       }
     }
 
-    File to=new File(ROOT_DIR,"properties.txt");
+    File to=new File(_rootDir,"properties.txt");
     writeFile(to,sb.toString());
   }
 
@@ -190,7 +190,7 @@ public class ReferenceDataGenerator
   {
     StringBuilder sb=new StringBuilder();
     DATInspectionTool.loadEnumsRegistry(_facade,sb);
-    File to=new File(ROOT_DIR,"enums.txt");
+    File to=new File(_rootDir,"enums.txt");
     writeFile(to,sb.toString());
   }
 
@@ -206,7 +206,7 @@ public class ReferenceDataGenerator
         break;
       }
     }
-    File to=new File(ROOT_DIR,"mapsSystemProps.txt");
+    File to=new File(_rootDir,"mapsSystemProps.txt");
     writeFile(to,props.dump());
   }
 
@@ -221,7 +221,7 @@ public class ReferenceDataGenerator
       sb.append(classDefinition).append(EndOfLine.NATIVE_EOL);
     }
     String contents=sb.toString().trim();
-    File wDir=new File(ROOT_DIR,"W");
+    File wDir=new File(_rootDir,"W");
     File to=new File(wDir,"classes.txt");
     writeFile(to,contents);
   }
@@ -231,18 +231,19 @@ public class ReferenceDataGenerator
     WLibData wlibData=_facade.getWLibData();
     ClassesTreeGenerator builder=new ClassesTreeGenerator();
     String classTree=builder.dumpClassesTree(wlibData);
-    File wDir=new File(ROOT_DIR,"W");
+    File wDir=new File(_rootDir,"W");
     File to=new File(wDir,"classesTree.txt");
     writeFile(to,classTree);
   }
 
   private void dumpDATFilesIndex()
   {
-    new DATFilesIndexBuilder().doIt();
+    new DATFilesIndexBuilder(_rootDir).doIt();
   }
 
   private void writeFile(File to, String contents)
   {
+    to.getParentFile().mkdirs();
     TextFileWriter w=new TextFileWriter(to,EncodingNames.UTF_8);
     w.start();
     w.writeSomeText(contents);
