@@ -56,6 +56,7 @@ public class DatEffectUtils
     PropertiesSet effectProps=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     if (effectProps!=null)
     {
+      //System.out.println(effectProps.dump());
       ret=new Effect();
       ret.setId(effectId);
       // Name

@@ -26,6 +26,7 @@ import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.utils.valueTables.QualityBasedValuesTable;
 import delta.games.lotro.common.utils.valueTables.io.xml.ValueTablesXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -67,6 +68,7 @@ import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -540,6 +542,7 @@ public class MainDatItemsLoader
         }
       }
     }
+    _consumablesLoader.reset();
     // On use
     _consumablesLoader.handleOnUseEffects(_currentItem,properties);
     // Skills
@@ -1080,7 +1083,8 @@ public class MainDatItemsLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new MainDatItemsLoader(facade).doIt();
     facade.dispose();
   }
