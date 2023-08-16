@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -25,10 +26,12 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.WellKnownStat;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.ArmourType;
@@ -120,13 +123,18 @@ public class CharacterClassDataLoader
     // Proficiencies
     _proficiencies.handleClass(classDescription);
     // Armour type for mitigations
+    ArmourType armourType=null;
     Integer calcType=(Integer)properties.getProperty("AdvTable_ArmorDefense_Points_CalcType");
     if (calcType!=null)
     {
-      ArmourType armourType=getArmourTypeForMitigations(calcType.intValue());
-      ClassProficiencies proficiencies=classDescription.getProficiencies();
-      proficiencies.setArmourTypeForMitigations(armourType);
+      armourType=getArmourTypeForMitigations(calcType.intValue());
     }
+    else
+    {
+      armourType=getDefaultArmourTypeForMitigations(classKey);
+    }
+    ClassProficiencies proficiencies=classDescription.getProficiencies();
+    proficiencies.setArmourTypeForMitigations(armourType);
     // Default buffs
     /*
     if (characterClass==CharacterClass.CAPTAIN)
@@ -155,6 +163,19 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     if (calcType==12) return ArmourTypes.LIGHT;
     if (calcType==13) return ArmourTypes.MEDIUM;
     if (calcType==14) return ArmourTypes.HEAVY;
+    return null;
+  }
+
+  
+  private ArmourType getDefaultArmourTypeForMitigations(String classKey)
+  {
+    if (classKey.equals(WellKnownCharacterClassKeys.BURGLAR)) return ArmourTypes.MEDIUM;
+    if (classKey.equals(WellKnownCharacterClassKeys.CAPTAIN)) return ArmourTypes.HEAVY;
+    if (classKey.equals(WellKnownCharacterClassKeys.CHAMPION)) return ArmourTypes.HEAVY;
+    if (classKey.equals(WellKnownCharacterClassKeys.GUARDIAN)) return ArmourTypes.HEAVY;
+    if (classKey.equals(WellKnownCharacterClassKeys.HUNTER)) return ArmourTypes.MEDIUM;
+    if (classKey.equals(WellKnownCharacterClassKeys.LORE_MASTER)) return ArmourTypes.LIGHT;
+    if (classKey.equals(WellKnownCharacterClassKeys.MINSTREL)) return ArmourTypes.LIGHT;
     return null;
   }
 
@@ -516,7 +537,9 @@ AdvTable_AvailableSkillEntryList:
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new CharacterClassDataLoader(facade).doIt();
   }
 }
