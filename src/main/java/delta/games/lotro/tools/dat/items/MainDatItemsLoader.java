@@ -61,6 +61,8 @@ import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
+import delta.games.lotro.lore.items.weapons.SpeedTables;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
@@ -126,6 +128,7 @@ public class MainDatItemsLoader
   private ItemSortingDataLoader _sortDataLoader;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
+  private SpeedTables _speedTables;
   private boolean _live;
 
   // Enums
@@ -155,6 +158,10 @@ public class MainDatItemsLoader
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _detailsLoader=new ItemDetailsLoader(_facade);
     _cosmeticLoader=new CosmeticLoader();
+    if (!_live)
+    {
+      _speedTables=new SpeedValuesLoader(facade).loadData();
+    }
     // Enums
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _socketTypes=enumsRegistry.get(SocketType.class);
@@ -642,6 +649,11 @@ public class MainDatItemsLoader
   {
     // DPS
     handleDPS(weapon,properties);
+    // Speed
+    if (!_live)
+    {
+      handleSpeed(weapon,properties);
+    }
     // Max Damage
     float maxDamage=((Float)properties.getProperty("Combat_Damage")).floatValue();
     weapon.setMaxDamage(Math.round(maxDamage));
@@ -706,23 +718,26 @@ public class MainDatItemsLoader
     weapon.setDPS(dps);
   }
 
-  private int getEquipmentCategory(PropertiesSet properties)
+  private void handleSpeed(Weapon weapon, PropertiesSet properties)
   {
-    Long value=(Long)properties.getProperty("Item_EquipmentCategory");
-    long code=(value!=null)?value.longValue():0;
-    if (code!=0)
+    Float duration=(Float)properties.getProperty("Item_BaseActionDuration");
+    Float mod=(Float)properties.getProperty("Item_BaseAnimDurationMultiplierMod");
+    Integer speedCode=(Integer)properties.getProperty("Combat_WeaponSpeed");
+    int id=weapon.getIdentifier();
+    String name=weapon.getName();
+    WeaponType type=weapon.getWeaponType();
+    WeaponSpeedEntry entry=_speedTables.getEntry(type,speedCode.intValue());
+    float expectedDuration=entry.getBaseActionDuration();
+    float expectedAnimDurationMod=entry.getBaseAnimationDurationMultiplierModifier();
+    if (Math.abs(expectedDuration-duration.floatValue())>0.01)
     {
-      long mask=1;
-      for(int i=1;i<=64;i++)
-      {
-        if ((code&mask)!=0)
-        {
-          return i;
-        }
-        mask<<=1;
-      }
+      LOGGER.warn("************ BAD DURATION! ID="+id+", name="+name+" ***********");
     }
-    return 0;
+    if (Math.abs(expectedAnimDurationMod-mod.floatValue())>0.01)
+    {
+      LOGGER.warn("************ BAD ANIM DURATION MOD! ID="+id+", name="+name+" ***********");
+    }
+    //System.out.println(id+"\t"+name+"\t"+type+"\t"+speedCode+"\t"+duration+"\t"+mod);
   }
 
   private void loadCarryAllSpecifics(CarryAll carryAll, PropertiesSet properties)
@@ -735,7 +750,8 @@ public class MainDatItemsLoader
 
   private Item buildItem(PropertiesSet properties)
   {
-    int equipmentCategoryCode=getEquipmentCategory(properties);
+    Long equipmentCategoryValue=(Long)properties.getProperty("Item_EquipmentCategory");
+    int equipmentCategoryCode=DatEnumsUtils.getEquipmentCategoryCode(equipmentCategoryValue);
     WeaponType weaponType=DatEnumsUtils.getWeaponTypeFromEquipmentCategory(equipmentCategoryCode);
     ArmourType armourType=ArmourTypesUtils.getArmourType(equipmentCategoryCode);
     // Legendary stuff?

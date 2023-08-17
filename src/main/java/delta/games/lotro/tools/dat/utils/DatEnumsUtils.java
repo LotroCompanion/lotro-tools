@@ -91,4 +91,27 @@ public class DatEnumsUtils
   {
     return LotroEnumsRegistry.getInstance().get(WeaponType.class).getEntry(code);
   }
+
+  /**
+   * Get the equipment category code from an equipment category bits field.
+   * @param equipmentCategory Input value.
+   * @return An equipment category code.
+   */
+  public static int getEquipmentCategoryCode(Long equipmentCategory)
+  {
+    long code=(equipmentCategory!=null)?equipmentCategory.longValue():0;
+    if (code!=0)
+    {
+      long mask=1;
+      for(int i=1;i<=64;i++)
+      {
+        if ((code&mask)!=0)
+        {
+          return i;
+        }
+        mask<<=1;
+      }
+    }
+    return 0;
+  }
 }
