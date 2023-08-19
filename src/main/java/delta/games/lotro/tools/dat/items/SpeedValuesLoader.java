@@ -4,8 +4,8 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.weapons.SpeedTables;
-import delta.games.lotro.lore.items.weapons.WeaponSpeed;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTable;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
@@ -31,10 +31,10 @@ public class SpeedValuesLoader
    * Load weapon speed data.
    * @return the loaded speed tables.
    */
-  public SpeedTables loadData()
+  public WeaponSpeedTables loadData()
   {
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"WeaponActionDurationTable");
-    SpeedTables ret=new SpeedTables();
+    WeaponSpeedTables ret=new WeaponSpeedTables();
     /*
 Item_WeaponActionDurationTable: 
   #1: Item_WeaponActionDurationData 1879049507
@@ -47,14 +47,17 @@ Item_WeaponActionDurationTable:
       for(Object idObj : idObjs)
       {
         int id=((Integer)idObj).intValue();
-        WeaponSpeed weaponSpeed=loadTable(id);
-        ret.addWeaponSpeed(weaponSpeed);
+        WeaponSpeedTable weaponSpeed=loadTable(id);
+        if (weaponSpeed!=null)
+        {
+          ret.addWeaponSpeed(weaponSpeed);
+        }
       }
     }
     return ret;
   }
 
-  private WeaponSpeed loadTable(int tableId)
+  private WeaponSpeedTable loadTable(int tableId)
   {
     PropertiesSet properties=_facade.loadProperties(tableId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
@@ -77,7 +80,11 @@ Item_WeaponActionDurationDataArray:
     Long equipmentCategoryValue=(Long)properties.getProperty("Item_EquipmentCategory");
     int equipmentCategoryCode=DatEnumsUtils.getEquipmentCategoryCode(equipmentCategoryValue);
     WeaponType weaponType=DatEnumsUtils.getWeaponTypeFromEquipmentCategory(equipmentCategoryCode);
-    WeaponSpeed ret=new WeaponSpeed(weaponType);
+    if (weaponType==null)
+    {
+      return null;
+    }
+    WeaponSpeedTable ret=new WeaponSpeedTable(weaponType);
     // Duration data
     Object[] dataArray=(Object[])properties.getProperty("Item_WeaponActionDurationDataArray");
     for(Object entryObj : dataArray)

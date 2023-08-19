@@ -263,6 +263,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.ITEM_COSMETICS);
     deleteFile(GeneratedFiles.VALUE_TABLES);
     deleteFile(GeneratedFiles.DPS_TABLES);
+    deleteFile(GeneratedFiles.SPEED_TABLES);
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);

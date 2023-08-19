@@ -282,6 +282,10 @@ public class GeneratedFiles
    */
   public static final File DPS_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.DPS_TABLES);
   /**
+   * Speed tables.
+   */
+  public static final File SPEED_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.SPEED_TABLES);
+  /**
    * Loots.
    */
   public static final File LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.LOOTS);

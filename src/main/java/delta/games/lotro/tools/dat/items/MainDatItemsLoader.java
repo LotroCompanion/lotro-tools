@@ -61,8 +61,9 @@ import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
-import delta.games.lotro.lore.items.weapons.SpeedTables;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
+import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
@@ -128,7 +129,7 @@ public class MainDatItemsLoader
   private ItemSortingDataLoader _sortDataLoader;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
-  private SpeedTables _speedTables;
+  private WeaponSpeedTables _speedTables;
   private boolean _live;
 
   // Enums
@@ -161,6 +162,7 @@ public class MainDatItemsLoader
     if (!_live)
     {
       _speedTables=new SpeedValuesLoader(facade).loadData();
+      WeaponSpeedTablesXMLWriter.writeSpeedTablesFile(GeneratedFiles.SPEED_TABLES,_speedTables);
     }
     // Enums
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
