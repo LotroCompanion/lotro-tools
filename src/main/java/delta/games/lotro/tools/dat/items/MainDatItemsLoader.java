@@ -739,6 +739,7 @@ public class MainDatItemsLoader
     {
       LOGGER.warn("************ BAD ANIM DURATION MOD! ID="+id+", name="+name+" ***********");
     }
+    weapon.setSpeed(entry);
     //System.out.println(id+"\t"+name+"\t"+type+"\t"+speedCode+"\t"+duration+"\t"+mod);
   }
 
