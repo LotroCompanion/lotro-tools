@@ -297,13 +297,25 @@ public class DeedsLoader
       {
         for(Object accomplishmentListObj : accomplishmentList)
         {
-          for(Object accomplishmentListObj2 : (Object[])accomplishmentListObj)
+          if (accomplishmentListObj instanceof Integer)
           {
-            Integer deedId=(Integer)accomplishmentListObj2;
+            Integer deedId=(Integer)accomplishmentListObj;
             DeedDescription deed=_deeds.get(deedId);
             if (deed!=null)
             {
               deed.setRequiredRace(race);
+            }
+          }
+          else
+          {
+            for(Object accomplishmentListObj2 : (Object[])accomplishmentListObj)
+            {
+              Integer deedId=(Integer)accomplishmentListObj2;
+              DeedDescription deed=_deeds.get(deedId);
+              if (deed!=null)
+              {
+                deed.setRequiredRace(race);
+              }
             }
           }
         }
