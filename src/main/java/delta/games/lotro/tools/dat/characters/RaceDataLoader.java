@@ -102,6 +102,7 @@ public class RaceDataLoader
     if (raceId==114) return "beorning";
     if (raceId==117) return "highelf";
     if (raceId==120) return "stoutaxedwarf";
+    if (raceId==125) return "riverhobbit";
     return null;
   }
 
@@ -114,6 +115,7 @@ public class RaceDataLoader
     if (raceId==114) return "Beorning";
     if (raceId==117) return "High Elf";
     if (raceId==120) return "Stout-axe Dwarf";
+    if (raceId==125) return "River Hobbit";
     return null;
   }
 
