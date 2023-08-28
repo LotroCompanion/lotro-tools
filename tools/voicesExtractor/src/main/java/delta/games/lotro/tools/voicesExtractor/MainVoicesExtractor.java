@@ -19,21 +19,47 @@ import delta.games.lotro.tools.voicesExtractor.QuestAnalyzer.ResultElement;
  */
 public class MainVoicesExtractor
 {
+  private static final String ROOT_DIR_SEED="--rootDir=";
+  private static final String LANGUAGE_SEED="--language=";
   private DataFacade _facade;
   private File _rootDir;
+  private String _language;
   private SoundExtractor _soundsExtractor;
   private QuestAnalyzer _questAnalyzer;
   private List<ResultElement> _elements;
 
-  private MainVoicesExtractor()
+  private MainVoicesExtractor(String[] args)
   {
-    DatConfiguration cfg=new DatConfiguration();
-    cfg.setLocale("fr");
-    _facade=new DataFacade(cfg);
+    _language="fr";
     _rootDir=new File("d:\\tmp\\sounds2");
+    parseArgs(args);
+    DatConfiguration cfg=new DatConfiguration();
+    cfg.setLocale(_language);
+    _facade=new DataFacade(cfg);
     _soundsExtractor=new SoundExtractor(_facade);
     _questAnalyzer=new QuestAnalyzer();
     _elements=new ArrayList<ResultElement>();
+    // Info
+    File datFiles=cfg.getRootPath();
+    System.out.println("LOTRO install directory: "+datFiles);
+    System.out.println("Language: "+_language);
+    System.out.println("Output directory: "+_rootDir);
+  }
+
+  private void parseArgs(String[] args)
+  {
+    for(String arg : args)
+    {
+      if (arg.startsWith(ROOT_DIR_SEED))
+      {
+        String rootDir=arg.substring(ROOT_DIR_SEED.length());
+        _rootDir=new File(rootDir);
+      }
+      else if (arg.startsWith(LANGUAGE_SEED))
+      {
+        _language=arg.substring(LANGUAGE_SEED.length());
+      }
+    }
   }
 
   private void doIt()
@@ -94,6 +120,6 @@ public class MainVoicesExtractor
    */
   public static void main(String[] args)
   {
-    new MainVoicesExtractor().doIt();
+    new MainVoicesExtractor(args).doIt();
   }
 }

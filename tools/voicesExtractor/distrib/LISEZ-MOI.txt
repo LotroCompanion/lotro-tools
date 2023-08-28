@@ -1,0 +1,31 @@
+Extracteur des voix des NPCs SdAO
+=================================
+
+Pré-requis
+----------
+Java Runtime Environnement installé.
+J'utilise Java 8. Mais il y a une chance que ça marche avec les version ultérieures de Java.
+
+Configurer le fichier go.bat
+----------------------------
+1) Choisir le répertoire de sortie
+Dans ROOT_DIR, indiquer le répertoire où les fichiers seront écrits.
+Le répertoire est créé si il n'existe pas.
+Le répertoire n'est pas vidé par le programme.
+
+2) Indiquer le chemin de l'install SdAO
+Dans LOTRO_CLIENT_PATH, donner le chemin où se trouvent les fichiers .DAT
+
+Lancer
+------
+Depuis l'explorateur Windows, double-clic sur go.bat
+Attendre un peu...
+Et voilà.
+
+Résultats
+---------
+Les fichiers sont triés par nom de NPC (en Français).
+Dans chaque répertoire, on trouve 1 ou plusieurs fichier son dont le nom est du type :
+IDQuete-IDSon-nomSon.ogg (ou .wav)
+
+Pour trouver le nom d'une quête, utiliser le fichier quests.xml de LotroCompanion.
