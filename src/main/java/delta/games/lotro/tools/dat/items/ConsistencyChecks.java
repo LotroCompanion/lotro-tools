@@ -44,6 +44,7 @@ public class ConsistencyChecks
     int nbMissingWeaponTypes=0;
     for(Item item : items)
     {
+      item.setStatsFromStatsProvider();
       checkItemStats(item);
       //int id=item.getIdentifier();
       //String name=item.getName();
