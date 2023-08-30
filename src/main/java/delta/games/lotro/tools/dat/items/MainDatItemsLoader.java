@@ -183,7 +183,7 @@ public class MainDatItemsLoader
       Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
       String name=DatUtils.getStringProperty(properties,"Name");
       name=StringUtils.removeMarks(name);
-      if (!useItem(name,itemClassCode))
+      if (!useItem(indexDataId,name,itemClassCode))
       {
         return null;
       }
@@ -514,8 +514,9 @@ public class MainDatItemsLoader
     }
   }
 
-  private boolean useItem(String name, Integer itemClassInt)
+  private boolean useItem(int itemId, String name, Integer itemClassInt)
   {
+    if (itemId==1879465779) return true;
     if (name==null) return false;
     if (itemClassInt==null) return false;
     if (name.contains("TBD")) return false;

@@ -56,6 +56,10 @@ public class MainDatPaperItemsLoader
     //System.out.println("Paper item: "+itemId+", free="+free);
     // Inspect
     PaperItem paperItem=inspectItem(itemId.intValue());
+    if (paperItem==null)
+    {
+      return null;
+    }
     // Free
     paperItem.setFree(free);
     // Cap (optional)
@@ -82,6 +86,11 @@ public class MainDatPaperItemsLoader
   private PaperItem inspectItem(int itemId)
   {
     Item item=ItemsManager.getInstance().getItem(itemId);
+    if (item==null)
+    {
+      LOGGER.warn("Unknown item: "+itemId);
+      return null;
+    }
     PaperItem ret=new PaperItem(item);
     PropertiesSet itemProps=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
     Integer isBarter=(Integer)itemProps.getProperty("Barter_IsBarterItem");
@@ -135,7 +144,10 @@ public class MainDatPaperItemsLoader
       {
         PropertiesSet itemProps=(PropertiesSet)arrayItem;
         PaperItem paperItem=handleItem(itemProps,true);
-        paperItems.put(Integer.valueOf(paperItem.getIdentifier()),paperItem);
+        if (paperItem!=null)
+        {
+          paperItems.put(Integer.valueOf(paperItem.getIdentifier()),paperItem);
+        }
       }
     }
 
