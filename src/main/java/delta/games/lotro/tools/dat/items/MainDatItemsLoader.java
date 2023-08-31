@@ -240,7 +240,10 @@ public class MainDatItemsLoader
             boolean legendary=((item instanceof Legendary) || (item instanceof Legendary2));
             if (!legendary)
             {
-              LOGGER.info("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
+              if (level.intValue()!=1)
+              {
+                LOGGER.info("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
+              }
               level=minScaledLevel;
               item.setItemLevel(level);
             }
