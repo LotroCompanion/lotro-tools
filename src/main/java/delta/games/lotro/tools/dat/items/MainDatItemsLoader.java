@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -231,18 +232,20 @@ public class MainDatItemsLoader
       handleMunging(properties);
       if (level!=null)
       {
-        /*
         Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
         if (minScaledLevel!=null)
         {
           if (level.intValue()<minScaledLevel.intValue())
           {
-            //System.out.println("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
-            level=minScaledLevel;
-            item.setItemLevel(level);
+            boolean legendary=((item instanceof Legendary) || (item instanceof Legendary2));
+            if (!legendary)
+            {
+              LOGGER.info("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
+              level=minScaledLevel;
+              item.setItemLevel(level);
+            }
           }
         }
-        */
       }
       // Min Level
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
@@ -650,7 +653,8 @@ public class MainDatItemsLoader
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
   {
     // DPS
-    handleDPS(weapon,properties);
+    float dps=computeDps(weapon,properties);
+    weapon.setDPS(dps);
     // Speed
     if (!_live)
     {
@@ -669,32 +673,13 @@ public class MainDatItemsLoader
     weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
   }
 
-  private void handleDPS(Weapon weapon, PropertiesSet properties)
-  {
-    computeDps(weapon,properties);
-    // Check
-    float expectedDPS=((Float)properties.getProperty("Combat_BaseDPS")).floatValue();
-    float computedDPS=weapon.getDPS();
-    if (Math.abs(expectedDPS-computedDPS)>0.01)
-    {
-      int id=weapon.getIdentifier();
-      String name=weapon.getName();
-      System.out.println("Name="+name+", id="+id);
-      Integer iLevel=weapon.getItemLevel();
-      Integer offset=weapon.getItemLevelOffset();
-      System.out.println("\tItem level="+iLevel+", offset="+offset);
-      System.out.println("\tBad DPS computation: got "+computedDPS+", expected: "+expectedDPS);
-    }
-    weapon.setDPS(expectedDPS);
-  }
-
-  private void computeDps(Weapon weapon, PropertiesSet properties)
+  private float computeDps(Weapon weapon, PropertiesSet properties)
   {
     Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
     if (dpsLut==null)
     {
       LOGGER.warn("No DPS LUT for item: "+weapon);
-      return;
+      return 0;
     }
 
     // Compute item level to use
@@ -718,6 +703,7 @@ public class MainDatItemsLoader
     weapon.setDPSTable(table);
     float dps=table.getValue(quality,itemLevelForDPS).floatValue();
     weapon.setDPS(dps);
+    return dps;
   }
 
   private void handleSpeed(Weapon weapon, PropertiesSet properties)
@@ -1104,6 +1090,7 @@ public class MainDatItemsLoader
   {
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new MainDatItemsLoader(facade).doIt();
     facade.dispose();
   }
