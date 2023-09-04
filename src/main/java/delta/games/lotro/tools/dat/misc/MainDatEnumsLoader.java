@@ -35,6 +35,7 @@ import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
+import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
@@ -145,6 +146,8 @@ public class MainDatEnumsLoader
       loadEnum(587203232,"RunicTier",RunicTier.class); // 0x230002A0
       loadEnum(587203222,"RunicType",RelicType.class); // 0x23000296
     }
+    loadEnum(587203492,"SkillType",SkillType.class); // 0x230003A4
+
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType
