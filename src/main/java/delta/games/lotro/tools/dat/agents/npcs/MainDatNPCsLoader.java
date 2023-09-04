@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.CharacterSex;
+import delta.games.lotro.common.Genders;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -12,6 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.agents.npcs.io.xml.NPCsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -47,6 +50,9 @@ public class MainDatNPCsLoader
       // Name
       String npcName=_i18n.getNameStringProperty(properties,"Name",npcId,I18nUtils.OPTION_REMOVE_MARKS);
       ret=new NpcDescription(npcId,npcName);
+      // Gender
+      CharacterSex gender=extractGender(properties);
+      ret.setGender(gender);
       // Title
       String title=_i18n.getStringProperty(properties,"OccupationTitle",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       ret.setTitle(title);
@@ -56,6 +62,25 @@ public class MainDatNPCsLoader
       LOGGER.warn("Could not handle NPC ID="+npcId);
     }
     return ret;
+  }
+
+  private CharacterSex extractGender(PropertiesSet properties)
+  {
+    String name=DatStringUtils.getStringProperty(properties,"Name");
+    String tag=DatStringUtils.extractTag(name);
+    if (tag!=null)
+    {
+      tag=tag.toLowerCase();
+      if (tag.contains("m"))
+      {
+        return Genders.MALE;
+      }
+      else if (tag.contains("f"))
+      {
+        return Genders.FEMALE;
+      }
+    }
+    return null;
   }
 
   private boolean useId(int id)
