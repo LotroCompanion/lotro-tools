@@ -5,9 +5,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.dat.DATFilesConstants;
-import delta.games.lotro.dat.archive.DATArchive;
-import delta.games.lotro.dat.archive.DatFilesManager;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.EntityDescriptor;
@@ -59,14 +56,7 @@ public class LandblockInfoLoader
   public LandBlockInfo loadLandblockInfo(int region, int blockX, int blockY)
   {
     long landblockInfoDID=0x80200000L+(region*0x10000)+(blockX*0x100)+blockY;
-
-    DatFilesManager datFilesMgr=_facade.getDatFilesManager();
-    DATArchive cellArchive=datFilesMgr.getArchive(DATFilesConstants.CELL_SEED+region);
-    if (cellArchive==null)
-    {
-      return null;
-    }
-    byte[] data=cellArchive.loadEntry(landblockInfoDID);
+    byte[] data=_facade.loadData(landblockInfoDID);
     if (data==null)
     {
       return null;
