@@ -1,8 +1,8 @@
 package delta.games.lotro.tools.dat.utils;
 
-import delta.games.lotro.dat.archive.DATL10nSupport;
 import delta.games.lotro.dat.data.DatConfiguration;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.Locales;
 
 /**
  * Builder for the data facade to use for data-building tools.
@@ -17,7 +17,7 @@ public class DataFacadeBuilder
   public static DataFacade buildFacadeForTools()
   {
     DatConfiguration cfg=new DatConfiguration();
-    cfg.setLocale(DATL10nSupport.EN);
+    cfg.setLocale(Locales.EN);
     DataFacade facade=new DataFacade(cfg);
     return facade;
   }

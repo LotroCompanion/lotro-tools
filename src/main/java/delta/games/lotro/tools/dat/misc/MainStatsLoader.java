@@ -18,8 +18,8 @@ import delta.games.lotro.common.stats.StatsSorter;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
 import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.archive.DATL10nSupport;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.Locales;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -178,7 +178,7 @@ public class MainStatsLoader
             {
               String key="legacy:"+id;
               _i18n.defineLabel(localeCode,key,legacyName);
-              if (DATL10nSupport.EN.equals(localeCode))
+              if (Locales.EN.equals(localeCode))
               {
                 stat.setLegacyName(legacyName);
               }
