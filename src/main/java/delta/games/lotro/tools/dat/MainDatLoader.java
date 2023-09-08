@@ -38,6 +38,7 @@ import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
 import delta.games.lotro.tools.dat.items.MainDatPaperItemsLoader;
+import delta.games.lotro.tools.dat.items.MainWeaponDamageLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
@@ -106,6 +107,8 @@ public class MainDatLoader
     // Combat data
     new MainDatCombatLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
+    // Weapon damage
+    new MainWeaponDamageLoader(_facade).doIt();
     // Skills
     new MainSkillDataLoader(_facade).doIt();
     // Traits
@@ -264,6 +267,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.VALUE_TABLES);
     deleteFile(GeneratedFiles.DPS_TABLES);
     deleteFile(GeneratedFiles.SPEED_TABLES);
+    deleteFile(GeneratedFiles.WEAPON_DAMAGE);
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);

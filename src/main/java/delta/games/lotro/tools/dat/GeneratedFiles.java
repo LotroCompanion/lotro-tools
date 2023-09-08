@@ -286,6 +286,10 @@ public class GeneratedFiles
    */
   public static final File SPEED_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.SPEED_TABLES);
   /**
+   * Weapon damage.
+   */
+  public static final File WEAPON_DAMAGE=LotroCoreConfig.getInstance().getFile(DataFiles.WEAPON_DAMAGE);
+  /**
    * Loots.
    */
   public static final File LOOTS=LotroCoreConfig.getInstance().getFile(DataFiles.LOOTS);
