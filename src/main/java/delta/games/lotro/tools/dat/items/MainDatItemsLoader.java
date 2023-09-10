@@ -674,24 +674,19 @@ public class MainDatItemsLoader
     {
       handleSpeed(weapon,properties);
     }
-    // Max Damage
-    float maxDamage=((Float)properties.getProperty("Combat_Damage")).floatValue();
-    weapon.setMaxDamage(Math.round(maxDamage));
-    //Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
-    // Min Damage
+    // Damage
+    // Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
     float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();
+    float maxDamage=2*dps/(2-variance);
+    weapon.setMaxDamage(Math.round(maxDamage));
+    // Min Damage
     float minDamage=maxDamage*(1-variance);
     weapon.setMinDamage(Math.round(minDamage));
+
     // Damage type
     int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
     DamageType type=DatEnumsUtils.getDamageType(damageTypeEnum);
     weapon.setDamageType(type);
-    /*
-    WeaponSpeedEntry speedEntry=weapon.getSpeed();
-    float speed=(speedEntry!=null)?speedEntry.getBaseActionDuration():1;
-    WeaponType weaponType=weapon.getWeaponType();
-    System.out.println(weapon.getIdentifier()+"\t"+weapon.getName()+"\t"+dps+"\t"+minDamage+"\t"+maxDamage+"\t"+variance+"\t"+speed+"\t"+type+"\t"+weaponType);
-    */
   }
 
   private float computeDps(Weapon weapon, PropertiesSet properties)
