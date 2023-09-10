@@ -1,11 +1,8 @@
 package delta.games.lotro.tools.checks;
 
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
-import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 
 /**
  * Tool to check weapon damage computations.
@@ -22,36 +19,32 @@ public class MainCheckWeaponDamage
     int nbWeapons=0;
     for(Item item : ItemsManager.getInstance().getAllItems())
     {
-      boolean scalable=item.isScalable();
-      if (scalable)
-      {
-        continue;
-      }
+      Integer level=item.getItemLevel();
       if (item instanceof Weapon)
       {
         Weapon weapon=(Weapon)item;
         int id=item.getIdentifier();
         String name=item.getName();
-        float dps=weapon.getDPS();
+        // Min damage
+        float computedMinDamage=weapon.computeMinDamage(level.intValue());
         int minDamage=weapon.getMinDamage();
-        int maxDamage=weapon.getMaxDamage();
-        WeaponType type=weapon.getWeaponType();
-        float speed=0;
-        float mod=0;
-        ItemQuality quality=weapon.getQuality();
-        WeaponSpeedEntry speedEntry=weapon.getSpeed();
-        if (speedEntry!=null)
+        float diffMinDamage=Math.abs(minDamage-Math.round(computedMinDamage));
+        if (diffMinDamage>0.01)
         {
-          speed=speedEntry.getBaseActionDuration();
-          mod=speedEntry.getBaseAnimationDurationMultiplierModifier();
+          System.out.println("ID="+id+", name="+name+", level="+level);
+          System.out.println("\tMin damage="+minDamage+", computedMinDamage="+Math.round(computedMinDamage));
         }
-        String dpsStr=Float.toString(dps).replace('.',',');
-        String speedStr=Float.toString(speed).replace('.',',');
-        String modStr=Float.toString(mod).replace('.',',');
-        System.out.println(id+"\t"+name+"\t"+dpsStr+"\t"+minDamage+"\t"+maxDamage+"\t"+type.getKey()+"\t"+speedStr+"\t"+modStr+"\t"+quality.getKey());
+        float computedMaxDamage=weapon.computeMaxDamage(level.intValue());
+        int maxDamage=weapon.getMaxDamage();
+        float diffMaxDamage=Math.abs(maxDamage-Math.round(computedMaxDamage));
+        if (diffMaxDamage>0.01)
+        {
+          System.out.println("ID="+id+", name="+name+", level="+level);
+          System.out.println("\tMax damage="+maxDamage+", computedMaxDamage="+Math.round(computedMaxDamage));
+        }
         nbWeapons++;
       }
     }
-    System.out.println("Got "+nbWeapons+" weapons!");
+    System.out.println("Checked "+nbWeapons+" weapons!");
   }
 }
