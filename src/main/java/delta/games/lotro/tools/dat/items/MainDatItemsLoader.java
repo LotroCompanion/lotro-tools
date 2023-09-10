@@ -245,7 +245,9 @@ public class MainDatItemsLoader
               {
                 LOGGER.info("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
               }
+              Munging munging=item.getMunging();
               level=minScaledLevel;
+              level=munging.getItemLevel(level.intValue());
               item.setItemLevel(level);
             }
           }
