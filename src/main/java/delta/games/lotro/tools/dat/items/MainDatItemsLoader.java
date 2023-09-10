@@ -36,6 +36,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
+import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
@@ -277,23 +278,7 @@ public class MainDatItemsLoader
       }
       item.setItemClass(itemClass);
       // Armour value
-      StatProvider armorStatProvider=null;
-      Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
-      if ((armourValue!=null) && (armourValue.intValue()>0))
-      {
-        // Armour progression...
-        Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
-        if (armourProgressId!=null)
-        {
-          armorStatProvider=_statUtils.buildStatProvider(WellKnownStat.ARMOUR,armourProgressId.intValue());
-          int statsLevel=item.getItemLevelForStats().intValue();
-          Float computedArmourValue=armorStatProvider.getStatValue(1,statsLevel);
-          if (Math.abs(armourValue.intValue()-computedArmourValue.floatValue())>1)
-          {
-            //System.out.println("Delta in armour for "+_currentItem+": got "+computedArmourValue+", expected "+armourValue);
-          }
-        }
-      }
+      StatProvider armorStatProvider=handleArmour(properties,item);
       // Sturdiness
       Integer durabilityEnum=(Integer)properties.getProperty("Item_DurabilityEnum");
       if (durabilityEnum!=null)
@@ -653,6 +638,30 @@ public class MainDatItemsLoader
     }
   }
 
+  private StatProvider handleArmour(PropertiesSet properties, Item item)
+  {
+    StatProvider armorStatProvider=null;
+    Integer armourValue=(Integer)properties.getProperty("Item_Armor_Value");
+    if ((armourValue!=null) && (armourValue.intValue()>0))
+    {
+      // Armour progression...
+      Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
+      if (armourProgressId!=null)
+      {
+        armorStatProvider=_statUtils.buildStatProvider(WellKnownStat.ARMOUR,armourProgressId.intValue());
+        /*
+        int statsLevel=item.getItemLevelForStats().intValue();
+        Float computedArmourValue=armorStatProvider.getStatValue(1,statsLevel);
+        if (Math.abs(armourValue.intValue()-computedArmourValue.intValue())>0)
+        {
+          System.out.println("Delta in armour for "+_currentItem+": got "+computedArmourValue+", expected "+armourValue);
+        }
+        */
+      }
+    }
+    return armorStatProvider;
+  }
+
   private void loadWeaponSpecifics(Weapon weapon, PropertiesSet properties)
   {
     // DPS
@@ -673,7 +682,14 @@ public class MainDatItemsLoader
     weapon.setMinDamage(Math.round(minDamage));
     // Damage type
     int damageTypeEnum=((Integer)properties.getProperty("Combat_DamageType")).intValue();
-    weapon.setDamageType(DatEnumsUtils.getDamageType(damageTypeEnum));
+    DamageType type=DatEnumsUtils.getDamageType(damageTypeEnum);
+    weapon.setDamageType(type);
+    /*
+    WeaponSpeedEntry speedEntry=weapon.getSpeed();
+    float speed=(speedEntry!=null)?speedEntry.getBaseActionDuration():1;
+    WeaponType weaponType=weapon.getWeaponType();
+    System.out.println(weapon.getIdentifier()+"\t"+weapon.getName()+"\t"+dps+"\t"+minDamage+"\t"+maxDamage+"\t"+variance+"\t"+speed+"\t"+type+"\t"+weaponType);
+    */
   }
 
   private float computeDps(Weapon weapon, PropertiesSet properties)
