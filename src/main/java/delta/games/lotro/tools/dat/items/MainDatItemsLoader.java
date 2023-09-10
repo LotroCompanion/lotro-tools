@@ -300,6 +300,8 @@ public class MainDatItemsLoader
       RequirementsLoadingUtils.loadRequiredFaction(properties,item.getUsageRequirements());
       // - profession
       RequirementsLoadingUtils.loadRequiredProfession(properties,item.getUsageRequirements());
+      // - glory rank
+      RequirementsLoadingUtils.loadRequiredGloryRank(properties,item.getUsageRequirements());
       // Stats providers
       StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       if (armorStatProvider!=null)

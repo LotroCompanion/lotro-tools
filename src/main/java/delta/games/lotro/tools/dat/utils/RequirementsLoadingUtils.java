@@ -8,6 +8,7 @@ import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.requirements.FactionRequirement;
+import delta.games.lotro.common.requirements.GloryRankRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.config.LotroCoreConfig;
@@ -174,6 +175,22 @@ public class RequirementsLoadingUtils
       {
         LOGGER.warn("Profession not found: "+professionId);
       }
+    }
+  }
+
+  /**
+   * Load glory rank requirement.
+   * @param properties Source properties.
+   * @param requirements Storage for loaded data.
+   */
+  public static void loadRequiredGloryRank(PropertiesSet properties, UsageRequirement requirements)
+  {
+    Integer minRank=(Integer)properties.getProperty("Usage_MinGloryRank");
+    if (minRank!=null)
+    {
+      GloryRankRequirement requirement=new GloryRankRequirement();
+      requirement.setRank(minRank.intValue());
+      requirements.setGloryRankRequirement(requirement);
     }
   }
 }
