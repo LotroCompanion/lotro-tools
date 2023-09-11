@@ -37,6 +37,7 @@ import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.ArmourTypes;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -201,7 +202,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         PropertiesSet statProperties=(PropertiesSet)vitalStatObj;
         Integer value=(Integer)statProperties.getProperty("AdvTable_BaseVitalValue");
         Integer type=(Integer)statProperties.getProperty("AdvTable_VitalType");
-        StatDescription stat=getStatFromVitalType(type.intValue());
+        StatDescription stat=DatStatUtils.getStatFromVitalType(type.intValue());
         if (stat!=null)
         {
           if (useStartStat(stat))
@@ -416,15 +417,6 @@ AdvTable_AvailableSkillEntryList:
         description.addSkill(classSkill);
       }
     }
-  }
-
-  private StatDescription getStatFromVitalType(int vitalType)
-  {
-    if (vitalType==1) return WellKnownStat.MORALE;
-    if (vitalType==2) return WellKnownStat.POWER;
-    if (vitalType==3) return WellKnownStat.WARSTEED_ENDURANCE;
-    if (vitalType==4) return WellKnownStat.WARSTEED_POWER;
-    return null;
   }
 
   private StatDescription getStatFromStatType(int statType)

@@ -16,6 +16,7 @@ import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.common.stats.TieredScalableStatProvider;
+import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -422,5 +423,19 @@ public class DatStatUtils
     }
     //System.out.println("Type: "+type);
     return true;
+  }
+
+  /**
+   * Get a stat description from a vital type code.
+   * @param vitalType Vital type code.
+   * @return A stat description or <code>null</code> if not found.
+   */
+  public static StatDescription getStatFromVitalType(int vitalType)
+  {
+    if (vitalType==1) return WellKnownStat.MORALE;
+    if (vitalType==2) return WellKnownStat.POWER;
+    if (vitalType==3) return WellKnownStat.WARSTEED_ENDURANCE;
+    if (vitalType==4) return WellKnownStat.WARSTEED_POWER;
+    return null;
   }
 }
