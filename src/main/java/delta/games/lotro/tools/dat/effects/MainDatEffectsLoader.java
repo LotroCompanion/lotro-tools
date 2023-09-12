@@ -1,14 +1,10 @@
 package delta.games.lotro.tools.dat.effects;
 
-import java.io.File;
-
-import delta.common.utils.files.TextFileWriter;
-import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 
 /**
  * Get effects from DAT files.
@@ -17,8 +13,8 @@ import delta.games.lotro.dat.utils.BufferUtils;
 public class MainDatEffectsLoader
 {
   private DataFacade _facade;
-  private TextFileWriter _w;
   private EffectLoader _loader;
+  private Item _current;
 
   /**
    * Constructor.
@@ -28,42 +24,118 @@ public class MainDatEffectsLoader
   {
     _facade=facade;
     _loader=new EffectLoader(facade);
-    _w=new TextFileWriter(new File("effects3686.txt"));
-    _w.start();
   }
 
-  private int useId(int id)
-  {
-    byte[] data=_facade.loadData(id);
-    if (data!=null)
-    {
-      int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      if ((classDefIndex==WStateClass.EFFECT) || (classDefIndex==WStateClass.EFFECT2)
-          || (classDefIndex==WStateClass.EFFECT3) || (classDefIndex==WStateClass.EFFECT4)
-          || (classDefIndex==WStateClass.EFFECT5)
-          || (classDefIndex==3686))
-      {
-        return classDefIndex;
-      }
-    }
-    return 0;
-  }
+  private boolean _itemDisplayed;
 
   private void doIt()
   {
-    for(int id=0x70000000;id<=0x77FFFFFF;id++)
+    for(Item item : ItemsManager.getInstance().getAllItems())
     {
-      int classIndex=useId(id);
-      if (classIndex!=0)
+      _current=item;
+      _itemDisplayed=false;
+      PropertiesSet props=_facade.loadProperties(item.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
+      handleEffects(props);
+    }
+  }
+
+  private void handleEffects(PropertiesSet properties)
+  {
+    // On equip
+    Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
+    if (effects!=null)
+    {
+      handleEffectGenerators(effects);
+    }
+    // On use
+    handleOnUseEffects(properties);
+    // Skills
+    handleSkillEffects(properties);
+  }
+
+  private void handleEffectGenerators(Object[] effects)
+  {
+    for(Object effectObj : effects)
+    {
+      PropertiesSet effectProps=(PropertiesSet)effectObj;
+      int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
+      handleEffect(effectId);
+    }
+  }
+
+  private void handleOnUseEffects(PropertiesSet properties)
+  {
+    Object[] effectsOnUse=(Object[])properties.getProperty("EffectGenerator_UsageEffectList");
+    if (effectsOnUse!=null)
+    {
+      handleEffectGenerators(effectsOnUse);
+    }
+  }
+
+  /**
+   * Handle skill effects.
+   * @param properties Item properties.
+   */
+  private void handleSkillEffects(PropertiesSet properties)
+  {
+    Integer skillID=(Integer)properties.getProperty("Usage_SkillToExecute");
+    if (skillID==null)
+    {
+      return;
+    }
+    PropertiesSet skillProps=_facade.loadProperties(skillID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+    if (skillProps==null)
+    {
+      return;
+    }
+    handleSkillProps(skillProps);
+  }
+
+  private void handleSkillProps(PropertiesSet skillProps)
+  {
+    /*
+Skill_AttackHookList: 
+  #1: Skill_AttackHookInfo 
+    Skill_AttackHook_ActionDurationContributionMultiplier: 0.0
+    Skill_AttackHook_TargetEffectList: 
+     */
+    Object[] attackHookList=(Object[])skillProps.getProperty("Skill_AttackHookList");
+    if ((attackHookList==null) || (attackHookList.length==0))
+    {
+      return;
+    }
+    for(Object attackHookInfoObj : attackHookList)
+    {
+      PropertiesSet attackHookInfoProps=(PropertiesSet)attackHookInfoObj;
+      Object[] effectList=(Object[])attackHookInfoProps.getProperty("Skill_AttackHook_TargetEffectList");
+      if ((effectList!=null) && (effectList.length>0))
       {
-        PropertiesSet effectProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-        _w.writeNextLine("Class index="+classIndex+", ID="+id);
-        _w.writeSomeText(effectProps.dump());
-        Effect2 effect=_loader.getEffect(id);
-        //load(id);
+        for(Object effectEntry : effectList)
+        {
+          PropertiesSet effectProps=(PropertiesSet)effectEntry;
+          handleSkillEffect(effectProps);
+        }
       }
     }
-    _w.terminate();
+  }
+
+  private void handleSkillEffect(PropertiesSet effectProps)
+  {
+    Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
+    if ((effectID!=null) && (effectID.intValue()!=0))
+    {
+      handleEffect(effectID.intValue());
+    }
+  }
+
+  private void handleEffect(int effectID)
+  {
+    if (!_itemDisplayed)
+    {
+      System.out.println("Item: "+_current);
+      _itemDisplayed=true;
+    }
+    _loader.getEffect(effectID);
   }
 
   /**

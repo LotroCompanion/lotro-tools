@@ -24,6 +24,8 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
+import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -100,7 +102,17 @@ public class EffectLoader
     {
       return null;
     }
-    //System.out.println(effectProps.dump());
+    byte[] data=_facade.loadData(effectId);
+    if (data==null)
+    {
+      return null;
+    }
+    System.out.println("******************");
+    int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
+    ClassDefinition classDef=_facade.getWLibData().getClass(classDefIndex);
+    String className=classDef.getName();
+    System.out.println("Effect ID="+effectId+", class="+className+" ("+classDefIndex+")");
+    System.out.println(effectProps.dump().trim());
     Effect2 ret=new Effect2();
     ret.setId(effectId);
     // Name
@@ -150,8 +162,9 @@ public class EffectLoader
     // TODO: use Effect_Applied_Description too!
     // Aspects
     loadAspects(ret,effectProps);
-
+    System.out.println("******");
     _dump.dumpEffect(ret);
+    System.out.println("");
     return ret;
   }
 
