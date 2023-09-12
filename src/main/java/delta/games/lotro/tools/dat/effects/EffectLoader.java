@@ -51,7 +51,7 @@ public class EffectLoader
   public EffectLoader(DataFacade facade)
   {
     _facade=facade;
-    _i18nUtils=new I18nUtils("effects2",facade.getGlobalStringsManager());
+    //_i18nUtils=new I18nUtils("effects2",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18nUtils);
     _loadedEffects=new HashMap<Integer,Effect2>();
     IndentableStream is=new IndentableStream(System.out);
@@ -125,6 +125,18 @@ public class EffectLoader
       description=DatUtils.getStringProperty(effectProps,"Effect_Definition_Description");
     }
     ret.setDescription(description);
+    // Description
+    String appliedDescription;
+    if (_i18nUtils!=null)
+    {
+      appliedDescription=_i18nUtils.getStringProperty(effectProps,"Effect_Applied_Description");
+    }
+    else
+    {
+      appliedDescription=DatUtils.getStringProperty(effectProps,"Effect_Applied_Description");
+    }
+    ret.setAppliedDescription(appliedDescription);
+
     // Also:
     // From: Effect_Description_Override: ${PROCPROBABILITY} chance on heal to proc,
     //private String _descriptionOverride;
@@ -188,10 +200,12 @@ public class EffectLoader
   private ProcEffect loadProcAspect(PropertiesSet effectProps)
   {
     Object[] userEffectsList=(Object[])effectProps.getProperty("EffectGenerator_SkillProc_UserEffectList");
-    if (userEffectsList==null)
+    Object[] targetEffectsList=(Object[])effectProps.getProperty("EffectGenerator_SkillProc_TargetEffectList");
+    if ((userEffectsList==null) && (targetEffectsList==null))
     {
       return null;
     }
+    
     ProcEffect ret=new ProcEffect();
     // Skill types
     Long skillTypeFlags=(Long)effectProps.getProperty("Effect_SkillProc_SkillTypes");
@@ -213,6 +227,15 @@ public class EffectLoader
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps);
         ret.addProcedEffect(generator);
+      }
+    }
+    if (targetEffectsList!=null)
+    {
+      for(Object entry : targetEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps);
+        ret.addProcedEffect(generator); // TODO Distinguish User/Target
       }
     }
     // Cooldown
