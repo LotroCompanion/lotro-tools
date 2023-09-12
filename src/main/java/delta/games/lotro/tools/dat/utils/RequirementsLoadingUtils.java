@@ -186,7 +186,7 @@ public class RequirementsLoadingUtils
   public static void loadRequiredGloryRank(PropertiesSet properties, UsageRequirement requirements)
   {
     Integer minRank=(Integer)properties.getProperty("Usage_MinGloryRank");
-    if (minRank!=null)
+    if ((minRank!=null) && (minRank.intValue()>0))
     {
       GloryRankRequirement requirement=new GloryRankRequirement();
       requirement.setRank(minRank.intValue());
