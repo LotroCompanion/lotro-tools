@@ -672,14 +672,16 @@ public class MainDatItemsLoader
     float dps=computeDps(weapon,properties);
     weapon.setDPS(dps);
     // Speed
+    float speed=1;
     if (!_live)
     {
-      handleSpeed(weapon,properties);
+      speed=handleSpeed(weapon,properties);
     }
+    
     // Damage
     // Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
     float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();
-    float maxDamage=2*dps/(2-variance);
+    float maxDamage=2*dps/(2-variance)*speed;
     weapon.setMaxDamage(Math.round(maxDamage));
     // Min Damage
     float minDamage=maxDamage*(1-variance);
@@ -724,7 +726,7 @@ public class MainDatItemsLoader
     return dps;
   }
 
-  private void handleSpeed(Weapon weapon, PropertiesSet properties)
+  private float handleSpeed(Weapon weapon, PropertiesSet properties)
   {
     Float duration=(Float)properties.getProperty("Item_BaseActionDuration");
     Float mod=(Float)properties.getProperty("Item_BaseAnimDurationMultiplierMod");
@@ -745,6 +747,7 @@ public class MainDatItemsLoader
     }
     weapon.setSpeed(entry);
     //System.out.println(id+"\t"+name+"\t"+type+"\t"+speedCode+"\t"+duration+"\t"+mod);
+    return duration.floatValue();
   }
 
   private void loadCarryAllSpecifics(CarryAll carryAll, PropertiesSet properties)
