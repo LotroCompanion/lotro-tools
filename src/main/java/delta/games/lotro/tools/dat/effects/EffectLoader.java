@@ -8,8 +8,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.streams.IndentableStream;
+import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.DumpEffect2;
 import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.FellowshipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
@@ -127,31 +129,14 @@ public class EffectLoader
     }
     ret.setName(effectName);
     // Description
-    String description;
-    if (_i18nUtils!=null)
-    {
-      description=_i18nUtils.getStringProperty(effectProps,"Effect_Definition_Description");
-    }
-    else
-    {
-      description=DatUtils.getStringProperty(effectProps,"Effect_Definition_Description");
-    }
+    String description=getStringProperty(effectProps,"Effect_Definition_Description");
     ret.setDescription(description);
-    // Description
-    String appliedDescription;
-    if (_i18nUtils!=null)
-    {
-      appliedDescription=_i18nUtils.getStringProperty(effectProps,"Effect_Applied_Description");
-    }
-    else
-    {
-      appliedDescription=DatUtils.getStringProperty(effectProps,"Effect_Applied_Description");
-    }
+    // Description override
+    String descriptionOverride=getStringProperty(effectProps,"Effect_Description_Override");
+    ret.setDescriptionOverride(descriptionOverride);
+    // Applied description
+    String appliedDescription=getStringProperty(effectProps,"Effect_Applied_Description");
     ret.setAppliedDescription(appliedDescription);
-
-    // Also:
-    // From: Effect_Description_Override: ${PROCPROBABILITY} chance on heal to proc,
-    //private String _descriptionOverride;
 
     // Icon
     Integer effectIconId=(Integer)effectProps.getProperty("Effect_Icon");
@@ -159,12 +144,31 @@ public class EffectLoader
     {
       ret.setIconId(effectIconId);
     }
-    // TODO: use Effect_Applied_Description too!
+    // Probability
+    ApplicationProbability probability=getProbability(effectProps);
+    ret.setApplicationProbability(probability);
+    // Duration
+    EffectDuration duration=getDuration(effectProps);
+    ret.setDuration(duration);
     // Aspects
     loadAspects(ret,effectProps);
     System.out.println("******");
     _dump.dumpEffect(ret);
     System.out.println("");
+    return ret;
+  }
+
+  private String getStringProperty(PropertiesSet props, String propertyName)
+  {
+    String ret;
+    if (_i18nUtils!=null)
+    {
+      ret=_i18nUtils.getStringProperty(props,propertyName);
+    }
+    else
+    {
+      ret=DatUtils.getStringProperty(props,propertyName);
+    }
     return ret;
   }
 
@@ -310,14 +314,11 @@ public class EffectLoader
     }
     FellowshipEffect ret=new FellowshipEffect();
     // Effects
-    if (effectsList!=null)
+    for(Object entry : effectsList)
     {
-      for(Object entry : effectsList)
-      {
-        PropertiesSet entryProps=(PropertiesSet)entry;
-        EffectGenerator generator=loadGenerator(entryProps);
-        ret.addEffect(generator);
-      }
+      PropertiesSet entryProps=(PropertiesSet)entry;
+      EffectGenerator generator=loadGenerator(entryProps);
+      ret.addEffect(generator);
     }
     // Flags
     Integer raidGroups=(Integer)effectProps.getProperty("Effect_InstantFellowship_ApplyToRaidGroups");
@@ -354,6 +355,50 @@ public class EffectLoader
     }
     Effect2 effect=getEffect(effectID);
     EffectGenerator ret=new EffectGenerator(effect,spellcraft);
+    return ret;
+  }
+
+  private ApplicationProbability getProbability(PropertiesSet effectProps)
+  {
+    Float probabilityFloat=(Float)effectProps.getProperty("Effect_ConstantApplicationProbability");
+    float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():0;
+    Float varianceFloat=(Float)effectProps.getProperty("Effect_ApplicationProbabilityVariance");
+    float variance=(varianceFloat!=null)?varianceFloat.floatValue():0;
+    Integer modPropertyInt=(Integer)effectProps.getProperty("Effect_ApplicationProbability_AdditiveModProp");
+    int modProperty=(modPropertyInt!=null)?modPropertyInt.intValue():0;
+    return ApplicationProbability.from(probability,variance,modProperty);
+    
+    
+    // Effect_VariableApplicationProbability, type=Struct
+    //   used but always:
+    // Effect_VariableApplicationProbability: 
+    //   Effect_VariableMax: 1.0
+    //   Effect_VariableMin: 1.0
+    // Effect_ApplicationProbabilityProgression: never used?
+    // Effect_SpecialApplicationProbability: never used?
+    // Effect_SuppressApplicationProbabilityExamination: never used?
+    // Effect_ApplicationProbability_AdditiveModProp_Array: never used?
+  }
+
+  private EffectDuration getDuration(PropertiesSet effectProps)
+  {
+    Float durationFloat=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
+    float duration=(durationFloat!=null)?durationFloat.floatValue():0;
+    Integer pulseCountInt=(Integer)effectProps.getProperty("Effect_Duration_ConstantPulseCount");
+    int pulseCount=(pulseCountInt!=null)?pulseCountInt.intValue():0;
+    // Effect_Duration_ConstantInterval_ModifierList: 
+    //   #1: Effect_ModifierPropertyList_Entry 268457993 (Item_Guardian_ShieldSpikes_Duration)
+    // Effect_Duration_ExpiresInRealTime: false, sometimes true.
+    Integer expiresInRealTimeInt=(Integer)effectProps.getProperty("Effect_Duration_ExpiresInRealTime");
+    boolean expiresInRealTime=((expiresInRealTimeInt!=null)&&(expiresInRealTimeInt.intValue()==1));
+    // Effect_Duration_Permanent: always 1 (true) when set. Only for legacies?
+    // Effect_Duration_CombatOnly: always 0 (false)?
+    // Effect_Duration_ProgressionInterval: unused?
+    // Effect_Duration_ProgressionPulseCount: unused?
+    EffectDuration ret=new EffectDuration();
+    ret.setDuration(duration);
+    ret.setPulseCount(pulseCount);
+    ret.setExpiresInRealTime(expiresInRealTime);
     return ret;
   }
 }
