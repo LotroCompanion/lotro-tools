@@ -16,7 +16,9 @@ import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.FellowshipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.StatsEffect;
+import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalInstantChangeEffect;
+import delta.games.lotro.common.effects.VitalOverTimeChangeEffect;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillType;
@@ -184,10 +186,10 @@ public class EffectLoader
     {
       effect.addAspect(procEffect);
     }
-    VitalInstantChangeEffect vitalInstanceChange=loadVitalInstantChangeAspect(effectProps);
-    if (vitalInstanceChange!=null)
+    VitalInstantChangeEffect instantChange=loadInstantVitalEffect(effectProps);
+    if (instantChange!=null)
     {
-      effect.addAspect(vitalInstanceChange);
+      effect.addAspect(instantChange);
     }
     FellowshipEffect fellowship=loadFellowhipAspect(effectProps);
     if (fellowship!=null)
@@ -261,24 +263,16 @@ public class EffectLoader
     return ret;
   }
 
-  private VitalInstantChangeEffect loadVitalInstantChangeAspect(PropertiesSet effectProps)
+  private VitalInstantChangeEffect loadInstantVitalEffect(PropertiesSet effectProps)
   {
     Integer vitalType=(Integer)effectProps.getProperty("Effect_BaseVital_VitalType");
     if (vitalType==null)
     {
       return null;
     }
-    Float constant=(Float)effectProps.getProperty("Effect_InstantVital_InitialChangeConstant");
-    Integer progressionID=(Integer)effectProps.getProperty("Effect_InstantVital_InitialChangeProgression");
-    Float min=(Float)effectProps.getProperty("Effect_RandomValueMin");
-    Float max=(Float)effectProps.getProperty("Effect_RandomValueMax");
-    if (!((constant!=null) || (progressionID!=null) || ((min!=null) && (max!=null))))
-    {
-      LOGGER.warn("No value data for a VitalInstantChangeEffect!");
-      return null;
-    }
-
     VitalInstantChangeEffect ret=new VitalInstantChangeEffect();
+    VitalChangeDescription description=ret.getInstantChangeDescription();
+    loadVitalChangeDescription(effectProps,"Effect_InstantVital_InitialChange",description);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
     ret.setStat(stat);
@@ -286,23 +280,67 @@ public class EffectLoader
     Integer multiplicativeInt=(Integer)effectProps.getProperty("Effect_InstantVital_Multiplicative");
     boolean multiplicative=((multiplicativeInt!=null)&&(multiplicativeInt.intValue()==1));
     ret.setMultiplicative(multiplicative);
+    return ret;
+  }
 
-    // Initial change: constant, progression or range:
+  private VitalOverTimeChangeEffect loadVitalOverTimeEffect(PropertiesSet effectProps)
+  {
+  /*
+Effect_VitalOverTime_ChangePerIntervalProgression: 1879068280
+Effect_VitalOverTime_ChangePerInterval_Critical_Multiplier: 1.0
+Effect_VitalOverTime_ChangePerInterval_ModifierList: 
+  #1: Effect_ModifierPropertyList_Entry 268437688 (EffectMod_ModType_DamageMultModifier_Add)
+Effect_VitalOverTime_InitialChangeProgression: 1879068279
+Effect_VitalOverTime_InitialChange_Critical_Multiplier: 1.0
+Effect_VitalOverTime_InitialChange_ModifierList: 
+  #1: Effect_ModifierPropertyList_Entry 268437688 (EffectMod_ModType_DamageMultModifier_Add)
+Effect_VitalOverTime_VitalType: 1 (Morale)
+ */
+    Integer vitalType=(Integer)effectProps.getProperty("Effect_VitalOverTime_VitalType");
+    if (vitalType==null)
+    {
+      return null;
+    }
+    VitalOverTimeChangeEffect ret=new VitalOverTimeChangeEffect();
+    loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange",ret.getInitialChangeDescription());
+    loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval",ret.getOverTimeChangeDescription());
+    // Stat
+    StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
+    ret.setStat(stat);
+    return ret;
+  }
+
+  private void loadVitalChangeDescription(PropertiesSet effectProps, String seed, VitalChangeDescription storage)
+  {
+    Float constant=(Float)effectProps.getProperty(seed+"Constant");
+    Integer progressionID=(Integer)effectProps.getProperty(seed+"Progression");
+    Float min=null;
+    Float max=null;
+    PropertiesSet randomProps=(PropertiesSet)effectProps.getProperty(seed+"Random");
+    if (randomProps!=null)
+    {
+      min=(Float)effectProps.getProperty("Effect_RandomValueMin");
+      max=(Float)effectProps.getProperty("Effect_RandomValueMax");
+    }
+    if (!((constant!=null) || (progressionID!=null) || ((min!=null) && (max!=null))))
+    {
+      LOGGER.warn("No value data for vital change!");
+      return;
+    }
     if (constant!=null)
     {
-      ret.setConstant(constant.floatValue());
+      storage.setConstant(constant.floatValue());
     }
     else if (progressionID!=null)
     {
       Progression progression=ProgressionUtils.getProgression(_facade,progressionID.intValue());
-      ret.setProgression(progression);
+      storage.setProgression(progression);
     }
-    else
+    else // Random
     {
-      ret.setMinValue(min.floatValue());
-      ret.setMaxValue(max.floatValue());
+      storage.setMinValue(min.floatValue());
+      storage.setMaxValue(max.floatValue());
     }
-    return ret;
   }
 
   private FellowshipEffect loadFellowhipAspect(PropertiesSet effectProps)
