@@ -1,10 +1,13 @@
 package delta.games.lotro.tools.dat.effects;
 
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 
 /**
  * Get effects from DAT files.
@@ -144,7 +147,8 @@ Skill_AttackHookList:
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new MainDatEffectsLoader(facade).doIt();
     facade.dispose();
   }

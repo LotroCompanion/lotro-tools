@@ -14,11 +14,11 @@ import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.FellowshipEffect;
+import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.StatsEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
-import delta.games.lotro.common.effects.VitalInstantChangeEffect;
-import delta.games.lotro.common.effects.VitalOverTimeChangeEffect;
+import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillType;
@@ -114,7 +114,7 @@ public class EffectLoader
     System.out.println("******************");
     int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
     ClassDefinition classDef=_facade.getWLibData().getClass(classDefIndex);
-    String className=classDef.getName();
+    String className=(classDef!=null)?classDef.getName():"??";
     System.out.println("Effect ID="+effectId+", class="+className+" ("+classDefIndex+")");
     System.out.println(effectProps.dump().trim());
     Effect2 ret=new Effect2();
@@ -186,11 +186,17 @@ public class EffectLoader
     {
       effect.addAspect(procEffect);
     }
-    VitalInstantChangeEffect instantChange=loadInstantVitalEffect(effectProps);
-    if (instantChange!=null)
+    InstantVitalEffect instantVital=loadInstantVitalEffect(effectProps);
+    if (instantVital!=null)
     {
-      effect.addAspect(instantChange);
+      effect.addAspect(instantVital);
     }
+    VitalOverTimeEffect vitalOverTime=loadVitalOverTimeEffect(effectProps);
+    if (vitalOverTime!=null)
+    {
+      effect.addAspect(vitalOverTime);
+    }
+    
     FellowshipEffect fellowship=loadFellowhipAspect(effectProps);
     if (fellowship!=null)
     {
@@ -263,16 +269,20 @@ public class EffectLoader
     return ret;
   }
 
-  private VitalInstantChangeEffect loadInstantVitalEffect(PropertiesSet effectProps)
+  private InstantVitalEffect loadInstantVitalEffect(PropertiesSet effectProps)
   {
     Integer vitalType=(Integer)effectProps.getProperty("Effect_BaseVital_VitalType");
     if (vitalType==null)
     {
       return null;
     }
-    VitalInstantChangeEffect ret=new VitalInstantChangeEffect();
-    VitalChangeDescription description=ret.getInstantChangeDescription();
-    loadVitalChangeDescription(effectProps,"Effect_InstantVital_InitialChange",description);
+    InstantVitalEffect ret=new InstantVitalEffect();
+    VitalChangeDescription description=loadVitalChangeDescription(effectProps,"Effect_InstantVital_InitialChange");
+    if (description==null)
+    {
+      LOGGER.warn("No value data for vital change!");
+    }
+    ret.setInstantChangeDescription(description);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
     ret.setStat(stat);
@@ -283,7 +293,7 @@ public class EffectLoader
     return ret;
   }
 
-  private VitalOverTimeChangeEffect loadVitalOverTimeEffect(PropertiesSet effectProps)
+  private VitalOverTimeEffect loadVitalOverTimeEffect(PropertiesSet effectProps)
   {
   /*
 Effect_VitalOverTime_ChangePerIntervalProgression: 1879068280
@@ -301,16 +311,22 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     {
       return null;
     }
-    VitalOverTimeChangeEffect ret=new VitalOverTimeChangeEffect();
-    loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange",ret.getInitialChangeDescription());
-    loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval",ret.getOverTimeChangeDescription());
+    VitalOverTimeEffect ret=new VitalOverTimeEffect();
+    VitalChangeDescription initialChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange");
+    ret.setInitialChangeDescription(initialChange);
+    VitalChangeDescription overTimeChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval");
+    if (overTimeChange==null)
+    {
+      LOGGER.warn("No value data for vital change!");
+    }
+    ret.setOverTimeChangeDescription(overTimeChange);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
     ret.setStat(stat);
     return ret;
   }
 
-  private void loadVitalChangeDescription(PropertiesSet effectProps, String seed, VitalChangeDescription storage)
+  private VitalChangeDescription loadVitalChangeDescription(PropertiesSet effectProps, String seed)
   {
     Float constant=(Float)effectProps.getProperty(seed+"Constant");
     Integer progressionID=(Integer)effectProps.getProperty(seed+"Progression");
@@ -319,28 +335,29 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     PropertiesSet randomProps=(PropertiesSet)effectProps.getProperty(seed+"Random");
     if (randomProps!=null)
     {
-      min=(Float)effectProps.getProperty("Effect_RandomValueMin");
-      max=(Float)effectProps.getProperty("Effect_RandomValueMax");
+      min=(Float)randomProps.getProperty("Effect_RandomValueMin");
+      max=(Float)randomProps.getProperty("Effect_RandomValueMax");
     }
     if (!((constant!=null) || (progressionID!=null) || ((min!=null) && (max!=null))))
     {
-      LOGGER.warn("No value data for vital change!");
-      return;
+      return null;
     }
+    VitalChangeDescription ret=new VitalChangeDescription();
     if (constant!=null)
     {
-      storage.setConstant(constant.floatValue());
+      ret.setConstant(constant.floatValue());
     }
     else if (progressionID!=null)
     {
       Progression progression=ProgressionUtils.getProgression(_facade,progressionID.intValue());
-      storage.setProgression(progression);
+      ret.setProgression(progression);
     }
     else // Random
     {
-      storage.setMinValue(min.floatValue());
-      storage.setMaxValue(max.floatValue());
+      ret.setMinValue(min.floatValue());
+      ret.setMaxValue(max.floatValue());
     }
+    return ret;
   }
 
   private FellowshipEffect loadFellowhipAspect(PropertiesSet effectProps)
