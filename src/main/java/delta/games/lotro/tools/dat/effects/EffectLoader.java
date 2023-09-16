@@ -414,7 +414,10 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     }
     ret.setMultiplicative(multiplicative);
     // Constant
-    ret.setConstant(constant);
+    if (Math.abs(constant)>0.0001)
+    {
+      ret.setConstant(constant);
+    }
     if (progressionIDInt!=null)
     {
       Progression progression=ProgressionUtils.getProgression(_facade,progressionIDInt.intValue());
@@ -554,8 +557,14 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
 
   private EffectDuration getDuration(PropertiesSet effectProps)
   {
-    Float durationFloat=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
-    float duration=(durationFloat!=null)?durationFloat.floatValue():0;
+    Float duration=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
+    if (duration!=null)
+    {
+      if (Math.abs(duration.floatValue())<0.0001)
+      {
+        duration=null;
+      }
+    }
     Integer pulseCountInt=(Integer)effectProps.getProperty("Effect_Duration_ConstantPulseCount");
     int pulseCount=(pulseCountInt!=null)?pulseCountInt.intValue():0;
     // Effect_Duration_ConstantInterval_ModifierList: 
