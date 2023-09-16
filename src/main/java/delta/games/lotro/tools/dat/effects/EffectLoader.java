@@ -11,11 +11,14 @@ import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.DumpEffect2;
 import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
-import delta.games.lotro.common.effects.FellowshipEffect;
+import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
+import delta.games.lotro.common.effects.ReactiveVitalChange;
+import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.StatsEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
@@ -30,6 +33,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.wlib.ClassDefinition;
+import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -112,10 +116,10 @@ public class EffectLoader
       return null;
     }
     System.out.println("******************");
-    int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-    ClassDefinition classDef=_facade.getWLibData().getClass(classDefIndex);
+    int classIndex=BufferUtils.getDoubleWordAt(data,4);
+    ClassDefinition classDef=_facade.getWLibData().getClass(classIndex);
     String className=(classDef!=null)?classDef.getName():"??";
-    System.out.println("Effect ID="+effectId+", class="+className+" ("+classDefIndex+")");
+    System.out.println("Effect ID="+effectId+", class="+className+" ("+classIndex+")");
     System.out.println(effectProps.dump().trim());
     Effect2 ret=new Effect2();
     ret.setId(effectId);
@@ -153,7 +157,7 @@ public class EffectLoader
     EffectDuration duration=getDuration(effectProps);
     ret.setDuration(duration);
     // Aspects
-    loadAspects(ret,effectProps);
+    loadAspects(ret,effectProps,classIndex);
     System.out.println("******");
     _dump.dumpEffect(ret);
     System.out.println("");
@@ -174,7 +178,7 @@ public class EffectLoader
     return ret;
   }
 
-  private void loadAspects(Effect2 effect, PropertiesSet effectProps)
+  private void loadAspects(Effect2 effect, PropertiesSet effectProps, int classDef)
   {
     StatsEffect statsAspect=loadStatsAspect(effectProps);
     if (statsAspect!=null)
@@ -196,11 +200,15 @@ public class EffectLoader
     {
       effect.addAspect(vitalOverTime);
     }
-    
-    FellowshipEffect fellowship=loadFellowhipAspect(effectProps);
+    InstantFellowshipEffect fellowship=loadInstantFellowshipAspect(effectProps);
     if (fellowship!=null)
     {
       effect.addAspect(fellowship);
+    }
+    if (classDef==736)
+    {
+      ReactiveVitalEffect reactiveVitalEffect=loadReactiveVitalChange(effectProps);
+      effect.addAspect(reactiveVitalEffect);
     }
   }
 
@@ -326,6 +334,115 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     return ret;
   }
 
+  private ReactiveVitalEffect loadReactiveVitalChange(PropertiesSet effectProps)
+  {
+    ReactiveVitalEffect ret=new ReactiveVitalEffect();
+    ReactiveVitalChange defenderChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_DefenderVitalChange_");
+    ret.setDefenderReactiveVitalChange(defenderChange);
+    ReactiveVitalChange attackerChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_AttackerVitalChange_");
+    ret.setAttackerReactiveVitalChange(attackerChange);
+    EffectAndProbability defenderEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_DefenderEffect_");
+    ret.setDefenderEffect(defenderEffect);
+    EffectAndProbability attackerEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_AttackerEffect_");
+    ret.setAttackerEffect(attackerEffect);
+    // Vital types
+    /*
+    Object[] vitalTypeList=(Object[])effectProps.getProperty("Effect_VitalInterested_VitalTypeList");
+    if (vitalTypeList!=null)
+    {
+      for(Object vitalTypeObj : vitalTypeList)
+      {
+        int vitalType=((Integer)vitalTypeObj).intValue();
+        StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType);
+        ret.addVitalType(stat);
+      }
+    }
+    */
+    // Incoming damage types
+    LotroEnum<DamageType> damageTypeEnum=LotroEnumsRegistry.getInstance().get(DamageType.class);
+    Object[] damageTypeList=(Object[])effectProps.getProperty("Effect_InterestedIncomingDamageTypes");
+    if (damageTypeList!=null)
+    {
+      for(Object damageTypeObj : damageTypeList)
+      {
+        int damageTypeCode=((Integer)damageTypeObj).intValue();
+        DamageType damageType=damageTypeEnum.getEntry(damageTypeCode);
+        ret.addDamageType(damageType);
+      }
+    }
+    // Damage type override
+    Integer damageTypeOverrideCode=(Integer)effectProps.getProperty("Effect_ReactiveVital_AttackerVitalChange_DamageTypeOverride");
+    if (damageTypeOverrideCode!=null)
+    {
+      DamageType damageTypeOverride=damageTypeEnum.getEntry(damageTypeOverrideCode.intValue());
+      ret.setAttackerDamageTypeOverride(damageTypeOverride);
+    }
+    // Remove on proc
+    Integer removeOnProcInt=(Integer)effectProps.getProperty("Effect_ReactiveVital_RemoveOnSuccessfulProc");
+    boolean removeOnProc=((removeOnProcInt!=null)&&(removeOnProcInt.intValue()==1));
+    ret.setRemoveOnProc(removeOnProc);
+    return ret;
+  }
+
+  private ReactiveVitalChange loadReactiveVitalChange(PropertiesSet effectProps, String seed)
+  {
+    Float constantFloat=(Float)effectProps.getProperty(seed+"Constant");
+    Integer progressionIDInt=(Integer)effectProps.getProperty(seed+"Progression");
+    float constant=(constantFloat!=null)?constantFloat.floatValue():0;
+    int progressionID=(progressionIDInt!=null)?progressionIDInt.intValue():0;
+    if ((constant<=0) && (progressionID==0))
+    {
+      return null;
+    }
+
+    ReactiveVitalChange ret=new ReactiveVitalChange();
+    // Probability
+    Float probabilityFloat=(Float)effectProps.getProperty(seed+"Probability");
+    float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():0;
+    ret.setProbability(probability);
+    // Multiplicative/additive
+    Integer additiveInt=(Integer)effectProps.getProperty(seed+"Additive");
+    Integer multiplicativeInt=(Integer)effectProps.getProperty(seed+"Multiplicative");
+    boolean multiplicative=false;
+    if ((multiplicativeInt!=null) && (multiplicativeInt.intValue()==1))
+    {
+      multiplicative=true;
+      if ((additiveInt!=null) && (additiveInt.intValue()!=0))
+      {
+        LOGGER.warn("Additive or multiplicative?");
+      }
+    }
+    ret.setMultiplicative(multiplicative);
+    // Constant
+    ret.setConstant(constant);
+    if (progressionIDInt!=null)
+    {
+      Progression progression=ProgressionUtils.getProgression(_facade,progressionIDInt.intValue());
+      ret.setProgression(progression);
+    }
+    return ret;
+  }
+
+  private EffectAndProbability loadEffectAndProbability(PropertiesSet effectProps, String seed)
+  {
+    Float probabilityFloat=(Float)effectProps.getProperty(seed+"Probability");
+    float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():0;
+    Integer effectIDInt=(Integer)effectProps.getProperty(seed+"Effect");
+    int effectID=(effectIDInt!=null)?effectIDInt.intValue():0;
+    if (effectID==0)
+    {
+      return null;
+    }
+    Effect2 effect=getEffect(effectID);
+    if (effect==null)
+    {
+      LOGGER.warn("Effect not found: "+effectID);
+      return null;
+    }
+    EffectAndProbability ret=new EffectAndProbability(effect,probability);
+    return ret;
+  }
+
   private VitalChangeDescription loadVitalChangeDescription(PropertiesSet effectProps, String seed)
   {
     Float constant=(Float)effectProps.getProperty(seed+"Constant");
@@ -360,14 +477,14 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     return ret;
   }
 
-  private FellowshipEffect loadFellowhipAspect(PropertiesSet effectProps)
+  private InstantFellowshipEffect loadInstantFellowshipAspect(PropertiesSet effectProps)
   {
     Object[] effectsList=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
     if (effectsList==null)
     {
       return null;
     }
-    FellowshipEffect ret=new FellowshipEffect();
+    InstantFellowshipEffect ret=new InstantFellowshipEffect();
     // Effects
     for(Object entry : effectsList)
     {
