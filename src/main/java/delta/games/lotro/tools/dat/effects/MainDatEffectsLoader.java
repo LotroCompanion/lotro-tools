@@ -7,6 +7,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.sets.ItemsSet;
+import delta.games.lotro.lore.items.sets.ItemsSetsManager;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 
 /**
@@ -17,7 +19,8 @@ public class MainDatEffectsLoader
 {
   private DataFacade _facade;
   private EffectLoader _loader;
-  private Item _current;
+  private Item _item;
+  private ItemsSet _set;
 
   /**
    * Constructor.
@@ -30,19 +33,30 @@ public class MainDatEffectsLoader
   }
 
   private boolean _itemDisplayed;
+  private boolean _setDisplayed;
 
   private void doIt()
   {
+    // Items
     for(Item item : ItemsManager.getInstance().getAllItems())
     {
-      _current=item;
+      _item=item;
       _itemDisplayed=false;
       PropertiesSet props=_facade.loadProperties(item.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
-      handleEffects(props);
+      handleItemEffects(props);
+    }
+    _item=null;
+    // Sets
+    for(ItemsSet set : ItemsSetsManager.getInstance().getAll())
+    {
+      _set=set;
+      _setDisplayed=false;
+      PropertiesSet props=_facade.loadProperties(set.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
+      handleSetEffects(props);
     }
   }
 
-  private void handleEffects(PropertiesSet properties)
+  private void handleItemEffects(PropertiesSet properties)
   {
     // On equip
     Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
@@ -133,12 +147,47 @@ Skill_AttackHookList:
 
   private void handleEffect(int effectID)
   {
-    if (!_itemDisplayed)
+    if ((_item!=null) && (!_itemDisplayed))
     {
-      System.out.println("Item: "+_current);
+      System.out.println("Item: "+_item);
       _itemDisplayed=true;
     }
+    if ((_set!=null) && (!_setDisplayed))
+    {
+      System.out.println("Set: "+_set);
+      _setDisplayed=true;
+    }
     _loader.getEffect(effectID);
+  }
+
+  private void handleSetEffects(PropertiesSet properties)
+  {
+    //System.out.println(properties.dump());
+    /*
+    Set_ActiveCountDataList: 
+      #1: Set_ActiveCountData 
+        Set_ActiveCount: 2
+        Set_EffectDataList: 
+          #1: EffectGenerator_EffectStruct 
+            EffectGenerator_EffectID: 1879098038
+            EffectGenerator_EffectSpellcraft: -1.0
+    */
+    Object[] activeCountDataList=(Object[])properties.getProperty("Set_ActiveCountDataList");
+    if (activeCountDataList==null)
+    {
+      return;
+    }
+    for(Object activeCountDataEntry : activeCountDataList)
+    {
+      PropertiesSet entryProps=(PropertiesSet)activeCountDataEntry;
+      //int count=((Integer)entryProps.getProperty("Set_ActiveCount")).intValue();
+      Object[] effectsList=(Object[])entryProps.getProperty("Set_EffectDataList");
+      if (effectsList==null)
+      {
+        continue;
+      }
+      handleEffectGenerators(effectsList);
+    }
   }
 
   /**
