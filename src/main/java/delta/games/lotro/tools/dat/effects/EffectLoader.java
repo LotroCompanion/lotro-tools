@@ -390,7 +390,7 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     Integer progressionIDInt=(Integer)effectProps.getProperty(seed+"Progression");
     float constant=(constantFloat!=null)?constantFloat.floatValue():0;
     int progressionID=(progressionIDInt!=null)?progressionIDInt.intValue():0;
-    if ((constant<=0) && (progressionID==0))
+    if ((Math.abs(constant)<0.0001) && (progressionID==0))
     {
       return null;
     }
