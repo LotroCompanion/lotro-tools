@@ -67,6 +67,7 @@ import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
@@ -132,6 +133,7 @@ public class MainDatItemsLoader
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
   private WeaponSpeedTables _speedTables;
+  private EffectLoader _effectsLoader;
   private boolean _live;
 
   // Enums
@@ -166,6 +168,7 @@ public class MainDatItemsLoader
       _speedTables=new SpeedValuesLoader(facade).loadData();
       WeaponSpeedTablesXMLWriter.writeSpeedTablesFile(GeneratedFiles.SPEED_TABLES,_speedTables);
     }
+    _effectsLoader=new EffectLoader(facade);
     // Enums
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _socketTypes=enumsRegistry.get(SocketType.class);
@@ -302,6 +305,8 @@ public class MainDatItemsLoader
       RequirementsLoadingUtils.loadRequiredProfession(properties,item.getUsageRequirements());
       // - glory rank
       RequirementsLoadingUtils.loadRequiredGloryRank(properties,item.getUsageRequirements());
+      // - effect
+      RequirementsLoadingUtils.loadRequiredEffect(properties,item.getUsageRequirements(),_effectsLoader);
       // Stats providers
       StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       if (armorStatProvider!=null)
@@ -1099,6 +1104,8 @@ public class MainDatItemsLoader
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.DPS_TABLES,_dpsLoader.getTables());
     // Save item cosmetics
     _cosmeticLoader.save();
+    // Save effects
+    _effectsLoader.save();
     // Save labels
     _i18n.save();
   }

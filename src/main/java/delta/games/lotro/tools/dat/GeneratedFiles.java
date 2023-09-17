@@ -258,6 +258,10 @@ public class GeneratedFiles
    */
   public static final File BUFFS=LotroCoreConfig.getInstance().getFile(DataFiles.BUFFS);
   /**
+   * Effects.
+   */
+  public static final File EFFECTS=LotroCoreConfig.getInstance().getFile(DataFiles.EFFECTS);
+  /**
    * Effect icons.
    */
   public static final File EFFECT_ICONS=LotroCoreConfig.getInstance().getFile("effectIcons");

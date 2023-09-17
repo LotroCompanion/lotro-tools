@@ -6,7 +6,9 @@ import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.CraftTier;
+import delta.games.lotro.common.requirements.EffectRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.GloryRankRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
@@ -19,6 +21,7 @@ import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
 
 /**
  * Utility methods to load requirements.
@@ -191,6 +194,23 @@ public class RequirementsLoadingUtils
       GloryRankRequirement requirement=new GloryRankRequirement();
       requirement.setRank(minRank.intValue());
       requirements.setGloryRankRequirement(requirement);
+    }
+  }
+
+  /**
+   * Load effect requirement.
+   * @param properties Source properties.
+   * @param requirements Storage for loaded data.
+   * @param loader Effects loader.
+   */
+  public static void loadRequiredEffect(PropertiesSet properties, UsageRequirement requirements, EffectLoader loader)
+  {
+    Integer effectId=(Integer)properties.getProperty("Usage_RequiredEffect");
+    if ((effectId!=null) && (effectId.intValue()>0))
+    {
+      Effect effect=loader.getEffect(effectId.intValue());
+      EffectRequirement requirement=new EffectRequirement(effect);
+      requirements.setEffectRequirement(requirement);
     }
   }
 }

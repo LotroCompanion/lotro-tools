@@ -18,7 +18,7 @@ import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 public class MainDatEffectsLoader
 {
   private DataFacade _facade;
-  private EffectLoader _loader;
+  private EffectLoader2 _loader;
   private Item _item;
   private ItemsSet _set;
 
@@ -29,7 +29,7 @@ public class MainDatEffectsLoader
   public MainDatEffectsLoader(DataFacade facade)
   {
     _facade=facade;
-    _loader=new EffectLoader(facade);
+    _loader=new EffectLoader2(facade);
   }
 
   private boolean _itemDisplayed;
