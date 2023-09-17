@@ -2,7 +2,6 @@ package delta.games.lotro.tools.dat.items;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -11,14 +10,9 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.ClassesManager;
-import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
-import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
-import delta.games.lotro.common.enums.ItemUniquenessChannel;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
@@ -51,20 +45,16 @@ import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
 import delta.games.lotro.lore.items.legendary.LegendaryItem;
 import delta.games.lotro.lore.items.legendary.LegendaryWeapon;
-import delta.games.lotro.lore.items.legendary2.EnhancementRune;
 import delta.games.lotro.lore.items.legendary2.Legendary2;
 import delta.games.lotro.lore.items.legendary2.LegendaryAttrs2;
 import delta.games.lotro.lore.items.legendary2.LegendaryItem2;
 import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
 import delta.games.lotro.lore.items.legendary2.SocketEntry;
 import delta.games.lotro.lore.items.legendary2.SocketsSetup;
-import delta.games.lotro.lore.items.legendary2.Tracery;
-import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
-import delta.games.lotro.lore.items.legendary2.io.xml.TraceriesXMLWriter;
 import delta.games.lotro.lore.items.scaling.Munging;
-import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
@@ -110,13 +100,6 @@ public class MainDatItemsLoader
     4178 // Carry-alls
   };
 
-  private static final int[] OVERLAY_FOR_TIER=
-  {
-    1091914756, 1091914773, 1091914770, 1091914772, 1091914776, // 1-5
-    1091914767, 1091914762, 1091914765, 1091914774, 1091914766, // 6-10
-    1092396132, 1092396316, 1092508824, 1092694659 // 11-14
-  };
-
   private DataFacade _facade;
   private DatStatUtils _statUtils;
   private I18nUtils _i18n;
@@ -127,18 +110,15 @@ public class MainDatItemsLoader
   private ItemValueLoader _valueLoader;
   private DPSValueLoader _dpsLoader;
   private Map<Integer,Integer> _itemLevelOffsets;
-  private List<Tracery> _traceries;
-  private List<EnhancementRune> _enhancementRunes;
   private ItemSortingDataLoader _sortDataLoader;
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
   private WeaponSpeedTables _speedTables;
   private EffectLoader _effectsLoader;
+  private SocketablesManager _socketablesManager;
   private boolean _live;
 
   // Enums
-  private LotroEnum<SocketType> _socketTypes;
-  private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
   private LotroEnum<ItemClass> _itemClassEnum;
   private LotroEnum<EquipmentCategory> _equipmentCategoryEnum;
   private LotroEnum<ItemSturdiness> _itemSturdinessEnum;
@@ -158,8 +138,6 @@ public class MainDatItemsLoader
     _legaciesLoader=new LegaciesLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
     _dpsLoader=new DPSValueLoader(_facade);
-    _traceries=new ArrayList<Tracery>();
-    _enhancementRunes=new ArrayList<EnhancementRune>();
     _sortDataLoader=new ItemSortingDataLoader(facade);
     _detailsLoader=new ItemDetailsLoader(_facade);
     _cosmeticLoader=new CosmeticLoader();
@@ -169,10 +147,9 @@ public class MainDatItemsLoader
       WeaponSpeedTablesXMLWriter.writeSpeedTablesFile(GeneratedFiles.SPEED_TABLES,_speedTables);
     }
     _effectsLoader=new EffectLoader(facade);
+    _socketablesManager=new SocketablesManager();
     // Enums
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
-    _socketTypes=enumsRegistry.get(SocketType.class);
-    _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
     _itemClassEnum=enumsRegistry.get(ItemClass.class);
     _equipmentCategoryEnum=enumsRegistry.get(EquipmentCategory.class);
     _itemSturdinessEnum=enumsRegistry.get(ItemSturdiness.class);
@@ -278,7 +255,7 @@ public class MainDatItemsLoader
       // Classify socketables (essences, traceries, enhancement runes) 
       if (itemClassCode.intValue()==ItemClassUtils.ESSENCE_CODE)
       {
-        int code=classifySocketable(item,properties);
+        int code=_socketablesManager.classifySocketable(item,properties);
         itemClass=_itemClassEnum.getEntry(code);
       }
       item.setItemClass(itemClass);
@@ -405,7 +382,7 @@ public class MainDatItemsLoader
         // Item_Socket_Type: 4 (Heraldric Tracery)
         // Item_Socket_Unlock_ILevel: 52
         int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
-        SocketType socketType=getSocketType(socketTypeCode);
+        SocketType socketType=SocketUtils.getSocketType(socketTypeCode);
         int unlockLevel=((Integer)essenceSlotProps.getProperty("Item_Socket_Unlock_ILevel")).intValue();
         SocketEntry entry=new SocketEntry(socketType,unlockLevel);
         setup.addSocket(entry);
@@ -420,34 +397,6 @@ public class MainDatItemsLoader
       item.setEssenceSlots(nbSlots);
     }
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
-  }
-
-  private static String getRequiredClassKey(SocketType socketType)
-  {
-    int code=socketType.getCode();
-    if (code==6) return WellKnownCharacterClassKeys.BEORNING;
-    if (code==7) return WellKnownCharacterClassKeys.BRAWLER;
-    if (code==8) return WellKnownCharacterClassKeys.BURGLAR;
-    if (code==9) return WellKnownCharacterClassKeys.CAPTAIN;
-    if (code==10) return WellKnownCharacterClassKeys.CHAMPION;
-    if (code==11) return WellKnownCharacterClassKeys.GUARDIAN;
-    if (code==12) return WellKnownCharacterClassKeys.HUNTER;
-    if (code==13) return WellKnownCharacterClassKeys.LORE_MASTER;
-    if (code==14) return WellKnownCharacterClassKeys.MINSTREL;
-    if (code==15) return WellKnownCharacterClassKeys.RUNE_KEEPER;
-    if (code==16) return WellKnownCharacterClassKeys.WARDEN;
-    return null;
-  }
-
-  private SocketType getSocketType(int code)
-  {
-    List<SocketType> types=_socketTypes.getFromBitSet(code);
-    if (types.size()!=1)
-    {
-      LOGGER.warn("Unsupported socket type code: "+code);
-      return null;
-    }
-    return types.get(0);
   }
 
   private boolean isNewLegendaryItem(Object[] essenceSlots)
@@ -887,128 +836,6 @@ public class MainDatItemsLoader
     return null;
   }
 
-  private int classifySocketable(Item item, PropertiesSet properties)
-  {
-    Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
-    if (overlay==null)
-    {
-      return ItemClassUtils.ESSENCE_CODE;
-    }
-    String name=item.getName();
-    if ((name!=null) && (name.contains("Mordor - Essences")))
-    {
-      return ItemClassUtils.getBoxOfEssenceCode();
-    }
-    int nbOverlays=OVERLAY_FOR_TIER.length;
-    int tier=0;
-    for(int i=0;i<nbOverlays;i++)
-    {
-      if (overlay.intValue()==OVERLAY_FOR_TIER[i])
-      {
-        tier=i+1;
-        break;
-      }
-    }
-    if (tier==0)
-    {
-      LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
-    }
-    int code=getSocketableItemClass(item,properties,tier);
-    return code;
-  }
-
-  private int getSocketableItemClass(Item item, PropertiesSet properties, int tier)
-  {
-    Long type=(Long)properties.getProperty("Item_Socket_Type");
-    if (type==null)
-    {
-      LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
-      return 0;
-    }
-    if (type.intValue()==0)
-    {
-      handleEnhancementRune(item,properties);
-      return ItemClassUtils.getEnhancementRuneCode(tier);
-    }
-    SocketType socketType=getSocketType(type.intValue());
-    if (socketType==null)
-    {
-      LOGGER.warn("Unexpected socket type: "+type+" for item: "+item);
-      return 0;
-    }
-    int socketTypeCode=socketType.getCode();
-    if (socketTypeCode==1)
-    {
-      return ItemClassUtils.getEssenceCode(tier);
-    }
-    if (socketTypeCode==18)
-    {
-      return ItemClassUtils.getEssenceOfWarCode(tier);
-    }
-    if (socketTypeCode==19)
-    {
-      return ItemClassUtils.getCloakEssenceCode(tier);
-    }
-    if (socketTypeCode==20)
-    {
-      return ItemClassUtils.getNecklaceEssenceCode(tier);
-    }
-    handleTracery(item,socketType,properties);
-    if (socketTypeCode==3)
-    {
-      return ItemClassUtils.getHeraldicTraceryCode(tier);
-    }
-    else if (socketTypeCode==4)
-    {
-      return ItemClassUtils.getWordOfPowerCode(tier);
-    }
-    else if (socketTypeCode==5)
-    {
-      return ItemClassUtils.getWordOfCraftCode(tier);
-    }
-    // 6-16+21
-    else if (((socketTypeCode>=6) && (socketTypeCode<=16)) || (socketTypeCode==21))
-    {
-      return ItemClassUtils.getWordOfMasteryCode(tier);
-    }
-    else //if (socketTypeCode==2)
-    {
-      LOGGER.warn("Unmanaged socket type "+socketTypeCode+" for item: "+item);
-      return 0;
-    }
-  }
-
-  private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
-  {
-    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
-    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
-    int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
-    int setId=((Integer)props.getProperty("Item_PropertySet")).intValue();
-    ItemUniquenessChannel uniquenessChannel=null;
-    Integer uniquenessChannelCode=(Integer)props.getProperty("Item_UniquenessChannel");
-    if ((uniquenessChannelCode!=null) && (uniquenessChannelCode.intValue()!=0))
-    {
-      uniquenessChannel=_uniquenessChannel.getEntry(uniquenessChannelCode.intValue());
-    }
-    Tracery tracery=new Tracery(item,socketType,minItemLevel,maxItemLevel,levelupIncrement,setId,uniquenessChannel);
-    _traceries.add(tracery);
-    String requiredClassKey=getRequiredClassKey(socketType);
-    if (requiredClassKey!=null)
-    {
-      ClassDescription requiredClass=ClassesManager.getInstance().getCharacterClassByKey(requiredClassKey);
-      item.setRequiredClass(requiredClass);
-    }
-  }
-
-  private void handleEnhancementRune(Item item, PropertiesSet props)
-  {
-    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
-    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
-    int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
-    EnhancementRune enhancementRune=new EnhancementRune(item,minItemLevel,maxItemLevel,levelupIncrement);
-    _enhancementRunes.add(enhancementRune);
-  }
-
   private int getType(int id)
   {
     byte[] data=_facade.loadData(id);
@@ -1078,12 +905,8 @@ public class MainDatItemsLoader
     /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save legendary data
     LegendaryAttrs2XMLWriter.write(GeneratedFiles.LEGENDARY_ATTRS,legendaryItems);
-    // Save traceries
-    Collections.sort(_traceries,new IdentifiableComparator<Tracery>());
-    TraceriesXMLWriter.write(GeneratedFiles.TRACERIES,_traceries);
-    // Save enhancement runes
-    Collections.sort(_enhancementRunes,new IdentifiableComparator<EnhancementRune>());
-    EnhancementRunesXMLWriter.write(GeneratedFiles.ENHANCEMENT_RUNES,_enhancementRunes);
+    // Save socketables
+    _socketablesManager.save();
     // Save progressions
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
