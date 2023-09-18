@@ -272,8 +272,6 @@ public class MainDatEnumsLoader
       handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getBoxOfEssenceCode(),"BoxOfEssences",0);
       for(int tier=1;tier<=14;tier++)
       {
-        // Essences
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEssenceCode(tier),"Essence",tier);
         // Enhancement runes
         handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(tier),"EnhancementRune",tier);
         // Heraldric Traceries
@@ -284,12 +282,6 @@ public class MainDatEnumsLoader
         handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfMasteryCode(tier),"WoMastery",tier);
         // Words of Craft
         handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfCraftCode(tier),"WoCraft",tier);
-        // Essences of War
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEssenceOfWarCode(tier),"EssenceWar",tier);
-        // Cloak Essences
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getCloakEssenceCode(tier),"CloakEssence",tier);
-        // Necklace Essences
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getNecklaceEssenceCode(tier),"NecklaceEssence",tier);
       }
     }
     else if (enumId==0x23000350) // WJEncounterCategory

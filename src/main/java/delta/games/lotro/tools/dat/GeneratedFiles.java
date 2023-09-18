@@ -121,6 +121,10 @@ public class GeneratedFiles
    */
   public static final File GENERIC_ITEM_EFFECTS=LotroCoreConfig.getInstance().getFile(DataFiles.GENERIC_ITEM_EFFECTS);
   /**
+   * Essences.
+   */
+  public static final File ESSENCES=LotroCoreConfig.getInstance().getFile(DataFiles.ESSENCES);
+  /**
    * Stats.
    */
   public static final File STATS=LotroCoreConfig.getInstance().getFile(DataFiles.STATS);

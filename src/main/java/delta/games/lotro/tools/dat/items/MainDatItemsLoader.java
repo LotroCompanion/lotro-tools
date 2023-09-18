@@ -252,13 +252,12 @@ public class MainDatItemsLoader
       }
       // Item class
       ItemClass itemClass=_itemClassEnum.getEntry(itemClassCode.intValue());
-      // Classify socketables (essences, traceries, enhancement runes) 
+      item.setItemClass(itemClass);
+      // Handle socketables (essences, traceries, enhancement runes) 
       if (itemClassCode.intValue()==ItemClassUtils.ESSENCE_CODE)
       {
-        int code=_socketablesManager.classifySocketable(item,properties);
-        itemClass=_itemClassEnum.getEntry(code);
+        _socketablesManager.handleSocketable(item,properties);
       }
-      item.setItemClass(itemClass);
       // Armour value
       StatProvider armorStatProvider=handleArmour(properties,item);
       // Sturdiness

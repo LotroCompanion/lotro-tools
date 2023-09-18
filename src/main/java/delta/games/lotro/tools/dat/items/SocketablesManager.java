@@ -10,6 +10,7 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.ItemUniquenessChannel;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -17,6 +18,9 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.essences.Essence;
+import delta.games.lotro.lore.items.essences.EssencesManager;
+import delta.games.lotro.lore.items.essences.io.xml.EssencesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.EnhancementRune;
 import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
@@ -40,6 +44,8 @@ public class SocketablesManager
 
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
+  private EssencesManager _essencesMgr;
+  private LotroEnum<ItemClass> _itemClassEnum;
   private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
 
   /**
@@ -49,105 +55,113 @@ public class SocketablesManager
   {
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
+    _essencesMgr=new EssencesManager();
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    _itemClassEnum=enumsRegistry.get(ItemClass.class);
     _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
   }
 
   /**
-   * Classify a socketable.
+   * Handle a socketable.
    * @param item Source item.
    * @param properties Item properties.
-   * @return A class code.
    */
-  public int classifySocketable(Item item, PropertiesSet properties)
+  public void handleSocketable(Item item, PropertiesSet properties)
   {
-    Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
-    if (overlay==null)
+    int newCode=handleSocketablePrivate(item,properties);
+    if (newCode>=0)
     {
-      return ItemClassUtils.ESSENCE_CODE;
+      ItemClass itemClass=_itemClassEnum.getEntry(newCode);
+      item.setItemClass(itemClass);
     }
+  }
+
+  private int handleSocketablePrivate(Item item, PropertiesSet properties)
+  {
+    // Special case
     String name=item.getName();
     if ((name!=null) && (name.contains("Mordor - Essences")))
     {
       return ItemClassUtils.getBoxOfEssenceCode();
     }
-    int nbOverlays=OVERLAY_FOR_TIER.length;
-    int tier=0;
-    for(int i=0;i<nbOverlays;i++)
-    {
-      if (overlay.intValue()==OVERLAY_FOR_TIER[i])
-      {
-        tier=i+1;
-        break;
-      }
-    }
-    if (tier==0)
-    {
-      LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
-    }
-    int code=getSocketableItemClass(item,properties,tier);
-    return code;
-  }
-
-  private int getSocketableItemClass(Item item, PropertiesSet properties, int tier)
-  {
+    // Use socket type...
     Long type=(Long)properties.getProperty("Item_Socket_Type");
     if (type==null)
     {
       LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
-      return 0;
+      return -1;
     }
+    Integer tier=findTier(item,properties);
     if (type.intValue()==0)
     {
+      // 0 => enhancement rune
       handleEnhancementRune(item,properties);
-      return ItemClassUtils.getEnhancementRuneCode(tier);
+      return ItemClassUtils.getEnhancementRuneCode(tier.intValue());
     }
     SocketType socketType=SocketUtils.getSocketType(type.intValue());
     if (socketType==null)
     {
       LOGGER.warn("Unexpected socket type: "+type+" for item: "+item);
-      return 0;
+      return -1;
     }
     int socketTypeCode=socketType.getCode();
-    if (socketTypeCode==1)
+    // Essences
+    if ((socketTypeCode==1) || // Classic essences
+        (socketTypeCode==18) || // Essences of War (PvP)
+        (socketTypeCode==19) || // Cloak essences
+        (socketTypeCode==20)) // Necklace essences
     {
-      return ItemClassUtils.getEssenceCode(tier);
+      handleEssence(item,socketType,tier);
+      return -1;
     }
-    if (socketTypeCode==18)
-    {
-      return ItemClassUtils.getEssenceOfWarCode(tier);
-    }
-    if (socketTypeCode==19)
-    {
-      return ItemClassUtils.getCloakEssenceCode(tier);
-    }
-    if (socketTypeCode==20)
-    {
-      return ItemClassUtils.getNecklaceEssenceCode(tier);
-    }
+    // Traceries
     handleTracery(item,socketType,properties);
+    // - heraldic tracery
     if (socketTypeCode==3)
     {
-      return ItemClassUtils.getHeraldicTraceryCode(tier);
+      return ItemClassUtils.getHeraldicTraceryCode(tier.intValue());
     }
+    // - word of power
     else if (socketTypeCode==4)
     {
-      return ItemClassUtils.getWordOfPowerCode(tier);
+      return ItemClassUtils.getWordOfPowerCode(tier.intValue());
     }
+    // - word of craft
     else if (socketTypeCode==5)
     {
-      return ItemClassUtils.getWordOfCraftCode(tier);
+      return ItemClassUtils.getWordOfCraftCode(tier.intValue());
     }
-    // 6-16+21
+    // - word of mastery: 6-16+21
     else if (((socketTypeCode>=6) && (socketTypeCode<=16)) || (socketTypeCode==21))
     {
-      return ItemClassUtils.getWordOfMasteryCode(tier);
+      return ItemClassUtils.getWordOfMasteryCode(tier.intValue());
     }
     else //if (socketTypeCode==2)
     {
       LOGGER.warn("Unmanaged socket type "+socketTypeCode+" for item: "+item);
-      return 0;
+      return -1;
     }
+  }
+
+  private Integer findTier(Item item, PropertiesSet properties)
+  {
+    Integer overlay=(Integer)properties.getProperty("Icon_Layer_OverlayDID");
+    if (overlay==null)
+    {
+      return null;
+    }
+    int nbOverlays=OVERLAY_FOR_TIER.length;
+    for(int i=0;i<nbOverlays;i++)
+    {
+      if (overlay.intValue()==OVERLAY_FOR_TIER[i])
+      {
+        int tier=i+1;
+        return Integer.valueOf(tier);
+      }
+    }
+    String name=item.getName();
+    LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
+    return null;
   }
 
   private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
@@ -198,11 +212,20 @@ public class SocketablesManager
     return null;
   }
 
+  private void handleEssence(Item item, SocketType type, Integer tier)
+  {
+    Essence essence=new Essence(item,type);
+    essence.setTier(tier);
+    _essencesMgr.registerEssence(essence);
+  }
+
   /**
    * Save loaded data.
    */
   public void save()
   {
+    // Save essences
+    EssencesXMLWriter.write(GeneratedFiles.ESSENCES,_essencesMgr.getAll());
     // Save traceries
     Collections.sort(_traceries,new IdentifiableComparator<Tracery>());
     TraceriesXMLWriter.write(GeneratedFiles.TRACERIES,_traceries);
