@@ -91,12 +91,13 @@ public class SocketablesManager
       LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
       return -1;
     }
-    Integer tier=findTier(item,properties);
+    Integer tierInt=findTier(item,properties);
+    item.setTier(tierInt);
     if (type.intValue()==0)
     {
       // 0 => enhancement rune
       handleEnhancementRune(item,properties);
-      return ItemClassUtils.getEnhancementRuneCode(tier.intValue());
+      return ItemClassUtils.getEnhancementRuneCode();
     }
     SocketType socketType=SocketUtils.getSocketType(type.intValue());
     if (socketType==null)
@@ -111,7 +112,7 @@ public class SocketablesManager
         (socketTypeCode==19) || // Cloak essences
         (socketTypeCode==20)) // Necklace essences
     {
-      handleEssence(item,socketType,tier);
+      handleEssence(item,socketType);
       return -1;
     }
     // Traceries
@@ -119,22 +120,22 @@ public class SocketablesManager
     // - heraldic tracery
     if (socketTypeCode==3)
     {
-      return ItemClassUtils.getHeraldicTraceryCode(tier.intValue());
+      return ItemClassUtils.getHeraldicTraceryCode();
     }
     // - word of power
     else if (socketTypeCode==4)
     {
-      return ItemClassUtils.getWordOfPowerCode(tier.intValue());
+      return ItemClassUtils.getWordOfPowerCode();
     }
     // - word of craft
     else if (socketTypeCode==5)
     {
-      return ItemClassUtils.getWordOfCraftCode(tier.intValue());
+      return ItemClassUtils.getWordOfCraftCode();
     }
     // - word of mastery: 6-16+21
     else if (((socketTypeCode>=6) && (socketTypeCode<=16)) || (socketTypeCode==21))
     {
-      return ItemClassUtils.getWordOfMasteryCode(tier.intValue());
+      return ItemClassUtils.getWordOfMasteryCode();
     }
     else //if (socketTypeCode==2)
     {
@@ -212,10 +213,9 @@ public class SocketablesManager
     return null;
   }
 
-  private void handleEssence(Item item, SocketType type, Integer tier)
+  private void handleEssence(Item item, SocketType type)
   {
     Essence essence=new Essence(item,type);
-    essence.setTier(tier);
     _essencesMgr.registerEssence(essence);
   }
 

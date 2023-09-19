@@ -269,44 +269,40 @@ public class MainDatEnumsLoader
     if (enumId==0x23000036) // ItemClass
     {
       // Box of Essences
-      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getBoxOfEssenceCode(),"BoxOfEssences",0);
-      for(int tier=1;tier<=14;tier++)
-      {
-        // Enhancement runes
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(tier),"EnhancementRune",tier);
-        // Heraldric Traceries
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getHeraldicTraceryCode(tier),"HeraldricTracery",tier);
-        // Words of Power
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfPowerCode(tier),"WoPower",tier);
-        // Words of Mastery
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfMasteryCode(tier),"WoMastery",tier);
-        // Words of Craft
-        handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfCraftCode(tier),"WoCraft",tier);
-      }
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getBoxOfEssenceCode(),"BoxOfEssences");
+      // Enhancement runes
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getEnhancementRuneCode(),"EnhancementRune");
+      // Heraldric Traceries
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getHeraldicTraceryCode(),"HeraldricTracery");
+      // Words of Power
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfPowerCode(),"WoPower");
+      // Words of Mastery
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfMasteryCode(),"WoMastery");
+      // Words of Craft
+      handleCustomEntry(lotroEnum,i18n,ItemClassUtils.getWordOfCraftCode(),"WoCraft");
     }
     else if (enumId==0x23000350) // WJEncounterCategory
     {
-      handleCustomEntry(lotroEnum,i18n,0,"OtherInstanceCategory",0);
+      handleCustomEntry(lotroEnum,i18n,0,"OtherInstanceCategory");
     }
     else if (enumId==0x23000063) // CraftTier
     {
-      handleCustomEntry(lotroEnum,i18n,0,"Beginner",0);
+      handleCustomEntry(lotroEnum,i18n,0,"Beginner");
     }
   }
 
-  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, int tier)
+  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey)
   {
-    return handleCustomEntry(lotroEnum,i18n,code,baseKey,null,tier);
+    return handleCustomEntry(lotroEnum,i18n,code,baseKey,null);
   }
 
-  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, String key, int tier)
+  private <T extends LotroEnumEntry> T handleCustomEntry(LotroEnum<T> lotroEnum, I18nUtils i18n, int code, String baseKey, String key)
   {
     // Define localized labels
-    String i18nKey=baseKey+((tier>0)?("-"+tier):"");
-    Object[] params=new Object[] {Integer.valueOf(tier)};
+    String i18nKey=baseKey;
     for(Locale locale : _translator.getLocales())
     {
-      String value=_translator.translate(baseKey,params,locale);
+      String value=_translator.translate(baseKey,null,locale);
       i18n.defineLabel(locale.getLanguage(),i18nKey,value);
     }
     // Define entry
@@ -401,8 +397,8 @@ public class MainDatEnumsLoader
     LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(0,"Gender",implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE",0);
-    handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE",0);
+    handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE");
+    handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE");
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
@@ -413,13 +409,13 @@ public class MainDatEnumsLoader
     LotroEnum<DeedType> lotroEnum=new LotroEnum<DeedType>(0,enumName,implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    handleCustomEntry(lotroEnum,i18n,100,enumName+".CLASS","CLASS",0);
-    handleCustomEntry(lotroEnum,i18n,101,enumName+".RACE","RACE",0);
-    handleCustomEntry(lotroEnum,i18n,102,enumName+".EVENT","EVENT",0);
-    handleCustomEntry(lotroEnum,i18n,103,enumName+".EXPLORER","EXPLORER",0);
-    handleCustomEntry(lotroEnum,i18n,104,enumName+".LORE","LORE",0);
-    handleCustomEntry(lotroEnum,i18n,105,enumName+".REPUTATION","REPUTATION",0);
-    handleCustomEntry(lotroEnum,i18n,106,enumName+".SLAYER","SLAYER",0);
+    handleCustomEntry(lotroEnum,i18n,100,enumName+".CLASS","CLASS");
+    handleCustomEntry(lotroEnum,i18n,101,enumName+".RACE","RACE");
+    handleCustomEntry(lotroEnum,i18n,102,enumName+".EVENT","EVENT");
+    handleCustomEntry(lotroEnum,i18n,103,enumName+".EXPLORER","EXPLORER");
+    handleCustomEntry(lotroEnum,i18n,104,enumName+".LORE","LORE");
+    handleCustomEntry(lotroEnum,i18n,105,enumName+".REPUTATION","REPUTATION");
+    handleCustomEntry(lotroEnum,i18n,106,enumName+".SLAYER","SLAYER");
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
@@ -430,10 +426,10 @@ public class MainDatEnumsLoader
     LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,enumName,implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    handleCustomEntry(lotroEnum,i18n,100,enumName+".BIND_ON_EQUIP","BIND_ON_EQUIP",0);
-    handleCustomEntry(lotroEnum,i18n,101,enumName+".BIND_ON_ACQUIRE","BIND_ON_ACQUIRE",0);
-    handleCustomEntry(lotroEnum,i18n,102,enumName+".BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE",0);
-    handleCustomEntry(lotroEnum,i18n,103,enumName+".NONE","NONE",0);
+    handleCustomEntry(lotroEnum,i18n,100,enumName+".BIND_ON_EQUIP","BIND_ON_EQUIP");
+    handleCustomEntry(lotroEnum,i18n,101,enumName+".BIND_ON_ACQUIRE","BIND_ON_ACQUIRE");
+    handleCustomEntry(lotroEnum,i18n,102,enumName+".BOUND_TO_ACCOUNT_ON_ACQUIRE","BOUND_TO_ACCOUNT_ON_ACQUIRE");
+    handleCustomEntry(lotroEnum,i18n,103,enumName+".NONE","NONE");
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
@@ -444,27 +440,27 @@ public class MainDatEnumsLoader
     LotroEnum<EquipmentLocation> lotroEnum=new LotroEnum<EquipmentLocation>(0,enumName,implClass);
     String labelsSetName="enum-"+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
-    handleCustomEntry(lotroEnum,i18n,0,enumName+".HEAD","HEAD",0);
-    handleCustomEntry(lotroEnum,i18n,1,enumName+".SHOULDER","SHOULDER",0);
-    handleCustomEntry(lotroEnum,i18n,2,enumName+".BACK","BACK",0);
-    handleCustomEntry(lotroEnum,i18n,3,enumName+".CHEST","CHEST",0);
-    handleCustomEntry(lotroEnum,i18n,4,enumName+".HAND","HAND",0);
-    handleCustomEntry(lotroEnum,i18n,5,enumName+".LEGS","LEGS",0);
-    handleCustomEntry(lotroEnum,i18n,6,enumName+".FEET","FEET",0);
-    handleCustomEntry(lotroEnum,i18n,7,enumName+".EAR","EAR",0);
-    handleCustomEntry(lotroEnum,i18n,8,enumName+".NECK","NECK",0);
-    handleCustomEntry(lotroEnum,i18n,9,enumName+".WRIST","WRIST",0);
-    handleCustomEntry(lotroEnum,i18n,10,enumName+".FINGER","FINGER",0);
-    handleCustomEntry(lotroEnum,i18n,11,enumName+".POCKET","POCKET",0);
-    handleCustomEntry(lotroEnum,i18n,12,enumName+".MAIN_HAND","MAIN_HAND",0);
-    handleCustomEntry(lotroEnum,i18n,13,enumName+".OFF_HAND","OFF_HAND",0);
-    handleCustomEntry(lotroEnum,i18n,14,enumName+".RANGED_ITEM","RANGED_ITEM",0);
-    handleCustomEntry(lotroEnum,i18n,15,enumName+".TOOL","TOOL",0);
-    handleCustomEntry(lotroEnum,i18n,16,enumName+".CLASS_SLOT","CLASS_SLOT",0);
-    handleCustomEntry(lotroEnum,i18n,17,enumName+".BRIDLE","BRIDLE",0);
-    handleCustomEntry(lotroEnum,i18n,18,enumName+".MAIN_HAND_AURA","MAIN_HAND_AURA",0);
-    handleCustomEntry(lotroEnum,i18n,19,enumName+".OFF_HAND_AURA","OFF_HAND_AURA",0);
-    handleCustomEntry(lotroEnum,i18n,20,enumName+".RANGED_AURA","RANGED_AURA",0);
+    handleCustomEntry(lotroEnum,i18n,0,enumName+".HEAD","HEAD");
+    handleCustomEntry(lotroEnum,i18n,1,enumName+".SHOULDER","SHOULDER");
+    handleCustomEntry(lotroEnum,i18n,2,enumName+".BACK","BACK");
+    handleCustomEntry(lotroEnum,i18n,3,enumName+".CHEST","CHEST");
+    handleCustomEntry(lotroEnum,i18n,4,enumName+".HAND","HAND");
+    handleCustomEntry(lotroEnum,i18n,5,enumName+".LEGS","LEGS");
+    handleCustomEntry(lotroEnum,i18n,6,enumName+".FEET","FEET");
+    handleCustomEntry(lotroEnum,i18n,7,enumName+".EAR","EAR");
+    handleCustomEntry(lotroEnum,i18n,8,enumName+".NECK","NECK");
+    handleCustomEntry(lotroEnum,i18n,9,enumName+".WRIST","WRIST");
+    handleCustomEntry(lotroEnum,i18n,10,enumName+".FINGER","FINGER");
+    handleCustomEntry(lotroEnum,i18n,11,enumName+".POCKET","POCKET");
+    handleCustomEntry(lotroEnum,i18n,12,enumName+".MAIN_HAND","MAIN_HAND");
+    handleCustomEntry(lotroEnum,i18n,13,enumName+".OFF_HAND","OFF_HAND");
+    handleCustomEntry(lotroEnum,i18n,14,enumName+".RANGED_ITEM","RANGED_ITEM");
+    handleCustomEntry(lotroEnum,i18n,15,enumName+".TOOL","TOOL");
+    handleCustomEntry(lotroEnum,i18n,16,enumName+".CLASS_SLOT","CLASS_SLOT");
+    handleCustomEntry(lotroEnum,i18n,17,enumName+".BRIDLE","BRIDLE");
+    handleCustomEntry(lotroEnum,i18n,18,enumName+".MAIN_HAND_AURA","MAIN_HAND_AURA");
+    handleCustomEntry(lotroEnum,i18n,19,enumName+".OFF_HAND_AURA","OFF_HAND_AURA");
+    handleCustomEntry(lotroEnum,i18n,20,enumName+".RANGED_AURA","RANGED_AURA");
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
