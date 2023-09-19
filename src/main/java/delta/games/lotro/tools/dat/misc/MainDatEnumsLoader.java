@@ -333,6 +333,10 @@ public class MainDatEnumsLoader
     {
       return getRelicTypeKey(code);
     }
+    else if (implClass==SocketType.class)
+    {
+      return getSocketTypeKey(code);
+    }
     return null;
   }
 
@@ -388,6 +392,15 @@ public class MainDatEnumsLoader
     if (code==2) return "SETTING";
     if (code==3) return "GEM";
     if (code==4) return "CRAFTED_RELIC";
+    return null;
+  }
+
+  private String getSocketTypeKey(int code)
+  {
+    if (code==1) return "S"; // Classic/standard
+    if (code==18) return "W"; // Essence of War
+    if (code==19) return "C"; // Cloak
+    if (code==20) return "N"; // Necklace
     return null;
   }
 
