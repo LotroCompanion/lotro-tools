@@ -20,6 +20,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.essences.Essence;
 import delta.games.lotro.lore.items.essences.EssencesManager;
+import delta.games.lotro.lore.items.essences.EssencesSlotsSetup;
 import delta.games.lotro.lore.items.essences.io.xml.EssencesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.EnhancementRune;
 import delta.games.lotro.lore.items.legendary2.Tracery;
@@ -217,6 +218,24 @@ public class SocketablesManager
   {
     Essence essence=new Essence(item,type);
     _essencesMgr.registerEssence(essence);
+  }
+
+  /**
+   * Load an essences setup.
+   * @param essenceSlots Input data.
+   * @return A setup.
+   */
+  public EssencesSlotsSetup loadEssenceSlotsSetup(Object[] essenceSlots)
+  {
+    EssencesSlotsSetup setup=new EssencesSlotsSetup();
+    for(Object essenceSlot : essenceSlots)
+    {
+      PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
+      int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
+      SocketType socketType=SocketUtils.getSocketType(socketTypeCode);
+      setup.addSlot(socketType);
+    }
+    return setup;
   }
 
   /**

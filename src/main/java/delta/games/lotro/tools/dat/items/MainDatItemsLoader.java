@@ -40,6 +40,7 @@ import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.carryalls.CarryAll;
+import delta.games.lotro.lore.items.essences.EssencesSlotsSetup;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.Legendary;
 import delta.games.lotro.lore.items.legendary.LegendaryAttrs;
@@ -393,7 +394,8 @@ public class MainDatItemsLoader
     else
     {
       // Essences
-      item.setEssenceSlots(nbSlots);
+      EssencesSlotsSetup setup=_socketablesManager.loadEssenceSlotsSetup(essenceSlots);
+      item.setEssenceSlots(setup);
     }
     //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
