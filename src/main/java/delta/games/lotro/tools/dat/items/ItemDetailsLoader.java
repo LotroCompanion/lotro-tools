@@ -1,6 +1,8 @@
 package delta.games.lotro.tools.dat.items;
 
+import java.util.BitSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -11,12 +13,16 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.enums.Genus;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
@@ -25,6 +31,7 @@ import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemXP;
 import delta.games.lotro.lore.items.details.VirtueXP;
+import delta.games.lotro.lore.items.details.WeaponSlayerInfo;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 
@@ -59,6 +66,7 @@ public class ItemDetailsLoader
     handleItemXP(item,props);
     handleItemReputation(item,props);
     handleEffects(item,props);
+    handleWeaponSlayer(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -328,6 +336,27 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
       {
         GrantedElement<EmoteDescription> grantedElement=new GrantedElement<EmoteDescription>(GrantType.EMOTE,emote);
         Item.addDetail(item,grantedElement);
+      }
+    }
+  }
+
+  private void handleWeaponSlayer(Item item, PropertiesSet props)
+  {
+    Float value=(Float)props.getProperty("Combat_WeaponSlayerAddMod");
+    if (value!=null)
+    {
+      Integer genusFlags=(Integer)props.getProperty("Combat_WeaponSlayerGenus");
+      if (genusFlags!=null)
+      {
+        BitSet bitset=BitSetUtils.getBitSetFromFlags(genusFlags.intValue());
+        LotroEnum<Genus> genusEnum=LotroEnumsRegistry.getInstance().get(Genus.class);
+        List<Genus> genuses=genusEnum.getFromBitSet(bitset);
+        WeaponSlayerInfo info=new WeaponSlayerInfo(value.floatValue());
+        for(Genus genus : genuses)
+        {
+          info.addGenus(genus);
+        }
+        Item.addDetail(item,info);
       }
     }
   }
