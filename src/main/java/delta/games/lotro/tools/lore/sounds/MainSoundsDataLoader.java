@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.script.ScriptsTable;
 import delta.games.lotro.dat.loaders.script.ScriptTableLoader;
-import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.GeneratedJukeboxFiles;
 import delta.lotro.jukebox.core.model.SoundDescription;
 import delta.lotro.jukebox.core.model.io.xml.SoundsXMLWriter;
 
@@ -63,7 +63,7 @@ public class MainSoundsDataLoader
     // Write sounds
     SoundsRegistry registry=aggregator.getSoundsRegistry();
     List<SoundDescription> sounds=registry.getKnownSounds();
-    File toFile=GeneratedFiles.SOUNDS;
+    File toFile=GeneratedJukeboxFiles.SOUNDS;
     SoundsXMLWriter.writeSoundsFile(toFile,sounds);
   }
 

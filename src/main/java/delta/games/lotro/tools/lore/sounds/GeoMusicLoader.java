@@ -12,7 +12,7 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
-import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.GeneratedJukeboxFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.lotro.jukebox.core.model.SoundContext;
 import delta.lotro.jukebox.core.model.SoundContextsManager;
@@ -50,7 +50,7 @@ public class GeoMusicLoader
   public void doIt()
   {
     SoundContextsManager areaContexts=handleAreas();
-    saveContextFile(GeneratedFiles.AREA_CONTEXTS,areaContexts,SoundContextsXMLConstants.AREA_CONTEXT_TAG);
+    saveContextFile(GeneratedJukeboxFiles.AREA_CONTEXTS,areaContexts,SoundContextsXMLConstants.AREA_CONTEXT_TAG);
     handleDungeons();
   }
 

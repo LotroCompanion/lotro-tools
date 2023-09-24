@@ -18,7 +18,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.enums.MapperUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.GeneratedJukeboxFiles;
 import delta.lotro.jukebox.core.model.SoundContext;
 import delta.lotro.jukebox.core.model.SoundContextsManager;
 import delta.lotro.jukebox.core.model.SoundDescription;
@@ -53,9 +53,9 @@ public class ItemsMusicLoader
   public void doIt()
   {
     SoundContextsManager musicItems=doMusicItems();
-    saveContextFile(GeneratedFiles.MUSIC_ITEMS,musicItems,SoundContextsXMLConstants.MUSIC_ITEM_CONTEXT_TAG);
+    saveContextFile(GeneratedJukeboxFiles.MUSIC_ITEMS,musicItems,SoundContextsXMLConstants.MUSIC_ITEM_CONTEXT_TAG);
     SoundContextsManager instruments=doInstruments();
-    saveContextFile(GeneratedFiles.INSTRUMENTS,instruments,SoundContextsXMLConstants.INSTRUMENT_CONTEXT_TAG);
+    saveContextFile(GeneratedJukeboxFiles.INSTRUMENTS,instruments,SoundContextsXMLConstants.INSTRUMENT_CONTEXT_TAG);
   }
 
   private void saveContextFile(File toFile, SoundContextsManager mgr, String contextTag)
