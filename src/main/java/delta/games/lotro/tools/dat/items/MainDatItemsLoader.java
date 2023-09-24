@@ -40,6 +40,7 @@ import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.Weapon;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.carryalls.CarryAll;
+import delta.games.lotro.lore.items.essences.Essence;
 import delta.games.lotro.lore.items.essences.EssencesSlotsSetup;
 import delta.games.lotro.lore.items.io.xml.ItemXMLWriter;
 import delta.games.lotro.lore.items.legendary.Legendary;
@@ -755,7 +756,17 @@ public class MainDatItemsLoader
       }
       else
       {
-        ret=new Item();
+        SocketType type=_socketablesManager.isEssence(properties);
+        if (type!=null)
+        {
+          Essence essence=new Essence();
+          ret=essence;
+          essence.setType(type);
+        }
+        else
+        {
+          ret=new Item();
+        }
       }
     }
     if (equipmentCategoryCode!=0)

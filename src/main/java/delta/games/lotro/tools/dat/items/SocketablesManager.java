@@ -19,9 +19,7 @@ import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.essences.Essence;
-import delta.games.lotro.lore.items.essences.EssencesManager;
 import delta.games.lotro.lore.items.essences.EssencesSlotsSetup;
-import delta.games.lotro.lore.items.essences.io.xml.EssencesXMLWriter;
 import delta.games.lotro.lore.items.legendary2.EnhancementRune;
 import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.lore.items.legendary2.io.xml.EnhancementRunesXMLWriter;
@@ -45,7 +43,6 @@ public class SocketablesManager
 
   private List<Tracery> _traceries;
   private List<EnhancementRune> _enhancementRunes;
-  private EssencesManager _essencesMgr;
   private LotroEnum<ItemClass> _itemClassEnum;
   private LotroEnum<ItemUniquenessChannel> _uniquenessChannel;
 
@@ -56,10 +53,43 @@ public class SocketablesManager
   {
     _traceries=new ArrayList<Tracery>();
     _enhancementRunes=new ArrayList<EnhancementRune>();
-    _essencesMgr=new EssencesManager();
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _itemClassEnum=enumsRegistry.get(ItemClass.class);
     _uniquenessChannel=enumsRegistry.get(ItemUniquenessChannel.class);
+  }
+
+  /**
+   * Indicates of the given item properties are for an essence.
+   * @param properties Properties to use.
+   * @return <code>null</code> or a socket type if it is an essence.
+   */
+  public SocketType isEssence(PropertiesSet properties)
+  {
+    Integer itemClassCode=(Integer)properties.getProperty("Item_Class");
+    if ((itemClassCode==null) || (itemClassCode.intValue()!=ItemClassUtils.ESSENCE_CODE))
+    {
+      return null;
+    }
+    Long type=(Long)properties.getProperty("Item_Socket_Type");
+    if ((type==null) || (type.intValue()==0))
+    {
+      return null;
+    }
+    SocketType socketType=SocketUtils.getSocketType(type.intValue());
+    if (socketType==null)
+    {
+      return null;
+    }
+    int socketTypeCode=socketType.getCode();
+    // Essences
+    if ((socketTypeCode==1) || // Classic essences
+        (socketTypeCode==18) || // Essences of War (PvP)
+        (socketTypeCode==19) || // Cloak essences
+        (socketTypeCode==20)) // Necklace essences
+    {
+      return socketType;
+    }
+    return null;
   }
 
   /**
@@ -108,12 +138,8 @@ public class SocketablesManager
     }
     int socketTypeCode=socketType.getCode();
     // Essences
-    if ((socketTypeCode==1) || // Classic essences
-        (socketTypeCode==18) || // Essences of War (PvP)
-        (socketTypeCode==19) || // Cloak essences
-        (socketTypeCode==20)) // Necklace essences
+    if (item instanceof Essence)
     {
-      handleEssence(item,socketType);
       return -1;
     }
     // Traceries
@@ -214,12 +240,6 @@ public class SocketablesManager
     return null;
   }
 
-  private void handleEssence(Item item, SocketType type)
-  {
-    Essence essence=new Essence(item,type);
-    _essencesMgr.registerEssence(essence);
-  }
-
   /**
    * Load an essences setup.
    * @param essenceSlots Input data.
@@ -243,8 +263,6 @@ public class SocketablesManager
    */
   public void save()
   {
-    // Save essences
-    EssencesXMLWriter.write(GeneratedFiles.ESSENCES,_essencesMgr.getAll());
     // Save traceries
     Collections.sort(_traceries,new IdentifiableComparator<Tracery>());
     TraceriesXMLWriter.write(GeneratedFiles.TRACERIES,_traceries);
