@@ -112,6 +112,10 @@ public class GeneratedFiles
    */
   public static final File ITEM_LARGE_ICONS_DIR=LotroCoreConfig.getInstance().getFile("largeItemIcons");
   /**
+   * Socket icons.
+   */
+  public static final File SOCKET_ICONS_DIR=LotroCoreConfig.getInstance().getFile("socketIcons");
+  /**
    * Item cosmetics.
    */
   public static final File ITEM_COSMETICS=LotroCoreConfig.getInstance().getFile(DataFiles.ITEM_COSMETICS);

@@ -39,6 +39,7 @@ import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
 import delta.games.lotro.tools.dat.items.MainDatPaperItemsLoader;
 import delta.games.lotro.tools.dat.items.MainWeaponDamageLoader;
+import delta.games.lotro.tools.dat.items.SocketIconsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
@@ -50,6 +51,7 @@ import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
+import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
@@ -133,6 +135,7 @@ public class MainDatLoader
     MainDatCraftingLoader craftingLoader=new MainDatCraftingLoader(_facade);
     craftingLoader.doIt();
     // Items
+    new SocketIconsLoader(_facade).doIt();
     new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -259,6 +262,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.ITEMS);
     deleteDirectory(GeneratedFiles.ITEM_ICONS_DIR);
     deleteDirectory(GeneratedFiles.ITEM_LARGE_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.SOCKET_ICONS_DIR);
     deleteFile(GeneratedFiles.PASSIVES);
     deleteFile(GeneratedFiles.PASSIVES_USAGE);
     deleteFile(GeneratedFiles.CONSUMABLES);
