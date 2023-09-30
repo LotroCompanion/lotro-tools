@@ -51,7 +51,6 @@ import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.MiscIconsManager;
-import delta.games.lotro.tools.dat.misc.SlotIconsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
@@ -135,7 +134,10 @@ public class MainDatLoader
     MainDatCraftingLoader craftingLoader=new MainDatCraftingLoader(_facade);
     craftingLoader.doIt();
     // Items
-    new SocketIconsLoader(_facade).doIt();
+    if (live)
+    {
+      new SocketIconsLoader(_facade).doIt();
+    }
     new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
@@ -229,6 +231,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.COLORS);
     deleteFile(GeneratedFiles.COMBAT_DATA);
     deleteDirectory(GeneratedFiles.ENUMS_DIR);
+    // Labels
+    //deleteDirectory(GeneratedFiles.LABELS);
     // Geo
     deleteFile(GeneratedFiles.LANDMARKS);
     // Character data
