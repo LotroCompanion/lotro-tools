@@ -138,15 +138,6 @@ Mount_SkillToGrantRaceArray:
 
   private void handleItemXP(Item item, PropertiesSet props)
   {
-    //ItemAdvancement_XPToAdd
-    {
-      Integer amount=(Integer)props.getProperty("ItemAdvancement_XPToAdd");
-      if (amount!=null)
-      {
-        ItemXP itemXP=new ItemXP(amount.intValue());
-        Item.addDetail(item,itemXP);
-      }
-    }
     //RewardTrack_ExperienceType: 1 (ItemAdvancement)
     //RewardTrack_XPToAdd: 130000
     {
