@@ -45,24 +45,27 @@ public class MainWeaponDamageLoader
   {
     WeaponDamageManager ret=new WeaponDamageManager();
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"WeaponDamageVarianceTable");
-    Object[] entries=(Object[])props.getProperty("Item_WeaponVarianceTable");
-    for(Object entryObj : entries)
+    if (props!=null)
     {
-      PropertiesSet entryProps=(PropertiesSet)entryObj;
-      // Weapon types
-      Long equipmentCategoryValue=(Long)entryProps.getProperty("Item_WeaponVarianceEquipmentCategory");
-      BitSet bitset=BitSetUtils.getBitSetFromFlags(equipmentCategoryValue.longValue());
-      LotroEnum<WeaponType> weaponTypesEnum=LotroEnumsRegistry.getInstance().get(WeaponType.class);
-      List<WeaponType> weaponTypes=weaponTypesEnum.getFromBitSet(bitset);
-      // Variance
-      Float variance=(Float)entryProps.getProperty("Item_WeaponVarianceValue");
-      if (variance==null)
+      Object[] entries=(Object[])props.getProperty("Item_WeaponVarianceTable");
+      for(Object entryObj : entries)
       {
-        continue;
-      }
-      for(WeaponType type : weaponTypes)
-      {
-        ret.setVariance(type,variance.floatValue());
+        PropertiesSet entryProps=(PropertiesSet)entryObj;
+        // Weapon types
+        Long equipmentCategoryValue=(Long)entryProps.getProperty("Item_WeaponVarianceEquipmentCategory");
+        BitSet bitset=BitSetUtils.getBitSetFromFlags(equipmentCategoryValue.longValue());
+        LotroEnum<WeaponType> weaponTypesEnum=LotroEnumsRegistry.getInstance().get(WeaponType.class);
+        List<WeaponType> weaponTypes=weaponTypesEnum.getFromBitSet(bitset);
+        // Variance
+        Float variance=(Float)entryProps.getProperty("Item_WeaponVarianceValue");
+        if (variance==null)
+        {
+          continue;
+        }
+        for(WeaponType type : weaponTypes)
+        {
+          ret.setVariance(type,variance.floatValue());
+        }
       }
     }
     return ret;
