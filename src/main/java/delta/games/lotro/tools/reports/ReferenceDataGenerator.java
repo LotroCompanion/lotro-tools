@@ -9,7 +9,6 @@ import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.StringTools;
-import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
