@@ -2,7 +2,8 @@ package delta.games.lotro.tools.reports;
 
 import java.io.File;
 
-import delta.games.lotro.config.LotroCoreConfig;
+import delta.games.lotro.dat.misc.Context;
+import delta.games.lotro.dat.misc.Version;
 
 /**
  * Constants for the reports generators.
@@ -12,6 +13,7 @@ public class ReportsContants
 {
   private static final File ROOT_DIR=new File("../lotro-live-private-doc/dat");
   private static final File SOA_ROOT_DIR=new File("../lotro-legacy-private-doc/dat");
+  private static final File DDO_ROOT_DIR=new File("../lotro-ddo-private-doc/dat");
 
   /**
    * Get the root directory for reports.
@@ -19,7 +21,10 @@ public class ReportsContants
    */
   public static File getReportsRootDir()
   {
-    boolean isLive=LotroCoreConfig.isLive();
-    return (isLive)?ROOT_DIR:SOA_ROOT_DIR;
+    Version version=Context.getVersion();
+    if (version==Version.LIVE) return ROOT_DIR;
+    else if (version==Version.SOA_11) return SOA_ROOT_DIR;
+    else if (version==Version.DDO) return DDO_ROOT_DIR;
+    return null;
   }
 }

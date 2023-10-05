@@ -126,6 +126,10 @@ public class ReferenceDataGenerator
   {
     PropertiesSet properties=_facade.loadProperties(0x7900020E);
     Object[] classIds=(Object[])properties.getProperty("AdvTable_LevelTableList");
+    if (classIds==null)
+    {
+      return;
+    }
     for(Object classId : classIds)
     {
       int propsId=((Integer)classId).intValue();
@@ -198,6 +202,10 @@ public class ReferenceDataGenerator
   {
     PropertiesSet props=null;
     UILayout layout=new UILayoutLoader(_facade).loadUiLayout(0x22000041);
+    if (layout==null)
+    {
+      return;
+    }
     for(UIElement uiElement : layout.getChildElements())
     {
       if (uiElement.getIdentifier()==268437543) // MapBackground
@@ -256,7 +264,7 @@ public class ReferenceDataGenerator
    */
   public static void main(String[] args)
   {
-    Context.init(LotroCoreConfig.getMode());
+    Context.init();
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new ReferenceDataGenerator(facade).doIt();
   }
