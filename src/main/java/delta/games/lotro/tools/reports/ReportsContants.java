@@ -13,7 +13,7 @@ public class ReportsContants
 {
   private static final File ROOT_DIR=new File("../lotro-live-private-doc/dat");
   private static final File SOA_ROOT_DIR=new File("../lotro-legacy-private-doc/dat");
-  private static final File DDO_ROOT_DIR=new File("../lotro-ddo-private-doc/dat");
+  private static final File DDO_ROOT_DIR=new File("../ddo-live-private-doc/dat");
 
   /**
    * Get the root directory for reports.
