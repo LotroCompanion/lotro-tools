@@ -27,6 +27,7 @@ import delta.games.lotro.lore.crafting.recipes.RecipesManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.misc.CooldownLoader;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
@@ -318,7 +319,7 @@ public class MainDatRecipesLoader
     // XP mapping
     _xpMapping=loadXpMapping();
     // Cooldown mapping
-    _cooldownMapping=loadCooldownMapping();
+    _cooldownMapping=CooldownLoader.doIt(_facade);
     // Load recipes
     RecipesManager recipesManager=new RecipesManager(false);
     scanAll(recipesManager);
@@ -369,24 +370,6 @@ public class MainDatRecipesLoader
         PropertiesSet item=(PropertiesSet)array[i];
         Integer key=(Integer)item.getProperty("CraftControl_XPRewardEnum");
         Integer value=(Integer)item.getProperty("CraftControl_XPRewardValue");
-        ret.put(key,value);
-      }
-    }
-    return ret;
-  }
-
-  private Map<Integer,Float> loadCooldownMapping()
-  {
-    Map<Integer,Float> ret=new HashMap<Integer,Float>();
-    PropertiesSet properties=_facade.loadProperties(0x79000264);
-    if (properties!=null)
-    {
-      Object[] array=(Object[])properties.getProperty("CooldownControl_DurationMapList");
-      for(int i=0;i<array.length;i++)
-      {
-        PropertiesSet item=(PropertiesSet)array[i];
-        Integer key=(Integer)item.getProperty("CooldownControl_DurationType");
-        Float value=(Float)item.getProperty("CooldownControl_DurationValue");
         ret.put(key,value);
       }
     }
