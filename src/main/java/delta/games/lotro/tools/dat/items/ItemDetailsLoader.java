@@ -3,6 +3,7 @@ package delta.games.lotro.tools.dat.items;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -29,11 +30,13 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.ItemReputation;
+import delta.games.lotro.lore.items.details.ItemUsageCooldown;
 import delta.games.lotro.lore.items.details.ItemXP;
 import delta.games.lotro.lore.items.details.VirtueXP;
 import delta.games.lotro.lore.items.details.WeaponSlayerInfo;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
+import delta.games.lotro.tools.dat.misc.CooldownLoader;
 
 /**
  * Loader for item details.
@@ -44,6 +47,7 @@ public class ItemDetailsLoader
   private static final Logger LOGGER=Logger.getLogger(ItemDetailsLoader.class);
 
   private DataFacade _facade;
+  private Map<Integer,Float> _cooldownData;
 
   /**
    * Constructor.
@@ -52,6 +56,7 @@ public class ItemDetailsLoader
   public ItemDetailsLoader(DataFacade facade)
   {
     _facade=facade;
+    _cooldownData=CooldownLoader.doIt(facade);
   }
 
   /**
@@ -67,6 +72,7 @@ public class ItemDetailsLoader
     handleItemReputation(item,props);
     handleEffects(item,props);
     handleWeaponSlayer(item,props);
+    handleCooldownData(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -349,6 +355,22 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
         }
         Item.addDetail(item,info);
       }
+    }
+  }
+
+  private void handleCooldownData(Item item, PropertiesSet props)
+  {
+    /*
+Usage_CooldownChannel: 9 (Power_Item)
+Usage_CooldownDuration: 21 (Item_2m)
+     */
+    Integer durationKey=(Integer)props.getProperty("Usage_CooldownDuration");
+    if (durationKey!=null)
+    {
+      Float duration=_cooldownData.get(durationKey);
+      Integer channel=(Integer)props.getProperty("Usage_CooldownChannel");
+      ItemUsageCooldown info=new ItemUsageCooldown(duration.floatValue(),channel);
+      Item.addDetail(item,info);
     }
   }
 }
