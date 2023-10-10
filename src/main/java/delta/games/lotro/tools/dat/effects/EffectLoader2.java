@@ -8,12 +8,15 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.streams.IndentableStream;
+import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.DumpEffect2;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
+import delta.games.lotro.common.effects.GenesisEffect;
+import delta.games.lotro.common.effects.Hotspot;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
@@ -32,8 +35,12 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.dat.wlib.ClassDefinition;
+import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -209,6 +216,11 @@ public class EffectLoader2
     {
       ReactiveVitalEffect reactiveVitalEffect=loadReactiveVitalChange(effectProps);
       effect.addAspect(reactiveVitalEffect);
+    }
+    if (classDef==719)
+    {
+      GenesisEffect genesisEffect=loadGenesisEffect(effectProps);
+      effect.addAspect(genesisEffect);
     }
   }
 
@@ -423,6 +435,8 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
       Progression progression=ProgressionUtils.getProgression(_facade,progressionIDInt.intValue());
       ret.setProgression(progression);
     }
+    Float variance=(Float)effectProps.getProperty(seed+"Variance");
+    ret.setVariance(variance);
     return ret;
   }
 
@@ -450,6 +464,7 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
   {
     Float constant=(Float)effectProps.getProperty(seed+"Constant");
     Integer progressionID=(Integer)effectProps.getProperty(seed+"Progression");
+    Float variance=(Float)effectProps.getProperty(seed+"Variance");
     Float min=null;
     Float max=null;
     PropertiesSet randomProps=(PropertiesSet)effectProps.getProperty(seed+"Random");
@@ -477,6 +492,8 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
       ret.setMinValue(min.floatValue());
       ret.setMaxValue(max.floatValue());
     }
+    // Variance
+    ret.setVariance(variance);
     return ret;
   }
 
@@ -580,6 +597,94 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     ret.setDuration(duration);
     ret.setPulseCount(pulseCount);
     ret.setExpiresInRealTime(expiresInRealTime);
+    return ret;
+  }
+
+  private GenesisEffect loadGenesisEffect(PropertiesSet effectProps)
+  {
+    /*
+Effect ID=1879163860, class=GenesisEffect (719)
+Effect_Genesis_ConstantSummonDuration: 20.0
+Effect_Genesis_PermanentSummonDuration: 0
+Effect_Genesis_SummonedObject: 1879163733
+     */
+    int summonedObjectID=((Integer)effectProps.getProperty("Effect_Genesis_SummonedObject")).intValue();
+    Float summonDuration=(Float)effectProps.getProperty("Effect_Genesis_ConstantSummonDuration");
+    Integer permanent=(Integer)effectProps.getProperty("Effect_Genesis_PermanentSummonDuration");
+    GenesisEffect ret=new GenesisEffect();
+    handleSummonedObject(summonedObjectID,ret);
+    if (summonDuration!=null)
+    {
+      ret.setDuration(summonDuration.floatValue());
+    }
+    if ((permanent!=null) && (permanent.intValue()==1))
+    {
+      ret.setPermanent();
+    }
+    return ret;
+  }
+
+  private void handleSummonedObject(int objectID, GenesisEffect effect)
+  {
+    PropertiesSet props=_facade.loadProperties(objectID+DATConstants.DBPROPERTIES_OFFSET);
+    String name=DatStringUtils.getStringProperty(props,"Name");
+    Interactable interactable=null;
+    int weenieType=((Integer)props.getProperty("WeenieType")).intValue();
+    if (weenieType==262145) // Hotspot
+    {
+      Hotspot hotspot=loadHotspot(objectID,props);
+      effect.setHotspot(hotspot);
+    }
+    // Cannot use InteractableUtils.findInteractable() here because it's too soon!
+    else if (weenieType==131151) // RealNPC
+    {
+      NpcDescription npc=new NpcDescription(objectID,name);
+      interactable=npc;
+    }
+    else if (weenieType==65615) // Monster
+    {
+      MobDescription mob=new MobDescription(objectID,name);
+      interactable=mob;
+    }
+    else if (weenieType==129) // Item
+    {
+      Item item=new Item();
+      item.setIdentifier(objectID);
+      item.setName(name);
+      interactable=item;
+    }
+    else
+    {
+      // Ignored, for instance:
+      // Generator (65537)
+    }
+    effect.setInteractable(interactable);
+    //System.out.println("Summoned other ID="+objectID+": "+name+" (type="+weenieType+")");
+  }
+
+  private Hotspot loadHotspot(int hotspotID, PropertiesSet props)
+  {
+    /*
+EffectGenerator_HotspotEffectList: 
+  #1: EffectGenerator_EffectStruct 
+    EffectGenerator_EffectID: 1879163549
+    EffectGenerator_EffectSpellcraft: -1.0
+Name: Greater Emblem of Defence
+WeenieType: 262145 (Hotspot)
+    */
+    Hotspot ret=new Hotspot(hotspotID);
+    String name=DatStringUtils.getStringProperty(props,"Name");
+    ret.setName(name);
+    Object[] effectsList=(Object[])props.getProperty("EffectGenerator_HotspotEffectList");
+    if (effectsList!=null)
+    {
+      for(Object effectEntry : effectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)effectEntry;
+        EffectGenerator generator=loadGenerator(entryProps);
+        ret.addEffect(generator);
+      }
+    }
     return ret;
   }
 }
