@@ -147,6 +147,7 @@ public class MainDatEffectsLoader
     {
       return;
     }
+    // TODO Use Usage_SkillLevel is any!
     PropertiesSet skillProps=_facade.loadProperties(skillID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
     if (skillProps==null)
     {

@@ -17,6 +17,7 @@ import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.GenesisEffect;
 import delta.games.lotro.common.effects.Hotspot;
+import delta.games.lotro.common.effects.InduceCombatStateEffect;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
@@ -25,9 +26,11 @@ import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.StatsEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
+import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillType;
+import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
@@ -222,6 +225,11 @@ public class EffectLoader2
       GenesisEffect genesisEffect=loadGenesisEffect(effectProps);
       effect.addAspect(genesisEffect);
     }
+    if (classDef==769)
+    {
+      InduceCombatStateEffect induceCombatStateEffect=loadInduceCombatStateEffect(effectProps);
+      effect.addAspect(induceCombatStateEffect);
+    }
   }
 
   private StatsEffect loadStatsAspect(PropertiesSet effectProps)
@@ -325,6 +333,7 @@ Effect_VitalOverTime_InitialChange_Critical_Multiplier: 1.0
 Effect_VitalOverTime_InitialChange_ModifierList: 
   #1: Effect_ModifierPropertyList_Entry 268437688 (EffectMod_ModType_DamageMultModifier_Add)
 Effect_VitalOverTime_VitalType: 1 (Morale)
+Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
  */
     Integer vitalType=(Integer)effectProps.getProperty("Effect_VitalOverTime_VitalType");
     if (vitalType==null)
@@ -343,6 +352,14 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
     ret.setStat(stat);
+    // Damage type
+    LotroEnum<DamageType> damageTypeEnum=LotroEnumsRegistry.getInstance().get(DamageType.class);
+    Integer damageTypeCode=(Integer)effectProps.getProperty("Effect_DamageType");
+    if ((damageTypeCode!=null) && (damageTypeCode.intValue()!=0))
+    {
+      DamageType damageType=damageTypeEnum.getEntry(damageTypeCode.intValue());
+      ret.setDamageType(damageType);
+    }
     return ret;
   }
 
@@ -686,5 +703,56 @@ WeenieType: 262145 (Hotspot)
       }
     }
     return ret;
+  }
+
+  private InduceCombatStateEffect loadInduceCombatStateEffect(PropertiesSet effectProps)
+  {
+    /*
+    Effect ID=1879051312, class=InduceCombatStateEffect (769)
+    Effect_InduceCombatState_ConstantDuration: 3.0
+    Effect_InduceCombatState_StateToInduce: 16384 (Stunned)
+    Effect_InduceCombatState_VariableDuration: 
+      Effect_VariableMax: 5.0
+      Effect_VariableMin: 3.0
+      Effect_VariableSpellcraftMax: 50.0
+      Effect_VariableSpellcraftMin: 25.0
+    Effect_CombatState_Induce_StateDuration_ModProp_List: 
+      #1: Effect_ModifierPropertyList_Entry 268452197 (CombatState_ConjunctionStunned_Duration)
+     */
+    InduceCombatStateEffect ret=new InduceCombatStateEffect();
+    // Constant duration
+    Float duration=(Float)effectProps.getProperty("Effect_InduceCombatState_ConstantDuration");
+    if (duration!=null)
+    {
+      ret.setDuration(duration.floatValue());
+    }
+    // Duration function
+    PropertiesSet durationProps=(PropertiesSet)effectProps.getProperty("Effect_InduceCombatState_VariableDuration");
+    if (durationProps!=null)
+    {
+      LinearFunction function=loadLinearFunction(durationProps);
+      ret.setDurationFunction(function);
+    }
+    // Combat state
+    int bitSetValue=((Integer)effectProps.getProperty("Effect_InduceCombatState_StateToInduce")).intValue();
+    LotroEnum<CombatState> damageTypeEnum=LotroEnumsRegistry.getInstance().get(CombatState.class);
+    BitSet bitSet=BitSetUtils.getBitSetFromFlags(bitSetValue);
+    List<CombatState> states=damageTypeEnum.getFromBitSet(bitSet);
+    if (states.size()!=1)
+    {
+      LOGGER.warn("Unexpected size for combat states: "+states);
+    }
+    CombatState state=states.get(0);
+    ret.setCombatState(state);
+    return ret;
+  }
+
+  private LinearFunction loadLinearFunction(PropertiesSet props)
+  {
+    float minX=((Float)props.getProperty("Effect_VariableSpellcraftMin")).floatValue();
+    float minY=((Float)props.getProperty("Effect_VariableMin")).floatValue();
+    float maxX=((Float)props.getProperty("Effect_VariableSpellcraftMax")).floatValue();
+    float maxY=((Float)props.getProperty("Effect_VariableMax")).floatValue();
+    return new LinearFunction(minX,maxX,minY,maxY);
   }
 }

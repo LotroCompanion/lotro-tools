@@ -14,6 +14,7 @@ import delta.games.lotro.common.enums.AllegianceGroup;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
+import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.enums.CraftingUICategory;
 import delta.games.lotro.common.enums.DeedCategory;
@@ -147,6 +148,7 @@ public class MainDatEnumsLoader
       loadEnum(587203222,"RunicType",RelicType.class); // 0x23000296
     }
     loadEnum(587203492,"SkillType",SkillType.class); // 0x230003A4
+    loadEnum(587202640,"CombatState",CombatState.class); // 0x23000050
 
     // Derivated enums
     // From EquipmentCategory:
