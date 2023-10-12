@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
+import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.DumpEffect2;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectAndProbability;
@@ -29,6 +30,7 @@ import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.stats.StatDescription;
@@ -229,6 +231,11 @@ public class EffectLoader2
     {
       InduceCombatStateEffect induceCombatStateEffect=loadInduceCombatStateEffect(effectProps);
       effect.addAspect(induceCombatStateEffect);
+    }
+    if (classDef==714)
+    {
+      DispelByResistEffect dispelByResistEffect=loadDispelByResistEffect(effectProps);
+      effect.addAspect(dispelByResistEffect);
     }
   }
 
@@ -744,6 +751,11 @@ WeenieType: 262145 (Hotspot)
     }
     CombatState state=states.get(0);
     ret.setCombatState(state);
+    // Grace period:
+    // TODO
+    // Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override: 1.0
+    // 100% break chance on harm after 1s
+    // 3% break chance on damage after 1s
     return ret;
   }
 
@@ -754,5 +766,43 @@ WeenieType: 262145 (Hotspot)
     float maxX=((Float)props.getProperty("Effect_VariableSpellcraftMax")).floatValue();
     float maxY=((Float)props.getProperty("Effect_VariableMax")).floatValue();
     return new LinearFunction(minX,maxX,minY,maxY);
+  }
+
+  private DispelByResistEffect loadDispelByResistEffect(PropertiesSet effectProps)
+  {
+  /*
+Effect ID=1879157351, class=DispelByResistEffect (714)
+Effect_DispelByResist_MaximumDispelCount: 1
+Effect_DispelByResist_ResistCategoryFilter: 8 (Wound)
+Effect_DispelByResist_UseStrengthRestriction: 1
+ */
+
+    DispelByResistEffect ret=new DispelByResistEffect();
+    // Dispel count
+    Integer dispelCountInt=(Integer)effectProps.getProperty("Effect_DispelByResist_MaximumDispelCount");
+    int dispelCount=(dispelCountInt!=null)?dispelCountInt.intValue():-1;
+    ret.setMaxDispelCount(dispelCount);
+    // Resist Categories
+    int categoriesCode=((Integer)effectProps.getProperty("Effect_DispelByResist_ResistCategoryFilter")).intValue();
+    LotroEnum<ResistCategory> categoriesEnum=LotroEnumsRegistry.getInstance().get(ResistCategory.class);
+    BitSet bitset=BitSetUtils.getBitSetFromFlags(categoriesCode);
+    List<ResistCategory> categories=categoriesEnum.getFromBitSet(bitset);
+    for(ResistCategory category : categories)
+    {
+      ret.addResistCategory(category);
+    }
+    // Strength restriction
+    Integer useStrengthResitriction=(Integer)effectProps.getProperty("Effect_DispelByResist_UseStrengthRestriction");
+    if ((useStrengthResitriction!=null) && (useStrengthResitriction.intValue()==1))
+    {
+      ret.setUseStrengthRestriction(true);
+    }
+    // Strength offset:
+    Float strengthOffset=(Float)effectProps.getProperty("Effect_DispelByResist_StrengthRestrictionOffset");
+    if (strengthOffset!=null)
+    {
+      ret.setStrengthOffset(Integer.valueOf(strengthOffset.intValue()));
+    }
+    return ret;
   }
 }
