@@ -33,6 +33,7 @@ import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
@@ -149,6 +150,7 @@ public class MainDatEnumsLoader
     }
     loadEnum(587203492,"SkillType",SkillType.class); // 0x230003A4
     loadEnum(587202640,"CombatState",CombatState.class); // 0x23000050
+    loadEnum(587202660,"ResistCategory",ResistCategory.class); // 0x23000064
 
     // Derivated enums
     // From EquipmentCategory:
