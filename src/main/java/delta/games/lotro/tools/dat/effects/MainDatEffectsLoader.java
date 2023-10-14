@@ -244,7 +244,12 @@ Skill_AttackHookList:
   {
     int level=getLevel();
     EffectDisplay display=new EffectDisplay(level);
-    display.displayEffect(effect);
+    StringBuilder sb=new StringBuilder();
+    display.displayEffect(sb,effect);
+    if (sb.length()>0)
+    {
+      System.out.println(sb.toString().trim());
+    }
   }
 
   private int getLevel()

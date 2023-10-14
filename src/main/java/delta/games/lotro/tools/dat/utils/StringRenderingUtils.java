@@ -1,8 +1,8 @@
 package delta.games.lotro.tools.dat.utils;
 
+import delta.common.utils.variables.VariableValueProvider;
 import delta.games.lotro.dat.data.strings.renderer.OptionItem;
 import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
-import delta.games.lotro.dat.data.strings.renderer.VariableValueProvider;
 
 /**
  * Utilities related to string rendering.

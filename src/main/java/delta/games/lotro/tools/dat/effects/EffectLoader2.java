@@ -241,6 +241,7 @@ public class EffectLoader2
 
   private StatsEffect loadStatsAspect(PropertiesSet effectProps)
   {
+    // Effect PropertyModificationEffect (734) or MountEffect (2459)
     Object modArray=effectProps.getProperty("Mod_Array");
     if (modArray==null)
     {
@@ -267,6 +268,7 @@ public class EffectLoader2
     }
     
     ProcEffect ret=new ProcEffect();
+    // TODO Effect_SkillProc_RequiredCombatResult
     // Skill types
     Long skillTypeFlags=(Long)effectProps.getProperty("Effect_SkillProc_SkillTypes");
     if (skillTypeFlags!=null)
