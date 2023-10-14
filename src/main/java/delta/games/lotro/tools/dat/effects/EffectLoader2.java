@@ -22,9 +22,9 @@ import delta.games.lotro.common.effects.InduceCombatStateEffect;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
+import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
-import delta.games.lotro.common.effects.StatsEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.enums.CombatState;
@@ -133,7 +133,7 @@ public class EffectLoader2
     String className=(classDef!=null)?classDef.getName():"??";
     System.out.println("Effect ID="+effectId+", class="+className+" ("+classIndex+")");
     System.out.println(effectProps.dump().trim());
-    Effect2 ret=new Effect2();
+    Effect2 ret=buildEffect(classIndex);
     ret.setId(effectId);
     // Name
     String effectName;
@@ -167,9 +167,9 @@ public class EffectLoader2
     ret.setApplicationProbability(probability);
     // Duration
     EffectDuration duration=getDuration(effectProps);
-    ret.setDuration(duration);
-    // Aspects
-    loadAspects(ret,effectProps,classIndex);
+    ret.setEffectDuration(duration);
+    // Specifics
+    loadSpecifics(ret,effectProps,classIndex);
     System.out.println("******");
     _dump.dumpEffect(ret);
     System.out.println("");
@@ -190,84 +190,94 @@ public class EffectLoader2
     return ret;
   }
 
-  private void loadAspects(Effect2 effect, PropertiesSet effectProps, int classDef)
+  private Effect2 buildEffect(int classDef)
   {
-    StatsEffect statsAspect=loadStatsAspect(effectProps);
-    if (statsAspect!=null)
+    // Effect PropertyModificationEffect (734) and child classes
+    // expect those explicitly handled later
+    if ((classDef==734) || (classDef==713) || (classDef==3222) || 
+        (classDef==716) || (classDef==717) || (classDef==752) ||
+        (classDef==753) || (classDef==739) || (classDef==748) ||
+        (classDef==764) || (classDef==780) || (classDef==2156) ||
+        (classDef==2259) || (classDef==2441) || (classDef==2459) ||
+        (classDef==3218) || (classDef==3690) || (classDef==3833) ||
+        (classDef==3842))
     {
-      effect.addAspect(statsAspect);
+      return new PropertyModificationEffect();
     }
-    ProcEffect procEffect=loadProcAspect(effectProps);
-    if (procEffect!=null)
+    else if (classDef==3686) return new ProcEffect();
+    else if (classDef==725) return new InstantVitalEffect();
+    else if (classDef==755) return new VitalOverTimeEffect();
+    else if (classDef==724) return new InstantFellowshipEffect();
+    else if (classDef==736) return new ReactiveVitalEffect();
+    else if (classDef==719) return new GenesisEffect();
+    else if (classDef==769) return new InduceCombatStateEffect();
+    else if (classDef==714) return new DispelByResistEffect();
+    //System.out.println("Unmanaged class: "+classDef);
+    return new Effect2();
+  }
+
+  private void loadSpecifics(Effect2 effect, PropertiesSet effectProps, int classDef)
+  {
+    if (effect instanceof ProcEffect)
     {
-      effect.addAspect(procEffect);
+      loadProcEffect((ProcEffect)effect,effectProps);
     }
-    InstantVitalEffect instantVital=loadInstantVitalEffect(effectProps);
-    if (instantVital!=null)
+    else if (effect instanceof PropertyModificationEffect)
     {
-      effect.addAspect(instantVital);
+      loadPropertyModificationEffect((PropertyModificationEffect)effect,effectProps);
     }
-    VitalOverTimeEffect vitalOverTime=loadVitalOverTimeEffect(effectProps);
-    if (vitalOverTime!=null)
+    else if (effect instanceof InstantVitalEffect)
     {
-      effect.addAspect(vitalOverTime);
+      loadInstantVitalEffect((InstantVitalEffect)effect,effectProps);
     }
-    InstantFellowshipEffect fellowship=loadInstantFellowshipAspect(effectProps);
-    if (fellowship!=null)
+    else if (effect instanceof VitalOverTimeEffect)
     {
-      effect.addAspect(fellowship);
+      loadVitalOverTimeEffect((VitalOverTimeEffect)effect,effectProps);
     }
-    if (classDef==736)
+    else if (effect instanceof InstantFellowshipEffect)
     {
-      ReactiveVitalEffect reactiveVitalEffect=loadReactiveVitalChange(effectProps);
-      effect.addAspect(reactiveVitalEffect);
+      loadInstantFellowshipAspect((InstantFellowshipEffect)effect,effectProps);
     }
-    if (classDef==719)
+    else if (effect instanceof ReactiveVitalEffect)
     {
-      GenesisEffect genesisEffect=loadGenesisEffect(effectProps);
-      effect.addAspect(genesisEffect);
+      loadReactiveVitalEffect((ReactiveVitalEffect)effect,effectProps);
     }
-    if (classDef==769)
+    else if (effect instanceof GenesisEffect)
     {
-      InduceCombatStateEffect induceCombatStateEffect=loadInduceCombatStateEffect(effectProps);
-      effect.addAspect(induceCombatStateEffect);
+      loadGenesisEffect((GenesisEffect)effect,effectProps);
+   }
+    else if (effect instanceof InduceCombatStateEffect)
+    {
+      loadInduceCombatStateEffect((InduceCombatStateEffect)effect,effectProps);
     }
-    if (classDef==714)
+    else if (effect instanceof DispelByResistEffect)
     {
-      DispelByResistEffect dispelByResistEffect=loadDispelByResistEffect(effectProps);
-      effect.addAspect(dispelByResistEffect);
+      loadDispelByResistEffect((DispelByResistEffect)effect,effectProps);
     }
   }
 
-  private StatsEffect loadStatsAspect(PropertiesSet effectProps)
+  private void loadPropertyModificationEffect(PropertyModificationEffect effect, PropertiesSet effectProps)
   {
     // Effect PropertyModificationEffect (734) or MountEffect (2459)
     Object modArray=effectProps.getProperty("Mod_Array");
     if (modArray==null)
     {
-      return null;
+      return;
     }
-    StatsEffect ret=null;
     // Stats
     StatsProvider statsProvider=_statUtils.buildStatProviders(effectProps);
     if (statsProvider.getNumberOfStatProviders()>0)
     {
-      ret=new StatsEffect();
-      ret.setStatsProvider(statsProvider);
+      effect.setStatsProvider(statsProvider);
     }
-    return ret;
   }
 
-  private ProcEffect loadProcAspect(PropertiesSet effectProps)
+  private void loadProcEffect(ProcEffect effect, PropertiesSet effectProps)
   {
+    loadPropertyModificationEffect(effect,effectProps);
     Object[] userEffectsList=(Object[])effectProps.getProperty("EffectGenerator_SkillProc_UserEffectList");
     Object[] targetEffectsList=(Object[])effectProps.getProperty("EffectGenerator_SkillProc_TargetEffectList");
-    if ((userEffectsList==null) && (targetEffectsList==null))
-    {
-      return null;
-    }
-    
-    ProcEffect ret=new ProcEffect();
+
     // TODO Effect_SkillProc_RequiredCombatResult
     // Skill types
     Long skillTypeFlags=(Long)effectProps.getProperty("Effect_SkillProc_SkillTypes");
@@ -276,11 +286,11 @@ public class EffectLoader2
       BitSet bitset=BitSetUtils.getBitSetFromFlags(skillTypeFlags.longValue());
       LotroEnum<SkillType> skillTypesEnum=LotroEnumsRegistry.getInstance().get(SkillType.class);
       List<SkillType> skillTypes=skillTypesEnum.getFromBitSet(bitset);
-      ret.setSkillTypes(skillTypes);
+      effect.setSkillTypes(skillTypes);
     }
     // Probability
     Float probability=(Float)effectProps.getProperty("Effect_SkillProc_ProcProbability");
-    ret.setProcProbability(probability);
+    effect.setProcProbability(probability);
     // Proc'ed effects
     if (userEffectsList!=null)
     {
@@ -288,7 +298,7 @@ public class EffectLoader2
       {
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps);
-        ret.addProcedEffect(generator);
+        effect.addProcedEffect(generator);
       }
     }
     if (targetEffectsList!=null)
@@ -297,40 +307,33 @@ public class EffectLoader2
       {
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps);
-        ret.addProcedEffect(generator); // TODO Distinguish User/Target
+        effect.addProcedEffect(generator); // TODO Distinguish User/Target
       }
     }
     // Cooldown
     Float cooldown=(Float)effectProps.getProperty("Effect_MinTimeBetweenProcs");
-    ret.setCooldown(cooldown);
-    return ret;
+    effect.setCooldown(cooldown);
   }
 
-  private InstantVitalEffect loadInstantVitalEffect(PropertiesSet effectProps)
+  private void loadInstantVitalEffect(InstantVitalEffect effect, PropertiesSet effectProps)
   {
     Integer vitalType=(Integer)effectProps.getProperty("Effect_BaseVital_VitalType");
-    if (vitalType==null)
-    {
-      return null;
-    }
-    InstantVitalEffect ret=new InstantVitalEffect();
     VitalChangeDescription description=loadVitalChangeDescription(effectProps,"Effect_InstantVital_InitialChange");
     if (description==null)
     {
       LOGGER.warn("No value data for vital change!");
     }
-    ret.setInstantChangeDescription(description);
+    effect.setInstantChangeDescription(description);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
-    ret.setStat(stat);
+    effect.setStat(stat);
     // Multiplicative?
     Integer multiplicativeInt=(Integer)effectProps.getProperty("Effect_InstantVital_Multiplicative");
     boolean multiplicative=((multiplicativeInt!=null)&&(multiplicativeInt.intValue()==1));
-    ret.setMultiplicative(multiplicative);
-    return ret;
+    effect.setMultiplicative(multiplicative);
   }
 
-  private VitalOverTimeEffect loadVitalOverTimeEffect(PropertiesSet effectProps)
+  private void loadVitalOverTimeEffect(VitalOverTimeEffect effect, PropertiesSet effectProps)
   {
   /*
 Effect_VitalOverTime_ChangePerIntervalProgression: 1879068280
@@ -345,44 +348,37 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
 Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
  */
     Integer vitalType=(Integer)effectProps.getProperty("Effect_VitalOverTime_VitalType");
-    if (vitalType==null)
-    {
-      return null;
-    }
-    VitalOverTimeEffect ret=new VitalOverTimeEffect();
     VitalChangeDescription initialChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange");
-    ret.setInitialChangeDescription(initialChange);
+    effect.setInitialChangeDescription(initialChange);
     VitalChangeDescription overTimeChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval");
     if (overTimeChange==null)
     {
       LOGGER.warn("No value data for vital change!");
     }
-    ret.setOverTimeChangeDescription(overTimeChange);
+    effect.setOverTimeChangeDescription(overTimeChange);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
-    ret.setStat(stat);
+    effect.setStat(stat);
     // Damage type
     LotroEnum<DamageType> damageTypeEnum=LotroEnumsRegistry.getInstance().get(DamageType.class);
     Integer damageTypeCode=(Integer)effectProps.getProperty("Effect_DamageType");
     if ((damageTypeCode!=null) && (damageTypeCode.intValue()!=0))
     {
       DamageType damageType=damageTypeEnum.getEntry(damageTypeCode.intValue());
-      ret.setDamageType(damageType);
+      effect.setDamageType(damageType);
     }
-    return ret;
   }
 
-  private ReactiveVitalEffect loadReactiveVitalChange(PropertiesSet effectProps)
+  private void loadReactiveVitalEffect(ReactiveVitalEffect effect, PropertiesSet effectProps)
   {
-    ReactiveVitalEffect ret=new ReactiveVitalEffect();
     ReactiveVitalChange defenderChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_DefenderVitalChange_");
-    ret.setDefenderReactiveVitalChange(defenderChange);
+    effect.setDefenderReactiveVitalChange(defenderChange);
     ReactiveVitalChange attackerChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_AttackerVitalChange_");
-    ret.setAttackerReactiveVitalChange(attackerChange);
+    effect.setAttackerReactiveVitalChange(attackerChange);
     EffectAndProbability defenderEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_DefenderEffect_");
-    ret.setDefenderEffect(defenderEffect);
+    effect.setDefenderEffect(defenderEffect);
     EffectAndProbability attackerEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_AttackerEffect_");
-    ret.setAttackerEffect(attackerEffect);
+    effect.setAttackerEffect(attackerEffect);
     // Vital types
     /*
     Object[] vitalTypeList=(Object[])effectProps.getProperty("Effect_VitalInterested_VitalTypeList");
@@ -405,7 +401,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
       {
         int damageTypeCode=((Integer)damageTypeObj).intValue();
         DamageType damageType=damageTypeEnum.getEntry(damageTypeCode);
-        ret.addDamageType(damageType);
+        effect.addDamageType(damageType);
       }
     }
     // Damage type override
@@ -413,13 +409,12 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     if (damageTypeOverrideCode!=null)
     {
       DamageType damageTypeOverride=damageTypeEnum.getEntry(damageTypeOverrideCode.intValue());
-      ret.setAttackerDamageTypeOverride(damageTypeOverride);
+      effect.setAttackerDamageTypeOverride(damageTypeOverride);
     }
     // Remove on proc
     Integer removeOnProcInt=(Integer)effectProps.getProperty("Effect_ReactiveVital_RemoveOnSuccessfulProc");
     boolean removeOnProc=((removeOnProcInt!=null)&&(removeOnProcInt.intValue()==1));
-    ret.setRemoveOnProc(removeOnProc);
-    return ret;
+    effect.setRemoveOnProc(removeOnProc);
   }
 
   private ReactiveVitalChange loadReactiveVitalChange(PropertiesSet effectProps, String seed)
@@ -523,44 +518,38 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     return ret;
   }
 
-  private InstantFellowshipEffect loadInstantFellowshipAspect(PropertiesSet effectProps)
+  private void loadInstantFellowshipAspect(InstantFellowshipEffect effect, PropertiesSet effectProps)
   {
     Object[] effectsList=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
-    if (effectsList==null)
-    {
-      return null;
-    }
-    InstantFellowshipEffect ret=new InstantFellowshipEffect();
     // Effects
     for(Object entry : effectsList)
     {
       PropertiesSet entryProps=(PropertiesSet)entry;
       EffectGenerator generator=loadGenerator(entryProps);
-      ret.addEffect(generator);
+      effect.addEffect(generator);
     }
     // Flags
     Integer raidGroups=(Integer)effectProps.getProperty("Effect_InstantFellowship_ApplyToRaidGroups");
     if (raidGroups!=null)
     {
-      ret.setAppliesToRaidGroups(raidGroups.intValue()==1);
+      effect.setAppliesToRaidGroups(raidGroups.intValue()==1);
     }
     Integer pets=(Integer)effectProps.getProperty("Effect_InstantFellowship_ApplyToPets");
     if (pets!=null)
     {
-      ret.setAppliesToPets(pets.intValue()==1);
+      effect.setAppliesToPets(pets.intValue()==1);
     }
     Integer target=(Integer)effectProps.getProperty("Effect_InstantFellowship_ApplyToTarget");
     if (target!=null)
     {
-      ret.setAppliesToTarget(target.intValue()==1);
+      effect.setAppliesToTarget(target.intValue()==1);
     }
     // Range
     Float range=(Float)effectProps.getProperty("Effect_InstantFellowship_MaxRange");
     if ((range!=null) && (range.floatValue()>0))
     {
-      ret.setRange(range.floatValue());
+      effect.setRange(range.floatValue());
     }
-    return ret;
   }
 
   private EffectGenerator loadGenerator(PropertiesSet generatorProps)
@@ -626,7 +615,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     return ret;
   }
 
-  private GenesisEffect loadGenesisEffect(PropertiesSet effectProps)
+  private void loadGenesisEffect(GenesisEffect effect, PropertiesSet effectProps)
   {
     /*
 Effect ID=1879163860, class=GenesisEffect (719)
@@ -637,17 +626,15 @@ Effect_Genesis_SummonedObject: 1879163733
     int summonedObjectID=((Integer)effectProps.getProperty("Effect_Genesis_SummonedObject")).intValue();
     Float summonDuration=(Float)effectProps.getProperty("Effect_Genesis_ConstantSummonDuration");
     Integer permanent=(Integer)effectProps.getProperty("Effect_Genesis_PermanentSummonDuration");
-    GenesisEffect ret=new GenesisEffect();
-    handleSummonedObject(summonedObjectID,ret);
+    handleSummonedObject(summonedObjectID,effect);
     if (summonDuration!=null)
     {
-      ret.setDuration(summonDuration.floatValue());
+      effect.setDuration(summonDuration.floatValue());
     }
     if ((permanent!=null) && (permanent.intValue()==1))
     {
-      ret.setPermanent();
+      effect.setPermanent();
     }
-    return ret;
   }
 
   private void handleSummonedObject(int objectID, GenesisEffect effect)
@@ -714,7 +701,7 @@ WeenieType: 262145 (Hotspot)
     return ret;
   }
 
-  private InduceCombatStateEffect loadInduceCombatStateEffect(PropertiesSet effectProps)
+  private void loadInduceCombatStateEffect(InduceCombatStateEffect effect, PropertiesSet effectProps)
   {
     /*
     Effect ID=1879051312, class=InduceCombatStateEffect (769)
@@ -728,19 +715,18 @@ WeenieType: 262145 (Hotspot)
     Effect_CombatState_Induce_StateDuration_ModProp_List: 
       #1: Effect_ModifierPropertyList_Entry 268452197 (CombatState_ConjunctionStunned_Duration)
      */
-    InduceCombatStateEffect ret=new InduceCombatStateEffect();
     // Constant duration
     Float duration=(Float)effectProps.getProperty("Effect_InduceCombatState_ConstantDuration");
     if (duration!=null)
     {
-      ret.setDuration(duration.floatValue());
+      effect.setDuration(duration.floatValue());
     }
     // Duration function
     PropertiesSet durationProps=(PropertiesSet)effectProps.getProperty("Effect_InduceCombatState_VariableDuration");
     if (durationProps!=null)
     {
       LinearFunction function=loadLinearFunction(durationProps);
-      ret.setDurationFunction(function);
+      effect.setDurationFunction(function);
     }
     // Combat state
     int bitSetValue=((Integer)effectProps.getProperty("Effect_InduceCombatState_StateToInduce")).intValue();
@@ -752,13 +738,12 @@ WeenieType: 262145 (Hotspot)
       LOGGER.warn("Unexpected size for combat states: "+states);
     }
     CombatState state=states.get(0);
-    ret.setCombatState(state);
+    effect.setCombatState(state);
     // Grace period:
     // TODO
     // Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override: 1.0
     // 100% break chance on harm after 1s
     // 3% break chance on damage after 1s
-    return ret;
   }
 
   private LinearFunction loadLinearFunction(PropertiesSet props)
@@ -770,7 +755,7 @@ WeenieType: 262145 (Hotspot)
     return new LinearFunction(minX,maxX,minY,maxY);
   }
 
-  private DispelByResistEffect loadDispelByResistEffect(PropertiesSet effectProps)
+  private void loadDispelByResistEffect(DispelByResistEffect effect, PropertiesSet effectProps)
   {
   /*
 Effect ID=1879157351, class=DispelByResistEffect (714)
@@ -779,11 +764,10 @@ Effect_DispelByResist_ResistCategoryFilter: 8 (Wound)
 Effect_DispelByResist_UseStrengthRestriction: 1
  */
 
-    DispelByResistEffect ret=new DispelByResistEffect();
     // Dispel count
     Integer dispelCountInt=(Integer)effectProps.getProperty("Effect_DispelByResist_MaximumDispelCount");
     int dispelCount=(dispelCountInt!=null)?dispelCountInt.intValue():-1;
-    ret.setMaxDispelCount(dispelCount);
+    effect.setMaxDispelCount(dispelCount);
     // Resist Categories
     int categoriesCode=((Integer)effectProps.getProperty("Effect_DispelByResist_ResistCategoryFilter")).intValue();
     LotroEnum<ResistCategory> categoriesEnum=LotroEnumsRegistry.getInstance().get(ResistCategory.class);
@@ -791,20 +775,19 @@ Effect_DispelByResist_UseStrengthRestriction: 1
     List<ResistCategory> categories=categoriesEnum.getFromBitSet(bitset);
     for(ResistCategory category : categories)
     {
-      ret.addResistCategory(category);
+      effect.addResistCategory(category);
     }
     // Strength restriction
     Integer useStrengthResitriction=(Integer)effectProps.getProperty("Effect_DispelByResist_UseStrengthRestriction");
     if ((useStrengthResitriction!=null) && (useStrengthResitriction.intValue()==1))
     {
-      ret.setUseStrengthRestriction(true);
+      effect.setUseStrengthRestriction(true);
     }
     // Strength offset:
     Float strengthOffset=(Float)effectProps.getProperty("Effect_DispelByResist_StrengthRestrictionOffset");
     if (strengthOffset!=null)
     {
-      ret.setStrengthOffset(Integer.valueOf(strengthOffset.intValue()));
+      effect.setStrengthOffset(Integer.valueOf(strengthOffset.intValue()));
     }
-    return ret;
   }
 }
