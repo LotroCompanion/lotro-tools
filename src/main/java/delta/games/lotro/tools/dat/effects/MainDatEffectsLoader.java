@@ -2,6 +2,9 @@ package delta.games.lotro.tools.dat.effects;
 
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectDisplay;
+import delta.games.lotro.common.effects.EffectGenerator;
+import delta.games.lotro.common.effects.ItemEffectsManager;
+import delta.games.lotro.common.effects.ItemEffectsManager.Type;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -34,7 +37,6 @@ public class MainDatEffectsLoader
     _loader=new EffectLoader2(facade);
   }
 
-  private boolean _itemDisplayed;
   private boolean _setDisplayed;
 
   private static int[] TEST_ITEM_IDS= {
@@ -78,9 +80,8 @@ public class MainDatEffectsLoader
     {
       //Item item=ItemsManager.getInstance().getItem(itemId);
       _item=item;
-      _itemDisplayed=false;
       PropertiesSet props=_facade.loadProperties(item.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
-      handleItemEffects(props);
+      handleItem(item,props);
     }
     _item=null;
     // Sets
@@ -95,14 +96,48 @@ public class MainDatEffectsLoader
     }
   }
 
-  private void handleItemEffects(PropertiesSet properties)
+  private void handleItem(Item item, PropertiesSet properties)
   {
     // On equip
-    handleOnEquipEffects(properties);
+    handleOnEquipEffects(item,properties);
     // On use
-    handleOnUseEffects(properties);
+    handleOnUseEffects(item,properties);
     // Skills
     handleSkillEffects(properties);
+
+    // Show effects
+    ItemEffectsManager mgr=item.getEffects();
+    if (mgr!=null)
+    {
+      if (mgr.hasEffects())
+      {
+        System.out.println("Item: "+_item);
+        if (mgr.hasOnEquipEffects())
+        {
+          EffectGenerator[] onEquip=mgr.getEffects(Type.ON_EQUIP);
+          if (onEquip.length>0)
+          {
+            System.out.println("On equip:");
+            for(EffectGenerator effect : onEquip)
+            {
+              showEffect(effect);
+            }
+          }
+        }
+      }
+      if (mgr.hasOnUseEffects())
+      {
+        EffectGenerator[] onUse=mgr.getEffects(Type.ON_USE);
+        if (onUse.length>0)
+        {
+          System.out.println("On use:");
+          for(EffectGenerator effect : onUse)
+          {
+            showEffect(effect);
+          }
+        }
+      }
+    }
   }
 
   private void handleEffectGenerators(Object[] effects)
@@ -115,21 +150,33 @@ public class MainDatEffectsLoader
     }
   }
 
-  private void handleOnEquipEffects(PropertiesSet properties)
+  private void handleOnEquipEffects(Item item, PropertiesSet properties)
   {
     Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
-    if (effects!=null)
-    {
-      handleEffectGenerators(effects);
-    }
+    handleItemEffects(item,effects,ItemEffectsManager.Type.ON_EQUIP);
   }
 
-  private void handleOnUseEffects(PropertiesSet properties)
+  private void handleOnUseEffects(Item item, PropertiesSet properties)
   {
     Object[] effects=(Object[])properties.getProperty("EffectGenerator_UsageEffectList");
-    if (effects!=null)
+    handleItemEffects(item,effects,ItemEffectsManager.Type.ON_USE);
+  }
+
+  private void handleItemEffects(Item item, Object[] effects, ItemEffectsManager.Type type)
+  {
+    if (effects==null)
     {
-      handleEffectGenerators(effects);
+      return;
+    }
+    for(Object effectObj : effects)
+    {
+      PropertiesSet effectProps=(PropertiesSet)effectObj;
+      int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
+      Effect2 effect=_loader.getEffect(effectId);
+      Float spellcraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
+      if ((spellcraft!=null) && (spellcraft.floatValue()<0)) spellcraft=null;
+      EffectGenerator generator=new EffectGenerator(effect,spellcraft);
+      Item.addEffect(item,type,generator);
     }
   }
 
@@ -195,11 +242,6 @@ Skill_AttackHookList:
 
   private Effect2 handleEffect(int effectID)
   {
-    if ((_item!=null) && (!_itemDisplayed))
-    {
-      System.out.println("Item: "+_item);
-      _itemDisplayed=true;
-    }
     if ((_set!=null) && (!_setDisplayed))
     {
       System.out.println("Set: "+_set);
@@ -240,9 +282,28 @@ Skill_AttackHookList:
     }
   }
 
+  private void showEffect(EffectGenerator effectGenerator)
+  {
+    Effect2 effect=effectGenerator.getEffect();
+    Float spellcraft=effectGenerator.getSpellcraft();
+    if (spellcraft!=null)
+    {
+      showEffect(effect,spellcraft.intValue());
+    }
+    else
+    {
+      showEffect(effect);
+    }
+  }
+
   private void showEffect(Effect2 effect)
   {
     int level=getLevel();
+    showEffect(effect,level);
+  }
+
+  private void showEffect(Effect2 effect, int level)
+  {
     EffectDisplay display=new EffectDisplay(level);
     StringBuilder sb=new StringBuilder();
     display.displayEffect(sb,effect);

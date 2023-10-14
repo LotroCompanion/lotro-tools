@@ -115,7 +115,7 @@ public class EffectLoader2
    * @param effectId Effect identifier.
    * @return An effect or <code>null</code> if not found.
    */
-  public Effect2 loadEffect(int effectId)
+  private Effect2 loadEffect(int effectId)
   {
     PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     if (effectProps==null)
