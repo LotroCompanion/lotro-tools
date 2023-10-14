@@ -222,6 +222,10 @@ public class EffectLoader2
     {
       loadProcEffect((ProcEffect)effect,effectProps);
     }
+    else if (effect instanceof ReactiveVitalEffect)
+    {
+      loadReactiveVitalEffect((ReactiveVitalEffect)effect,effectProps);
+    }
     else if (effect instanceof PropertyModificationEffect)
     {
       loadPropertyModificationEffect((PropertyModificationEffect)effect,effectProps);
@@ -237,10 +241,6 @@ public class EffectLoader2
     else if (effect instanceof InstantFellowshipEffect)
     {
       loadInstantFellowshipAspect((InstantFellowshipEffect)effect,effectProps);
-    }
-    else if (effect instanceof ReactiveVitalEffect)
-    {
-      loadReactiveVitalEffect((ReactiveVitalEffect)effect,effectProps);
     }
     else if (effect instanceof GenesisEffect)
     {
@@ -371,6 +371,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
 
   private void loadReactiveVitalEffect(ReactiveVitalEffect effect, PropertiesSet effectProps)
   {
+    loadPropertyModificationEffect(effect,effectProps);
     ReactiveVitalChange defenderChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_DefenderVitalChange_");
     effect.setDefenderReactiveVitalChange(defenderChange);
     ReactiveVitalChange attackerChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_AttackerVitalChange_");
