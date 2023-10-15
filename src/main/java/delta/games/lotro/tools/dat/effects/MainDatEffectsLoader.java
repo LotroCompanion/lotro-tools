@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.effects;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.character.skills.SkillDescription;
@@ -9,19 +10,21 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectDisplay;
 import delta.games.lotro.common.effects.EffectGenerator;
-import delta.games.lotro.common.effects.ItemEffectsManager;
-import delta.games.lotro.common.effects.ItemEffectsManager.Type;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemEffectsManager;
+import delta.games.lotro.lore.items.ItemEffectsManager.Type;
 import delta.games.lotro.lore.items.ItemUtils;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.details.SkillToExecute;
+import delta.games.lotro.lore.items.sets.ItemSetEffectsManager;
 import delta.games.lotro.lore.items.sets.ItemsSet;
 import delta.games.lotro.lore.items.sets.ItemsSetsManager;
+import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 
 /**
@@ -46,8 +49,6 @@ public class MainDatEffectsLoader
     _loader=new EffectLoader2(facade);
     _handledSkills=new HashSet<Integer>();
   }
-
-  private boolean _setDisplayed;
 
   private static int[] TEST_ITEM_IDS= {
       1879150044, // Lothlórien Protector's Locket
@@ -100,9 +101,8 @@ public class MainDatEffectsLoader
     {
       //ItemsSet set=ItemsSetsManager.getInstance().getSetById(sedId);
       _set=set;
-      _setDisplayed=false;
       PropertiesSet props=_facade.loadProperties(set.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
-      handleSetEffects(props);
+      handleSetEffects(set,props);
     }
   }
 
@@ -160,13 +160,47 @@ public class MainDatEffectsLoader
     }
   }
 
-  private void handleEffectGenerators(Object[] effects)
+  private void showItemsSet(ItemsSet set)
+  {
+    boolean setDisplayed=false;
+    List<SetBonus> bonuses=set.getBonuses();
+    for(SetBonus bonus : bonuses)
+    {
+      ItemSetEffectsManager effectsMgr=bonus.getEffects();
+      if (effectsMgr==null)
+      {
+        continue;
+      }
+      if (!setDisplayed)
+      {
+        System.out.println("Set: "+_set);
+        setDisplayed=true;
+      }
+      System.out.println("Nb pieces: "+bonus.getPiecesCount());
+      EffectGenerator[] effectGenerators=effectsMgr.getEffects();
+      for(EffectGenerator effectGenerator : effectGenerators)
+      {
+        Effect2 effect=effectGenerator.getEffect();
+        int id=effect.getIdentifier();
+        String effectClass=effect.getClass().getName();
+        Float spellcraft=effectGenerator.getSpellcraft();
+        System.out.println("Effect ID="+id+", class="+effectClass+", spellcraft="+spellcraft);
+        showEffect(effect);
+      }
+    }
+  }
+
+  private void handleSetBonusEffects(SetBonus bonus, Object[] effects)
   {
     for(Object effectObj : effects)
     {
       PropertiesSet effectProps=(PropertiesSet)effectObj;
       int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-      /*Effect2 effect=*/handleEffect(effectId);
+      Effect2 effect=_loader.getEffect(effectId);
+      Float spellcraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
+      spellcraft=normalize(spellcraft);
+      EffectGenerator generator=new EffectGenerator(effect,spellcraft);
+      bonus.addEffect(generator);
     }
   }
 
@@ -194,7 +228,7 @@ public class MainDatEffectsLoader
       int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
       Effect2 effect=_loader.getEffect(effectId);
       Float spellcraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
-      if ((spellcraft!=null) && (spellcraft.floatValue()<0)) spellcraft=null;
+      spellcraft=normalize(spellcraft);
       EffectGenerator generator=new EffectGenerator(effect,spellcraft);
       Item.addEffect(item,type,generator);
     }
@@ -286,19 +320,7 @@ Skill_AttackHookList:
     return value;
   }
 
-  private Effect2 handleEffect(int effectID)
-  {
-    if ((_set!=null) && (!_setDisplayed))
-    {
-      System.out.println("Set: "+_set);
-      _setDisplayed=true;
-    }
-    Effect2 ret=_loader.getEffect(effectID);
-    showEffect(ret);
-    return ret;
-  }
-
-  private void handleSetEffects(PropertiesSet properties)
+  private void handleSetEffects(ItemsSet set,PropertiesSet properties)
   {
     //System.out.println(properties.dump());
     /*
@@ -324,8 +346,11 @@ Skill_AttackHookList:
       {
         continue;
       }
-      handleEffectGenerators(effectsList);
+      int count=((Integer)entryProps.getProperty("Set_ActiveCount")).intValue();
+      SetBonus bonus=set.getBonus(count);
+      handleSetBonusEffects(bonus,effectsList);
     }
+    showItemsSet(set);
   }
 
   private void showEffect(EffectGenerator effectGenerator)
