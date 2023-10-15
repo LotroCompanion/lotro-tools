@@ -730,16 +730,20 @@ WeenieType: 262145 (Hotspot)
       effect.setDurationFunction(function);
     }
     // Combat state
-    int bitSetValue=((Integer)effectProps.getProperty("Effect_InduceCombatState_StateToInduce")).intValue();
-    LotroEnum<CombatState> damageTypeEnum=LotroEnumsRegistry.getInstance().get(CombatState.class);
-    BitSet bitSet=BitSetUtils.getBitSetFromFlags(bitSetValue);
-    List<CombatState> states=damageTypeEnum.getFromBitSet(bitSet);
-    if (states.size()!=1)
+    Integer bitSetValueInt=(Integer)effectProps.getProperty("Effect_InduceCombatState_StateToInduce");
+    if (bitSetValueInt!=null)
     {
-      LOGGER.warn("Unexpected size for combat states: "+states);
+      int bitSetValue=bitSetValueInt.intValue();
+      LotroEnum<CombatState> damageTypeEnum=LotroEnumsRegistry.getInstance().get(CombatState.class);
+      BitSet bitSet=BitSetUtils.getBitSetFromFlags(bitSetValue);
+      List<CombatState> states=damageTypeEnum.getFromBitSet(bitSet);
+      if (states.size()!=1)
+      {
+        LOGGER.warn("Unexpected size for combat states: "+states);
+      }
+      CombatState state=states.get(0);
+      effect.setCombatState(state);
     }
-    CombatState state=states.get(0);
-    effect.setCombatState(state);
     // Grace period:
     // TODO
     // Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override: 1.0
