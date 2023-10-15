@@ -1,5 +1,11 @@
 package delta.games.lotro.tools.dat.effects;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillEffectGenerator;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectDisplay;
 import delta.games.lotro.common.effects.EffectGenerator;
@@ -11,7 +17,9 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemUtils;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.details.SkillToExecute;
 import delta.games.lotro.lore.items.sets.ItemsSet;
 import delta.games.lotro.lore.items.sets.ItemsSetsManager;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
@@ -26,6 +34,7 @@ public class MainDatEffectsLoader
   private EffectLoader2 _loader;
   private Item _item;
   private ItemsSet _set;
+  private Set<Integer> _handledSkills;
 
   /**
    * Constructor.
@@ -35,6 +44,7 @@ public class MainDatEffectsLoader
   {
     _facade=facade;
     _loader=new EffectLoader2(facade);
+    _handledSkills=new HashSet<Integer>();
   }
 
   private boolean _setDisplayed;
@@ -103,8 +113,12 @@ public class MainDatEffectsLoader
     // On use
     handleOnUseEffects(item,properties);
     // Skills
-    handleSkillEffects(properties);
+    handleSkillEffects(item,properties);
+    showItem(item);
+  }
 
+  private void showItem(Item item)
+  {
     // Show effects
     ItemEffectsManager mgr=item.getEffects();
     if (mgr!=null)
@@ -137,6 +151,12 @@ public class MainDatEffectsLoader
           }
         }
       }
+    }
+    // Skill
+    SkillToExecute skillToExecute=ItemUtils.getDetail(item,SkillToExecute.class);
+    if (skillToExecute!=null)
+    {
+      System.out.println(skillToExecute);
     }
   }
 
@@ -182,9 +202,10 @@ public class MainDatEffectsLoader
 
   /**
    * Handle skill effects.
+   * @param item Parent item.
    * @param properties Item properties.
    */
-  private void handleSkillEffects(PropertiesSet properties)
+  private void handleSkillEffects(Item item, PropertiesSet properties)
   {
     // TODO Avoid duplicate effects for skills:
     // For instance, Item 1879069473 (a hope token), uses a skill that
@@ -194,17 +215,22 @@ public class MainDatEffectsLoader
     {
       return;
     }
-    // TODO Use Usage_SkillLevel is any!
-    PropertiesSet skillProps=_facade.loadProperties(skillID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-    if (skillProps==null)
+    Integer skillLevel=(Integer)properties.getProperty("Usage_SkillLevel");
+    SkillDescription skill=SkillsManager.getInstance().getSkill(skillID.intValue());
+    if (!_handledSkills.contains(skillID))
     {
-      return;
+      handleSkillProps(skill);
+      _handledSkills.add(skillID);
     }
-    handleSkillProps(skillProps);
+    SkillToExecute detail=new SkillToExecute(skill,skillLevel);
+    Item.addDetail(item,detail);
+    //System.out.println("Set skill for item: "+item+" = "+skill+", level="+skillLevel);
   }
 
-  private void handleSkillProps(PropertiesSet skillProps)
+  private void handleSkillProps(SkillDescription skill)
   {
+    int skillID=skill.getIdentifier();
+    PropertiesSet skillProps=_facade.loadProperties(skillID+DATConstants.DBPROPERTIES_OFFSET);
     /*
 Skill_AttackHookList: 
   #1: Skill_AttackHookInfo 
@@ -225,19 +251,39 @@ Skill_AttackHookList:
         for(Object effectEntry : effectList)
         {
           PropertiesSet effectProps=(PropertiesSet)effectEntry;
-          handleSkillEffect(effectProps);
+          //System.out.println(effectProps.dump());
+          Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
+          if ((effectID!=null) && (effectID.intValue()!=0))
+          {
+            SkillEffectGenerator generator=handleSkillEffect(effectID.intValue(),effectProps);
+            SkillDescription.addEffect(skill,generator);
+          }
         }
       }
     }
   }
 
-  private void handleSkillEffect(PropertiesSet effectProps)
+  private SkillEffectGenerator handleSkillEffect(int effectID, PropertiesSet effectProps)
   {
-    Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
-    if ((effectID!=null) && (effectID.intValue()!=0))
+    Float duration=(Float)effectProps.getProperty("Skill_EffectDuration");
+    duration=normalize(duration);
+    Float spellcraft=(Float)effectProps.getProperty("Skill_EffectSpellcraft");
+    spellcraft=normalize(spellcraft);
+    Effect2 effect=_loader.getEffect(effectID);
+    return new SkillEffectGenerator(effect,spellcraft,duration);
+  }
+
+  private Float normalize(Float value)
+  {
+    if (value==null)
     {
-      handleEffect(effectID.intValue());
+      return null;
     }
+    if (value.floatValue()<0)
+    {
+      return null;
+    }
+    return value;
   }
 
   private Effect2 handleEffect(int effectID)
