@@ -6,6 +6,7 @@ import java.util.Set;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
+import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectDisplay;
@@ -119,13 +120,18 @@ public class MainDatEffectsLoader
 
   private void showItem(Item item)
   {
+    boolean itemDisplayed=false;
     // Show effects
     ItemEffectsManager mgr=item.getEffects();
     if (mgr!=null)
     {
       if (mgr.hasEffects())
       {
-        System.out.println("Item: "+_item);
+        if (!itemDisplayed)
+        {
+          System.out.println("Item: "+_item);
+          itemDisplayed=true;
+        }
         if (mgr.hasOnEquipEffects())
         {
           EffectGenerator[] onEquip=mgr.getEffects(Type.ON_EQUIP);
@@ -156,7 +162,30 @@ public class MainDatEffectsLoader
     SkillToExecute skillToExecute=ItemUtils.getDetail(item,SkillToExecute.class);
     if (skillToExecute!=null)
     {
+      if (!itemDisplayed)
+      {
+        System.out.println("Item: "+_item);
+        itemDisplayed=true;
+      }
+      System.out.println("On use:");
       System.out.println(skillToExecute);
+      showSkill(skillToExecute);
+    }
+  }
+
+  private void showSkill(SkillToExecute skillToExecute)
+  {
+    SkillDescription skill=skillToExecute.getSkill();
+    Integer level=skillToExecute.getLevel();
+    SkillEffectsManager mgr=skill.getEffects();
+    if (mgr==null)
+    {
+      return;
+    }
+    SkillEffectGenerator[] effectGenerators=mgr.getEffects();
+    for(SkillEffectGenerator effectGenerator : effectGenerators)
+    {
+      showEffect(effectGenerator,level);
     }
   }
 
@@ -355,11 +384,21 @@ Skill_AttackHookList:
 
   private void showEffect(EffectGenerator effectGenerator)
   {
+    showEffect(effectGenerator,null);
+  }
+
+  private void showEffect(EffectGenerator effectGenerator, Integer level)
+  {
     Effect2 effect=effectGenerator.getEffect();
+    Integer levelToUse=level;
     Float spellcraft=effectGenerator.getSpellcraft();
     if (spellcraft!=null)
     {
-      showEffect(effect,spellcraft.intValue());
+      levelToUse=Integer.valueOf(spellcraft.intValue());
+    }
+    if (levelToUse!=null)
+    {
+      showEffect(effect,levelToUse.intValue());
     }
     else
     {
