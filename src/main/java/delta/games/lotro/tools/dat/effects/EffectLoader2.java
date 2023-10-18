@@ -1,6 +1,8 @@
 package delta.games.lotro.tools.dat.effects;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.io.streams.IndentableStream;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.DispelByResistEffect;
@@ -23,10 +26,12 @@ import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
+import delta.games.lotro.common.effects.ReactiveChange;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
+import delta.games.lotro.common.effects.io.xml.EffectXMLWriter2;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -46,6 +51,7 @@ import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -372,14 +378,10 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
   private void loadReactiveVitalEffect(ReactiveVitalEffect effect, PropertiesSet effectProps)
   {
     loadPropertyModificationEffect(effect,effectProps);
-    ReactiveVitalChange defenderChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_DefenderVitalChange_");
-    effect.setDefenderReactiveVitalChange(defenderChange);
-    ReactiveVitalChange attackerChange=loadReactiveVitalChange(effectProps,"Effect_ReactiveVital_AttackerVitalChange_");
-    effect.setAttackerReactiveVitalChange(attackerChange);
-    EffectAndProbability defenderEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_DefenderEffect_");
-    effect.setDefenderEffect(defenderEffect);
-    EffectAndProbability attackerEffect=loadEffectAndProbability(effectProps,"Effect_ReactiveVital_AttackerEffect_");
-    effect.setAttackerEffect(attackerEffect);
+    ReactiveChange attackerChange=loadReactiveChange(effectProps,"Effect_ReactiveVital_Attacker");
+    effect.setAttackerReactiveChange(attackerChange);
+    ReactiveChange defenderChange=loadReactiveChange(effectProps,"Effect_ReactiveVital_Defender");
+    effect.setDefenderReactiveChange(defenderChange);
     // Vital types
     /*
     Object[] vitalTypeList=(Object[])effectProps.getProperty("Effect_VitalInterested_VitalTypeList");
@@ -418,6 +420,17 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     effect.setRemoveOnProc(removeOnProc);
   }
 
+  private ReactiveChange loadReactiveChange(PropertiesSet effectProps, String seed)
+  {
+    ReactiveVitalChange vitalChange=loadReactiveVitalChange(effectProps,seed+"VitalChange_");
+    EffectAndProbability effect=loadEffectAndProbability(effectProps,seed+"Effect_");
+    if ((vitalChange!=null) || (effect!=null))
+    {
+      return new ReactiveChange(vitalChange,effect);
+    }
+    return null;
+  }
+  
   private ReactiveVitalChange loadReactiveVitalChange(PropertiesSet effectProps, String seed)
   {
     Float constantFloat=(Float)effectProps.getProperty(seed+"Constant");
@@ -575,8 +588,6 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     Integer modPropertyInt=(Integer)effectProps.getProperty("Effect_ApplicationProbability_AdditiveModProp");
     int modProperty=(modPropertyInt!=null)?modPropertyInt.intValue():0;
     return ApplicationProbability.from(probability,variance,modProperty);
-    
-    
     // Effect_VariableApplicationProbability, type=Struct
     //   used but always:
     // Effect_VariableApplicationProbability: 
@@ -630,7 +641,7 @@ Effect_Genesis_SummonedObject: 1879163733
     handleSummonedObject(summonedObjectID,effect);
     if (summonDuration!=null)
     {
-      effect.setDuration(summonDuration.floatValue());
+      effect.setSummonDuration(summonDuration.floatValue());
     }
     if ((permanent!=null) && (permanent.intValue()==1))
     {
@@ -794,5 +805,16 @@ Effect_DispelByResist_UseStrengthRestriction: 1
     {
       effect.setStrengthOffset(Integer.valueOf(strengthOffset.intValue()));
     }
+  }
+
+  /**
+   * Save loaded data.
+   */
+  public void save()
+  {
+    EffectXMLWriter2 w=new EffectXMLWriter2();
+    List<Effect2> effects=new ArrayList<Effect2>(_loadedEffects.values());
+    Collections.sort(effects,new IdentifiableComparator<Effect2>());
+    w.write(GeneratedFiles.EFFECTS2,effects);
   }
 }

@@ -105,6 +105,7 @@ public class MainDatEffectsLoader
       PropertiesSet props=_facade.loadProperties(set.getIdentifier()+DATConstants.DBPROPERTIES_OFFSET);
       handleSetEffects(set,props);
     }
+    _loader.save();
   }
 
   private void handleItem(Item item, PropertiesSet properties)
