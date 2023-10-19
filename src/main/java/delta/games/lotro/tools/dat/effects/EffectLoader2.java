@@ -56,6 +56,7 @@ import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -683,7 +684,14 @@ Effect_Genesis_SummonedObject: 1879163733
       // Ignored, for instance:
       // Generator (65537)
     }
-    effect.setInteractable(interactable);
+    if (interactable!=null)
+    {
+      Proxy<Interactable> proxy=new Proxy<Interactable>();
+      proxy.setId(objectID);
+      proxy.setName(name);
+      proxy.setObject(interactable);
+      effect.setInteractable(proxy);
+    }
     //System.out.println("Summoned other ID="+objectID+": "+name+" (type="+weenieType+")");
   }
 
