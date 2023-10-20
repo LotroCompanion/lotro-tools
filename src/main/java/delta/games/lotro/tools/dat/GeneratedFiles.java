@@ -156,6 +156,10 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_LEGENDARY=new File("data/progressions/tmp/progressions_legendary.xml").getAbsoluteFile();
   /**
+   * Progressions for effects.
+   */
+  public static final File PROGRESSIONS_EFFECTS=new File("data/progressions/tmp/progressions_effects.xml").getAbsoluteFile();
+  /**
    * All progressions.
    */
   public static final File PROGRESSIONS=LotroCoreConfig.getInstance().getFile(DataFiles.PROGRESSIONS);

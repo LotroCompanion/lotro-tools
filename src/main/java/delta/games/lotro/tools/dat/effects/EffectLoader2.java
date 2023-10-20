@@ -52,6 +52,7 @@ import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.MainProgressionsMerger;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -820,9 +821,14 @@ Effect_DispelByResist_UseStrengthRestriction: 1
    */
   public void save()
   {
+    // Effects
     EffectXMLWriter2 w=new EffectXMLWriter2();
     List<Effect2> effects=new ArrayList<Effect2>(_loadedEffects.values());
     Collections.sort(effects,new IdentifiableComparator<Effect2>());
     w.write(GeneratedFiles.EFFECTS2,effects);
+    // Progressions
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
+    // Tmp:
+    new MainProgressionsMerger().doIt();
   }
 }
