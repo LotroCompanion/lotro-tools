@@ -22,6 +22,8 @@ import delta.games.lotro.lore.items.sets.ItemsSet.SetType;
 import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
+import delta.games.lotro.tools.dat.effects.ItemsSetEffectsLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -36,16 +38,19 @@ public class MainDatItemsSetsLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatItemsSetsLoader.class);
 
   private DataFacade _facade;
+  private ItemsSetEffectsLoader _effectsLoader;
   private DatStatUtils _statUtils;
   private I18nUtils _i18n;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader. 
    */
-  public MainDatItemsSetsLoader(DataFacade facade)
+  public MainDatItemsSetsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
+    _effectsLoader=new ItemsSetEffectsLoader(effectsLoader);
     _i18n=new I18nUtils("itemsSets",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
   }
@@ -158,6 +163,8 @@ Set_Name:
         set.addBonus(bonus);
       }
     }
+    // Effects
+    _effectsLoader.handleSetEffects(set,properties);
     return set;
   }
 
@@ -283,7 +290,8 @@ Set_Name:
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatItemsSetsLoader(facade).doIt();
+    EffectLoader effectsLoader=new EffectLoader(facade);
+    new MainDatItemsSetsLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
 }

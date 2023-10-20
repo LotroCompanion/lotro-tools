@@ -24,6 +24,8 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
 import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
+import delta.games.lotro.tools.dat.effects.SkillEffectsLoader;
 import delta.games.lotro.tools.dat.skills.mounts.MountsLoader;
 import delta.games.lotro.tools.dat.skills.pets.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -41,18 +43,21 @@ public class MainSkillDataLoader
   private List<SkillDescription> _skills;
   private MountsLoader _mountsLoader;
   private CosmeticPetLoader _petsLoader;
+  private SkillEffectsLoader _effectsLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public MainSkillDataLoader(DataFacade facade)
+  public MainSkillDataLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
     _skills=new ArrayList<SkillDescription>();
     _mountsLoader=new MountsLoader(facade,_i18n);
     _petsLoader=new CosmeticPetLoader(facade,_i18n);
+    _effectsLoader=new SkillEffectsLoader(effectsLoader);
   }
 
   /**
@@ -174,6 +179,7 @@ public class MainSkillDataLoader
         CosmeticPetDescription pet=(CosmeticPetDescription)ret;
         _petsLoader.loadPetData(skillProperties,pet);
       }
+      _effectsLoader.handleSkillProps(ret,skillProperties);
     }
     return ret;
   }
@@ -243,7 +249,8 @@ public class MainSkillDataLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainSkillDataLoader(facade).doIt();
+    EffectLoader effectsLoader=new EffectLoader(facade);
+    new MainSkillDataLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
 }

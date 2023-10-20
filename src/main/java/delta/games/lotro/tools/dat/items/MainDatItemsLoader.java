@@ -60,6 +60,7 @@ import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
+import delta.games.lotro.tools.dat.effects.ItemEffectsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
 import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
@@ -116,7 +117,7 @@ public class MainDatItemsLoader
   private ItemDetailsLoader _detailsLoader;
   private CosmeticLoader _cosmeticLoader;
   private WeaponSpeedTables _speedTables;
-  private EffectLoader _effectsLoader;
+  private ItemEffectsLoader _itemEffectsLoader;
   private SocketablesManager _socketablesManager;
   private boolean _live;
 
@@ -128,8 +129,9 @@ public class MainDatItemsLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader. 
    */
-  public MainDatItemsLoader(DataFacade facade)
+  public MainDatItemsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
     _i18n=new I18nUtils("items",facade.getGlobalStringsManager());
@@ -148,7 +150,7 @@ public class MainDatItemsLoader
       _speedTables=new SpeedValuesLoader(facade).loadData();
       WeaponSpeedTablesXMLWriter.writeSpeedTablesFile(GeneratedFiles.SPEED_TABLES,_speedTables);
     }
-    _effectsLoader=new EffectLoader(facade);
+    _itemEffectsLoader=new ItemEffectsLoader(effectsLoader);
     _socketablesManager=new SocketablesManager();
     // Enums
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
@@ -284,7 +286,8 @@ public class MainDatItemsLoader
       // - glory rank
       RequirementsLoadingUtils.loadRequiredGloryRank(properties,item.getUsageRequirements());
       // - effect
-      RequirementsLoadingUtils.loadRequiredEffect(properties,item.getUsageRequirements(),_effectsLoader);
+      EffectLoader effectsLoader=_itemEffectsLoader.getEffectsLoader();
+      RequirementsLoadingUtils.loadRequiredEffect(properties,item.getUsageRequirements(),effectsLoader);
       // Stats providers
       StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       if (armorStatProvider!=null)
@@ -319,6 +322,8 @@ public class MainDatItemsLoader
       _detailsLoader.handleItem(item,properties);
       // Cosmetics
       _cosmeticLoader.handleItem(item,properties,type);
+      // Effects
+      _itemEffectsLoader.handleItem(item,properties);
     }
     else
     {
@@ -939,8 +944,6 @@ public class MainDatItemsLoader
     ValueTablesXMLWriter.writeValueTablesFile(GeneratedFiles.DPS_TABLES,_dpsLoader.getTables());
     // Save item cosmetics
     _cosmeticLoader.save();
-    // Save effects
-    _effectsLoader.save();
     // Save labels
     _i18n.save();
   }
@@ -954,7 +957,8 @@ public class MainDatItemsLoader
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     Locale.setDefault(Locale.ENGLISH);
-    new MainDatItemsLoader(facade).doIt();
+    EffectLoader effectsLoader=new EffectLoader(facade);
+    new MainDatItemsLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
 }

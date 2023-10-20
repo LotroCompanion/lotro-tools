@@ -28,6 +28,7 @@ import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatRecipesLoader;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
 import delta.games.lotro.tools.dat.geo.MainDatLandmarksLoader;
@@ -110,8 +111,10 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
+    // Effects
+    EffectLoader effectsLoader=new EffectLoader(_facade);
     // Skills
-    new MainSkillDataLoader(_facade).doIt();
+    new MainSkillDataLoader(_facade,effectsLoader).doIt();
     // Traits
     new MainTraitDataLoader(_facade).doIt();
     // Emotes
@@ -139,7 +142,8 @@ public class MainDatLoader
       new SocketIconsLoader(_facade).doIt();
     }
     new GenericItemEffectsLoader(_facade).doIt();
-    new MainDatItemsLoader(_facade).doIt();
+    new MainDatItemsLoader(_facade,effectsLoader).doIt();
+    effectsLoader.save();
     new MainProgressionsMerger().doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
@@ -147,7 +151,7 @@ public class MainDatLoader
     new InitialGearLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Items sets
-    new MainDatItemsSetsLoader(_facade).doIt();
+    new MainDatItemsSetsLoader(_facade,effectsLoader).doIt();
     if (live)
     {
       // Paper items
