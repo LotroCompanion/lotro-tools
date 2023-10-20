@@ -143,15 +143,16 @@ public class MainDatLoader
     }
     new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
-    effectsLoader.save();
     new MainProgressionsMerger().doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
-    // Initial gear
-    new InitialGearLoader(_facade).doIt();
-    new MainProgressionsMerger().doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade,effectsLoader).doIt();
+    // Save effects
+    effectsLoader.save();
+    new MainProgressionsMerger().doIt();
+    // Initial gear
+    new InitialGearLoader(_facade).doIt();
     if (live)
     {
       // Paper items
