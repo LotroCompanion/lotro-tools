@@ -1,8 +1,10 @@
 package delta.games.lotro.tools.dat.effects;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.io.xml.EffectXMLParser2;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter2;
@@ -17,8 +19,9 @@ public class MainTestEffectsReadWrite
   private void doIt()
   {
     EffectXMLParser2 p=new EffectXMLParser2(null);
-    List<Effect2> effects=p.parseEffectsFile(GeneratedFiles.EFFECTS2);
-    File to=new File(GeneratedFiles.EFFECTS2.getParentFile(),"effect2-rewrite.xml");
+    List<Effect2> effects=p.parseEffectsFile(GeneratedFiles.EFFECTS);
+    Collections.sort(effects,new IdentifiableComparator<Effect2>());
+    File to=new File(GeneratedFiles.EFFECTS.getParentFile(),"effect-rewrite.xml");
     EffectXMLWriter2 w=new EffectXMLWriter2();
     w.write(to,effects);
   }

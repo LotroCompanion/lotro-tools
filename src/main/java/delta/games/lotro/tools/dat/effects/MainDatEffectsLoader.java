@@ -35,7 +35,7 @@ import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 public class MainDatEffectsLoader
 {
   private DataFacade _facade;
-  private EffectLoader2 _loader;
+  private EffectLoader _loader;
   private Item _item;
   private ItemsSet _set;
   private Set<Integer> _handledSkills;
@@ -47,7 +47,7 @@ public class MainDatEffectsLoader
   public MainDatEffectsLoader(DataFacade facade)
   {
     _facade=facade;
-    _loader=new EffectLoader2(facade);
+    _loader=new EffectLoader(facade);
     _handledSkills=new HashSet<Integer>();
   }
 
@@ -231,6 +231,7 @@ public class MainDatEffectsLoader
       spellcraft=normalize(spellcraft);
       EffectGenerator generator=new EffectGenerator(effect,spellcraft);
       bonus.addEffect(generator);
+      // EffectGenerator_EffectDataList
     }
   }
 
