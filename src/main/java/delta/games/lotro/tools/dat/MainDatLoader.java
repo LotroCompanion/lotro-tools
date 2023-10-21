@@ -316,8 +316,10 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.CRAFTING_DATA);
     // Buffs
     deleteFile(GeneratedFiles.BUFFS);
-    deleteFile(GeneratedFiles.EFFECTS);
     deleteFile(GeneratedFiles.EFFECT_ICONS);
+    // Effects
+    deleteFile(GeneratedFiles.EFFECTS);
+    deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
     // Trait points
     deleteFile(GeneratedFiles.TRAIT_POINTS);
     // Collections

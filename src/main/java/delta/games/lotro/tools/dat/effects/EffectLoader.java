@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.effects;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -43,6 +44,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
@@ -151,6 +153,21 @@ public class EffectLoader
     ret.setEffectDuration(duration);
     // Specifics
     loadSpecifics(ret,effectProps,classIndex);
+    // Icon
+    Integer iconId=ret.getIconId();
+    if (iconId!=null)
+    {
+      String iconFilename=iconId+".png";
+      File to=new File(GeneratedFiles.EFFECT_ICONS_DIR,iconFilename).getAbsoluteFile();
+      if (!to.exists())
+      {
+        boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
+        if (!ok)
+        {
+          LOGGER.warn("Could not build effect icon: "+iconFilename);
+        }
+      }
+    }
     return ret;
   }
 

@@ -273,6 +273,10 @@ public class GeneratedFiles
    */
   public static final File EFFECT_ICONS=LotroCoreConfig.getInstance().getFile("effectIcons");
   /**
+   * Effect icons directory.
+   */
+  public static final File EFFECT_ICONS_DIR=LotroCoreConfig.getInstance().getFile("effectIconsDir");
+  /**
    * Collections.
    */
   public static final File COLLECTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.COLLECTIONS);

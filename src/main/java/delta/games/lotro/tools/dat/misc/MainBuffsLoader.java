@@ -136,7 +136,7 @@ public class MainBuffsLoader
           boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
           if (!ok)
           {
-            LOGGER.warn("Could not build trait icon: "+iconFilename);
+            LOGGER.warn("Could not build effect icon: "+iconFilename);
           }
         }
       }
