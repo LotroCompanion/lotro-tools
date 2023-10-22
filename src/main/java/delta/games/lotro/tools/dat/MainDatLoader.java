@@ -111,10 +111,9 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
-    // Effects
-    EffectLoader effectsLoader=new EffectLoader(_facade);
     // Skills
-    new MainSkillDataLoader(_facade,effectsLoader).doIt();
+    MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
+    skillsLoader.doIt();
     // Traits
     new MainTraitDataLoader(_facade).doIt();
     // Emotes
@@ -141,6 +140,9 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
+    // Effects
+    EffectLoader effectsLoader=new EffectLoader(_facade);
+    skillsLoader.loadEffects(effectsLoader);
     new GenericItemEffectsLoader(_facade).doIt();
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();

@@ -43,21 +43,18 @@ public class MainSkillDataLoader
   private List<SkillDescription> _skills;
   private MountsLoader _mountsLoader;
   private CosmeticPetLoader _petsLoader;
-  private SkillEffectsLoader _effectsLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param effectsLoader Effects loader.
    */
-  public MainSkillDataLoader(DataFacade facade, EffectLoader effectsLoader)
+  public MainSkillDataLoader(DataFacade facade)
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
     _skills=new ArrayList<SkillDescription>();
     _mountsLoader=new MountsLoader(facade,_i18n);
     _petsLoader=new CosmeticPetLoader(facade,_i18n);
-    _effectsLoader=new SkillEffectsLoader(effectsLoader);
   }
 
   /**
@@ -179,7 +176,6 @@ public class MainSkillDataLoader
         CosmeticPetDescription pet=(CosmeticPetDescription)ret;
         _petsLoader.loadPetData(skillProperties,pet);
       }
-      _effectsLoader.handleSkillProps(ret,skillProperties);
     }
     return ret;
   }
@@ -225,6 +221,22 @@ public class MainSkillDataLoader
   }
 
   /**
+   * Load skill effects.
+   * @param effectsLoader Effects loader.
+   */
+  public void loadEffects(EffectLoader effectsLoader)
+  {
+    SkillEffectsLoader skillEffectsLoader=new SkillEffectsLoader(effectsLoader);
+    for(SkillDescription skill : _skills)
+    {
+      int skillId=skill.getIdentifier();
+      PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
+      skillEffectsLoader.handleSkillProps(skill,skillProperties);
+    }
+    saveSkills();
+  }
+
+  /**
    * Save skills to disk.
    */
   private void saveSkills()
@@ -249,8 +261,7 @@ public class MainSkillDataLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    EffectLoader effectsLoader=new EffectLoader(facade);
-    new MainSkillDataLoader(facade,effectsLoader).doIt();
+    new MainSkillDataLoader(facade).doIt();
     facade.dispose();
   }
 }
