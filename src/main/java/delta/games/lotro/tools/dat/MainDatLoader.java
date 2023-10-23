@@ -143,7 +143,7 @@ public class MainDatLoader
     // Effects
     EffectLoader effectsLoader=new EffectLoader(_facade);
     skillsLoader.loadEffects(effectsLoader);
-    new GenericItemEffectsLoader(_facade).doIt();
+    new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Character data
