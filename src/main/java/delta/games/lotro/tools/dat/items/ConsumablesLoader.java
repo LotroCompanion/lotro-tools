@@ -170,6 +170,10 @@ public class ConsumablesLoader
 
   private void handleStatsProvider(Item item, StatsProvider statsProvider, Float spellcraft)
   {
+    if (statsProvider==null)
+    {
+      return;
+    }
     if (statsProvider.getNumberOfStatProviders()>0)
     {
       if (_current==null)
@@ -251,11 +255,14 @@ public class ConsumablesLoader
     {
       return;
     }
+    Integer skillLevel=skillToExecute.getLevel();
+    Float defaultLevel=(skillLevel!=null)?Float.valueOf(skillLevel.intValue()):null;
     for(SkillEffectGenerator effectGenerator : effectGenerators)
     {
       Float skillSpellcraft=effectGenerator.getSpellcraft();
+      Float spellcraft=(skillSpellcraft!=null)?skillSpellcraft:defaultLevel;
       Effect2 effect=effectGenerator.getEffect();
-      handleEffect(item,effect,skillSpellcraft);
+      handleEffect(item,effect,spellcraft);
     }
   }
 
@@ -269,7 +276,10 @@ public class ConsumablesLoader
     ConsumableXMLWriter.write(GeneratedFiles.CONSUMABLES,_consumables);
   }
 
-  private void doIt()
+  /**
+   * Do consumables.
+   */
+  public void doIt()
   {
     for(Item item : ItemsManager.getInstance().getAllItems())
     {
@@ -286,6 +296,10 @@ public class ConsumablesLoader
     registerConsumable(_current);
   }
 
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     new ConsumablesLoader().doIt();

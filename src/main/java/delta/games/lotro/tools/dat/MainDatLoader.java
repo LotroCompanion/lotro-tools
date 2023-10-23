@@ -34,6 +34,7 @@ import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
 import delta.games.lotro.tools.dat.geo.MainDatLandmarksLoader;
 import delta.games.lotro.tools.dat.instances.MainDatInstancesTreeLoader;
 import delta.games.lotro.tools.dat.instances.MainDatPrivateEncountersLoader;
+import delta.games.lotro.tools.dat.items.ConsumablesLoader;
 import delta.games.lotro.tools.dat.items.GenericItemEffectsLoader;
 import delta.games.lotro.tools.dat.items.MainDatDisenchantmentsLoader;
 import delta.games.lotro.tools.dat.items.MainDatItemsLoader;
@@ -229,6 +230,8 @@ public class MainDatLoader
       // Hobbies
       new MainHobbiesLoader(_facade).doIt();
     }
+    // Consumables
+    new ConsumablesLoader().doIt();
   }
 
   private void cleanup()

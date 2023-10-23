@@ -1,16 +1,11 @@
 package delta.games.lotro.tools.dat.effects;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.DispelByResistEffect;
@@ -18,6 +13,7 @@ import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
+import delta.games.lotro.common.effects.EffectsManager;
 import delta.games.lotro.common.effects.GenesisEffect;
 import delta.games.lotro.common.effects.Hotspot;
 import delta.games.lotro.common.effects.InduceCombatStateEffect;
@@ -69,7 +65,7 @@ public class EffectLoader
   private DataFacade _facade;
   private DatStatUtils _statUtils;
   private I18nUtils _i18nUtils;
-  private Map<Integer,Effect2> _loadedEffects;
+  private EffectsManager _effectsMgr;
 
   /**
    * Constructor.
@@ -80,7 +76,7 @@ public class EffectLoader
     _facade=facade;
     _i18nUtils=new I18nUtils("effects",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18nUtils);
-    _loadedEffects=new HashMap<Integer,Effect2>();
+    _effectsMgr=EffectsManager.getInstance();
   }
 
   /**
@@ -90,13 +86,13 @@ public class EffectLoader
    */
   public Effect2 getEffect(int effectId)
   {
-    Integer key=Integer.valueOf(effectId);
-    if (_loadedEffects.containsKey(key))
+    Effect2 ret=_effectsMgr.getEffectById(effectId);
+    if (ret==null)
     {
-      return _loadedEffects.get(key);
+      ret=loadEffect(effectId);
+      _effectsMgr.addEffect(ret);
+      
     }
-    Effect2 ret=loadEffect(effectId);
-    _loadedEffects.put(key,ret);
     return ret;
   }
 
@@ -798,8 +794,7 @@ Effect_DispelByResist_UseStrengthRestriction: 1
   {
     // Effects
     EffectXMLWriter2 w=new EffectXMLWriter2();
-    List<Effect2> effects=new ArrayList<Effect2>(_loadedEffects.values());
-    Collections.sort(effects,new IdentifiableComparator<Effect2>());
+    List<Effect2> effects=EffectsManager.getInstance().getEffects();
     w.write(GeneratedFiles.EFFECTS,effects);
     _i18nUtils.save();
     // Progressions

@@ -1,13 +1,13 @@
 package delta.games.lotro.tools.dat.skills;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -40,7 +40,6 @@ public class MainSkillDataLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
-  private List<SkillDescription> _skills;
   private MountsLoader _mountsLoader;
   private CosmeticPetLoader _petsLoader;
 
@@ -52,7 +51,6 @@ public class MainSkillDataLoader
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
-    _skills=new ArrayList<SkillDescription>();
     _mountsLoader=new MountsLoader(facade,_i18n);
     _petsLoader=new CosmeticPetLoader(facade,_i18n);
   }
@@ -73,6 +71,7 @@ public class MainSkillDataLoader
 
   private void loadSkills()
   {
+    SkillsManager skillsMgr=SkillsManager.getInstance();
     for(int i=0x70000000;i<=0x77FFFFFF;i++)
     {
       byte[] data=_facade.loadData(i);
@@ -85,7 +84,7 @@ public class MainSkillDataLoader
           SkillDescription skill=loadSkill(did);
           if (skill!=null)
           {
-            _skills.add(skill);
+            skillsMgr.registerSkill(skill);
           }
         }
       }
@@ -227,7 +226,7 @@ public class MainSkillDataLoader
   public void loadEffects(EffectLoader effectsLoader)
   {
     SkillEffectsLoader skillEffectsLoader=new SkillEffectsLoader(effectsLoader);
-    for(SkillDescription skill : _skills)
+    for(SkillDescription skill : SkillsManager.getInstance().getAll())
     {
       int skillId=skill.getIdentifier();
       PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
@@ -241,11 +240,12 @@ public class MainSkillDataLoader
    */
   private void saveSkills()
   {
-    int nbSkills=_skills.size();
+    List<SkillDescription> skills=SkillsManager.getInstance().getAll();
+    int nbSkills=skills.size();
     LOGGER.info("Writing "+nbSkills+" skills");
     // Write skills file
-    Collections.sort(_skills,new IdentifiableComparator<SkillDescription>());
-    boolean ok=new SkillDescriptionXMLWriter().write(GeneratedFiles.SKILLS,_skills);
+    Collections.sort(skills,new IdentifiableComparator<SkillDescription>());
+    boolean ok=new SkillDescriptionXMLWriter().write(GeneratedFiles.SKILLS,skills);
     if (ok)
     {
       LOGGER.info("Wrote skills file: "+GeneratedFiles.SKILLS);
