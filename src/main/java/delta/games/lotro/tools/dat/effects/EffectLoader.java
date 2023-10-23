@@ -252,10 +252,7 @@ public class EffectLoader
     }
     // Stats
     StatsProvider statsProvider=_statUtils.buildStatProviders(effectProps);
-    if (statsProvider.getNumberOfStatProviders()>0)
-    {
-      effect.setStatsProvider(statsProvider);
-    }
+    effect.setStatsProvider(statsProvider);
   }
 
   private void loadProcEffect(ProcEffect effect, PropertiesSet effectProps)

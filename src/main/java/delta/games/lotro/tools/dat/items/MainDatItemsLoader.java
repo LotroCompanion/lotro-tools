@@ -108,7 +108,6 @@ public class MainDatItemsLoader
   private I18nUtils _i18n;
   private Item _currentItem;
   private PassivesLoader _passivesLoader;
-  private ConsumablesLoader _consumablesLoader;
   private LegaciesLoader _legaciesLoader;
   private ItemValueLoader _valueLoader;
   private DPSValueLoader _dpsLoader;
@@ -138,7 +137,6 @@ public class MainDatItemsLoader
     _statUtils=new DatStatUtils(facade,_i18n);
     _live=Context.isLive();
     _passivesLoader=new PassivesLoader(_facade);
-    _consumablesLoader=new ConsumablesLoader(_facade);
     _legaciesLoader=new LegaciesLoader(_facade);
     _valueLoader=new ItemValueLoader(_facade);
     _dpsLoader=new DPSValueLoader(_facade);
@@ -302,8 +300,6 @@ public class MainDatItemsLoader
         statsProvider.addStatProvider(armorStatProvider);
       }
       item.setStatsProvider(statsProvider);
-      // Effects
-      handleEffects(properties);
       // Weapon specifics
       if (item instanceof Weapon)
       {
@@ -485,64 +481,6 @@ public class MainDatItemsLoader
     //int itemClass=itemClassInt.intValue();
     //if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
     return true;
-  }
-
-  private void handleEffects(PropertiesSet properties)
-  {
-    // On equip
-    Object[] effects=(Object[])properties.getProperty("EffectGenerator_EquipperEffectList");
-    if (effects!=null)
-    {
-      for(Object effectObj : effects)
-      {
-        PropertiesSet effectProps=(PropertiesSet)effectObj;
-        int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-        StatsProvider effectStats=handleEffect(effectId);
-        if (effectStats!=null)
-        {
-          int nbProviders=effectStats.getNumberOfStatProviders();
-          for(int i=0;i<nbProviders;i++)
-          {
-            _currentItem.getStatsProvider().addStatProvider(effectStats.getStatProvider(i));
-          }
-        }
-      }
-    }
-    _consumablesLoader.reset();
-    // On use
-    _consumablesLoader.handleOnUseEffects(_currentItem,properties);
-    // Skills
-    _consumablesLoader.handleSkillEffects(_currentItem,properties);
-  }
-
-  private StatsProvider handleEffect(int effectId)
-  {
-    PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
-    boolean useEffect=useEffect(effectProps);
-    if (useEffect)
-    {
-      return _statUtils.buildStatProviders(effectProps);
-    }
-    return null;
-  }
-
-  private boolean useEffect(PropertiesSet effectProps)
-  {
-    Object probability=effectProps.getProperty("Effect_ConstantApplicationProbability");
-    if ((probability!=null) && (probability.equals(Float.valueOf(1.0f))))
-    {
-      Integer permanent=(Integer)effectProps.getProperty("Effect_Duration_Permanent");
-      if ((permanent!=null) && (permanent.intValue()==1))
-      {
-        return true;
-      }
-      Float constantInterval=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
-      if ((constantInterval!=null) && (constantInterval.intValue()>0))
-      {
-        return true;
-      }
-    }
-    return false;
   }
 
   private void handleLegendaries(Item item, PropertiesSet properties)
@@ -931,8 +869,6 @@ public class MainDatItemsLoader
     _statUtils.showStatistics();
     // Save passives
     _passivesLoader.savePassives();
-    // Save consumables
-    _consumablesLoader.saveConsumables();
     // Save legacies
     if (_live)
     {

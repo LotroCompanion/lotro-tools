@@ -2,29 +2,32 @@ package delta.games.lotro.tools.dat.items;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillEffectGenerator;
+import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect;
+import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.EffectGenerator;
+import delta.games.lotro.common.effects.InstantFellowshipEffect;
+import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
-import delta.games.lotro.dat.DATConstants;
-import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.consumables.Consumable;
 import delta.games.lotro.lore.consumables.io.xml.ConsumableXMLWriter;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemUtils;
+import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.details.SkillToExecute;
+import delta.games.lotro.lore.items.effects.ItemEffectsManager;
+import delta.games.lotro.lore.items.effects.ItemEffectsManager.Type;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEffectUtils;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for consumables.
@@ -32,26 +35,18 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
  */
 public class ConsumablesLoader
 {
-  private DataFacade _facade;
-  private I18nUtils _i18n;
-  private DatStatUtils _statUtils;
-  private Map<Integer,Effect> _parsedEffects;
   private Integer _spellcraftProperty;
   private List<Consumable> _consumables;
   private Set<Integer> _handledEffectsForCurrentItem;
+  private Consumable _current;
 
   private static final int APPARENT_LEVEL_PROPERTY=268457149;
 
   /**
    * Constructor.
-   * @param facade Data facade.
    */
-  public ConsumablesLoader(DataFacade facade)
+  public ConsumablesLoader()
   {
-    _facade=facade;
-    _i18n=new I18nUtils("consumables",facade.getGlobalStringsManager());
-    _statUtils=new DatStatUtils(facade,_i18n);
-    _parsedEffects=new HashMap<Integer,Effect>();
     _consumables=new ArrayList<Consumable>();
     _handledEffectsForCurrentItem=new HashSet<Integer>();
   }
@@ -62,35 +57,43 @@ public class ConsumablesLoader
   public void reset()
   {
     _handledEffectsForCurrentItem.clear();
+    _current=null;
   }
 
   /**
    * Find 'on use' effects on an item.
    * @param item Item to use.
-   * @param properties Item properties.
    */
-  public void handleOnUseEffects(Item item, PropertiesSet properties)
+  public void handleOnUseEffects(Item item)
   {
     if (!useItem(item))
     {
       return;
     }
-    Object[] effectsOnUse=(Object[])properties.getProperty("EffectGenerator_UsageEffectList");
-    if (effectsOnUse!=null)
+    ItemEffectsManager effectsMgr=item.getEffects();
+    if (effectsMgr==null)
     {
-      //System.out.println(properties.dump());
-      Consumable currentConsumable=new Consumable(item);
+      return;
+    }
+    EffectGenerator[] effectGenerators=effectsMgr.getEffects(Type.ON_USE);
+    if (effectGenerators.length>0)
+    {
       // Look for a spellcraft property
-      _spellcraftProperty=loadSpellcraftProperty(properties);
-
-      handleEffectGenerators(item,currentConsumable,effectsOnUse,null);
-      registerConsumable(currentConsumable);
+      //_spellcraftProperty=loadSpellcraftProperty(properties);
+      for(EffectGenerator effectGenerator : effectGenerators)
+      {
+        handleEffectGenerators(item,effectGenerator,null);
+      }
     }
   }
 
   private void registerConsumable(Consumable currentConsumable)
   {
-    // Register consumable
+    if (currentConsumable==null)
+    {
+      return;
+    }
+    // Register consumable if needed
     StatsProvider statsProvider=currentConsumable.getProvider();
     int nbStatProviders=statsProvider.getNumberOfStatProviders();
     int nbEffects=statsProvider.getSpecialEffects().size();
@@ -109,6 +112,8 @@ public class ConsumablesLoader
     return true;
   }
 
+  /*
+   * TODO: handle spellcraft calculator.
   private Integer loadSpellcraftProperty(PropertiesSet properties)
   {
     Integer propertyId=null;
@@ -120,81 +125,59 @@ public class ConsumablesLoader
     }
     return propertyId;
   }
+   */
 
-  private void handleEffect(Item item, Consumable currentConsumable, int effectId, Float defaultSpellcraft)
+  private void handleEffect(Item item, Effect2 effect, Float defaultSpellcraft)
   {
-    PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println("Effect props: "+effectProps.dump());
-    Object[] effects=(Object[])effectProps.getProperty("EffectGenerator_InstantFellowship_AppliedEffectList");
-    if (effects!=null)
+    if (effect instanceof InstantFellowshipEffect)
     {
-      handleEffectGenerators(item,currentConsumable,effects,defaultSpellcraft);
+      InstantFellowshipEffect fellowshipEffect=(InstantFellowshipEffect)effect;
+      List<EffectGenerator> effectGenerators=fellowshipEffect.getEffects();
+      for(EffectGenerator effectGenerator : effectGenerators)
+      {
+        handleEffectGenerators(item,effectGenerator,defaultSpellcraft);
+      }
     }
     else
     {
-      StatsProvider consumableStatsProvider=currentConsumable.getProvider();
-      handleSimpleEffect(item, consumableStatsProvider, effectId, defaultSpellcraft);
+      handleSimpleEffect(item, effect, defaultSpellcraft);
     }
   }
 
-  private void handleEffectGenerators(Item item, Consumable currentConsumable, Object[] effects, Float defaultSpellcraft)
+  private void handleEffectGenerators(Item item, EffectGenerator effectGenerator, Float defaultSpellcraft)
   {
-    for(Object effectGeneratorObj : effects)
-    {
-      PropertiesSet effectGeneratorProps=(PropertiesSet)effectGeneratorObj;
-      //System.out.println(effectGeneratorProps.dump());
-      int childEffectId=((Integer)effectGeneratorProps.getProperty("EffectGenerator_EffectID")).intValue();
-      Float spellCraft=(Float)effectGeneratorProps.getProperty("EffectGenerator_EffectSpellcraft");
-      spellCraft=fixSpellcraft(spellCraft);
-      Float spellcraftToUse=(spellCraft!=null)?spellCraft:defaultSpellcraft;
-      handleEffect(item, currentConsumable, childEffectId, spellcraftToUse);
-    }
+    Effect2 childEffect=effectGenerator.getEffect();
+    Float spellCraft=effectGenerator.getSpellcraft();
+    Float spellcraftToUse=(spellCraft!=null)?spellCraft:defaultSpellcraft;
+    handleEffect(item, childEffect, spellcraftToUse);
   }
 
-  private void handleSimpleEffect(Item item, StatsProvider consumableStatsProvider, int effectId, Float spellcraft)
+  private void handleSimpleEffect(Item item, Effect2 effect, Float spellcraft)
   {
-    Integer key=Integer.valueOf(effectId);
-    Effect effect=_parsedEffects.get(key);
-    if (effect==null)
-    {
-      effect=DatEffectUtils.loadEffect(_statUtils,effectId);
-      // Remove icon: it is not interesting for consumable effects
-      effect.setIconId(null);
-      _parsedEffects.put(key,effect);
-      /*
-      StatsProvider statsProvider=effect.getStatsProvider();
-      if (statsProvider.getNumberOfStatProviders()>0)
-      {
-        System.out.println("Item: "+item+"  => "+effectId+((spellcraft!=null)?" (spellcraft: "+spellcraft+")":""));
-        System.out.println(effect);
-      }
-      */
-    }
+    Integer key=Integer.valueOf(effect.getIdentifier());
     if (_handledEffectsForCurrentItem.contains(key))
     {
       return;
     }
     _handledEffectsForCurrentItem.add(key);
-    StatsProvider statsProvider=effect.getStatsProvider();
+    if (effect instanceof PropertyModificationEffect)
+    {
+      PropertyModificationEffect propModEffect=(PropertyModificationEffect)effect;
+      handleStatsProvider(item,propModEffect.getStatsProvider(),spellcraft);
+    }
+  }
+
+  private void handleStatsProvider(Item item, StatsProvider statsProvider, Float spellcraft)
+  {
     if (statsProvider.getNumberOfStatProviders()>0)
     {
-      int level=0;
-      if ((spellcraft!=null) && (spellcraft.floatValue()>0))
+      if (_current==null)
       {
-        level=spellcraft.intValue();
+        _current=new Consumable(item);
       }
-      else if ((_spellcraftProperty!=null) && (_spellcraftProperty.intValue()==APPARENT_LEVEL_PROPERTY))
-      {
-        // Use character level
-      }
-      else
-      {
-        Integer itemLevel=item.getItemLevel();
-        if ((itemLevel!=null) && (itemLevel.intValue()>1))
-        {
-          level=itemLevel.intValue();
-        }
-      }
+      StatsProvider consumableStatsProvider=_current.getProvider();
+      int level=getLevel(item,spellcraft);
       int nbStats=statsProvider.getNumberOfStatProviders();
       for(int i=0;i<nbStats;i++)
       {
@@ -216,79 +199,64 @@ public class ConsumablesLoader
     }
     for(SpecialEffect specialEffect : statsProvider.getSpecialEffects())
     {
-      consumableStatsProvider.addSpecialEffect(specialEffect);
+      if (_current==null)
+      {
+        _current=new Consumable(item);
+      }
+      _current.getProvider().addSpecialEffect(specialEffect);
     }
+  }
+
+  private int getLevel(Item item, Float spellcraft)
+  {
+    int level=0;
+    if ((spellcraft!=null) && (spellcraft.floatValue()>0))
+    {
+      level=spellcraft.intValue();
+    }
+    else if ((_spellcraftProperty!=null) && (_spellcraftProperty.intValue()==APPARENT_LEVEL_PROPERTY))
+    {
+      // Use character level
+    }
+    else
+    {
+      Integer itemLevel=item.getItemLevel();
+      if ((itemLevel!=null) && (itemLevel.intValue()>1))
+      {
+        level=itemLevel.intValue();
+      }
+    }
+    return level;
   }
 
   /**
    * Handle skill effects.
    * @param item Parent items.
-   * @param properties Item properties.
    */
-  public void handleSkillEffects(Item item, PropertiesSet properties)
+  public void handleSkillEffects(Item item)
   {
-    Integer skillID=(Integer)properties.getProperty("Usage_SkillToExecute");
-    if (skillID==null)
+    SkillToExecute skillToExecute=ItemUtils.getDetail(item,SkillToExecute.class);
+    if (skillToExecute==null)
     {
       return;
     }
-    PropertiesSet skillProps=_facade.loadProperties(skillID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-    if (skillProps==null)
+    SkillDescription skill=skillToExecute.getSkill();
+    SkillEffectsManager effectsMgr=skill.getEffects();
+    if (effectsMgr==null)
     {
       return;
     }
-    handleSkillProps(item,skillProps);
-  }
-
-  private void handleSkillProps(Item item, PropertiesSet skillProps)
-  {
-    /*
-Skill_AttackHookList: 
-  #1: Skill_AttackHookInfo 
-    Skill_AttackHook_ActionDurationContributionMultiplier: 0.0
-    Skill_AttackHook_TargetEffectList: 
-     */
-    Object[] attackHookList=(Object[])skillProps.getProperty("Skill_AttackHookList");
-    if ((attackHookList==null) || (attackHookList.length==0))
+    SkillEffectGenerator[] effectGenerators=effectsMgr.getEffects();
+    if (effectGenerators.length==0)
     {
       return;
     }
-    for(Object attackHookInfoObj : attackHookList)
+    for(SkillEffectGenerator effectGenerator : effectGenerators)
     {
-      PropertiesSet attackHookInfoProps=(PropertiesSet)attackHookInfoObj;
-      Object[] effectList=(Object[])attackHookInfoProps.getProperty("Skill_AttackHook_TargetEffectList");
-      if ((effectList!=null) && (effectList.length>0))
-      {
-        for(Object effectEntry : effectList)
-        {
-          PropertiesSet effectProps=(PropertiesSet)effectEntry;
-          handleSkillEffect(item,effectProps);
-        }
-      }
+      Float skillSpellcraft=effectGenerator.getSpellcraft();
+      Effect2 effect=effectGenerator.getEffect();
+      handleEffect(item,effect,skillSpellcraft);
     }
-  }
-
-  private void handleSkillEffect(Item item, PropertiesSet effectProps)
-  {
-    Integer effectID=(Integer)effectProps.getProperty("Skill_Effect");
-    if ((effectID!=null) && (effectID.intValue()!=0))
-    {
-      Consumable currentConsumable=new Consumable(item);
-      Float skillSpellcraft=(Float)effectProps.getProperty("Skill_EffectSpellcraft");
-      skillSpellcraft=fixSpellcraft(skillSpellcraft);
-      //System.out.println("Item: "+item+"  => "+effectID+" (spellcraft: "+skillSpellcraft);
-      handleEffect(item,currentConsumable,effectID.intValue(),skillSpellcraft);
-      registerConsumable(currentConsumable);
-    }
-  }
-
-  private Float fixSpellcraft(Float spellcraft)
-  {
-    if ((spellcraft!=null) && (spellcraft.floatValue()<0))
-    {
-      spellcraft=null;
-    }
-    return spellcraft;
   }
 
   /**
@@ -299,7 +267,27 @@ Skill_AttackHookList:
     // Data
     Collections.sort(_consumables,new IdentifiableComparator<Consumable>());
     ConsumableXMLWriter.write(GeneratedFiles.CONSUMABLES,_consumables);
-    // Labels
-    _i18n.save();
+  }
+
+  private void doIt()
+  {
+    for(Item item : ItemsManager.getInstance().getAllItems())
+    {
+      handleItem(item);
+    }
+    saveConsumables();
+  }
+
+  private void handleItem(Item item)
+  {
+    reset();
+    handleOnUseEffects(item);
+    handleSkillEffects(item);
+    registerConsumable(_current);
+  }
+
+  public static void main(String[] args)
+  {
+    new ConsumablesLoader().doIt();
   }
 }
