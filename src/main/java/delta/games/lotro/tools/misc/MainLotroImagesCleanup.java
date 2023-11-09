@@ -90,7 +90,7 @@ public class MainLotroImagesCleanup
 
   void cleanRadarImages()
   {
-    int[] regions=new int[]{1,2,3,4,14,15};
+    int[] regions=new int[]{1,2,3,4,5,14,15};
     for(int region : regions)
     {
       for(int blockX=0;blockX<=255;blockX++)

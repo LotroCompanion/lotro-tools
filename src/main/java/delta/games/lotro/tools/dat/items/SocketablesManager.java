@@ -38,7 +38,7 @@ public class SocketablesManager
   {
     1091914756, 1091914773, 1091914770, 1091914772, 1091914776, // 1-5
     1091914767, 1091914762, 1091914765, 1091914774, 1091914766, // 6-10
-    1092396132, 1092396316, 1092508824, 1092694659 // 11-14
+    1092396132, 1092396316, 1092508824, 1092694659, 1092694658 // 11-15
   };
 
   private List<Tracery> _traceries;
@@ -85,7 +85,9 @@ public class SocketablesManager
     if ((socketTypeCode==1) || // Classic essences
         (socketTypeCode==18) || // Essences of War (PvP)
         (socketTypeCode==19) || // Cloak essences
-        (socketTypeCode==20)) // Necklace essences
+        (socketTypeCode==20) || // Necklace essences
+        (socketTypeCode==22) || // Primary Essence
+        (socketTypeCode==23)) // Vital Essence
     {
       return socketType;
     }

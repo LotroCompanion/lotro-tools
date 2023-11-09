@@ -246,6 +246,10 @@ public class MapsSystemLoader
     {
       return null;
     }
+    if (childBaseId==childElement.getIdentifier())
+    {
+      return null;
+    }
     //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
     UIElement baseElement=getUIElementById(childBaseId);
     if (baseElement!=null)

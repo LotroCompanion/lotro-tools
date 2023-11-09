@@ -107,7 +107,7 @@ public class MapsDataLoader
     LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
     LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
     boolean isLive=Context.isLive();
-    int[] regions=isLive?new int[]{1,2,3,4,14}:new int[]{1};
+    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
     for(int region : regions)
     {
       System.out.println("Region "+region);

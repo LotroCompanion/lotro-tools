@@ -38,7 +38,7 @@ public class MainLandblocksBuilder
     LandblocksManager index=new LandblocksManager();
     int nbBlocks=0;
     boolean isLive=Context.isLive();
-    int[] regions=isLive?new int[]{1,2,3,4,14}:new int[]{1};
+    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
     for(int region : regions)
     {
       System.out.println("Region "+region);

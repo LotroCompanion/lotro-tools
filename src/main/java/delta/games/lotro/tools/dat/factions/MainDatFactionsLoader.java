@@ -321,6 +321,7 @@ Reputation_LowestTier: 1
     {
       LOGGER.warn("Sort order not specified for some factions: "+factions);
     }
+    ret.addAll(factions);
     return ret;
   }
 
@@ -462,6 +463,7 @@ Reputation_LowestTier: 1
     if (factionId==1879326961) return new String[]{category,"MINAS_TIRITH",FactionLevelTemplates.EXTENDED_CLASSIC}; // Defenders of Minas Tirith
     if (factionId==1879330539) return new String[]{category,"RIDERS_ROHAN",FactionLevelTemplates.CLASSIC}; // Riders of Rohan
     if (factionId==1879463136) return new String[]{category,null,null}; // The Renewal of Gondor
+    if (factionId==1879465745) return new String[]{category,null,null}; // Citizens of Umbar Baharbêl
     category="Mordor";
     if (factionId==1879334719) return new String[]{category,"HOST_OF_THE_WEST",FactionLevelTemplates.EXTENDED_CLASSIC}; // Host of the West
     if (factionId==1879341949) return new String[]{category,"HOW_ARMOUR",FactionLevelTemplates.HOW}; // Host of the West: Armour
@@ -531,7 +533,7 @@ Reputation_LowestTier: 1
       // Dol Amroth
       1879306071,1879308442,1879308438,1879308441,1879308436,1879308443,1879308440,1879308439,1879308437,
       // Gondor
-      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,1879463136,
+      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,1879463136,1879465745,
       // Mordor
       1879334719,1879341949,1879341953,1879341952,1879345136,
       // Misc
