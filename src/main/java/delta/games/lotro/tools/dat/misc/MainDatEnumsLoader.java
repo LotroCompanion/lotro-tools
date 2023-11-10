@@ -405,6 +405,8 @@ public class MainDatEnumsLoader
     if (code==18) return "W"; // Essence of War
     if (code==19) return "C"; // Cloak
     if (code==20) return "N"; // Necklace
+    if (code==22) return "P"; // Primary
+    if (code==23) return "V"; // Vital
     return null;
   }
 
