@@ -416,7 +416,8 @@ public class MainDatItemsLoader
   Item_Socket_Unlock_ILevel: 52
        */
       int socketType=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
-      if ((socketType!=1) && (socketType!=131072) && (socketType!=262144) && (socketType!=524288))
+      if ((socketType!=1) && (socketType!=131072) && (socketType!=262144) && (socketType!=524288)
+          && (socketType!=2097152) && (socketType!=4194304))
       {
         return true;
       }
