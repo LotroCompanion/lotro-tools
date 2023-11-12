@@ -43,7 +43,7 @@ public class MainBuildUpdatePackage
     ToolsConfig config=new ToolsConfig(baseURL,to); 
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/work/LotRO Companion/app");
     String packageName="patch21.0.38";
-    Version newVersion=new Version(2138,"21.0.38");
+    Version newVersion=new Version(2139,"21.0.1.38");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
