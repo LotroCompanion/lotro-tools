@@ -116,6 +116,7 @@ public class PropertyDescriptorsManager
       handleRegion(2,0x18000014);
       handleRegion(3,0x18000015);
       handleRegion(4,0x1800001a);
+      handleRegion(5,0x1800001a);
       handleRegion(14,0x18000014);
     }
   }
