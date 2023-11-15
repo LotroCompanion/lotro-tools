@@ -31,7 +31,7 @@ public class MainInitUpdatesSystemLoreDatabase
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/loredb/${file}/download";
     File to=new File("d:/tmp/loredb-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to); 
-    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/LotRO Companion/app");
+    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/work/LotRO Companion/app");
 
     // Build a description of the software directory
     DescriptionBuilder descriptionBuilder=new DescriptionBuilder();
