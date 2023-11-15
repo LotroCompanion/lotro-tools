@@ -23,6 +23,7 @@ import delta.games.lotro.lore.allegiances.io.xml.AllegianceXMLWriter;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -125,8 +126,8 @@ public class MainDatAllegiancesLoader
    */
   public void doIt()
   {
-    // Load AllegianceControl
-    PropertiesSet props=_facade.loadProperties(0x7904A21F);
+    // Load 
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"AllegianceControl");
     //System.out.println(props.dump());
 
     AllegiancesManager mgr=new AllegiancesManager();
@@ -145,7 +146,7 @@ public class MainDatAllegiancesLoader
       }
     }
     // Load curves
-    int[] curveIDs={1879353332,1879353333,1879353334,1879353335};
+    int[] curveIDs={1879353332,1879353333,1879353334,1879353335,1879478784};
     //Object[] curveIDs=(Object[])props.getProperty("Allegiance_Advancement_Progressions_Array");
     //for(Object curveIDObj : curveIDs)
     for(int curveID : curveIDs)
