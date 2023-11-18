@@ -68,15 +68,15 @@ public class RecipeIconsInitializer
   {
     if ("FARMER".equals(key))
     {
-      if ((tier==10) || (tier==11) || (tier==14)) return "1091804717-1090522692";
+      if ((tier==10) || (tier==11) || (tier==14) || (tier==15)) return "1091804717-1090522692";
     }
     else if ("FORESTER".equals(key))
     {
-      if ((tier>=10) && (tier<=14)) return "1091804719-1090522692";
+      if ((tier>=10) && (tier<=15)) return "1091804719-1090522692";
     }
     else if ("PROSPECTOR".equals(key))
     {
-      if ((tier>=10) && (tier<=14)) return "1091804728-1090522692";
+      if ((tier>=10) && (tier<=15)) return "1091804728-1090522692";
     }
     else if ("JEWELLER".equals(key))
     {
