@@ -300,7 +300,35 @@ public class MainDatRecipesLoader
         version.setBaseCriticalChance(Integer.valueOf((int)(critBonus.floatValue()*100)));
       }
     }
+    checkForItemLevels(regular,criticalResult);
     return version;
+  }
+
+  private void checkForItemLevels(CraftingResult regular, CraftingResult critical)
+  {
+    if (critical==null)
+    {
+      return;
+    }
+    Item regularItem=regular.getItem();
+    int regularItemID=(regularItem!=null)?regularItem.getIdentifier():0;
+    int regularQuantity=regular.getQuantity();
+    Item critItem=critical.getItem();
+    int critItemID=(critItem!=null)?critItem.getIdentifier():0;
+    int critQuantity=critical.getQuantity();
+    if ((regularItemID==critItemID) && (regularQuantity==critQuantity))
+    {
+      PropertiesSet props=_facade.loadProperties(regularItemID+DATConstants.DBPROPERTIES_OFFSET);
+      Integer itemLevel=(Integer)props.getProperty("Item_Level");
+      Integer craftingOffset=(Integer)props.getProperty("Item_iLevel_Crafting_Offset");
+      if (craftingOffset!=null)
+      {
+        int regularItemLevel=itemLevel.intValue();
+        regular.setItemLevel(regularItemLevel);
+        int critItemLevel=itemLevel.intValue()+craftingOffset.intValue();
+        critical.setItemLevel(critItemLevel);
+      }
+    }
   }
 
   private Profession getProfessionFromProfessionId(int id)
