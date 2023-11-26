@@ -3,13 +3,11 @@ package delta.games.lotro.tools.dat.quests;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.strings.renderer.StringRenderer;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.tools.dat.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.dat.misc.WorldEventsLoader;
-import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.WorldEventConditionsLoader;
 import delta.games.lotro.utils.Proxy;
 
@@ -19,13 +17,13 @@ import delta.games.lotro.utils.Proxy;
  */
 public class AchievablesLoadingUtils
 {
-  private StringRenderer _renderer;
   private QuestRequirementsLoader _requirementsLoader;
   private UsageRequirementsLoader _usageRequirementsLoader;
   private WorldEventConditionsLoader _weConditionsLoader;
   private DatRewardsLoader _rewardsLoader;
   private WorldEventsLoader _worldEventsLoader;
   private WebStoreItemsLoader _webStoreItemsLoader;
+  private AchievableEventIDLoader _eventIDsLoader;
 
   /**
    * Constructor.
@@ -37,10 +35,10 @@ public class AchievablesLoadingUtils
     _rewardsLoader=rewardsLoader;
     _worldEventsLoader=new WorldEventsLoader(facade);
     _webStoreItemsLoader=new WebStoreItemsLoader(facade);
-    _renderer=StringRenderingUtils.buildAllOptionsRenderer();
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _usageRequirementsLoader=new UsageRequirementsLoader();
     _weConditionsLoader=new WorldEventConditionsLoader(_worldEventsLoader);
+    _eventIDsLoader=new AchievableEventIDLoader(facade);
   }
 
   /**
@@ -62,16 +60,12 @@ public class AchievablesLoadingUtils
   }
 
   /**
-   * Render a string format.
-   * @param format Input format.
-   * @return a rendered string.
+   * Get the event IDs loader.
+   * @return the event IDs loader.
    */
-  public String renderName(String format)
+  public AchievableEventIDLoader getEventIDsLoader()
   {
-    String ret=_renderer.render(format);
-    ret=ret.replace("  "," ");
-    ret=ret.trim();
-    return ret;
+    return _eventIDsLoader;
   }
 
   /**

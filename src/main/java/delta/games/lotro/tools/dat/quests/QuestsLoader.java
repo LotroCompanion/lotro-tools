@@ -203,6 +203,8 @@ public class QuestsLoader
       WebStoreItem webStoreItem=_utils.getWebStoreItemsLoader().getWebStoreItem(webStoreItemID.intValue());
       quest.setWebStoreItem(webStoreItem);
     }
+    // Events
+    _utils.getEventIDsLoader().doAchievable(quest);
     // Registration
     _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
   }

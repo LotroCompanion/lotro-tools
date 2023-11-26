@@ -141,7 +141,7 @@ public class DatObjectivesLoader
         {
           for(PropertyValue completionConditionValue : completionConditionsArray.getValues())
           {
-            handleObjectiveItem(objective,completionConditionValue);
+            handleObjectiveCondition(objective,completionConditionValue);
           }
         }
         // Ignored: Quest_NPCObjRoles (Array) and Quest_ObjectiveVolumeString (String)
@@ -151,13 +151,13 @@ public class DatObjectivesLoader
     objectivesManager.sort();
   }
 
-  private void handleObjectiveItem(Objective objective, PropertyValue item)
+  private void handleObjectiveCondition(Objective objective, PropertyValue item)
   {
     String propertyName=item.getDefinition().getName();
     if ("Quest_CompletionCondition".equals(propertyName))
     {
       ArrayPropertyValue completionConditionArray=(ArrayPropertyValue)item;
-      handleCompletionCondition(objective,completionConditionArray);
+      handleCompletionConditions(objective,completionConditionArray);
     }
     else if ("Quest_FailureCondition".equals(propertyName))
     {
@@ -171,7 +171,7 @@ public class DatObjectivesLoader
   }
 
   @SuppressWarnings("unused")
-  private void handleCompletionCondition(Objective objective, ArrayPropertyValue completionConditionArray)
+  private void handleCompletionConditions(Objective objective, ArrayPropertyValue completionConditionArray)
   {
     /*
 268439142 - Quest_CompletionCondition, type=Array
@@ -180,30 +180,30 @@ public class DatObjectivesLoader
   Property: Quest_Condition_NeverFinish, ID=268437079, type=boolean
   Property: QuestEvent_Entry, ID=268439867, type=Struct
      */
-    for(PropertyValue completionConditionItem : completionConditionArray.getValues())
+    for(PropertyValue completionCondition : completionConditionArray.getValues())
     {
-      String propertyName=completionConditionItem.getDefinition().getName();
+      String propertyName=completionCondition.getDefinition().getName();
       if ("Quest_CompletionConditionCount".equals(propertyName))
       {
-        int conditionCount=((Integer)completionConditionItem.getValue()).intValue();
+        int conditionCount=((Integer)completionCondition.getValue()).intValue();
       }
       else if ("QuestEvent_Entry".equals(propertyName))
       {
-        PropertiesSet questEventEntryProps=(PropertiesSet)completionConditionItem.getValue();
+        PropertiesSet questEventEntryProps=(PropertiesSet)completionCondition.getValue();
         handleQuestEventEntry(objective,questEventEntryProps);
       }
       else if ("QuestEvent_CompoundEvent".equals(propertyName))
       {
-        ArrayPropertyValue compoundEventArray=(ArrayPropertyValue)completionConditionItem;
+        ArrayPropertyValue compoundEventArray=(ArrayPropertyValue)completionCondition;
         handleCompoundEvent(objective,compoundEventArray);
       }
       else if ("Quest_Condition_NeverFinish".equals(propertyName))
       {
-        int neverFinish=((Integer)completionConditionItem.getValue()).intValue();
+        int neverFinish=((Integer)completionCondition.getValue()).intValue();
       }
       else
       {
-        LOGGER.warn("Unmanaged item for a completion condition array: "+completionConditionItem);
+        LOGGER.warn("Unmanaged item for a completion condition array: "+completionCondition);
       }
     }
   }
@@ -496,10 +496,6 @@ public class DatObjectivesLoader
     {
       condition=new DefaultObjectiveCondition(type);
     }
-    if (eventOrder!=null)
-    {
-      condition.setIndex(eventOrder.intValue());
-    }
     // Lore info
     if (loreInfo!=null)
     {
@@ -519,6 +515,13 @@ public class DatObjectivesLoader
       condition.setCount(count.intValue());
     }
     objective.addCondition(condition);
+    if (eventOrder!=null)
+    {
+      if (eventOrder.intValue()!=condition.getIndex())
+      {
+        LOGGER.warn("Event order and index mismatch!");
+      }
+    }
   }
 
   private DetectingCondition handleDetecting(PropertiesSet properties, Objective objective)

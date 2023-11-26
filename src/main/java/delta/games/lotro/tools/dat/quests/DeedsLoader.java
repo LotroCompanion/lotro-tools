@@ -138,6 +138,8 @@ public class DeedsLoader
       WebStoreItem webStoreItem=_utils.getWebStoreItemsLoader().getWebStoreItem(webStoreItemID.intValue());
       deed.setWebStoreItem(webStoreItem);
     }
+    // Events
+    _utils.getEventIDsLoader().doAchievable(deed);
     // Registration
     _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
   }
