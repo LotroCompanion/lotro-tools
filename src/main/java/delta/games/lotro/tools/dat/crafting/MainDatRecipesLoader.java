@@ -155,6 +155,7 @@ public class MainDatRecipesLoader
             Item critResultItem=_itemsManager.getItem(critResultId.intValue());
             critical.setItem(critResultItem);
           }
+          checkForItemLevels(newVersion.getRegular(),newVersion.getCritical());
           // Ingredient
           Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
           if (ingredientId!=null)
