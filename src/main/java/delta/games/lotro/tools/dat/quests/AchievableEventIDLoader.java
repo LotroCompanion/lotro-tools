@@ -41,31 +41,44 @@ public class AchievableEventIDLoader
     ObjectivesManager objectivesMgr=achievable.getObjectives();
     @SuppressWarnings("unchecked")
     Map<Integer,ClassInstance> map=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_questEventHash");
-    for(Map.Entry<Integer,ClassInstance> entry : map.entrySet())
+    if (map!=null)
     {
-      Integer eventID=entry.getKey();
-      ClassInstance eventInstance=entry.getValue();
-      PropertiesSet props=(PropertiesSet)eventInstance.getAttributeValue("m_collection");
-      Integer eventOrder=(Integer)eventInstance.getAttributeValue("m_iEventOrder");
-      if ((eventOrder==null) || (eventOrder.intValue()<0))
+      for(Map.Entry<Integer,ClassInstance> entry : map.entrySet())
       {
-        continue;
+        Integer eventID=entry.getKey();
+        ClassInstance eventInstance=entry.getValue();
+        PropertiesSet props=(PropertiesSet)eventInstance.getAttributeValue("m_collection");
+        Integer eventOrder=(Integer)eventInstance.getAttributeValue("m_iEventOrder");
+        if ((eventOrder==null) || (eventOrder.intValue()<0))
+        {
+          continue;
+        }
+        Integer objectiveID=(Integer)props.getProperty("QuestEvent_ObjectiveID");
+        Objective objective=objectivesMgr.getObjectives().get(objectiveID.intValue()-1);
+        ObjectiveCondition condition=objective.getConditions().get(eventOrder.intValue());
+        condition.setEventID(eventID.intValue());
       }
-      Integer objectiveID=(Integer)props.getProperty("QuestEvent_ObjectiveID");
-      Objective objective=objectivesMgr.getObjectives().get(objectiveID.intValue()-1);
-      ObjectiveCondition condition=objective.getConditions().get(eventOrder.intValue());
-      condition.setEventID(eventID.intValue());
-    }
-    int eventID=1;
-    for(Objective objective : objectivesMgr.getObjectives())
-    {
-      for(ObjectiveCondition condition : objective.getConditions())
+      int eventID=1;
+      for(Objective objective : objectivesMgr.getObjectives())
       {
-        if (condition.getEventID()==eventID)
+        for(ObjectiveCondition condition : objective.getConditions())
+        {
+          if (condition.getEventID()==eventID)
+          {
+            condition.setEventID(0);
+          }
+          eventID++;
+        }
+      }
+    }
+    else
+    {
+      for(Objective objective : objectivesMgr.getObjectives())
+      {
+        for(ObjectiveCondition condition : objective.getConditions())
         {
           condition.setEventID(0);
         }
-        eventID++;
       }
     }
   }

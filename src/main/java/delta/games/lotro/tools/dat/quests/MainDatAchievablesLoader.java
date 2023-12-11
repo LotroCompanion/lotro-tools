@@ -2,16 +2,20 @@ package delta.games.lotro.tools.dat.quests;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
 
@@ -167,7 +171,9 @@ public class MainDatAchievablesLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(facade);
     new MainDatAchievablesLoader(facade,rewardsLoader).doIt();
     facade.dispose();
