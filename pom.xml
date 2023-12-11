@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-core</artifactId>
-      <version>21.0.1</version>
+      <version>21.1</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
