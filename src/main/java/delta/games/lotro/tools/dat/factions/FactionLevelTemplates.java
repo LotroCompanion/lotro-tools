@@ -208,6 +208,7 @@ public class FactionLevelTemplates
     levels.add("EASTEMNET MASTER");
     levels.add("WESTEMNET MASTER");
     levels.add("MINAS ITHIL MASTER");
+    levels.add("UMBAR");
     return levels;
   }
 

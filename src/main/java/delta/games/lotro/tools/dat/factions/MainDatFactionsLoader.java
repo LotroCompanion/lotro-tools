@@ -489,6 +489,14 @@ Reputation_LowestTier: 1
     if (factionId==1879124452) return new String[]{category,"GUILD_TAILOR",FactionLevelTemplates.GUILD}; // Tailor's Guild
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
+    category="Umbar Guild";
+    if (factionId==1879479489) return new String[]{category,null,null};
+    if (factionId==1879479494) return new String[]{category,null,null};
+    if (factionId==1879479492) return new String[]{category,null,null};
+    if (factionId==1879479491) return new String[]{category,null,null};
+    if (factionId==1879479493) return new String[]{category,null,null};
+    if (factionId==1879479490) return new String[]{category,null,null};
+    if (factionId==1879479487) return new String[]{category,null,null};
 
     LOGGER.warn("Unmanaged faction ID: "+factionId);
     return null;
@@ -543,7 +551,9 @@ Reputation_LowestTier: 1
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
       // New ones
-      1879413167,1879413168,1879413559,1879416174,1879416935,1879442863,1879443125,1879448435,1879457726
+      1879413167,1879413168,1879413559,1879416174,1879416935,1879442863,1879443125,1879448435,1879457726,
+      // Umbar guilds
+      1879479489,1879479494,1879479492,1879479491,1879479493,1879479490,1879479487
     };
     return ret;
   }
