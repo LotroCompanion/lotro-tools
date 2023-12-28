@@ -18,10 +18,14 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.instances.PrivateEncounter;
+import delta.games.lotro.lore.instances.PrivateEncounterQuests;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
+import delta.games.lotro.lore.quests.QuestDescription;
+import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Get private encounters (instances) from DAT files.
@@ -112,22 +116,35 @@ public class MainDatPrivateEncountersLoader
         blocks.add(block);
       }
     }
-    // Quest ID
+    // Quests
+    PrivateEncounterQuests quests=ret.getQuests();
     Integer questId=(Integer)props.getProperty("PrivateEncounterTemplate_InstanceQuest");
-    ret.setQuestId(questId);
+    if (questId!=null)
+    {
+      Proxy<QuestDescription> parentQuest=buildProxy(questId.intValue());
+      quests.setParentQuest(parentQuest);
+    }
     // Quests to bestow
+    /*
+    PrivateEncounterTemplate_QuestToBestow_Array: 
+      #1: 1879172579
+      #2: 1879172578
+    */
     Object[] questToBestowArray=(Object[])props.getProperty("PrivateEncounterTemplate_QuestToBestow_Array");
     if ((questToBestowArray!=null) && (questToBestowArray.length>0))
     {
       for(Object questToBestowObj : questToBestowArray)
       {
-        ret.addQuestToBestow(((Integer)questToBestowObj).intValue());
+        int id=((Integer)questToBestowObj).intValue();
+        Proxy<QuestDescription> proxy=buildProxy(id);
+        if (proxy!=null)
+        {
+          quests.addQuest(proxy);
+        }
       }
     }
+    // Random quests
     /*
-    PrivateEncounterTemplate_QuestToBestow_Array: 
-      #1: 1879172579
-      #2: 1879172578
     PrivateEncounterTemplate_RandomBestowalQuests_Array: 
       #1: 
         PrivateEncounterTemplate_NumQuestsToBestow: 1
@@ -136,6 +153,31 @@ public class MainDatPrivateEncountersLoader
           #2: 1879172582
           #3: 1879172580
     */
+    Object[] randomQuestsArray=(Object[])props.getProperty("PrivateEncounterTemplate_RandomBestowalQuests_Array");
+    if ((randomQuestsArray!=null) && (randomQuestsArray.length>0))
+    {
+      int size=randomQuestsArray.length;
+      if (size!=1)
+      {
+        LOGGER.warn("Size is not 1: "+size);
+      }
+      PropertiesSet randomProps=(PropertiesSet)randomQuestsArray[0];
+      Integer nbRandomQuests=(Integer)randomProps.getProperty("PrivateEncounterTemplate_NumQuestsToBestow");
+      if ((nbRandomQuests!=null) && (nbRandomQuests.intValue()>0))
+      {
+        quests.setRandomQuestsCount(nbRandomQuests.intValue());
+      }
+      Object[] questIdsArray=(Object[])randomProps.getProperty("PrivateEncounterTemplate_QuestToBestow_Array");
+      for(Object questIdObj : questIdsArray)
+      {
+        int id=((Integer)questIdObj).intValue();
+        Proxy<QuestDescription> proxy=buildProxy(id);
+        if (proxy!=null)
+        {
+          quests.addRandomQuest(proxy);
+        }
+      }
+    }
     // Maximum number of players
     Integer maxPlayers=(Integer)props.getProperty("PrivateEncounterTemplate_MaxPlayers");
     ret.setMaxPlayers(maxPlayers);
@@ -154,6 +196,21 @@ public class MainDatPrivateEncountersLoader
     // Build maps
     _mapDataBuilder.handlePrivateEncounter(ret,blocks);
     return ret;
+  }
+
+  private Proxy<QuestDescription> buildProxy(int questId)
+  {
+    QuestDescription quest=QuestsManager.getInstance().getQuest(questId);
+    if (quest==null)
+    {
+      LOGGER.warn("Quest not found: "+questId);
+      return null;
+    }
+    Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
+    proxy.setId(quest.getIdentifier());
+    proxy.setName(quest.getName());
+    proxy.setObject(quest);
+    return proxy;
   }
 
   private void loadSkirmishSpecifics(SkirmishPrivateEncounter skirmishPE, PropertiesSet props)

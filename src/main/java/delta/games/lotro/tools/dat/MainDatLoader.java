@@ -171,8 +171,6 @@ public class MainDatLoader
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
     craftingLoader.updateRecipeIcons();
-    // Private encounters
-    new MainDatPrivateEncountersLoader(_facade).doIt();
     // Containers
     new MainDatContainerLoader(_facade).doIt();
     // Mobs
@@ -185,6 +183,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Associate deeds to faction levels
     MainDatFactionsLoader.associateDeeds(factionsRegistry);
+    // Private encounters
+    new MainDatPrivateEncountersLoader(_facade).doIt();
     // Buffs
     new MainBuffsLoader(_facade).doIt();
     // Trait points
