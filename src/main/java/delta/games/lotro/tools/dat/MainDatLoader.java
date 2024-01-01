@@ -171,6 +171,9 @@ public class MainDatLoader
     // Recipes
     new MainDatRecipesLoader(_facade).doIt();
     craftingLoader.updateRecipeIcons();
+    // Private encounters
+    MainDatPrivateEncountersLoader peLoader=new MainDatPrivateEncountersLoader(_facade);
+    peLoader.doIt();
     // Containers
     new MainDatContainerLoader(_facade).doIt();
     // Mobs
@@ -183,8 +186,8 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Associate deeds to faction levels
     MainDatFactionsLoader.associateDeeds(factionsRegistry);
-    // Private encounters
-    new MainDatPrivateEncountersLoader(_facade).doIt();
+    // Private encounter loader: resolve proxies
+    peLoader.finish();
     // Buffs
     new MainBuffsLoader(_facade).doIt();
     // Trait points
@@ -374,6 +377,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     deleteFile(GeneratedFiles.PROGRESSIONS);
+    // Labels
+    //deleteDirectory(GeneratedFiles.LABELS);
   }
 
   private void deleteFile(File toDelete)

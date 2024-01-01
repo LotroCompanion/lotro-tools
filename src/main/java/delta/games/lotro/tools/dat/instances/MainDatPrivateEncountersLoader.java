@@ -41,6 +41,7 @@ public class MainDatPrivateEncountersLoader
   private LotroEnum<WJEncounterType> _worldJoinType;
   private LotroEnum<WJEncounterCategory> _worldJoinCategory;
   private I18nUtils _i18n;
+  private List<Proxy<QuestDescription>> _proxies;
 
   /**
    * Constructor.
@@ -54,6 +55,7 @@ public class MainDatPrivateEncountersLoader
     _worldJoinType=LotroEnumsRegistry.getInstance().get(WJEncounterType.class);
     _worldJoinCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
     _i18n=new I18nUtils("instances",facade.getGlobalStringsManager());
+    _proxies=new ArrayList<Proxy<QuestDescription>>();
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -200,17 +202,34 @@ public class MainDatPrivateEncountersLoader
 
   private Proxy<QuestDescription> buildProxy(int questId)
   {
-    QuestDescription quest=QuestsManager.getInstance().getQuest(questId);
-    if (quest==null)
-    {
-      LOGGER.warn("Quest not found: "+questId);
-      return null;
-    }
     Proxy<QuestDescription> proxy=new Proxy<QuestDescription>();
-    proxy.setId(quest.getIdentifier());
-    proxy.setName(quest.getName());
-    proxy.setObject(quest);
+    proxy.setId(questId);
+    _proxies.add(proxy);
     return proxy;
+  }
+
+  /**
+   * Finish loading:
+   * <ul>
+   * <li>resolve proxies,
+   * <li>save again
+   * </ul>
+   */
+  public void finish()
+  {
+    for(Proxy<QuestDescription> proxy : _proxies)
+    {
+      int questId=proxy.getId();
+      QuestDescription quest=QuestsManager.getInstance().getQuest(questId);
+      if (quest==null)
+      {
+        LOGGER.warn("Quest not found: "+questId);
+        continue;
+      }
+      proxy.setName(quest.getName());
+      proxy.setObject(quest);
+    }
+    save();
   }
 
   private void loadSkirmishSpecifics(SkirmishPrivateEncounter skirmishPE, PropertiesSet props)
@@ -346,14 +365,19 @@ public class MainDatPrivateEncountersLoader
         }
       }
     }
+    save();
+    // Save labels
+    _i18n.save();
+  }
+
+  private void save()
+  {
     // Save private encounters
     boolean ok=PrivateEncountersXMLWriter.writePrivateEncountersFile(GeneratedFiles.PRIVATE_ENCOUNTERS,_data);
     if (ok)
     {
       LOGGER.info("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
     }
-    // Save labels
-    _i18n.save();
   }
 
   /**
