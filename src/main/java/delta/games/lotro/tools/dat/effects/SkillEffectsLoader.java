@@ -30,9 +30,6 @@ public class SkillEffectsLoader
    */
   public void handleSkillProps(SkillDescription skill, PropertiesSet skillProps)
   {
-    // TODO Avoid duplicate effects for skills:
-    // For instance, Item 1879069473 (a hope token), uses a skill that
-    // triggers 2 effects: a fellowship effect that triggers effect X, and effect X a second time!
     /*
 Skill_AttackHookList: 
   #1: Skill_AttackHookInfo 
