@@ -105,11 +105,6 @@ public class DatObjectivesLoader
    */
   public void handleObjectives(ObjectivesManager objectivesManager, Achievable achievable, PropertiesSet properties)
   {
-    if (objectivesManager==null)
-    {
-      return;
-    }
-    //_currentAchievable=achievable;
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
@@ -135,13 +130,23 @@ public class DatObjectivesLoader
         // Billboard override
         String billboardOverride=_i18n.getStringProperty(objectiveProps,"Quest_ObjectiveBillboardOverride");
         objective.setBillboardOverride(billboardOverride);
-        // Conditions (can have several conditions)
+        // Completion and failure conditions (only 1 max of each)
         ArrayPropertyValue completionConditionsArray=(ArrayPropertyValue)objectiveProps.getPropertyValueByName("Quest_CompletionConditionArray");
         if (completionConditionsArray!=null)
         {
           for(PropertyValue completionConditionValue : completionConditionsArray.getValues())
           {
             handleObjectiveCondition(objective,completionConditionValue);
+          }
+        }
+        // Check completions count
+        Integer completionsCount=objective.getCompletionConditionsCount();
+        if (completionsCount!=null)
+        {
+          int nbConditions=objective.getConditions().size();
+          if (nbConditions==completionsCount.intValue())
+          {
+            objective.setCompletionConditionsCount(null);
           }
         }
         // Ignored: Quest_NPCObjRoles (Array) and Quest_ObjectiveVolumeString (String)
@@ -170,7 +175,6 @@ public class DatObjectivesLoader
     }
   }
 
-  @SuppressWarnings("unused")
   private void handleCompletionConditions(Objective objective, ArrayPropertyValue completionConditionArray)
   {
     /*
@@ -186,11 +190,13 @@ public class DatObjectivesLoader
       if ("Quest_CompletionConditionCount".equals(propertyName))
       {
         int conditionCount=((Integer)completionCondition.getValue()).intValue();
+        objective.setCompletionConditionsCount(Integer.valueOf(conditionCount));
       }
       else if ("QuestEvent_Entry".equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)completionCondition.getValue();
-        handleQuestEventEntry(objective,questEventEntryProps);
+        ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
+        objective.addCondition(condition);
       }
       else if ("QuestEvent_CompoundEvent".equals(propertyName))
       {
@@ -199,6 +205,7 @@ public class DatObjectivesLoader
       }
       else if ("Quest_Condition_NeverFinish".equals(propertyName))
       {
+        @SuppressWarnings("unused")
         int neverFinish=((Integer)completionCondition.getValue()).intValue();
       }
       else
@@ -223,7 +230,8 @@ public class DatObjectivesLoader
       if ("QuestEvent_Entry".equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)compoundEventItem.getValue();
-        handleQuestEventEntry(objective,questEventEntryProps);
+        ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
+        objective.addCondition(condition);
       }
       else if ("QuestEvent_Entry_Array".equals(propertyName))
       {
@@ -245,17 +253,24 @@ public class DatObjectivesLoader
       if ("QuestEvent_Entry".equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)questEventItem.getValue();
-        handleQuestEventEntry(objective,questEventEntryProps);
+        ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
+        objective.addCondition(condition);
       }
     }
   }
 
   private void handleFailureCondition(Objective objective, ArrayPropertyValue failureConditionArray)
   {
-    // Unmanaged
+    for(PropertyValue entry : failureConditionArray.getValues())
+    {
+      PropertiesSet questEventEntryProps=(PropertiesSet)entry.getValue();
+      ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
+      condition.setEventID(0);
+      objective.addFailureCondition(condition);
+    }
   }
 
-  private void handleQuestEventEntry(Objective objective, PropertiesSet properties)
+  private ObjectiveCondition handleQuestEventEntry(PropertiesSet properties)
   {
     /*
      * Shared condition attributes:
@@ -268,9 +283,6 @@ public class DatObjectivesLoader
      * QuestEvent_ShowBillboardText: usually 0, can be 1 (means that the condition shall be displayed in the UI?)
      * QuestEvent_ShowProgressText: optional, 0 if set, used many times
      */
-    // Order
-    Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
-    //System.out.println("\tEvent #"+eventOrder);
     // ID
     int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
     //System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
@@ -361,27 +373,27 @@ public class DatObjectivesLoader
     ConditionType type=null;
     if (questEventId==1)
     {
-      condition=handleEnterDetection(properties,objective);
+      condition=handleEnterDetection(properties);
     }
     else if (questEventId==5)
     {
-      condition=handleNpcUsed(properties,objective);
+      condition=handleNpcUsed(properties);
     }
     else if (questEventId==7)
     {
-      condition=handleItemUsed(properties,objective);
+      condition=handleItemUsed(properties);
     }
     else if (questEventId==9)
     {
-      condition=handleDetecting(properties,objective);
+      condition=handleDetecting(properties);
     }
     else if (questEventId==10)
     {
-      condition=handleExternalInventoryItemUsed(properties,objective);
+      condition=handleExternalInventoryItemUsed(properties);
     }
     else if (questEventId==11)
     {
-      condition=handleNpcTalk(properties,objective);
+      condition=handleNpcTalk(properties);
     }
     else if (questEventId==13)
     {
@@ -389,15 +401,15 @@ public class DatObjectivesLoader
     }
     else if (questEventId==14)
     {
-      condition=handleTimeExpired(properties,objective);
+      condition=handleTimeExpired(properties);
     }
     else if (questEventId==16)
     {
-      condition=handleItemTalk(properties,objective);
+      condition=handleItemTalk(properties);
     }
     else if (questEventId==18)
     {
-      condition=handleLevelCondition(properties,objective);
+      condition=handleLevelCondition(properties);
     }
     else if (questEventId==19)
     {
@@ -409,7 +421,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==21)
     {
-      condition=handleLandmarkDetection(properties,objective);
+      condition=handleLandmarkDetection(properties);
     }
     else if (questEventId==22)
     {
@@ -514,31 +526,30 @@ public class DatObjectivesLoader
     {
       condition.setCount(count.intValue());
     }
-    objective.addCondition(condition);
+    // Order
+    Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
     if (eventOrder!=null)
     {
-      if (eventOrder.intValue()!=condition.getIndex())
-      {
-        LOGGER.warn("Event order and index mismatch!");
-      }
+      condition.setIndex(eventOrder.intValue());
     }
+    return condition;
   }
 
-  private DetectingCondition handleDetecting(PropertiesSet properties, Objective objective)
+  private DetectingCondition handleDetecting(PropertiesSet properties)
   {
     DetectingCondition ret=new DetectingCondition();
-    handleDetectionCondition(ret,properties,objective);
+    handleDetectionCondition(ret,properties);
     return ret;
   }
 
-  private EnterDetectionCondition handleEnterDetection(PropertiesSet properties, Objective objective)
+  private EnterDetectionCondition handleEnterDetection(PropertiesSet properties)
   {
     EnterDetectionCondition ret=new EnterDetectionCondition();
-    handleDetectionCondition(ret,properties,objective);
+    handleDetectionCondition(ret,properties);
     return ret;
   }
 
-  private void handleDetectionCondition(DetectionCondition condition, PropertiesSet properties, Objective objective)
+  private void handleDetectionCondition(DetectionCondition condition, PropertiesSet properties)
   {
     ConditionTarget target=null;
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
@@ -580,7 +591,7 @@ public class DatObjectivesLoader
   }
   */
 
-  private ItemUsedCondition handleItemUsed(PropertiesSet properties, Objective objective)
+  private ItemUsedCondition handleItemUsed(PropertiesSet properties)
   {
     /*
      * QuestEvent_AllowQuickslot: optional, found 22 times Integer 0.
@@ -603,7 +614,7 @@ public class DatObjectivesLoader
   }
 
   @SuppressWarnings("unused")
-  private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties, Objective objective)
+  private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
@@ -615,7 +626,7 @@ public class DatObjectivesLoader
   }
 
   @SuppressWarnings("unused")
-  private ItemTalkCondition handleItemTalk(PropertiesSet properties, Objective objective)
+  private ItemTalkCondition handleItemTalk(PropertiesSet properties)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
@@ -635,21 +646,21 @@ public class DatObjectivesLoader
     }
   }
 
-  private NpcTalkCondition handleNpcTalk(PropertiesSet properties, Objective objective)
+  private NpcTalkCondition handleNpcTalk(PropertiesSet properties)
   {
     NpcTalkCondition ret=new NpcTalkCondition();
-    handleNpcCondition(ret,properties,objective);
+    handleNpcCondition(ret,properties);
     return ret;
   }
 
-  private NpcUsedCondition handleNpcUsed(PropertiesSet properties, Objective objective)
+  private NpcUsedCondition handleNpcUsed(PropertiesSet properties)
   {
     NpcUsedCondition ret=new NpcUsedCondition();
-    handleNpcCondition(ret,properties,objective);
+    handleNpcCondition(ret,properties);
     return ret;
   }
 
-  private void handleNpcCondition(NpcCondition condition, PropertiesSet properties, Objective objective)
+  private void handleNpcCondition(NpcCondition condition, PropertiesSet properties)
   {
     /*
      * QuestEvent_RoleConstraint: used 6 times for limlight spirits.
@@ -675,7 +686,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     //getPositions(npcId,roleConstraint,objective.getIndex());
   }
 
-  private LevelCondition handleLevelCondition(PropertiesSet properties, Objective objective)
+  private LevelCondition handleLevelCondition(PropertiesSet properties)
   {
     LevelCondition ret=new LevelCondition();
     int level=((Integer)properties.getProperty("QuestEvent_PlayerLevel")).intValue();
@@ -683,7 +694,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     return ret;
   }
 
-  private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties, Objective objective)
+  private LandmarkDetectionCondition handleLandmarkDetection(PropertiesSet properties)
   {
     LandmarkDetectionCondition ret=new LandmarkDetectionCondition();
     /*
@@ -1025,7 +1036,7 @@ QuestEvent_ShowBillboardText: 0
   }
 
   
-  private TimeExpiredCondition handleTimeExpired(PropertiesSet properties, Objective objective)
+  private TimeExpiredCondition handleTimeExpired(PropertiesSet properties)
   {
     Integer timeLimit=(Integer)properties.getProperty("QuestEvent_TimeLimit");
     int duration=(timeLimit!=null)?timeLimit.intValue():0;
