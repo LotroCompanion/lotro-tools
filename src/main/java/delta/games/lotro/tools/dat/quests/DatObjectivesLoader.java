@@ -105,6 +105,7 @@ public class DatObjectivesLoader
    */
   public void handleObjectives(ObjectivesManager objectivesManager, Achievable achievable, PropertiesSet properties)
   {
+    handleMainFailureConditions(achievable,properties);
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
     {
@@ -1248,5 +1249,26 @@ QuestEvent_ShowProgressText: 0
       target.setAgent(agent);
     }
     return target;
+  }
+
+  private void handleMainFailureConditions(Achievable achievable, PropertiesSet props)
+  {
+    Object[] conditionsArray=(Object[])props.getProperty("Quest_FailureConditionArray");
+    if (conditionsArray==null)
+    {
+      return;
+    }
+    ObjectivesManager objectivesMgr=achievable.getObjectives();
+    for(Object conditionObj : conditionsArray)
+    {
+      Object[] conditionEntryArray=(Object[])conditionObj;
+      for(Object conditionEntry : conditionEntryArray)
+      {
+        PropertiesSet failureConditionProps=(PropertiesSet)conditionEntry;
+        ObjectiveCondition failureCondition=handleQuestEventEntry(failureConditionProps);
+        failureCondition.setEventID(0);
+        objectivesMgr.addFailureCondition(failureCondition);
+      }
+    }
   }
 }
