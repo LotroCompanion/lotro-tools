@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.dat.quests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
@@ -28,6 +31,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.LandDivision;
 import delta.games.lotro.lore.quests.Achievable;
+import delta.games.lotro.lore.quests.objectives.CompoundQuestEvent;
 import delta.games.lotro.lore.quests.objectives.ConditionTarget;
 import delta.games.lotro.lore.quests.objectives.ConditionType;
 import delta.games.lotro.lore.quests.objectives.DefaultObjectiveCondition;
@@ -202,7 +206,8 @@ public class DatObjectivesLoader
       else if ("QuestEvent_CompoundEvent".equals(propertyName))
       {
         ArrayPropertyValue compoundEventArray=(ArrayPropertyValue)completionCondition;
-        handleCompoundEvent(objective,compoundEventArray);
+        CompoundQuestEvent compoundEvent=handleCompoundEvent(compoundEventArray);
+        objective.addCondition(compoundEvent);
       }
       else if ("Quest_Condition_NeverFinish".equals(propertyName))
       {
@@ -216,7 +221,7 @@ public class DatObjectivesLoader
     }
   }
 
-  private void handleCompoundEvent(Objective objective, ArrayPropertyValue compoundEventArray)
+  private CompoundQuestEvent handleCompoundEvent(ArrayPropertyValue compoundEventArray)
   {
     /*
 268439626 - QuestEvent_CompoundEvent, type=Array
@@ -225,25 +230,37 @@ public class DatObjectivesLoader
   Property: QuestEvent_CompoundProgressOverride, ID=268439136, type=String Info
   Property: QuestEvent_Entry_Array, ID=268457470, type=Array
      */
+    CompoundQuestEvent ret=new CompoundQuestEvent();
     for(PropertyValue compoundEventItem : compoundEventArray.getValues())
     {
       String propertyName=compoundEventItem.getDefinition().getName();
       if ("QuestEvent_Entry".equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)compoundEventItem.getValue();
-        ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
-        objective.addCondition(condition);
+        ObjectiveCondition event=handleQuestEventEntry(questEventEntryProps);
+        ret.addQuestEvent(event);
       }
       else if ("QuestEvent_Entry_Array".equals(propertyName))
       {
         ArrayPropertyValue questEventArray=(ArrayPropertyValue)compoundEventItem;
-        handleQuestEventEntryArray(objective,questEventArray);
+        List<ObjectiveCondition> events=handleQuestEventEntryArray(questEventArray);
+        for(ObjectiveCondition event : events)
+        {
+          ret.addQuestEvent(event);
+        }
+      }
+      else if ("QuestEvent_CompoundProgressOverride".equals(propertyName))
+      {
+        String progressOverride=_i18n.getStringProperty(compoundEventItem,0);
+        ret.setCompoundProgressOverride(progressOverride);
       }
     }
+    return ret;
   }
 
-  private void handleQuestEventEntryArray(Objective objective, ArrayPropertyValue questEventArray)
+  private List<ObjectiveCondition> handleQuestEventEntryArray(ArrayPropertyValue questEventArray)
   {
+    List<ObjectiveCondition> ret=new ArrayList<ObjectiveCondition>();
     /*
 268457470 - QuestEvent_Entry_Array, type=Array
   Property: QuestEvent_Entry, ID=268439867, type=Struct
@@ -255,9 +272,10 @@ public class DatObjectivesLoader
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)questEventItem.getValue();
         ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
-        objective.addCondition(condition);
+        ret.add(condition);
       }
     }
+    return ret;
   }
 
   private void handleFailureCondition(Objective objective, ArrayPropertyValue failureConditionArray)
