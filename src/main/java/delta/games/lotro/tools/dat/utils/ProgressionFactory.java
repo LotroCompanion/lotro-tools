@@ -7,10 +7,9 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
-import delta.games.lotro.utils.maths.AbstractArrayProgression;
 import delta.games.lotro.utils.maths.ArrayProgression;
+import delta.games.lotro.utils.maths.ArrayProgressionConstants;
 import delta.games.lotro.utils.maths.LinearInterpolatingProgression;
-import delta.games.lotro.utils.maths.LongArrayProgression;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -32,15 +31,15 @@ public class ProgressionFactory
     Progression ret=buildLinearProgression(progressionId, properties);
     if (ret==null)
     {
-      ret=buildArrayProgression(progressionId, properties,"FloatProgression_Array");
+      ret=buildArrayProgression(progressionId,ArrayProgressionConstants.FLOAT,properties,"FloatProgression_Array");
     }
     if (ret==null)
     {
-      ret=buildPropertyProgression(progressionId, properties);
+      ret=buildPropertyProgression(progressionId,properties);
     }
     if (ret==null)
     {
-      ret=buildArrayProgression(progressionId, properties,"Combat_BaseDPSArray");
+      ret=buildArrayProgression(progressionId,ArrayProgressionConstants.FLOAT,properties,"Combat_BaseDPSArray");
     }
     if (ret==null)
     {
@@ -49,7 +48,7 @@ public class ProgressionFactory
     return ret;
   }
 
-  private static AbstractArrayProgression buildPropertyProgression(int progressionId, PropertiesSet properties)
+  private static ArrayProgression buildPropertyProgression(int progressionId, PropertiesSet properties)
   {
     PropertyValue propertyValue=properties.getPropertyValueByName("PropertyProgression_Array");
     if (propertyValue==null)
@@ -61,68 +60,35 @@ public class ProgressionFactory
     PropertyValue[] values=arrayPropertyValue.getValues();
     PropertyDefinition propertyDefinition=values[0].getDefinition();
     PropertyType type=propertyDefinition.getPropertyType();
-    Class<?> valueClass=getValueClass(type);
-    if (valueClass==Long.class)
-    {
-      return buildLongArrayProgression(progressionId,properties,"PropertyProgression_Array");
-    }
-    if (valueClass==Float.class)
-    {
-      return buildArrayProgression(progressionId,properties,"PropertyProgression_Array");
-    }
-    return null;
+    String valueType=getValueClass(type);
+    return buildArrayProgression(progressionId,valueType,properties,"PropertyProgression_Array");
   }
 
-  private static Class<? extends Number> getValueClass(PropertyType type)
+  private static String getValueClass(PropertyType type)
   {
-    if (type==PropertyType.DATA_FILE) return Long.class;
-    if (type==PropertyType.FLOAT) return Float.class;
-    if (type==PropertyType.INT) return Long.class;
-    if (type==PropertyType.ENUM_MAPPER) return Long.class;
+    if (type==PropertyType.DATA_FILE) return ArrayProgressionConstants.LONG;
+    if (type==PropertyType.FLOAT) return ArrayProgressionConstants.FLOAT;
+    if (type==PropertyType.INT) return ArrayProgressionConstants.INTEGER;
+    if (type==PropertyType.ENUM_MAPPER) return ArrayProgressionConstants.INTEGER;
     LOGGER.warn("Unsupported property progression type: "+type);
-    return Float.class;
+    return ArrayProgressionConstants.FLOAT;
   }
 
-  private static ArrayProgression buildArrayProgression(int progressionId, PropertiesSet properties, String arrayProperty)
+  private static ArrayProgression buildArrayProgression(int progressionId, String type, PropertiesSet properties, String arrayProperty)
   {
     ArrayProgression ret=null;
     Object[] progression=(Object[])properties.getProperty(arrayProperty);
     if (progression!=null)
     {
-      int nbItems=progression.length;
-      ret=new ArrayProgression(progressionId, nbItems);
       // Always 1?
-      Integer minIndexValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
-      int minIndex=(minIndexValue!=null)?minIndexValue.intValue():1;
-      fillArrayProgression(ret,minIndex,progression);
-    }
-    return ret;
-  }
-
-  private static void fillArrayProgression(ArrayProgression ret, int minIndex, Object[] progression)
-  {
-    for(int i=0;i<progression.length;i++)
-    {
-      Number value=(Number)progression[i];
-      ret.set(i,i+minIndex,value.floatValue());
-    }
-  }
-
-  private static LongArrayProgression buildLongArrayProgression(int progressionId, PropertiesSet properties, String arrayProperty)
-  {
-    LongArrayProgression ret=null;
-    Object[] progression=(Object[])properties.getProperty(arrayProperty);
-    if (progression!=null)
-    {
+      Integer minXValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
+      int minX=(minXValue!=null)?minXValue.intValue():1;
       int nbItems=progression.length;
-      ret=new LongArrayProgression(progressionId, nbItems);
-      // Always 1?
-      Integer minIndexValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
-      int minIndex=(minIndexValue!=null)?minIndexValue.intValue():1;
+      ret=new ArrayProgression(progressionId,type,minX,nbItems);
       for(int i=0;i<progression.length;i++)
       {
         Number value=(Number)progression[i];
-        ret.set(i,i+minIndex,value.longValue());
+        ret.set(i+minX,value);
       }
     }
     return ret;

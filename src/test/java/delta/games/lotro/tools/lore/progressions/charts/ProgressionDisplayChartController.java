@@ -171,17 +171,11 @@ public class ProgressionDisplayChartController
     {
       ArrayProgression ap=(ArrayProgression)progression;
       int nbPoints=ap.getNumberOfPoints();
-      int minX=Integer.MAX_VALUE;
-      int maxX=Integer.MIN_VALUE;
-      for(int i=0;i<nbPoints;i++)
+      int minX=ap.getMinX();
+      int maxX=ap.getMinX()+nbPoints-1;
+      for(int i=minX;i<=maxX;i++)
       {
-        int x=ap.getX(i);
-        if (minX>x) minX=x;
-        if (maxX<x) maxX=x;
-      }
-      for(int i=minX;i<maxX;i++)
-      {
-        float value=ap.getValue(i).floatValue();
+        Number value=ap.getRawValue(i);
         toonSeries.add(i,value);
       }
     }
