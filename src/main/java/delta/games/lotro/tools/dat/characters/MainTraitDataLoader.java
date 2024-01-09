@@ -27,7 +27,9 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
+import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.maths.ArrayProgression;
 
 /**
  * Get trait definitions from DAT files.
@@ -60,7 +62,7 @@ public class MainTraitDataLoader
   {
     loadPropertiesMap();
     loadTraits();
-    SkimirshTraitsLoader skirmishTraitsLoader=new SkimirshTraitsLoader(_facade);
+    SkirmishTraitsLoader skirmishTraitsLoader=new SkirmishTraitsLoader(_facade);
     skirmishTraitsLoader.doIt();
   }
 
@@ -152,6 +154,21 @@ public class MainTraitDataLoader
     {
       ret.setIconId(iconId.intValue());
     }
+    // Static Icon Overlay
+    Integer staticIconOverlayId=(Integer)traitProperties.getProperty("Trait_Static_Icon_Overlay");
+    if (staticIconOverlayId!=null)
+    {
+      ret.setStaticIconOverlayId(staticIconOverlayId);
+      loadIconFile(staticIconOverlayId.intValue());
+    }
+    // Rank Overlay Progression
+    Integer rankOverlayProgression=(Integer)traitProperties.getProperty("Trait_Rank_Overlay_Progression");
+    if ((rankOverlayProgression!=null) && (rankOverlayProgression.intValue()!=0))
+    {
+      ArrayProgression progression=(ArrayProgression)ProgressionUtils.getProgression(_facade,rankOverlayProgression.intValue());
+      ret.setRankOverlayProgression(progression);
+      loadRankIcons(progression);
+    }
     // Min level
     Integer minLevelInt=(Integer)traitProperties.getProperty("Trait_Minimum_Level");
     int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
@@ -194,16 +211,7 @@ public class MainTraitDataLoader
     // Build icon file
     if (iconId!=null)
     {
-      String iconFilename=iconId+".png";
-      File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,iconFilename).getAbsoluteFile();
-      if (!to.exists())
-      {
-        boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
-        if (!ok)
-        {
-          LOGGER.warn("Could not build trait icon: "+iconFilename);
-        }
-      }
+      loadIconFile(iconId.intValue());
     }
     // Skills
     Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
@@ -221,6 +229,34 @@ public class MainTraitDataLoader
       }
     }
     return ret;
+  }
+
+  private void loadRankIcons(ArrayProgression progression)
+  {
+    int nbPoints=progression.getNumberOfPoints();
+    for(int i=1;i<nbPoints;i++)
+    {
+      int iconId=progression.getRawValue(i).intValue();
+      loadIconFile(iconId);
+    }
+  }
+
+  private void loadIconFile(int iconId)
+  {
+    if (iconId==0)
+    {
+      return;
+    }
+    String iconFilename=iconId+".png";
+    File to=new File(GeneratedFiles.TRAIT_ICONS_DIR,iconFilename).getAbsoluteFile();
+    if (!to.exists())
+    {
+      boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
+      if (!ok)
+      {
+        LOGGER.warn("Could not build trait icon: "+iconFilename);
+      }
+    }
   }
 
   /**

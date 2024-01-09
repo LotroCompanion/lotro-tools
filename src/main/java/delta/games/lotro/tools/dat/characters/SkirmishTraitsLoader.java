@@ -15,7 +15,7 @@ import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
  * Get skirmish traits from DAT files.
  * @author DAM
  */
-public class SkimirshTraitsLoader
+public class SkirmishTraitsLoader
 {
   private DataFacade _facade;
 
@@ -23,7 +23,7 @@ public class SkimirshTraitsLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public SkimirshTraitsLoader(DataFacade facade)
+  public SkirmishTraitsLoader(DataFacade facade)
   {
     _facade=facade;
   }
