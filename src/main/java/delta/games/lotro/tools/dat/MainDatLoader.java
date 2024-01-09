@@ -376,6 +376,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     deleteFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
+    deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
     deleteFile(GeneratedFiles.PROGRESSIONS);
     // Labels
     //deleteDirectory(GeneratedFiles.LABELS);
