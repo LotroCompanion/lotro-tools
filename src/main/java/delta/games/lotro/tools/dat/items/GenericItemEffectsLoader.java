@@ -15,6 +15,7 @@ import delta.games.lotro.lore.items.effects.GenericItemEffects;
 import delta.games.lotro.lore.items.effects.io.xml.GenericItemEffectsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
@@ -146,7 +147,8 @@ public class GenericItemEffectsLoader
   public static void main(String[] args)
   {
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
-    EffectLoader loader=new EffectLoader(facade);
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader loader=new EffectLoader(facade,placesLoader);
     new GenericItemEffectsLoader(facade,loader).doIt();
   }
 }

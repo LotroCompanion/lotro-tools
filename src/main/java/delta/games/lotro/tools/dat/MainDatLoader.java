@@ -46,6 +46,7 @@ import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
@@ -141,8 +142,10 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
+    // Places
+    PlacesLoader placesLoader=new PlacesLoader(_facade);
     // Effects
-    EffectLoader effectsLoader=new EffectLoader(_facade);
+    EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     skillsLoader.loadEffects(effectsLoader);
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     new MainDatItemsLoader(_facade,effectsLoader).doIt();

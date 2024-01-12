@@ -24,6 +24,7 @@ import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.effects.ItemsSetEffectsLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
@@ -290,7 +291,8 @@ Set_Name:
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    EffectLoader effectsLoader=new EffectLoader(facade);
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     new MainDatItemsSetsLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }

@@ -24,6 +24,7 @@ import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.effects.ReactiveChange;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
+import delta.games.lotro.common.effects.RecallEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter2;
@@ -32,6 +33,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
+import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -47,7 +49,7 @@ import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.MainProgressionsMerger;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -66,14 +68,17 @@ public class EffectLoader
   private DatStatUtils _statUtils;
   private I18nUtils _i18nUtils;
   private EffectsManager _effectsMgr;
+  private PlacesLoader _placesLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param placesLoader Places loader.
    */
-  public EffectLoader(DataFacade facade)
+  public EffectLoader(DataFacade facade, PlacesLoader placesLoader)
   {
     _facade=facade;
+    _placesLoader=placesLoader;
     _i18nUtils=new I18nUtils("effects",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18nUtils);
     _effectsMgr=EffectsManager.getInstance();
@@ -194,6 +199,7 @@ public class EffectLoader
     else if (classDef==719) return new GenesisEffect();
     else if (classDef==769) return new InduceCombatStateEffect();
     else if (classDef==714) return new DispelByResistEffect();
+    else if (classDef==737) return new RecallEffect();
     //System.out.println("Unmanaged class: "+classDef);
     return new Effect2();
   }
@@ -235,6 +241,10 @@ public class EffectLoader
     else if (effect instanceof DispelByResistEffect)
     {
       loadDispelByResistEffect((DispelByResistEffect)effect,effectProps);
+    }
+    else if (effect instanceof RecallEffect)
+    {
+      loadRecallEffect((RecallEffect)effect,effectProps);
     }
   }
 
@@ -787,6 +797,30 @@ Effect_DispelByResist_UseStrengthRestriction: 1
     }
   }
 
+  private void loadRecallEffect(RecallEffect effect, PropertiesSet effectProps)
+  {
+  /*
+Effect_Recall_Location_Type: 3 (Telepad)
+Effect_Recall_Radius: 0.0
+Effect_Recall_Raid: 0
+Effect_Recall_Telepad: eredluin_thorinshall_exit
+Effect_Recall_Travel_Link: 0 (Undef)
+  */
+    // Location type
+    //Integer locationType=(Integer)effectProps.getProperty("Effect_Recall_Location_Type");
+    // Position
+    String telepad=(String)effectProps.getProperty("Effect_Recall_Telepad");
+    //System.out.println("type="+locationType+", telepad="+telepad);
+    if ((telepad!=null) && (!telepad.isEmpty()))
+    {
+      ExtendedPosition position=_placesLoader.getPositionForName(telepad);
+      if (position!=null)
+      {
+        effect.setPosition(position.getPosition());
+      }
+    }
+  }
+
   /**
    * Save loaded data.
    */
@@ -799,7 +833,5 @@ Effect_DispelByResist_UseStrengthRestriction: 1
     _i18nUtils.save();
     // Progressions
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
-    // Tmp:
-    new MainProgressionsMerger().doIt();
   }
 }

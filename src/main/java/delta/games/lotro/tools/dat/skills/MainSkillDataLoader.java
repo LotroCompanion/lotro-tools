@@ -7,14 +7,19 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillEffectGenerator;
+import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
+import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.RecallEffect;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.TravelLink;
+import delta.games.lotro.common.geo.Position;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -26,6 +31,7 @@ import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.effects.SkillEffectsLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.skills.mounts.MountsLoader;
 import delta.games.lotro.tools.dat.skills.pets.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -56,7 +62,7 @@ public class MainSkillDataLoader
   }
 
   /**
-   * Load trait data.
+   * Load skill data.
    */
   public void doIt()
   {
@@ -187,13 +193,20 @@ public class MainSkillDataLoader
       return new TravelSkill(travelType);
     }
     Integer categoryCode=(Integer)properties.getProperty("Skill_Category");
-    if ((categoryCode!=null) && (categoryCode.intValue()==88)) // Standard Mounts
+    if (categoryCode!=null)
     {
-      return new MountDescription();
-    }
-    if ((categoryCode!=null) && (categoryCode.intValue()==145)) // Pets
-    {
-      return new CosmeticPetDescription();
+      if (categoryCode.intValue()==88) // Standard Mounts
+      {
+        return new MountDescription();
+      }
+      else if (categoryCode.intValue()==145) // Pets
+      {
+        return new CosmeticPetDescription();
+      }
+      else if (categoryCode.intValue()==102) // Travel skills
+      {
+        return new TravelSkill(null);
+      }
     }
     return new SkillDescription();
   }
@@ -231,8 +244,31 @@ public class MainSkillDataLoader
       int skillId=skill.getIdentifier();
       PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
       skillEffectsLoader.handleSkillProps(skill,skillProperties);
+      if (skill instanceof TravelSkill)
+      {
+        TravelSkill travelSkill=(TravelSkill)skill;
+        loadTravelSkillSpecifics(travelSkill);
+      }
     }
     saveSkills();
+  }
+
+  private void loadTravelSkillSpecifics(TravelSkill travelSkill)
+  {
+    SkillEffectsManager effectsMgr=travelSkill.getEffects();
+    if (effectsMgr!=null)
+    {
+      for(SkillEffectGenerator generator : effectsMgr.getEffects())
+      {
+        Effect2 effect=generator.getEffect();
+        if (effect instanceof RecallEffect)
+        {
+          RecallEffect recallEffect=(RecallEffect)effect;
+          Position position=recallEffect.getPosition();
+          travelSkill.setPosition(position);
+        }
+      }
+    }
   }
 
   /**
@@ -261,7 +297,12 @@ public class MainSkillDataLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainSkillDataLoader(facade).doIt();
+    MainSkillDataLoader loader=new MainSkillDataLoader(facade);
+    loader.doIt();
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    loader.loadEffects(effectsLoader);
+    effectsLoader.save();
     facade.dispose();
   }
 }

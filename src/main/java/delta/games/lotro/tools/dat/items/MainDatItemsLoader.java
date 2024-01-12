@@ -63,6 +63,7 @@ import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.effects.ItemEffectsLoader;
 import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.PassivesLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.utils.ArmourTypesUtils;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
@@ -894,7 +895,8 @@ public class MainDatItemsLoader
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     Locale.setDefault(Locale.ENGLISH);
-    EffectLoader effectsLoader=new EffectLoader(facade);
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     new MainDatItemsLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
