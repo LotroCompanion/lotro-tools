@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.characters;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +13,21 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
+import delta.games.lotro.character.traits.prerequisites.AbstractTraitPrerequisite;
+import delta.games.lotro.character.traits.prerequisites.CompoundTraitPrerequisite;
+import delta.games.lotro.character.traits.prerequisites.SimpleTraitPrerequisite;
+import delta.games.lotro.character.traits.prerequisites.TraitLogicOperator;
+import delta.games.lotro.character.traits.prerequisites.TraitPrerequisitesUtils;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -29,6 +37,7 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.ArrayProgression;
 
 /**
@@ -43,6 +52,7 @@ public class MainTraitDataLoader
   private DatStatUtils _statUtils;
   private I18nUtils _i18n;
   private Map<Integer,Integer> _traitIds2PropMap;
+  private List<Proxy<TraitDescription>> _proxies;
 
   /**
    * Constructor.
@@ -53,6 +63,7 @@ public class MainTraitDataLoader
     _facade=facade;
     _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
+    _proxies=new ArrayList<Proxy<TraitDescription>>();
   }
 
   /**
@@ -96,6 +107,7 @@ public class MainTraitDataLoader
         }
       }
     }
+    TraitPrerequisitesUtils.resolveProxies(traitsMgr.getAll(),_proxies);
     saveTraits();
   }
 
@@ -228,7 +240,83 @@ public class MainTraitDataLoader
         }
       }
     }
+    // Pre-requisites
+    CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitId,traitProperties);
+    if (prerequisites!=null)
+    {
+      AbstractTraitPrerequisite toUse=simplify(prerequisites);
+      ret.setTraitPrerequisite(toUse);
+    }
     return ret;
+  }
+
+  private CompoundTraitPrerequisite loadPrerequisites(int traitId, PropertiesSet properties)
+  {
+    PropertyValue value=properties.getPropertyValueByName("Trait_Prerequisites_Logic");
+    if (value==null)
+    {
+      return null;
+    }
+    /*
+    StringBuilder sb=new StringBuilder();
+    sb.append("ID=").append(traitId).append(EndOfLine.NATIVE_EOL);
+    PropertiesUtils.dumpValue(sb,0,value);
+    System.out.println(sb);
+    */
+    ArrayPropertyValue arrayValue=(ArrayPropertyValue)value;
+    return loadCompoundPrerequisites(arrayValue);
+  }
+
+  private CompoundTraitPrerequisite loadCompoundPrerequisites(ArrayPropertyValue arrayValue)
+  {
+    PropertyDefinition property=arrayValue.getDefinition();
+    TraitLogicOperator operator=findOperatorFromPropertyName(property.getName());
+    CompoundTraitPrerequisite ret=new CompoundTraitPrerequisite(operator);
+    for(PropertyValue childPropertyValue : arrayValue.getValues())
+    {
+      Object childValue=childPropertyValue.getValue();
+      //System.out.println(childDef.getName()+" => "+childValue);
+      if (childPropertyValue instanceof ArrayPropertyValue)
+      {
+        ArrayPropertyValue childArrayPropertyValue=(ArrayPropertyValue)childPropertyValue;
+        CompoundTraitPrerequisite childPrerequisite=loadCompoundPrerequisites(childArrayPropertyValue);
+        ret.addPrerequisite(childPrerequisite);
+      }
+      else
+      {
+        int traitID=((Integer)childValue).intValue();
+        SimpleTraitPrerequisite childPrerequisite=new SimpleTraitPrerequisite();
+        Proxy<TraitDescription> proxy=childPrerequisite.getTraitProxy();
+        _proxies.add(proxy);
+        proxy.setId(traitID);
+        ret.addPrerequisite(childPrerequisite);
+      }
+    }
+    return ret;
+  }
+
+  private TraitLogicOperator findOperatorFromPropertyName(String name)
+  {
+    if (name.contains("OneOf")) return TraitLogicOperator.ONE_OF;
+    if (name.contains("NoneOf")) return TraitLogicOperator.NONE_OF;
+    if (name.contains("AllOf")) return TraitLogicOperator.ALL_OF;
+    if (name.contains("Trait_Prerequisites_Logic")) return TraitLogicOperator.ALL_OF;
+    return null;
+  }
+
+  private AbstractTraitPrerequisite simplify(CompoundTraitPrerequisite input)
+  {
+    List<AbstractTraitPrerequisite> children=input.getPrerequisites();
+    if (children.size()==1)
+    {
+      AbstractTraitPrerequisite child=children.get(0);
+      if (child instanceof CompoundTraitPrerequisite)
+      {
+        return simplify((CompoundTraitPrerequisite)child);
+      }
+      return child;
+    }
+    return input;
   }
 
   private void loadRankIcons(ArrayProgression progression)
