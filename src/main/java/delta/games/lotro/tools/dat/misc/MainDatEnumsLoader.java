@@ -42,6 +42,7 @@ import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.common.enums.TraitNature;
+import delta.games.lotro.common.enums.TraitSubCategory;
 import delta.games.lotro.common.enums.TraitTreeBranchType;
 import delta.games.lotro.common.enums.TraitTreeType;
 import delta.games.lotro.common.enums.TravelLink;
@@ -109,6 +110,7 @@ public class MainDatEnumsLoader
     loadEnum(587202672,"ExaminationModStatType",MobType.class); // 0x23000070
     loadEnum(587202586,"SkillCharacteristicCategory",SkillCategory.class); // 0x2300001A
     loadEnum(587202647,"TraitNature",TraitNature.class); // 0x23000057
+    loadEnum(587203308,"TraitSubCategory",TraitSubCategory.class); // 0x230002EC
     loadEnum(587203634,"ItemSocketType",SocketType.class); // 0x23000432
     loadEnum(587202614,"ItemClass",ItemClass.class); // 0x23000036
     loadEnum(587202568,"TravelLink",TravelLink.class); // 0x23000008
