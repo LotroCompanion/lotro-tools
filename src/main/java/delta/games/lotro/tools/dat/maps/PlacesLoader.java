@@ -77,6 +77,10 @@ public class PlacesLoader
   private void loadPlaces()
   {
     byte[] data=_facade.loadData(PLACES_DID);
+    if (data==null)
+    {
+      return;
+    }
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     int did=BufferUtils.readUInt32(bis);
     if (did!=PLACES_DID)
