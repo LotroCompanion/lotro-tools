@@ -42,15 +42,15 @@ public class SocketIconsLoader
         Icon_Layer_OverlayDID: 1091914756
         Usage_MinLevel: 45
      */
+    File rootDir=GeneratedFiles.SOCKET_ICONS_DIR;
     Object[] essenceOverlaysArray=(Object[])props.getProperty("ItemSocketControl_LevelToEssenceIconOverlay_Array");
     for(Object essenceOverlayEntry : essenceOverlaysArray)
     {
       PropertiesSet entryProps=(PropertiesSet)essenceOverlayEntry;
       int minLevel=((Integer)entryProps.getProperty("Usage_MinLevel")).intValue();
       int overlayDID=((Integer)entryProps.getProperty("Icon_Layer_OverlayDID")).intValue();
-      DatIconsUtils.buildImageFile(_facade,overlayDID,new File(minLevel+"-"+overlayDID+".png"));
+      DatIconsUtils.buildImageFile(_facade,overlayDID,new File(rootDir,minLevel+"-"+overlayDID+".png"));
     }
-    File rootDir=GeneratedFiles.SOCKET_ICONS_DIR;
     Object[] socketImageArray=(Object[])props.getProperty("ItemSocketControl_Socket_Image_Array");
     for(Object socketImageEntry : socketImageArray)
     {
