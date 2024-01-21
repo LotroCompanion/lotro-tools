@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -121,9 +122,27 @@ public class MainDatBrowser
     return classDefIndex;
   }
 
-  private void searchId(int[] idToSearch) {
+  private void searchUtf16String(String s)
+  {
+    byte[] buffer=s.getBytes(StandardCharsets.UTF_16);
+    int length=s.length();
+    // Swap all words
+    for(int i=0;i<length;i++)
+    {
+      byte tmp=buffer[i*2+1];
+      buffer[i*2+1]=buffer[i*2];
+      buffer[i*2]=tmp;
+    }
+    _toSearch=new byte[1][];
+    _toSearch[0]=buffer;
+    search();
+  }
+
+  private void searchId(int[] idToSearch)
+  {
     _toSearch=new byte[idToSearch.length][];
-    for(int i=0;i<idToSearch.length;i++) {
+    for(int i=0;i<idToSearch.length;i++)
+    {
       _toSearch[i]=intToByteArray(idToSearch[i]);
       int revert=BufferUtils.readUInt32(new ByteArrayInputStream(_toSearch[i]));
       if (revert!=idToSearch[i])
@@ -132,6 +151,11 @@ public class MainDatBrowser
       }
     }
     System.out.println("************** searching ids=" + Arrays.toString(idToSearch) + "******************");
+    search();
+  }
+
+  private void search()
+  {
     // Iterate on keys
     //for(int id=0x70000000;id<0x7FFFFFFF;id++)
     for(long id=0x00000000L;id<0x9FFFFFFFL;id++)
@@ -172,6 +196,7 @@ public class MainDatBrowser
   private void doIt()
   {
     searchId(new int[] {0x10000053, 0x73C4A39});
+    //searchUtf16String("skill_hunter_recall_thorinshall");
     System.out.println(_countByType);
     System.out.println(ids);
   }
