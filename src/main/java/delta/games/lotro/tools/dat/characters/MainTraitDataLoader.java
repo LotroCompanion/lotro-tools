@@ -235,20 +235,62 @@ public class MainTraitDataLoader
       loadIconFile(iconId.intValue());
     }
     // Skills
-    Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
-    if (skillArray!=null) 
+    SkillsManager skillsMgr=SkillsManager.getInstance();
     {
-      SkillsManager skillsMgr=SkillsManager.getInstance();
-      for(Object skillIdObj : skillArray)
+      Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
+      if (skillArray!=null) 
       {
-        int skillId=((Integer)skillIdObj).intValue();
-        SkillDescription skill=skillsMgr.getSkill(skillId);
-        if (skill!=null)
+        for(Object skillIdObj : skillArray)
         {
-          ret.addSkill(skill);
+          int skillId=((Integer)skillIdObj).intValue();
+          SkillDescription skill=skillsMgr.getSkill(skillId);
+          if (skill!=null)
+          {
+            ret.addSkill(skill);
+          }
+          else
+          {
+            LOGGER.warn("Skill not found: "+skillId);
+          }
         }
       }
     }
+    // Skills (again)
+    /*
+Trait_EffectSkill_AtRankSkillsAcquired_Array: 
+  #1: Trait_EffectSkill_AtRankSkillsAcquired_Struct 
+    Trait_EffectSkill_SkillAcquired_Array: 
+      #1: Trait_EffectSkill_SkillAcquired 1879064192
+    Trait_EffectSkill_SkillAcquired_Rank: 1
+     */
+    {
+      Object[] skillArray=(Object[])traitProperties.getProperty("Trait_EffectSkill_AtRankSkillsAcquired_Array");
+      if (skillArray!=null)
+      {
+        //System.out.println(ret);
+        for(Object entry : skillArray)
+        {
+          PropertiesSet effectSkillStruct=(PropertiesSet)entry;
+          int rank=((Integer)effectSkillStruct.getProperty("Trait_EffectSkill_SkillAcquired_Rank")).intValue();
+          Object[] skillIDsArray=(Object[])effectSkillStruct.getProperty("Trait_EffectSkill_SkillAcquired_Array");
+          for(Object skillIDObj : skillIDsArray)
+          {
+            int skillId=((Integer)skillIDObj).intValue();
+            //System.out.println("Rank "+rank+" => "+skillId);
+            SkillDescription skill=skillsMgr.getSkill(skillId);
+            if (skill!=null)
+            {
+              ret.addSkill(skill);
+            }
+            else
+            {
+              LOGGER.warn("Skill not found: "+skillId);
+            }
+          }
+        }
+      }
+    }
+
     // Pre-requisites
     CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitId,traitProperties);
     if (prerequisites!=null)
