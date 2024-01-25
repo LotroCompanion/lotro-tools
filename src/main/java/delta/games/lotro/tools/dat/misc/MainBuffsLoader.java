@@ -31,7 +31,7 @@ public class MainBuffsLoader
   /**
    * Directory for effect icons.
    */
-  private static File EFFECT_ICONS_DIR=new File("data\\effects\\tmp").getAbsoluteFile();
+  public static File EFFECT_ICONS_DIR=new File("data\\effects\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private DatStatUtils _statUtils;
@@ -65,49 +65,49 @@ public class MainBuffsLoader
   {
     List<EffectBuff> buffs=new ArrayList<EffectBuff>();
     // In Defence of Middle Earth
-    loadBuff(buffs,1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH");
+    loadBuff(buffs,1879053032,"IN_DEFENCE_OF_MIDDLE_EARTH"); // EFFECT
     // Motivated
-    loadBuff(buffs,1879073072,"MOTIVATED");
+    loadBuff(buffs,1879073072,"MOTIVATED"); // EFFECT
     // Dissonance
-    loadBuff(buffs,1879095617,null);
+    loadBuff(buffs,1879095617,null); // EFFECT
     // Resonance
-    loadBuff(buffs,1879217087,null);
+    loadBuff(buffs,1879217087,null); // EFFECT
     // Enhanced Abilities
-    loadBuff(buffs,1879145605,null);
+    loadBuff(buffs,1879145605,null); // (unmanaged) EFFECT
     // Peace and Quiet
-    //loadBuff(buffs,1879145606,null));
+    //loadBuff(buffs,1879145606,null)); // (unmanaged) EFFECT
     // A Quiet Calm (I)
-    loadBuff(buffs,1879145414,null);
+    loadBuff(buffs,1879145414,null); // (unmanaged) EFFECT
     // A Quiet Calm (II)
-    loadBuff(buffs,1879239303,null);
+    loadBuff(buffs,1879239303,null); // (unmanaged) EFFECT
     // Minstrel anthems:
     // Anthem of Composure
-    loadBuff(buffs,1879073122,null);
+    loadBuff(buffs,1879073122,null); // (unmanaged) EFFECT
     // Anthem of Prowess
-    loadBuff(buffs,1879073120,null);
+    loadBuff(buffs,1879073120,null); // (unmanaged) EFFECT
     // Anthem of War
-    loadBuff(buffs,1879060866,null);
+    loadBuff(buffs,1879060866,null); // (unmanaged) EFFECT
     // Anthem of the Third Age - Resonance
-    loadBuff(buffs,1879205019,null);
+    loadBuff(buffs,1879205019,null); // (unmanaged) EFFECT
     // Anthem of the Third Age - Dissonance
-    loadBuff(buffs,1879205020,null);
+    loadBuff(buffs,1879205020,null); // (unmanaged) EFFECT
     // Anthem of the Third Age - Melody
-    loadBuff(buffs,1879217358,null);
+    loadBuff(buffs,1879217358,null); // EFFECT
     // Dwarves Endurance
-    loadBuff(buffs,1879073616,null);
+    loadBuff(buffs,1879073616,null); // EFFECT
     // Duty Bound
-    loadBuff(buffs,1879084065,null);
+    loadBuff(buffs,1879084065,null); // EFFECT
 
     // Scroll of Finesse
-    loadBuff(buffs,1879216017,null);
+    loadBuff(buffs,1879216017,null); // EFFECT
 
     // Veteran Fortitude
-    loadBuff(buffs,1879077245,null);
+    loadBuff(buffs,1879077245,null); // EFFECT
     // Veteran Determination
-    loadBuff(buffs,1879139404,null);
+    loadBuff(buffs,1879139404,null); // EFFECT
 
     // Guardian's Ward
-    loadBuff(buffs,1879060192,null);
+    loadBuff(buffs,1879060192,null); // EFFECT
 
     return buffs;
   }

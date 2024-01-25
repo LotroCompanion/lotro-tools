@@ -328,6 +328,7 @@ public class MainDatLoader
     // Buffs
     deleteFile(GeneratedFiles.BUFFS);
     deleteFile(GeneratedFiles.EFFECT_ICONS);
+    deleteDirectory(MainBuffsLoader.EFFECT_ICONS_DIR);
     // Effects
     deleteFile(GeneratedFiles.EFFECTS);
     deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
