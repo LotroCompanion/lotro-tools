@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
+import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.effects.EffectAndProbability;
@@ -180,7 +181,7 @@ public class EffectLoader
   private Effect2 buildEffect(int classDef)
   {
     // Effect PropertyModificationEffect (734) and child classes
-    // expect those explicitly handled later
+    // except those explicitly handled later
     if ((classDef==734) || (classDef==713) || (classDef==3222) || 
         (classDef==716) || (classDef==717) || (classDef==752) ||
         (classDef==753) || (classDef==739) || (classDef==748) ||
@@ -200,6 +201,7 @@ public class EffectLoader
     else if (classDef==769) return new InduceCombatStateEffect();
     else if (classDef==714) return new DispelByResistEffect();
     else if (classDef==737) return new RecallEffect();
+    else if (classDef==767) return new ComboEffect();
     //System.out.println("Unmanaged class: "+classDef);
     return new Effect2();
   }
@@ -245,6 +247,10 @@ public class EffectLoader
     else if (effect instanceof RecallEffect)
     {
       loadRecallEffect((RecallEffect)effect,effectProps);
+    }
+    else if (effect instanceof ComboEffect)
+    {
+      loadComboEffect((ComboEffect)effect,effectProps);
     }
   }
 
@@ -819,6 +825,68 @@ Effect_Recall_Travel_Link: 0 (Undef)
         effect.setPosition(position.getPosition());
       }
     }
+  }
+
+  private void loadComboEffect(ComboEffect effect, PropertiesSet effectProps)
+  {
+/*
+******** Properties: 1879453021
+Effect_Combo_CasterOnly: 0
+Effect_Combo_EffectPresentList: 
+  #1: Effect_WSLEffect 1879073120
+  #2: Effect_WSLEffect 1879453022
+  #3: Effect_WSLEffect 0
+Effect_Combo_EffectToAddIfNotPresent: 1879073122
+Effect_Combo_EffectToAddIfPresent: 1879453022
+Effect_Combo_EffectToGiveBackIfPresent: DID
+Effect_Combo_EffectToGiveBackIfNotPresent: DID
+Effect_Combo_EffectToExamine: 1879073122
+Effect_Combo_RemoveAllOldEffectsIfPresent: 0 (bool)
+Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
+*/
+    Object[] presentArray=(Object[])effectProps.getProperty("Effect_Combo_EffectPresentList");
+    if (presentArray!=null)
+    {
+      for(Object presentObj : presentArray)
+      {
+        Integer effectID=(Integer)presentObj;
+        Proxy<Effect2> presentEffect=buildProxy(effectID);
+        effect.addPresentEffect(presentEffect);
+      }
+    }
+    // To add if not present
+    Integer toAddIfNotPresent=(Integer)effectProps.getProperty("Effect_Combo_EffectToAddIfNotPresent");
+    effect.setToAddIfNotPresent(buildProxy(toAddIfNotPresent));
+    // To add if present
+    Integer toAddIfPresent=(Integer)effectProps.getProperty("Effect_Combo_EffectToAddIfPresent");
+    effect.setToAddIfPresent(buildProxy(toAddIfPresent));
+    // To give back if not present
+    Integer toGiveBackIfNotPresent=(Integer)effectProps.getProperty("Effect_Combo_EffectToGiveBackIfNotPresent");
+    effect.setToGiveBackIfNotPresent(buildProxy(toGiveBackIfNotPresent));
+    // To give back if present
+    Integer toGiveBackIfPresent=(Integer)effectProps.getProperty("Effect_Combo_EffectToGiveBackIfPresent");
+    effect.setToGiveBackIfPresent(buildProxy(toGiveBackIfPresent));
+    // To examine
+    Integer toExamine=(Integer)effectProps.getProperty("Effect_Combo_EffectToExamine");
+    effect.setToExamine(buildProxy(toExamine));
+  }
+
+  private Proxy<Effect2> buildProxy(Integer effectID)
+  {
+    if ((effectID==null) || (effectID.intValue()==0))
+    {
+      return null;
+    }
+    Proxy<Effect2> proxy=null;
+    Effect2 effect=getEffect(effectID.intValue());
+    if (effect!=null)
+    {
+      proxy=new Proxy<Effect2>();
+      proxy.setId(effectID.intValue());
+      proxy.setName(effect.getName());
+      proxy.setObject(effect);
+    }
+    return proxy;
   }
 
   /**
