@@ -45,12 +45,15 @@ import delta.games.lotro.tools.dat.items.SocketIconsLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
+import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
+import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
+import delta.games.lotro.tools.dat.misc.MainPropertyResponseMapsLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
@@ -111,6 +114,13 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
+    // Dungeons
+    MainDatDungeonsLoader dungeonsLoader=new MainDatDungeonsLoader(_facade);
+    dungeonsLoader.doIt();
+    // Geographic areas
+    new MainDatGeoAreasLoader(_facade).doIt();
+    // Load dungeon positions
+    dungeonsLoader.loadPositions();
     // Skills
     MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
     skillsLoader.doIt();
@@ -146,12 +156,15 @@ public class MainDatLoader
     EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     skillsLoader.loadEffects(effectsLoader);
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
+    // Items
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
     // Items sets
     new MainDatItemsSetsLoader(_facade,effectsLoader).doIt();
+    // Property Response maps
+    new MainPropertyResponseMapsLoader(_facade,effectsLoader).doIt();
     // Save effects
     effectsLoader.save();
     new MainProgressionsMerger().doIt();
@@ -249,6 +262,11 @@ public class MainDatLoader
     //deleteDirectory(GeneratedFiles.LABELS);
     // Geo
     deleteFile(GeneratedFiles.LANDMARKS);
+    // Dungeons
+    deleteFile(GeneratedFiles.DUNGEONS);
+    // Areas
+    deleteFile(GeneratedFiles.GEO_AREAS);
+    deleteDirectory(GeneratedFiles.AREA_ICONS);
     // Character data
     deleteFile(GeneratedFiles.STAT_CONTRIBS);
     deleteFile(GeneratedFiles.START_STATS);

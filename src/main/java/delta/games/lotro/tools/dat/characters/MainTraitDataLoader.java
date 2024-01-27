@@ -271,6 +271,7 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
         for(Object entry : skillArray)
         {
           PropertiesSet effectSkillStruct=(PropertiesSet)entry;
+          @SuppressWarnings("unused")
           int rank=((Integer)effectSkillStruct.getProperty("Trait_EffectSkill_SkillAcquired_Rank")).intValue();
           Object[] skillIDsArray=(Object[])effectSkillStruct.getProperty("Trait_EffectSkill_SkillAcquired_Array");
           for(Object skillIDObj : skillIDsArray)

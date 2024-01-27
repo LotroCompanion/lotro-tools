@@ -11,8 +11,6 @@ import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
-import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
-import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapsDataLoader;
 import delta.games.lotro.tools.dat.maps.landblocks.MainLandblocksBuilder;
@@ -59,13 +57,6 @@ public class MainGeoDatLoader
   {
     // Land-blocks
     new MainLandblocksBuilder(_facade).doIt();
-    // Dungeons
-    MainDatDungeonsLoader dungeonsLoader=new MainDatDungeonsLoader(_facade);
-    dungeonsLoader.doIt();
-    // Geographic areas
-    new MainDatGeoAreasLoader(_facade).doIt();
-    // Load dungeon positions
-    dungeonsLoader.loadPositions();
     // Maps data (base-maps, markers)
     new MapsDataLoader(_facade).doIt();
   }
@@ -97,11 +88,6 @@ public class MainGeoDatLoader
     deleteFile(LINKS);
     deleteFile(GeneratedFiles.PARCHMENT_MAPS);
     deleteFile(GeneratedFiles.RESOURCES_MAPS);
-    // Dungeons
-    deleteFile(GeneratedFiles.DUNGEONS);
-    // Areas
-    deleteFile(GeneratedFiles.GEO_AREAS);
-    deleteFile(GeneratedFiles.AREA_ICONS);
     // Landblocks
     deleteFile(GeneratedFiles.LANDBLOCKS);
   }

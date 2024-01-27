@@ -122,7 +122,7 @@ public class MainDatBrowser
     return classDefIndex;
   }
 
-  private void searchUtf16String(String s)
+  void searchUtf16String(String s)
   {
     byte[] buffer=s.getBytes(StandardCharsets.UTF_16);
     int length=s.length();

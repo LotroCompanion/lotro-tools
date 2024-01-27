@@ -73,24 +73,24 @@ public class MainBuffsLoader
     // Resonance
     loadBuff(buffs,1879217087,null); // EFFECT
     // Enhanced Abilities
-    loadBuff(buffs,1879145605,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879145605,null); // EFFECT
     // Peace and Quiet
-    //loadBuff(buffs,1879145606,null)); // (unmanaged) EFFECT
+    //loadBuff(buffs,1879145606,null)); // EFFECT
     // A Quiet Calm (I)
-    loadBuff(buffs,1879145414,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879145414,null); // EFFECT
     // A Quiet Calm (II)
-    loadBuff(buffs,1879239303,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879239303,null); // EFFECT
     // Minstrel anthems:
     // Anthem of Composure
-    loadBuff(buffs,1879073122,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879073122,null); // EFFECT
     // Anthem of Prowess
-    loadBuff(buffs,1879073120,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879073120,null); // EFFECT
     // Anthem of War
-    loadBuff(buffs,1879060866,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879060866,null); // EFFECT
     // Anthem of the Third Age - Resonance
-    loadBuff(buffs,1879205019,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879205019,null); // EFFECT
     // Anthem of the Third Age - Dissonance
-    loadBuff(buffs,1879205020,null); // (unmanaged) EFFECT
+    loadBuff(buffs,1879205020,null); // EFFECT
     // Anthem of the Third Age - Melody
     loadBuff(buffs,1879217358,null); // EFFECT
     // Dwarves Endurance
