@@ -42,7 +42,6 @@ import delta.games.lotro.tools.dat.items.MainDatItemsSetsLoader;
 import delta.games.lotro.tools.dat.items.MainDatPaperItemsLoader;
 import delta.games.lotro.tools.dat.items.MainWeaponDamageLoader;
 import delta.games.lotro.tools.dat.items.SocketIconsLoader;
-import delta.games.lotro.tools.dat.items.legendary.LegaciesLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
@@ -53,7 +52,6 @@ import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
-import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
@@ -275,8 +273,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.STAT_TOMES);
     // Titles
     deleteFile(GeneratedFiles.TITLES);
-    deleteFile(GeneratedFiles.TITLE_ICONS);
-    deleteDirectory(MainDatTitlesLoader.TITLE_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.TITLE_ICONS);
     // Items
     deleteFile(GeneratedFiles.GENERIC_ITEM_EFFECTS);
     deleteFile(GeneratedFiles.ITEMS);
@@ -295,8 +292,7 @@ public class MainDatLoader
     // - legacies
     deleteFile(GeneratedFiles.LEGACIES);
     deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
-    deleteFile(GeneratedFiles.LEGACIES_ICONS);
-    deleteDirectory(LegaciesLoader.LEGACIES_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.LEGACIES_ICONS);
     // Items sets
     deleteFile(GeneratedFiles.SETS);
     // Legendary system
@@ -356,8 +352,7 @@ public class MainDatLoader
     // NPCs
     deleteFile(GeneratedFiles.NPCS);
     // Misc icons
-    deleteFile(GeneratedFiles.MISC_ICONS);
-    deleteDirectory(MiscIconsManager.MISC_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.MISC_ICONS);
     // Allegiances
     deleteFile(GeneratedFiles.ALLEGIANCES);
     deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
@@ -365,8 +360,7 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.BILLING_GROUPS);
     // Hobbies
     deleteFile(GeneratedFiles.HOBBIES);
-    deleteFile(GeneratedFiles.HOBBY_ICONS);
-    deleteDirectory(MainHobbiesLoader.HOBBY_ICONS_DIR);
+    deleteDirectory(GeneratedFiles.HOBBY_ICONS);
     // Misc
     deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
     deleteFile(GeneratedFiles.WORLD_EVENTS);

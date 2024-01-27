@@ -37,7 +37,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
-import delta.games.lotro.tools.dat.misc.MiscIconsManager;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.utils.StringUtils;
 
@@ -316,7 +316,7 @@ public class LootLoader
     if (imageDid!=null)
     {
       ret.setImageId(imageDid);
-      File toDir=new File(MiscIconsManager.MISC_ICONS_DIR,"trophyListIcons");
+      File toDir=new File(GeneratedFiles.MISC_ICONS,"trophyLists");
       File to=new File(toDir,imageDid.toString()+".png");
       if (!to.exists())
       {

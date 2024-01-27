@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
@@ -56,11 +55,6 @@ import delta.games.lotro.utils.maths.Progression;
 public class LegaciesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(LegaciesLoader.class);
-
-  /**
-   * Directory for legacies icons.
-   */
-  public static final File LEGACIES_ICONS_DIR=new File("data\\legacies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;
@@ -111,8 +105,6 @@ public class LegaciesLoader
     // Imbued
     save(_imbuedLegaciesManager);
     _i18nImbued.save();
-    // Icons
-    saveIcons();
   }
 
   private ImbuedLegacy loadImbuedLegacy(int id)
@@ -299,17 +291,6 @@ public class LegaciesLoader
     if (ok)
     {
       LOGGER.info("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
-    }
-  }
-
-  private void saveIcons()
-  {
-    // Write legacies icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    boolean ok=archiver.go(GeneratedFiles.LEGACIES_ICONS,LEGACIES_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote legacies icons archive: "+GeneratedFiles.LEGACIES_ICONS);
     }
   }
 
@@ -697,7 +678,7 @@ public class LegaciesLoader
   public void loadIcon(int iconId)
   {
     String iconFilename=iconId+".png";
-    File to=new File(LEGACIES_ICONS_DIR,"legaciesIcons/"+iconFilename).getAbsoluteFile();
+    File to=new File(GeneratedFiles.LEGACIES_ICONS,iconFilename).getAbsoluteFile();
     if (!to.exists())
     {
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);

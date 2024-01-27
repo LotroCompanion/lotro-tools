@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.enums.AllegianceGroup;
@@ -33,11 +32,6 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 public class MainDatAllegiancesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatAllegiancesLoader.class);
-
-  /**
-   * Directory for allegiances icons.
-   */
-  public static final File ALLEGIANCE_ICONS_DIR=new File("data\\allegiances\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private LotroEnum<AllegianceGroup> _groups;
@@ -80,7 +74,7 @@ public class MainDatAllegiancesLoader
     ret.setMinLevel(minLevel);
     // Icon
     int iconId=((Integer)properties.getProperty("Allegiance_Image")).intValue();
-    File allegianceImage=new File(ALLEGIANCE_ICONS_DIR,"allegianceIcons/"+iconId+".png").getAbsoluteFile();
+    File allegianceImage=new File(GeneratedFiles.ALLEGIANCES_ICONS,iconId+".png").getAbsoluteFile();
     if (!allegianceImage.exists())
     {
       DatIconsUtils.buildImageFile(_facade,iconId,allegianceImage);
@@ -162,13 +156,6 @@ public class MainDatAllegiancesLoader
       LOGGER.info("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
     }
     _i18n.save();
-    // Write allegiances icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.ALLEGIANCES_ICONS,ALLEGIANCE_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote allegiance icons archive: "+GeneratedFiles.ALLEGIANCES_ICONS);
-    }
   }
 
   /**

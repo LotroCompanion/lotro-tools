@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -24,11 +23,6 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 public class GeoAreasLoader
 {
   private static final Logger LOGGER=Logger.getLogger(GeoAreasLoader.class);
-
-  /**
-   * Directory for area icons.
-   */
-  public static final File AREA_ICONS_DIR=new File("data\\maps\\areas\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private GeoAreasManager _geoMgr;
@@ -81,8 +75,7 @@ public class GeoAreasLoader
     Integer imageId=(Integer)areaProps.getProperty("Area_Icon");
     if ((imageId!=null) && (imageId.intValue()>0))
     {
-      File toDir=new File(AREA_ICONS_DIR,"areaIcons");
-      File to=new File(toDir,imageId+".png");
+      File to=new File(GeneratedFiles.AREA_ICONS,imageId+".png");
       if (!to.exists())
       {
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),to);
@@ -206,13 +199,6 @@ public class GeoAreasLoader
     if (ok)
     {
       LOGGER.info("Wrote geographic areas file: "+GeneratedFiles.GEO_AREAS);
-    }
-    // Icons
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.AREA_ICONS,GeoAreasLoader.AREA_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote area icons archive: "+GeneratedFiles.AREA_ICONS);
     }
     // Labels
     _i18n.save();

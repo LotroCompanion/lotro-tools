@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
@@ -33,11 +32,6 @@ import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 public class MainHobbiesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainHobbiesLoader.class);
-
-  /**
-   * Directory for skill icons.
-   */
-  public static final File HOBBY_ICONS_DIR=new File("data\\hobbies\\tmp").getAbsoluteFile();
 
   private DataFacade _facade;
   private I18nUtils _i18n;
@@ -96,7 +90,7 @@ public class MainHobbiesLoader
     ret.setIconId(iconId);
     // Build icon file
     String iconFilename=iconId+".png";
-    File to=new File(HOBBY_ICONS_DIR,"hobbyIcons/"+iconFilename).getAbsoluteFile();
+    File to=new File(GeneratedFiles.HOBBY_ICONS,iconFilename).getAbsoluteFile();
     if (!to.exists())
     {
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
@@ -204,13 +198,6 @@ public class MainHobbiesLoader
     if (ok)
     {
       LOGGER.info("Wrote hobbies file: "+GeneratedFiles.HOBBIES);
-    }
-    // Write hobby icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    ok=archiver.go(GeneratedFiles.HOBBY_ICONS,HOBBY_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote hobby icons archive: "+GeneratedFiles.HOBBY_ICONS);
     }
     // Labels
     _i18n.save();

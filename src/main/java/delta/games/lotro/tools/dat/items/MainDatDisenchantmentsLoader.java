@@ -17,7 +17,6 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.DisenchantmentResultXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.misc.MiscIconsManager;
 import delta.games.lotro.tools.dat.others.LootLoader;
 
 /**
@@ -101,8 +100,6 @@ public class MainDatDisenchantmentsLoader
     DisenchantmentResultXMLWriter.writeDisenchantmentsFile(GeneratedFiles.DISENCHANTMENTS,disenchantments);
     // Write loot data 
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
-    // Write misc icons
-    MiscIconsManager.writeMiscIconsFile();
   }
 
   /**
