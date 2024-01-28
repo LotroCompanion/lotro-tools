@@ -14,6 +14,7 @@ import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 import delta.games.lotro.tools.dat.maps.landblocks.LandblockGeneratorsAnalyzer;
@@ -44,13 +45,12 @@ public class MapsDataLoader
    */
   public void doIt()
   {
-    // Categories
     MapsManager mapsManager=_mapsDataMgr.getMapsManager();
+    // Categories
     initCategories(mapsManager.getCategories());
     _markerUtils=new MarkersLoadingUtils(_facade,_mapsDataMgr);
-    // Parchment maps
-    MapsSystemLoader mapsSystemLoader=new MapsSystemLoader(_facade,mapsManager);
-    mapsSystemLoader.doIt();
+    // Maps
+    loadMaps(mapsManager);
     // Map notes
     {
       long now1=System.currentTimeMillis();
@@ -91,8 +91,21 @@ public class MapsDataLoader
     MainCategoriesPruner pruner=new MainCategoriesPruner(_mapsDataMgr.getMapsManager());
     pruner.doIt();
 
-    // Save markers
+    // Save data
     _mapsDataMgr.write();
+  }
+
+  private void loadMaps(MapsManager mapsManager)
+  {
+    // Parchment maps
+    MapsSystemLoader mapsSystemLoader=new MapsSystemLoader(_facade,mapsManager);
+    mapsSystemLoader.doIt();
+    // Dungeon maps
+    GeoreferencedBasemapsManager basemapsManager=mapsManager.getBasemapsManager();
+    DungeonMapsLoader dungeonMapsLoader=new DungeonMapsLoader(_facade,basemapsManager);
+    dungeonMapsLoader.doIt();
+    // Save data
+    basemapsManager.write();
   }
 
   private void initCategories(CategoriesManager categoriesManager)

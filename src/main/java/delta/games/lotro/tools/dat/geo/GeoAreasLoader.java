@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.maps;
+package delta.games.lotro.tools.dat.geo;
 
 import java.io.File;
 

@@ -16,7 +16,7 @@ import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 public class GeoUtils
 {
   /**
-   * Build an extended posiiton from a DAT position.
+   * Build an extended position from a DAT position.
    * @param position Position to use.
    * @return An extended position.
    */
@@ -40,7 +40,12 @@ public class GeoUtils
     return ret;
   }
 
-  private static Integer getZoneID(DatPosition position)
+  /**
+   * Get the parent zone (area or dungeon) for a position.
+   * @param position Position to use.
+   * @return A parent zone identifier or <code>null</code>.
+   */
+  public static Integer getZoneID(DatPosition position)
   {
     Integer zoneID=null;
     int region=position.getRegion();

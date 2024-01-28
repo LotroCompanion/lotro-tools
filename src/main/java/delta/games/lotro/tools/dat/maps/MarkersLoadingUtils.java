@@ -118,7 +118,7 @@ public class MarkersLoadingUtils
       LOGGER.warn("Found unsupported region: "+region);
       return null;
     }
-    Integer parentZoneId=MapUtils.getParentZone(position);
+    Integer parentZoneId=GeoUtils.getZoneID(position);
     if (parentZoneId==null)
     {
       LOGGER.warn("No parent zone for marker!");
@@ -362,7 +362,7 @@ public class MarkersLoadingUtils
         targetMap=map;
       }
     }
-    Integer parentZone=MapUtils.getParentZone(destPosition);
+    Integer parentZone=GeoUtils.getZoneID(destPosition);
     Integer destId=(destArea!=null)?Integer.valueOf(destArea.getIdentifier()):null;
     if (!Objects.equals(destId,parentZone))
     {

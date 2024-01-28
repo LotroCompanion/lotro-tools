@@ -174,7 +174,6 @@ public class MapsDataManager
   public void write()
   {
     cleanupMarkers();
-    _mapsManager.getBasemapsManager().write();
     _mapsManager.getMarkersManager().write();
     buildIndexes();
     _index.writeIndexes();

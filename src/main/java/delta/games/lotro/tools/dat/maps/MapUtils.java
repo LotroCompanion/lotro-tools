@@ -13,7 +13,6 @@ import javax.imageio.stream.ImageInputStream;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.Identifiable;
-import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.maps.AbstractMap;
@@ -22,8 +21,6 @@ import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.ParchmentMap;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.lore.maps.ZoneUtils;
-import delta.games.lotro.lore.maps.landblocks.Landblock;
-import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
@@ -151,26 +148,5 @@ public class MapUtils
       }
     }
     return null;
-  }
-
-  /**
-   * Get the parent zone (area or dungeon) for a position.
-   * @param position Position to use.
-   * @return A parent zone identifier or <code>null</code>.
-   */
-  public static Integer getParentZone(DatPosition position)
-  {
-    Integer zoneId=null;
-    int region=position.getRegion();
-    int blockX=position.getBlockX();
-    int blockY=position.getBlockY();
-    LandblocksManager mgr=LandblocksManager.getInstance();
-    Landblock landblock=mgr.getLandblock(region,blockX,blockY);
-    if (landblock!=null)
-    {
-      int cell=position.getCell();
-      zoneId=landblock.getParentData(cell,position.getPosition());
-    }
-    return zoneId; 
   }
 }

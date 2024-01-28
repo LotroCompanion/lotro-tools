@@ -13,6 +13,7 @@ import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
+import delta.games.lotro.tools.dat.maps.GeoUtils;
 import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapUtils;
 
@@ -63,7 +64,7 @@ public class MapsFinder
   private Integer getMapUsingParentZone(DatPosition position)
   {
     Integer ret=null;
-    Integer parentZoneId=MapUtils.getParentZone(position);
+    Integer parentZoneId=GeoUtils.getZoneID(position);
     if (parentZoneId!=null)
     {
       AbstractMap map=MapUtils.findMapForZone(parentZoneId.intValue());

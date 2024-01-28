@@ -67,7 +67,7 @@ public class MapNotesLoader
 
     if ((areaDID==0) && (dungeonDID==0))
     {
-      Integer parentZoneId=MapUtils.getParentZone(position);
+      Integer parentZoneId=GeoUtils.getZoneID(position);
       if (parentZoneId!=null)
       {
         areaDID=parentZoneId.intValue();

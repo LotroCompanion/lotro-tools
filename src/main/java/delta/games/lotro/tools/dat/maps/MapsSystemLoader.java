@@ -281,6 +281,7 @@ public class MapsSystemLoader
     {
       LOGGER.info("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
     }
+    _mapsManager.getLinksManager().write();
     // - labels
     _i18n.save();
   }

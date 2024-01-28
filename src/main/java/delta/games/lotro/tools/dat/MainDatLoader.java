@@ -31,6 +31,8 @@ import delta.games.lotro.tools.dat.crafting.MainDatRecipesLoader;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
 import delta.games.lotro.tools.dat.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.dat.factions.MainDatFactionsLoader;
+import delta.games.lotro.tools.dat.geo.MainDatDungeonsLoader;
+import delta.games.lotro.tools.dat.geo.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.geo.MainDatLandmarksLoader;
 import delta.games.lotro.tools.dat.instances.MainDatInstancesTreeLoader;
 import delta.games.lotro.tools.dat.instances.MainDatPrivateEncountersLoader;
@@ -45,8 +47,6 @@ import delta.games.lotro.tools.dat.items.SocketIconsLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.dat.items.legendary.MainDatLegendaryTitlesLoader;
-import delta.games.lotro.tools.dat.maps.MainDatDungeonsLoader;
-import delta.games.lotro.tools.dat.maps.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
@@ -114,12 +114,11 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
+    // Geographic areas
+    new MainDatGeoAreasLoader(_facade).doIt();
     // Dungeons
     MainDatDungeonsLoader dungeonsLoader=new MainDatDungeonsLoader(_facade);
     dungeonsLoader.doIt();
-    // Geographic areas
-    new MainDatGeoAreasLoader(_facade).doIt();
-    // Load dungeon positions
     dungeonsLoader.loadPositions();
     // Skills
     MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
