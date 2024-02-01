@@ -202,7 +202,7 @@ public class MainDatLoader
     // Private encounter loader: resolve proxies
     peLoader.finish();
     // Buffs
-    new MainBuffsLoader(_facade).doIt();
+    new MainBuffsLoader().doIt();
     // Trait points
     new TraitPointsRegistryBuilder().doIt();
     if (live)
@@ -340,8 +340,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.CRAFTING_DATA);
     // Buffs
     deleteFile(GeneratedFiles.BUFFS);
-    deleteFile(GeneratedFiles.EFFECT_ICONS);
-    deleteDirectory(MainBuffsLoader.EFFECT_ICONS_DIR);
     // Effects
     deleteFile(GeneratedFiles.EFFECTS);
     deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
@@ -389,7 +387,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
     deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
-    deleteFile(GeneratedFiles.PROGRESSIONS_BUFFS);
     deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
     deleteFile(GeneratedFiles.PROGRESSIONS);

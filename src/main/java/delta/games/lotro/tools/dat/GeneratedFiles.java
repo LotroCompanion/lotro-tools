@@ -144,10 +144,6 @@ public class GeneratedFiles
    */
   public static final File PROGRESSIONS_ACHIEVABLES=new File("data/progressions/tmp/progressions_achievables.xml").getAbsoluteFile();
   /**
-   * Progressions for buffs.
-   */
-  public static final File PROGRESSIONS_BUFFS=new File("data/progressions/tmp/progressions_buffs.xml").getAbsoluteFile();
-  /**
    * Progressions for combat data.
    */
   public static final File PROGRESSIONS_COMBAT=new File("data/progressions/tmp/progressions_combat.xml").getAbsoluteFile();
@@ -268,10 +264,6 @@ public class GeneratedFiles
    * Effects.
    */
   public static final File EFFECTS=LotroCoreConfig.getInstance().getFile(DataFiles.EFFECTS);
-  /**
-   * Effect icons.
-   */
-  public static final File EFFECT_ICONS=LotroCoreConfig.getInstance().getFile("effectIcons");
   /**
    * Effect icons directory.
    */

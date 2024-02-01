@@ -1,24 +1,17 @@
 package delta.games.lotro.tools.dat.misc;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import delta.common.utils.files.archives.DirectoryArchiver;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect;
-import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.EffectsManager;
 import delta.games.lotro.lore.buffs.EffectBuff;
 import delta.games.lotro.lore.buffs.io.xml.EffectBuffXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatEffectUtils;
-import delta.games.lotro.tools.dat.utils.DatStatUtils;
-import delta.games.lotro.tools.dat.utils.ProgressionUtils;
-import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Loader for effect-based buffs.
@@ -29,36 +22,13 @@ public class MainBuffsLoader
   private static final Logger LOGGER=Logger.getLogger(MainBuffsLoader.class);
 
   /**
-   * Directory for effect icons.
-   */
-  public static File EFFECT_ICONS_DIR=new File("data\\effects\\tmp").getAbsoluteFile();
-
-  private DataFacade _facade;
-  private DatStatUtils _statUtils;
-  private I18nUtils _i18n;
-
-  /**
-   * Constructor.
-   * @param facade Data facade.
-   */
-  public MainBuffsLoader(DataFacade facade)
-  {
-    _facade=facade;
-    _i18n=new I18nUtils("buffs",facade.getGlobalStringsManager());
-    _statUtils=new DatStatUtils(facade,_i18n);
-  }
-
-  /**
    * Load specific buffs.
    */
   public void doIt()
   {
     List<EffectBuff> buffs=loadBuffs();
     // Save
-    // - data
     save(buffs);
-    // - labels
-    _i18n.save();
   }
 
   private List<EffectBuff> loadBuffs()
@@ -115,7 +85,7 @@ public class MainBuffsLoader
   private void loadBuff(List<EffectBuff> buffs, int id, String key)
   {
     EffectBuff buff=null;
-    Effect effect=DatEffectUtils.loadEffect(_statUtils,id,_i18n);
+    Effect2 effect=EffectsManager.getInstance().getEffectById(id);
     if (effect!=null)
     {
       buff=new EffectBuff();
@@ -124,26 +94,11 @@ public class MainBuffsLoader
       {
         buff.setKey(key);
       }
-
-      // Build icon file
-      Integer iconId=effect.getIconId();
-      if (iconId!=null)
-      {
-        String iconFilename=iconId+".png";
-        File to=new File(EFFECT_ICONS_DIR,"effectIcons/"+iconFilename).getAbsoluteFile();
-        if (!to.exists())
-        {
-          boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
-          if (!ok)
-          {
-            LOGGER.warn("Could not build effect icon: "+iconFilename);
-          }
-        }
-      }
-    }
-    if (buff!=null)
-    {
       buffs.add(buff);
+    }
+    else
+    {
+      LOGGER.warn("Effect not found: "+id);
     }
   }
 
@@ -151,15 +106,6 @@ public class MainBuffsLoader
   {
     // Buffs file
     saveBuffs(buffs);
-    // Save progressions
-    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_BUFFS);
-    // Write effect icons archive
-    DirectoryArchiver archiver=new DirectoryArchiver();
-    boolean ok=archiver.go(GeneratedFiles.EFFECT_ICONS,EFFECT_ICONS_DIR);
-    if (ok)
-    {
-      LOGGER.info("Wrote effects icons archive: "+GeneratedFiles.EFFECT_ICONS);
-    }
   }
 
   /**
@@ -178,8 +124,6 @@ public class MainBuffsLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
-    new MainBuffsLoader(facade).doIt();
-    facade.dispose();
+    new MainBuffsLoader().doIt();
   }
 }
