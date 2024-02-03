@@ -26,6 +26,7 @@ import delta.games.lotro.common.effects.ReactiveChange;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.RecallEffect;
+import delta.games.lotro.common.effects.TieredEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter2;
@@ -202,6 +203,7 @@ public class EffectLoader
     else if (classDef==714) return new DispelByResistEffect();
     else if (classDef==737) return new RecallEffect();
     else if (classDef==767) return new ComboEffect();
+    else if (classDef==3866) return new TieredEffect();
     //System.out.println("Unmanaged class: "+classDef);
     return new Effect2();
   }
@@ -251,6 +253,10 @@ public class EffectLoader
     else if (effect instanceof ComboEffect)
     {
       loadComboEffect((ComboEffect)effect,effectProps);
+    }
+    else if (effect instanceof TieredEffect)
+    {
+      loadTieredEffect((TieredEffect)effect,effectProps);
     }
   }
 
@@ -869,6 +875,45 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
     // To examine
     Integer toExamine=(Integer)effectProps.getProperty("Effect_Combo_EffectToExamine");
     effect.setToExamine(buildProxy(toExamine));
+  }
+
+  private void loadTieredEffect(TieredEffect effect, PropertiesSet effectProps)
+  {
+    // From Effect_TierUp_EffectList:
+    /*
+      #1: EffectGenerator_EffectStruct 
+        EffectGenerator_EffectID: 1879449300
+        EffectGenerator_EffectSpellcraft: -1.0
+        ...
+      #5: EffectGenerator_EffectStruct 
+        EffectGenerator_EffectID: 1879449315
+        EffectGenerator_EffectSpellcraft: -1.0
+    */
+    Object[] tierUpList=(Object[])effectProps.getProperty("Effect_TierUp_EffectList");
+    for(Object tierUpEntry : tierUpList)
+    {
+      EffectGenerator generator=loadGenerator((PropertiesSet)tierUpEntry);
+      effect.addTierEffect(generator);
+    }
+    // From Effect_TierUp_FinalEffect:
+    /*
+    #1: EffectGenerator_EffectStruct 
+      EffectGenerator_EffectID: 1879449315
+      EffectGenerator_EffectSpellcraft: -1.0
+    */
+    Object[] finalEffectList=(Object[])effectProps.getProperty("Effect_TierUp_FinalEffect");
+    if (finalEffectList!=null)
+    {
+      if (finalEffectList.length>1)
+      {
+        LOGGER.warn("More than 1 final effect!");
+      }
+      for(Object finalEntry : finalEffectList)
+      {
+        EffectGenerator generator=loadGenerator((PropertiesSet)finalEntry);
+        effect.setFinalTier(generator);
+      }
+    }
   }
 
   private Proxy<Effect2> buildProxy(Integer effectID)
