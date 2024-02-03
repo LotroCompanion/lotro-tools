@@ -19,6 +19,7 @@ import delta.games.lotro.character.traits.prerequisites.SimpleTraitPrerequisite;
 import delta.games.lotro.character.traits.prerequisites.TraitLogicOperator;
 import delta.games.lotro.character.traits.prerequisites.TraitPrerequisitesUtils;
 import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
@@ -316,6 +317,40 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
   }
 
   private void loadEffects(TraitDescription trait, PropertiesSet traitProperties)
+  {
+    loadEffectsAtRank(trait,traitProperties);
+    loadEffectGenerators(trait,traitProperties);
+  }
+
+  private void loadEffectGenerators(TraitDescription trait, PropertiesSet traitProperties)
+  {
+    /*
+    EffectGenerator_TraitEffectList: 
+      #1: EffectGenerator_EffectStruct 
+        EffectGenerator_EffectID: 1879051501
+        EffectGenerator_EffectSpellcraft: 0.0
+    */
+    Object[] effectsArray=(Object[])traitProperties.getProperty("EffectGenerator_TraitEffectList");
+    if (effectsArray==null)
+    {
+      return;
+    }
+    for(Object entry : effectsArray)
+    {
+      PropertiesSet generatorProps=(PropertiesSet)entry;
+      int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue(); 
+      Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
+      if ((spellcraft!=null) && (spellcraft.floatValue()<0))
+      {
+        spellcraft=null;
+      }
+      Effect2 effect=_effectsLoader.getEffect(effectID);
+      EffectGenerator generator=new EffectGenerator(effect,spellcraft);
+      trait.addEffectGenerator(generator);
+    }
+  }
+
+  private void loadEffectsAtRank(TraitDescription trait, PropertiesSet traitProperties)
   {
     /*
 Trait_EffectSkill_AtRankEffects_Array: 
