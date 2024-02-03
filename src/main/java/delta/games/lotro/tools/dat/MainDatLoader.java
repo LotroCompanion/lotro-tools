@@ -123,8 +123,12 @@ public class MainDatLoader
     // Skills
     MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
     skillsLoader.doIt();
+    // Places
+    PlacesLoader placesLoader=new PlacesLoader(_facade);
+    // Effects
+    EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     // Traits
-    new MainTraitDataLoader(_facade).doIt();
+    new MainTraitDataLoader(_facade,effectsLoader).doIt();
     // Emotes
     new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
@@ -149,10 +153,6 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
-    // Places
-    PlacesLoader placesLoader=new PlacesLoader(_facade);
-    // Effects
-    EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     skillsLoader.loadEffects(effectsLoader);
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     // Items

@@ -18,6 +18,7 @@ import delta.games.lotro.character.traits.prerequisites.CompoundTraitPrerequisit
 import delta.games.lotro.character.traits.prerequisites.SimpleTraitPrerequisite;
 import delta.games.lotro.character.traits.prerequisites.TraitLogicOperator;
 import delta.games.lotro.character.traits.prerequisites.TraitPrerequisitesUtils;
+import delta.games.lotro.common.effects.Effect2;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
@@ -35,6 +36,8 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.effects.EffectLoader;
+import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -50,6 +53,7 @@ public class MainTraitDataLoader
   private static final Logger LOGGER=Logger.getLogger(MainTraitDataLoader.class);
 
   private DataFacade _facade;
+  private EffectLoader _effectsLoader;
   private DatStatUtils _statUtils;
   private I18nUtils _i18n;
   private Map<Integer,Integer> _traitIds2PropMap;
@@ -58,10 +62,12 @@ public class MainTraitDataLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public MainTraitDataLoader(DataFacade facade)
+  public MainTraitDataLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
+    _effectsLoader=effectsLoader;
     _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
     _proxies=new ArrayList<Proxy<TraitDescription>>();
@@ -235,6 +241,22 @@ public class MainTraitDataLoader
       loadIconFile(iconId.intValue());
     }
     // Skills
+    loadSkills(ret,traitProperties);
+    // Effects
+    loadEffects(ret,traitProperties);
+
+    // Pre-requisites
+    CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitId,traitProperties);
+    if (prerequisites!=null)
+    {
+      AbstractTraitPrerequisite toUse=simplify(prerequisites);
+      ret.setTraitPrerequisite(toUse);
+    }
+    return ret;
+  }
+
+  private void loadSkills(TraitDescription trait, PropertiesSet traitProperties)
+  {
     SkillsManager skillsMgr=SkillsManager.getInstance();
     {
       Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
@@ -246,7 +268,7 @@ public class MainTraitDataLoader
           SkillDescription skill=skillsMgr.getSkill(skillId);
           if (skill!=null)
           {
-            ret.addSkill(skill);
+            trait.addSkill(skill);
           }
           else
           {
@@ -281,7 +303,7 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
             SkillDescription skill=skillsMgr.getSkill(skillId);
             if (skill!=null)
             {
-              ret.addSkill(skill);
+              trait.addSkill(skill);
             }
             else
             {
@@ -291,15 +313,42 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
         }
       }
     }
+  }
 
-    // Pre-requisites
-    CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitId,traitProperties);
-    if (prerequisites!=null)
+  private void loadEffects(TraitDescription trait, PropertiesSet traitProperties)
+  {
+    /*
+Trait_EffectSkill_AtRankEffects_Array: 
+  #1: Trait_EffectSkill_AtRankEffects_Struct 
+    Trait_EffectSkill_AtRankEffects_Rank: 1
+    Trait_EffectSkill_Effect_Array: 
+      #1: Trait_EffectSkill_EffectDID 1879449317
+     */
+    Object[] effectsArray=(Object[])traitProperties.getProperty("Trait_EffectSkill_AtRankEffects_Array");
+    if (effectsArray==null)
     {
-      AbstractTraitPrerequisite toUse=simplify(prerequisites);
-      ret.setTraitPrerequisite(toUse);
+      return;
     }
-    return ret;
+    for(Object entry : effectsArray)
+    {
+      PropertiesSet effectSkillStruct=(PropertiesSet)entry;
+      int rank=((Integer)effectSkillStruct.getProperty("Trait_EffectSkill_AtRankEffects_Rank")).intValue();
+      Object[] effectIDsArray=(Object[])effectSkillStruct.getProperty("Trait_EffectSkill_Effect_Array");
+      for(Object effectIDObj : effectIDsArray)
+      {
+        int effectID=((Integer)effectIDObj).intValue();
+        //System.out.println("Rank "+rank+" => "+effectID);
+        Effect2 effect=_effectsLoader.getEffect(effectID);
+        if (effect!=null)
+        {
+          trait.addEffect(effect,rank);
+        }
+        else
+        {
+          LOGGER.warn("Effect not found: "+effectID);
+        }
+      }
+    }
   }
 
   private CompoundTraitPrerequisite loadPrerequisites(int traitId, PropertiesSet properties)
@@ -426,7 +475,9 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainTraitDataLoader(facade).doIt();
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    new MainTraitDataLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
 }
