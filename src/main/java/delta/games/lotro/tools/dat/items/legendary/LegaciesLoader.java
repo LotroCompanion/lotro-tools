@@ -45,6 +45,7 @@ import delta.games.lotro.tools.dat.utils.DatEffectUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.WeaponTypesUtils;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -109,11 +110,8 @@ public class LegaciesLoader
 
   private ImbuedLegacy loadImbuedLegacy(int id)
   {
-    //System.out.println("**** ID="+id+" *****");
     PropertiesSet props=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(props.dump());
 
-    //statNames.addAll(props.getPropertyNames());
     ImbuedLegacy ret=new ImbuedLegacy();
     // ID
     ret.setIdentifier(id);
@@ -210,9 +208,7 @@ public class LegaciesLoader
 
   private void loadImbuedLegacies()
   {
-    // ItemAdvancementControl
-    PropertiesSet props=_facade.loadProperties(0x7000EAA6+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(props.dump());
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"ItemAdvancementControl");
 
     // Extract imbued class/stat legacies
     {
@@ -298,7 +294,6 @@ public class LegaciesLoader
   {
     // Load reforge table: value of ItemAdvancement_ReforgeTable from 1879134775 (NPC: Forge-master)
     PropertiesSet globalReforgeTableProps=_facade.loadProperties(1879138325+DATConstants.DBPROPERTIES_OFFSET);
-    //showProps(1879138325,"global",globalReforgeTableProps);
 
     Object[] reforgeTables=(Object[])globalReforgeTableProps.getProperty("ItemAdvancement_ReforgeSlotInfo_Array");
     for(Object reforgeTableObj : reforgeTables)
@@ -311,12 +306,10 @@ public class LegaciesLoader
     }
     // Load default legacies (CombatPropertyModControl)
     PropertiesSet combatPropertyProps=_facade.loadProperties(1879167147+DATConstants.DBPROPERTIES_OFFSET);
-    //showProps(1879167147,"combatPropertyProps",combatPropertyProps);
     Object[] combatPropertyModArray=(Object[])combatPropertyProps.getProperty("Item_CombatPropertyModArray");
     for(Object combatPropertyModObj : combatPropertyModArray)
     {
       PropertiesSet combatPropertyModProps=(PropertiesSet)combatPropertyModObj;
-      //showProps(0,"combatPropertyModProps",combatPropertyModProps);
       int effectsTableId=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
       int combatPropertyType=((Integer)combatPropertyModProps.getProperty("Item_RequiredCombatPropertyType")).intValue();
       loadLegaciesTable(effectsTableId,combatPropertyType);
@@ -325,16 +318,13 @@ public class LegaciesLoader
 
   private void handleReforgeTable(int reforgeTableId, EquipmentLocation slot)
   {
-    //System.out.println("Slot: "+slot+", reforge table: "+reforgeTableId);
     PropertiesSet reforgeTableProps=_facade.loadProperties(reforgeTableId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(reforgeTableProps.dump());
     Object[] reforgeTableItems=(Object[])reforgeTableProps.getProperty("ItemAdvancement_ReforgeTable_Array");
     for(Object reforgeTableItemObj : reforgeTableItems)
     {
       PropertiesSet reforgeTableItemProps=(PropertiesSet)reforgeTableItemObj;
       int classCode=((Integer)reforgeTableItemProps.getProperty("ItemAdvancement_Class")).intValue();
       ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
-      //System.out.println("Class: "+characterClass);
       Object[] reforgeGroups=(Object[])reforgeTableItemProps.getProperty("ItemAdvancement_ReforgeGroup_Array");
       for(Object reforgeGroupObj : reforgeGroups)
       {
@@ -355,7 +345,6 @@ public class LegaciesLoader
       PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
       int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
       //int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
-      //System.out.println("List: "+progressionListId+", weight="+weight);
 
       Boolean major=null;
       if (slot!=EquipmentLocations.BRIDLE)
@@ -368,15 +357,12 @@ public class LegaciesLoader
         if (index==0) major=Boolean.FALSE; else major=Boolean.TRUE;
       }
       PropertiesSet progressionListProps=_facade.loadProperties(progressionListId+DATConstants.DBPROPERTIES_OFFSET);
-      //System.out.println(progressionListProps.dump());
       Object[] effectArray=(Object[])progressionListProps.getProperty("ItemAdvancement_Effect_Array");
-      //System.out.println("Found "+effectArray.length+" effects");
       for(Object effectEntryObj : effectArray)
       {
         PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
         Integer effectId=(Integer)effectEntry.getProperty("ItemAdvancement_Effect");
         //int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
-        //System.out.println("Effect weight:"+effectWeight);
         NonImbuedLegacyTier legacyTier=_loadedEffects.get(effectId);
         if (legacyTier==null)
         {
@@ -530,7 +516,6 @@ public class LegaciesLoader
   private void loadLegaciesTable(int tableId, int combatPropertyType)
   {
     PropertiesSet props=_facade.loadProperties(tableId+DATConstants.DBPROPERTIES_OFFSET);
-    //showProps(tableId,"legacies tables",props);
 
     LegacyType type=DatLegendaryUtils.getLegacyTypeFromCombatPropertyType(combatPropertyType);
     ClassDescription characterClass=getClassFromCombatPropertyType(combatPropertyType);
@@ -559,11 +544,8 @@ public class LegaciesLoader
     for(Object qualityPropsObj : qualityArray)
     {
       PropertiesSet qualityProps=(PropertiesSet)qualityPropsObj;
-      //showProps(0,"quality props",qualityProps);
       int effectId=((Integer)qualityProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
       int quality=((Integer)qualityProps.getProperty("Item_Quality")).intValue();
-
-      //System.out.println("Quality: "+quality);
       if (effectId!=0)
       {
         DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
@@ -574,7 +556,6 @@ public class LegaciesLoader
       {
         int prog=((Integer)qualityProps.getProperty("Item_PropertyModProgression")).intValue();
         PropertiesSet progProps=_facade.loadProperties(prog+DATConstants.DBPROPERTIES_OFFSET);
-        //showProps(prog,"property mod progression",progProps);
         Object[] effectArray=(Object[])progProps.getProperty("DataIDProgression_Array");
         for(Object effectIdObj : effectArray)
         {
@@ -687,11 +668,5 @@ public class LegaciesLoader
         LOGGER.warn("Could not build legacy icon: "+iconFilename);
       }
     }
-  }
-
-  void showProps(int id, String meaning, PropertiesSet props)
-  {
-    System.out.println("ID: "+id+" -- "+meaning);
-    System.out.println(props.dump());
   }
 }

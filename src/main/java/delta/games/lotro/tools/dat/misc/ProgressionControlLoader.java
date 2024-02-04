@@ -3,9 +3,9 @@ package delta.games.lotro.tools.dat.misc;
 import java.util.HashMap;
 import java.util.Map;
 
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
  * Loader for data in ProgressionControl.
@@ -33,14 +33,13 @@ public class ProgressionControlLoader
    */
   public void loadProgressionData()
   {
-    // Load properties for ItemAdvancementControl (0x7900F24A)
-    PropertiesSet itemAdvancementControlProps=_facade.loadProperties(1879110218+DATConstants.DBPROPERTIES_OFFSET);
-    if (itemAdvancementControlProps==null)
+    PropertiesSet progressionControlProps=WeenieContentDirectory.loadWeenieContentProps(_facade,"ProgressionControl");
+    if (progressionControlProps==null)
     {
       return;
     }
     // Starting levels
-    Object[] startingLevelTable=(Object[])itemAdvancementControlProps.getProperty("ProgressionControl_TypeStartingLevelTable");
+    Object[] startingLevelTable=(Object[])progressionControlProps.getProperty("ProgressionControl_TypeStartingLevelTable");
     for(Object startingLevelObj : startingLevelTable)
     {
       PropertiesSet startingLevelProps=(PropertiesSet)startingLevelObj;
@@ -53,7 +52,7 @@ public class ProgressionControlLoader
       _startingLevels.put(Integer.valueOf(typeCode),Integer.valueOf(level));
     }
     // Multipliers
-    Object[] multipliersTable=(Object[])itemAdvancementControlProps.getProperty("ProgressionControl_TypeMultiplierTable");
+    Object[] multipliersTable=(Object[])progressionControlProps.getProperty("ProgressionControl_TypeMultiplierTable");
     for(Object multiplierObj : multipliersTable)
     {
       PropertiesSet multiplierProps=(PropertiesSet)multiplierObj;

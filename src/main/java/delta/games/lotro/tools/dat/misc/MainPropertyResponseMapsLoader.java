@@ -61,7 +61,6 @@ PropertyResponse_WorldEventResponse_List:
     ...
      */
     PropertiesSet props=_facade.loadProperties(propertyResponseMapID+DATConstants.DBPROPERTIES_OFFSET);
-    System.out.println(props.dump());
     Object[] array=(Object[])props.getProperty("PropertyResponse_WorldEventResponse_List");
     for(Object entry : array)
     {
@@ -100,7 +99,6 @@ PropertyResponse_Filter_Array:
   #1: PropertyResponse_Filter_Alignment 1 (Good)
      */
     PropertiesSet props=_facade.loadProperties(callbackID+DATConstants.DBPROPERTIES_OFFSET);
-    System.out.println(props.dump());
     Object[] array=(Object[])props.getProperty("PropertyResponseCallback_AppliedEffect_Array");
     for(Object entry : array)
     {

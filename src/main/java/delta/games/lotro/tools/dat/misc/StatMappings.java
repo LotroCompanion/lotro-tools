@@ -153,7 +153,7 @@ public class StatMappings
     }
     else
     {
-      System.out.println("Stat not found: "+gameKey);
+      LOGGER.warn("Stat not found: "+gameKey);
     }
   }
 }

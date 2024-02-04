@@ -84,7 +84,6 @@ public class WebStoreItemsLoader
   private WebStoreItem handleWebStoreItem(int webStoreItemID)
   {
     PropertiesSet props=_facade.loadProperties(webStoreItemID+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(props.dump());
     WebStoreItem ret=new WebStoreItem(webStoreItemID);
     // Name
     String name=_i18n.getNameStringProperty(props,"WebStoreItem_Name",webStoreItemID,0);
@@ -101,7 +100,7 @@ public class WebStoreItemsLoader
     }
     // Free for subscribers
     Integer freeForSubscribersInt=(Integer)props.getProperty("WebStoreAccountItem_IsFreeForSubscribers");
-    boolean freeForSubscribers=(freeForSubscribersInt!=null)?(freeForSubscribersInt.intValue()>0):false;
+    boolean freeForSubscribers=((freeForSubscribersInt!=null)&&(freeForSubscribersInt.intValue()>0));
     ret.setFreeForSubscribers(freeForSubscribers);
     /*
     WebStoreAccountItem_BillingToken: 629 (WSWILDW)
