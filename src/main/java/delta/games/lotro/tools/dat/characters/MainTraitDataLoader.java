@@ -320,6 +320,7 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
   {
     loadEffectsAtRank(trait,traitProperties);
     loadEffectGenerators(trait,traitProperties);
+    loadVirtuePassives(trait,traitProperties);
   }
 
   private void loadEffectGenerators(TraitDescription trait, PropertiesSet traitProperties)
@@ -338,16 +339,40 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
     for(Object entry : effectsArray)
     {
       PropertiesSet generatorProps=(PropertiesSet)entry;
-      int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue(); 
-      Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
-      if ((spellcraft!=null) && (spellcraft.floatValue()<0))
-      {
-        spellcraft=null;
-      }
-      Effect2 effect=_effectsLoader.getEffect(effectID);
-      EffectGenerator generator=new EffectGenerator(effect,spellcraft);
-      trait.addEffectGenerator(generator);
+      loadEffectGenerator(trait, generatorProps);
     }
+  }
+
+  private void loadVirtuePassives(TraitDescription trait, PropertiesSet traitProperties)
+  {
+    /*
+EffectGenerator_Virtue_PassiveEffectList: 
+  #1: EffectGenerator_EffectStruct 
+    EffectGenerator_EffectID: 1879389531
+     */
+    Object[] effectsArray=(Object[])traitProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
+    if (effectsArray==null)
+    {
+      return;
+    }
+    for(Object entry : effectsArray)
+    {
+      PropertiesSet generatorProps=(PropertiesSet)entry;
+      loadEffectGenerator(trait, generatorProps);
+    }
+  }
+
+  private void loadEffectGenerator(TraitDescription trait, PropertiesSet generatorProps)
+  {
+    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue(); 
+    Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
+    if ((spellcraft!=null) && (spellcraft.floatValue()<0))
+    {
+      spellcraft=null;
+    }
+    Effect2 effect=_effectsLoader.getEffect(effectID);
+    EffectGenerator generator=new EffectGenerator(effect,spellcraft);
+    trait.addEffectGenerator(generator);
   }
 
   private void loadEffectsAtRank(TraitDescription trait, PropertiesSet traitProperties)
