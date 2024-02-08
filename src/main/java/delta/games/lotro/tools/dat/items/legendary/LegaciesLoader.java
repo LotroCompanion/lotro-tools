@@ -15,7 +15,6 @@ import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.constraints.ClassAndSlot;
-import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
@@ -136,10 +135,13 @@ public class LegaciesLoader
     // Initial max tier
     int initialMaxTier=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_InitialMaxLevel")).intValue();
     ret.setMaxInitialLevel(initialMaxTier);
-    // Stats
+    // Effect => Stats & ID
     Integer imbuedEffect=(Integer)props.getProperty("ItemAdvancement_ImbuedLegacy_Effect");
     if (imbuedEffect!=null)
     {
+      // Effect ID
+      ret.setEffectID(imbuedEffect.intValue());
+      // Stats
       StatsProvider provider=DatEffectUtils.loadEffectStats(_statUtilsImbued,imbuedEffect.intValue());
       ret.setStatsProvider(provider);
     }
@@ -384,12 +386,8 @@ public class LegaciesLoader
   private NonImbuedLegacyTier buildTieredLegacy(int effectId, Boolean major)
   {
     NonImbuedLegacyTier legacyTier=null;
-    Effect effect=DatEffectUtils.loadEffect(_statUtilsNonImbued,effectId);
-    // Remove name: it is not interesting for tiered legacies
-    effect.setName(null);
-    // Remove icon: it is not interesting for tiered legacies
-    effect.setIconId(null);
-    StatDescription stat=getStat(effect);
+    StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_statUtilsNonImbued,effectId);
+    StatDescription stat=getStat(statsProvider);
     TieredNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getLegacy(stat);
     if (legacy==null)
     {
@@ -410,7 +408,6 @@ public class LegaciesLoader
         legacy.setType(LegacyType.CLASS);
       }
     }
-    StatsProvider statsProvider=effect.getStatsProvider();
     int nbStats=statsProvider.getNumberOfStatProviders();
     if (nbStats>0)
     {
@@ -423,7 +420,7 @@ public class LegaciesLoader
       int pointTier=((Integer)progressionProps.getProperty("Progression_PointTier")).intValue();
       //Integer progType=(Integer)progressionProps.getProperty("Progression_Type");
       int tier=pointTier-1;
-      legacyTier=legacy.addTier(tier,effect);
+      legacyTier=legacy.addTier(tier,effectId,statsProvider);
       // Progression type
       int typeCode=((Integer)progressionProps.getProperty("Progression_Type")).intValue();
       // Start level
@@ -441,9 +438,8 @@ public class LegaciesLoader
     return legacyTier;
   }
 
-  private StatDescription getStat(Effect effect)
+  private StatDescription getStat(StatsProvider statsProvider)
   {
-    StatsProvider statsProvider=effect.getStatsProvider();
     int nbStats=statsProvider.getNumberOfStatProviders();
     if (nbStats>0)
     {
@@ -574,21 +570,15 @@ public class LegaciesLoader
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
     if (legacy==null)
     {
-      Effect effect=DatEffectUtils.loadEffect(_statUtilsNonImbued,effectId);
-      if (effect!=null)
-      {
-        // Remove name: it is not interesting for non imbued legacies
-        effect.setName(null);
-        // Remove icon: it is not interesting for non imbued legacies
-        effect.setIconId(null);
-        legacy=new DefaultNonImbuedLegacy();
-        legacy.setEffect(effect);
-        legacy.setType(type);
-        // Patch stats for specific cases
-        patchStats(effect.getStatsProvider(),characterClass,slot);
-        // Register legacy
-        _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
-      }
+      StatsProvider statsProvider=DatEffectUtils.loadEffectStats(_statUtilsNonImbued,effectId);
+      legacy=new DefaultNonImbuedLegacy();
+      legacy.setEffectID(effectId);
+      legacy.setStatsProvider(statsProvider);
+      legacy.setType(type);
+      // Patch stats for specific cases
+      patchStats(statsProvider,characterClass,slot);
+      // Register legacy
+      _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
     }
     //System.out.println("Got "+legacy+" for quality "+quality);
     if ((characterClass!=null) || (slot!=null))
@@ -628,11 +618,9 @@ public class LegaciesLoader
       // Build a DPS legacy using the effect identifier as legacy identifier
       legacy=new DefaultNonImbuedLegacy();
       legacy.setType(LegacyType.DPS);
+      legacy.setEffectID(dpsLutId); // TODO : this is not a true effect ID!!
       StatsProvider stats=loadDpsLut(dpsLutId);
-      Effect effect=new Effect();
-      effect.setId(dpsLutId);
-      effect.setStatsProvider(stats);
-      legacy.setEffect(effect);
+      legacy.setStatsProvider(stats);
       legacy.setIconId(1091968768);
       // Manually setup link with imbued DPS legacies:
       int imbuedDpsLegacyId=0;
