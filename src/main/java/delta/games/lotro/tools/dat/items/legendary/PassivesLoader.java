@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect;
-import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.items.legendary.passives.Passive;
 import delta.games.lotro.lore.items.legendary.passives.PassivesGroup;
+import delta.games.lotro.lore.items.legendary.passives.io.xml.PassivesXMLWriter;
 import delta.games.lotro.lore.items.legendary.passives.io.xml.PassivesGroupsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatEffectUtils;
@@ -29,7 +29,7 @@ public class PassivesLoader
   private I18nUtils _i18n;
   private DatStatUtils _statUtils;
   private Map<Integer,PassivesGroup> _loadedGroups;
-  private Map<Integer,Effect> _parsedEffects;
+  private Map<Integer,Passive> _parsedPassives;
 
   /**
    * Constructor.
@@ -41,7 +41,7 @@ public class PassivesLoader
     _i18n=new I18nUtils("passives",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
     _loadedGroups=new HashMap<Integer,PassivesGroup>();
-    _parsedEffects=new HashMap<Integer,Effect>();
+    _parsedPassives=new HashMap<Integer,Passive>();
   }
 
   /**
@@ -82,15 +82,11 @@ public class PassivesLoader
       Integer effectId=(Integer)effectProps.getProperty("ItemAdvancement_Effect");
       if (effectId!=null)
       {
-        Effect effect=_parsedEffects.get(effectId);
-        if (effect==null)
+        Passive passive=_parsedPassives.get(effectId);
+        if (passive==null)
         {
-          effect=DatEffectUtils.loadEffect(_statUtils,effectId.intValue());
-          // Remove name: it is not interesting for passives
-          effect.setName(null);
-          // Remove icon: it is not interesting for passives
-          effect.setIconId(null);
-          _parsedEffects.put(effectId,effect);
+          passive=DatEffectUtils.loadPassive(_statUtils,effectId.intValue());
+          _parsedPassives.put(effectId,passive);
           //System.out.println("\tLoaded effect: "+effect);
         }
         PassivesGroup group=_loadedGroups.get(Integer.valueOf(staticEffectGroupId));
@@ -105,9 +101,9 @@ public class PassivesLoader
   public void savePassives()
   {
     // Passives
-    List<Effect> effects=new ArrayList<Effect>(_parsedEffects.values());
-    Collections.sort(effects,new IdentifiableComparator<Effect>());
-    EffectXMLWriter.write(GeneratedFiles.PASSIVES,effects);
+    List<Passive> effects=new ArrayList<Passive>(_parsedPassives.values());
+    Collections.sort(effects,new IdentifiableComparator<Passive>());
+    PassivesXMLWriter.write(GeneratedFiles.PASSIVES,effects);
     // Passives usage
     List<Integer> groupIds=new ArrayList<Integer>(_loadedGroups.keySet());
     Collections.sort(groupIds);
