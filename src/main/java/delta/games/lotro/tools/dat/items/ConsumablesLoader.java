@@ -10,7 +10,7 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
@@ -127,7 +127,7 @@ public class ConsumablesLoader
   }
    */
 
-  private void handleEffect(Item item, Effect2 effect, Float defaultSpellcraft)
+  private void handleEffect(Item item, Effect effect, Float defaultSpellcraft)
   {
     //System.out.println("Effect props: "+effectProps.dump());
     if (effect instanceof InstantFellowshipEffect)
@@ -147,13 +147,13 @@ public class ConsumablesLoader
 
   private void handleEffectGenerators(Item item, EffectGenerator effectGenerator, Float defaultSpellcraft)
   {
-    Effect2 childEffect=effectGenerator.getEffect();
+    Effect childEffect=effectGenerator.getEffect();
     Float spellCraft=effectGenerator.getSpellcraft();
     Float spellcraftToUse=(spellCraft!=null)?spellCraft:defaultSpellcraft;
     handleEffect(item, childEffect, spellcraftToUse);
   }
 
-  private void handleSimpleEffect(Item item, Effect2 effect, Float spellcraft)
+  private void handleSimpleEffect(Item item, Effect effect, Float spellcraft)
   {
     Integer key=Integer.valueOf(effect.getIdentifier());
     if (_handledEffectsForCurrentItem.contains(key))
@@ -261,7 +261,7 @@ public class ConsumablesLoader
     {
       Float skillSpellcraft=effectGenerator.getSpellcraft();
       Float spellcraft=(skillSpellcraft!=null)?skillSpellcraft:defaultLevel;
-      Effect2 effect=effectGenerator.getEffect();
+      Effect effect=effectGenerator.getEffect();
       handleEffect(item,effect,spellcraft);
     }
   }

@@ -18,7 +18,7 @@ import delta.games.lotro.character.traits.prerequisites.CompoundTraitPrerequisit
 import delta.games.lotro.character.traits.prerequisites.SimpleTraitPrerequisite;
 import delta.games.lotro.character.traits.prerequisites.TraitLogicOperator;
 import delta.games.lotro.character.traits.prerequisites.TraitPrerequisitesUtils;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -370,7 +370,7 @@ EffectGenerator_Virtue_PassiveEffectList:
     {
       spellcraft=null;
     }
-    Effect2 effect=_effectsLoader.getEffect(effectID);
+    Effect effect=_effectsLoader.getEffect(effectID);
     EffectGenerator generator=new EffectGenerator(effect,spellcraft);
     trait.addEffectGenerator(generator);
   }
@@ -398,7 +398,7 @@ Trait_EffectSkill_AtRankEffects_Array:
       {
         int effectID=((Integer)effectIDObj).intValue();
         //System.out.println("Rank "+rank+" => "+effectID);
-        Effect2 effect=_effectsLoader.getEffect(effectID);
+        Effect effect=_effectsLoader.getEffect(effectID);
         if (effect!=null)
         {
           trait.addEffect(effect,rank);

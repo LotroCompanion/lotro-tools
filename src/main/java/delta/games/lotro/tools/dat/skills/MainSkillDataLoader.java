@@ -13,7 +13,7 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.RecallEffect;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -260,7 +260,7 @@ public class MainSkillDataLoader
     {
       for(SkillEffectGenerator generator : effectsMgr.getEffects())
       {
-        Effect2 effect=generator.getEffect();
+        Effect effect=generator.getEffect();
         if (effect instanceof RecallEffect)
         {
           RecallEffect recallEffect=(RecallEffect)effect;

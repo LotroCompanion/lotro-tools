@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -88,7 +88,7 @@ public class GenericItemEffectsLoader
     {
       PropertiesSet effectProps=(PropertiesSet)effectEntry;
       int effectID=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-      Effect2 effect=_effectsLoader.getEffect(effectID);
+      Effect effect=_effectsLoader.getEffect(effectID);
       ret.addEffect(effect);
     }
     return ret;
@@ -129,7 +129,7 @@ public class GenericItemEffectsLoader
     {
       PropertiesSet effectProps=(PropertiesSet)effectEntry;
       int effectID=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-      Effect2 effect=_effectsLoader.getEffect(effectID);
+      Effect effect=_effectsLoader.getEffect(effectID);
       ret.addEffect(effect);
     }
     return ret;

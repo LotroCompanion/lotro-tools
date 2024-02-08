@@ -6,7 +6,7 @@ import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.requirements.EffectRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
@@ -208,7 +208,7 @@ public class RequirementsLoadingUtils
     Integer effectId=(Integer)properties.getProperty("Usage_RequiredEffect");
     if ((effectId!=null) && (effectId.intValue()>0))
     {
-      Effect2 effect=loader.getEffect(effectId.intValue());
+      Effect effect=loader.getEffect(effectId.intValue());
       EffectRequirement requirement=new EffectRequirement(effect);
       requirements.setEffectRequirement(requirement);
     }

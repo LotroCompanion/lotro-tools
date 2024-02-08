@@ -1,6 +1,6 @@
 package delta.games.lotro.tools.dat.effects;
 
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.sets.ItemsSet;
@@ -66,7 +66,7 @@ public class ItemsSetEffectsLoader
     {
       PropertiesSet effectProps=(PropertiesSet)effectObj;
       int effectId=((Integer)effectProps.getProperty("EffectGenerator_EffectID")).intValue();
-      Effect2 effect=_loader.getEffect(effectId);
+      Effect effect=_loader.getEffect(effectId);
       Float spellcraft=(Float)effectProps.getProperty("EffectGenerator_EffectSpellcraft");
       spellcraft=Utils.normalize(spellcraft);
       EffectGenerator generator=new EffectGenerator(effect,spellcraft);

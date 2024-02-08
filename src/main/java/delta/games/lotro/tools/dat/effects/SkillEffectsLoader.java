@@ -3,7 +3,7 @@ package delta.games.lotro.tools.dat.effects;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectType;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.utils.Utils;
 
@@ -133,7 +133,7 @@ Skill_UserEffectList:
     duration=Utils.normalize(duration);
     Float spellcraft=(Float)effectProps.getProperty("Skill_EffectSpellcraft");
     spellcraft=Utils.normalize(spellcraft);
-    Effect2 effect=_loader.getEffect(effectID.intValue());
+    Effect effect=_loader.getEffect(effectID.intValue());
     SkillEffectGenerator generator=new SkillEffectGenerator(effect,spellcraft,duration,type);
     SkillDescription.addEffect(skill,generator);
   }
@@ -147,7 +147,7 @@ Skill_UserEffectList:
     }
     Float spellcraft=(Float)effectProps.getProperty("Skill_Toggle_Effect_Spellcraft");
     spellcraft=Utils.normalize(spellcraft);
-    Effect2 effect=_loader.getEffect(effectID.intValue());
+    Effect effect=_loader.getEffect(effectID.intValue());
     SkillEffectGenerator generator=new SkillEffectGenerator(effect,spellcraft,null,type);
     SkillDescription.addEffect(skill,generator);
   }

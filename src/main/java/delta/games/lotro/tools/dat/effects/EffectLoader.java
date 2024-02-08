@@ -10,7 +10,7 @@ import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectGenerator;
@@ -29,7 +29,7 @@ import delta.games.lotro.common.effects.RecallEffect;
 import delta.games.lotro.common.effects.TieredEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
-import delta.games.lotro.common.effects.io.xml.EffectXMLWriter2;
+import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -91,9 +91,9 @@ public class EffectLoader
    * @param effectId Effect identifier.
    * @return An effect or <code>null</code> if not found/loaded.
    */
-  public Effect2 getEffect(int effectId)
+  public Effect getEffect(int effectId)
   {
-    Effect2 ret=_effectsMgr.getEffectById(effectId);
+    Effect ret=_effectsMgr.getEffectById(effectId);
     if (ret==null)
     {
       ret=loadEffect(effectId);
@@ -108,7 +108,7 @@ public class EffectLoader
    * @param effectId Effect identifier.
    * @return An effect or <code>null</code> if not found.
    */
-  private Effect2 loadEffect(int effectId)
+  private Effect loadEffect(int effectId)
   {
     PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
     if (effectProps==null)
@@ -128,7 +128,7 @@ public class EffectLoader
     System.out.println("Effect ID="+effectId+", class="+className+" ("+classIndex+")");
     System.out.println(effectProps.dump().trim());
     */
-    Effect2 ret=buildEffect(classIndex);
+    Effect ret=buildEffect(classIndex);
     ret.setId(effectId);
     // Name
     String effectName=_i18nUtils.getNameStringProperty(effectProps,"Effect_Name",effectId,0);
@@ -179,7 +179,7 @@ public class EffectLoader
     return _i18nUtils.getStringProperty(props,propertyName);
   }
 
-  private Effect2 buildEffect(int classDef)
+  private Effect buildEffect(int classDef)
   {
     // Effect PropertyModificationEffect (734) and child classes
     // except those explicitly handled later
@@ -205,10 +205,10 @@ public class EffectLoader
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
     //System.out.println("Unmanaged class: "+classDef);
-    return new Effect2();
+    return new Effect();
   }
 
-  private void loadSpecifics(Effect2 effect, PropertiesSet effectProps, int classDef)
+  private void loadSpecifics(Effect effect, PropertiesSet effectProps, int classDef)
   {
     if (effect instanceof ProcEffect)
     {
@@ -480,7 +480,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     {
       return null;
     }
-    Effect2 effect=getEffect(effectID);
+    Effect effect=getEffect(effectID);
     if (effect==null)
     {
       LOGGER.warn("Effect not found: "+effectID);
@@ -569,7 +569,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     {
       spellcraft=null;
     }
-    Effect2 effect=getEffect(effectID);
+    Effect effect=getEffect(effectID);
     EffectGenerator ret=new EffectGenerator(effect,spellcraft);
     return ret;
   }
@@ -856,7 +856,7 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
       for(Object presentObj : presentArray)
       {
         Integer effectID=(Integer)presentObj;
-        Proxy<Effect2> presentEffect=buildProxy(effectID);
+        Proxy<Effect> presentEffect=buildProxy(effectID);
         effect.addPresentEffect(presentEffect);
       }
     }
@@ -916,17 +916,17 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
     }
   }
 
-  private Proxy<Effect2> buildProxy(Integer effectID)
+  private Proxy<Effect> buildProxy(Integer effectID)
   {
     if ((effectID==null) || (effectID.intValue()==0))
     {
       return null;
     }
-    Proxy<Effect2> proxy=null;
-    Effect2 effect=getEffect(effectID.intValue());
+    Proxy<Effect> proxy=null;
+    Effect effect=getEffect(effectID.intValue());
     if (effect!=null)
     {
-      proxy=new Proxy<Effect2>();
+      proxy=new Proxy<Effect>();
       proxy.setId(effectID.intValue());
       proxy.setName(effect.getName());
       proxy.setObject(effect);
@@ -940,8 +940,8 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
   public void save()
   {
     // Effects
-    EffectXMLWriter2 w=new EffectXMLWriter2();
-    List<Effect2> effects=EffectsManager.getInstance().getEffects();
+    EffectXMLWriter w=new EffectXMLWriter();
+    List<Effect> effects=EffectsManager.getInstance().getEffects();
     w.write(GeneratedFiles.EFFECTS,effects);
     _i18nUtils.save();
     // Progressions

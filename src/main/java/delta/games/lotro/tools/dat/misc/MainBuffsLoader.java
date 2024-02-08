@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.IdentifiableComparator;
-import delta.games.lotro.common.effects.Effect2;
+import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectsManager;
 import delta.games.lotro.lore.buffs.EffectBuff;
 import delta.games.lotro.lore.buffs.io.xml.EffectBuffXMLWriter;
@@ -85,7 +85,7 @@ public class MainBuffsLoader
   private void loadBuff(List<EffectBuff> buffs, int id, String key)
   {
     EffectBuff buff=null;
-    Effect2 effect=EffectsManager.getInstance().getEffectById(id);
+    Effect effect=EffectsManager.getInstance().getEffectById(id);
     if (effect!=null)
     {
       buff=new EffectBuff();
