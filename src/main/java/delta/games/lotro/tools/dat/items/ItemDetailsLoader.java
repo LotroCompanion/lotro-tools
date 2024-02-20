@@ -14,6 +14,7 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.common.enums.AllegianceGroup;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -27,6 +28,7 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.emotes.EmoteDescription;
 import delta.games.lotro.lore.emotes.EmotesManager;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.details.AllegiancePoints;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.ItemReputation;
@@ -48,6 +50,7 @@ public class ItemDetailsLoader
 
   private DataFacade _facade;
   private Map<Integer,Float> _cooldownData;
+  private LotroEnum<AllegianceGroup> _allegianceGroupEnum;
 
   /**
    * Constructor.
@@ -57,6 +60,7 @@ public class ItemDetailsLoader
   {
     _facade=facade;
     _cooldownData=CooldownLoader.doIt(facade);
+    _allegianceGroupEnum=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
   }
 
   /**
@@ -73,6 +77,7 @@ public class ItemDetailsLoader
     handleEffects(item,props);
     handleWeaponSlayer(item,props);
     handleCooldownData(item,props);
+    handleAllegiancePoints(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -371,6 +376,25 @@ Usage_CooldownDuration: 21 (Item_2m)
       Integer channel=(Integer)props.getProperty("Usage_CooldownChannel");
       ItemUsageCooldown info=new ItemUsageCooldown(duration.floatValue(),channel);
       Item.addDetail(item,info);
+    }
+  }
+
+  private void handleAllegiancePoints(Item item, PropertiesSet props)
+  {
+    // Allegiance_Group: 1 (Mordor)
+    // Allegiance_Points: 1000
+    {
+      Integer points=(Integer)props.getProperty("Allegiance_Points");
+      Integer groupCode=(Integer)props.getProperty("Allegiance_Group");
+      if ((points!=null) && (points.intValue()>0))
+      {
+        if ((groupCode!=null) && (groupCode.intValue()>0))
+        {
+          AllegianceGroup group=_allegianceGroupEnum.getEntry(groupCode.intValue());
+          AllegiancePoints allegiancePoints=new AllegiancePoints(group,points.intValue());
+          Item.addDetail(item,allegiancePoints);
+        }
+      }
     }
   }
 }
