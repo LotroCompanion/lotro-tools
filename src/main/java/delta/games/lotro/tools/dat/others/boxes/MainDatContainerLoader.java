@@ -11,7 +11,6 @@ import delta.games.lotro.common.treasure.RelicsList;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
-import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -46,11 +45,12 @@ public class MainDatContainerLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param lootsManager Loots manager.
    */
-  public MainDatContainerLoader(DataFacade facade)
+  public MainDatContainerLoader(DataFacade facade, LootsManager lootsManager)
   {
     _facade=facade;
-    _loots=new LootsManager();
+    _loots=lootsManager;
     _lootLoader=new LootLoader(facade,_loots);
     _instancesLootLoader=new CustomInstancesLootLoader(_facade,_lootLoader);
   }
@@ -318,10 +318,6 @@ If PackageItem_IsPreviewable: 1
         containers.add(container);
       }
     }
-    // Dump some stats
-    _loots.dump();
-    // Write loot data
-    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
     // Write container data
     ContainerXMLWriter.writeContainersFile(GeneratedFiles.CONTAINERS,containers);
     // Write custom instance loots
@@ -348,7 +344,8 @@ If PackageItem_IsPreviewable: 1
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatContainerLoader(facade).doIt();
+    LootsManager lootsManager=LootsManager.getInstance();
+    new MainDatContainerLoader(facade,lootsManager).doIt();
     facade.dispose();
   }
 }

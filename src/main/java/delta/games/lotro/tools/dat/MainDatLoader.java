@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.common.treasure.LootsManager;
+import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
@@ -169,6 +170,7 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Initial gear
     new InitialGearLoader(_facade).doIt();
+    LootsManager lootsManager=new LootsManager();
     if (live)
     {
       // Paper items
@@ -188,11 +190,22 @@ public class MainDatLoader
     MainDatPrivateEncountersLoader peLoader=new MainDatPrivateEncountersLoader(_facade);
     peLoader.doIt();
     // Containers
-    new MainDatContainerLoader(_facade).doIt();
+    new MainDatContainerLoader(_facade,lootsManager).doIt();
     // Mobs
-    new MainDatMobsLoader(_facade,LootsManager.getInstance()).doIt();
+    new MainDatMobsLoader(_facade,lootsManager).doIt();
     // NPCs
     new MainDatNPCsLoader(_facade).doIt();
+    // Disenchantment
+    if (live)
+    {
+      new MainDatDisenchantmentsLoader(_facade,lootsManager).doIt();
+    }
+    // Mobs loot
+    new MainDatGenericMobLootLoader(_facade,lootsManager).doIt();
+    // Save loots
+    lootsManager.dump();
+    // Write loot data
+    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
     // Quests and deeds
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
     new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();
@@ -217,13 +230,6 @@ public class MainDatLoader
     {
       new MainDatInstancesTreeLoader(_facade).doIt();
     }
-    // Disenchantment
-    if (live)
-    {
-      new MainDatDisenchantmentsLoader(_facade).doIt();
-    }
-    // Mobs loot
-    new MainDatGenericMobLootLoader(_facade,LootsManager.getInstance()).doIt();
     // Merge progressions
     new MainProgressionsMerger().doIt();
     // Reference data

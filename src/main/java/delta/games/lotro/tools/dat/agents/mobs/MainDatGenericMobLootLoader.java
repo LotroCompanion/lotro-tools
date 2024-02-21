@@ -10,7 +10,6 @@ import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
-import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -216,8 +215,6 @@ LevelBasedLootTable_LootTable:
     {
       LOGGER.info("Wrote generic mobs loot file: "+GeneratedFiles.GENERIC_MOB_LOOTS);
     }
-    // Write loot data
-    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
   }
 
   /**

@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TrophyList;
-import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -34,11 +33,12 @@ public class MainDatDisenchantmentsLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param lootsManager Loots manager.
    */
-  public MainDatDisenchantmentsLoader(DataFacade facade)
+  public MainDatDisenchantmentsLoader(DataFacade facade, LootsManager lootsManager)
   {
     _facade=facade;
-    _loots=LootsManager.getInstance();
+    _loots=lootsManager;
     _lootLoader=new LootLoader(facade,_loots);
   }
 
@@ -98,8 +98,6 @@ public class MainDatDisenchantmentsLoader
     }
     // Write disenchantment data
     DisenchantmentResultXMLWriter.writeDisenchantmentsFile(GeneratedFiles.DISENCHANTMENTS,disenchantments);
-    // Write loot data 
-    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
   }
 
   /**
@@ -109,7 +107,8 @@ public class MainDatDisenchantmentsLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatDisenchantmentsLoader(facade).doIt();
+    LootsManager lootsManager=LootsManager.getInstance();
+    new MainDatDisenchantmentsLoader(facade,lootsManager).doIt();
     facade.dispose();
   }
 }

@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
-import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -63,7 +62,6 @@ public class MainDatMobsLoader
       // Name
       String name=_i18n.getNameStringProperty(properties,"Name",mobId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       ret=new MobDescription(mobId,name);
-      //System.out.println("ID="+indexDataId+", Name: "+name);
       // Classification
       _classificationLoader.loadClassification(properties,ret.getClassification());
       // Loot
@@ -166,8 +164,6 @@ Quest_MonsterDivision: 245 => HallOfMirror
     {
       LOGGER.info("Wrote mobs file: "+GeneratedFiles.MOBS);
     }
-    // Write loot data
-    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,_loots);
     // Save labels
     _i18n.save();
   }
