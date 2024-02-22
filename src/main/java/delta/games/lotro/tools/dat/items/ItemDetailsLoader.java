@@ -16,6 +16,7 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.enums.AllegianceGroup;
 import delta.games.lotro.common.enums.Genus;
+import delta.games.lotro.common.enums.HousingHookCategory;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
@@ -31,6 +32,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.details.AllegiancePoints;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
+import delta.games.lotro.lore.items.details.HousingHooks;
 import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemUsageCooldown;
 import delta.games.lotro.lore.items.details.ItemXP;
@@ -78,6 +80,7 @@ public class ItemDetailsLoader
     handleWeaponSlayer(item,props);
     handleCooldownData(item,props);
     handleAllegiancePoints(item,props);
+    handleDecorationInfo(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -395,6 +398,24 @@ Usage_CooldownDuration: 21 (Item_2m)
           Item.addDetail(item,allegiancePoints);
         }
       }
+    }
+  }
+
+  private void handleDecorationInfo(Item item, PropertiesSet props)
+  {
+    //Item_Decoration_Category: 4194832 (Furniture,Yard,Mobile Yard)
+    Long code=(Long)props.getProperty("Item_Decoration_Category");
+    if ((code!=null) && (code.longValue()!=0))
+    {
+      BitSet bitset=BitSetUtils.getBitSetFromFlags(code.longValue());
+      LotroEnum<HousingHookCategory> housingHookCategoryEnum=LotroEnumsRegistry.getInstance().get(HousingHookCategory.class);
+      List<HousingHookCategory> categories=housingHookCategoryEnum.getFromBitSet(bitset);
+      HousingHooks info=new HousingHooks();
+      for(HousingHookCategory category : categories)
+      {
+        info.addCategory(category);
+      }
+      Item.addDetail(item,info);
     }
   }
 }

@@ -22,6 +22,7 @@ import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
+import delta.games.lotro.common.enums.HousingHookCategory;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.ItemUniquenessChannel;
@@ -153,6 +154,7 @@ public class MainDatEnumsLoader
     loadEnum(587203492,"SkillType",SkillType.class); // 0x230003A4
     loadEnum(587202640,"CombatState",CombatState.class); // 0x23000050
     loadEnum(587202660,"ResistCategory",ResistCategory.class); // 0x23000064
+    loadEnum(587203172,"HousingHookCategory",HousingHookCategory.class); // 0x23000264
 
     // Derivated enums
     // From EquipmentCategory:
