@@ -33,6 +33,7 @@ import delta.games.lotro.common.enums.LotroEnumEntry;
 import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
+import delta.games.lotro.common.enums.PerkUICategory;
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.RunicTier;
@@ -155,6 +156,7 @@ public class MainDatEnumsLoader
     loadEnum(587202640,"CombatState",CombatState.class); // 0x23000050
     loadEnum(587202660,"ResistCategory",ResistCategory.class); // 0x23000064
     loadEnum(587203172,"HousingHookCategory",HousingHookCategory.class); // 0x23000264
+    loadEnum(587203027,"PerkUICategory",PerkUICategory.class); // 0x230001D3
 
     // Derivated enums
     // From EquipmentCategory:

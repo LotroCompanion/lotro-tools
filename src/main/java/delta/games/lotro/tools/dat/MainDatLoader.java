@@ -54,6 +54,7 @@ import delta.games.lotro.tools.dat.misc.MainBuffsLoader;
 import delta.games.lotro.tools.dat.misc.MainDatColorLoader;
 import delta.games.lotro.tools.dat.misc.MainDatEnumsLoader;
 import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
+import delta.games.lotro.tools.dat.misc.MainPerksLoader;
 import delta.games.lotro.tools.dat.misc.MainPropertyResponseMapsLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
@@ -165,6 +166,8 @@ public class MainDatLoader
     new MainDatItemsSetsLoader(_facade,effectsLoader).doIt();
     // Property Response maps
     new MainPropertyResponseMapsLoader(_facade,effectsLoader).doIt();
+    // Perks
+    new MainPerksLoader(_facade,effectsLoader).doIt();
     // Save effects
     effectsLoader.save();
     new MainProgressionsMerger().doIt();
@@ -382,6 +385,9 @@ public class MainDatLoader
     // Hobbies
     deleteFile(GeneratedFiles.HOBBIES);
     deleteDirectory(GeneratedFiles.HOBBY_ICONS);
+    // Perks
+    deleteFile(GeneratedFiles.PERKS);
+    deleteDirectory(GeneratedFiles.PERK_ICONS);
     // Misc
     deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
     deleteFile(GeneratedFiles.WORLD_EVENTS);

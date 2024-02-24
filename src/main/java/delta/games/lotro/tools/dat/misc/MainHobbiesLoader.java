@@ -191,8 +191,8 @@ public class MainHobbiesLoader
    */
   private void saveHobbies(List<HobbyDescription> hobbies)
   {
-    int nbSkills=hobbies.size();
-    LOGGER.info("Writing "+nbSkills+" hobbies");
+    int nbHobbies=hobbies.size();
+    LOGGER.info("Writing "+nbHobbies+" hobbies");
     // Write hobbies file
     boolean ok=HobbyDescriptionXMLWriter.write(GeneratedFiles.HOBBIES,hobbies);
     if (ok)

@@ -416,4 +416,12 @@ public class GeneratedFiles
    * Labels dir.
    */
   public static final File LABELS=LotroCoreConfig.getInstance().getFile(DataFiles.LABELS);
+  /**
+   * Perks.
+   */
+  public static final File PERKS=LotroCoreConfig.getInstance().getFile(DataFiles.PERKS);
+  /**
+   * Perk icons.
+   */
+  public static final File PERK_ICONS=LotroCoreConfig.getInstance().getFile("perkIcons");
 }
