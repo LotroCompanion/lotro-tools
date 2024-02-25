@@ -134,16 +134,19 @@ public class WebStoreItemsLoader
   {
     int id=WeenieContentDirectory.getWeenieID(_facade,"WebStoreDirectory");
     WStateDataSet wState=_facade.loadWState(id);
-    ClassInstance webStoreDirectory=(ClassInstance)wState.getValue(wState.getOrphanReferences().get(0).intValue());
-    List<Integer> itemIDs=(List<Integer>)webStoreDirectory.getAttributeValue("20643033");
-    for(Integer itemID : itemIDs)
+    if (wState!=null)
     {
-      getWebStoreItem(itemID.intValue());
-    }
-    Map<Integer,Integer> map=(Map<Integer,Integer>)webStoreDirectory.getAttributeValue("128197076");
-    for(Integer itemID : map.values())
-    {
-      getWebStoreItem(itemID.intValue());
+      ClassInstance webStoreDirectory=(ClassInstance)wState.getValue(wState.getOrphanReferences().get(0).intValue());
+      List<Integer> itemIDs=(List<Integer>)webStoreDirectory.getAttributeValue("20643033");
+      for(Integer itemID : itemIDs)
+      {
+        getWebStoreItem(itemID.intValue());
+      }
+      Map<Integer,Integer> map=(Map<Integer,Integer>)webStoreDirectory.getAttributeValue("128197076");
+      for(Integer itemID : map.values())
+      {
+        getWebStoreItem(itemID.intValue());
+      }
     }
     // Save
     save();
