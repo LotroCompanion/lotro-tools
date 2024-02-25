@@ -29,6 +29,7 @@ import delta.games.lotro.lore.deeds.DeedType;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.webStore.WebStoreItem;
+import delta.games.lotro.lore.webStore.WebStoreItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -135,7 +136,7 @@ public class DeedsLoader
     Integer webStoreItemID=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
     if (webStoreItemID!=null)
     {
-      WebStoreItem webStoreItem=_utils.getWebStoreItemsLoader().getWebStoreItem(webStoreItemID.intValue());
+      WebStoreItem webStoreItem=WebStoreItemsManager.getInstance().getWebStoreItem(webStoreItemID.intValue());
       deed.setWebStoreItem(webStoreItem);
     }
     // Events

@@ -22,6 +22,23 @@ public class WeenieContentDirectory
    */
   public static PropertiesSet loadWeenieContentProps(DataFacade facade, String name)
   {
+    int id=getWeenieID(facade,name);
+    if (id!=0)
+    {
+      PropertiesSet props=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+      return props;
+    }
+    return null;
+  }
+
+  /**
+   * Load some properties using the WeenieContent directory.
+   * @param facade Data facade.
+   * @param name Content name.
+   * @return Some properties or <code>null</code> if not found.
+   */
+  public static int getWeenieID(DataFacade facade, String name)
+  {
     byte[] data=facade.loadData(0x28000000);
     DIDMapper map=DataIdMapLoader.decodeDataIdMap(data);
     Integer dataId=map.getDataIdForLabel("WEENIECONTENT");
@@ -36,11 +53,10 @@ public class WeenieContentDirectory
         if (name.equals(subLabel))
         {
           int subDataId=subMap.getDataIdForLabel(subLabel).intValue();
-          PropertiesSet props=facade.loadProperties(subDataId+DATConstants.DBPROPERTIES_OFFSET);
-          return props;
+          return subDataId;
         }
       }
     }
-    return null;
+    return 0;
   }
 }

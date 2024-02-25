@@ -145,7 +145,5 @@ public class AchievablesLoadingUtils
   {
     // Save world events
     _worldEventsLoader.save();
-    // Save web store items
-    _webStoreItemsLoader.save();
   }
 }

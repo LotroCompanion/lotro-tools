@@ -26,6 +26,7 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.lore.webStore.WebStoreItem;
+import delta.games.lotro.lore.webStore.WebStoreItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
@@ -200,7 +201,7 @@ public class QuestsLoader
     Integer webStoreItemID=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
     if (webStoreItemID!=null)
     {
-      WebStoreItem webStoreItem=_utils.getWebStoreItemsLoader().getWebStoreItem(webStoreItemID.intValue());
+      WebStoreItem webStoreItem=WebStoreItemsManager.getInstance().getWebStoreItem(webStoreItemID.intValue());
       quest.setWebStoreItem(webStoreItem);
     }
     // Events

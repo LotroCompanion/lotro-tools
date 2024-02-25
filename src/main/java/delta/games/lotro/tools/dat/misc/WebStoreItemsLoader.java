@@ -17,9 +17,13 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.webStore.WebStoreItem;
 import delta.games.lotro.lore.webStore.io.xml.WebStoreItemsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -86,17 +90,26 @@ public class WebStoreItemsLoader
     PropertiesSet props=_facade.loadProperties(webStoreItemID+DATConstants.DBPROPERTIES_OFFSET);
     WebStoreItem ret=new WebStoreItem(webStoreItemID);
     // Name
-    String name=_i18n.getNameStringProperty(props,"WebStoreItem_Name",webStoreItemID,0);
+    String name=_i18n.getNameStringProperty(props,"WebStoreItem_Name",webStoreItemID,I18nUtils.OPTION_REMOVE_MARKS);
     ret.setName(name);
     // SKU
     String sku=(String)props.getProperty("WebStoreItem_SKU");
     ret.setSku(sku);
+    // Short name
+    String shortName=(String)props.getProperty("WebStoreItem_ShortName");
+    ret.setShortName(shortName);
     // Billing Token
     Integer billingTokenCode=(Integer)props.getProperty("WebStoreAccountItem_BillingToken");
     if (billingTokenCode!=null)
     {
       BillingGroup billingGroup=_billingGroups.getEntry(billingTokenCode.intValue());
       ret.setBillingToken(billingGroup);
+    }
+    // Item ID
+    Integer itemID=(Integer)props.getProperty("WebStoreInventoryItem_DataID");
+    if (itemID!=null)
+    {
+      ret.setItemID(itemID.intValue());
     }
     // Free for subscribers
     Integer freeForSubscribersInt=(Integer)props.getProperty("WebStoreAccountItem_IsFreeForSubscribers");
@@ -114,9 +127,32 @@ public class WebStoreItemsLoader
   }
 
   /**
+   * Load data.
+   */
+  @SuppressWarnings("unchecked")
+  public void doIt()
+  {
+    int id=WeenieContentDirectory.getWeenieID(_facade,"WebStoreDirectory");
+    WStateDataSet wState=_facade.loadWState(id);
+    ClassInstance webStoreDirectory=(ClassInstance)wState.getValue(wState.getOrphanReferences().get(0).intValue());
+    List<Integer> itemIDs=(List<Integer>)webStoreDirectory.getAttributeValue("20643033");
+    for(Integer itemID : itemIDs)
+    {
+      getWebStoreItem(itemID.intValue());
+    }
+    Map<Integer,Integer> map=(Map<Integer,Integer>)webStoreDirectory.getAttributeValue("128197076");
+    for(Integer itemID : map.values())
+    {
+      getWebStoreItem(itemID.intValue());
+    }
+    // Save
+    save();
+  }
+
+  /**
    * Save data.
    */
-  public void save()
+  private void save()
   {
     // Data
     WebStoreItemsXMLWriter webStoreItemsWriter=new WebStoreItemsXMLWriter();
@@ -128,5 +164,16 @@ public class WebStoreItemsLoader
     }
     // Labels
     _i18n.save();
+  }
+
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    new WebStoreItemsLoader(facade).doIt();
   }
 }

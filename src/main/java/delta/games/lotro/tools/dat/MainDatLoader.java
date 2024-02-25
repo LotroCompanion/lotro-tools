@@ -57,6 +57,7 @@ import delta.games.lotro.tools.dat.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.dat.misc.MainPerksLoader;
 import delta.games.lotro.tools.dat.misc.MainPropertyResponseMapsLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
+import delta.games.lotro.tools.dat.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
 import delta.games.lotro.tools.dat.quests.MainDatAchievablesLoader;
@@ -160,6 +161,8 @@ public class MainDatLoader
     // Items
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
+    // Web Store
+    new WebStoreItemsLoader(_facade).doIt();
     // Character data
     new MainCharacterDataLoader(_facade).doIt();
     // Items sets
