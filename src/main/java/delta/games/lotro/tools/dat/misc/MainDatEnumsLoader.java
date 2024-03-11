@@ -43,6 +43,7 @@ import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
+import delta.games.lotro.common.enums.TraitGroup;
 import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.enums.TraitSubCategory;
 import delta.games.lotro.common.enums.TraitTreeBranchType;
@@ -157,6 +158,7 @@ public class MainDatEnumsLoader
     loadEnum(587202660,"ResistCategory",ResistCategory.class); // 0x23000064
     loadEnum(587203172,"HousingHookCategory",HousingHookCategory.class); // 0x23000264
     loadEnum(587203027,"PerkUICategory",PerkUICategory.class); // 0x230001D3
+    loadEnum(587203310,"TraitGroup",TraitGroup.class); // 0x230002EE
 
     // Derivated enums
     // From EquipmentCategory:

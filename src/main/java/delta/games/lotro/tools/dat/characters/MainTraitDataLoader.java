@@ -23,6 +23,7 @@ import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
+import delta.games.lotro.common.enums.TraitGroup;
 import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.enums.TraitSubCategory;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -59,6 +60,7 @@ public class MainTraitDataLoader
   private I18nUtils _i18n;
   private Map<Integer,Integer> _traitIds2PropMap;
   private List<Proxy<TraitDescription>> _proxies;
+  private LotroEnum<TraitGroup> _traitGroupEnum;
 
   /**
    * Constructor.
@@ -72,6 +74,7 @@ public class MainTraitDataLoader
     _i18n=new I18nUtils("traits",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
     _proxies=new ArrayList<Proxy<TraitDescription>>();
+    _traitGroupEnum=LotroEnumsRegistry.getInstance().get(TraitGroup.class);
   }
 
   /**
@@ -225,6 +228,20 @@ public class MainTraitDataLoader
       LotroEnum<TraitSubCategory> subCategoryMgr=registry.get(TraitSubCategory.class);
       TraitSubCategory subCategory=subCategoryMgr.getEntry(subCategoryCode.intValue());
       ret.setSubCategory(subCategory);
+    }
+    // Trait groups
+    Object[] traitGroups=(Object[])traitProperties.getProperty("Trait_Groups");
+    if (traitGroups!=null)
+    {
+      for(Object traitGroupObj : traitGroups)
+      {
+        int groupCode=((Integer)traitGroupObj).intValue();
+        TraitGroup group=_traitGroupEnum.getEntry(groupCode);
+        if (group!=null)
+        {
+          ret.addTraitGroup(group);
+        }
+      }
     }
     // Tooltip
     String tooltip=_i18n.getStringProperty(traitProperties,"Trait_Tooltip");
