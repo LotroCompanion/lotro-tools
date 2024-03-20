@@ -119,7 +119,6 @@ public class DatObjectivesLoader
         PropertiesSet objectiveProps=(PropertiesSet)objectiveObj;
 
         Objective objective=new Objective();
-        //System.out.println(objectiveProps.dump());
         // Index
         int objectiveIndex=((Integer)objectiveProps.getProperty("Quest_ObjectiveIndex")).intValue();
         objective.setIndex(objectiveIndex);

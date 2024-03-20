@@ -129,7 +129,6 @@ public class ConsumablesLoader
 
   private void handleEffect(Item item, Effect effect, Float defaultSpellcraft)
   {
-    //System.out.println("Effect props: "+effectProps.dump());
     if (effect instanceof InstantFellowshipEffect)
     {
       InstantFellowshipEffect fellowshipEffect=(InstantFellowshipEffect)effect;
@@ -256,7 +255,7 @@ public class ConsumablesLoader
       return;
     }
     Integer skillLevel=skillToExecute.getLevel();
-    Float defaultLevel=(skillLevel!=null)?Float.valueOf(skillLevel.intValue()):null;
+    Float defaultLevel=(skillLevel!=null)?Float.valueOf(skillLevel.floatValue()):null;
     for(SkillEffectGenerator effectGenerator : effectGenerators)
     {
       Float skillSpellcraft=effectGenerator.getSpellcraft();

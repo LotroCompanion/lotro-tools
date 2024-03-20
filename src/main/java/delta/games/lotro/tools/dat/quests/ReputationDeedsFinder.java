@@ -140,11 +140,7 @@ public class ReputationDeedsFinder
   private boolean useDeed(DeedDescription deed)
   {
     RaceRequirement raceReq=deed.getUsageRequirement().getRaceRequirement();
-    if (raceReq!=null)
-    {
-      return false;
-    }
-    return true;
+    return (raceReq==null);
   }
 
   /**

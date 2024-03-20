@@ -24,12 +24,12 @@ public class MainGeoDatLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainGeoDatLoader.class);
 
-  private static File ROOT_MAPS_DIR;
-  private static File CATEGORIES_DIR;
-  private static File INDEXES_DIR;
-  private static File MAPS_DIR;
-  private static File MARKERS_DIR;
-  private static File LINKS;
+  private File _rootMapsDir;
+  private File _categoriesDir;
+  private File _indexesDir;
+  private File _mapsDirs;
+  private File _markersDir;
+  private File _linksFile;
   private DataFacade _facade;
 
   /**
@@ -39,12 +39,12 @@ public class MainGeoDatLoader
   public MainGeoDatLoader(DataFacade facade)
   {
     _facade=facade;
-    ROOT_MAPS_DIR=MapConstants.getRootDir();
-    CATEGORIES_DIR=new File(ROOT_MAPS_DIR,"categories");
-    INDEXES_DIR=new File(ROOT_MAPS_DIR,"indexes");
-    MAPS_DIR=new File(ROOT_MAPS_DIR,"maps");
-    MARKERS_DIR=new File(ROOT_MAPS_DIR,"markers");
-    LINKS=new File(ROOT_MAPS_DIR,"links.xml");
+    _rootMapsDir=MapConstants.getRootDir();
+    _categoriesDir=new File(_rootMapsDir,"categories");
+    _indexesDir=new File(_rootMapsDir,"indexes");
+    _mapsDirs=new File(_rootMapsDir,"maps");
+    _markersDir=new File(_rootMapsDir,"markers");
+    _linksFile=new File(_rootMapsDir,"links.xml");
   }
 
   private void doIt()
@@ -81,11 +81,11 @@ public class MainGeoDatLoader
         return true;
       }
     };
-    deleteDirectory(CATEGORIES_DIR,f);
-    deleteDirectory(INDEXES_DIR);
-    deleteDirectory(MAPS_DIR);
-    deleteDirectory(MARKERS_DIR);
-    deleteFile(LINKS);
+    deleteDirectory(_categoriesDir,f);
+    deleteDirectory(_indexesDir);
+    deleteDirectory(_mapsDirs);
+    deleteDirectory(_markersDir);
+    deleteFile(_linksFile);
     deleteFile(GeneratedFiles.PARCHMENT_MAPS);
     deleteFile(GeneratedFiles.RESOURCES_MAPS);
     // Landblocks

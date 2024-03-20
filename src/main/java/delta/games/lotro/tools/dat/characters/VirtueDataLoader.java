@@ -51,7 +51,6 @@ public class VirtueDataLoader
   {
     List<VirtueDescription> virtues=new ArrayList<VirtueDescription>();
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TraitControl");
-    //System.out.println(properties.dump());
 
     long[] xpTable=null;
     Integer xpTableId=(Integer)properties.getProperty("Trait_Control_VirtueTierToExperience_AdvancementTable");
@@ -77,7 +76,6 @@ public class VirtueDataLoader
         continue;
       }
       virtues.add(virtue);
-      //System.out.println("Virtue: "+traitId+" - "+trait.getName());
       // Set XP table
       if (xpTable!=null)
       {
@@ -103,7 +101,6 @@ public class VirtueDataLoader
     {
       return null;
     }
-    //System.out.println(virtueProperties.dump());
     Integer nature=(Integer)virtueProperties.getProperty("Trait_Nature");
     if ((nature==null) || (nature.intValue()!=5))
     {
@@ -177,14 +174,7 @@ public class VirtueDataLoader
     }
 
     // Virtue key
-    String virtueKey=null;
-    if (id==1879072876) virtueKey="DETERMINATION";
-    else if (id==1879072876) virtueKey="LOYALTY";
-    else if (id==1879072876) virtueKey="VALOUR";
-    else
-    {
-      virtueKey=ret.getName().toUpperCase();
-    }
+    String virtueKey=ret.getName().toUpperCase();
     ret.setKey(virtueKey);
 
     // Icons (SoA)
@@ -201,7 +191,6 @@ public class VirtueDataLoader
       return;
     }
     PropertiesSet iconProgression=_facade.loadProperties(progressionID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(iconProgression.dump());
     /*
 PropertyProgression_Array:
   #1: Trait_Icon 1090553359
