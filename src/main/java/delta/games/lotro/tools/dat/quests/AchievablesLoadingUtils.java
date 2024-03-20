@@ -85,9 +85,9 @@ public class AchievablesLoadingUtils
       }
     }
     /*
-    DefaultPermissionBlobStruct: 
-      Usage_QuestRequirements: 
-        #1: 
+    DefaultPermissionBlobStruct:
+      Usage_QuestRequirements:
+        #1:
           Usage_Operator: 3
           Usage_QuestID: 1879048439
           Usage_QuestStatus: 805306368

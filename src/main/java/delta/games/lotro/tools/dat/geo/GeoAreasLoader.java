@@ -178,7 +178,7 @@ public class GeoAreasLoader
     for(Object regionObj : regionArray)
     {
       PropertiesSet regionProps=(PropertiesSet)regionObj;
-      int regionCode=((Integer)regionProps.getProperty("Region_ID")).intValue(); 
+      int regionCode=((Integer)regionProps.getProperty("Region_ID")).intValue();
       Region region=_geoMgr.getRegionByCode(regionCode);
       if (region==null)
       {

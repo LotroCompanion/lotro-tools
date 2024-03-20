@@ -527,7 +527,7 @@ public class LegaciesLoader
       patchStats(imbuedLegacy.getStatsProvider(),characterClass,slot);
       _imbuedLegaciesManager.registerLegacy(imbuedLegacy);
     }
-    
+
     ClassAndSlot spec=new ClassAndSlot(characterClass,slot);
     imbuedLegacy.addAllowedClassAndSlot(spec);
 
@@ -595,7 +595,6 @@ public class LegaciesLoader
       return;
     }
     // Guardian belts do have a special stat
-    
     if ((WellKnownCharacterClassKeys.GUARDIAN.equals(characterClass.getKey())) && (slot==EquipmentLocations.CLASS_SLOT))
     {
       StatProvider provider=statsProvider.getStatProvider(0);

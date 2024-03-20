@@ -71,7 +71,7 @@ Dungeon_Allowed_Mount_Types: 0
 Dungeon_MapData: 2013266712
 Dungeon_MiniMapData: 2013266712
 Dungeon_Music: 268435872 (Ghar_bayur)
-Dungeon_Name: 
+Dungeon_Name:
   #1: Crafting Bunker
 Dungeon_ParentDungeon: 0
      */
@@ -83,7 +83,7 @@ Dungeon_ParentDungeon: 0
   UI_Map_GameMap=UI_Map_BlockOffsetX: 254
   UI_Map_BlockOffsetY: 174
   UI_Map_FogOfWar: 0
-  UI_Map_FogOfWar_Color: 
+  UI_Map_FogOfWar_Color:
     #1: 0
     #2: 0
     #3: 0

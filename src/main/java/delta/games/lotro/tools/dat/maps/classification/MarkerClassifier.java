@@ -314,20 +314,20 @@ WeenieType: 65615 (Monster)
       // !! Farmland is a Hotspot, not an Item...
       /*
 ******** Properties: 1879063084
-EffectGenerator_HotspotEffectList: 
-  #1: 
+EffectGenerator_HotspotEffectList:
+  #1:
     EffectGenerator_EffectID: 1879063024 => "Superior Farmland"
     EffectGenerator_EffectSpellcraft: 1.0
-  #2: 
+  #2:
     EffectGenerator_EffectID: 1879062982 => "Farmland"
     EffectGenerator_EffectSpellcraft: 1.0
 Hotspot_IsHotspot: 1
 MapNote_Enabled: 1
 MapNote_Level: 65536 (World)
-MapNote_StringInfo: 
+MapNote_StringInfo:
   #1: Farmland
 MapNote_Type: 17592186044416 (Crafting Facility)
-Name: 
+Name:
   #1: Farmland
 WeenieType: 262145 (Hotspot)
        */
@@ -436,7 +436,7 @@ WeenieType: 259 (GameplayContainer)
     ******** Properties: 1879399128
     MapNote_Discoverable: 1789 (Discoverable_lm_breeland_wildwoods_switchstate_fields_west)
     MapNote_Type: 4398046511104 (Point of Interest)
-    Name: 
+    Name:
       #1: Blomley Sward
     WeenieType: 4194305 (Landmark)
     */
@@ -462,7 +462,7 @@ WeenieType: 259 (GameplayContainer)
     /*
     ******** Properties: 1879089870
     MapNote_Type: 72057594037927936 (Camp Site[e])
-    Name: 
+    Name:
       #1: Camp Site Fire
     WeenieType: 327809 (Milestone)
     */

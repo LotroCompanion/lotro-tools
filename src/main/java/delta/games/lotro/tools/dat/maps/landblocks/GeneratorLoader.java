@@ -49,8 +49,8 @@ public class GeneratorLoader
       return null;
     }
     /*
-Generator_PositionSetLimitArray: 
-  #1: 
+Generator_PositionSetLimitArray:
+  #1:
     Generator_PositionSetID: 165 (resource_scholar)
     Generator_PositionSetLimit: 2
      */
@@ -172,10 +172,10 @@ Generator_PositionSetLimitArray:
       }
     }
     /*
-    GeneratorProfile_Entry: 
+    GeneratorProfile_Entry:
       GeneratorProfile_Probability: 800
       GeneratorProfile_ProfileDefinition: 1879162624
-      GeneratorProfile_Properties: 
+      GeneratorProfile_Properties:
         #1: 1
     GeneratorProfile_PositionSetID: 12 (Boss)
     */
@@ -184,7 +184,7 @@ Generator_PositionSetLimitArray:
   private void handleProfileDefinitionEntry(PropertiesSet entryProps)
   {
     /*
-  #1: 
+  #1:
     GeneratorProfile_ProfileDefinition: 1879162707
     GeneratorProfile_Weight: 20
      */
@@ -207,18 +207,18 @@ Generator_PositionSetLimitArray:
   private void handleOneOfEntry(PropertiesSet entryProps)
   {
     /*
-  #1: 
-    GeneratorProfile_OneOf: 
-      #1: 
+  #1:
+    GeneratorProfile_OneOf:
+      #1:
         GeneratorProfile_RepeatMaxTimes: 1
         GeneratorProfile_RepeatMinTimes: 1
-      #2: 
+      #2:
         GeneratorProfile_WSLEntity: 1879162674
         GeneratorProfile_Weight: 70
-      #3: 
+      #3:
         GeneratorProfile_WSLEntity: 1879162665
         GeneratorProfile_Weight: 25
-      #4: 
+      #4:
         GeneratorProfile_WSLEntity: 1879162618
         GeneratorProfile_Weight: 10
     GeneratorProfile_PositionSetID: 152 (Base)

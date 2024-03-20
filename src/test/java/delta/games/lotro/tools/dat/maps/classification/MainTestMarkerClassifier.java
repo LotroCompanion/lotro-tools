@@ -57,7 +57,7 @@ public class MainTestMarkerClassifier
     }
     /*
     doBlock(1,6,7,markersMgr,stats); // Shire/bree
-    doBlock(1,10,3,markersMgr,stats); // Dunland 
+    doBlock(1,10,3,markersMgr,stats); // Dunland
     doBlock(1,8,8,markersMgr,stats); // Esteldin / Western North Downs
     doBlock(1,15,5,markersMgr,stats); // Shire Auction Hall
     */

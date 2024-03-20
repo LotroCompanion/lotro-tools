@@ -44,7 +44,7 @@ public class MainDatItemsSetsLoader
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param effectsLoader Effects loader. 
+   * @param effectsLoader Effects loader.
    */
   public MainDatItemsSetsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
@@ -57,28 +57,28 @@ public class MainDatItemsSetsLoader
   /*
 Sample items set properties:
 ************* 1879087805 *****************
-Set_ActiveCountDataList: 
-  #1: 
-    Mod_Array: 
-      #1: 
+Set_ActiveCountDataList:
+  #1:
+    Mod_Array:
+      #1:
         Mod_Modified: 268438584 (Vital_HealthCombatRegenAddMod)
         Mod_Op: 7 (Add)
         Mod_Progression: 1879212451
     Set_ActiveCount: 2
     ...
-Set_Description: 
+Set_Description:
   #1: Crafted by dwarf-masters of finely-tooled leather and hardened steel from the depths of the great mines beneath Ered Luin.
 Set_Icon: 1090519170
 Set_Level: 30
 Set_LevelRequired: 1
-Set_MemberList: 
+Set_MemberList:
   #1: 1879087723
   #2: 1879087724
   #3: 1879087725
   #4: 1879087726
   #5: 1879087727
   #6: 1879087728
-Set_Name: 
+Set_Name:
   #1: Armour of the White Flame
    */
 
@@ -176,8 +176,8 @@ Set_Name:
   private SetBonus loadBonus(PropertiesSet properties)
   {
 /*
-    Mod_Array: 
-      #1: 
+    Mod_Array:
+      #1:
         Mod_Modified: 268438584 (Vital_HealthCombatRegenAddMod)
         Mod_Op: 7 (Add)
         Mod_Progression: 1879212451

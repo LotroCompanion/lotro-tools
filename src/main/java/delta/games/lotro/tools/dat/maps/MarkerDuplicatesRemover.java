@@ -242,12 +242,12 @@ public class MarkerDuplicatesRemover
    *
    * 55 / 57:
    * Milestone / Camp Site
-   * 
+   *
    * Item: 73
    * 45: Crafting Facility
    * Hotspot: 75
    * 45: Crafting Facility
-   * 
+   *
    * Landmark: 74
    * 30: Homestead
    * 31: Town Crier

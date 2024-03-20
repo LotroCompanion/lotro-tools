@@ -140,7 +140,7 @@ public class MainDatEnumsLoader
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
     {
-      // Filled for live, empty for SoA, 
+      // Filled for live, empty for SoA,
       loadEnum(587203200,"MountType",MountType.class); // 0x23000280
       loadEnum(587203478,"SkillCharacteristicSubCategory",SkillCharacteristicSubCategory.class); // 0x23000396
     }

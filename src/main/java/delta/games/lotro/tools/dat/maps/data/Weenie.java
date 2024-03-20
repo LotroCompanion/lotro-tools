@@ -19,7 +19,7 @@ public class Weenie
    */
   public Weenie()
   {
-    
+    // Nothing!
   }
 
   /**

@@ -49,7 +49,7 @@ public class ItemSortingDataLoader
     {
       PropertiesSet entryProps=(PropertiesSet)sortInfoEntry;
       /*
-    Item_Client_Sort_PropertyNameArray: 
+    Item_Client_Sort_PropertyNameArray:
       #1: 268436135 (Item_Quality)
       #2: 268438017 (Item_Class)
       #3: 268437097 (Item_Level)

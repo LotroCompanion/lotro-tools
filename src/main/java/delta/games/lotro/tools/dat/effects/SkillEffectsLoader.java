@@ -39,10 +39,10 @@ public class SkillEffectsLoader
   private void handleSkillAttackHookList(SkillDescription skill, PropertiesSet skillProps)
   {
     /*
-Skill_AttackHookList: 
-  #1: Skill_AttackHookInfo 
+Skill_AttackHookList:
+  #1: Skill_AttackHookInfo
     Skill_AttackHook_ActionDurationContributionMultiplier: 0.0
-    Skill_AttackHook_TargetEffectList: 
+    Skill_AttackHook_TargetEffectList:
      */
     Object[] attackHookList=(Object[])skillProps.getProperty("Skill_AttackHookList");
     if ((attackHookList==null) || (attackHookList.length==0))
@@ -67,11 +67,11 @@ Skill_AttackHookList:
   private void handleToggleSkillEffects(SkillDescription skill, PropertiesSet skillProps)
   {
     /*
-Skill_Toggle_Effect_List: 
-  #1: Skill_Toggle_Effect_Data 
+Skill_Toggle_Effect_List:
+  #1: Skill_Toggle_Effect_Data
     Skill_Toggle_Effect: 1879383550
     Skill_Toggle_Effect_Spellcraft: -1.0
-  #2: Skill_Toggle_Effect_Data 
+  #2: Skill_Toggle_Effect_Data
     Skill_Toggle_Effect: 1879320187
     Skill_Toggle_Effect_Spellcraft: -1.0
     */
@@ -85,8 +85,8 @@ Skill_Toggle_Effect_List:
       }
     }
     /*
-Skill_Toggle_User_Effect_List: 
-  #1: Skill_Toggle_Effect_Data 
+Skill_Toggle_User_Effect_List:
+  #1: Skill_Toggle_Effect_Data
     Skill_Toggle_Effect: 1879174081
     Skill_Toggle_Effect_Spellcraft: -1.0
     */
@@ -104,8 +104,8 @@ Skill_Toggle_User_Effect_List:
   private void handleUserSkillEffects(SkillDescription skill, PropertiesSet skillProps)
   {
     /*
-Skill_UserEffectList: 
-  #1: Skill_EffectData 
+Skill_UserEffectList:
+  #1: Skill_EffectData
     Skill_Effect: 1879102614
     Skill_EffectDuration: -1.0
     Skill_EffectImplementUsage: 0 (Undef)

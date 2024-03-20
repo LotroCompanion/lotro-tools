@@ -254,9 +254,9 @@ public class LootLoader
   private void loadLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
   {
     /*
-    EntityFilter_PropertyRange_Max: 
+    EntityFilter_PropertyRange_Max:
       #1: 39
-    EntityFilter_PropertyRange_Min: 
+    EntityFilter_PropertyRange_Min:
       #1: 30
      */
     Object[] minArray=(Object[])levelProps.getProperty("EntityFilter_PropertyRange_Min");

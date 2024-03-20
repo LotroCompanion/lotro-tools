@@ -94,7 +94,7 @@ public class MainDatContainerLoader
       TrophyList trophyList=_lootLoader.getTrophyList(trophyTemplateId.intValue());
       lootTables.set(LootType.TROPHY_LIST,trophyList);
     }
- 
+
     //handleLootTables(properties,"SoftLock_",itemsContainer.getLootTables());
     handleLootTables(properties,"",itemsContainer.getLootTables());
     // Preview
@@ -172,7 +172,7 @@ PackageItem_BindAllItemsToAccount: 1
 PackageItem_UsePlayerAsContainerForMunging: 1
 
 If PackageItem_IsPreviewable: 1
-=> PackageItem_PreviewList: 
+=> PackageItem_PreviewList:
   #1: 1879259202
   #2: 1879259205
   #3: 1879259200

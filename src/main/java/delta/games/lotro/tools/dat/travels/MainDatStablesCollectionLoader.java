@@ -64,7 +64,7 @@ public class MainDatStablesCollectionLoader
     /*
 TravelWebSellMultiplier: 1.0
 TravelWebWC: 1879216497
-Travel_DiscountArray: 
+Travel_DiscountArray:
   #1: 268446908 (Discount_Travel_Special)
   #2: 268452164 (Discount_Travel_Theodred)
      */

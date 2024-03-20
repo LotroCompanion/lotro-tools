@@ -40,7 +40,7 @@ public class MainBuildUpdatePackage
     //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/${file}";
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
     File to=new File("d:/tmp/lc16-packages");
-    ToolsConfig config=new ToolsConfig(baseURL,to); 
+    ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/work/LotRO Companion/app");
     String packageName="patch21.4.0.39";
     Version newVersion=new Version(2144,"21.4.0.39");

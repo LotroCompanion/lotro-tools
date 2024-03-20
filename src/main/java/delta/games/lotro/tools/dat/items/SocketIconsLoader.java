@@ -37,8 +37,8 @@ public class SocketIconsLoader
   {
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"ItemSocketControl");
     /*
-    ItemSocketControl_LevelToEssenceIconOverlay_Array: 
-      #1: ItemSocketControl_LevelToEssenceIconOverlay_Entry 
+    ItemSocketControl_LevelToEssenceIconOverlay_Array:
+      #1: ItemSocketControl_LevelToEssenceIconOverlay_Entry
         Icon_Layer_OverlayDID: 1091914756
         Usage_MinLevel: 45
      */

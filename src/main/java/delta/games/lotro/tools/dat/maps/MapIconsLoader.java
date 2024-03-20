@@ -32,17 +32,17 @@ public class MapIconsLoader
   public void doIt(File imagesDir)
   {
     /*
-UI_Map_MapNoteTypeArray: 
-  #1: 
+UI_Map_MapNoteTypeArray:
+  #1:
     UI_Map_MapNoteMenuImage: 1090543183
-    UI_Map_MapNoteOnscreenImageStruct: 
+    UI_Map_MapNoteOnscreenImageStruct:
       UI_Map_MapNoteHighlightImage: 1090543185
       UI_Map_MapNoteImage: 1090543182
       UI_Map_MapNoteSelectedImage: 1090543184
     UI_Map_MapNoteType: 2 ()
-  #2: 
+  #2:
     UI_Map_MapNoteMenuImage: 1091733822
-    UI_Map_MapNoteOnscreenImageStruct: 
+    UI_Map_MapNoteOnscreenImageStruct:
       UI_Map_MapNoteHighlightImage: 1091733819
       UI_Map_MapNoteImage: 1091733821
       UI_Map_MapNoteSelectedImage: 1091733820

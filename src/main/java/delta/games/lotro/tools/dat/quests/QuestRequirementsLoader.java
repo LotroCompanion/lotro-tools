@@ -54,25 +54,24 @@ public class QuestRequirementsLoader
 
 /*
 Quest 1879202431:
-DefaultPermissionBlobStruct: 
-  Usage_QuestRequirements_OrList: 
-    #1: Usage_QuestRequirement 
+DefaultPermissionBlobStruct:
+  Usage_QuestRequirements_OrList:
+    #1: Usage_QuestRequirement
       Usage_Operator: 3 (EqualTo)
       Usage_QuestID: 1879202423
       Usage_QuestStatus: 805306368 (Completed)
-    #2: Usage_QuestRequirement 
+    #2: Usage_QuestRequirement
       Usage_Operator: 3 (EqualTo)
       Usage_QuestID: 1879202429
       Usage_QuestStatus: 805306368 (Completed)
-    #3: Usage_QuestRequirement 
+    #3: Usage_QuestRequirement
       Usage_Operator: 3 (EqualTo)
       Usage_QuestID: 1879202365
       Usage_QuestStatus: 805306368 (Completed)
-    #4: Usage_QuestRequirement 
+    #4: Usage_QuestRequirement
       Usage_Operator: 3 (EqualTo)
       Usage_QuestID: 1879202351
       Usage_QuestStatus: 805306368 (Completed)
- * 
  */
 
   /**

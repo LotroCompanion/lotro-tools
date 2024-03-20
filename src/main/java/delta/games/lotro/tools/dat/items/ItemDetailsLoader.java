@@ -108,8 +108,8 @@ public class ItemDetailsLoader
   private void handleGrantedMountSkillArray(Item item, PropertiesSet props)
   {
 /*
-Mount_SkillToGrantRaceArray: 
-  #1: Mount_SkillToGrantRace_Entry 
+Mount_SkillToGrantRaceArray:
+  #1: Mount_SkillToGrantRace_Entry
     Mount_SkillToGrant: 1879245852
     Usage_RequiredRaceEntry: 81 (Hobbit[O])
     ...
@@ -204,16 +204,16 @@ Mount_SkillToGrantRaceArray:
   private void handleEffects(Item item, PropertiesSet props)
   {
 /*
-EffectGenerator_UsageEffectList: 
-  #1: EffectGenerator_EffectStruct 
-    EffectGenerator_EffectDataList: 
-      #1: Effect_GrantTraitRank_Grant_List 
-        #1: Effect_GrantTraitRank_Grant_Node 
+EffectGenerator_UsageEffectList:
+  #1: EffectGenerator_EffectStruct
+    EffectGenerator_EffectDataList:
+      #1: Effect_GrantTraitRank_Grant_List
+        #1: Effect_GrantTraitRank_Grant_Node
           Effect_GrantTraitRank_Grant_XP: 1000
     EffectGenerator_EffectID: 1879186818
     EffectGenerator_EffectSpellcraft: -1.0
 
-  #1: EffectGenerator_EffectStruct 
+  #1: EffectGenerator_EffectStruct
     EffectGenerator_EffectID: 1879187320
     EffectGenerator_EffectSpellcraft: -1.0
 */

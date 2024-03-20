@@ -41,7 +41,7 @@ public class ItemStatistics
   /**
    * Constructor.
    */
-  public ItemStatistics() 
+  public ItemStatistics()
   {
     _itemsByQuality=new HashMap<ItemQuality,IntegerHolder>();
     _armoursByType=new HashMap<ArmourType,IntegerHolder>();
@@ -71,7 +71,7 @@ public class ItemStatistics
     showStatistics();
   }
 
-  private void handleItem(Item item) 
+  private void handleItem(Item item)
   {
     // Global count
     _itemsCount++;
@@ -111,7 +111,7 @@ public class ItemStatistics
     }
   }
 
-  private void handleArmour(Armour armour) 
+  private void handleArmour(Armour armour)
   {
     // Global count
     _armoursCount++;
@@ -128,7 +128,7 @@ public class ItemStatistics
     }
   }
 
-  private void handleWeapon(Weapon weapon) 
+  private void handleWeapon(Weapon weapon)
   {
     // Global count
     _weaponsCount++;

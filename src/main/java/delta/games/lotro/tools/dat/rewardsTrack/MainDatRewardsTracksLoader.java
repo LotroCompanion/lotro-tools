@@ -101,7 +101,7 @@ public class MainDatRewardsTracksLoader
   private RewardsTrackStep loadStep(PropertiesSet stepProps)
   {
     /*
-        #1: RewardTrack_Array_Entry 
+        #1: RewardTrack_Array_Entry
           RewardTrack_Array_ExperienceCostMultiplier: 1.0
           RewardTrack_Array_PipElement: 268453791 (ItemAdvancementRewards_Pip)
           RewardTrack_Array_Reward: 1879440795

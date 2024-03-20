@@ -64,7 +64,7 @@ public class RequirementsLoadingUtils
   public static void loadRequiredClasses(PropertiesSet properties, UsageRequirement requirements)
   {
     /*
-    Usage_RequiredClassList: 
+    Usage_RequiredClassList:
       #1: 162
     */
     Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
@@ -90,7 +90,7 @@ public class RequirementsLoadingUtils
   public static void loadRequiredRaces(PropertiesSet properties, UsageRequirement requirements)
   {
     /*
-    Usage_RequiredRaces: 
+    Usage_RequiredRaces:
       #1: 81
       #2: 23
       #3: 114

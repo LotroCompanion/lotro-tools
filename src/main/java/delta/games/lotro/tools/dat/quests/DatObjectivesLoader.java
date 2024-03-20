@@ -737,8 +737,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
   private MonsterDiedCondition handleMonsterDieCondition(PropertiesSet properties)
   {
     /*
-QuestEvent_MonsterGenus_Array: 
-  #1: 
+QuestEvent_MonsterGenus_Array:
+  #1:
     Quest_MonsterRegion: 1879049792
     Quest_MonsterSpecies: 41
 QuestEvent_Number: 1
@@ -1054,7 +1054,6 @@ QuestEvent_ShowBillboardText: 0
     return ret;
   }
 
-  
   private TimeExpiredCondition handleTimeExpired(PropertiesSet properties)
   {
     Integer timeLimit=(Integer)properties.getProperty("QuestEvent_TimeLimit");
@@ -1076,10 +1075,10 @@ QuestEvent_ShowBillboardText: 0
     // - (location)
     /*
 Craft recipe execution
-QuestEvent_BillboardProgressOverride: 
+QuestEvent_BillboardProgressOverride:
   #1: Seeds planted
-QuestEvent_Locations: 
-  #1: 
+QuestEvent_Locations:
+  #1:
     QuestEvent_Location_Position: R=1,I=0,bx=93,by=118,x=129.18,y=8.07,z=367.93
 QuestEvent_LocationsAreOverrides: 1
 QuestEvent_Number: 1
@@ -1113,20 +1112,20 @@ QuestEvent_ShowBillboardText: 1
   {
     /*
 Channeling!
-QuestEvent_BillboardProgressOverride: 
+QuestEvent_BillboardProgressOverride:
   #1: You tip the slop into the bucket, and it makes a sickening sound
 QuestEvent_ChannelingRoleConstraint: role_slop_to_prisoner_bucket
 QuestEvent_ChannelingState: 1879210738
 QuestEvent_EventOrder: 0
-QuestEvent_FailedBillboardText: 
+QuestEvent_FailedBillboardText:
   #1: You dropped the bucket and spilled the slop! Go get some more
 QuestEvent_ID: 13 (Channeling)
 QuestEvent_ItemDID: 1879209794
 QuestEvent_Number: 1
-QuestEvent_ProgressOverride: 
+QuestEvent_ProgressOverride:
   #1: Get some slop from the slop bucket in the kitchens
 QuestEvent_ShowBillboardText: 1
-QuestEvent_TappedProgressOverride: 
+QuestEvent_TappedProgressOverride:
   #1: Carry the slop to the bucket in the dungeons
      */
     /*
@@ -1141,7 +1140,7 @@ QuestEvent_TappedProgressOverride:
   {
     /*
 Channeling failed!
-QuestEvent_BillboardProgressOverride: 
+QuestEvent_BillboardProgressOverride:
   #1: You have lost the race
 QuestEvent_ChannelingState: 1879162589
 QuestEvent_ID: 20 (ChannelingFailed)
@@ -1166,26 +1165,26 @@ QuestEvent_ShowProgressText: 0
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CLEAR_CAMP);
     /*
 Clear camp!
-QuestEvent_BillboardProgressOverride: 
+QuestEvent_BillboardProgressOverride:
   #1: You have successfully defended Tóki Whitebeard!
 QuestEvent_DramaName: drama_stolen_stones_ending
 QuestEvent_EventOrder: 0
 QuestEvent_FailQuestWhenEventFails: 1
-QuestEvent_FailedBillboardText: 
+QuestEvent_FailedBillboardText:
   #1: Tóki Whitebeard has been defeated!
 QuestEvent_ID: 19 (ClearCamp)
 QuestEvent_KungFuDramaName: drama_stolen_stones_kungfu
 QuestEvent_Number: 1
-QuestEvent_ProgressOverride: 
+QuestEvent_ProgressOverride:
   #1: Search Ost Dúrgonn for the stolen stones
 QuestEvent_RoleConstraint: role_stolen_stones_dwarf
 QuestEvent_ShouldShowEscortVitals: 1
 QuestEvent_ShowBillboardText: 1
-QuestEvent_TappedProgressOverride: 
+QuestEvent_TappedProgressOverride:
   #1: Protect Tóki Whitebeard
 QuestEvent_WaitForDrama: 1
-Quest_Role: 
-  QuestDispenser_RoleSuccessText: 
+Quest_Role:
+  QuestDispenser_RoleSuccessText:
     #1: 'Are you...here to help? Be careful, friend! A mighty cave-claw has slain...the rest of my....'\n\nThe dwarf shudders with exhaustion.\n\n'This monstrous cave-claw...attacked us...after the trolls stole...the stones we...were bearing....'
   QuestDispenser_StartScriptID: 0
      */

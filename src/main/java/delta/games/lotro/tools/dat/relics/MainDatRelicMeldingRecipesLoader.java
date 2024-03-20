@@ -111,7 +111,7 @@ public class MainDatRelicMeldingRecipesLoader
     // Output
     MeldingOutput output=ret.getOutput();
     Map<Integer,Integer> resultsMap=(Map<Integer,Integer>)recipeWState.getAttributeValue("141263172");
-    
+
     for(Map.Entry<Integer,Integer> entry : resultsMap.entrySet())
     {
       int weight=entry.getValue().intValue();

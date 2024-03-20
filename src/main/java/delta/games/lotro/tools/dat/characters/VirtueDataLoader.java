@@ -178,8 +178,8 @@ public class VirtueDataLoader
 
     // Virtue key
     String virtueKey=null;
-    if (id==1879072876) virtueKey="DETERMINATION"; 
-    else if (id==1879072876) virtueKey="LOYALTY"; 
+    if (id==1879072876) virtueKey="DETERMINATION";
+    else if (id==1879072876) virtueKey="LOYALTY";
     else if (id==1879072876) virtueKey="VALOUR";
     else
     {
@@ -203,7 +203,7 @@ public class VirtueDataLoader
     PropertiesSet iconProgression=_facade.loadProperties(progressionID.intValue()+DATConstants.DBPROPERTIES_OFFSET);
     //System.out.println(iconProgression.dump());
     /*
-PropertyProgression_Array: 
+PropertyProgression_Array:
   #1: Trait_Icon 1090553359
   #2: Trait_Icon 1090553360
   #3: Trait_Icon 1090553361

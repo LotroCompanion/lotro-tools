@@ -120,7 +120,7 @@ public class MainDatAllegiancesLoader
    */
   public void doIt()
   {
-    // Load 
+    // Load
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"AllegianceControl");
     //System.out.println(props.dump());
 

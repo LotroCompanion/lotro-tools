@@ -147,8 +147,8 @@ public class CharacterClassDataLoader
     }
     */
     /*
-AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List: 
-  #1: 
+AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
+  #1:
     AdvTable_AdvancedCharacterStart_CharacterStartInfo: 1879228369
     AdvTable_AdvancedCharacterStart_Tier: 8
      */
@@ -167,7 +167,6 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     return null;
   }
 
-  
   private ArmourType getDefaultArmourTypeForMitigations(String classKey)
   {
     if (classKey.equals(WellKnownCharacterClassKeys.BURGLAR)) return ArmourTypes.MEDIUM;
@@ -394,8 +393,8 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
   private void loadSkills(ClassDescription description, PropertiesSet properties)
   {
 /*
-AdvTable_AvailableSkillEntryList: 
-  #1: 
+AdvTable_AvailableSkillEntryList:
+  #1:
     AdvTable_AdvancedCharacterShortcutIndex: 1
     AdvTable_Level: 1
     AdvTable_PrerequisiteSkill: 0

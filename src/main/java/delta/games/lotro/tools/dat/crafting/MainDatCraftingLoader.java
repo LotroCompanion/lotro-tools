@@ -95,14 +95,14 @@ public class MainDatCraftingLoader
     _data.getVocationsRegistry().addVocation(ret);
     return ret;
     /*
-CraftVocation_ChangeString: 
+CraftVocation_ChangeString:
   #1: Armsmen are capable of crafting any weapon you might ever need, so it's an excellent choice for anyone who relies on a blade.  An Armsman is proficient in mining and smelting, but will need to trade for wood with which to make bows, spears, and the like.  Do you wish to learn this trade?  (WEAPONSMITH, PROSPECTOR, WOODWORKER)
-CraftVocation_ItemArray: 
+CraftVocation_ItemArray:
   #1: 1879084067
   #2: 1879085802
   #3: 1879085799
   #4: 1879085795
-CraftVocation_LearnString: 
+CraftVocation_LearnString:
   #1: Armsmen are capable of crafting any weapon you might ever need, so it's an excellent choice for anyone who relies on a blade.  An Armsman is proficient in mining and smelting, but will need to trade for wood with which to make bows, spears, and the like.  Do you wish to learn this trade?  (WEAPONSMITH, PROSPECTOR, WOODWORKER)
      */
   }
@@ -278,7 +278,7 @@ CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
     /*
     ******** Properties: 1879124441
     CraftGuild_Faction: 1879124448
-    CraftGuild_LearnString: 
+    CraftGuild_LearnString:
       #1: Do you want to join the Cook's Guild?
     CraftGuild_Profession: 1879061252
     CraftGuild_QuestCategory: 94 (Crafting Guild: Cook)

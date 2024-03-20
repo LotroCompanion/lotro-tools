@@ -34,8 +34,8 @@ public class ItemLevelOffsetsUtils
       }
     }
     /*
-  InventoryControl_DistributionToLevelOffsetList: 
-    #1: 
+  InventoryControl_DistributionToLevelOffsetList:
+    #1:
       InventoryControl_DistributionType: 3 (Quest)
       InventoryControl_LevelOffset: 0
      */

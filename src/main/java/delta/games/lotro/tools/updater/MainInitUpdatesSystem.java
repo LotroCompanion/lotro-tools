@@ -30,7 +30,7 @@ public class MainInitUpdatesSystem
     //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/";
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
     File to=new File("d:/tmp/lc16-packages");
-    ToolsConfig config=new ToolsConfig(baseURL,to); 
+    ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/16.0/LotRO Companion/app");
 
     // Build a description of the software directory

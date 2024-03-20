@@ -278,7 +278,7 @@ public class MainTraitDataLoader
     SkillsManager skillsMgr=SkillsManager.getInstance();
     {
       Object[] skillArray=(Object[])traitProperties.getProperty("Trait_Skill_Array");
-      if (skillArray!=null) 
+      if (skillArray!=null)
       {
         for(Object skillIdObj : skillArray)
         {
@@ -297,9 +297,9 @@ public class MainTraitDataLoader
     }
     // Skills (again)
     /*
-Trait_EffectSkill_AtRankSkillsAcquired_Array: 
-  #1: Trait_EffectSkill_AtRankSkillsAcquired_Struct 
-    Trait_EffectSkill_SkillAcquired_Array: 
+Trait_EffectSkill_AtRankSkillsAcquired_Array:
+  #1: Trait_EffectSkill_AtRankSkillsAcquired_Struct
+    Trait_EffectSkill_SkillAcquired_Array:
       #1: Trait_EffectSkill_SkillAcquired 1879064192
     Trait_EffectSkill_SkillAcquired_Rank: 1
      */
@@ -343,8 +343,8 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
   private void loadEffectGenerators(TraitDescription trait, PropertiesSet traitProperties)
   {
     /*
-    EffectGenerator_TraitEffectList: 
-      #1: EffectGenerator_EffectStruct 
+    EffectGenerator_TraitEffectList:
+      #1: EffectGenerator_EffectStruct
         EffectGenerator_EffectID: 1879051501
         EffectGenerator_EffectSpellcraft: 0.0
     */
@@ -363,8 +363,8 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
   private void loadVirtuePassives(TraitDescription trait, PropertiesSet traitProperties)
   {
     /*
-EffectGenerator_Virtue_PassiveEffectList: 
-  #1: EffectGenerator_EffectStruct 
+EffectGenerator_Virtue_PassiveEffectList:
+  #1: EffectGenerator_EffectStruct
     EffectGenerator_EffectID: 1879389531
      */
     Object[] effectsArray=(Object[])traitProperties.getProperty("EffectGenerator_Virtue_PassiveEffectList");
@@ -381,7 +381,7 @@ EffectGenerator_Virtue_PassiveEffectList:
 
   private void loadEffectGenerator(TraitDescription trait, PropertiesSet generatorProps)
   {
-    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue(); 
+    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue();
     Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
     if ((spellcraft!=null) && (spellcraft.floatValue()<0))
     {
@@ -395,10 +395,10 @@ EffectGenerator_Virtue_PassiveEffectList:
   private void loadEffectsAtRank(TraitDescription trait, PropertiesSet traitProperties)
   {
     /*
-Trait_EffectSkill_AtRankEffects_Array: 
-  #1: Trait_EffectSkill_AtRankEffects_Struct 
+Trait_EffectSkill_AtRankEffects_Array:
+  #1: Trait_EffectSkill_AtRankEffects_Struct
     Trait_EffectSkill_AtRankEffects_Rank: 1
-    Trait_EffectSkill_Effect_Array: 
+    Trait_EffectSkill_Effect_Array:
       #1: Trait_EffectSkill_EffectDID 1879449317
      */
     Object[] effectsArray=(Object[])traitProperties.getProperty("Trait_EffectSkill_AtRankEffects_Array");

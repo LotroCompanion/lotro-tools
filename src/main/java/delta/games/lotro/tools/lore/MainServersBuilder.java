@@ -50,17 +50,17 @@ public class MainServersBuilder
   {
     List<ServerDescription> ret=new ArrayList<ServerDescription>();
     // US
-    ret.add(buildServer("Arkenstone","198.252.160.98",US));
-    ret.add(buildServer("Brandywine","198.252.160.99",US));
-    ret.add(buildServer("Crickhollow","198.252.160.100",US));
-    ret.add(buildServer("Gladden","198.252.160.101",US));
-    ret.add(buildServer("Landroval","198.252.160.102",US));
+    ret.add(buildServer("Arkenstone","198.252.160.98",US)); // NOSONAR
+    ret.add(buildServer("Brandywine","198.252.160.99",US)); // NOSONAR
+    ret.add(buildServer("Crickhollow","198.252.160.100",US)); // NOSONAR
+    ret.add(buildServer("Gladden","198.252.160.101",US)); // NOSONAR
+    ret.add(buildServer("Landroval","198.252.160.102",US)); // NOSONAR
     // EU
-    ret.add(buildServer("Belegaer","198.252.160.103",EU));
-    ret.add(buildServer("Evernight","198.252.160.104",EU));
-    ret.add(buildServer("Gwaihir","198.252.160.105",EU));
-    ret.add(buildServer("Laurelin","198.252.160.106",EU));
-    ret.add(buildServer("Sirannon","198.252.160.107",EU));
+    ret.add(buildServer("Belegaer","198.252.160.103",EU)); // NOSONAR
+    ret.add(buildServer("Evernight","198.252.160.104",EU)); // NOSONAR
+    ret.add(buildServer("Gwaihir","198.252.160.105",EU)); // NOSONAR
+    ret.add(buildServer("Laurelin","198.252.160.106",EU)); // NOSONAR
+    ret.add(buildServer("Sirannon","198.252.160.107",EU)); // NOSONAR
     return ret;
   }
 
@@ -71,7 +71,7 @@ public class MainServersBuilder
   {
     List<ServerDescription> servers=buildServers();
     File toFile=GeneratedFiles.SERVERS;
-    boolean ok=ServerXMLWriter.writeServersFile(toFile,servers); 
+    boolean ok=ServerXMLWriter.writeServersFile(toFile,servers);
     if (ok)
     {
       LOGGER.info("Wrote file: "+toFile);

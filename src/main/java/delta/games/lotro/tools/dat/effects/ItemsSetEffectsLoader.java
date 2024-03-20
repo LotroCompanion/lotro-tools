@@ -32,11 +32,11 @@ public class ItemsSetEffectsLoader
   public void handleSetEffects(ItemsSet set,PropertiesSet properties)
   {
     /*
-    Set_ActiveCountDataList: 
-      #1: Set_ActiveCountData 
+    Set_ActiveCountDataList:
+      #1: Set_ActiveCountData
         Set_ActiveCount: 2
-        Set_EffectDataList: 
-          #1: EffectGenerator_EffectStruct 
+        Set_EffectDataList:
+          #1: EffectGenerator_EffectStruct
             EffectGenerator_EffectID: 1879098038
             EffectGenerator_EffectSpellcraft: -1.0
     */

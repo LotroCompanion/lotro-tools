@@ -57,11 +57,11 @@ Sample properties:
 Reputation_Faction_AdvancementTable: 1879090256
 Reputation_Faction_CurrentTier_PropertyName: 268441507
 Reputation_Faction_DefaultTier: 3
-Reputation_Faction_Description: 
+Reputation_Faction_Description:
   #1: A Council of several races who struggle to take the war into the heart of Angmar itself. They strike from the hidden refuge of Gath Forthnír in the far northern wastes of Angmar.
 Reputation_Faction_EarnedReputation_PropertyName: 268441501
 Reputation_Faction_GlobalCap_PropertyName: 268441759
-Reputation_Faction_Name: 
+Reputation_Faction_Name:
   #1: Council of the North
 Reputation_Faction_TierNameProgression: 1879209346
 Reputation_HighestTier: 7

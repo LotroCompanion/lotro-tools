@@ -51,7 +51,7 @@ public class ScreenshotsRename
   {
     final FileFilter f=new FileFilter()
     {
-      
+      @Override
       public boolean accept(File pathname)
       {
         return pathname.getName().startsWith("ScreenShot");
@@ -59,10 +59,12 @@ public class ScreenshotsRename
     };
     FileIteratorCallback c=new FileIteratorCallback()
     {
+      @Override
       public void leaveDirectory(File absolute, File relative)
       {
         // Nothing to do!
       }
+      @Override
       public void handleFile(File absolute, File relative)
       {
         if (f.accept(absolute))
@@ -70,10 +72,12 @@ public class ScreenshotsRename
           doRename(absolute);
         }
       }
+      @Override
       public void handleDirectory(File absolute, File relative)
       {
         // Nothing to do!
       }
+      @Override
       public boolean enterDirectory(File absolute, File relative)
       {
         return true;

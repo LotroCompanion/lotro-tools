@@ -183,7 +183,7 @@ public class DeedKeysInjector
     return null;
   }
 
-  private String[] REGIONS = { "Angmar", "Bree-land", "Dunland", "Enedwaith", "Ered Luin", "Eregion", "Evendim", 
+  private String[] REGIONS = { "Angmar", "Bree-land", "Dunland", "Enedwaith", "Ered Luin", "Eregion", "Evendim",
       "Forochel", "Great River", "Lone-lands", "Lothlórien", "Misty Mountains",
       "Moria", "North Downs", "Southern Mirkwood", "The Shire", "The Trollshaws" };
   private int[] DEED_CATEGORY_CODES= {

@@ -107,8 +107,8 @@ public class MonsterClassDataLoader
   private void loadTraits(AbstractClassDescription description, PropertiesSet properties)
   {
 /*
-MonsterPlay_TraitList: 
-  #1: MonsterPlay_TraitEntry 
+MonsterPlay_TraitList:
+  #1: MonsterPlay_TraitEntry
     MonsterPlay_Trait: 1879072425
     MonsterPlay_TraitMinLevel: 95
     MonsterPlay_TraitMinRank: 0
@@ -140,8 +140,8 @@ MonsterPlay_TraitList:
   private void loadSkills(AbstractClassDescription description, PropertiesSet properties)
   {
 /*
-MonsterPlay_SkillList: 
-  #1: MonsterPlay_SkillEntry 
+MonsterPlay_SkillList:
+  #1: MonsterPlay_SkillEntry
     MonsterPlay_Skill: 1879073674
     MonsterPlay_SkillCost: 0
     MonsterPlay_SkillMinLevel: 95

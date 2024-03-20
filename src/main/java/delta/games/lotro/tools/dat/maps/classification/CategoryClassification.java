@@ -1,7 +1,7 @@
 package delta.games.lotro.tools.dat.maps.classification;
 
 /**
- * Category classification. 
+ * Category classification.
  * @author DAM
  */
 public class CategoryClassification extends Classification

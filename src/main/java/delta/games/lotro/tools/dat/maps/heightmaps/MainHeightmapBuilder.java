@@ -78,7 +78,7 @@ public class MainHeightmapBuilder
 
     //3 bytes per pixel: red, green, blue
     WritableRaster raster = Raster.createInterleavedRaster(buffer, width, height, 3 * width, 3, new int[] {0, 1, 2}, (Point)null);
-    ColorModel cm = new ComponentColorModel(ColorModel.getRGBdefault().getColorSpace(), false, true, Transparency.OPAQUE, DataBuffer.TYPE_BYTE); 
+    ColorModel cm = new ComponentColorModel(ColorModel.getRGBdefault().getColorSpace(), false, true, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
     BufferedImage image = new BufferedImage(cm, raster, true, null);
 
     File to=new File(name);

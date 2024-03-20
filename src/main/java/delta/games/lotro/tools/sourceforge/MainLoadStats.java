@@ -95,6 +95,7 @@ public class MainLoadStats
       return count;
     }
 
+    @Override
     public String toString()
     {
       return "("+getNbDownloads()+") Countries: "+_countByCountries+"\nOS: "+_countByOSes;

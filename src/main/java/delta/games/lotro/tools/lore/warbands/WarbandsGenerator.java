@@ -20,7 +20,7 @@ public class WarbandsGenerator
   private static final String NORCROFTS="Norcrofts";
   private static final String ENTWASH_VALE="Entwash Vale";
   private static final String SUTCROFTS="Sutcrofts";
-  
+
   private WarbandsRegistry buildRegistry()
   {
     WarbandsRegistry registry=new WarbandsRegistry();
@@ -89,7 +89,7 @@ public class WarbandsGenerator
     {
       WarbandDefinition w=new WarbandDefinition();
       w.setName("Skútog");
-      w.setIconName("skutog");  
+      w.setIconName("skutog");
       w.setRegion(NORCROFTS);
       w.setLevel(Integer.valueOf(79));
       w.setMorale(Integer.valueOf(0));

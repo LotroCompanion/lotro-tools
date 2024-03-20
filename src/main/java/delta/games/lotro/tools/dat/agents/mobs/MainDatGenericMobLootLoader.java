@@ -89,8 +89,8 @@ public class MainDatGenericMobLootLoader
       return;
     }
     /*
-    SpeciesLevelLootTable: 
-      #1: 
+    SpeciesLevelLootTable:
+      #1:
         Agent_Species: 7 (Orc)
         Agent_Subspecies: 0 (Undef)
         LevelBasedLootTable_LevelTable: 1879106442
@@ -159,8 +159,8 @@ public class MainDatGenericMobLootLoader
     }
     /*
 ******** Properties: 1879106442
-LevelBasedLootTable_LootTable: 
-  #1: 
+LevelBasedLootTable_LootTable:
+  #1:
     LevelBasedLootTable_Level: 1
     LevelBasedLootTable_TreasureProfile: 1879064739
     LevelBasedLootTable_TrophyList: 1879064740
@@ -201,7 +201,7 @@ LevelBasedLootTable_LootTable:
     entry.setTreasureList(treasureList);
     entry.setTrophyList(trophyList);
     return entry;
-  } 
+  }
 
   /**
    * Load data.

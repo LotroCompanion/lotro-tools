@@ -62,15 +62,14 @@ public class GenericItemEffectsLoader
       GenericItemEffects effects=handleEquipperEntry(entryProps);
       allEffects.add(effects);
     }
-    
   }
 
   private GenericItemEffects handleEquipperEntry(PropertiesSet props)
   {
 /*
-  #1: InventoryControl_DefaultEquipperEffectData 
-    EffectGenerator_EquipperEffectList: 
-      #1: EffectGenerator_EffectStruct 
+  #1: InventoryControl_DefaultEquipperEffectData
+    EffectGenerator_EquipperEffectList:
+      #1: EffectGenerator_EffectStruct
         EffectGenerator_EffectID: 1879049208
     InventoryControl_EquipmentCategory: 8192 (Crossbow[E])
  */
@@ -103,15 +102,14 @@ public class GenericItemEffectsLoader
       GenericItemEffects effects=handleTargetEntry(entryProps);
       allEffects.add(effects);
     }
-    
   }
 
   private GenericItemEffects handleTargetEntry(PropertiesSet props)
   {
 /*
-  #1: InventoryControl_DefaultTargetEffectData 
-    EffectGenerator_TargetEffectList: 
-      #1: EffectGenerator_EffectStruct 
+  #1: InventoryControl_DefaultTargetEffectData
+    EffectGenerator_TargetEffectList:
+      #1: EffectGenerator_EffectStruct
         EffectGenerator_EffectID: 1879049208
     InventoryControl_EquipmentCategory: 8192 (Crossbow[E])
  */

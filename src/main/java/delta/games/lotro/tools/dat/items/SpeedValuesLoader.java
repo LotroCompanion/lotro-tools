@@ -4,9 +4,9 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
-import delta.games.lotro.lore.items.weapons.WeaponSpeedTable;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTable;
+import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
@@ -36,7 +36,7 @@ public class SpeedValuesLoader
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"WeaponActionDurationTable");
     WeaponSpeedTables ret=new WeaponSpeedTables();
     /*
-Item_WeaponActionDurationTable: 
+Item_WeaponActionDurationTable:
   #1: Item_WeaponActionDurationData 1879049507
   ...
   #19: Item_WeaponActionDurationData 1879049525
@@ -66,12 +66,12 @@ Item_WeaponActionDurationTable:
     }
     /*
 Item_EquipmentCategory: 8192 (Crossbow[E])
-Item_WeaponActionDurationDataArray: 
-  #1: Item_WeaponActionDurationDataEntry 
+Item_WeaponActionDurationDataArray:
+  #1: Item_WeaponActionDurationDataEntry
     Item_BaseActionDuration: 2.7
     Item_BaseAnimDurationMultiplierMod: 0.1
     Item_WeaponSpeed: 5 (ExtremelySlow)
-  #2: Item_WeaponActionDurationDataEntry 
+  #2: Item_WeaponActionDurationDataEntry
     Item_BaseActionDuration: 2.6
     Item_BaseAnimDurationMultiplierMod: 0.05
     Item_WeaponSpeed: 4 (VerySlow)

@@ -28,7 +28,7 @@ import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLConstants;
 import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLWriter;
 
 /**
- * Loads music data for items. 
+ * Loads music data for items.
  * @author DAM
  */
 public class ItemsMusicLoader

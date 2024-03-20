@@ -51,7 +51,7 @@ public class AchievableGeoPointsManager
   }
 
   /**
-   * Get the known basemap identifiers. 
+   * Get the known basemap identifiers.
    * @return A sorted list of basemap identifiers.
    */
   public List<Integer> getMapIds()
@@ -94,7 +94,7 @@ public class AchievableGeoPointsManager
   }
 
   /**
-   * Get the known land blocks. 
+   * Get the known land blocks.
    * @return A sorted list of land block identifiers.
    */
   public List<BlockReference> getBlocks()

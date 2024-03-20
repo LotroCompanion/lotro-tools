@@ -42,27 +42,27 @@ public class MainDatEmotesLoader
 Sample emote properties:
 ************* 1879071841 *****************
 Emote_AllowedWhileMounted: 1
-Emote_CommandString: 
+Emote_CommandString:
   -1: hug
-Emote_Description: 
+Emote_Description:
   -1: Using this emote causes you to hug someone.
 Emote_IconImage: 1092280913
-Emote_Message_FirstPerson: 
+Emote_Message_FirstPerson:
   -1: You hug yourself.  Don't you feel better?
-Emote_Message_FirstPersonWithTarget: 
-  -1: You give 
+Emote_Message_FirstPersonWithTarget:
+  -1: You give
   -2:  a big hug.
-Emote_Message_ThirdPerson: 
+Emote_Message_ThirdPerson:
   -1: #1:
   -2:  hugs #1:{herself[f]|himself} and seems happier.
-Emote_Message_ThirdPersonWithTarget: 
-  -1: 
-  -2:  gives 
+Emote_Message_ThirdPersonWithTarget:
+  -1:
+  -2:  gives
   -3:  a big hug.
 Emote_Mounted_ScriptID: 268435904
 Emote_MustBeGranted: 0
 Emote_ScriptID: 268446269
-Emote_SourceText: 
+Emote_SourceText:
   -1: Everyone can use this emote.
   */
 

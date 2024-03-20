@@ -172,9 +172,9 @@ public class MainDatInstancesTreeLoader
     {
       InstanceCategory category=new InstanceCategory(EPIC_BATTLES);
       /*
-      WorldJoinControl_InstanceGroups: 
-        #1: 
-          WorldJoinControl_Grouped_Instance_List: 
+      WorldJoinControl_InstanceGroups:
+        #1:
+          WorldJoinControl_Grouped_Instance_List:
             #1: 1879269583
           WorldJoinControl_Instance_Group_Label: 3 (Deeping-coomb)
       */
@@ -198,7 +198,7 @@ public class MainDatInstancesTreeLoader
     // Seasonal categories
     {
       /*
-      WorldJoin_Seasonal_EncounterCategory_Array: 
+      WorldJoin_Seasonal_EncounterCategory_Array:
         #1: 25 (Spring)
         #2: 23 (Summer)
         #3: 27 (Harvestmath)

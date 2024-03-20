@@ -129,7 +129,7 @@ public class MainDatItemsLoader
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param effectsLoader Effects loader. 
+   * @param effectsLoader Effects loader.
    */
   public MainDatItemsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
@@ -256,7 +256,7 @@ public class MainDatItemsLoader
       // Item class
       ItemClass itemClass=_itemClassEnum.getEntry(itemClassCode.intValue());
       item.setItemClass(itemClass);
-      // Handle socketables (essences, traceries, enhancement runes) 
+      // Handle socketables (essences, traceries, enhancement runes)
       if (itemClassCode.intValue()==ItemClassUtils.ESSENCE_CODE)
       {
         _socketablesManager.handleSocketable(item,properties);
@@ -578,7 +578,7 @@ public class MainDatItemsLoader
     {
       speed=handleSpeed(weapon,properties);
     }
-    
+
     // Damage
     // Combat_DamageVariance: 0.4 => Min damage is 60% of max damage
     float variance=((Float)properties.getProperty("Combat_DamageVariance")).floatValue();

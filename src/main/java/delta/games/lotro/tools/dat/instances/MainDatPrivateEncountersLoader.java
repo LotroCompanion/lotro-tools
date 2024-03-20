@@ -128,7 +128,7 @@ public class MainDatPrivateEncountersLoader
     }
     // Quests to bestow
     /*
-    PrivateEncounterTemplate_QuestToBestow_Array: 
+    PrivateEncounterTemplate_QuestToBestow_Array:
       #1: 1879172579
       #2: 1879172578
     */
@@ -147,10 +147,10 @@ public class MainDatPrivateEncountersLoader
     }
     // Random quests
     /*
-    PrivateEncounterTemplate_RandomBestowalQuests_Array: 
-      #1: 
+    PrivateEncounterTemplate_RandomBestowalQuests_Array:
+      #1:
         PrivateEncounterTemplate_NumQuestsToBestow: 1
-        PrivateEncounterTemplate_QuestToBestow_Array: 
+        PrivateEncounterTemplate_QuestToBestow_Array:
           #1: 1879172581
           #2: 1879172582
           #3: 1879172580
@@ -236,7 +236,7 @@ public class MainDatPrivateEncountersLoader
   {
     // - difficulty tiers
     /*
-    Skirmish_Template_DifficultyTierArray: 
+    Skirmish_Template_DifficultyTierArray:
       #1: 1 (Tier I)
       #2: 2 (Tier II)
      */
@@ -260,7 +260,7 @@ public class MainDatPrivateEncountersLoader
     }
     // - group sizes
     /*
-    Skirmish_Template_GroupSizeArray: 
+    Skirmish_Template_GroupSizeArray:
       #1: 12 (Raid (12))
      */
     LotroEnum<GroupSize> groupSizesMgr=LotroEnumsRegistry.getInstance().get(GroupSize.class);

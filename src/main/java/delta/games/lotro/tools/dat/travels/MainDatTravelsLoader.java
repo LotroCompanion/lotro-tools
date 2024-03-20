@@ -130,21 +130,21 @@ public class MainDatTravelsLoader
     //System.out.println(properties.dump());
     /*
 ************* 1879103917 *****************
-Name: 
+Name:
   #1: Gath Forthnír - Swift Travel
-TravelRoute_ActionArray: 
+TravelRoute_ActionArray:
   #1: 1879072604
   #2: 1879072630
   #3: 1879103929
 TravelRoute_Destination: 1879103928
 TravelRoute_TravelMode: 1879106525
 Usage_AllowedWhileMounted: 1   ==> always 1
-Usage_QuestRequirements: 
-  #1: 
+Usage_QuestRequirements:
+  #1:
     Usage_Operator: 3
     Usage_QuestID: 1879053183
     Usage_QuestStatus: 805306368
-Usage_RequiredFaction: 
+Usage_RequiredFaction:
   Usage_RequiredFaction_DataID: 1879091341
   Usage_RequiredFaction_Tier: 4
 Usage_RequiresSubscriberOrUnsub: 1

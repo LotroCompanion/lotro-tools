@@ -98,7 +98,6 @@ public class EffectLoader
     {
       ret=loadEffect(effectId);
       _effectsMgr.addEffect(ret);
-      
     }
     return ret;
   }
@@ -183,7 +182,7 @@ public class EffectLoader
   {
     // Effect PropertyModificationEffect (734) and child classes
     // except those explicitly handled later
-    if ((classDef==734) || (classDef==713) || (classDef==3222) || 
+    if ((classDef==734) || (classDef==713) || (classDef==3222) ||
         (classDef==716) || (classDef==717) || (classDef==752) ||
         (classDef==753) || (classDef==739) || (classDef==748) ||
         (classDef==764) || (classDef==780) || (classDef==2156) ||
@@ -339,11 +338,11 @@ public class EffectLoader
   /*
 Effect_VitalOverTime_ChangePerIntervalProgression: 1879068280
 Effect_VitalOverTime_ChangePerInterval_Critical_Multiplier: 1.0
-Effect_VitalOverTime_ChangePerInterval_ModifierList: 
+Effect_VitalOverTime_ChangePerInterval_ModifierList:
   #1: Effect_ModifierPropertyList_Entry 268437688 (EffectMod_ModType_DamageMultModifier_Add)
 Effect_VitalOverTime_InitialChangeProgression: 1879068279
 Effect_VitalOverTime_InitialChange_Critical_Multiplier: 1.0
-Effect_VitalOverTime_InitialChange_ModifierList: 
+Effect_VitalOverTime_InitialChange_ModifierList:
   #1: Effect_ModifierPropertyList_Entry 268437688 (EffectMod_ModType_DamageMultModifier_Add)
 Effect_VitalOverTime_VitalType: 1 (Morale)
 Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
@@ -425,7 +424,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     }
     return null;
   }
-  
+
   private ReactiveVitalChange loadReactiveVitalChange(PropertiesSet effectProps, String seed)
   {
     Float constantFloat=(Float)effectProps.getProperty(seed+"Constant");
@@ -563,7 +562,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
 
   private EffectGenerator loadGenerator(PropertiesSet generatorProps)
   {
-    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue(); 
+    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue();
     Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
     if ((spellcraft!=null) && (spellcraft.floatValue()<0))
     {
@@ -585,7 +584,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     return ApplicationProbability.from(probability,variance,modProperty);
     // Effect_VariableApplicationProbability, type=Struct
     //   used but always:
-    // Effect_VariableApplicationProbability: 
+    // Effect_VariableApplicationProbability:
     //   Effect_VariableMax: 1.0
     //   Effect_VariableMin: 1.0
     // Effect_ApplicationProbabilityProgression: never used?
@@ -606,7 +605,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     }
     Integer pulseCountInt=(Integer)effectProps.getProperty("Effect_Duration_ConstantPulseCount");
     int pulseCount=(pulseCountInt!=null)?pulseCountInt.intValue():0;
-    // Effect_Duration_ConstantInterval_ModifierList: 
+    // Effect_Duration_ConstantInterval_ModifierList:
     //   #1: Effect_ModifierPropertyList_Entry 268457993 (Item_Guardian_ShieldSpikes_Duration)
     // Effect_Duration_ExpiresInRealTime: false, sometimes true.
     Integer expiresInRealTimeInt=(Integer)effectProps.getProperty("Effect_Duration_ExpiresInRealTime");
@@ -692,8 +691,8 @@ Effect_Genesis_SummonedObject: 1879163733
   private Hotspot loadHotspot(int hotspotID, PropertiesSet props)
   {
     /*
-EffectGenerator_HotspotEffectList: 
-  #1: EffectGenerator_EffectStruct 
+EffectGenerator_HotspotEffectList:
+  #1: EffectGenerator_EffectStruct
     EffectGenerator_EffectID: 1879163549
     EffectGenerator_EffectSpellcraft: -1.0
 Name: Greater Emblem of Defence
@@ -721,12 +720,12 @@ WeenieType: 262145 (Hotspot)
     Effect ID=1879051312, class=InduceCombatStateEffect (769)
     Effect_InduceCombatState_ConstantDuration: 3.0
     Effect_InduceCombatState_StateToInduce: 16384 (Stunned)
-    Effect_InduceCombatState_VariableDuration: 
+    Effect_InduceCombatState_VariableDuration:
       Effect_VariableMax: 5.0
       Effect_VariableMin: 3.0
       Effect_VariableSpellcraftMax: 50.0
       Effect_VariableSpellcraftMin: 25.0
-    Effect_CombatState_Induce_StateDuration_ModProp_List: 
+    Effect_CombatState_Induce_StateDuration_ModProp_List:
       #1: Effect_ModifierPropertyList_Entry 268452197 (CombatState_ConjunctionStunned_Duration)
      */
     // Constant duration
@@ -838,7 +837,7 @@ Effect_Recall_Travel_Link: 0 (Undef)
 /*
 ******** Properties: 1879453021
 Effect_Combo_CasterOnly: 0
-Effect_Combo_EffectPresentList: 
+Effect_Combo_EffectPresentList:
   #1: Effect_WSLEffect 1879073120
   #2: Effect_WSLEffect 1879453022
   #3: Effect_WSLEffect 0
@@ -881,11 +880,11 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
   {
     // From Effect_TierUp_EffectList:
     /*
-      #1: EffectGenerator_EffectStruct 
+      #1: EffectGenerator_EffectStruct
         EffectGenerator_EffectID: 1879449300
         EffectGenerator_EffectSpellcraft: -1.0
         ...
-      #5: EffectGenerator_EffectStruct 
+      #5: EffectGenerator_EffectStruct
         EffectGenerator_EffectID: 1879449315
         EffectGenerator_EffectSpellcraft: -1.0
     */
@@ -897,7 +896,7 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
     }
     // From Effect_TierUp_FinalEffect:
     /*
-    #1: EffectGenerator_EffectStruct 
+    #1: EffectGenerator_EffectStruct
       EffectGenerator_EffectID: 1879449315
       EffectGenerator_EffectSpellcraft: -1.0
     */

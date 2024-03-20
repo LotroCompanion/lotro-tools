@@ -30,7 +30,7 @@ public class MainInitUpdatesSystemLoreDatabase
     //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/";
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/loredb/${file}/download";
     File to=new File("d:/tmp/loredb-packages");
-    ToolsConfig config=new ToolsConfig(baseURL,to); 
+    ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/work/LotRO Companion/app");
 
     // Build a description of the software directory

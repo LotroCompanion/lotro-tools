@@ -61,36 +61,36 @@ public class MainDatLegendaryTitlesLoader
   /*
 Sample properties:
 ******** Properties: 1879232157
-EffectGenerator_RunicEffectList: 
-  #1: 
+EffectGenerator_RunicEffectList:
+  #1:
     EffectGenerator_EffectID: 1879227042
     EffectGenerator_EffectSpellcraft: 95.0
 ItemAdvancement_IATitle_Category: 90
 ItemAdvancement_IATitle_Tier: 2
 ItemAdvancement_Title_DamageType: 8
 ItemAdvancement_Title_SlayerGenusType: 0
-Name: 
+Name:
   #1: Will of Eldar Days II
 
 ******** Properties: 1879227042
 Effect_ApplicationProbabilityVariance: 0.0
-Effect_Applied_Description: 
+Effect_Applied_Description:
 Effect_ClassPriority: 1
 Effect_ConstantApplicationProbability: 1.0
 Effect_Debuff: 0
-Effect_Definition_Description: 
+Effect_Definition_Description:
 Effect_Duration_Permanent: 1
 Effect_EquivalenceClass: 0
 Effect_Harmful: 0
 Effect_Icon: 1090519170
-Effect_Name: 
+Effect_Name:
   #1: ModificationEffect
 Effect_RemoveOnAwaken: 0
 Effect_RemoveOnDefeat: 0
 Effect_SentToClient: 1
 Effect_UIVisible: 0
-Mod_Array: 
-  #1: 
+Mod_Array:
+  #1:
     Mod_Modified: 268435981
     Mod_Op: 7
     Mod_Progression: 1879211576

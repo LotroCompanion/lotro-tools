@@ -85,9 +85,9 @@ public class MainBillingGroupsLoader
   {
     /*
         Version_TitleBestow_BillingGroups: {40} (MorPr10)
-        Version_TitleBestow_FreepTitleList: 
+        Version_TitleBestow_FreepTitleList:
           #1: Version_TitleBestow_Title 1879117452
-        Version_TitleBestow_CreepTitleList: 
+        Version_TitleBestow_CreepTitleList:
           #1: Version_TitleBestow_Title 1879356048
         Version_TitleBestow_StampProperty: 268444584 (Version_Title_StampProperty_1)
      */

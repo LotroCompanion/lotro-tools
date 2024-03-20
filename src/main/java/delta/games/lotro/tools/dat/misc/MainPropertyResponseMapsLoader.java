@@ -54,8 +54,8 @@ public class MainPropertyResponseMapsLoader
       return;
     }
     /*
-PropertyResponse_WorldEventResponse_List: 
-  #1: PropertyResponse_WorldEventResponse_Entry 
+PropertyResponse_WorldEventResponse_List:
+  #1: PropertyResponse_WorldEventResponse_Entry
     PropertyResponse_Callback: 1879145607
     PropertyResponse_WorldEvent: 1879145610
     ...
@@ -81,21 +81,21 @@ PropertyResponse_WorldEventResponse_List:
       return;
     }
     /*
-DefaultPermissionBlobStruct: 
+DefaultPermissionBlobStruct:
   Usage_ValidClassificationType: 5 (Player)
-PropertyResponseCallback_AppliedEffect_Array: 
-  #1: PropertyResponseCallback_AppliedEffect_Entry 
-    PropertyResponseCallback_AppliedEffect_List: 
+PropertyResponseCallback_AppliedEffect_Array:
+  #1: PropertyResponseCallback_AppliedEffect_Entry
+    PropertyResponseCallback_AppliedEffect_List:
       #1: PropertyResponseCallback_AppliedEffect 1879145604
     PropertyResponseCallback_Ceiling: 1
     PropertyResponseCallback_Floor: 1
-  #2: PropertyResponseCallback_AppliedEffect_Entry 
-    PropertyResponseCallback_AppliedEffect_List: 
+  #2: PropertyResponseCallback_AppliedEffect_Entry
+    PropertyResponseCallback_AppliedEffect_List:
       #1: PropertyResponseCallback_AppliedEffect 1879145605
     PropertyResponseCallback_Ceiling: 2
     PropertyResponseCallback_Floor: 2
 PropertyResponseCallback_UseTargetLevelForSpellcraft: 1
-PropertyResponse_Filter_Array: 
+PropertyResponse_Filter_Array:
   #1: PropertyResponse_Filter_Alignment 1 (Good)
      */
     PropertiesSet props=_facade.loadProperties(callbackID+DATConstants.DBPROPERTIES_OFFSET);

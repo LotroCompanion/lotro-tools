@@ -52,12 +52,12 @@ public class MainDatTitlesLoader
 Sample title properties:
 ************* 1879051517 *****************
 Title_Category: 17
-Title_Description: 
+Title_Description:
   #1: You have aided the Bounders of the Shire greatly and been granted the title of Honorary Shirriff.
 Title_Exclusion_Group: 0
 Title_Icon: 1090641175
 Title_Priority: 1
-Title_String: 
+Title_String:
   #1: #1:
   #2: #1:{ [E]}#2:
   #3: #3:{ [E]}#3:

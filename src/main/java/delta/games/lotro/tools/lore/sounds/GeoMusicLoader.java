@@ -23,7 +23,7 @@ import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLConstants;
 import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLWriter;
 
 /**
- * Loads music data for areas/dungeons. 
+ * Loads music data for areas/dungeons.
  * @author DAM
  */
 public class GeoMusicLoader

@@ -66,9 +66,6 @@ public class LinkCreationInteractor
 
   private class LinkCreationMouseListener extends MouseAdapter
   {
-    private int _x;
-    private int _y;
-
     @Override
     public void mouseClicked(MouseEvent event)
     {
@@ -76,8 +73,8 @@ public class LinkCreationInteractor
       int modifiers=event.getModifiers();
       if ((button==MouseEvent.BUTTON1) && ((modifiers&InputEvent.SHIFT_MASK)!=0))
       {
-        _x=event.getX();
-        _y=event.getY();
+        int x=event.getX();
+        int y=event.getY();
         GeoreferencedBasemapsManager basemapsManager=_manager.getBasemapsManager();
         MapChooserDialogController chooser=new MapChooserDialogController(null,basemapsManager);
         chooser.setTitle("Choose...");
@@ -85,7 +82,7 @@ public class LinkCreationInteractor
         GeoreferencedBasemap selected=chooser.editModal();
         if (selected!=null)
         {
-          doLink(selected,_x,_y);
+          doLink(selected,x,y);
         }
       }
     }

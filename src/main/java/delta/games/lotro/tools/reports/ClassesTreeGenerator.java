@@ -16,7 +16,7 @@ import delta.games.lotro.dat.wlib.WLibData;
 public class ClassesTreeGenerator
 {
   /**
-   * Dump a tree view of the WSL classes hierarchy. 
+   * Dump a tree view of the WSL classes hierarchy.
    * @param data WLib data.
    * @return A displayable string.
    */

@@ -86,7 +86,7 @@ public class ConsistencyChecks
     System.out.println("Nb items with missing stats: " + _nbMissingStats);
   }
 
-  private void checkItemStats(Item item) 
+  private void checkItemStats(Item item)
   {
     EquipmentLocation location=item.getEquipmentLocation();
     if (location!=null)

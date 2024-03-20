@@ -11,7 +11,6 @@ import delta.games.lotro.lore.deeds.DeedDescription;
 
 /**
  * Bundle of deeds.
- * 
  * <p>Provides simplified access to deeds:
  * <ul>
  * <li>by name

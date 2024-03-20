@@ -40,6 +40,7 @@ public class MainLinkEditor
     final NavigationSupport navSupport=new NavigationSupport(mapPanelCtrl);
     NavigationListener listener=new NavigationListener()
     {
+      @Override
       public void mapChangeRequest(MapViewDefinition mapView)
       {
         int key=mapView.getMapKey();

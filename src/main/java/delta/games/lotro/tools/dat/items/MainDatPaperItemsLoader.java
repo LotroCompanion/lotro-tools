@@ -152,8 +152,8 @@ public class MainDatPaperItemsLoader
     }
 
     /*
-PaperItemControl_VersionArray: 
-  #1: 
+PaperItemControl_VersionArray:
+  #1:
     PaperItemControl_NewItem: 1879224343
     PaperItemControl_NewItem_QuantityRatio: 1.0
     PaperItemControl_OldItem: 1879155768

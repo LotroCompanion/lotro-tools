@@ -39,7 +39,7 @@ public class MainBuildUpdatePackageLoreDatabase
     // Constants
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/loredb/${file}/download";
     File to=new File("d:/tmp/loredb-packages");
-    ToolsConfig config=new ToolsConfig(baseURL,to); 
+    ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/work/LotRO Lore Database/app");
     String packageName="patch3.0.0";
     Version newVersion=new Version(3000,"SoA Book 11 - 3.0.0");
