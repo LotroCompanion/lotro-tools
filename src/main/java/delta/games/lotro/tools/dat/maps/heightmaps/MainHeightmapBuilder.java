@@ -93,15 +93,13 @@ public class MainHeightmapBuilder
 
   private void paintHeightMap(HeightMap map, int blockX, int blockY)
   {
-    // Decode data
-    //byte[] buffer=new byte[32*32*3];
     int baseY=(MAX_Y-blockY)*32;
     for(int y=0;y<32;y++)
     {
       for(int x=0;x<32;x++)
       {
         int h=map.getRawHeightAt(x,y);
-        int c = (int)(Math.log(((16 * h) % 65535) + 1)/Math.log(1.045));
+        int c = (int)(Math.log(((16 * h) % 65535) + 1.0)/Math.log(1.045));
         byte color=(byte)c;
         int fullX=((blockX-MIN_X)*32)+x;
         int fullY=baseY+(31-y);

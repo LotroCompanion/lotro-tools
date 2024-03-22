@@ -209,7 +209,7 @@ public class MainDatLoader
     // Mobs loot
     new MainDatGenericMobLootLoader(_facade,lootsManager).doIt();
     // Save loots
-    lootsManager.dump();
+    lootsManager.dump(System.out);
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
     // Quests and deeds
