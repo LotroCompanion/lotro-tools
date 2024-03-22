@@ -3,6 +3,8 @@ package delta.games.lotro.tools.misc;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.NumericTools;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -25,10 +27,16 @@ import delta.games.lotro.lore.maps.DungeonsManager;
  */
 public class MainLotroImagesCleanup
 {
-  private static final File ROOT_DIR=new File("D:\\dev\\git\\lotro-tools");
-  //private static final File TO_DIR=new File("D:\\tmp\\radar images");
+  private static final Logger LOGGER=Logger.getLogger(MainLotroImagesCleanup.class);
 
-  private DataFacade _facade=new DataFacade();
+  private DataFacade _facade;
+  private File _rootDir;
+
+  private MainLotroImagesCleanup(File rootDir)
+  {
+    _rootDir=rootDir;
+    _facade=new DataFacade();
+  }
 
   private void doIt()
   {
@@ -127,15 +135,14 @@ public class MainLotroImagesCleanup
 
   private void handleRadarImageId(int imageId)
   {
-    File from=new File(ROOT_DIR,imageId+".png");
+    File from=new File(_rootDir,imageId+".png");
     if (from.exists())
     {
-      from.delete();
-      /*
-      File to=new File(TO_DIR,imageId+".png");
-      TO_DIR.mkdirs();
-      from.renameTo(to);
-      */
+      boolean ok=from.delete();
+      if (!ok)
+      {
+        LOGGER.warn("Failed to delete file: "+from);
+      }
     }
   }
 
@@ -155,10 +162,14 @@ public class MainLotroImagesCleanup
 
   private void removeIcon(int iconId)
   {
-    File iconFile=new File(ROOT_DIR,iconId+".png");
+    File iconFile=new File(_rootDir,iconId+".png");
     if (iconFile.exists())
     {
-      iconFile.delete();
+      boolean ok=iconFile.delete();
+      if (!ok)
+      {
+        LOGGER.warn("Failed to delete file: "+iconFile);
+      }
     }
   }
 
@@ -168,6 +179,8 @@ public class MainLotroImagesCleanup
    */
   public static void main(String[] args)
   {
-    new MainLotroImagesCleanup().doIt();
+    // D:\\dev\\git\\lotro-tools
+    File rootDir=new File(args[0]);
+    new MainLotroImagesCleanup(rootDir).doIt();
   }
 }

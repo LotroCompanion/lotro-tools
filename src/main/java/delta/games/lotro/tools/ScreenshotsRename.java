@@ -14,10 +14,9 @@ import delta.common.utils.files.iterator.FileIteratorCallback;
  */
 public class ScreenshotsRename
 {
-  private static final File ROOT_DIR=new File("X:\\damien\\docs\\jeux\\lotro\\screenshots");
+  private final SimpleDateFormat _sdf=new SimpleDateFormat("yyyy-MM-dd-HHmmss");
 
-  private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd-HHmmss");
-  private static void doRename(File f)
+  private void doRename(File f)
   {
     long time=f.lastModified();
     File to=null;
@@ -27,27 +26,27 @@ public class ScreenshotsRename
       String name=null;
       if (index==0)
       {
-        name=sdf.format(new Date(time))+".jpg";
+        name=_sdf.format(new Date(time))+".jpg";
       }
       else
       {
-        name=sdf.format(new Date(time))+"-"+index+".jpg";
+        name=_sdf.format(new Date(time))+"-"+index+".jpg";
       }
       to=new File(f.getParentFile(),name);
       index++;
     } while (to.exists());
     if(!to.exists())
     {
-      System.out.println("Rename to: "+to.getName());
-      f.renameTo(to);
+      System.out.println("Rename to: "+to.getName()); // NOSONAR
+      boolean ok=f.renameTo(to);
+      if (!ok)
+      {
+        System.err.println("Rename failed!"); // NOSONAR
+      }
     }
   }
 
-  /**
-   * Main method of this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
+  private void doIt(File rootDir)
   {
     final FileFilter f=new FileFilter()
     {
@@ -84,7 +83,18 @@ public class ScreenshotsRename
       }
     };
 
-    FileIterator it=new FileIterator(ROOT_DIR,true,c);
+    FileIterator it=new FileIterator(rootDir,true,c);
     it.run();
+  }
+
+  /**
+   * Main method of this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    // X:\\damien\\docs\\jeux\\lotro\\screenshots
+    File rootDir=new File(args[0]);
+    new ScreenshotsRename().doIt(rootDir);
   }
 }

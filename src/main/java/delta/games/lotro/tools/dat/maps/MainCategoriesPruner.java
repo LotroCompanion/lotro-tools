@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
@@ -19,6 +21,8 @@ import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
  */
 public class MainCategoriesPruner
 {
+  private static final Logger LOGGER=Logger.getLogger(MainCategoriesPruner.class);
+
   private MapsManager _mapsManager;
 
   /**
@@ -51,7 +55,11 @@ public class MainCategoriesPruner
       {
         categoriesMgr.removeCategory(code);
         File iconFile=categoriesMgr.getIconFile(category);
-        iconFile.delete();
+        boolean ok=iconFile.delete();
+        if (!ok)
+        {
+          LOGGER.warn("Failed to delete file: "+iconFile);
+        }
       }
     }
     categoriesMgr.save();
