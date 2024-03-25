@@ -120,13 +120,6 @@ public class EffectLoader
       return null;
     }
     int classIndex=BufferUtils.getDoubleWordAt(data,4);
-    /*
-    System.out.println("******************");
-    ClassDefinition classDef=_facade.getWLibData().getClass(classIndex);
-    String className=(classDef!=null)?classDef.getName():"??";
-    System.out.println("Effect ID="+effectId+", class="+className+" ("+classIndex+")");
-    System.out.println(effectProps.dump().trim());
-    */
     Effect ret=buildEffect(classIndex);
     ret.setId(effectId);
     // Name
@@ -203,7 +196,6 @@ public class EffectLoader
     else if (classDef==737) return new RecallEffect();
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
-    //System.out.println("Unmanaged class: "+classDef);
     return new Effect();
   }
 
@@ -685,7 +677,6 @@ Effect_Genesis_SummonedObject: 1879163733
       proxy.setObject(interactable);
       effect.setInteractable(proxy);
     }
-    //System.out.println("Summoned other ID="+objectID+": "+name+" (type="+weenieType+")");
   }
 
   private Hotspot loadHotspot(int hotspotID, PropertiesSet props)
@@ -821,7 +812,6 @@ Effect_Recall_Travel_Link: 0 (Undef)
     //Integer locationType=(Integer)effectProps.getProperty("Effect_Recall_Location_Type");
     // Position
     String telepad=(String)effectProps.getProperty("Effect_Recall_Telepad");
-    //System.out.println("type="+locationType+", telepad="+telepad);
     if ((telepad!=null) && (!telepad.isEmpty()))
     {
       ExtendedPosition position=_placesLoader.getPositionForName(telepad);

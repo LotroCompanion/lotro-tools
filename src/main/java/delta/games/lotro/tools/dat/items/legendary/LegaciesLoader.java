@@ -235,7 +235,6 @@ public class LegaciesLoader
       {
         // 2 items
         PropertiesSet legacyProps=(PropertiesSet)obj;
-        //System.out.println(legacyProps.dump());
         int legacyId=((Integer)legacyProps.getProperty("ItemAdvancement_ImbuedDPSWidget")).intValue();
         ImbuedLegacy legacy=loadImbuedLegacy(legacyId);
         // Allowed equipment
@@ -338,7 +337,7 @@ public class LegaciesLoader
 
   private void handleReforgeGroup(ClassDescription characterClass, EquipmentLocation slot, int reforgeGroupId)
   {
-    //System.out.println("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
+    LOGGER.debug("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
     PropertiesSet props=_facade.loadProperties(reforgeGroupId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
     int index=0;
@@ -346,7 +345,8 @@ public class LegaciesLoader
     {
       PropertiesSet progressionListSpec=(PropertiesSet)progressionListObj;
       int progressionListId=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList")).intValue();
-      //int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
+      @SuppressWarnings("unused")
+      int weight=((Integer)progressionListSpec.getProperty("ItemAdvancement_ProgressionList_Weight")).intValue();
 
       Boolean major=null;
       if (slot!=EquipmentLocations.BRIDLE)
@@ -364,7 +364,8 @@ public class LegaciesLoader
       {
         PropertiesSet effectEntry=(PropertiesSet)effectEntryObj;
         Integer effectId=(Integer)effectEntry.getProperty("ItemAdvancement_Effect");
-        //int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
+        @SuppressWarnings("unused")
+        int effectWeight=((Integer)effectEntry.getProperty("ItemAdvancement_Mod_Weight")).intValue();
         NonImbuedLegacyTier legacyTier=_loadedEffects.get(effectId);
         if (legacyTier==null)
         {
@@ -418,7 +419,6 @@ public class LegaciesLoader
       PropertiesSet progressionProps=_facade.loadProperties(progressionId+DATConstants.DBPROPERTIES_OFFSET);
       // Tier
       int pointTier=((Integer)progressionProps.getProperty("Progression_PointTier")).intValue();
-      //Integer progType=(Integer)progressionProps.getProperty("Progression_Type");
       int tier=pointTier-1;
       legacyTier=legacy.addTier(tier,effectId,statsProvider);
       // Progression type
@@ -426,10 +426,10 @@ public class LegaciesLoader
       // Start level
       Integer startLevel=_progressionControl.getStartingLevel(typeCode);
       legacyTier.setStartRank(startLevel);
-      //System.out.println("Start level for "+stat+": "+startLevel);
+      LOGGER.debug("Start level for "+stat+": "+startLevel);
       // Multiplier
-      /*Float multiplier=*/_progressionControl.getMultiplier(typeCode);
-      //System.out.println("Multiplier for "+stat.getName()+" @tier"+tier+": "+multiplier);
+      Float multiplier=_progressionControl.getMultiplier(typeCode);
+      LOGGER.debug("Multiplier for "+stat.getName()+" @tier"+tier+": "+multiplier);
     }
     else
     {
@@ -541,10 +541,11 @@ public class LegaciesLoader
     {
       PropertiesSet qualityProps=(PropertiesSet)qualityPropsObj;
       int effectId=((Integer)qualityProps.getProperty("Item_RequiredCombatPropertyModDid")).intValue();
+      @SuppressWarnings("unused")
       int quality=((Integer)qualityProps.getProperty("Item_Quality")).intValue();
       if (effectId!=0)
       {
-        DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+        DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,characterClass,slot);
         legacy.setIconId(iconId);
         legacy.setImbuedLegacyId(imbuedLegacyId);
       }
@@ -556,7 +557,7 @@ public class LegaciesLoader
         for(Object effectIdObj : effectArray)
         {
           effectId=((Integer)effectIdObj).intValue();
-          DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,quality,characterClass,slot);
+          DefaultNonImbuedLegacy legacy=buildDefaultLegacy(effectId,type,characterClass,slot);
           legacy.setIconId(iconId);
           legacy.setImbuedLegacyId(imbuedLegacyId);
         }
@@ -564,7 +565,7 @@ public class LegaciesLoader
     }
   }
 
-  private DefaultNonImbuedLegacy buildDefaultLegacy(int effectId, LegacyType type, int quality,
+  private DefaultNonImbuedLegacy buildDefaultLegacy(int effectId, LegacyType type,
       ClassDescription characterClass, EquipmentLocation slot)
   {
     DefaultNonImbuedLegacy legacy=_nonImbuedLegaciesManager.getDefaultLegacy(effectId);
@@ -580,7 +581,6 @@ public class LegaciesLoader
       // Register legacy
       _nonImbuedLegaciesManager.addDefaultLegacy(legacy);
     }
-    //System.out.println("Got "+legacy+" for quality "+quality);
     if ((characterClass!=null) || (slot!=null))
     {
       _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);

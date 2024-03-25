@@ -3,6 +3,8 @@ package delta.games.lotro.tools.dat.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.lore.items.Armour;
@@ -20,6 +22,8 @@ import delta.games.lotro.lore.items.legendary.Legendary;
  */
 public class ConsistencyChecks
 {
+  private static final Logger LOGGER=Logger.getLogger(ConsistencyChecks.class);
+
   private List<Item> _missingStats;
   private int _nbMissingStats;
   private int _nbStats;
@@ -46,8 +50,6 @@ public class ConsistencyChecks
     {
       item.setStatsFromStatsProvider();
       checkItemStats(item);
-      //int id=item.getIdentifier();
-      //String name=item.getName();
       // Armours
       if (item instanceof Armour)
       {
@@ -56,13 +58,11 @@ public class ConsistencyChecks
         if (armourValue==null)
         {
           nbMissingArmourValues++;
-          //System.out.println("No armour value for: " + name + " (" + id + ')');
         }
         ArmourType type=armour.getArmourType();
         if (type==null)
         {
           nbMissingArmourTypes++;
-          //System.out.println("No armour type for: " + name + " (" + id + ')');
         }
       }
       // Weapons
@@ -73,17 +73,16 @@ public class ConsistencyChecks
         if (type==null)
         {
           nbMissingWeaponTypes++;
-          //System.out.println("No weapon type for: " + name + " (" + id + ')');
         }
       }
     }
-    System.out.println("Items statistics:");
-    System.out.println("Nb armours with missing armour type: " + nbMissingArmourTypes);
-    System.out.println("Nb armours with missing armour value: " + nbMissingArmourValues);
-    System.out.println("Nb weapons with missing type: " + nbMissingWeaponTypes);
-    System.out.println("Nb legendary items: " + _nbLegendaryItems);
-    System.out.println("Nb items with stats: " + _nbStats);
-    System.out.println("Nb items with missing stats: " + _nbMissingStats);
+    LOGGER.info("Items statistics:");
+    LOGGER.info("Nb armours with missing armour type: " + nbMissingArmourTypes);
+    LOGGER.info("Nb armours with missing armour value: " + nbMissingArmourValues);
+    LOGGER.info("Nb weapons with missing type: " + nbMissingWeaponTypes);
+    LOGGER.info("Nb legendary items: " + _nbLegendaryItems);
+    LOGGER.info("Nb items with stats: " + _nbStats);
+    LOGGER.info("Nb items with missing stats: " + _nbMissingStats);
   }
 
   private void checkItemStats(Item item)
@@ -108,10 +107,6 @@ public class ConsistencyChecks
         {
           _missingStats.add(item);
           _nbMissingStats++;
-          //if ((location==EquipmentLocation.BACK) || (location==EquipmentLocation.LEGS))
-          {
-            //System.out.println("No stat for item: " + item + " at " + location);
-          }
         }
         else
         {

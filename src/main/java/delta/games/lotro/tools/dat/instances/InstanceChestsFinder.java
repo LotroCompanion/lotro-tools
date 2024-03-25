@@ -119,12 +119,9 @@ public class InstanceChestsFinder
   private void showByInstance()
   {
     ItemsManager itemsMgr=ItemsManager.getInstance();
-    @SuppressWarnings("unused")
-    PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     List<Integer> peIds=new ArrayList<Integer>(_mapByPe.keySet());
     Collections.sort(peIds);
     for(SkirmishPrivateEncounter pe : InstancesTree.getInstance().getInstances())
-    //for(Integer peId : peIds)
     {
       Integer peId=Integer.valueOf(pe.getIdentifier());
       List<Item> items=new ArrayList<Item>();
@@ -133,7 +130,6 @@ public class InstanceChestsFinder
         items.add(itemsMgr.getItem(itemId.intValue()));
       }
       Collections.sort(items,new ItemNameComparator());
-      //PrivateEncounter pe=peMgr.getPrivateEncounterById(peId.intValue());
       System.out.println("Private encounter "+pe.getName()+" has chests:");
       for(Item item : items)
       {

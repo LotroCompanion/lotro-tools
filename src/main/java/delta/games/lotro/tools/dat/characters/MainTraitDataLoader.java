@@ -99,7 +99,6 @@ public class MainTraitDataLoader
       {
         int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        //System.out.println(classDefIndex);
         if ((classDefIndex==1477) || (classDefIndex==1478) || (classDefIndex==1483) ||
             (classDefIndex==1494) || (classDefIndex==2525) || (classDefIndex==3438) || (classDefIndex==3509))
         {
@@ -149,7 +148,6 @@ public class MainTraitDataLoader
     }
   }
 
-
   /**
    * Load a trait.
    * @param traitId Trait identifier.
@@ -162,7 +160,6 @@ public class MainTraitDataLoader
     {
       return null;
     }
-    //System.out.println("*********** Trait: "+traitId+" ****************");
     TraitDescription ret=new TraitDescription();
     ret.setIdentifier(traitId);
     // Name
@@ -264,7 +261,7 @@ public class MainTraitDataLoader
     loadEffects(ret,traitProperties);
 
     // Pre-requisites
-    CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitId,traitProperties);
+    CompoundTraitPrerequisite prerequisites=loadPrerequisites(traitProperties);
     if (prerequisites!=null)
     {
       AbstractTraitPrerequisite toUse=simplify(prerequisites);
@@ -307,7 +304,6 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
       Object[] skillArray=(Object[])traitProperties.getProperty("Trait_EffectSkill_AtRankSkillsAcquired_Array");
       if (skillArray!=null)
       {
-        //System.out.println(ret);
         for(Object entry : skillArray)
         {
           PropertiesSet effectSkillStruct=(PropertiesSet)entry;
@@ -317,7 +313,6 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
           for(Object skillIDObj : skillIDsArray)
           {
             int skillId=((Integer)skillIDObj).intValue();
-            //System.out.println("Rank "+rank+" => "+skillId);
             SkillDescription skill=skillsMgr.getSkill(skillId);
             if (skill!=null)
             {
@@ -414,7 +409,6 @@ Trait_EffectSkill_AtRankEffects_Array:
       for(Object effectIDObj : effectIDsArray)
       {
         int effectID=((Integer)effectIDObj).intValue();
-        //System.out.println("Rank "+rank+" => "+effectID);
         Effect effect=_effectsLoader.getEffect(effectID);
         if (effect!=null)
         {
@@ -428,19 +422,13 @@ Trait_EffectSkill_AtRankEffects_Array:
     }
   }
 
-  private CompoundTraitPrerequisite loadPrerequisites(int traitId, PropertiesSet properties)
+  private CompoundTraitPrerequisite loadPrerequisites(PropertiesSet properties)
   {
     PropertyValue value=properties.getPropertyValueByName("Trait_Prerequisites_Logic");
     if (value==null)
     {
       return null;
     }
-    /*
-    StringBuilder sb=new StringBuilder();
-    sb.append("ID=").append(traitId).append(EndOfLine.NATIVE_EOL);
-    PropertiesUtils.dumpValue(sb,0,value);
-    System.out.println(sb);
-    */
     ArrayPropertyValue arrayValue=(ArrayPropertyValue)value;
     return loadCompoundPrerequisites(arrayValue);
   }
@@ -453,7 +441,6 @@ Trait_EffectSkill_AtRankEffects_Array:
     for(PropertyValue childPropertyValue : arrayValue.getValues())
     {
       Object childValue=childPropertyValue.getValue();
-      //System.out.println(childDef.getName()+" => "+childValue);
       if (childPropertyValue instanceof ArrayPropertyValue)
       {
         ArrayPropertyValue childArrayPropertyValue=(ArrayPropertyValue)childPropertyValue;

@@ -9,6 +9,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.WJEncounterCategory;
 import delta.games.lotro.common.enums.WJEncounterType;
+import delta.games.lotro.common.enums.WJInstanceGroup;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.instances.InstanceCategory;
@@ -26,6 +27,8 @@ import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
  */
 public class MainDatInstancesTreeLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MainDatInstancesTreeLoader.class);
+
   /**
    * "Seasonal" category name.
    */
@@ -47,10 +50,8 @@ public class MainDatInstancesTreeLoader
    */
   private static final String SKIRMISH="Skirmish";
 
-  private static final Logger LOGGER=Logger.getLogger(MainDatInstancesTreeLoader.class);
-
   private DataFacade _facade;
-  //private LotroEnum<WJInstanceGroup> _instanceGroups;
+  private LotroEnum<WJInstanceGroup> _instanceGroups;
   private LotroEnum<WJEncounterCategory> _encounterCategory;
   private InstancesTree _tree;
   private Set<WJEncounterCategory> _seasonalCategories;
@@ -63,7 +64,7 @@ public class MainDatInstancesTreeLoader
   {
     _facade=facade;
     _tree=new InstancesTree();
-    //_instanceGroups=LotroEnumsRegistry.getInstance().get(WJInstanceGroup.class);
+    _instanceGroups=LotroEnumsRegistry.getInstance().get(WJInstanceGroup.class);
     _encounterCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
     _seasonalCategories=new HashSet<WJEncounterCategory>();
   }
@@ -89,7 +90,7 @@ public class MainDatInstancesTreeLoader
     loadCategories(props);
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     // Featured instances
-    /*
+    LOGGER.debug("Featured instances");
     Object[] featuredInstancesArray=(Object[])props.getProperty("WorldJoinControl_FeaturedInstance_Array");
     for(Object featuredInstanceObj : featuredInstancesArray)
     {
@@ -99,14 +100,16 @@ public class MainDatInstancesTreeLoader
       {
         String name=pe.getName();
         boolean isSkirmish=(pe instanceof SkirmishPrivateEncounter);
-        System.out.println("\tID="+instanceId+" => "+name+" (skirmish="+isSkirmish);
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("\tID="+instanceId+" => "+name+" (skirmish="+isSkirmish);
+        }
       }
       else
       {
         LOGGER.warn("Private encounter not found: "+instanceId);
       }
     }
-    */
     InstanceCategory seasonal=new InstanceCategory(SEASONAL);
     _tree.addCategory(seasonal);
     InstanceCategory nonScalingInstances=new InstanceCategory(NON_SCALING_INSTANCES);
@@ -116,7 +119,6 @@ public class MainDatInstancesTreeLoader
     InstanceCategory skirmishes=new InstanceCategory(SKIRMISH);
     _tree.addCategory(skirmishes);
     // Available instances
-    //System.out.println("Available instances:");
     Object[] availablePEsArray=(Object[])props.getProperty("WorldJoin_AvailablePETemplates_Array");
     for(Object availablePEObj : availablePEsArray)
     {
@@ -125,8 +127,6 @@ public class MainDatInstancesTreeLoader
       if (pe!=null)
       {
         boolean isSkirmish=(pe instanceof SkirmishPrivateEncounter);
-        //String name=pe.getName();
-        //System.out.println("\tID="+privateEncounterId+" => "+name+" (skirmish="+isSkirmish+")");
         if (!isSkirmish)
         {
           continue;
@@ -182,8 +182,9 @@ public class MainDatInstancesTreeLoader
       for(Object instanceGroupObj : instanceGroupsArray)
       {
         PropertiesSet instanceGroupProps=(PropertiesSet)instanceGroupObj;
-        //int labelCode=((Integer)instanceGroupProps.getProperty("WorldJoinControl_Instance_Group_Label")).intValue();
-        //WJInstanceGroup label=_instanceGroups.getEntry(labelCode);
+        int labelCode=((Integer)instanceGroupProps.getProperty("WorldJoinControl_Instance_Group_Label")).intValue();
+        @SuppressWarnings("unused")
+        WJInstanceGroup label=_instanceGroups.getEntry(labelCode);
         Object[] instanceIdsArray=(Object[])instanceGroupProps.getProperty("WorldJoinControl_Grouped_Instance_List");
         for(Object instanceIdObj : instanceIdsArray)
         {

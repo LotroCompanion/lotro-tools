@@ -50,7 +50,6 @@ public class TraitTreesDataLoader
   private TraitTree handleTraitTree(int traitTreeId)
   {
     PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(properties.dump());
     // Branches
     /*
     Object[] branchDescriptions=(Object[])properties.getProperty("Trait_TraitTree_BranchDescriptionArray");
@@ -70,7 +69,6 @@ public class TraitTreesDataLoader
     TraitTreeType traiTreeType=traitTreeTypeEnum.getEntry(traitTreeTypeCode);
     TraitTree tree=new TraitTree(traitTreeId,traiTreeType);
     LOGGER.info("Loading trait tree with type: "+traiTreeType);
-    //System.out.println("Got trait tree for: "+characterClass);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
     LotroEnum<TraitTreeBranchType> traitTreeBranchTypeEnum=registry.get(TraitTreeBranchType.class);
@@ -114,7 +112,6 @@ public class TraitTreesDataLoader
       int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
       int traitLocation=((Integer)traitProps.getProperty("Trait_TraitTree_TraitLocation")).intValue();
       String cellId=_traitCell.getString(traitLocation);
-      //System.out.println("Cell: "+cell);
       TraitDescription trait=TraitUtils.getTrait(traitId);
       TraitTreeCell cell=new TraitTreeCell(cellId,trait);
       // Dependencies
@@ -127,7 +124,6 @@ public class TraitTreesDataLoader
           int depTraitLocation=((Integer)depProps.getProperty("Trait_TraitTree_TraitDependency")).intValue();
           String depCellId=_traitCell.getString(depTraitLocation);
           int depRank=((Integer)depProps.getProperty("Trait_TraitTree_TraitDependencyRank")).intValue();
-          //System.out.println("Cell "+cell+" depends on cell "+depCellId+" at rank: "+depRank);
           TraitTreeCellDependency cellDependency=new TraitTreeCellDependency(depCellId,depRank);
           cell.addDependency(cellDependency);
         }
@@ -139,14 +135,12 @@ public class TraitTreesDataLoader
 
   private void handleSpecializationProgression(TraitTreeProgression progression, PropertiesSet progressionProperties)
   {
-    //System.out.println(progressionProperties.dump());
     Object[] progressionSteps=(Object[])progressionProperties.getProperty("SparseDIDProgression_Array");
     for(Object progressionStepObj : progressionSteps)
     {
       PropertiesSet progressionStepProps=(PropertiesSet)progressionStepObj;
       Number nbPointsValue=(Number)progressionStepProps.getProperty("SparseDIDProgressionEntry_Key");
       int nbPoints=nbPointsValue.intValue();
-      //System.out.println("Nb points: "+nbPoints);
       int traitId=((Integer)progressionStepProps.getProperty("SparseDIDProgressionEntry_DID")).intValue();
       TraitDescription description=TraitUtils.getTrait(traitId);
       progression.addStep(nbPoints,description);
@@ -161,7 +155,6 @@ public class TraitTreesDataLoader
   {
     PropertiesSet properties=_facade.loadProperties(0x7900025B);
     List<TraitTree> traitTrees=new ArrayList<TraitTree>();
-    //System.out.println(properties.dump());
     Map<Integer,TraitTreeBranch> branchByCode=new HashMap<Integer,TraitTreeBranch>();
     Object[] traitNatures=(Object[])properties.getProperty("Trait_Control_PointBasedTraitNature_Array");
     if (traitNatures==null)
@@ -204,13 +197,11 @@ public class TraitTreesDataLoader
 
   private void handleMainTraits(PropertiesSet traitNatureProps, Map<Integer,TraitTreeBranch> branchByCode)
   {
-    //System.out.println(traitNatureProps.dump());
     Object[] traitTreeArray=(Object[])traitNatureProps.getProperty("Trait_Control_PointBasedTrait_TraitTreeArray");
     for(Object traitTreeIdObj : traitTreeArray)
     {
       int traitTreeId=((Integer)traitTreeIdObj).intValue();
       PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
-      //System.out.println(properties.dump());
       // Traits
       Object[] traits=(Object[])properties.getProperty("Trait_TraitTree_TraitArray");
       for(Object traitObj : traits)

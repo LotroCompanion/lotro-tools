@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.dat.effects;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.effects.Effect;
@@ -16,6 +18,8 @@ import delta.games.lotro.tools.dat.utils.Utils;
  */
 public class ItemEffectsLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(ItemEffectsLoader.class);
+
   private EffectLoader _loader;
 
   /**
@@ -97,6 +101,9 @@ public class ItemEffectsLoader
     SkillDescription skill=SkillsManager.getInstance().getSkill(skillID.intValue());
     SkillToExecute detail=new SkillToExecute(skill,skillLevel);
     Item.addDetail(item,detail);
-    //System.out.println("Set skill for item: "+item+" = "+skill+", level="+skillLevel);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Set skill for item: "+item+" = "+skill+", level="+skillLevel);
+    }
   }
 }

@@ -41,7 +41,6 @@ public class ProficienciesLoader
    */
   public void handleClass(ClassDescription classDescription)
   {
-    //System.out.println("Class: "+classDescription.getCharacterClass().getLabel());
     List<ClassTrait> classTraits=classDescription.getTraits();
     for(ClassTrait classTrait : classTraits)
     {
@@ -86,11 +85,9 @@ public class ProficienciesLoader
 
   private void addProficiencies(Long category, int level, ClassProficiencies proficiencies)
   {
-    //System.out.println("\tTrait: "+trait.getName()+" at level "+level+", Category: "+category);
     Set<WeaponType> weaponTypes=_weaponUtils.getAllowedEquipment(category.longValue());
     if (!weaponTypes.isEmpty())
     {
-      //System.out.println("\t\t=> "+weaponTypes);
       TypedClassProficiencies<WeaponType> weaponProficiencies=proficiencies.getWeaponProficiencies();
       for(WeaponType weaponType : weaponTypes)
       {
@@ -103,7 +100,6 @@ public class ProficienciesLoader
     Set<ArmourType> armourTypes=ArmourTypesUtils.getArmourTypes(category.longValue());
     if (!armourTypes.isEmpty())
     {
-      //System.out.println("\t\t=> "+armourTypes);
       TypedClassProficiencies<ArmourType> armourProficiencies=proficiencies.getArmourProficiencies();
       for(ArmourType armourType : armourTypes)
       {

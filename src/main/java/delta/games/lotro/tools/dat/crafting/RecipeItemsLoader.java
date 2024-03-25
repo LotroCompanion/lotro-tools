@@ -74,7 +74,6 @@ public class RecipeItemsLoader
             LOGGER.warn("Found multiple recipe items for recipe: "+recipe);
           }
           _unknownRecipes.remove(recipeKey);
-          //System.out.println("Recipe "+recipe+" comes from "+item);
           recipe.setRecipeScroll(item);
         }
       }
@@ -84,7 +83,7 @@ public class RecipeItemsLoader
     Set<Integer> autobestowed=getAutobestowedRecipes();
     LOGGER.info("There are "+autobestowed.size()+" autobestowed recipes.");
     _unknownRecipes.removeAll(autobestowed);
-    if (_unknownRecipes.size()>0)
+    if (!_unknownRecipes.isEmpty())
     {
       LOGGER.warn("There are "+_unknownRecipes.size()+" recipe with unknown source:");
       for(Integer unknownRecipeId : _unknownRecipes)
