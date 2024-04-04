@@ -105,7 +105,7 @@ public class ReferenceDataGenerator
         writeFile(to,sb.toString().trim());
       }
     }
-    catch(Throwable e)
+    catch(Exception e)
     {
       LOGGER.error("Error with WSL ID="+id+", "+to, e);
     }
@@ -213,8 +213,11 @@ public class ReferenceDataGenerator
         break;
       }
     }
-    File to=new File(_rootDir,"mapsSystemProps.txt");
-    writeFile(to,props.dump());
+    if (props!=null)
+    {
+      File to=new File(_rootDir,"mapsSystemProps.txt");
+      writeFile(to,props.dump());
+    }
   }
 
   private void dumpWLibClasses()

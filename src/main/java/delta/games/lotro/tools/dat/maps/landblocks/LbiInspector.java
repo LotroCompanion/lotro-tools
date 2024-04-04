@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.maps.landblocks;
 
+import java.io.PrintStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -32,37 +33,38 @@ public class LbiInspector
   /**
    * Dump the contents of a landblock.
    * @param lbi Landblock info.
+   * @param out Output stream.
    */
-  public void dump(LandBlockInfo lbi)
+  public void dump(LandBlockInfo lbi, PrintStream out)
   {
-    System.out.println("Props: "+lbi.getProps());
+    out.println("Props: "+lbi.getProps());
     // Cells
     List<Cell> cells=lbi.getCells();
-    System.out.println("Cells: ("+cells.size()+")");
+    out.println("Cells: ("+cells.size()+")");
     for(Cell cell : cells)
     {
-      System.out.println("\t"+cell);
+      out.println("\t"+cell);
     }
     // Entities
     List<EntityDescriptor> entities=lbi.getEntities();
-    System.out.println("Entities: ("+entities.size()+")");
+    out.println("Entities: ("+entities.size()+")");
     for(EntityDescriptor entity : entities)
     {
-      System.out.println("\t"+entity);
+      out.println("\t"+entity);
     }
     // Links
     List<LbiLink> links=lbi.getLinks();
-    System.out.println("Links: ("+links.size()+")");
+    out.println("Links: ("+links.size()+")");
     for(LbiLink link : links)
     {
-      System.out.println("\t"+link);
+      out.println("\t"+link);
     }
     // Weenies
     List<Weenie> weenies=lbi.getWeenies();
-    System.out.println("Weenies: ("+weenies.size()+")");
+    out.println("Weenies: ("+weenies.size()+")");
     for(Weenie weenie : weenies)
     {
-      System.out.println("\t"+weenie);
+      out.println("\t"+weenie);
     }
   }
 

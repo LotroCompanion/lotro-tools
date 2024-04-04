@@ -61,7 +61,7 @@ public class RecipeIconsInitializer
     {
       return getDefaultIconLive(key,tier);
     }
-    return getDefaultIconSoA(key,tier);
+    return getDefaultIconSoA(key);
   }
 
   private static String getDefaultIconLive(String key, int tier)
@@ -88,7 +88,7 @@ public class RecipeIconsInitializer
     return "";
   }
 
-  private static String getDefaultIconSoA(String key, int tier)
+  private static String getDefaultIconSoA(String key)
   {
     if ("FORESTER".equals(key))
     {

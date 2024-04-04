@@ -126,7 +126,7 @@ public class DATInspectionTool
           for(Integer token : table.getTokens())
           {
             StringTableEntry entry=table.getEntry(token.intValue());
-            handleEntry(stringTableId,token.intValue(),entry);
+            handleEntry(token.intValue(),entry);
           }
         }
         else
@@ -148,13 +148,13 @@ public class DATInspectionTool
         for(Integer token : table.getTokens())
         {
           StringTableEntry entry=table.getEntry(token.intValue());
-          handleEntry(stringTableId,token.intValue(),entry);
+          handleEntry(token.intValue(),entry);
         }
       }
     }
   }
 
-  private static void handleEntry(int tableId, int token, StringTableEntry entry)
+  private static void handleEntry(int token, StringTableEntry entry)
   {
     String stringFormat=StringInfoUtils.buildStringFormat(entry);
     System.out.println("\t"+token+": "+stringFormat);

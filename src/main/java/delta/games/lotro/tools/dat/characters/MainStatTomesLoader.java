@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.characters;
 
+import java.io.PrintStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -99,17 +100,17 @@ public class MainStatTomesLoader
     _tomesManager.registerStatTome(tome);
   }
 
-  void showRegistry()
+  void showRegistry(PrintStream out)
   {
     List<StatDescription> stats=_tomesManager.getStats();
     for(StatDescription stat : stats)
     {
-      System.out.println(stat.getName());
+      out.println(stat.getName());
       int nbRanks=_tomesManager.getNbOfRanks(stat);
       for(int i=1;i<=nbRanks;i++)
       {
         StatTome tome=_tomesManager.getStatTome(stat,i);
-        System.out.println("\t"+tome);
+        out.println("\t"+tome);
       }
     }
   }

@@ -52,7 +52,7 @@ public class DatRolesLoader
     handleCompletionComments(quest,properties);
   }
 
-  void handleGlobalRoles(QuestDescription quest, PropertiesSet properties)
+  void handleGlobalRoles(PropertiesSet properties)
   {
     // Quest_GlobalRoles
     Object[] roles=(Object[])properties.getProperty("Quest_GlobalRoles");

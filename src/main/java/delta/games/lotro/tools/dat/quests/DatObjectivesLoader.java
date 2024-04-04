@@ -303,14 +303,12 @@ public class DatObjectivesLoader
      */
     // ID
     int questEventId=((Integer)properties.getProperty("QuestEvent_ID")).intValue();
-    //System.out.println("\t\tEvent ID: "+questEventId+" ("+eventMeaning+")");
     // Billboard
     boolean showBillboardText=true;
     Integer showBillboardTextInt=(Integer)properties.getProperty("QuestEvent_ShowBillboardText");
     if ((showBillboardTextInt!=null) && (showBillboardTextInt.intValue()==0))
     {
       showBillboardText=false;
-      //System.out.println("\t\tShow billboard text: "+showBillboardTextInt);
     }
     // Billboard override
     String billboardProgressOverride=_i18n.getStringProperty(properties,"QuestEvent_BillboardProgressOverride");
@@ -324,7 +322,6 @@ public class DatObjectivesLoader
     if ((showProgressTextInt!=null) && (showProgressTextInt.intValue()==0))
     {
       showProgressText=false;
-      //System.out.println("\t\tShow progress text: "+showProgressTextInt);
     }
     // Progress override
     String progressOverride=_i18n.getStringProperty(properties,"QuestEvent_ProgressOverride");
@@ -572,7 +569,6 @@ public class DatObjectivesLoader
     ConditionTarget target=null;
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    //System.out.println("Enter detect: "+detect+", role="+roleConstraint);
     if (detect!=null)
     {
       target=getTarget(detect);
@@ -993,7 +989,7 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_WorldEvent_Value: always. Integer 1, rarely 4 or 7.
      * QuestEvent_RoleConstraint: string. 4 uses: 2 for draigoch, 2 for skirmishes (goblin's pot in 21st hall, arrows in defence of bruinen)
      * QuestEvent_WorldEvent: ID (relates to world event, such as festivals)
-     * QuestEvent_WorldEvent_Operator: always. Integer 3.
+     * QuestEvent_WorldEvent_Operator: always. Integer 3 => "EqualTo".
      * QuestEvent_Number: almost always. Integer 1 if set.
      */
     /*

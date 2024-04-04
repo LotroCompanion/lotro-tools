@@ -211,7 +211,7 @@ public class MainDatItemsLoader
       Integer level=(Integer)properties.getProperty("Item_Level");
       item.setItemLevel(level);
       // Item level tweak
-      Integer itemLevelOffset=getItemLevelOffset(item,properties);
+      Integer itemLevelOffset=getItemLevelOffset(properties);
       item.setItemLevelOffset(itemLevelOffset);
       handleMunging(properties);
       if (level!=null)
@@ -761,7 +761,7 @@ public class MainDatItemsLoader
     }
   }
 
-  private Integer getItemLevelOffset(Item item, PropertiesSet properties)
+  private Integer getItemLevelOffset(PropertiesSet properties)
   {
     Integer ret=null;
     Integer distributionType=(Integer)properties.getProperty("Item_DistributionType");

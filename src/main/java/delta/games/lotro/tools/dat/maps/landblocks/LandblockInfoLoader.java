@@ -348,7 +348,7 @@ public class LandblockInfoLoader
     propsLoader.decodeProperties(bis,props);
     weenie.setProps(props);
     Set<Integer> ids=_generatorLoader.handleGenerator(props);
-    if ((ids!=null) && (ids.size()>0))
+    if ((ids!=null) && (!ids.isEmpty()))
     {
       weenie.setGeneratorDids(ids);
     }

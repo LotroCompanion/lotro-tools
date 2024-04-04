@@ -101,7 +101,7 @@ public class MainStatsLoader
     if (propertyType==PropertyType.BIT_FIELD32) return StatType.BITFIELD;
     if (propertyType==PropertyType.BITFIELD_64) return StatType.BITFIELD;
     if (propertyType==PropertyType.ARRAY) return StatType.ARRAY;
-    System.out.println("Unmanaged property type: "+propertyType);
+    LOGGER.warn("Unmanaged property type: "+propertyType);
     return StatType.OTHER;
   }
 
@@ -185,8 +185,6 @@ public class MainStatsLoader
             }
           }
         }
-        // Set percentage
-        //stat.setPercentage(_oldStatsLabels.isPercentage(legacyKey));
       }
     }
   }
@@ -226,7 +224,7 @@ public class MainStatsLoader
     {
       Set<String> intersection=new HashSet<String>(wellKnownStatsKeys);
       intersection.retainAll(notWellKnownStatsKeys);
-      if (intersection.size()>0)
+      if (!intersection.isEmpty())
       {
         LOGGER.warn("Well-known and not well-known do intersect: "+intersection);
       }
@@ -244,7 +242,7 @@ public class MainStatsLoader
         boolean ok=names.add(name);
         if (!ok)
         {
-          System.out.println("Found duplicate stat name: "+name);
+          LOGGER.warn("Found duplicate stat name: "+name);
         }
       }
     }
@@ -302,7 +300,10 @@ public class MainStatsLoader
       }
     }
     String statName=_oldStatsLabels.getStatLegacyName(legacyKey,Locale.ENGLISH);
-    //System.out.println("Custom stat: key="+legacyKey+", name="+legacyName);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Custom stat: key="+legacyKey+", name="+statName);
+    }
     StatDescription stat=new StatDescription(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
@@ -327,7 +328,7 @@ public class MainStatsLoader
     addCustomStat(id--,"ARMOUR",false,StatType.INTEGER);
     // Add other stats
     addCustomStat(id--,"DPS",false,StatType.FLOAT);
-    addCustomStat(id--,"Combat_TacticalDPS_Modifier#1",false,StatType.FLOAT);
+    addCustomStat(id,"Combat_TacticalDPS_Modifier#1",false,StatType.FLOAT);
   }
 
   /**

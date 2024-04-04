@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.AbstractMapper;
@@ -33,6 +36,8 @@ import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLWriter;
  */
 public class ItemsMusicLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(ItemsMusicLoader.class);
+
   private DataFacade _facade;
   private SoundContextManager _contextMgr;
 
@@ -122,12 +127,16 @@ Usage_IsMusicalInstrument: 1
   {
     int itemId=item.getIdentifier();
     PropertiesSet itemProps=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
-    //long category=((Long)itemProps.getProperty("Item_Decoration_Category")).longValue();
     int propertyId=((Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Name")).intValue();
-    int propertyValue=((Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Value")).intValue();
-    //EnumMapper enumMapper=findEnumForProperty(propertyId);
-    //String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue):"?";
-    //System.out.println("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue+" ("+valueLabel+")");
+    PropertyValue propertyValueValue=itemProps.getPropertyValueByName("Item_Decoration_PropertyHook_Value");
+    int propertyValue=((Integer)propertyValueValue.getValue()).intValue();
+    if (LOGGER.isDebugEnabled())
+    {
+      long category=((Long)itemProps.getProperty("Item_Decoration_Category")).longValue();
+      EnumMapper enumMapper=findEnumForProperty(propertyValueValue.getDefinition());
+      String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue):"?";
+      LOGGER.debug("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue+" ("+valueLabel+")");
+    }
     SoundContext ret=new SoundContext(itemId,item.getName(),item.getIcon());
     SoundReferences soundRefs=ret.getSounds();
     List<SoundDescription> sounds=findSounds(propertyId,propertyValue);
@@ -154,8 +163,10 @@ Usage_IsMusicalInstrument: 1
     PropertyDefinition propertyDef=registry.getPropertyDefByName("Item_Music_Instrument_Type");
     EnumMapper enumMapper=findEnumForProperty(propertyDef);
     String valueLabel=(enumMapper!=null)?enumMapper.getLabel(category.intValue()):"?";
-    //System.out.println("Item: "+item+" => category="+category+" ("+valueLabel+")");
-
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Item: "+item+" => category="+category+" ("+valueLabel+")");
+    }
     PropertyDefinition propertyDefForSound=registry.getPropertyDefByName("Music_Instrument_Type");
     List<SoundDescription> sounds=findSounds(propertyDefForSound.getPropertyId(),category.intValue());
     ret=new SoundContext(category.intValue(),valueLabel,null);

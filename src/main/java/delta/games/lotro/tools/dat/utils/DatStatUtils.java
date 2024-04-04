@@ -269,7 +269,7 @@ public class DatStatUtils
       LOGGER.warn("Unknown stat: "+def.getName());
       return null;
     }
-    boolean useStat=useStat(stat,def);
+    boolean useStat=useStat(def);
     if (!useStat)
     {
       return null;
@@ -413,7 +413,7 @@ public class DatStatUtils
     return delta.games.lotro.utils.dat.DatStatUtils.getStatDescription(propertyDefinition.getPropertyId(),propertyDefinition.getName());
   }
 
-  private static boolean useStat(StatDescription stat, PropertyDefinition def)
+  private static boolean useStat(PropertyDefinition def)
   {
     PropertyType type=def.getPropertyType();
     if ((type==PropertyType.BIT_FIELD32) || (type==PropertyType.DATA_FILE) ||

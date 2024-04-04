@@ -147,7 +147,7 @@ public class EffectLoader
     EffectDuration duration=getDuration(effectProps);
     ret.setEffectDuration(duration);
     // Specifics
-    loadSpecifics(ret,effectProps,classIndex);
+    loadSpecifics(ret,effectProps);
     // Icon
     Integer iconId=ret.getIconId();
     if (iconId!=null)
@@ -199,7 +199,7 @@ public class EffectLoader
     return new Effect();
   }
 
-  private void loadSpecifics(Effect effect, PropertiesSet effectProps, int classDef)
+  private void loadSpecifics(Effect effect, PropertiesSet effectProps)
   {
     if (effect instanceof ProcEffect)
     {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.maps.data.MapsManager;
@@ -25,6 +27,8 @@ import delta.games.lotro.tools.dat.maps.classification.ResourceClassification;
  */
 public class MapsDataManager
 {
+  private static final Logger LOGGER=Logger.getLogger(MapsDataManager.class);
+
   private MapsManager _mapsManager;
   private MarkersIndexesManager _index;
   private Map<Integer,MarkersStore> _didStore;
@@ -140,16 +144,18 @@ public class MapsDataManager
   private void buildIndexes()
   {
     // DID
-    for(Integer did : _didStore.keySet())
+    for(Map.Entry<Integer,MarkersStore> didEntry : _didStore.entrySet())
     {
-      MarkersStore store=_didStore.get(did);
+      Integer did=didEntry.getKey();
+      MarkersStore store=didEntry.getValue();
       MarkersIndex index=new MarkersIndex(did.intValue(),store.getMarkers());
       _index.setDidIndex(index);
     }
     // CL
-    for(Integer contentLayerId : _clStore.keySet())
+    for(Map.Entry<Integer,MarkersStore> contentLayerEntry : _clStore.entrySet())
     {
-      MarkersStore store=_clStore.get(contentLayerId);
+      Integer contentLayerId=contentLayerEntry.getKey();
+      MarkersStore store=contentLayerEntry.getValue();
       MarkersIndex index=new MarkersIndex(contentLayerId.intValue(),store.getMarkers());
       _index.setContentLayerIndex(index);
     }
@@ -165,7 +171,7 @@ public class MapsDataManager
     }
     int nbRemovedMarkers=remover.getRemovedMarkers();
     int nbTotalMarkers=remover.getTotalMarkers();
-    System.out.println("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
+    LOGGER.info("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
   }
 
   /**

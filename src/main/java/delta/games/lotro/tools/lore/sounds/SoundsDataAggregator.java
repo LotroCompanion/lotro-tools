@@ -80,11 +80,6 @@ public class SoundsDataAggregator
     {
       PropertyValue first=values.get(0);
       PropertyDefinition propertyDef=first.getDefinition();
-      boolean useProperty=useProperty(propertyDef);
-      if (!useProperty)
-      {
-        continue;
-      }
       SoundDescription sound=getSound(soundID,soundChannel);
       for(PropertyValue propertyValue : values)
       {
@@ -127,11 +122,6 @@ public class SoundsDataAggregator
       nb+=values.size();
     }
     return nb;
-  }
-
-  private boolean useProperty(PropertyDefinition propertyDefinition)
-  {
-    return true;
   }
 
   /**

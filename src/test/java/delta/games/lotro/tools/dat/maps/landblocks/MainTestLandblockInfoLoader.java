@@ -41,7 +41,7 @@ public class MainTestLandblockInfoLoader
     if (lbi!=null)
     {
       LbiInspector inspector=new LbiInspector();
-      inspector.dump(lbi);
+      inspector.dump(lbi,System.out);
     }
   }
 
