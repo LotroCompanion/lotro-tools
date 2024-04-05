@@ -8,11 +8,13 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.Interactable;
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.LoaderUtils;
@@ -76,6 +78,8 @@ public class DatObjectivesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
 
+  private static final String QUEST_EVENT_ENTRY="QuestEvent_Entry";
+
   private DataFacade _facade;
   private I18nUtils _i18n;
 
@@ -85,6 +89,7 @@ public class DatObjectivesLoader
 
   @SuppressWarnings("unused")
   private GeoData _geoData;
+  private Achievable _currentAchievable;
 
   /**
    * Constructor.
@@ -109,6 +114,7 @@ public class DatObjectivesLoader
    */
   public void handleObjectives(ObjectivesManager objectivesManager, Achievable achievable, PropertiesSet properties)
   {
+    _currentAchievable=achievable;
     handleMainFailureConditions(achievable,properties);
     Object[] objectivesArray=(Object[])properties.getProperty("Quest_ObjectiveArray");
     if (objectivesArray!=null)
@@ -196,7 +202,7 @@ public class DatObjectivesLoader
         int conditionCount=((Integer)completionCondition.getValue()).intValue();
         objective.setCompletionConditionsCount(Integer.valueOf(conditionCount));
       }
-      else if ("QuestEvent_Entry".equals(propertyName))
+      else if (QUEST_EVENT_ENTRY.equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)completionCondition.getValue();
         ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
@@ -233,7 +239,7 @@ public class DatObjectivesLoader
     for(PropertyValue compoundEventItem : compoundEventArray.getValues())
     {
       String propertyName=compoundEventItem.getDefinition().getName();
-      if ("QuestEvent_Entry".equals(propertyName))
+      if (QUEST_EVENT_ENTRY.equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)compoundEventItem.getValue();
         ObjectiveCondition event=handleQuestEventEntry(questEventEntryProps);
@@ -267,7 +273,7 @@ public class DatObjectivesLoader
     for(PropertyValue questEventItem : questEventArray.getValues())
     {
       String propertyName=questEventItem.getDefinition().getName();
-      if ("QuestEvent_Entry".equals(propertyName))
+      if (QUEST_EVENT_ENTRY.equals(propertyName))
       {
         PropertiesSet questEventEntryProps=(PropertiesSet)questEventItem.getValue();
         ObjectiveCondition condition=handleQuestEventEntry(questEventEntryProps);
@@ -311,11 +317,8 @@ public class DatObjectivesLoader
       showBillboardText=false;
     }
     // Billboard override
+    @SuppressWarnings("unused")
     String billboardProgressOverride=_i18n.getStringProperty(properties,"QuestEvent_BillboardProgressOverride");
-    if (billboardProgressOverride!=null)
-    {
-      //System.out.println("\t\tBillboard progress override: "+billboardProgressOverride);
-    }
     // Progress
     boolean showProgressText=true;
     Integer showProgressTextInt=(Integer)properties.getProperty("QuestEvent_ShowProgressText");
@@ -326,23 +329,20 @@ public class DatObjectivesLoader
     // Progress override
     String progressOverride=_i18n.getStringProperty(properties,"QuestEvent_ProgressOverride");
     // Role constraint
+    @SuppressWarnings("unused")
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    if (roleConstraint!=null)
-    {
-      //System.out.println("\t\tRole constraint: "+roleConstraint);
-    }
     // Lore info
     String loreInfo=_i18n.getStringProperty(properties,"Accomplishment_LoreInfo");
     // Count
     Integer count=(Integer)properties.getProperty("QuestEvent_Number");
 
     // Deeds:
-    // QuestEvent_ID: {32=3936(done), 22=1142(done), 1=889, 21=869(done), 26=611, 31=487(done), 45=411, 7=349, 25=116,
-    // 34=108, 11=82, 39=51, 4=41, 18=29, 24=22, 16=20, 6=15, 10=2, 58=2, 59=1}
+    // QuestEvent_ID: 32=3936(done), 22=1142(done), 1=889, 21=869(done), 26=611, 31=487(done), 45=411, 7=349, 25=116,
+    // 34=108, 11=82, 39=51, 4=41, 18=29, 24=22, 16=20, 6=15, 10=2, 58=2, 59=1
     // Quests:
-    // QuestEvent_ID:  {11=11545, 7=3845, 22=3164(done), 1=2970, 32=1967(done), 34=1599, 10=1162, 31=831(done), 5=640, 21=425(done),
+    // QuestEvent_ID:  11=11545, 7=3845, 22=3164(done), 1=2970, 32=1967(done), 34=1599, 10=1162, 31=831(done), 5=640, 21=425(done),
     // 24=301, 14=293, 19=210, 27=196, 13=187, 56=144, 16=123, 37=97, 29=97, 33=72, 2=58, 59=50, 25=46,
-    // 18=43, 26=39, 58=35, 57=35, 4=25, 46=16, 40=15, 39=14, 43=14, 30=12, 45=8, 38=5, 6=1, 9=1}
+    // 18=43, 26=39, 58=35, 57=35, 4=25, 46=16, 40=15, 39=14, 43=14, 30=12, 45=8, 38=5, 6=1, 9=1
 
     /*
   1 => EnterDetection (deeds,quests)
@@ -412,7 +412,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==13)
     {
-      condition=handleChanneling(properties);
+      condition=handleChanneling();
     }
     else if (questEventId==14)
     {
@@ -428,11 +428,11 @@ public class DatObjectivesLoader
     }
     else if (questEventId==19)
     {
-      condition=handleClearCamp(properties);
+      condition=handleClearCamp();
     }
     else if (questEventId==20)
     {
-      condition=handleChannelingFailed(properties);
+      condition=handleChannelingFailed();
     }
     else if (questEventId==21)
     {
@@ -449,7 +449,7 @@ public class DatObjectivesLoader
     else if (questEventId==25)
     {
       type=ConditionType.PLAYER_DIED;
-      handlePlayerDied(properties);
+      handlePlayerDied();
     }
     else if (questEventId==26)
     {
@@ -463,7 +463,7 @@ public class DatObjectivesLoader
     */
     else if (questEventId==30)
     {
-      condition=handleSelfDied(properties);
+      condition=handleSelfDied();
     }
     else if (questEventId==31)
     {
@@ -475,7 +475,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==33)
     {
-      condition=handleCraftRecipeExecution(properties);
+      condition=handleCraftRecipeExecution();
     }
     else if (questEventId==34)
     {
@@ -488,7 +488,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==43)
     {
-      condition=handleDismounted(properties);
+      condition=handleDismounted();
     }
     else if (questEventId==45)
     {
@@ -496,7 +496,7 @@ public class DatObjectivesLoader
     }
     else if (questEventId==46)
     {
-      condition=handleTeleported(properties);
+      condition=handleTeleported();
     }
     else if (questEventId==59)
     {
@@ -592,14 +592,9 @@ public class DatObjectivesLoader
   }
 
   /*
-  private static Set<String> _props=new HashSet<String>();
-
   private void handleKungFu(PropertiesSet properties, Objective objective)
   {
     System.out.println("Kung Fu!");
-    _props.addAll(properties.getPropertyNames());
-    System.out.println(_props);
-    System.out.println(properties.dump());
     // QuestEvent_RunKungFu is 0 or absent...
     // QuestEvent_RoleConstraint: always set
   }
@@ -622,15 +617,14 @@ public class DatObjectivesLoader
 
     ItemUsedCondition ret=new ItemUsedCondition();
     fillItemCondition(ret,itemId);
-    /*List<DatPosition> positions=*/
-    //getPositions(itemId,roleConstraint,objective.getIndex());
+    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
-  @SuppressWarnings("unused")
   private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    @SuppressWarnings("unused")
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
@@ -639,10 +633,10 @@ public class DatObjectivesLoader
     return ret;
   }
 
-  @SuppressWarnings("unused")
   private ItemTalkCondition handleItemTalk(PropertiesSet properties)
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    @SuppressWarnings("unused")
     String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemTalkCondition ret=new ItemTalkCondition();
@@ -820,7 +814,7 @@ QuestEvent_ShowBillboardText: 0
     return ret;
   }
 
-  private void handlePlayerDied(PropertiesSet properties)
+  private void handlePlayerDied()
   {
     /*
      * QuestEvent_MonsterGenus_Array: always
@@ -830,19 +824,7 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_TerritoryDID: Zone ID (Eregion, Forochel, Angmar)
      * QuestEvent_Number
      */
-    /*
-    Integer territoryId=(Integer)properties.getProperty("QuestEvent_TerritoryDID");
-    if (territoryId!=null)
-    {
-      String name=PlaceLoader.loadPlace(_facade,territoryId.intValue());
-      System.out.println("Territory: "+name);
-    }
-    */
   }
-
-  //public static String currentName="";
-
-  //public static HashMap<String,List<String>> _flagsToAchievables=new HashMap<String,List<String>>();
 
   private SkillUsedCondition handleSkillUsed(PropertiesSet properties)
   {
@@ -876,25 +858,7 @@ QuestEvent_ShowBillboardText: 0
     {
       ret.setMaxPerDay(dailyMaxIncrement);
     }
-    /*
-    Long flags=(Long)properties.getProperty("QuestEvent_SkillQuestFlags");
-    if ((flags!=null) && (flags.longValue()!=0))
-    {
-      BitSet bits=BitSetUtils.getBitSetFromFlags(flags.longValue());
-      //System.out.println("Flags: "+flags+" => "+bits);
-      String key=bits.toString();
-      List<String> names=_flagsToAchievables.get(key);
-      if (names==null)
-      {
-        names=new ArrayList<String>();
-        _flagsToAchievables.put(key,names);
-      }
-      names.add(currentName);
-      Collections.sort(names);
-    }
-    */
-    //Object[] attackResultArray=(Object[])properties.getProperty("QuestEvent_Skill_AttackResultArray");
-    //System.out.println(properties.dump());
+    // Use QuestEvent_Skill_AttackResultArray for attack result types
     return ret;
   }
 
@@ -961,25 +925,12 @@ QuestEvent_ShowBillboardText: 0
         //System.out.println("\t\tQuest category: "+questCategoryCode+" => "+questCategory);
         ret.setQuestCategory(questCategory);
       }
-      // Unused
-      /*
-      Integer deedCategoryCode=(Integer)properties.getProperty("QuestEvent_AccomplishmentCompleteCategory");
-      if (deedCategoryCode!=null)
+      else
       {
-        String deedCategory=_deedCategory.getString(deedCategoryCode.intValue());
-        System.out.println("\t\tDeed category: "+deedCategoryCode+" => "+deedCategory);
-        ret.setDeedCategory(deedCategory);
+        LOGGER.warn("No ID and no category for QuestCompleteCondition in : "+_currentAchievable);
+        // May be use: QuestEvent_AccomplishmentCompleteCategory?
       }
-      */
     }
-    // Unused
-    /*
-    Integer dailyMax=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
-    if (dailyMax!=null)
-    {
-      System.out.println("dailyMax: "+dailyMax); // -1?
-    }
-    */
     return ret;
   }
 
@@ -992,18 +943,15 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_WorldEvent_Operator: always. Integer 3 => "EqualTo".
      * QuestEvent_Number: almost always. Integer 1 if set.
      */
-    /*
     Integer value=(Integer)properties.getProperty("QuestEvent_WorldEvent_Value");
     int id=((Integer)properties.getProperty("QuestEvent_WorldEvent")).intValue();
     int operator=((Integer)properties.getProperty("QuestEvent_WorldEvent_Operator")).intValue();
     String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    System.out.println("World event: ID="+id+", operator="+operator+", value="+value+", count="+count+", constraint="+constraint);
     PropertiesSet worldEventProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     int propId=((Integer)worldEventProps.getProperty("WorldEvent_WorldPropertyName")).intValue();
     PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(propId);
-    System.out.println(propDef);
-    System.out.println(worldEventProps.dump());
-    */
+    String propName=(propDef!=null)?propDef.getName():"?";
+    LOGGER.debug("World event: ID="+id+", name="+propName+", operator="+operator+", value="+value+", constraint="+constraint);
   }
 
   private HobbyCondition handleHobbyItem(PropertiesSet properties)
@@ -1013,7 +961,8 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_ItemDID: always. Item ID (probably all fishes).
      * QuestEvent_Number: set 40 times. Mostly Integer: 1, sometimes 10.
      */
-    //int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
+    @SuppressWarnings("unused")
+    int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     HobbyCondition ret=new HobbyCondition();
     Item item=ItemsManager.getInstance().getItem(itemId.intValue());
@@ -1058,12 +1007,8 @@ QuestEvent_ShowBillboardText: 0
     return ret;
   }
 
-  private DefaultObjectiveCondition handleCraftRecipeExecution(PropertiesSet properties)
+  private DefaultObjectiveCondition handleCraftRecipeExecution()
   {
-    /*
-    System.out.println("Craft recipe execution");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CRAFT_RECIPE_EXECUTION);
     // - count
     // - recipe ID
@@ -1083,30 +1028,21 @@ QuestEvent_ShowBillboardText: 1
     return ret;
   }
 
-  private DefaultObjectiveCondition handleDismounted(PropertiesSet properties)
+  private DefaultObjectiveCondition handleDismounted()
   {
-    /*
-    System.out.println("Dismounted!");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.DISMOUNTED);
     return ret;
   }
 
-  private DefaultObjectiveCondition handleTeleported(PropertiesSet properties)
+  private DefaultObjectiveCondition handleTeleported()
   {
-    /*
-    System.out.println("Teleported!");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.TELEPORTED);
     return ret;
   }
 
-  private DefaultObjectiveCondition handleChanneling(PropertiesSet properties)
+  private DefaultObjectiveCondition handleChanneling()
   {
     /*
-Channeling!
 QuestEvent_BillboardProgressOverride:
   #1: You tip the slop into the bucket, and it makes a sickening sound
 QuestEvent_ChannelingRoleConstraint: role_slop_to_prisoner_bucket
@@ -1123,15 +1059,11 @@ QuestEvent_ShowBillboardText: 1
 QuestEvent_TappedProgressOverride:
   #1: Carry the slop to the bucket in the dungeons
      */
-    /*
-    System.out.println("Channeling!");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CHANNELING);
     return ret;
   }
 
-  private DefaultObjectiveCondition handleChannelingFailed(PropertiesSet properties)
+  private DefaultObjectiveCondition handleChannelingFailed()
   {
     /*
 Channeling failed!
@@ -1143,20 +1075,12 @@ QuestEvent_Number: 1
 QuestEvent_ShowBillboardText: 1
 QuestEvent_ShowProgressText: 0
      */
-    /*
-    System.out.println("Channeling failed!");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CHANNELING_FAILED);
     return ret;
   }
 
-  private DefaultObjectiveCondition handleClearCamp(PropertiesSet properties)
+  private DefaultObjectiveCondition handleClearCamp()
   {
-    /*
-    System.out.println("Clear camp!");
-    System.out.println(properties.dump());
-    */
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CLEAR_CAMP);
     /*
 Clear camp!
@@ -1186,12 +1110,8 @@ Quest_Role:
     return ret;
   }
 
-  private DefaultObjectiveCondition handleSelfDied(PropertiesSet properties)
+  private DefaultObjectiveCondition handleSelfDied()
   {
-    /*
-    System.out.println("Self died!");
-    System.out.println(properties.dump());
-    */
     /*
 Self died!
 QuestEvent_ID: 30 (SelfDied)

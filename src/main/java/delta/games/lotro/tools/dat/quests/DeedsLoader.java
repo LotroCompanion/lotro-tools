@@ -44,6 +44,8 @@ public class DeedsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DeedsLoader.class);
 
+  private static final String CLASS_KEY="CLASS";
+
   private DataFacade _facade;
   private Map<Integer,DeedDescription> _deeds;
   private LotroEnum<DeedCategory> _deedUiTabName;
@@ -172,66 +174,66 @@ public class DeedsLoader
       int typeCode=categoryId.intValue();
       if (typeCode==22)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
       }
       else if (typeCode==2)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CAPTAIN);
       }
       else if (typeCode==3)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.GUARDIAN);
       }
       else if (typeCode==5)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.MINSTREL);
       }
       else if (typeCode==6)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BURGLAR);
       }
       else if (typeCode==26)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.HUNTER);
       }
       else if (typeCode==28)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CHAMPION);
       }
       else if (typeCode==30)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.LORE_MASTER);
       }
       else if (typeCode==35)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.WARDEN);
       }
       else if (typeCode==36)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.RUNE_KEEPER);
       }
       else if (typeCode==38)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BEORNING);
       }
       else if (typeCode==40)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.BRAWLER);
       }
       else if (typeCode==41)
       {
-        type=_deedTypeEnum.getByKey("CLASS");
+        type=_deedTypeEnum.getByKey(CLASS_KEY);
         setClassRequirementForDeed(deed,WellKnownCharacterClassKeys.CORSAIR);
       }
       else if (typeCode==34)
@@ -415,7 +417,7 @@ public class DeedsLoader
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     deeds.addAll(_deeds.values());
     int nbDeeds=_deeds.size();
-    System.out.println("Nb deeds: "+nbDeeds);
+    LOGGER.info("Nb deeds: "+nbDeeds);
     // Write deeds file
     Collections.sort(deeds,new IdentifiableComparator<DeedDescription>());
     DeedXMLWriter writer=new DeedXMLWriter();

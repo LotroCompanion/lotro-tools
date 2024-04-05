@@ -25,6 +25,13 @@ public class DeedKeysInjector
   private static final Logger LOGGER=Logger.getLogger(DeedKeysInjector.class);
 
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
+  private static final String[] RACES = { "Dwarf", "Elf", "High Elf", "Hobbit", "Man" };
+  private static final String[] REGIONS = { "Angmar", "Bree-land", "Dunland", "Enedwaith", "Ered Luin", "Eregion", "Evendim",
+      "Forochel", "Great River", "Lone-lands", "Lothlórien", "Misty Mountains",
+      "Moria", "North Downs", "Southern Mirkwood", "The Shire", "The Trollshaws" };
+  private static final int[] DEED_CATEGORY_CODES= {
+      11, 7, 37, 34, 3, 19, 12, 15, 39, 8, 18, 4, 17, 2, 25, 5, 1
+  };
 
   private DeedsBundle _old;
   private DeedsBundle _new;
@@ -75,7 +82,10 @@ public class DeedKeysInjector
       return;
     }
     String name=deed.getName();
-    //System.out.println("Handling deed: "+key+" -- "+name);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Handling deed: "+key+" -- "+name);
+    }
     List<DeedDescription> oldDeedsWithName=_old.getDeedsByName(name);
     if (oldDeedsWithName.size()==1)
     {
@@ -98,7 +108,6 @@ public class DeedKeysInjector
       }
       if (newDeed==null)
       {
-        //System.out.println("manualResolution(\""+key+"\",1234567);");
         LOGGER.warn("Deed not resolved: key=["+key+"], name=["+name+"]");
         _nbFailures++;
       }
@@ -109,7 +118,6 @@ public class DeedKeysInjector
     }
     else
     {
-      //System.out.println("manualResolution(\""+key+"\",1234567);");
       LOGGER.warn("Several old deeds with that name: "+name);
       _nbFailures++;
     }
@@ -136,9 +144,7 @@ public class DeedKeysInjector
     }
     if (nbNewDeeds>1)
     {
-      // TODO Handle these
       LOGGER.warn("Ambiguous name: (x"+nbNewDeeds+") "+name);
-      //return null;
       return newDeeds.get(0);
     }
     return null;
@@ -183,13 +189,6 @@ public class DeedKeysInjector
     return null;
   }
 
-  private String[] REGIONS = { "Angmar", "Bree-land", "Dunland", "Enedwaith", "Ered Luin", "Eregion", "Evendim",
-      "Forochel", "Great River", "Lone-lands", "Lothlórien", "Misty Mountains",
-      "Moria", "North Downs", "Southern Mirkwood", "The Shire", "The Trollshaws" };
-  private int[] DEED_CATEGORY_CODES= {
-      11, 7, 37, 34, 3, 19, 12, 15, 39, 8, 18, 4, 17, 2, 25, 5, 1
-  };
-
   private DeedDescription handleRegionSuffix(DeedDescription deed)
   {
     String name=deed.getName();
@@ -215,8 +214,6 @@ public class DeedKeysInjector
     return null;
   }
 
-  private String[] RACES = { "Dwarf", "Elf", "High Elf", "Hobbit", "Man" };
-
   private DeedDescription handleRaceSuffix(DeedDescription deed)
   {
     String name=deed.getName();
@@ -226,9 +223,6 @@ public class DeedKeysInjector
       if (name.endsWith(suffix))
       {
         String fixedRace=race;
-        //if ("The Trollshaws".equals(race)) fixedRegionName="Trollshaws";
-        //if ("The Shire".equals(race)) fixedRegionName="Shire";
-
         String newDeedName=name.substring(0,name.length()-suffix.length()).trim();
         List<DeedDescription> candidateDeeds=_new.getDeedsByName(newDeedName);
         for(DeedDescription candidateDeed : candidateDeeds)
@@ -248,8 +242,6 @@ public class DeedKeysInjector
   {
     manualResolution("Ally_to_the_Council_of_the_North",1879190367);
     manualResolution("Alternate_Ending_(Deed)",1879278971);
-    // This one is the same as the previous one
-    //manualResolution("Alternative_Ending_(Deed)",1879278971);
     manualResolution("Ann%C3%BAminas_--_Glinghant",1879188607);
     manualResolution("Ann%C3%BAminas_--_Haudh_Valandil",1879188619);
     manualResolution("Ann%C3%BAminas_--_Ost_Elendil",1879188613);
@@ -309,8 +301,6 @@ public class DeedKeysInjector
     manualResolution("Quests_of_Limlight_Gorge",1879231052);
     manualResolution("Quests_of_Pelennor_(After_Battle)",1879338695);
     manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
-    // This one is the same as the previous one
-    //manualResolution("Quests_to_Restore_the_Three_Kingdoms",1879366147);
     manualResolution("Quick_Wrist_(Captain)",1879277396);
     manualResolution("Quick_Wrist_(Guardian)",1879277271);
     manualResolution("Rune-keeper_Slayer3",1879145087);
@@ -392,12 +382,6 @@ public class DeedKeysInjector
     // Force some resolutions otherwise wrong with auto resolution
     manualResolution("Enmity_of_the_Goblins_(Hobbit)",1879073466);
     manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
-
-    // Some more manual resolutions after an update of the deed label
-    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
-    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
-    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
-    manualResolution("Enmity_of_the_Goblins_(Beorning_Deed)",1879317099);
     manualResolution("Uruk_Slayer_of_the_Westemnet",1879287745);
     manualResolution("Dunlending_Slayer_of_the_Westemnet_(Advanced)",1879287747);
     manualResolution("Dunlending_Slayer_of_the_Westemnet",1879287748);
@@ -452,6 +436,9 @@ public class DeedKeysInjector
     _new.setDeeds(newDeeds);
     loadOldDeeds();
     resolveDeeds();
-    System.out.println("Number of failures: "+_nbFailures);
+    if (_nbFailures>0)
+    {
+      LOGGER.warn("Number of failures: "+_nbFailures);
+    }
   }
 }

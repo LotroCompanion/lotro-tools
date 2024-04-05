@@ -35,6 +35,8 @@ public class DatStatUtils
 {
   private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
 
+  private static final String MOD_DESCRIPTION_OVERRIDE="Mod_DescriptionOverride";
+
   private DataFacade _facade;
   private I18nUtils _i18nUtils;
   private StatsUsageStatistics _statistics;
@@ -96,11 +98,9 @@ public class DatStatUtils
   public StatsProvider buildStatProviders(String propsPrefix, PropertiesSet properties)
   {
     String arrayPropName="Mod_Array";
-    String progressionPropName="Mod_Progression";
     if (propsPrefix!=null)
     {
       arrayPropName=propsPrefix+arrayPropName;
-      progressionPropName=propsPrefix+progressionPropName;
     }
 
     StatsProvider statsProvider=new StatsProvider();
@@ -341,19 +341,19 @@ public class DatStatUtils
     String ret=null;
     if (_i18nUtils!=null)
     {
-      ret=_i18nUtils.getStringProperty(statProperties,"Mod_DescriptionOverride");
+      ret=_i18nUtils.getStringProperty(statProperties,MOD_DESCRIPTION_OVERRIDE);
     }
     else
     {
-      Object propertyValue=statProperties.getProperty("Mod_DescriptionOverride");
+      Object propertyValue=statProperties.getProperty(MOD_DESCRIPTION_OVERRIDE);
       if (propertyValue!=null)
       {
         ret=DatStringUtils.getString(propertyValue);
       }
     }
-    if(ret==null)
+    if (ret==null)
     {
-      if (statProperties.hasProperty("Mod_DescriptionOverride"))
+      if (statProperties.hasProperty(MOD_DESCRIPTION_OVERRIDE))
       {
         ret=StatUtils.NO_DESCRIPTION;
       }
@@ -421,7 +421,6 @@ public class DatStatUtils
     {
       return false;
     }
-    //System.out.println("Type: "+type);
     return true;
   }
 
