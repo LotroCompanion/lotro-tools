@@ -2,6 +2,9 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
@@ -26,6 +29,8 @@ import delta.games.lotro.tools.dat.maps.landblocks.LandblockInfoLoader;
  */
 public class MapsDataLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(MapsDataLoader.class);
+
   private DataFacade _facade;
   private MapsDataManager _mapsDataMgr;
   private MarkersLoadingUtils _markerUtils;
@@ -54,38 +59,38 @@ public class MapsDataLoader
     // Map notes
     {
       long now1=System.currentTimeMillis();
-      System.out.println("Loading map notes...");
+      Console.println("Loading map notes...");
       MapNotesLoader mapNotesLoader=new MapNotesLoader(_facade,_markerUtils);
       mapNotesLoader.doIt();
       long now2=System.currentTimeMillis();
-      System.out.println("Map notes took: "+(now2-now1)+"ms");
+      Console.println("Map notes took: "+(now2-now1)+"ms");
     }
     // Quest map notes
     {
       long now1=System.currentTimeMillis();
-      System.out.println("Loading quest map notes...");
+      Console.println("Loading quest map notes...");
       QuestMapNotesLoader questMapNotesLoader=new QuestMapNotesLoader(_facade,_markerUtils);
       questMapNotesLoader.doIt();
       long now2=System.currentTimeMillis();
-      System.out.println("Quest map notes took: "+(now2-now1)+"ms");
+      Console.println("Quest map notes took: "+(now2-now1)+"ms");
     }
     // Quest Event Target Locations
     if (Context.isLive())
     {
       long now1=System.currentTimeMillis();
-      System.out.println("Loading quest event target locations...");
+      Console.println("Loading quest event target locations...");
       GeoData data=QuestEventTargetLocationLoader.loadGeoData(_facade);
       loadPositions(data);
       long now2=System.currentTimeMillis();
-      System.out.println("QETL took: "+(now2-now1)+"ms");
+      Console.println("QETL took: "+(now2-now1)+"ms");
     }
     // Landblock analyser
     {
-      System.out.println("Loading landblock locations...");
+      Console.println("Loading landblock locations...");
       long now1=System.currentTimeMillis();
       analyzeLandblocks();
       long now2=System.currentTimeMillis();
-      System.out.println("Landblocks took: "+(now2-now1)+"ms");
+      Console.println("Landblocks took: "+(now2-now1)+"ms");
     }
     // Prune categories
     MainCategoriesPruner pruner=new MainCategoriesPruner(_mapsDataMgr.getMapsManager());
@@ -123,10 +128,13 @@ public class MapsDataLoader
     int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
     for(int region : regions)
     {
-      System.out.println("Region "+region);
+      Console.println("Region "+region);
       for(int blockX=0;blockX<=0xFE;blockX++)
       {
-        //System.out.println("X="+blockX);
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("X="+blockX);
+        }
         for(int blockY=0;blockY<=0xFE;blockY++)
         {
           LandBlockInfo lbi=lbiLoader.loadLandblockInfo(region,blockX,blockY);
@@ -142,11 +150,11 @@ public class MapsDataLoader
   private void loadPositions(GeoData data)
   {
     // Word geo data
-    System.out.println("\tWorld geo data");
+    Console.println("World geo data",1);
     ContentLayerGeoData worldGeoData=data.getWorldGeoData();
     loadPositions(worldGeoData);
     // Content layers geo data
-    System.out.println("\tContent layers geo data");
+    Console.println("Content layers geo data",1);
     List<Integer> contentLayers=data.getContentLayers();
     for(Integer contentLayer : contentLayers)
     {
@@ -154,7 +162,7 @@ public class MapsDataLoader
       loadPositions(contentLayerGeoData);
     }
     // Achievables geo data
-    System.out.println("\tAchievables geo data");
+    Console.println("Achievables geo data",1);
     List<AchievableGeoData> achievableGeoDatas=data.getAllAchievableGeoData();
     for(AchievableGeoData achievableGeoData : achievableGeoDatas)
     {

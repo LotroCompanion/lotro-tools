@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -15,6 +16,7 @@ import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
 import delta.games.lotro.dat.utils.DatIconsUtils;
+import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.lore.maps.ParchmentMap;
@@ -63,11 +65,15 @@ public class MapsSystemLoader
    * Load the properties for maps system.
    * @return the loaded properties, or <code>null</code> if a problem occurred.
    */
-  public PropertiesSet loadMapsSystemProperties()
+  private PropertiesSet loadMapsSystemProperties()
   {
     _uiLayout=buildLayout();
     UIElement mapBackgroundElement=getUIElementById(268437543);
-    return mapBackgroundElement.getProperties();
+    if (mapBackgroundElement!=null)
+    {
+      return mapBackgroundElement.getProperties();
+    }
+    return null;
   }
 
   private UILayout buildLayout()
@@ -104,17 +110,17 @@ public class MapsSystemLoader
     // ActiveElement
     int parchmentMapId=((Integer)props.getProperty("UI_Map_ActiveElement")).intValue();
     String activeElementName=_uiElementId.getString(parchmentMapId);
-    //System.out.println("\tActive element: "+activeElementName+" ("+activeElementId+")");
-
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Active element: "+activeElementName+" ("+parchmentMapId+")");
+    }
     // Map name
     String mapName=_i18n.getNameStringProperty(props,"UI_Map_MenuName",parchmentMapId,0);
     if (mapName==null)
     {
       mapName="";
     }
-    //System.out.println("Map name: "+mapName);
-    for(int i=0;i<level;i++) System.out.print("\t");
-    System.out.println(mapName);
+    Console.println(mapName,level);
 
     GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
     // Map image
@@ -134,12 +140,10 @@ public class MapsSystemLoader
     // - Mordor: 0.03644
     // - Middle-earth: 0.0173184
     float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
-    //System.out.println("\tScale: "+scale);
 
     float geo2pixel;
     // Origin
     GeoPoint origin=MapUtils.getOrigin(activeElementName,scale,props);
-    //System.out.println("\tOrigin: "+origin);
     if (origin!=null)
     {
       geo2pixel=scale*200;
@@ -148,6 +152,12 @@ public class MapsSystemLoader
     {
       origin=new GeoPoint(0,0);
       geo2pixel=1;
+    }
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("\tScale: "+scale);
+      LOGGER.debug("\tOrigin: "+origin);
+      LOGGER.debug("\tGeo2pixel: "+geo2pixel);
     }
     GeoReference geoReference=new GeoReference(origin,geo2pixel);
     GeoreferencedBasemap basemap=new GeoreferencedBasemap(parchmentMapId,mapName,geoReference);
@@ -166,32 +176,9 @@ public class MapsSystemLoader
     UIElement uiElement=getUIElementById(parchmentMapId);
     if (uiElement!=null)
     {
-      GeoBox boundingBox=basemap.getBoundingBox();
       for(UIElement childElement : uiElement.getChildElements())
       {
-        Integer childMapUI=findChildMap(childElement);
-        if (childMapUI!=null)
-        {
-          //System.out.println("\t\tChild map: "+childMapUI);
-          //String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
-          //System.out.println("\t\tTooltip: "+tooltip);
-          Point location=childElement.getRelativeBounds().getLocation();
-          //System.out.println("\t\tLocation: "+location);
-
-          // Add link
-          int target=childMapUI.intValue();
-          GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
-          if (boundingBox.isInBox(hotPoint))
-          {
-            MapLink link=new MapLink(parchmentMapId,0,target,hotPoint,null);
-            LinksManager linksManager=_mapsManager.getLinksManager();
-            linksManager.addLink(link);
-          }
-          else
-          {
-            LOGGER.warn("Point: "+hotPoint+" is not in bounding box: "+boundingBox);
-          }
-        }
+        handleChildMap(childElement,basemap);
       }
     }
 
@@ -206,6 +193,54 @@ public class MapsSystemLoader
     // Register map
     _maps.add(parchmentMap);
     // Areas
+    handleAreas(props,parchmentMap);
+    // Sub maps
+    Object[] subMaps=(Object[])props.getProperty("UI_Map_AreaData_Array");
+    if (subMaps!=null)
+    {
+      for(Object subMapObj : subMaps)
+      {
+        PropertiesSet subMapProps=(PropertiesSet)subMapObj;
+        handleMapProps(subMapProps,level+1,parchmentMapId);
+      }
+    }
+  }
+
+  private void handleChildMap(UIElement childElement, GeoreferencedBasemap basemap)
+  {
+    Integer childMapUI=findChildMap(childElement);
+    if (childMapUI!=null)
+    {
+      Point location=childElement.getRelativeBounds().getLocation();
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\t\tChild map: "+childMapUI);
+        PropertiesSet childProps=childElement.getProperties();
+        String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
+        LOGGER.debug("\t\tTooltip: "+tooltip);
+        LOGGER.debug("\t\tLocation: "+location);
+      }
+      // Add link
+      int target=childMapUI.intValue();
+      GeoReference geoReference=basemap.getGeoReference();
+      GeoPoint hotPoint=geoReference.pixel2geo(new Dimension(location.x+32,location.y+32));
+      GeoBox boundingBox=basemap.getBoundingBox();
+      if (boundingBox.isInBox(hotPoint))
+      {
+        int parchmentMapId=basemap.getIdentifier();
+        MapLink link=new MapLink(parchmentMapId,0,target,hotPoint,null);
+        LinksManager linksManager=_mapsManager.getLinksManager();
+        linksManager.addLink(link);
+      }
+      else
+      {
+        LOGGER.warn("Point: "+hotPoint+" is not in bounding box: "+boundingBox);
+      }
+    }
+  }
+
+  private void handleAreas(PropertiesSet props, ParchmentMap parchmentMap)
+  {
     Object[] areas=(Object[])props.getProperty("UI_Map_AreaDIDs_Array");
     if (areas!=null)
     {
@@ -220,16 +255,6 @@ public class MapsSystemLoader
         }
       }
     }
-    // Sub maps
-    Object[] subMaps=(Object[])props.getProperty("UI_Map_AreaData_Array");
-    if (subMaps!=null)
-    {
-      for(Object subMapObj : subMaps)
-      {
-        PropertiesSet subMapProps=(PropertiesSet)subMapObj;
-        handleMapProps(subMapProps,level+1,parchmentMapId);
-      }
-    }
   }
 
   private Integer findChildMap(UIElement childElement)
@@ -240,7 +265,6 @@ public class MapsSystemLoader
     {
       return childMapUI;
     }
-    //int childId=childElement.getIdentifier();
     int childBaseId=childElement.getBaseElementId();
     if (childBaseId==0)
     {
@@ -250,7 +274,6 @@ public class MapsSystemLoader
     {
       return null;
     }
-    //System.out.println("Child ID/base ID: "+childId+"/"+childBaseId);
     UIElement baseElement=getUIElementById(childBaseId);
     if (baseElement!=null)
     {
@@ -316,14 +339,20 @@ public class MapsSystemLoader
     {
       deepingCoomb=helmsDeep.removeArea(1879277189);
     }
-    ParchmentMap westfold=getMap(268449758);
-    if ((westfold!=null) && (deepingCoomb!=null))
+    if (deepingCoomb!=null)
     {
-      westfold.addArea(deepingCoomb);
+      ParchmentMap westfold=getMap(268449758);
+      if (westfold!=null)
+      {
+        westfold.addArea(deepingCoomb);
+      }
     }
     // Remove areas from Eriador
     ParchmentMap eriador=getMap(268437557);
-    eriador.removeAllAreas();
+    if (eriador!=null)
+    {
+      eriador.removeAllAreas();
+    }
   }
 
   private ParchmentMap getMap(int id)

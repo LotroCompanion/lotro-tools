@@ -76,9 +76,11 @@ import delta.games.lotro.utils.Proxy;
  */
 public class DatObjectivesLoader
 {
+
   private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
 
   private static final String QUEST_EVENT_ENTRY="QuestEvent_Entry";
+  private static final String QUEST_EVENT_ROLE_CONSTRAINT="QuestEvent_RoleConstraint";
 
   private DataFacade _facade;
   private I18nUtils _i18n;
@@ -330,7 +332,7 @@ public class DatObjectivesLoader
     String progressOverride=_i18n.getStringProperty(properties,"QuestEvent_ProgressOverride");
     // Role constraint
     @SuppressWarnings("unused")
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
     // Lore info
     String loreInfo=_i18n.getStringProperty(properties,"Accomplishment_LoreInfo");
     // Count
@@ -455,12 +457,11 @@ public class DatObjectivesLoader
     {
       condition=handleSkillUsed(properties);
     }
-    /*
     else if (questEventId==27)
     {
-      //handleKungFu(properties,objective);
+      type=ConditionType.KUNG_FU;
+      handleKungFu();
     }
-    */
     else if (questEventId==30)
     {
       condition=handleSelfDied();
@@ -505,7 +506,6 @@ public class DatObjectivesLoader
     else if (questEventId==2) type=ConditionType.LEAVE_DETECTION;
     else if (questEventId==4) type=ConditionType.MONSTER_PLAYER_DIED;
     else if (questEventId==6) type=ConditionType.SKILL_APPLIED;
-    else if (questEventId==27) type=ConditionType.KUNG_FU;
     else if (questEventId==29) type=ConditionType.ESCORT;
     else if (questEventId==37) type=ConditionType.SESSION_FINISHED;
     else if (questEventId==38) type=ConditionType.RESOURCE_SET;
@@ -568,7 +568,7 @@ public class DatObjectivesLoader
   {
     ConditionTarget target=null;
     Integer detect=(Integer)properties.getProperty("QuestEvent_Detect");
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
     if (detect!=null)
     {
       target=getTarget(detect);
@@ -591,14 +591,11 @@ public class DatObjectivesLoader
     condition.setTarget(target);
   }
 
-  /*
-  private void handleKungFu(PropertiesSet properties, Objective objective)
+  private void handleKungFu()
   {
-    System.out.println("Kung Fu!");
     // QuestEvent_RunKungFu is 0 or absent...
     // QuestEvent_RoleConstraint: always set
   }
-  */
 
   private ItemUsedCondition handleItemUsed(PropertiesSet properties)
   {
@@ -613,7 +610,8 @@ public class DatObjectivesLoader
      * QuestEvent_DestroyInventoryItems: optional, found 16 times Integer 0 or 1.
      */
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
-    //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    @SuppressWarnings("unused")
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
 
     ItemUsedCondition ret=new ItemUsedCondition();
     fillItemCondition(ret,itemId);
@@ -625,7 +623,7 @@ public class DatObjectivesLoader
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     @SuppressWarnings("unused")
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
     fillItemCondition(ret,itemId);
@@ -637,7 +635,7 @@ public class DatObjectivesLoader
   {
     Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
     @SuppressWarnings("unused")
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
 
     ItemTalkCondition ret=new ItemTalkCondition();
     fillItemCondition(ret,itemId);
@@ -922,7 +920,6 @@ QuestEvent_ShowBillboardText: 0
       if (questCategoryCode!=null)
       {
         String questCategory=_questCategory.getString(questCategoryCode.intValue());
-        //System.out.println("\t\tQuest category: "+questCategoryCode+" => "+questCategory);
         ret.setQuestCategory(questCategory);
       }
       else
@@ -946,7 +943,7 @@ QuestEvent_ShowBillboardText: 0
     Integer value=(Integer)properties.getProperty("QuestEvent_WorldEvent_Value");
     int id=((Integer)properties.getProperty("QuestEvent_WorldEvent")).intValue();
     int operator=((Integer)properties.getProperty("QuestEvent_WorldEvent_Operator")).intValue();
-    String constraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String constraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
     PropertiesSet worldEventProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     int propId=((Integer)worldEventProps.getProperty("WorldEvent_WorldPropertyName")).intValue();
     PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(propId);

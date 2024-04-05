@@ -2,6 +2,8 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.DIDMapper;
 import delta.games.lotro.dat.data.enums.DIDMapper.DidMapEntry;
@@ -14,6 +16,8 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class RegionLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(RegionLoader.class);
+
   private DataFacade _facade;
 
   /**
@@ -36,11 +40,11 @@ public class RegionLoader
       DIDMapper subMap=DataIdMapLoader.decodeDataIdMap(data);
       for(Integer key : subMap.getKeys())
       {
-        System.out.println("Key="+key);
+        LOGGER.debug("Key="+key);
         DidMapEntry entry=subMap.getEntry(key.intValue());
         int did=entry.getDID();
         String label=entry.getLabel();
-        System.out.println("\tDID="+did+", label="+label);
+        LOGGER.debug("\tDID="+did+", label="+label);
         if (did!=0)
         {
           loadRegion(did,label);
@@ -62,8 +66,7 @@ public class RegionLoader
     int originLY=BufferUtils.readUInt32(bis);
     float alwaysZero=BufferUtils.readFloat(bis);
     alwaysZero=BufferUtils.readFloat(bis);
-    float originToMap=BufferUtils.readFloat(bis); // TODO
-
+    float originToMap=BufferUtils.readFloat(bis);
     BufferUtils.skip(bis,6); // always 1 1 0 0 0 0
     int sceneDescDID=BufferUtils.readUInt32(bis);
     BufferUtils.skip(bis,6); // "
@@ -80,7 +83,7 @@ public class RegionLoader
     int propertyDescDID=BufferUtils.readUInt32(bis);
     BufferUtils.skip(bis,6); // "
     int terrainTypeTableDID=BufferUtils.readUInt32(bis);
-    System.out.println(propertyDescDID);
+    LOGGER.debug("Property Descriptor ID: "+propertyDescDID);
   }
 
   /**

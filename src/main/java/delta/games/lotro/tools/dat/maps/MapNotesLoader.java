@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
@@ -149,7 +150,7 @@ public class MapNotesLoader
       {
         System.out.println("discoverableMapNoteIndex="+discoverableMapNoteIndex);
       }
-      if (gameSpecificProps.getPropertyNames().size()>0)
+      if (!gameSpecificProps.getPropertyNames().isEmpty())
       {
         System.out.println("Game specific props: "+gameSpecificProps.dump());
       }
@@ -173,7 +174,7 @@ public class MapNotesLoader
       throw new IllegalArgumentException("Expected DID for map notes: "+MAP_NOTES_DID);
     }
     int count=BufferUtils.readUInt32(bis); // > 10k
-    System.out.println("Number of map notes: "+count);
+    Console.println("Number of map notes: "+count);
     for(int i=0;i<count;i++)
     {
       loadMapNote(bis);

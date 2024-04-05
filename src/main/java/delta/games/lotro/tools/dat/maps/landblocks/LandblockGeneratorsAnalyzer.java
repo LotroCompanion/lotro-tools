@@ -68,7 +68,7 @@ public class LandblockGeneratorsAnalyzer
         {
           int[] contentLayers=initContentLayers(weenie);
           Set<Integer> dids=weenie.getGeneratorDids();
-          if ((dids!=null) && (dids.size()>0))
+          if ((dids!=null) && (!dids.isEmpty()))
           {
             for(Integer did : dids)
             {

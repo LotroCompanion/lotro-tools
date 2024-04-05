@@ -108,7 +108,6 @@ public class LandBlockInfo
   {
     Long key=Long.valueOf(entity.getIid());
     _entities.put(key,entity);
-    //System.out.println("Added entity: "+String.format("%08X",Long.valueOf(entity.getIid())));
   }
 
   /**
@@ -154,7 +153,6 @@ public class LandBlockInfo
   {
     Long key=Long.valueOf(link.getIid());
     _links.put(key,link);
-    //System.out.println("Added link: "+String.format("%08X",Long.valueOf(link.getIid())));
   }
 
   /**
@@ -200,7 +198,6 @@ public class LandBlockInfo
   {
     Long key=Long.valueOf(weenie.getIid());
     _weenies.put(key,weenie);
-    //System.out.println("Added weenie: "+String.format("%08X",Long.valueOf(weenie.getIid())));
   }
 
   /**

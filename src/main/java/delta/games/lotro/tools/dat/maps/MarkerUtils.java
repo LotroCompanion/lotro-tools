@@ -44,7 +44,7 @@ public class MarkerUtils
    * @param dataId Data identifier to use.
    * @return <code>true</code> to accept, <code>false</code> to reject.
    */
-  public static boolean accept(DataIdentification dataId)
+  public static boolean accept(DataIdentification dataId) // NOSONAR
   {
     if (dataId==null)
     {
