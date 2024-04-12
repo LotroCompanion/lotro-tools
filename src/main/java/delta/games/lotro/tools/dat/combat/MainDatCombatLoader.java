@@ -1,11 +1,8 @@
 package delta.games.lotro.tools.dat.combat;
 
-import java.util.Objects;
-
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.stats.ratings.ProgressionRatingCurveImpl;
-import delta.games.lotro.character.stats.ratings.RatingCurve;
 import delta.games.lotro.character.stats.ratings.RatingCurveId;
 import delta.games.lotro.common.global.CombatData;
 import delta.games.lotro.common.global.io.xml.CombatDataXMLWriter;
@@ -77,60 +74,10 @@ public class MainDatCombatLoader
 
       ProgressionRatingCurveImpl curve=new ProgressionRatingCurveImpl(hardCapProg,ratingProg,targetCapProg);
       _data.getRatingsMgr().setCurve(id,curve);
-      /*
-      RatingsMgr mgr=new RatingsMgr();
-      RatingsInitializerUpdate21.init(mgr);
-      RatingCurve oldCurve=mgr.getCurve(id);
-      compareCurves(id,curve,oldCurve);
-      */
     }
     else
     {
       LOGGER.warn("Unmanaged curve type: "+calcType+" => "+_calcType.getString(calcType));
-      //System.out.println("Hard cap: "+hardCapProg);
-      //System.out.println("Rating: "+ratingProg);
-      //System.out.println("Target cap: "+targetCapProg);
-    }
-  }
-
-  void compareCurves(RatingCurveId id, RatingCurve curve, RatingCurve oldCurve)
-  {
-    for(int level=1;level<=120;level++)
-    {
-      Double r1=curve.getRatingForCap(level);
-      Double r2=oldCurve.getRatingForCap(level);
-      if (!Objects.equals(r1,r2))
-      {
-        System.out.println(id+": level="+level+": cap ratings diff: r1="+r1+", r2="+r2);
-      }
-      for(int rating=0;rating<5000000;rating+=10000)
-      {
-        Double p1=curve.getPercentage(rating,level);
-        Double p2=oldCurve.getPercentage(rating,level);
-        if (p1==null)
-        {
-          if (p2!=null)
-          {
-            System.out.println("(1) "+id+": Bad point: level="+level+", rating="+rating);
-          }
-        }
-        else
-        {
-          if (p2==null)
-          {
-            System.out.println("(2) "+id+": Bad point: level="+level+", rating="+rating);
-          }
-          double delta=Math.abs(p1.doubleValue()-p2.doubleValue());
-          if (delta>0.01)
-          {
-            System.out.println("(3) "+id+": Bad point: level="+level+", rating="+rating+", delta="+delta);
-          }
-          else
-          {
-            // Good point!
-          }
-        }
-      }
     }
   }
 

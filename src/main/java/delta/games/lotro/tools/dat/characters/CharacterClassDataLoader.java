@@ -76,7 +76,6 @@ public class CharacterClassDataLoader
   private void handleClass(int classId)
   {
     PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("AdvTable_ClassInfo");
     // Code
     int classCode=((Integer)properties.getProperty("AdvTable_Class")).intValue();
@@ -136,16 +135,6 @@ public class CharacterClassDataLoader
     }
     ClassProficiencies proficiencies=classDescription.getProficiencies();
     proficiencies.setArmourTypeForMitigations(armourType);
-    // Default buffs
-    /*
-    if (characterClass==CharacterClass.CAPTAIN)
-    {
-      BuffSpecification idome=new BuffSpecification("IN_DEFENCE_OF_MIDDLE_EARTH",null);
-      classDescription.addDefaultBuff(idome);
-      BuffSpecification motivated=new BuffSpecification("MOTIVATED",null);
-      classDescription.addDefaultBuff(motivated);
-    }
-    */
     /*
 AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
   #1:
@@ -191,113 +180,129 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     for(Object levelPropertiesObj : levelsProperties)
     {
       PropertiesSet levelProperties=(PropertiesSet)levelPropertiesObj;
-      int level=((Integer)levelProperties.getProperty("AdvTable_Level")).intValue();
-      LOGGER.debug("Level: "+level);
-      BasicStatsSet stats=new BasicStatsSet();
-      // Vitals
-      Object[] vitalStats=(Object[])levelProperties.getProperty("AdvTable_BaseVitalEntryList");
-      for(Object vitalStatObj : vitalStats)
-      {
-        PropertiesSet statProperties=(PropertiesSet)vitalStatObj;
-        Integer value=(Integer)statProperties.getProperty("AdvTable_BaseVitalValue");
-        Integer type=(Integer)statProperties.getProperty("AdvTable_VitalType");
-        StatDescription stat=DatStatUtils.getStatFromVitalType(type.intValue());
-        if (stat!=null)
-        {
-          if (useStartStat(stat))
-          {
-            stats.setStat(stat,value);
-          }
-        }
-        else
-        {
-          LOGGER.warn("Stat not found (1): "+type);
-        }
-      }
-      // Other stats
-      Object[] otherStats=(Object[])levelProperties.getProperty("AdvTable_MaxStatEntryList");
-      for(Object otherStatObj : otherStats)
-      {
-        PropertiesSet statProperties=(PropertiesSet)otherStatObj;
-        Integer value=(Integer)statProperties.getProperty("AdvTable_StatValue");
-        Integer type=(Integer)statProperties.getProperty("AdvTable_StatType");
-        StatDescription stat=getStatFromStatType(type.intValue());
-        if (stat!=null)
-        {
-          if (useStartStat(stat))
-          {
-            stats.setStat(stat,value);
-          }
-        }
-        else
-        {
-          LOGGER.warn("Stat not found (2): "+type);
-        }
-      }
-      // Regen
-      String classKey=characterClass.getKey();
-      // ICPR
-      if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
-      {
-        stats.setStat(WellKnownStat.ICPR,Integer.valueOf(240));
-      }
-      // OCPR
-      if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
-      {
-        int ocpr=75;
-        if (level>=3) ocpr=90;
-        if (level>=8) ocpr=105;
-        if (level>=26) ocpr=120;
-        stats.setStat(WellKnownStat.OCPR,Integer.valueOf(ocpr));
-      }
-      // OCMR
-      if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
-      {
-        int ocmr=120;
-        if (level>=4) ocmr=180;
-        if (level>=10) ocmr=240;
-        if (level>=31) ocmr=300;
-        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
-      }
-      else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
-      {
-        int ocmr=60;
-        if (level>=2) ocmr=120;
-        if (level>=6) ocmr=180;
-        if (level>=16) ocmr=240;
-        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
-      }
-      else
-      {
-        int ocmr=60;
-        if (level>=5) ocmr=120;
-        stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
-      }
-      // ICMR
-      int icmr;
-      if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
-      {
-        icmr=(int)(91.25 + level * 0.75);
-      }
-      else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
-          (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
-      {
-        icmr=(int)(80.5 + level * (2.0/3));
-      }
-      else
-      {
-        icmr=(int)(71.1 + level * 0.6);
-      }
-      stats.setStat(WellKnownStat.ICMR,Integer.valueOf(icmr));
-      _startStatsManager.setStats(characterClass,level,stats);
+      handleLevel(characterClass, levelProperties);
     }
+  }
+
+  private void handleLevel(ClassDescription characterClass, PropertiesSet levelProperties)
+  {
+    int level=((Integer)levelProperties.getProperty("AdvTable_Level")).intValue();
+    LOGGER.debug("Level: "+level);
+    BasicStatsSet stats=new BasicStatsSet();
+    // Vitals
+    Object[] vitalStats=(Object[])levelProperties.getProperty("AdvTable_BaseVitalEntryList");
+    for(Object vitalStatObj : vitalStats)
+    {
+      PropertiesSet statProperties=(PropertiesSet)vitalStatObj;
+      Integer value=(Integer)statProperties.getProperty("AdvTable_BaseVitalValue");
+      Integer type=(Integer)statProperties.getProperty("AdvTable_VitalType");
+      StatDescription stat=DatStatUtils.getStatFromVitalType(type.intValue());
+      if (stat!=null)
+      {
+        if (useStartStat(stat))
+        {
+          stats.setStat(stat,value);
+        }
+      }
+      else
+      {
+        LOGGER.warn("Stat not found (1): "+type);
+      }
+    }
+    // Other stats
+    Object[] otherStats=(Object[])levelProperties.getProperty("AdvTable_MaxStatEntryList");
+    for(Object otherStatObj : otherStats)
+    {
+      PropertiesSet statProperties=(PropertiesSet)otherStatObj;
+      Integer value=(Integer)statProperties.getProperty("AdvTable_StatValue");
+      Integer type=(Integer)statProperties.getProperty("AdvTable_StatType");
+      StatDescription stat=getStatFromStatType(type.intValue());
+      if (stat!=null)
+      {
+        if (useStartStat(stat))
+        {
+          stats.setStat(stat,value);
+        }
+      }
+      else
+      {
+        LOGGER.warn("Stat not found (2): "+type);
+      }
+    }
+    // Regen
+    String classKey=characterClass.getKey();
+    // ICPR
+    if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
+    {
+      stats.setStat(WellKnownStat.ICPR,Integer.valueOf(240));
+    }
+    // OCPR
+    if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
+    {
+      int ocpr=75;
+      if (level>=3) ocpr=90;
+      if (level>=8) ocpr=105;
+      if (level>=26) ocpr=120;
+      stats.setStat(WellKnownStat.OCPR,Integer.valueOf(ocpr));
+    }
+    // OCMR
+    int ocmr=computeOCMR(classKey,level);
+    stats.setStat(WellKnownStat.OCMR,Integer.valueOf(ocmr));
+    // ICMR
+    int icmr=computeICMR(classKey,level);
+    stats.setStat(WellKnownStat.ICMR,Integer.valueOf(icmr));
+    _startStatsManager.setStats(characterClass,level,stats);
+  }
+
+  private int computeOCMR(String classKey, int level)
+  {
+    int ocmr;
+    if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
+    {
+      ocmr=120;
+      if (level>=4) ocmr=180;
+      if (level>=10) ocmr=240;
+      if (level>=31) ocmr=300;
+    }
+    else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
+    {
+      ocmr=60;
+      if (level>=2) ocmr=120;
+      if (level>=6) ocmr=180;
+      if (level>=16) ocmr=240;
+    }
+    else
+    {
+      ocmr=60;
+      if (level>=5) ocmr=120;
+    }
+    return ocmr;
+  }
+
+  private int computeICMR(String classKey, int level)
+  {
+    int icmr;
+    if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.WARDEN.equals(classKey)))
+    {
+      icmr=(int)(91.25 + level * 0.75);
+    }
+    else if ((WellKnownCharacterClassKeys.BEORNING.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.CAPTAIN.equals(classKey)) ||
+        (WellKnownCharacterClassKeys.HUNTER.equals(classKey)))
+    {
+      icmr=(int)(80.5 + level * (2.0/3));
+    }
+    else
+    {
+      icmr=(int)(71.1 + level * 0.6);
+    }
+    return icmr;
   }
 
   private boolean useStartStat(StatDescription stat)
@@ -322,31 +327,39 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         for(Object formulaPropertiesObj : formulasProperties)
         {
           PropertiesSet formulaProperties=(PropertiesSet)formulaPropertiesObj;
-          float value=((Float)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Value")).floatValue();
-          if (Math.abs(value)>0.001)
-          {
-            Integer targetStatId=(Integer)derivedStatProperties.getProperty("AdvTable_DerivedStat");
-            if (targetStatId.intValue()<=27) // Ignore war-steed related stats
-            {
-              StatDescription targetStat=getDerivedStat(targetStatId.intValue());
-              value=StatUtils.fixStatValue(targetStat,value);
-              Integer sourceStatId=(Integer)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Stat");
-              StatDescription sourceStat=getStatFromStatType(sourceStatId.intValue());
-              if (sourceStat!=null)
-              {
-                //System.out.println(sourceStat+"*"+value+" => "+targetStat);
-                _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,Float.valueOf(value));
-                if (targetStat==WellKnownStat.TACTICAL_MASTERY)
-                {
-                  _derivatedStatsManager.setFactor(sourceStat,WellKnownStat.OUTGOING_HEALING,characterClass,Float.valueOf(value));
-                }
-              }
-            }
-          }
+          handleDerivation(characterClass,derivedStatProperties,formulaProperties);
         }
       }
     }
     addImplicitDerivations(characterClass);
+  }
+
+  private void handleDerivation(ClassDescription characterClass, PropertiesSet derivedStatProperties, PropertiesSet formulaProperties)
+  {
+    float value=((Float)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Value")).floatValue();
+    if (Math.abs(value)>0.001)
+    {
+      Integer targetStatId=(Integer)derivedStatProperties.getProperty("AdvTable_DerivedStat");
+      if (targetStatId.intValue()<=27) // Ignore war-steed related stats
+      {
+        StatDescription targetStat=getDerivedStat(targetStatId.intValue());
+        value=StatUtils.fixStatValue(targetStat,value);
+        Integer sourceStatId=(Integer)formulaProperties.getProperty("AdvTable_DerivedStat_Formula_Stat");
+        StatDescription sourceStat=getStatFromStatType(sourceStatId.intValue());
+        if (sourceStat!=null)
+        {
+          if (LOGGER.isDebugEnabled())
+          {
+            LOGGER.debug(sourceStat+"*"+value+" => "+targetStat);
+          }
+          _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,Float.valueOf(value));
+          if (targetStat==WellKnownStat.TACTICAL_MASTERY)
+          {
+            _derivatedStatsManager.setFactor(sourceStat,WellKnownStat.OUTGOING_HEALING,characterClass,Float.valueOf(value));
+          }
+        }
+      }
+    }
   }
 
   private void addImplicitDerivations(ClassDescription characterClass)
@@ -435,9 +448,9 @@ AdvTable_AvailableSkillEntryList:
     // From enum DerivedStatType, (id=587203378)
     if (statType==1) return WellKnownStat.MORALE;
     if (statType==2) return WellKnownStat.POWER;
-    //if (statType==3) return STAT.PHYSICAL_MASTERY; // Melee Offence Rating
-    //if (statType==4) return STAT.PHYSICAL_MASTERY; // Ranged Offence Rating
-    //if (statType==5) return STAT.TACTICAL_MASTERY; // Tactical Offence Rating
+    // 3 => STAT.PHYSICAL_MASTERY Melee Offence Rating
+    // 4 => STAT.PHYSICAL_MASTERY Ranged Offence Rating
+    // 5 => STAT.TACTICAL_MASTERY Tactical Offence Rating
     if (statType==6) return WellKnownStat.OUTGOING_HEALING; // Outgoing Healing Rating
     if (statType==7) return WellKnownStat.CRITICAL_RATING;
     if (statType==8) return WellKnownStat.PHYSICAL_MITIGATION;
@@ -458,7 +471,7 @@ AdvTable_AvailableSkillEntryList:
     if (statType==23) return null; // Resistance_Magic
     if (statType==26) return WellKnownStat.TACTICAL_MASTERY;
     if (statType==27) return WellKnownStat.PHYSICAL_MASTERY;
-    System.out.println("Unsupported stat type: "+statType);
+    LOGGER.warn("Unsupported stat type: "+statType);
     return null;
   }
 
@@ -481,15 +494,7 @@ AdvTable_AvailableSkillEntryList:
     if (id==193) return WellKnownCharacterClassKeys.RUNE_KEEPER;
     if (id==194) return WellKnownCharacterClassKeys.WARDEN;
     if (id==216) return WellKnownCharacterClassKeys.CORSAIR;
-    // Monster Play
-    /*
-    if (id==71) return CharacterClass.REAVER;
-    if (id==128) return CharacterClass.DEFILER;
-    if (id==127) return CharacterClass.WEAVER;
-    if (id==179) return CharacterClass.BLACKARROW;
-    if (id==52) return CharacterClass.WARLEADER;
-    if (id==126) return CharacterClass.STALKER;
-    */
+    LOGGER.warn("Unknown class ID: "+id);
     return "Unknown";
   }
 

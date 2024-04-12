@@ -70,7 +70,6 @@ public class LbiInspector
 
   private void checkEntities(LandBlockInfo lbi)
   {
-    // Iterate on entities
     List<EntityDescriptor> entities=lbi.getEntities();
     for(EntityDescriptor entity : entities)
     {

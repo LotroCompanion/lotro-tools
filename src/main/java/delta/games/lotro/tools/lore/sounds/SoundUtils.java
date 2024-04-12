@@ -3,6 +3,7 @@ package delta.games.lotro.tools.lore.sounds;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.PrintStream;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFileFormat.Type;
@@ -28,12 +29,13 @@ public class SoundUtils
 
   /**
    * Show supported sound types.
+   * @param out Output stream.
    */
-  public static void showSupportedSoundTypes()
+  public static void showSupportedSoundTypes(PrintStream out)
   {
     for(Type type : AudioSystem.getAudioFileTypes())
     {
-      System.out.println(type);
+      out.println(type);
     }
   }
 
@@ -98,10 +100,13 @@ public class SoundUtils
     {
       LOGGER.warn("Could not get format of sound: unsupported type!");
     }
-    // System.out.println("Format: "+format.getFormat());
-    // System.out.println("Byte length: "+format.getByteLength());
-    // System.out.println("Frame length: "+format.getFrameLength());
-    // System.out.println("Properties: "+format.properties());
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Format: "+format.getFormat());
+      LOGGER.debug("Byte length: "+format.getByteLength());
+      LOGGER.debug("Frame length: "+format.getFrameLength());
+      LOGGER.debug("Properties: "+format.properties());
+    }
   }
 
   /**

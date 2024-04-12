@@ -36,9 +36,8 @@ public class PropertyDescriptorsManager
     init();
   }
 
-  private void loadPropertyDescEntr(ByteArrayInputStream bis, PropertiesDescriptor storage)
+  private void loadPropertyDescEntry(ByteArrayInputStream bis, PropertiesDescriptor storage)
   {
-    //System.out.println("****** Property descriptor entry:");
     // Property ID
     int propertyID=BufferUtils.readUInt32(bis);
     int echo=BufferUtils.readUInt32(bis);
@@ -51,18 +50,14 @@ public class PropertyDescriptorsManager
     {
       throw new IllegalStateException("Property definition not found: ID="+propertyID);
     }
-    //System.out.println(propertyDef);
     // Block map key
     int blockMapKey=BufferUtils.readUInt32(bis);
-    //System.out.println("Block map key: "+blockMapKey);
     /*int unknown=*/BufferUtils.readUInt8(bis); // 0 or 1
     int count=BufferUtils.readUInt32(bis);
-    //System.out.println(count+" properties to load!");
     DBPropertiesLoader propsLoader=new DBPropertiesLoader(_facade);
     for(int i=0;i<count;i++)
     {
       PropertyValue propertyValue=propsLoader.decodeProperty(bis,false);
-      //System.out.println(propertyValue);
       storage.addPropertyValue(blockMapKey,propertyValue);
     }
   }
@@ -74,7 +69,6 @@ public class PropertyDescriptorsManager
    */
   public PropertiesDescriptor loadPropertiesDescriptor(int propertyDescId)
   {
-    //System.out.println("************** Property descriptor: "+propertyDescId);
     byte[] data=_facade.loadData(propertyDescId);
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     int did=BufferUtils.readUInt32(bis);
@@ -89,10 +83,9 @@ public class PropertyDescriptorsManager
     }
     PropertiesDescriptor ret=new PropertiesDescriptor();
     int count=BufferUtils.readTSize(bis);
-    //System.out.println(count+" property descriptor entries to load!");
     for(int i=0;i<count;i++)
     {
-      loadPropertyDescEntr(bis,ret);
+      loadPropertyDescEntry(bis,ret);
     }
     int available=bis.available();
     if (available>0)

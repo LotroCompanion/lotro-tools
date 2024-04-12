@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.links.MapLink;
 
@@ -14,6 +16,8 @@ import delta.games.lotro.maps.data.links.MapLink;
  */
 public class LinksStorage
 {
+  private static final Logger LOGGER=Logger.getLogger(LinksStorage.class);
+
   private static final float THRESHOLD=0.0005f;
   private List<MapLink> _links;
   private Map<String,List<MapLink>> _sortedLinks;
@@ -46,7 +50,7 @@ public class LinksStorage
   private void addLink(List<MapLink> links, MapLink linkToAdd)
   {
     boolean doAdd=true;
-    if (links.size()>0)
+    if (!links.isEmpty())
     {
       for(MapLink link : links)
       {
@@ -59,13 +63,19 @@ public class LinksStorage
     }
     if (doAdd)
     {
-      //System.out.println("Added link: "+linkToAdd);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Added link: "+linkToAdd);
+      }
       _links.add(linkToAdd);
       links.add(linkToAdd);
     }
     else
     {
-      //System.out.println("Ignored: "+linkToAdd);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Ignored: "+linkToAdd);
+      }
     }
   }
 
@@ -74,7 +84,6 @@ public class LinksStorage
     float deltaLat=p1.getLatitude()-p2.getLatitude();
     float deltaLon=p1.getLongitude()-p2.getLongitude();
     float d2=deltaLat*deltaLat+deltaLon*deltaLon;
-    //System.out.println("Delta2="+d2);
     return d2<THRESHOLD;
   }
 

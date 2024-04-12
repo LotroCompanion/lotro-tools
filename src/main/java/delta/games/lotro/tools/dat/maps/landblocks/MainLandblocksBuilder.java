@@ -8,6 +8,7 @@ import delta.games.lotro.lore.maps.landblocks.Landblock;
 import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.lore.maps.landblocks.io.xml.LandblocksXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
+import delta.games.lotro.tools.utils.ToolLog;
 
 /**
  * Tool class to load all the landblocks.
@@ -41,12 +42,13 @@ public class MainLandblocksBuilder
     int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
     for(int region : regions)
     {
-      System.out.println("Region "+region);
+      ToolLog.LOGGER.info("Region "+region);
       for(int blockX=0;blockX<=0xFF;blockX++)
       {
-        System.out.println("X="+blockX);
+        ToolLog.LOGGER.info("X="+blockX);
         for(int blockY=0;blockY<=0xFF;blockY++)
         {
+          ToolLog.LOGGER.debug("\tY="+blockY);
           Landblock data=landblockLoader.buildLandblock(region,blockX,blockY);
           if (data!=null)
           {
@@ -56,7 +58,7 @@ public class MainLandblocksBuilder
         }
       }
     }
-    System.out.println("Loaded "+nbBlocks+" blocks!");
+    ToolLog.LOGGER.info("Loaded "+nbBlocks+" landblocks!");
     return index;
   }
 

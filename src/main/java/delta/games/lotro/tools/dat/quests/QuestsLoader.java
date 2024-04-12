@@ -30,6 +30,7 @@ import delta.games.lotro.lore.webStore.WebStoreItemsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.StringRenderingUtils;
+import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 import delta.games.lotro.tools.dat.utils.i18n.StringProcessor;
 import delta.games.lotro.utils.Proxy;
@@ -277,49 +278,42 @@ public class QuestsLoader
     if ((smallFellowshipRecommended!=null) && (smallFellowshipRecommended.intValue()==1))
     {
       quest.setSize(Size.SMALL_FELLOWSHIP);
-      //System.out.println("IS Small Fellowship recommended: "+smallFellowshipRecommended);
     }
     // - fellowship
     Integer fellowshipRecommended=((Integer)properties.getProperty("Quest_IsFellowshipRecommended"));
     if ((fellowshipRecommended!=null) && (fellowshipRecommended.intValue()==1))
     {
       quest.setSize(Size.FELLOWSHIP);
-      //System.out.println("IS Fellowship recommended: "+fellowshipRecommended);
     }
     // - raid
     Integer isRaidQuest=((Integer)properties.getProperty("Quest_ShowRaidInJournal"));
     if ((isRaidQuest!=null) && (isRaidQuest.intValue()==1))
     {
       quest.setSize(Size.RAID);
-      //System.out.println("IS Raid quest: "+isRaidQuest);
     }
     // Instance quest? Default is no.
     Integer isInstanceQuest=((Integer)properties.getProperty("Quest_IsInstanceQuest"));
     if ((isInstanceQuest!=null) && (isInstanceQuest.intValue()==1))
     {
       quest.setInstanced(true);
-      //System.out.println("IS Instance quest: "+isInstanceQuest);
     }
     // Shareable? Default is yes.
     Integer isShareable=((Integer)properties.getProperty("Quest_IsShareable"));
     if ((isShareable!=null) && (isShareable.intValue()==0))
     {
       quest.setShareable(false);
-      //System.out.println("IS shareable quest: "+isShareable);
     }
     // Session play? Default is no.
     Integer isSessionQuest=((Integer)properties.getProperty("Quest_IsSessionQuest"));
     if ((isSessionQuest!=null) && (isSessionQuest.intValue()==1))
     {
       quest.setSessionPlay(true);
-      //System.out.println("IS session quest: "+isSessionQuest);
     }
     // Automatic bestowed quest (landscape, in-instance quest). Default is no.
     Integer isPeBestowedQuest=((Integer)properties.getProperty("Quest_IsPEBestowedQuest"));
     if ((isPeBestowedQuest!=null) && (isPeBestowedQuest.intValue()==1))
     {
       quest.setAutoBestowed(true);
-      //System.out.println("IS PE bestowed quest: "+isPeBestowedQuest);
     }
     // Unused:
     // Quest_IsSessionAccomplishment
@@ -365,8 +359,7 @@ public class QuestsLoader
    */
   public void loadQuestArcs()
   {
-    PropertiesSet questArcsDirectory=_facade.loadProperties(0x7900E36F);
-    //System.out.println(questArcsDirectory.dump());
+    PropertiesSet questArcsDirectory=WeenieContentDirectory.loadWeenieContentProps(_facade,"QuestArcDirectory"); // 0x7900E36F
     if (questArcsDirectory==null)
     {
       return;
