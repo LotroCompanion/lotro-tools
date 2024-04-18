@@ -149,11 +149,18 @@ public class DatRolesLoader
           if (peId!=null)
           {
             PrivateEncounter pe=PrivateEncountersManager.getInstance().getPrivateEncounterById(peId.intValue());
-            LOGGER.info("Found PE: "+peId+"("+pe.getName()+") in quest "+quest.getName());
+            if (pe!=null)
+            {
+              LOGGER.info("Found PE: "+peId+" ("+pe.getName()+") in quest "+quest.getName());
+            }
+            else
+            {
+              LOGGER.warn("PE (ID="+peId+") is null in quest "+quest.getName());
+            }
           }
           else
           {
-            LOGGER.warn("PE is null"+" in quest "+quest.getName());
+            LOGGER.warn("PE ID is null"+" in quest "+quest.getName());
           }
         }
       }
