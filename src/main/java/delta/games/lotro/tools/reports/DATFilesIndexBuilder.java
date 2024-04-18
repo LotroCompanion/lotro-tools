@@ -93,7 +93,7 @@ public class DATFilesIndexBuilder
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    File rootDir=ReportsContants.getReportsRootDir();
+    File rootDir=ReportsConstants.getReportsRootDir();
     new DATFilesIndexBuilder(rootDir).doIt();
   }
 }

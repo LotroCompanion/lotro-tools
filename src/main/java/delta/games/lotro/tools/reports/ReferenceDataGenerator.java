@@ -45,7 +45,7 @@ public class ReferenceDataGenerator
   public ReferenceDataGenerator(DataFacade facade)
   {
     _facade=facade;
-    _rootDir=ReportsContants.getReportsRootDir();
+    _rootDir=ReportsConstants.getReportsRootDir();
   }
 
   /**

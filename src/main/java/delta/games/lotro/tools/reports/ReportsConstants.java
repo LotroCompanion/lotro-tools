@@ -9,7 +9,7 @@ import delta.games.lotro.dat.misc.Version;
  * Constants for the reports generators.
  * @author DAM
  */
-public class ReportsContants
+public class ReportsConstants
 {
   private static final File ROOT_DIR=new File("../lotro-live-private-doc/dat");
   private static final File SOA_ROOT_DIR=new File("../lotro-legacy-private-doc/dat");
