@@ -121,7 +121,7 @@ public class MainGeoDatLoader
       LOGGER.warn("Cannot delete null directory!");
       return;
     }
-    FilesDeleter deleter=new FilesDeleter(toDelete,filter,true);
+    FilesDeleter deleter=new FilesDeleter(toDelete,filter,false);
     deleter.doIt();
   }
 
