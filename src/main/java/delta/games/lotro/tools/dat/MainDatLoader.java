@@ -382,7 +382,7 @@ public class MainDatLoader
     deleteDirectory(GeneratedFiles.MISC_ICONS);
     // Allegiances
     deleteFile(GeneratedFiles.ALLEGIANCES);
-    deleteFile(GeneratedFiles.ALLEGIANCES_ICONS);
+    deleteDirectory(GeneratedFiles.ALLEGIANCES_ICONS);
     // Billing groups
     deleteFile(GeneratedFiles.BILLING_GROUPS);
     // Hobbies
