@@ -25,6 +25,7 @@ import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
 import delta.games.lotro.tools.dat.characters.MonsterClassDataLoader;
 import delta.games.lotro.tools.dat.characters.NationalitiesLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
+import delta.games.lotro.tools.dat.characters.MainXpTableLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
@@ -110,6 +111,8 @@ public class MainDatLoader
     new MainDatColorLoader(_facade).doIt();
     // Enums
     new MainDatEnumsLoader(_facade).doIt();
+    // XP
+    new MainXpTableLoader(_facade).doIt();
     // Geo
     new MainDatLandmarksLoader(_facade).doIt();
     // Combat data
@@ -405,8 +408,6 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
     deleteFile(GeneratedFiles.PROGRESSIONS);
-    // Labels
-    //deleteDirectory(GeneratedFiles.LABELS);
   }
 
   private void deleteFile(File toDelete)

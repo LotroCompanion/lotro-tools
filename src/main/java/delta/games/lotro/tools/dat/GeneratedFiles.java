@@ -424,4 +424,8 @@ public class GeneratedFiles
    * Perk icons.
    */
   public static final File PERK_ICONS=LotroCoreConfig.getInstance().getFile("perkIcons");
+  /**
+   * XP table.
+   */
+  public static final File XP_TABLE=LotroCoreConfig.getInstance().getFile(DataFiles.XP_TABLE);
 }
