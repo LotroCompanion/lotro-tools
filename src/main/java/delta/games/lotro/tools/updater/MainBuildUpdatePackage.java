@@ -37,13 +37,12 @@ public class MainBuildUpdatePackage
   public static void main(String[] args)
   {
     // Constants
-    //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/${file}";
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
     File to=new File("d:/tmp/lc16-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/work/LotRO Companion/app");
-    String packageName="patch21.4.0.39.1.1";
-    Version newVersion=new Version(2145,"21.4.0.39.1.1");
+    String packageName="patch21.4.0.39.2";
+    Version newVersion=new Version(2146,"21.4.0.39.2");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
@@ -57,7 +56,7 @@ public class MainBuildUpdatePackage
     // Compute diffs
     UpdateOperationsBuilder diffBuilder=new UpdateOperationsBuilder();
     UpdateOperations operations=diffBuilder.computeDiff(directory,description);
-    if (operations.getOperations().size()==0)
+    if (operations.getOperations().isEmpty())
     {
       System.out.println("No updates!");
       return;
