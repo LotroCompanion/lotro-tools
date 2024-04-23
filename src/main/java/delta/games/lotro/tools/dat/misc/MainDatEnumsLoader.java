@@ -30,6 +30,7 @@ import delta.games.lotro.common.enums.LegendaryTitleCategory;
 import delta.games.lotro.common.enums.LegendaryTitleTier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
+import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
@@ -159,6 +160,7 @@ public class MainDatEnumsLoader
     loadEnum(587203172,"HousingHookCategory",HousingHookCategory.class); // 0x23000264
     loadEnum(587203027,"PerkUICategory",PerkUICategory.class); // 0x230001D3
     loadEnum(587203310,"TraitGroup",TraitGroup.class); // 0x230002EE
+    loadEnum(587202657,"MobDivision",MobDivision.class); // 0x23000061
 
     // Derivated enums
     // From EquipmentCategory:

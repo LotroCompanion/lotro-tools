@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.Interactable;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
@@ -76,7 +79,6 @@ import delta.games.lotro.utils.Proxy;
  */
 public class DatObjectivesLoader
 {
-
   private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
 
   private static final String QUEST_EVENT_ENTRY="QuestEvent_Entry";
@@ -85,7 +87,7 @@ public class DatObjectivesLoader
   private DataFacade _facade;
   private I18nUtils _i18n;
 
-  private EnumMapper _monsterDivision;
+  private LotroEnum<MobDivision> _mobDivision;
   private EnumMapper _questEvent;
   private EnumMapper _questCategory;
 
@@ -102,7 +104,7 @@ public class DatObjectivesLoader
   {
     _facade=facade;
     _i18n=i18n;
-    _monsterDivision=_facade.getEnumsManager().getEnumMapper(587202657);
+    _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=_facade.getEnumsManager().getEnumMapper(587202585);
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
@@ -742,11 +744,11 @@ QuestEvent_ShowBillboardText: 0
       {
         PropertiesSet monsterGenusProps=(PropertiesSet)monsterGenusArray[i];
         // Where
-        String divisionStr=null;
-        Integer mobDivision=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
-        if (mobDivision!=null)
+        MobDivision mobDivision=null;
+        Integer mobDivisionCode=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
+        if (mobDivisionCode!=null)
         {
-          divisionStr=_monsterDivision.getString(mobDivision.intValue());
+          mobDivision=_mobDivision.getEntry(mobDivisionCode.intValue());
         }
         LandDivision landDivision=null;
         Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
@@ -763,7 +765,7 @@ QuestEvent_ShowBillboardText: 0
         // What
         EntityClassification mobReference=MobUtils.buildMobReference(monsterGenusProps);
         MobSelection selection=new MobSelection();
-        MobLocation location=new MobLocation(divisionStr,landDivision,landmark);
+        MobLocation location=new MobLocation(mobDivision,landDivision,landmark);
         selection.setWhere(location);
         selection.setWhat(mobReference);
         ret.getMobSelections().add(selection);
