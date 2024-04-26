@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.NationalitiesManager;
@@ -77,7 +78,7 @@ public class RaceDataLoader
     raceDescription.setDescription(description);
     // Short or tall?
     Integer isTall=(Integer)properties.getProperty("RaceTable_IsTallRace");
-    boolean tall=(isTall!=null)?(isTall.intValue()==1):true;
+    boolean tall=((isTall!=null) && (isTall.intValue()==1));
     raceDescription.setTall(tall);
     // Nationalities
     Object[] nationalityCodes=(Object[])properties.getProperty("RaceTable_NationalityList");
@@ -161,7 +162,6 @@ public class RaceDataLoader
     // Avatar
     int avatarId=((Integer)genderProperties.getProperty("RaceTable_Gender_PlayerAvatar")).intValue();
     gender.setAvatarId(avatarId);
-    //loadAvatar(avatarId);
     return gender;
   }
 
@@ -172,7 +172,7 @@ public class RaceDataLoader
     float ocmr=((Float)properties.getProperty("Vital_HealthPeaceBaseRegen")).floatValue();
     float icpr=((Float)properties.getProperty("Vital_PowerCombatBaseRegen")).floatValue();
     float ocpr=((Float)properties.getProperty("Vital_PowerPeaceBaseRegen")).floatValue();
-    System.out.println("ICMR="+icmr+", OCMR="+ocmr+", ICPR="+icpr+", OCPR="+ocpr);
+    Console.println("ICMR="+icmr+", OCMR="+ocmr+", ICPR="+icpr+", OCPR="+ocpr);
   }
 
   private File getIconFile(int iconID)
@@ -188,10 +188,10 @@ public class RaceDataLoader
     {
       PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
       int level=((Integer)traitProperties.getProperty("AdvTable_Trait_Level")).intValue();
-      //Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
+      Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
-      //System.out.println("Level: "+level+" (rank="+rank+")");
       TraitDescription trait=TraitUtils.getTrait(traitId);
+      LOGGER.debug("Level: "+level+" => trait "+trait+" (rank="+rank+")");
       RaceTrait raceTrait=new RaceTrait(level,trait);
       description.addTrait(raceTrait);
     }
@@ -220,7 +220,7 @@ public class RaceDataLoader
     {
       PropertiesSet raceProps=(PropertiesSet)raceArrayObj;
       int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
-      //System.out.println("Race: "+raceId);
+      LOGGER.debug("Race: "+raceId);
       RaceDescription description=_racesById.get(Integer.valueOf(raceId));
       if (description!=null)
       {

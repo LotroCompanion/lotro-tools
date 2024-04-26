@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.checks;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -27,7 +28,7 @@ public class MainFindItems
       {
         int id=item.getIdentifier();
         String name=item.getName();
-        System.out.println("ID="+id+", name="+name+", munging="+munging);
+        Console.println("ID="+id+", name="+name+", munging="+munging);
       }
     }
   }
@@ -38,7 +39,6 @@ public class MainFindItems
     {
       if (item instanceof Legendary) continue;
       if (item instanceof Legendary2) continue;
-      //if (!(item instanceof Weapon)) continue;
       Munging munging=item.getMunging();
       if (munging==null) continue;
       Progression progression=munging.getProgression();
@@ -47,7 +47,7 @@ public class MainFindItems
       if (statsProvider!=null) continue;
       int id=item.getIdentifier();
       String name=item.getName();
-      System.out.println("ID="+id+", name="+name+", munging="+munging);
+      Console.println("ID="+id+", name="+name+", munging="+munging);
       // => no such weapon
       // => some armour chests
     }

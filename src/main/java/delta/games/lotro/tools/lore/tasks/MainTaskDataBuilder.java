@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.rewards.ReputationReward;
+import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestsManager;
@@ -13,6 +15,7 @@ import delta.games.lotro.lore.quests.objectives.InventoryItemCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.lore.quests.objectives.ObjectivesManager;
+import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.tasks.Task;
 import delta.games.lotro.lore.tasks.io.xml.TasksXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -43,7 +46,7 @@ public class MainTaskDataBuilder
 
   private Task buildTask(QuestDescription quest)
   {
-    System.out.println("ID="+quest.getIdentifier()+" - "+quest.getName());
+    LOGGER.info("ID="+quest.getIdentifier()+" - "+quest.getName());
     // Item
     InventoryItemCondition itemCondition=findRequiredItem(quest);
     if (itemCondition==null)
@@ -53,23 +56,21 @@ public class MainTaskDataBuilder
     int count=itemCondition.getCount();
     Item item=itemCondition.getItem();
     String name=item.getName();
-    System.out.println("\t"+name+" x"+count);
+    LOGGER.info("\t"+name+" x"+count);
     Task ret=new Task(quest);
     ret.setRequiredItems(item,count);
-    /*
-    Rewards rewards=task.getRewards();
+    Rewards rewards=quest.getRewards();
     // Reputation rewards
     List<ReputationReward> reputationRewards=rewards.getRewardElementsOfClass(ReputationReward.class);
-    if (reputationRewards.size()>0)
+    if (!reputationRewards.isEmpty())
     {
       for(ReputationReward reputationReward : reputationRewards)
       {
         Faction faction=reputationReward.getFaction();
         int amount=reputationReward.getAmount();
-        System.out.println("\t"+faction.getName()+" - "+amount+" pts");
+        LOGGER.info("\t"+faction.getName()+" - "+amount+" pts");
       }
     }
-    */
     return ret;
   }
 
@@ -79,7 +80,7 @@ public class MainTaskDataBuilder
     int nbConditions=inventoryItemConditions.size();
     if ((nbConditions!=1) && (nbConditions!=2))
     {
-      System.out.println("Bad conditions count for "+task+". Got: "+nbConditions);
+      LOGGER.warn("Bad conditions count for "+task+". Got: "+nbConditions);
       return null;
     }
     if (nbConditions>1)
@@ -90,11 +91,11 @@ public class MainTaskDataBuilder
       int count2=inventoryItemConditions.get(1).getCount();
       if (itemID!=itemID2)
       {
-        System.out.println("Item ID mismatch: "+itemID+"!="+itemID2);
+        LOGGER.warn("Item ID mismatch: "+itemID+"!="+itemID2);
       }
       if (count!=count2)
       {
-        System.out.println("Item count mismatch: "+count+"!="+count2);
+        LOGGER.warn("Item count mismatch: "+count+"!="+count2);
       }
     }
     return inventoryItemConditions.get(0);

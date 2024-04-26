@@ -2,6 +2,7 @@ package delta.games.lotro.tools.reports;
 
 import java.util.List;
 
+import delta.common.utils.io.Console;
 import delta.common.utils.text.EndOfLine;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -70,13 +71,13 @@ public class DATInspectionTool
     for(String label : map.getLabels())
     {
       Integer dataId=map.getDataIdForLabel(label);
-      System.out.println(label+" ("+dataId+")");
+      Console.println(label+" ("+dataId+")");
       if (dataId!=null)
       {
         data=facade.loadData(dataId.intValue());
         if (data==null) continue;
         DIDMapper subMap=DataIdMapLoader.decodeDataIdMap(data);
-        System.out.println(subMap.dump());
+        Console.println(subMap.dump());
       }
     }
   }
@@ -96,11 +97,11 @@ public class DATInspectionTool
         if (subLabel.startsWith("\u0000\u0000")) continue;
         int subDataId=subMap.getDataIdForLabel(subLabel).intValue();
         long dbPropsId=subDataId+DATConstants.DBPROPERTIES_OFFSET;
-        System.out.println("****** Weenie: "+subLabel+" - "+dbPropsId);
+        Console.println("****** Weenie: "+subLabel+" - "+dbPropsId);
         PropertiesSet props=facade.loadProperties(dbPropsId);
         if (props!=null)
         {
-          System.out.println(props.dump());
+          Console.println(props.dump());
         }
       }
     }
@@ -119,7 +120,7 @@ public class DATInspectionTool
       for(String enumName : enumNames)
       {
         int stringTableId=map2.getDataIdForLabel(enumName).intValue();
-        System.out.println(enumName+" - "+stringTableId);
+        Console.println(enumName+" - "+stringTableId);
         StringTable table=facade.getStringsManager().getStringTable(stringTableId);
         if (table!=null)
         {
@@ -131,7 +132,7 @@ public class DATInspectionTool
         }
         else
         {
-          System.out.println("\tNot found!");
+          Console.println("\tNot found!");
         }
       }
     }
@@ -144,7 +145,7 @@ public class DATInspectionTool
       StringTable table=facade.getStringsManager().getStringTable(stringTableId);
       if (table!=null)
       {
-        System.out.println("String Table ID: "+stringTableId);
+        Console.println("String Table ID: "+stringTableId);
         for(Integer token : table.getTokens())
         {
           StringTableEntry entry=table.getEntry(token.intValue());
@@ -157,7 +158,7 @@ public class DATInspectionTool
   private static void handleEntry(int token, StringTableEntry entry)
   {
     String stringFormat=StringInfoUtils.buildStringFormat(entry);
-    System.out.println("\t"+token+": "+stringFormat);
+    Console.println("\t"+token+": "+stringFormat);
   }
 
   /**

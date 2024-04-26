@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.dat.DATConstants;
@@ -141,10 +142,10 @@ Dungeon_ParentDungeon: 0
   public void showDungeons()
   {
     List<Dungeon> dungeons=getDungeons();
-    System.out.println("Found "+dungeons.size()+" dungeons");
+    Console.println("Found "+dungeons.size()+" dungeons");
     for(Dungeon dungeon : dungeons)
     {
-      System.out.println(dungeon);
+      Console.println(dungeon);
     }
   }
 
@@ -171,7 +172,7 @@ Dungeon_ParentDungeon: 0
   public void loadPositions()
   {
     List<Dungeon> dungeons=getDungeons();
-    System.out.println("Found "+dungeons.size()+" dungeons");
+    LOGGER.info("Found "+dungeons.size()+" dungeons");
     for(Dungeon dungeon : dungeons)
     {
       // Handle position

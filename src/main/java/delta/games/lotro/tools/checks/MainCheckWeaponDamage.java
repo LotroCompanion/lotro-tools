@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.checks;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.Weapon;
@@ -31,20 +32,20 @@ public class MainCheckWeaponDamage
         float diffMinDamage=Math.abs(minDamage-Math.round(computedMinDamage));
         if (diffMinDamage>0.01)
         {
-          System.out.println("ID="+id+", name="+name+", level="+level);
-          System.out.println("\tMin damage="+minDamage+", computedMinDamage="+Math.round(computedMinDamage));
+          Console.println("ID="+id+", name="+name+", level="+level);
+          Console.println("\tMin damage="+minDamage+", computedMinDamage="+Math.round(computedMinDamage));
         }
         float computedMaxDamage=weapon.computeMaxDamage(level.intValue());
         int maxDamage=weapon.getMaxDamage();
         float diffMaxDamage=Math.abs(maxDamage-Math.round(computedMaxDamage));
         if (diffMaxDamage>0.01)
         {
-          System.out.println("ID="+id+", name="+name+", level="+level);
-          System.out.println("\tMax damage="+maxDamage+", computedMaxDamage="+Math.round(computedMaxDamage));
+          Console.println("ID="+id+", name="+name+", level="+level);
+          Console.println("\tMax damage="+maxDamage+", computedMaxDamage="+Math.round(computedMaxDamage));
         }
         nbWeapons++;
       }
     }
-    System.out.println("Checked "+nbWeapons+" weapons!");
+    Console.println("Checked "+nbWeapons+" weapons!");
   }
 }

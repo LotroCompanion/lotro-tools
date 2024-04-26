@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.items.legendary;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -32,9 +33,9 @@ public class MainDatConversionDataInspection
   {
     // ItemAdvancementControl
     PropertiesSet properties=_facade.loadProperties(1879108262+DATConstants.DBPROPERTIES_OFFSET);
-    System.out.println("Non imbued");
+    Console.println("Non imbued");
     doArray(properties,"ItemAdvancement_LI2ConversionReward_UnimbuedTotalLevel_Array");
-    System.out.println("Imbued");
+    Console.println("Imbued");
     doArray(properties,"ItemAdvancement_LI2ConversionReward_ImbuedLegacy_Array");
     // ItemAdvancement_MaxILevelProgression: 1879422471
     doMaxILevelProgression(properties);
@@ -45,7 +46,7 @@ public class MainDatConversionDataInspection
     int progressionId=((Integer)props.getProperty("ItemAdvancement_MaxILevelProgression")).intValue();
     PropertiesSet progressionProps=_facade.loadProperties(progressionId+DATConstants.DBPROPERTIES_OFFSET);
     Progression prog=ProgressionFactory.buildProgression(progressionId,progressionProps);
-    System.out.println("Max Item Level progression: "+prog);
+    Console.println("Max Item Level progression: "+prog);
   }
 
   private void doArray(PropertiesSet props, String propName)
@@ -58,7 +59,7 @@ public class MainDatConversionDataInspection
     ItemAdvancement_LI2ConversionReward_Item: 1879424263
     ItemAdvancement_LI2ConversionReward_Progression: 1879430913
        */
-      System.out.println("************* entry **************");
+      Console.println("************* entry **************");
       int itemId=((Integer)entryProps.getProperty("ItemAdvancement_LI2ConversionReward_Item")).intValue();
       int progressionId=((Integer)entryProps.getProperty("ItemAdvancement_LI2ConversionReward_Progression")).intValue();
       handleItemIdAndProgression(itemId,progressionId);
@@ -74,13 +75,13 @@ public class MainDatConversionDataInspection
     {
       String itemName=DatUtils.getStringProperty(itemProps,"Name");
       itemName=StringUtils.fixName(itemName);
-      System.out.println("Item name: "+itemName);
+      Console.println("Item name: "+itemName);
       Progression prog=ProgressionFactory.buildProgression(progressionId,progressionProps);
-      System.out.println(" => "+prog);
+      Console.println(" => "+prog);
     }
     else
     {
-      System.out.println("Level to item progression");
+      Console.println("Level to item progression");
       /*
       ArrayProgression itemProg=(ArrayProgression)ProgressionFactory.buildProgression(itemId,itemProps);
       int nbPoints=itemProg.getNumberOfPoints();
@@ -94,12 +95,12 @@ public class MainDatConversionDataInspection
           String itemName=DatUtils.getStringProperty(childProps,"Name");
           itemName=StringUtils.fixName(itemName);
           Object itemQuality=childProps.getProperty("Item_Quality");
-          System.out.println("Level "+level+" => Item name: "+itemName+"; quality: "+itemQuality);
+          Console.println("Level "+level+" => Item name: "+itemName+"; quality: "+itemQuality);
         }
       }
       */
       Progression prog=ProgressionFactory.buildProgression(progressionId,progressionProps);
-      System.out.println(" => "+prog);
+      Console.println(" => "+prog);
     }
   }
 

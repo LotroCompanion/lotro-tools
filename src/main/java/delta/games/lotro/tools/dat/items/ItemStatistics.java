@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.items;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class ItemStatistics
         handleWeapon((Weapon)item);
       }
     }
-    showStatistics();
+    showStatistics(System.out);
   }
 
   private void handleItem(Item item)
@@ -145,54 +146,54 @@ public class ItemStatistics
     }
   }
 
-  private void showStatistics()
+  private void showStatistics(PrintStream out)
   {
     // Items
-    System.out.println("Items: " + _itemsCount);
+    out.println("Items: " + _itemsCount);
     // - qualities
-    System.out.println("- by quality:");
+    out.println("- by quality:");
     List<ItemQuality> itemQualities=new ArrayList<ItemQuality>(_itemsByQuality.keySet());
     Collections.sort(itemQualities,new ItemQualityComparator());
     for(ItemQuality itemQuality : itemQualities)
     {
       IntegerHolder count=_itemsByQuality.get(itemQuality);
-      System.out.println("\t"+itemQuality+": "+count);
+      out.println("\t"+itemQuality+": "+count);
     }
     // - sub-categories
-    System.out.println("- by sub-category:");
+    out.println("- by sub-category:");
     List<String> itemSubCategories=new ArrayList<String>(_itemsBySubCategory.keySet());
     Collections.sort(itemSubCategories);
     for(String itemSubCategory : itemSubCategories)
     {
       IntegerHolder count=_itemsBySubCategory.get(itemSubCategory);
-      System.out.println("\t"+itemSubCategory+": "+count);
+      out.println("\t"+itemSubCategory+": "+count);
     }
     // - slot
-    System.out.println("- by slot:");
+    out.println("- by slot:");
     List<EquipmentLocation> locations=new ArrayList<EquipmentLocation>(_itemsBySlot.keySet());
     Collections.sort(locations,new LotroEnumEntryCodeComparator<EquipmentLocation>());
     for(EquipmentLocation location : locations)
     {
       IntegerHolder count=_itemsBySlot.get(location);
-      System.out.println("\t"+location+": "+count);
+      out.println("\t"+location+": "+count);
     }
     // Armours
-    System.out.println("Armours: " + _armoursCount);
+    out.println("Armours: " + _armoursCount);
     List<ArmourType> armourTypes=new ArrayList<ArmourType>(_armoursByType.keySet());
     Collections.sort(armourTypes,new ArmourTypeComparator());
     for(ArmourType armourType : armourTypes)
     {
       IntegerHolder count=_armoursByType.get(armourType);
-      System.out.println("\t"+armourType+": "+count);
+      out.println("\t"+armourType+": "+count);
     }
     // Weapons
-    System.out.println("Weapons: " + _weaponsCount);
+    out.println("Weapons: " + _weaponsCount);
     List<WeaponType> weaponTypes=new ArrayList<WeaponType>(_weaponsByType.keySet());
     Collections.sort(weaponTypes,new LotroEnumEntryNameComparator<WeaponType>());
     for(WeaponType weaponType : weaponTypes)
     {
       IntegerHolder count=_weaponsByType.get(weaponType);
-      System.out.println("\t"+weaponType+": "+count);
+      out.println("\t"+weaponType+": "+count);
     }
   }
 }

@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.crafting.recipes;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,6 +36,8 @@ import delta.games.lotro.lore.trade.vendor.VendorsManager;
  */
 public class MainRecipesDataBuilder
 {
+  private PrintStream _out=System.out;
+
   private Set<Integer> getRecipeItemIds()
   {
     Set<Integer> items=new HashSet<Integer>();
@@ -65,7 +68,7 @@ public class MainRecipesDataBuilder
     scrollsNotFound.removeAll(bartered);
     scrollsNotFound.removeAll(questRewards);
     scrollsNotFound.removeAll(deedRewards);
-    System.out.println("Scrolls not found:");
+    _out.println("Scrolls not found:");
     showList(scrollsNotFound);
   }
 
@@ -83,16 +86,16 @@ public class MainRecipesDataBuilder
         LootTables lootTables=itemsContainer.getLootTables();
         Set<Integer> containedItems=lootTables.getItemIds();
         containedItems.retainAll(recipeScrollsIds);
-        if (containedItems.size()>0)
+        if (!containedItems.isEmpty())
         {
           scrollContainers.add(Integer.valueOf(container.getIdentifier()));
         }
         foundScrolls.addAll(containedItems);
       }
     }
-    System.out.println("Scrolls found in containers:");
+    _out.println("Scrolls found in containers:");
     showList(foundScrolls);
-    System.out.println("Scroll containers:");
+    _out.println("Scroll containers:");
     showList(scrollContainers);
     return foundScrolls;
   }
@@ -101,7 +104,7 @@ public class MainRecipesDataBuilder
   {
     Set<Integer> soldItems=findSoldItems();
     soldItems.retainAll(recipeScrollsIds);
-    System.out.println("Sold scrolls:");
+    _out.println("Sold scrolls:");
     showList(soldItems);
     return soldItems;
   }
@@ -126,7 +129,7 @@ public class MainRecipesDataBuilder
   {
     Set<Integer> barteredItems=findBarteredItems();
     barteredItems.retainAll(recipeScrollsIds);
-    System.out.println("Bartered scrolls:");
+    _out.println("Bartered scrolls:");
     showList(barteredItems);
     return barteredItems;
   }
@@ -158,7 +161,7 @@ public class MainRecipesDataBuilder
     List<QuestDescription> quests=QuestsManager.getInstance().getAll();
     Set<Integer> rewardItemIDs=findRewardItems(quests);
     rewardItemIDs.retainAll(recipeScrollsIds);
-    System.out.println("Quest rewards:");
+    _out.println("Quest rewards:");
     showList(rewardItemIDs);
     return rewardItemIDs;
   }
@@ -168,7 +171,7 @@ public class MainRecipesDataBuilder
     List<DeedDescription> deeds=DeedsManager.getInstance().getAll();
     Set<Integer> rewardItemIDs=findRewardItems(deeds);
     rewardItemIDs.retainAll(recipeScrollsIds);
-    System.out.println("Deed rewards:");
+    _out.println("Deed rewards:");
     showList(rewardItemIDs);
     return rewardItemIDs;
   }
@@ -192,14 +195,14 @@ public class MainRecipesDataBuilder
 
   private void showList(Set<Integer> ids)
   {
-    System.out.println("Nb items: "+ids.size());
+    _out.println("Nb items: "+ids.size());
     ItemsManager itemsMgr=ItemsManager.getInstance();
     List<Integer> sortedIds=new ArrayList<Integer>(ids);
     Collections.sort(sortedIds);
     for(Integer id : sortedIds)
     {
       Item item=itemsMgr.getItem(id.intValue());
-      System.out.println(item);
+      _out.println(item);
     }
   }
 
