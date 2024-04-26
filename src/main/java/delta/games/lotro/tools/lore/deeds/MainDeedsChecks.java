@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.objectives.Objective;
@@ -35,7 +36,7 @@ public class MainDeedsChecks
       Integer index=Integer.valueOf(objective.getIndex());
       if (objectiveIndexes.contains(index))
       {
-        System.out.println("Duplicate objective index "+index+" for deed: "+deed);
+        Console.println("Duplicate objective index "+index+" for deed: "+deed);
       }
       else
       {
@@ -47,15 +48,15 @@ public class MainDeedsChecks
     int nbObjectives=objectivesMgr.getObjectivesCount();
     if (indexes.size()!=nbObjectives)
     {
-      System.out.println("Bad objectives count for deed: "+deed);
+      Console.println("Bad objectives count for deed: "+deed);
     }
     if (indexes.get(0).intValue()!=1)
     {
-      System.out.println("Bad first index for deed: "+deed);
+      Console.println("Bad first index for deed: "+deed);
     }
     if (indexes.get(nbObjectives-1).intValue()!=nbObjectives)
     {
-      System.out.println("Bad last index for deed: "+deed);
+      Console.println("Bad last index for deed: "+deed);
     }
     for(Objective objective : objectivesMgr.getObjectives())
     {
@@ -71,7 +72,7 @@ public class MainDeedsChecks
       Integer index=Integer.valueOf(condition.getIndex());
       if (conditionIndexes.contains(index))
       {
-        System.out.println("Duplicate condition index "+index+" for deed: "+deed+" objective #"+objective.getIndex());
+        Console.println("Duplicate condition index "+index+" for deed: "+deed+" objective #"+objective.getIndex());
       }
       else
       {
@@ -83,15 +84,15 @@ public class MainDeedsChecks
     int nbConditions=objective.getConditions().size();
     if (indexes.size()!=nbConditions)
     {
-      System.out.println("Bad conditions count for deed: "+deed);
+      Console.println("Bad conditions count for deed: "+deed);
     }
     if (indexes.get(0).intValue()!=0)
     {
-      System.out.println("Bad first index for deed: "+deed+", objective #"+objective.getIndex());
+      Console.println("Bad first index for deed: "+deed+", objective #"+objective.getIndex());
     }
     if (indexes.get(nbConditions-1).intValue()!=nbConditions-1)
     {
-      System.out.println("Bad last index for deed: "+deed+", objective #"+objective.getIndex());
+      Console.println("Bad last index for deed: "+deed+", objective #"+objective.getIndex());
     }
   }
 

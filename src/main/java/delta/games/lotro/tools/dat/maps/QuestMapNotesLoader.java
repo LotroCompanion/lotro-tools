@@ -2,6 +2,7 @@ package delta.games.lotro.tools.dat.maps;
 
 import java.io.ByteArrayInputStream;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -61,11 +62,11 @@ public class QuestMapNotesLoader
 
     if (VERBOSE)
     {
-      System.out.println("****** Quest map note:");
+      Console.println("****** Quest map note:");
       _markersUtils.log(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
       if (questDispenserInfo.getPropertyNames().size()>0)
       {
-        System.out.println("Quest dispenser info: "+questDispenserInfo.dump());
+        Console.println("Quest dispenser info: "+questDispenserInfo.dump());
       }
     }
     _markersUtils.buildMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);

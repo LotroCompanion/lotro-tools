@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.dat.data.DatPosition;
@@ -74,11 +75,11 @@ public class MarkersLoadingUtils
   public void log(DatPosition position, int areaDID, int dungeonDID, int noteDID,
       Object[] contentLayersArray, String text, long type)
   {
-    System.out.println("Position: "+position);
+    Console.println("Position: "+position);
     DataIdentification dataId=null;
     if (noteDID!=0)
     {
-      // {Milestone=327, Landmark=2459, Waypoint=1308, DoorTemplate=874, IItem=857, Hotspot=267, NPCTemplate=4273}
+      // Milestone=327, Landmark=2459, Waypoint=1308, DoorTemplate=874, IItem=857, Hotspot=267, NPCTemplate=4273
       dataId=DataIdentificationTools.identify(_facade,noteDID);
       Integer key=Integer.valueOf(dataId.getClassIndex());
       IntegerHolder counter=_typesCount.get(key);
@@ -89,18 +90,18 @@ public class MarkersLoadingUtils
       }
       counter.increment();
     }
-    System.out.println("Data ID: "+dataId);
+    Console.println("Data ID: "+dataId);
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
     {
-      System.out.println("Content layers: "+Arrays.toString(contentLayersArray));
+      Console.println("Content layers: "+Arrays.toString(contentLayersArray));
     }
     if ((text!=null) && (text.length()>0))
     {
-      System.out.println("Text: "+text);
+      Console.println("Text: "+text);
     }
     BitSet typeSet=BitSetUtils.getBitSetFromFlags(type);
     String typeStr=BitSetUtils.getStringFromBitSet(typeSet,_mapNoteType," / ");
-    System.out.println("Type: "+type+" => "+typeStr);
+    Console.println("Type: "+type+" => "+typeStr);
   }
 
   /**
@@ -183,24 +184,7 @@ public class MarkersLoadingUtils
     // Checks
     if (DO_CHECK)
     {
-      // Verified to work 100%
-      Landblock landblock=LandblocksManager.getInstance().getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
-      if (landblock==null)
-      {
-        LOGGER.warn("No parent data for: "+position);
-      }
-      int cell=position.getCell();
-      if ((cell!=0) && (!(where instanceof Dungeon)))
-      {
-        // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
-        //LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
-      }
-      Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition()):null;
-      Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
-      if (!Objects.equals(whereId,parentArea))
-      {
-        LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
-      }
+      checkMarker(position,where);
     }
     DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
     if (dataId==null)
@@ -247,6 +231,27 @@ public class MarkersLoadingUtils
     return marker;
   }
 
+  private void checkMarker(DatPosition position, Zone where)
+  {
+    Landblock landblock=LandblocksManager.getInstance().getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
+    if (landblock==null)
+    {
+      LOGGER.warn("No parent data for: "+position);
+    }
+    int cell=position.getCell();
+    if ((cell!=0) && (!(where instanceof Dungeon)))
+    {
+      // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
+      LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
+    }
+    Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition()):null;
+    Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
+    if (!Objects.equals(whereId,parentArea))
+    {
+      LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
+    }
+  }
+
   /**
    * Register links.
    */
@@ -262,16 +267,19 @@ public class MarkersLoadingUtils
   /**
    * Add a link.
    * @param position Link position.
-   * @param areaDID Source area.
-   * @param dungeonDID Source dungeon.
+   * @param where Where (area/dungeon).
    * @param noteDID Source DID.
    * @param destPosition Destination position.
    * @param destArea Destination area/dungeon.
    * @param contentLayersArray Content layers.
    * @param text Link text.
    */
-  public void addLink(DatPosition position, int areaDID, int dungeonDID, int noteDID, DatPosition destPosition, Identifiable destArea, Object[] contentLayersArray, String text)
+  public void addLink(DatPosition position, Zone where, int noteDID, DatPosition destPosition, Identifiable destArea, Object[] contentLayersArray, String text)
   {
+    if (where==null)
+    {
+      return;
+    }
     DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
     if (dataId==null)
     {
@@ -287,21 +295,8 @@ public class MarkersLoadingUtils
     {
       LOGGER.warn("Link has text: ["+text+"]");
     }
-    Zone where=null;
-    if (dungeonDID!=0)
-    {
-      where=ZoneUtils.getZone(dungeonDID);
-    }
-    if (where==null)
-    {
-      where=ZoneUtils.getZone(areaDID);
-    }
     AbstractMap targetMap=getTargetMap(destArea,destPosition);
     if (targetMap==null)
-    {
-      return;
-    }
-    if (where==null)
     {
       return;
     }

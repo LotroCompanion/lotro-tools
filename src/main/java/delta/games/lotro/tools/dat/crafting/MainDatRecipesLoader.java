@@ -62,146 +62,154 @@ public class MainDatRecipesLoader
 
   private Recipe load(int indexDataId)
   {
-    Recipe recipe=null;
     long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    if (properties!=null)
-    {
-      recipe=new Recipe();
-      // ID
-      recipe.setIdentifier(indexDataId);
-      // Name
-      String name=_i18n.getNameStringProperty(properties,"CraftRecipe_Name",indexDataId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
-      recipe.setName(name);
-      // Category
-      Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
-      if (categoryIndex!=null)
-      {
-        CraftingUICategory category=_category.getEntry(categoryIndex.intValue());
-        recipe.setCategory(category);
-      }
-      // XP
-      Integer xpId=(Integer)properties.getProperty("CraftRecipe_XPReward");
-      if (xpId!=null)
-      {
-        Integer xpValue=_xpMapping.get(xpId);
-        if (xpValue!=null)
-        {
-          recipe.setXP(xpValue.intValue());
-        }
-      }
-      // Cooldown
-      Integer cooldownId=(Integer)properties.getProperty("CraftRecipe_CooldownDuration");
-      if (cooldownId!=null)
-      {
-        Float cooldownValue=_cooldownMapping.get(cooldownId);
-        if (cooldownValue!=null)
-        {
-          recipe.setCooldown(cooldownValue.intValue());
-        }
-      }
-      // Single use
-      Integer singleUse=(Integer)properties.getProperty("CraftRecipe_OneTimeRecipe");
-      if ((singleUse!=null) && (singleUse.intValue()==1))
-      {
-        recipe.setOneTimeUse(true);
-      }
-      // Ingredients
-      List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
-      // Optional ingredients
-      List<Ingredient> optionalIngredients=getIngredientsList(properties,"CraftRecipe_OptionalIngredientList",true);
-      // Ingredient pack
-      Integer ingredientPackID=(Integer)properties.getProperty("CraftRecipe_IngredientPack");
-      if (ingredientPackID!=null)
-      {
-        Integer packQuantity=(Integer)properties.getProperty("CraftRecipe_IngredientPackQuantity");
-        int count=(packQuantity!=null)?packQuantity.intValue():1;
-        Item item=_itemsManager.getItem(ingredientPackID.intValue());
-        if (item!=null)
-        {
-          IngredientPack ingredientPack=new IngredientPack(item,count);
-          recipe.setIngredientPack(ingredientPack);
-        }
-      }
-      // Results
-      RecipeVersion firstResult=buildVersion(properties);
-      firstResult.getIngredients().addAll(ingredients);
-      firstResult.getIngredients().addAll(optionalIngredients);
-      recipe.getVersions().add(firstResult);
-      // Multiple output results
-      Object[] multiOutput=(Object[])properties.getProperty("CraftRecipe_MultiOutputArray");
-      if (multiOutput!=null)
-      {
-        for(Object output : multiOutput)
-        {
-          PropertiesSet outputProps=(PropertiesSet)output;
-          RecipeVersion newVersion=firstResult.cloneData();
-
-          // Patch
-          // - result
-          Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
-          if ((resultId!=null) && (resultId.intValue()>0))
-          {
-            CraftingResult regular=newVersion.getRegular();
-            Item resultItem=_itemsManager.getItem(resultId.intValue());
-            regular.setItem(resultItem);
-          }
-          // - critical result
-          Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
-          if ((critResultId!=null) && (critResultId.intValue()>0))
-          {
-            CraftingResult critical=newVersion.getCritical();
-            Item critResultItem=_itemsManager.getItem(critResultId.intValue());
-            critical.setItem(critResultItem);
-          }
-          checkForItemLevels(newVersion.getRegular(),newVersion.getCritical());
-          // Ingredient
-          Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
-          if (ingredientId!=null)
-          {
-            Item firstIngredient=_itemsManager.getItem(ingredientId.intValue());
-            newVersion.getIngredients().get(0).setItem(firstIngredient);
-          }
-          recipe.getVersions().add(newVersion);
-        }
-      }
-
-      // Profession
-      Integer professionId=(Integer)properties.getProperty("CraftRecipe_Profession");
-      if (professionId!=null)
-      {
-        Profession profession=getProfessionFromProfessionId(professionId.intValue());
-        recipe.setProfession(profession);
-      }
-      // Tier
-      Integer tier=getTier(properties);
-      if (tier!=null)
-      {
-        recipe.setTier(tier.intValue());
-      }
-      // Fixes
-      if (name==null)
-      {
-        name=recipe.getDefaultName();
-        recipe.setName(name);
-      }
-      Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
-      // TODO Store guild ID here (faction)
-      if ((guild!=null) && (guild.intValue()!=0))
-      {
-        recipe.setGuildRequired(true);
-      }
-      // Other attributes
-      // CraftRecipe_NameItemOnNormalSuccess
-      // CraftRecipe_NameItemOnCriticalSuccess
-      // CraftRecipe_ExecutionTime
-      checkRecipe(recipe);
-    }
-    else
+    if (properties==null)
     {
       LOGGER.warn("Could not handle recipe ID="+indexDataId);
+      return null;
     }
+    Recipe recipe=new Recipe();
+    // ID
+    recipe.setIdentifier(indexDataId);
+    // Name
+    String name=_i18n.getNameStringProperty(properties,"CraftRecipe_Name",indexDataId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+    recipe.setName(name);
+    // Category
+    Integer categoryIndex=(Integer)properties.getProperty("CraftRecipe_UICategory");
+    if (categoryIndex!=null)
+    {
+      CraftingUICategory category=_category.getEntry(categoryIndex.intValue());
+      recipe.setCategory(category);
+    }
+    // XP
+    Integer xpId=(Integer)properties.getProperty("CraftRecipe_XPReward");
+    if (xpId!=null)
+    {
+      Integer xpValue=_xpMapping.get(xpId);
+      if (xpValue!=null)
+      {
+        recipe.setXP(xpValue.intValue());
+      }
+    }
+    // Cooldown
+    Integer cooldownId=(Integer)properties.getProperty("CraftRecipe_CooldownDuration");
+    if (cooldownId!=null)
+    {
+      Float cooldownValue=_cooldownMapping.get(cooldownId);
+      if (cooldownValue!=null)
+      {
+        recipe.setCooldown(cooldownValue.intValue());
+      }
+    }
+    // Single use
+    Integer singleUse=(Integer)properties.getProperty("CraftRecipe_OneTimeRecipe");
+    if ((singleUse!=null) && (singleUse.intValue()==1))
+    {
+      recipe.setOneTimeUse(true);
+    }
+    // Results
+    RecipeVersion firstResult=buildVersion(properties);
+    // Ingredients
+    handleIngredients(recipe,firstResult,properties);
+    recipe.getVersions().add(firstResult);
+    // Multiple output results
+    Object[] multiOutput=(Object[])properties.getProperty("CraftRecipe_MultiOutputArray");
+    if (multiOutput!=null)
+    {
+      for(Object output : multiOutput)
+      {
+        PropertiesSet outputProps=(PropertiesSet)output;
+        RecipeVersion newVersion=handleRecipeOutput(firstResult,outputProps);
+        recipe.getVersions().add(newVersion);
+      }
+    }
+
+    // Profession
+    Integer professionId=(Integer)properties.getProperty("CraftRecipe_Profession");
+    if (professionId!=null)
+    {
+      Profession profession=getProfessionFromProfessionId(professionId.intValue());
+      recipe.setProfession(profession);
+    }
+    // Tier
+    Integer tier=getTier(properties);
+    if (tier!=null)
+    {
+      recipe.setTier(tier.intValue());
+    }
+    // Fixes
+    if (name==null)
+    {
+      name=recipe.getDefaultName();
+      recipe.setName(name);
+    }
+    Integer guild=(Integer)properties.getProperty("CraftRecipe_RequiredCraftGuild");
+    // TODO Store guild ID here (faction)
+    if ((guild!=null) && (guild.intValue()!=0))
+    {
+      recipe.setGuildRequired(true);
+    }
+    // Other attributes
+    // CraftRecipe_NameItemOnNormalSuccess
+    // CraftRecipe_NameItemOnCriticalSuccess
+    // CraftRecipe_ExecutionTime
+    checkRecipe(recipe);
     return recipe;
+  }
+
+  private void handleIngredients(Recipe recipe, RecipeVersion firstResult, PropertiesSet properties)
+  {
+    List<Ingredient> ingredients=getIngredientsList(properties,"CraftRecipe_IngredientList",false);
+    // Optional ingredients
+    List<Ingredient> optionalIngredients=getIngredientsList(properties,"CraftRecipe_OptionalIngredientList",true);
+    // Ingredient pack
+    Integer ingredientPackID=(Integer)properties.getProperty("CraftRecipe_IngredientPack");
+    if (ingredientPackID!=null)
+    {
+      Integer packQuantity=(Integer)properties.getProperty("CraftRecipe_IngredientPackQuantity");
+      int count=(packQuantity!=null)?packQuantity.intValue():1;
+      Item item=_itemsManager.getItem(ingredientPackID.intValue());
+      if (item!=null)
+      {
+        IngredientPack ingredientPack=new IngredientPack(item,count);
+        recipe.setIngredientPack(ingredientPack);
+      }
+    }
+    firstResult.getIngredients().addAll(ingredients);
+    firstResult.getIngredients().addAll(optionalIngredients);
+  }
+
+  private RecipeVersion handleRecipeOutput(RecipeVersion firstResult, PropertiesSet outputProps)
+  {
+    RecipeVersion newVersion=firstResult.cloneData();
+
+    // Patch
+    // - result
+    Integer resultId=(Integer)outputProps.getProperty("CraftRecipe_ResultItem");
+    if ((resultId!=null) && (resultId.intValue()>0))
+    {
+      CraftingResult regular=newVersion.getRegular();
+      Item resultItem=_itemsManager.getItem(resultId.intValue());
+      regular.setItem(resultItem);
+    }
+    // - critical result
+    Integer critResultId=(Integer)outputProps.getProperty("CraftRecipe_CriticalResultItem");
+    if ((critResultId!=null) && (critResultId.intValue()>0))
+    {
+      CraftingResult critical=newVersion.getCritical();
+      Item critResultItem=_itemsManager.getItem(critResultId.intValue());
+      critical.setItem(critResultItem);
+    }
+    checkForItemLevels(newVersion.getRegular(),newVersion.getCritical());
+    // Ingredient
+    Integer ingredientId=(Integer)outputProps.getProperty("CraftRecipe_Ingredient");
+    if (ingredientId!=null)
+    {
+      Item firstIngredient=_itemsManager.getItem(ingredientId.intValue());
+      newVersion.getIngredients().get(0).setItem(firstIngredient);
+    }
+    return newVersion;
   }
 
   private Integer getTier(PropertiesSet properties)
@@ -434,7 +442,6 @@ public class MainDatRecipesLoader
     if (icon==null)
     {
       LOGGER.warn(context+": missing icon");
-      return;
     }
   }
 

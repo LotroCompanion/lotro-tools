@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -34,8 +35,6 @@ import delta.games.lotro.lore.items.details.ItemDetailsManager;
  */
 public class SkillConstraintsComputer
 {
-  //private static final Logger LOGGER=Logger.getLogger(SkillConstraintsComputer.class);
-
   private Map<Integer,List<ClassDescription>> _classSkills;
   private Map<Integer,List<Item>> _itemGrantedSkills;
   private Map<Integer,List<TraitDescription>> _traitSkills;
@@ -172,9 +171,9 @@ public class SkillConstraintsComputer
 
   private void handleSkill(SkillDescription skill)
   {
-    System.out.println("Skill: "+skill);
+    Console.println("Skill: "+skill);
     UsageRequirement req=getSkillRequirement(skill);
-    System.out.println("\t"+req);
+    Console.println("\t"+req);
   }
 
   private UsageRequirement getSkillRequirement(SkillDescription skill)
@@ -183,7 +182,7 @@ public class SkillConstraintsComputer
     UsageRequirement ret=null;
     // Class skills
     List<ClassDescription> classes=_classSkills.get(key);
-    if ((classes!=null) && (classes.size()>0))
+    if ((classes!=null) && (!classes.isEmpty()))
     {
       ret=new UsageRequirement();
       for(ClassDescription characterClass : classes)
@@ -222,7 +221,7 @@ public class SkillConstraintsComputer
     for(Item item : items)
     {
       UsageRequirement itemReq=null;
-      //System.out.println("\tItem: "+item);
+      Console.println("\tItem: "+item);
       ItemBinding binding=item.getBinding();
       if (binding==ItemBindings.BIND_ON_ACQUIRE)
       {
@@ -242,7 +241,7 @@ public class SkillConstraintsComputer
     UsageRequirement ret=null;
     for(TraitDescription trait : traits)
     {
-      //System.out.println("\tTrait: "+trait);
+      Console.println("\tTrait: "+trait);
       Integer traitKey=Integer.valueOf(trait.getIdentifier());
       List<RaceDescription> races=_trait2Race.get(traitKey);
       if (races==null)
@@ -253,7 +252,7 @@ public class SkillConstraintsComputer
       {
         ret=new UsageRequirement();
         ret.addAllowedRace(raceDescription);
-        //System.out.println("\t\tRace: "+raceDescription.getRace());
+        Console.println("\t\tRace: "+raceDescription.getKey());
       }
     }
     return ret;
@@ -275,8 +274,7 @@ public class SkillConstraintsComputer
     _itemGrantedSkills=loadItemGrantedSkills();
     _traitSkills=loadTraitSkills();
     _trait2Race=loadRacialTraits();
-    List<SkillDescription> skills=getTravelSkills();
-    //List<SkillDescription> skills=getStandardMountSkills();
+    List<SkillDescription> skills=getTravelSkills(); // or getStandardMountSkills()
     for(SkillDescription skill : skills)
     {
       handleSkill(skill);

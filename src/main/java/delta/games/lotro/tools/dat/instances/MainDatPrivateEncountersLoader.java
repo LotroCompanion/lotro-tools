@@ -86,14 +86,9 @@ public class MainDatPrivateEncountersLoader
     int contentLayerId=((Integer)props.getProperty("PrivateEncounterTemplate_ContentLayer")).intValue();
     ret.setContentLayerId(contentLayerId);
     // Public instances?
-    /*
-    Integer isPublic=(Integer)props.getProperty("PrivateEncounterTemplate_PublicInstance");
-    if ((isPublic!=null) && (isPublic.intValue()==1))
-    {
-      // Assume public instances do use the world layer!
-      ret.addAdditionalContentLayer(0);
-    }
-    */
+    Integer isPublicInt=(Integer)props.getProperty("PrivateEncounterTemplate_PublicInstance");
+    @SuppressWarnings("unused")
+    boolean isPublic=((isPublicInt!=null) && (isPublicInt.intValue()==1));
     // Block references
     List<BlockReference> blocks=new ArrayList<BlockReference>();
     Object[] blocksArray=(Object[])props.getProperty("PrivateEncounterTemplate_ContainedLandBlockArray");
@@ -118,7 +113,30 @@ public class MainDatPrivateEncountersLoader
       }
     }
     // Quests
-    PrivateEncounterQuests quests=ret.getQuests();
+    loadQuests(ret,props);
+    // Maximum number of players
+    Integer maxPlayers=(Integer)props.getProperty("PrivateEncounterTemplate_MaxPlayers");
+    ret.setMaxPlayers(maxPlayers);
+
+    // Skirmish specifics
+    if (skirmishPE!=null)
+    {
+      loadSkirmishSpecifics(skirmishPE,props);
+    }
+    if (!accept(ret))
+    {
+      return null;
+    }
+    // Additional content layers
+    handleAdditionalContentLayers(ret);
+    // Build maps
+    _mapDataBuilder.handlePrivateEncounter(ret,blocks);
+    return ret;
+  }
+
+  private void loadQuests(PrivateEncounter pe, PropertiesSet props)
+  {
+    PrivateEncounterQuests quests=pe.getQuests();
     Integer questId=(Integer)props.getProperty("PrivateEncounterTemplate_InstanceQuest");
     if (questId!=null)
     {
@@ -138,10 +156,7 @@ public class MainDatPrivateEncountersLoader
       {
         int id=((Integer)questToBestowObj).intValue();
         Proxy<QuestDescription> proxy=buildProxy(id);
-        if (proxy!=null)
-        {
-          quests.addQuest(proxy);
-        }
+        quests.addQuest(proxy);
       }
     }
     // Random quests
@@ -173,30 +188,9 @@ public class MainDatPrivateEncountersLoader
       {
         int id=((Integer)questIdObj).intValue();
         Proxy<QuestDescription> proxy=buildProxy(id);
-        if (proxy!=null)
-        {
-          quests.addRandomQuest(proxy);
-        }
+        quests.addRandomQuest(proxy);
       }
     }
-    // Maximum number of players
-    Integer maxPlayers=(Integer)props.getProperty("PrivateEncounterTemplate_MaxPlayers");
-    ret.setMaxPlayers(maxPlayers);
-
-    // Skirmish specifics
-    if (skirmishPE!=null)
-    {
-      loadSkirmishSpecifics(skirmishPE,props);
-    }
-    if (!accept(ret))
-    {
-      return null;
-    }
-    // Additional content layers
-    handleAdditionalContentLayers(ret);
-    // Build maps
-    _mapDataBuilder.handlePrivateEncounter(ret,blocks);
-    return ret;
   }
 
   private Proxy<QuestDescription> buildProxy(int questId)
@@ -317,7 +311,7 @@ public class MainDatPrivateEncountersLoader
     return true;
   }
 
-  private static int[] CL0=
+  private static final int[] PE_THAT_USE_CONTENT_LAYER_0=
   {
     1879185298, // Urugarth
     1879184817, // Drake Wing
@@ -330,7 +324,7 @@ public class MainDatPrivateEncountersLoader
   private void handleAdditionalContentLayers(PrivateEncounter pe)
   {
     int peId=pe.getIdentifier();
-    for(int id : CL0)
+    for(int id : PE_THAT_USE_CONTENT_LAYER_0)
     {
       if (peId==id)
       {

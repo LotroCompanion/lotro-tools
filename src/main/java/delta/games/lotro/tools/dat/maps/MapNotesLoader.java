@@ -101,16 +101,16 @@ public class MapNotesLoader
 
     if (VERBOSE)
     {
-      System.out.println("****** Map note:");
+      Console.println("****** Map note:");
       _markersUtils.log(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
       if (iconId!=0)
       {
-        System.out.println("IconID: "+iconId);
+        Console.println("IconID: "+iconId);
       }
       if (levelCode!=0)
       {
         BitSet levelsSet=BitSetUtils.getBitSetFromFlags(levelCode);
-        System.out.println("Levels: "+levelCode+" => "+BitSetUtils.getStringFromBitSet(levelsSet,_mapLevel," / "));
+        Console.println("Levels: "+levelCode+" => "+BitSetUtils.getStringFromBitSet(levelsSet,_mapLevel," / "));
       }
     }
 
@@ -129,10 +129,19 @@ public class MapNotesLoader
       }
       if (VERBOSE)
       {
-        System.out.println("Link! Target position: "+destPosition);
-        System.out.println("Dest zone: "+destZone);
+        Console.println("Link! Target position: "+destPosition);
+        Console.println("Dest zone: "+destZone);
       }
-      _markersUtils.addLink(position,areaDID,dungeonDID,noteDID,destPosition,destZone,contentLayersArray,text);
+      Zone where=null;
+      if (dungeonDID!=0)
+      {
+        where=ZoneUtils.getZone(dungeonDID);
+      }
+      if (where==null)
+      {
+        where=ZoneUtils.getZone(areaDID);
+      }
+      _markersUtils.addLink(position,where,noteDID,destPosition,destZone,contentLayersArray,text);
     }
     float minRange=BufferUtils.readFloat(bis);
     float maxRange=BufferUtils.readFloat(bis);
@@ -144,15 +153,15 @@ public class MapNotesLoader
     {
       if ((minRange>0) || (maxRange>0))
       {
-        System.out.println("Range: min="+minRange+", max="+maxRange);
+        Console.println("Range: min="+minRange+", max="+maxRange);
       }
       if (discoverableMapNoteIndex!=0)
       {
-        System.out.println("discoverableMapNoteIndex="+discoverableMapNoteIndex);
+        Console.println("discoverableMapNoteIndex="+discoverableMapNoteIndex);
       }
       if (!gameSpecificProps.getPropertyNames().isEmpty())
       {
-        System.out.println("Game specific props: "+gameSpecificProps.dump());
+        Console.println("Game specific props: "+gameSpecificProps.dump());
       }
     }
     if (type!=1)
@@ -195,7 +204,7 @@ public class MapNotesLoader
     loadMapNotes();
     if (VERBOSE)
     {
-      System.out.println(_typesCount);
+      Console.println(_typesCount);
     }
   }
 

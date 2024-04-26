@@ -41,6 +41,8 @@ import delta.games.lotro.utils.Proxy;
  */
 public class QuestsLoader
 {
+  private static final String QUEST_NAME="Quest_Name";
+
   private static final Logger LOGGER=Logger.getLogger(QuestsLoader.class);
 
   private DataFacade _facade;
@@ -96,9 +98,9 @@ public class QuestsLoader
     // ID
     quest.setIdentifier(questID);
     // Name
-    String name=_i18n.getNameStringProperty(properties,"Quest_Name",questID,_processor);
+    String name=_i18n.getNameStringProperty(properties,QUEST_NAME,questID,_processor);
     quest.setName(name);
-    String rawName=_i18n.getStringProperty(properties,"Quest_Name");
+    String rawName=_i18n.getStringProperty(properties,QUEST_NAME);
     quest.setRawName(rawName);
 
     // Description
@@ -334,7 +336,7 @@ public class QuestsLoader
       return false;
     }
     // Name
-    String name=DatUtils.getStringProperty(properties,"Quest_Name");
+    String name=DatUtils.getStringProperty(properties,QUEST_NAME);
     if (name.startsWith("DNT"))
     {
       return false;
