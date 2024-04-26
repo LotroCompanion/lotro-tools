@@ -809,7 +809,8 @@ Effect_Recall_Telepad: eredluin_thorinshall_exit
 Effect_Recall_Travel_Link: 0 (Undef)
   */
     // Location type
-    //Integer locationType=(Integer)effectProps.getProperty("Effect_Recall_Location_Type");
+    @SuppressWarnings("unused")
+    Integer locationType=(Integer)effectProps.getProperty("Effect_Recall_Location_Type");
     // Position
     String telepad=(String)effectProps.getProperty("Effect_Recall_Telepad");
     if ((telepad!=null) && (!telepad.isEmpty()))

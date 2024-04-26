@@ -19,6 +19,8 @@ import delta.games.lotro.maps.data.markers.comparators.MarkerPositionComparator;
  */
 public class MarkerDuplicatesRemover
 {
+  private static final String REPLACE="\tReplace ";
+
   private static final Logger LOGGER=Logger.getLogger(MarkerDuplicatesRemover.class);
 
   private int _removedMarkers=0;
@@ -65,8 +67,11 @@ public class MarkerDuplicatesRemover
     // Sort by position
     Collections.sort(markers,new MarkerPositionComparator());
     Marker firstMarker=markers.get(0);
-    //int did=firstMarker.getDid();
-    //System.out.println("DID="+did+" => "+markers.size());
+    if (LOGGER.isDebugEnabled())
+    {
+      int did=firstMarker.getDid();
+      LOGGER.debug("DID="+did+" => "+markers.size());
+    }
     int nbMarkers=markers.size();
     GeoPoint position=firstMarker.getPosition();
     Marker previous=firstMarker;
@@ -93,8 +98,8 @@ public class MarkerDuplicatesRemover
     String label2=marker2.getLabel();
     if (!label1.equals(label2))
     {
-      //System.out.println("Found same DID and position: \n\t"+marker1+"\n\t"+marker2);
-      //System.out.println("\tLabels differ: "+label1+" / "+label2);
+      LOGGER.debug("Found same DID and position: \n\t"+marker1+"\n\t"+marker2);
+      LOGGER.debug("\tLabels differ: "+label1+" / "+label2);
       resolveLabel(marker1,marker2);
     }
     int category1=marker1.getCategoryCode();
@@ -118,16 +123,16 @@ public class MarkerDuplicatesRemover
     _removedMarkers++;
   }
 
-  private boolean resolveLabel(Marker marker1, Marker marker2)
+  private boolean resolveLabel(Marker aMarker, Marker anotherMarker)
   {
-    boolean ret=resolveLabelOneWay(marker1,marker2);
+    boolean ret=resolveLabelOneWay(aMarker,anotherMarker);
     if (!ret)
     {
-      ret=resolveLabelOneWay(marker2,marker1);
+      ret=resolveLabelOneWay(anotherMarker,aMarker);
     }
     if (!ret)
     {
-      LOGGER.warn("Unresolved label diff: \n\t"+marker1+"\n\t"+marker2);
+      LOGGER.warn("Unresolved label diff: \n\t"+aMarker+"\n\t"+anotherMarker);
     }
     return ret;
   }
@@ -136,14 +141,14 @@ public class MarkerDuplicatesRemover
   {
     if (marker2.getLabel().contains(marker1.getLabel()))
     {
-      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      LOGGER.debug(REPLACE+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }
     int category1=marker1.getCategoryCode();
     if (category1==74)
     {
-      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      LOGGER.debug(REPLACE+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }
@@ -166,26 +171,26 @@ public class MarkerDuplicatesRemover
           newLabel=marker1.getLabel().trim();
         }
       }
-      //System.out.println("\tReplace "+marker1.getLabel()+" and "+marker2.getLabel()+" by "+newLabel);
+      LOGGER.debug(REPLACE+marker1.getLabel()+" and "+marker2.getLabel()+" by "+newLabel);
       marker1.setLabel(newLabel);
       marker2.setLabel(newLabel);
       return true;
     }
     if ((category1==57) && (category2==55))
     {
-      //System.out.println("\tReplace "+marker1.getLabel()+" by "+marker2.getLabel());
+      LOGGER.debug(REPLACE+marker1.getLabel()+" by "+marker2.getLabel());
       marker1.setLabel(marker2.getLabel());
       return true;
     }
     return false;
   }
 
-  private Integer resolveCategory(int category1, int category2)
+  private Integer resolveCategory(int aCategory, int anotherCategory)
   {
-    Integer ret=resolveCategoryOneWay(category1,category2);
+    Integer ret=resolveCategoryOneWay(aCategory,anotherCategory);
     if (ret==null)
     {
-      ret=resolveCategoryOneWay(category2,category1);
+      ret=resolveCategoryOneWay(anotherCategory,aCategory);
     }
     return ret;
   }

@@ -517,7 +517,6 @@ public class LootLoader
       {
         return null;
       }
-      //System.out.println(properties.dump());
       ret=new RelicsList(propertyId);
       Object[] entriesArray=(Object[])properties.getProperty("RunicList_Array");
       for(Object entryObj : entriesArray)

@@ -273,7 +273,8 @@ public class MainDatLoader
     deleteFile(GeneratedFiles.COMBAT_DATA);
     deleteDirectory(GeneratedFiles.ENUMS_DIR);
     // Labels
-    //deleteDirectory(GeneratedFiles.LABELS);
+    // Do not delete the labels directory because it is shared with the geo data loader
+    // deleteDirectory(GeneratedFiles.LABELS)
     // Geo
     deleteFile(GeneratedFiles.LANDMARKS);
     // Dungeons

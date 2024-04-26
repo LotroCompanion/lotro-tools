@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
@@ -393,6 +394,7 @@ public class MainDatItemsLoader
       Legendary2 legendary=(Legendary2)item;
       LegendaryAttrs2 attrs=legendary.getLegendaryAttrs();
       attrs.setSockets(setup);
+      LOGGER.debug("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
     }
     else
     {
@@ -400,7 +402,6 @@ public class MainDatItemsLoader
       EssencesSlotsSetup setup=_socketablesManager.loadEssenceSlotsSetup(essenceSlots);
       item.setEssenceSlots(setup);
     }
-    //System.out.println("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
   }
 
   private boolean isNewLegendaryItem(Object[] essenceSlots)
@@ -480,8 +481,6 @@ public class MainDatItemsLoader
     if (name.contains("Barter Test")) return false;
     if (name.contains("Test of Will")) return true;
     if (name.startsWith("Test ")) return false;
-    //int itemClass=itemClassInt.intValue();
-    //if ((itemClass==230) || (itemClass==231) || (itemClass==232)) return false;
     return true;
   }
 
@@ -530,7 +529,8 @@ public class MainDatItemsLoader
       {
         LOGGER.warn("Legendary item with no main legacy base rank: "+item);
       }
-      //Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
+      @SuppressWarnings("unused")
+      Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
     }
   }
 
@@ -674,7 +674,19 @@ public class MainDatItemsLoader
     Item ret=null;
     if (weaponType!=null)
     {
-      Weapon weapon=(isLegendary?new LegendaryWeapon():(isNewLegendary?new LegendaryWeapon2():new Weapon()));
+      Weapon weapon=null;
+      if (isLegendary)
+      {
+        weapon=new LegendaryWeapon();
+      }
+      else if (isNewLegendary)
+      {
+        weapon=new LegendaryWeapon2();
+      }
+      else
+      {
+        weapon=new Weapon();
+      }
       weapon.setWeaponType(weaponType);
       ret=weapon;
     }
@@ -732,11 +744,13 @@ public class MainDatItemsLoader
 
   private void handleMunging(PropertiesSet properties)
   {
-    //Integer level=(Integer)properties.getProperty("Item_Level");
+    @SuppressWarnings("unused")
+    Integer level=(Integer)properties.getProperty("Item_Level");
     Integer minMungingLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
     Integer maxMungingLevel=(Integer)properties.getProperty("ItemMunging_MaxMungeLevel");
     Integer progressionId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
-    //Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
+    @SuppressWarnings("unused")
+    Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
     if (((minMungingLevel!=null) && (minMungingLevel.intValue()>0))
         || ((maxMungingLevel!=null) && (maxMungingLevel.intValue()>0))
         || (progressionId!=null))
@@ -859,7 +873,7 @@ public class MainDatItemsLoader
     ItemStatistics statistics=new ItemStatistics();
     statistics.showStatistics(items);
     // Save items
-    /*boolean ok=*/ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
+    ItemXMLWriter.writeItemsFile(GeneratedFiles.ITEMS,items);
     // Save legendary data
     LegendaryAttrs2XMLWriter.write(GeneratedFiles.LEGENDARY_ATTRS,legendaryItems);
     // Save socketables
@@ -867,7 +881,7 @@ public class MainDatItemsLoader
     // Save progressions
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS);
     // Stats usage statistics
-    System.out.println("Stats usage statistics (items):");
+    Console.println("Stats usage statistics (items):");
     _statUtils.showStatistics();
     // Save passives
     _passivesLoader.savePassives();

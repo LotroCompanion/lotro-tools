@@ -132,9 +132,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
     byte[] data=_facade.loadData(id);
     if (data!=null)
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      //System.out.println(classDefIndex);
       return (classDefIndex==WStateClass.MOB);
     }
     return false;

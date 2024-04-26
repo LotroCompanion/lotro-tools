@@ -1,10 +1,13 @@
 package delta.games.lotro.tools.dat.items;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
@@ -18,6 +21,8 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
  */
 public class CosmeticLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(CosmeticLoader.class);
+
   private Map<String,List<Item>> _map=new HashMap<String,List<Item>>();
 
   /**
@@ -64,7 +69,10 @@ public class CosmeticLoader
       }
     }
     String appearanceHash=sb.toString();
-    //System.out.println(physObj+" => "+appearanceHash+" => "+item);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug(physObj+" => "+appearanceHash+" => "+item);
+    }
     List<Item> list=_map.get(appearanceHash);
     if (list==null)
     {
@@ -97,18 +105,19 @@ public class CosmeticLoader
 
   /**
    * Dump the loaded data.
+   * @param out Output stream.
    */
-  public void dump()
+  public void dump(PrintStream out)
   {
     List<String> keys=new ArrayList<String>(_map.keySet());
-    System.out.println(_map.size());
+    out.println(_map.size());
     Collections.sort(keys);
     for(String key : keys)
     {
-      System.out.println("Key: "+key);
+      out.println("Key: "+key);
       for(Item item : _map.get(key))
       {
-        System.out.println("\t"+item);
+        out.println("\t"+item);
       }
     }
   }

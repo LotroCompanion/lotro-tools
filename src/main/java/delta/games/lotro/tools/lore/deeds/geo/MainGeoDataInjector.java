@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
@@ -64,7 +65,7 @@ public class MainGeoDataInjector
     AchievableGeoData achievableGeoData=data.getGeoDataForAchievable(achievableId);
     if (achievableGeoData!=null)
     {
-      //System.out.println("Achievable: "+achievable);
+      LOGGER.debug("Achievable: "+achievable);
       List<Objective> objectives=achievable.getObjectives().getObjectives();
       List<Integer> objectiveIndexes=achievableGeoData.getObjectiveIndexes();
       for(Integer objectiveIndex : objectiveIndexes)
@@ -83,7 +84,7 @@ public class MainGeoDataInjector
   private void handleAchievableObjective(AchievableGeoPointsManager pointsMgr, Achievable achievable, Objective objective, AchievableGeoData geoData)
   {
     int objectiveIndex=objective.getIndex();
-    //System.out.println("\tObjective #"+objectiveIndex);
+    LOGGER.debug("\tObjective #"+objectiveIndex);
     List<Integer> conditionIndexes=geoData.getConditionIndexes(objectiveIndex);
     List<ObjectiveCondition> conditions=objective.getConditions();
     for(Integer conditionIndex : conditionIndexes)
@@ -100,7 +101,7 @@ public class MainGeoDataInjector
       {
         continue;
       }
-      //System.out.println("\t\tCondition #"+conditionIndex);
+      LOGGER.debug("\t\tCondition #"+conditionIndex);
       List<AchievableGeoDataItem> items=geoData.getConditionData(objectiveIndex,conditionIndex.intValue());
       for(AchievableGeoDataItem geoItem : items)
       {
@@ -277,14 +278,14 @@ public class MainGeoDataInjector
     boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Updated the deeds file: "+GeneratedFiles.DEEDS);
+      Console.println("Updated the deeds file: "+GeneratedFiles.DEEDS);
     }
     // - quests
     QuestXMLWriter questsWriter=new QuestXMLWriter();
     ok=questsWriter.writeQuests(GeneratedFiles.QUESTS,quests,EncodingNames.UTF_8);
     if (ok)
     {
-      System.out.println("Updated the quests file: "+GeneratedFiles.QUESTS);
+      Console.println("Updated the quests file: "+GeneratedFiles.QUESTS);
     }
   }
 

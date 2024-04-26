@@ -23,9 +23,7 @@ public class DatQuestDeedsUtils
     byte[] data=facade.loadData(id);
     if (data!=null)
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-      //System.out.println(classDefIndex);
       return (classDefIndex==WStateClass.ACCOMPLISHMENT);
     }
     return false;

@@ -185,7 +185,15 @@ Mount_SkillToGrantRaceArray:
         {
           Long reputationGain=(Long)props.getProperty("Reputation_ReputationGain");
           Long reputationLoss=(Long)props.getProperty("Reputation_ReputationLoss");
-          int value=(reputationGain!=null)?reputationGain.intValue():((reputationLoss!=null)?reputationLoss.intValue():0);
+          int value=0;
+          if (reputationGain!=null)
+          {
+            value=reputationGain.intValue();
+          }
+          else if (reputationLoss!=null)
+          {
+            value=reputationLoss.intValue();
+          }
           ItemReputation reputation=new ItemReputation(faction,value);
           Item.addDetail(item,reputation);
         }
@@ -238,7 +246,6 @@ EffectGenerator_UsageEffectList:
   private void handleEffectDataList(Item item, PropertiesSet effectProps)
   {
     ArrayPropertyValue dataListValue=(ArrayPropertyValue)effectProps.getPropertyValueByName("EffectGenerator_EffectDataList");
-    //Integer effectID=(Integer)effectProps.getProperty("EffectGenerator_EffectID");
     if (dataListValue!=null)
     {
       for(PropertyValue dataListEntry : dataListValue.getValues())
@@ -301,31 +308,17 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
             ((traitToGrant!=null) && (traitToGrant.intValue()!=0)) ||
             ((grantNRanks!=null) && (grantNRanks.intValue()!=0)))
         {
-          //System.out.println("Item : "+item);
           if ((virtueXPAmount!=null) && (virtueXPAmount.intValue()!=0))
           {
             VirtueXP virtueXP=new VirtueXP(virtueXPAmount.intValue());
             Item.addDetail(item,virtueXP);
           }
-          /*
-          if ((upToRank!=null) && (upToRank.intValue()!=0))
-          {
-            System.out.println("\tUp to rank="+upToRank);
-          }
-          if ((traitToGrant!=null) && (traitToGrant.intValue()!=0))
-          {
-            System.out.println("\tTrait to grant="+traitToGrant);
-          }
-          if ((grantNRanks!=null) && (grantNRanks.intValue()!=0))
-          {
-            System.out.println("\tGrant N ranks="+grantNRanks);
-          }
-          */
+          // TODO Handle upToRank, traitToGrant and grantNRanks
         }
       }
       else
       {
-        System.out.println("Unmanaged grant entry: "+grantEntryPropDef);
+        LOGGER.warn("Unmanaged grant entry: "+grantEntryPropDef);
       }
     }
   }

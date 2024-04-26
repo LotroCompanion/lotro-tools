@@ -100,10 +100,6 @@ public class MainItemsTableBuilder
 
   private void doIt()
   {
-    /*
-    Item item=ItemsManager.getInstance().getItem(1879444233);
-    useItem(item);
-    */
     for(Item item : ItemsManager.getInstance().getAllItems())
     {
       handleItem(item);

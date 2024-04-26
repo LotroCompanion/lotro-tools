@@ -615,10 +615,6 @@ public class DatRewardsLoader
           LOGGER.warn("Unmanaged challenge level property: "+challengeLevelOverrideProperty);
         }
       }
-      else
-      {
-        //LOGGER.warn("No challenge level property!");
-      }
     }
     /*
     Quest_ChallengeLevel: 100

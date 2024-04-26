@@ -57,8 +57,6 @@ public class MainDatAllegiancesLoader
     }
     AllegianceDescription ret=new AllegianceDescription();
     ret.setIdentifier(allegianceID);
-    //System.out.println("************* "+allegianceID+" *****************");
-    //System.out.println(properties.dump());
     // Name
     String name=_i18n.getNameStringProperty(properties,"Allegiance_Name",allegianceID,0);
     ret.setName(name);
@@ -122,7 +120,6 @@ public class MainDatAllegiancesLoader
   {
     // Load
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"AllegianceControl");
-    //System.out.println(props.dump());
 
     AllegiancesManager mgr=new AllegiancesManager();
     Object[] allegianceIds=(Object[])props.getProperty("Allegiance_Type_Array");
@@ -140,14 +137,24 @@ public class MainDatAllegiancesLoader
       }
     }
     // Load curves
-    int[] curveIDs={1879353332,1879353333,1879353334,1879353335,1879478784};
-    //Object[] curveIDs=(Object[])props.getProperty("Allegiance_Advancement_Progressions_Array");
-    //for(Object curveIDObj : curveIDs)
-    for(int curveID : curveIDs)
+    // - legacy curves
     {
-      //int curveID=((Integer)curveIDObj).intValue();
-      Points2LevelCurve curve=loadCurve(curveID);
-      mgr.getCurvesManager().addCurve(curve);
+      int[] curveIDs={1879353332,1879353333,1879353334,1879353335,1879478784};
+      for(int curveID : curveIDs)
+      {
+        Points2LevelCurve curve=loadCurve(curveID);
+        mgr.getCurvesManager().addCurve(curve);
+      }
+    }
+    // - current curves
+    {
+      Object[] curveIDs=(Object[])props.getProperty("Allegiance_Advancement_Progressions_Array");
+      for(Object curveIDObj : curveIDs)
+      {
+        int curveID=((Integer)curveIDObj).intValue();
+        Points2LevelCurve curve=loadCurve(curveID);
+        mgr.getCurvesManager().addCurve(curve);
+      }
     }
     // Save
     boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,mgr);

@@ -48,7 +48,6 @@ public class ItemsSetEffectsLoader
     for(Object activeCountDataEntry : activeCountDataList)
     {
       PropertiesSet entryProps=(PropertiesSet)activeCountDataEntry;
-      //int count=((Integer)entryProps.getProperty("Set_ActiveCount")).intValue();
       Object[] effectsList=(Object[])entryProps.getProperty("Set_EffectDataList");
       if (effectsList==null)
       {

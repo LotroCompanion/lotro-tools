@@ -78,8 +78,6 @@ public class ConsumablesLoader
     EffectGenerator[] effectGenerators=effectsMgr.getEffects(Type.ON_USE);
     if (effectGenerators.length>0)
     {
-      // Look for a spellcraft property
-      //_spellcraftProperty=loadSpellcraftProperty(properties);
       for(EffectGenerator effectGenerator : effectGenerators)
       {
         handleEffectGenerators(item,effectGenerator,null);
@@ -108,7 +106,6 @@ public class ConsumablesLoader
     String category=item.getSubCategory();
     if ("Quest Item".equals(category)) return false;
     if ("Device".equals(category)) return false;
-    //if ("Festival Items".equals(category)) return false;
     return true;
   }
 

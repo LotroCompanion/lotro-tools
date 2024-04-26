@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.travels;
 
+import java.io.PrintStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -52,13 +53,7 @@ public class MainDatTravelsLoader
     TravelNode node=new TravelNode(indexDataId);
     long dbPropertiesId=indexDataId+DATConstants.DBPROPERTIES_OFFSET;
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
-    if (properties!=null)
-    {
-      //System.out.println("************* NODE "+indexDataId+" *****************");
-      //System.out.println(properties.dump());
-      //propNames.addAll(properties.getPropertyNames());
-    }
-    else
+    if (properties==null)
     {
       LOGGER.warn("Could not handle travel node ID="+indexDataId);
       return null;
@@ -105,8 +100,6 @@ public class MainDatTravelsLoader
     if (destination==null)
     {
       PropertiesSet properties=_facade.loadProperties(locationId+DATConstants.DBPROPERTIES_OFFSET);
-      //System.out.println("************* "+locationId+" *****************");
-      //System.out.println(properties.dump());
       // Name
       String name=DatUtils.getStringProperty(properties,"TravelDisplayName");
       if (name==null)
@@ -126,8 +119,6 @@ public class MainDatTravelsLoader
   private TravelRoute loadTravelRoute(int travelRouteId)
   {
     PropertiesSet properties=_facade.loadProperties(travelRouteId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println("************* "+travelRouteId+" *****************");
-    //System.out.println(properties.dump());
     /*
 ************* 1879103917 *****************
 Name:
@@ -201,14 +192,12 @@ Usage_RequiresSubscriberOrUnsub: 1
   private String loadTravelRouteAction(int routeActionId)
   {
     PropertiesSet properties=_facade.loadProperties(routeActionId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println("************* "+routeActionId+" *****************");
-    //System.out.println(properties.dump());
     String ret=(String)properties.getProperty("TravelSegment_HeadName");
     if (ret==null)
     {
-      //Float hopDelay=(Float)properties.getProperty("TravelHop_Delay");
+      @SuppressWarnings("unused")
+      Float hopDelay=(Float)properties.getProperty("TravelHop_Delay");
       String padLocation=(String)properties.getProperty("TravelPad_Location");
-      //System.out.println("NULL: "+hopDelay+" - "+padLocation);
       if (padLocation!=null)
       {
         ret=padLocation;
@@ -237,44 +226,43 @@ Usage_RequiresSubscriberOrUnsub: 1
       {
         int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        //System.out.println(classDefIndex);
         if (classDefIndex==1508)
         {
           load(did);
         }
       }
     }
-    dumpTravels();
+    dumpTravels(System.out);
   }
 
-  private void dumpTravels()
+  private void dumpTravels(PrintStream out)
   {
     List<TravelNode> nodes=_travelsMgr.getNodes();
     for(TravelNode node : nodes)
     {
-      System.out.println("Node: ID="+node.getIdentifier()+", name="+node.getName());
+      out.println("Node: ID="+node.getIdentifier()+", name="+node.getName());
       for(TravelDestination location : node.getLocations())
       {
-        System.out.println("\tAssociated location: ID="+location.getIdentifier()+", name="+location.getName());
+        out.println("\tAssociated location: ID="+location.getIdentifier()+", name="+location.getName());
       }
       List<TravelRouteInstance> routeInstances=node.getRoutes();
       for(TravelRouteInstance routeInstance : routeInstances)
       {
         TravelRoute route=routeInstance.getRoute();
         Money cost=routeInstance.getCost();
-        System.out.println("\tRoute: ID="+route.getIdentifier()+", name="+route.getName());
-        System.out.println("\t\tCost: "+cost);
-        System.out.println("\t\tMode: "+route.getMode());
-        System.out.println("\t\t"+route.getDestination());
+        out.println("\tRoute: ID="+route.getIdentifier()+", name="+route.getName());
+        out.println("\t\tCost: "+cost);
+        out.println("\t\tMode: "+route.getMode());
+        out.println("\t\t"+route.getDestination());
         UsageRequirement usageRequirement=route.getUsageRequirement();
         if (!usageRequirement.isEmpty())
         {
-          System.out.println("\t\tRequirements: "+usageRequirement);
+          out.println("\t\tRequirements: "+usageRequirement);
         }
         AbstractAchievableRequirement questRequirements=route.getQuestRequirement();
         if (questRequirements!=null)
         {
-          System.out.println("\t\tQuest requirements: "+questRequirements);
+          out.println("\t\tQuest requirements: "+questRequirements);
         }
       }
     }

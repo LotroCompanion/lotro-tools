@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.deeds;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,19 +23,20 @@ import delta.games.lotro.lore.worldEvents.WorldEventsManager;
 import delta.games.lotro.utils.Proxy;
 
 /**
- * Assess usage of world events in deeds.
+ * Assess usage of world events in achievables (deeds and quests).
  * @author DAM
  */
-public class MainAssessWorldEventUsageInDeeds
+public class MainAssessWorldEventUsageInAchievables
 {
   private Map<Integer,IntegerHolder> _weCounters=new HashMap<Integer,IntegerHolder>();
   private Map<Integer,IntegerHolder> _complexityCounters=new HashMap<Integer,IntegerHolder>();
   private int _nbCompound;
   private int _nbAnd;
+  private PrintStream _out=System.out;
 
   private void doIt()
   {
-    //doQuests();
+    doQuests();
     doDeeds();
     showResults();
   }
@@ -119,20 +121,20 @@ public class MainAssessWorldEventUsageInDeeds
   void showComplexity()
   {
     IntegerHolder nbComplexConditions=_complexityCounters.get(Integer.valueOf(-1));
-    System.out.println("Nb Complex condition: "+nbComplexConditions);
+    _out.println("Nb Complex condition: "+nbComplexConditions);
     IntegerHolder nbNoConditions=_complexityCounters.get(Integer.valueOf(0));
-    System.out.println("Nb NO condition: "+nbNoConditions);
+    _out.println("Nb NO condition: "+nbNoConditions);
     IntegerHolder nbSimpleConditions=_complexityCounters.get(Integer.valueOf(1));
-    System.out.println("Nb simple condition: "+nbSimpleConditions);
+    _out.println("Nb simple condition: "+nbSimpleConditions);
     for(int i=2;i<20;i++)
     {
       IntegerHolder nb=_complexityCounters.get(Integer.valueOf(i));
       if (nb!=null)
       {
-        System.out.println(i+" conditions: "+nb);
+        _out.println(i+" conditions: "+nb);
       }
     }
-    System.out.println("Nb compound: "+_nbCompound+", nb AND: "+_nbAnd+", nb OR: "+(_nbCompound-_nbAnd));
+    _out.println("Nb compound: "+_nbCompound+", nb AND: "+_nbAnd+", nb OR: "+(_nbCompound-_nbAnd));
   }
 
   void showWorldEventsUsage()
@@ -153,7 +155,7 @@ public class MainAssessWorldEventUsageInDeeds
     {
       int id=entry.getKey().intValue();
       WorldEvent worldEvent=worldEventsMgr.getWorldEvent(id);
-      System.out.println(worldEvent+" => "+entry.getValue());
+      _out.println(worldEvent+" => "+entry.getValue());
     }
   }
 
@@ -220,20 +222,20 @@ public class MainAssessWorldEventUsageInDeeds
 
   private void show(Achievable achievable)
   {
-    System.out.println("Achievable: "+achievable.getName());
+    _out.println("Achievable: "+achievable.getName());
     AbstractWorldEventCondition condition=achievable.getWorldEventsRequirement();
     if (condition instanceof SimpleWorldEventCondition)
     {
-      System.out.println("\t"+condition);
+      _out.println("\t"+condition);
     }
     else if (condition instanceof CompoundWorldEventCondition)
     {
       CompoundWorldEventCondition compoundCondition=(CompoundWorldEventCondition)condition;
-      System.out.println("Operator: "+compoundCondition.getOperator());
+      _out.println("Operator: "+compoundCondition.getOperator());
       List<AbstractWorldEventCondition> childConditions=compoundCondition.getItems();
       for(AbstractWorldEventCondition childCondition : childConditions)
       {
-        System.out.println("\t"+childCondition);
+        _out.println("\t"+childCondition);
       }
     }
   }
@@ -244,6 +246,6 @@ public class MainAssessWorldEventUsageInDeeds
    */
   public static void main(String[] args)
   {
-    new MainAssessWorldEventUsageInDeeds().doIt();
+    new MainAssessWorldEventUsageInAchievables().doIt();
   }
 }

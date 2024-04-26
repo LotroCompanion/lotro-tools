@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.utils;
+package delta.games.lotro.tools.dat;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

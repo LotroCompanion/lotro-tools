@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.instances;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class InstanceChestsFinder
             _mapByContainer.put(containerId,pes);
           }
           pes.add(pe);
-          // Register in pes map
+          // Register in PEs map
           items.add(containerId);
           pes.add(pe);
           break;
@@ -94,11 +95,11 @@ public class InstanceChestsFinder
   private void showResults()
   {
     //showByContainer();
-    showByInstance();
+    showByInstance(System.out);
   }
 
   @SuppressWarnings("unused")
-  private void showByContainer()
+  private void showByContainer(PrintStream out)
   {
     ItemsManager itemsMgr=ItemsManager.getInstance();
     List<Integer> containerIds=new ArrayList<Integer>(_mapByContainer.keySet());
@@ -106,17 +107,17 @@ public class InstanceChestsFinder
     for(Integer containerId : containerIds)
     {
       Item item=itemsMgr.getItem(containerId.intValue());
-      System.out.println("Container: "+item+" was found in:");
+      out.println("Container: "+item+" was found in:");
       List<PrivateEncounter> pes=new ArrayList<PrivateEncounter>(_mapByContainer.get(containerId));
       Collections.sort(pes,new NamedComparator());
       for(PrivateEncounter pe : pes)
       {
-        System.out.println("\t"+pe.getName());
+        out.println("\t"+pe.getName());
       }
     }
   }
 
-  private void showByInstance()
+  private void showByInstance(PrintStream out)
   {
     ItemsManager itemsMgr=ItemsManager.getInstance();
     List<Integer> peIds=new ArrayList<Integer>(_mapByPe.keySet());
@@ -130,10 +131,10 @@ public class InstanceChestsFinder
         items.add(itemsMgr.getItem(itemId.intValue()));
       }
       Collections.sort(items,new ItemNameComparator());
-      System.out.println("Private encounter "+pe.getName()+" has chests:");
+      out.println("Private encounter "+pe.getName()+" has chests:");
       for(Item item : items)
       {
-        System.out.println("\t"+item);
+        out.println("\t"+item);
       }
     }
   }

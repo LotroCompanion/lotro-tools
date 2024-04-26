@@ -37,7 +37,8 @@ public class CosmeticPetLoader
   public void loadPetData(PropertiesSet properties, CosmeticPetDescription ret)
   {
     // Hidden?
-    //int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
+    @SuppressWarnings("unused")
+    int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
     // Source description (null for war-steeds)
     String sourceDescription=_i18n.getStringProperty(properties,"Collection_Piece_SourceDesc");
     ret.setSourceDescription(sourceDescription);
@@ -72,12 +73,13 @@ public class CosmeticPetLoader
   private void handleSourceId(CosmeticPetDescription pet, int sourceId)
   {
     PropertiesSet sourceProps=_facade.loadProperties(sourceId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(sourceProps.dump());
 
-    //CosmeticEntity_CosmeticEntity: 1879305757
-    //CosmeticEntity_Distance: 3.0
-    //CosmeticEntity_Following_Speed: 10.0
-    //CosmeticEntity_MovementType: 2 (Following)
+    /*
+     * CosmeticEntity_CosmeticEntity: 1879305757
+     * CosmeticEntity_Distance: 3.0
+     * CosmeticEntity_Following_Speed: 10.0
+     * CosmeticEntity_MovementType: 2 (Following)
+     */
     // Initial Name
     String initialName=_i18n.getStringProperty(sourceProps,"CosmeticEntity_Name_Initial",I18nUtils.OPTION_REMOVE_MARKS);
     pet.setInitialName(initialName);

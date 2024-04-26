@@ -65,7 +65,6 @@ public class MainDatPrivateEncountersLoader
     {
       return null;
     }
-    //System.out.println(props.dump());
     PrivateEncounter ret=null;
     SkirmishPrivateEncounter skirmishPE=null;
     if (isSkirmish)

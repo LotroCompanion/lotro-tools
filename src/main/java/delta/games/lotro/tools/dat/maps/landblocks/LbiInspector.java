@@ -74,7 +74,6 @@ public class LbiInspector
     for(EntityDescriptor entity : entities)
     {
       long entityIid=entity.getIid();
-      //System.out.println("Entity: "+String.format("%08X",Long.valueOf(entityIid)));
       Weenie weenie=lbi.getWeenieByIid(entityIid);
       if (weenie!=null)
       {
@@ -82,7 +81,7 @@ public class LbiInspector
       }
       else
       {
-        LOGGER.warn("No weenie for entity: "+entityIid);
+        LOGGER.warn("No weenie for entity: "+String.format("%08X",Long.valueOf(entityIid)));
       }
     }
     // Conclusion: each entity has an associated weenie
@@ -95,7 +94,6 @@ public class LbiInspector
     List<LbiLink> links=lbi.getLinks();
     for(LbiLink link : links)
     {
-      //long linkIid=link.getIid();
       // From
       long fromIid=link.getFromIid();
       String from=findSource(lbi,fromIid);
@@ -143,7 +141,6 @@ public class LbiInspector
     for(Weenie weenie : weenies)
     {
       long iid=weenie.getIid();
-      //System.out.println("Entity: "+String.format("%08X",Long.valueOf(entityIid)));
       EntityDescriptor entity=lbi.getEntityByIid(iid);
       if (entity==null)
       {

@@ -53,7 +53,6 @@ public class MainDatPaperItemsLoader
   private PaperItem handleItem(PropertiesSet itemProps, boolean free)
   {
     Integer itemId=(Integer)itemProps.getProperty("PaperItemControl_Item");
-    //System.out.println("Paper item: "+itemId+", free="+free);
     // Inspect
     PaperItem paperItem=inspectItem(itemId.intValue());
     if (paperItem==null)
@@ -69,15 +68,9 @@ public class MainDatPaperItemsLoader
       Integer capDefault=(Integer)baseCapProps.getProperty("PaperItemControl_CapDefault");
       if (capDefault!=null)
       {
-        //System.out.println("Cap: "+capDefault);
-        /*
-        Integer hardCap=(Integer)itemProps.getProperty("PaperItemControl_TreatBaseCapAsHardCap");
-        if ((hardCap!=null) && (hardCap.intValue()!=0))
-        {
-          System.out.println("Hard cap!");
-        }
-        */
         paperItem.setCap(capDefault);
+        @SuppressWarnings("unused")
+        Integer hardCap=(Integer)itemProps.getProperty("PaperItemControl_TreatBaseCapAsHardCap");
       }
     }
     return paperItem;
@@ -114,7 +107,12 @@ public class MainDatPaperItemsLoader
       accountShared=true;
     }
     ret.setShared(accountShared);
-    //System.out.println("ID="+itemId+", name="+name+", class="+itemClassName+", category="+paperItemCategory+", iconID="+smallIconId+", shared="+accountShared);
+    if (LOGGER.isDebugEnabled())
+    {
+      String name=ret.getName();
+      String itemClassName=ret.getItemClass().getLabel();
+      LOGGER.debug("ID="+itemId+", name="+name+", class="+itemClassName+", category="+paperItemCategory+", iconID="+smallIconId+", shared="+accountShared);
+    }
     return ret;
   }
 
@@ -134,7 +132,10 @@ public class MainDatPaperItemsLoader
       {
         PropertiesSet itemProps=(PropertiesSet)arrayItem;
         PaperItem paperItem=handleItem(itemProps,false);
-        paperItems.put(Integer.valueOf(paperItem.getIdentifier()),paperItem);
+        if (paperItem!=null)
+        {
+          paperItems.put(Integer.valueOf(paperItem.getIdentifier()),paperItem);
+        }
       }
     }
     // "Free" paper items

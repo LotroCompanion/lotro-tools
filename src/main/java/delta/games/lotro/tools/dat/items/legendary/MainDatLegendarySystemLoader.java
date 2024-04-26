@@ -110,7 +110,6 @@ public class MainDatLegendarySystemLoader
   private void handleItemLevelInfo(int itemLevelInfoId, QualityBasedData qualityData)
   {
     PropertiesSet itemLevelInfoProps=_facade.loadProperties(itemLevelInfoId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(itemLevelInfoProps.dump());
     Object[] levelInfoTable=(Object[])itemLevelInfoProps.getProperty("ItemAdvancement_ItemLevelInfo_Array");
     for(Object levelInfoObj : levelInfoTable)
     {
@@ -137,7 +136,6 @@ public class MainDatLegendarySystemLoader
   private void handleLegendaryPointInfo(int legendaryPointInfoId, QualityBasedData qualityData)
   {
     PropertiesSet legendaryPointInfoProps=_facade.loadProperties(legendaryPointInfoId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(legendaryPointInfoProps.dump());
     Object[] legendaryPointSlotInfoTable=(Object[])legendaryPointInfoProps.getProperty("ItemAdvancement_LegendaryPointSlotInfo_Array");
     for(Object legendaryPointSlotInfoObj : legendaryPointSlotInfoTable)
     {

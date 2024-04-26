@@ -87,7 +87,6 @@ public class MainDatAchievablesLoader
     _deedsLoader.loadClassRequirements();
     // Resolve proxies
     resolveProxies();
-    //System.out.println(DatObjectivesLoader._flagsToAchievables);
 
     List<DeedDescription> deeds=_deedsLoader.postProcess();
     // - achievables geo data injection
@@ -104,10 +103,7 @@ public class MainDatAchievablesLoader
 
   private void doScan()
   {
-    //int[] IDS=new int[]{1879277326,1879139074};
-    //for(int id : IDS)
     for(int id=0x70000000;id<=0x77FFFFFF;id++)
-    //for(int id=DEBUG_ID;id<=DEBUG_ID;id++)
     {
       boolean useIt=DatQuestDeedsUtils.isQuestOrDeedId(_facade,id);
       if (useIt)
@@ -139,26 +135,24 @@ public class MainDatAchievablesLoader
   private void doIndex()
   {
     PropertiesSet deedsDirectory=_facade.loadProperties(0x79000255);
-    //System.out.println(deedsDirectory.dump());
     Object[] list=(Object[])deedsDirectory.getProperty("Accomplishment_List");
-    for(Object obj : list)
+    for(Object entry : list)
     {
-      if (obj instanceof Integer)
+      if (entry instanceof Integer)
       {
-        load(((Integer)obj).intValue());
+        // Accomplishment_File
+        load(((Integer)entry).intValue());
       }
-      else if (obj instanceof Object[])
+      else if (entry instanceof Object[])
       {
-        Object[] objs=(Object[])obj;
-        for(Object obj2 : objs)
+        // Accomplishment_Set
+        Object[] childEntries=(Object[])entry;
+        for(Object childEntry : childEntries)
         {
-          if (obj2 instanceof Integer)
+          if (childEntry instanceof Integer)
           {
-            load(((Integer)obj2).intValue());
-          }
-          else
-          {
-            System.out.println(obj.getClass());
+            // Accomplishment_File
+            load(((Integer)childEntry).intValue());
           }
         }
       }

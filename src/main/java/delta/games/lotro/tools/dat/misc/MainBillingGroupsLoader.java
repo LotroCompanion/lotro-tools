@@ -113,7 +113,7 @@ public class MainBillingGroupsLoader
         titles.add(title);
       }
     }
-    if (titles.size()>0)
+    if (!titles.isEmpty())
     {
       BitSet billingGroups=(BitSet)entryProps.getProperty("Version_TitleBestow_BillingGroups");
       LotroEnum<BillingGroup> billingGroupEnum=LotroEnumsRegistry.getInstance().get(BillingGroup.class);
@@ -150,7 +150,7 @@ public class MainBillingGroupsLoader
       if (groupDescription!=null)
       {
         billingGroupsDescriptions.add(groupDescription);
-        //showGroup(groupDescription);
+        showGroup(groupDescription);
       }
     }
     // Save groups
@@ -166,12 +166,12 @@ public class MainBillingGroupsLoader
   void showGroup(BillingGroupDescription groupDescription)
   {
     List<TitleDescription> titles=groupDescription.getAccountTitles();
-    if (titles.size()>0)
+    if (!titles.isEmpty())
     {
-      System.out.println("Group: "+groupDescription.getName());
+      LOGGER.info("Group: "+groupDescription.getName());
       for(TitleDescription title : titles)
       {
-        System.out.println("\t"+title.getIdentifier()+" - "+title.getName());
+        LOGGER.info("\t"+title.getIdentifier()+" - "+title.getName());
       }
     }
   }

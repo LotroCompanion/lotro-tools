@@ -48,6 +48,7 @@ public class GenericItemEffectsLoader
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"InventoryControl");
     // Equipper effects
     handleEquipperEffects(props,allEffects);
+    // TODO Handle target effects
     //handleTargetEffects(props,allEffects);
     // Save
     save(allEffects);
@@ -79,7 +80,6 @@ public class GenericItemEffectsLoader
     int index=bitset.nextSetBit(0);
     LotroEnum<EquipmentCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
     EquipmentCategory category=categoryEnum.getEntry(index+1);
-    //System.out.println("Category: "+category);
     GenericItemEffects ret=new GenericItemEffects(category);
     // Effects
     Object[] effectsList=(Object[])props.getProperty("EffectGenerator_EquipperEffectList");
@@ -119,7 +119,6 @@ public class GenericItemEffectsLoader
     int index=bitset.nextSetBit(0);
     LotroEnum<EquipmentCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(EquipmentCategory.class);
     EquipmentCategory category=categoryEnum.getEntry(index+1);
-    //System.out.println("Category: "+category);
     GenericItemEffects ret=new GenericItemEffects(category);
     // Effects
     Object[] effectsList=(Object[])props.getProperty("EffectGenerator_TargetEffectList");

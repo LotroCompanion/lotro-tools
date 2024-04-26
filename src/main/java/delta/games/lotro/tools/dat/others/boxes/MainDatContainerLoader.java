@@ -60,7 +60,7 @@ public class MainDatContainerLoader
    * @param item Item to use.
    * @return the loaded container.
    */
-  public Container load(Item item)
+  private Container load(Item item)
   {
     int itemID=item.getIdentifier();
     PropertiesSet properties=_facade.loadProperties(itemID+DATConstants.DBPROPERTIES_OFFSET);
@@ -70,7 +70,6 @@ public class MainDatContainerLoader
       return null;
     }
 
-    //System.out.println(properties.dump());
     ItemsContainer itemsContainer=new ItemsContainer(item);
     LootTables lootTables=itemsContainer.getLootTables();
     // Filtered trophy table
@@ -95,23 +94,13 @@ public class MainDatContainerLoader
       lootTables.set(LootType.TROPHY_LIST,trophyList);
     }
 
-    //handleLootTables(properties,"SoftLock_",itemsContainer.getLootTables());
+    //TODO soft locks: handleLootTables(properties,"SoftLock_",itemsContainer.getLootTables())
     handleLootTables(properties,"",itemsContainer.getLootTables());
     // Preview
-    /*
-    Integer preview=(Integer)properties.getProperty("PackageItem_IsPreviewable");
-    if ((preview!=null) && (preview.intValue()!=0))
+    if (LOGGER.isDebugEnabled())
     {
-      System.out.println("Preview:");
-      Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
-      for(Object previewIdObj : previewList)
-      {
-        Integer previewId=(Integer)previewIdObj;
-        Item item=ItemsManager.getInstance().getItem(previewId.intValue());
-        System.out.println("\t"+item);
-      }
+      handlePreview(properties);
     }
-    */
     // Effects (for scrolls)
     TreasureList treasureList=handleEffects(properties);
     if (treasureList!=null)
@@ -123,37 +112,7 @@ public class MainDatContainerLoader
     if (lootTables.hasTables())
     {
       ret=itemsContainer;
-      Integer previewable=(Integer)properties.getProperty("PackageItem_IsPreviewable");
-      if ((previewable!=null) && (previewable.intValue()==1))
-      {
-        Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
-        if ((previewList==null) || (previewList.length==0))
-        {
-          LOGGER.warn("No or empty preview list for "+item);
-        }
-      }
-      int action=((Integer)properties.getProperty("Usage_Action")).intValue();
-      if (action==1879303890)
-      {
-        itemsContainer.setOpenPolicy(ContainerOpenPolicy.USER_SELECTION);
-      }
-      //Integer weenieType=(Integer)properties.getProperty("WeenieType");
-      Integer bind2Acc=(Integer)properties.getProperty("PackageItem_BindAllItemsToAccount");
-      if ((bind2Acc!=null) && (bind2Acc.intValue()==1))
-      {
-        itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_ACCOUNT);
-      }
-      Integer bind2Char=(Integer)properties.getProperty("PackageItem_BindAllItemsToCharacter");
-      if ((bind2Char!=null) && (bind2Char.intValue()==1))
-      {
-        itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_CHARACTER);
-      }
-      Integer playerForMunging=(Integer)properties.getProperty("PackageItem_UsePlayerAsContainerForMunging");
-      if ((playerForMunging!=null) && (playerForMunging.intValue()==1))
-      {
-        itemsContainer.setUseCharacterForMunging(true);
-      }
-      //System.out.println(item+"\t"+action+"\t"+weenieType+"\t"+bind2Acc+"\t"+bind2Char+"\t"+previewable+"\t"+playerForMunging);
+      analyzeContainer(properties,item,itemsContainer);
     }
 
     // Relics?
@@ -166,19 +125,73 @@ public class MainDatContainerLoader
       }
       ret=relicsContainer;
     }
-     /*
+    return ret;
+  }
+
+  private void analyzeContainer(PropertiesSet properties, Item item, ItemsContainer itemsContainer)
+  {
+    Integer previewable=(Integer)properties.getProperty("PackageItem_IsPreviewable");
+    if ((previewable!=null) && (previewable.intValue()==1))
+    {
+      Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
+      if ((previewList==null) || (previewList.length==0))
+      {
+        LOGGER.warn("No or empty preview list for "+item);
+      }
+    }
+    int action=((Integer)properties.getProperty("Usage_Action")).intValue();
+    if (action==1879303890)
+    {
+      itemsContainer.setOpenPolicy(ContainerOpenPolicy.USER_SELECTION);
+    }
+    Integer weenieType=(Integer)properties.getProperty("WeenieType");
+    Integer bind2Acc=(Integer)properties.getProperty("PackageItem_BindAllItemsToAccount");
+    if ((bind2Acc!=null) && (bind2Acc.intValue()==1))
+    {
+      itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_ACCOUNT);
+    }
+    Integer bind2Char=(Integer)properties.getProperty("PackageItem_BindAllItemsToCharacter");
+    if ((bind2Char!=null) && (bind2Char.intValue()==1))
+    {
+      itemsContainer.setBindingPolicy(ContainerBindingPolicy.BIND_ON_CHARACTER);
+    }
+    Integer playerForMunging=(Integer)properties.getProperty("PackageItem_UsePlayerAsContainerForMunging");
+    if ((playerForMunging!=null) && (playerForMunging.intValue()==1))
+    {
+      itemsContainer.setUseCharacterForMunging(true);
+    }
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug(item+"\t"+action+"\t"+weenieType+"\t"+bind2Acc+"\t"+bind2Char+"\t"+previewable+"\t"+playerForMunging);
+    }
+  }
+
+  void handlePreview(PropertiesSet properties)
+  {
+    /*
 PackageItem_IsPreviewable: 0
 PackageItem_BindAllItemsToAccount: 1
 PackageItem_UsePlayerAsContainerForMunging: 1
 
 If PackageItem_IsPreviewable: 1
 => PackageItem_PreviewList:
-  #1: 1879259202
-  #2: 1879259205
-  #3: 1879259200
-  #4: 1879188748
-     */
-    return ret;
+ #1: 1879259202
+ #2: 1879259205
+ #3: 1879259200
+ #4: 1879188748
+    */
+    Integer preview=(Integer)properties.getProperty("PackageItem_IsPreviewable");
+    if ((preview!=null) && (preview.intValue()!=0))
+    {
+      LOGGER.debug("Preview:");
+      Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
+      for(Object previewIdObj : previewList)
+      {
+        Integer previewId=(Integer)previewIdObj;
+        Item item=ItemsManager.getInstance().getItem(previewId.intValue());
+        LOGGER.debug("\t"+item);
+      }
+    }
   }
 
   private void handleLootTables(PropertiesSet properties, String prefix, LootTables lootTables)
@@ -296,7 +309,6 @@ If PackageItem_IsPreviewable: 1
     if (runicLootListId!=null)
     {
       RelicsList list=_lootLoader.getRelicsList(runicLootListId.intValue());
-      //System.out.println(list);
       ret=new RelicsContainer(item);
       ret.setRelicsList(list);
     }
@@ -324,17 +336,12 @@ If PackageItem_IsPreviewable: 1
     _instancesLootLoader.writeData();
     // Test samples:
     /*
-    // Battle Gift Box
-    load(1879303552);
-    // Cosmetic Gift Box
-    load(1879303553);
-    // Ancient Riddermark Scroll Case III
-    load(1879265139);
-    // Coffer of Adventurer's Armour - Heavy (Incomparable: 1879378494)
-    load(1879378494);
-    // Coffer of Adventurer's Jewellery - Might (Incomparable: 1879378473)
-    load(1879378473);
-    */
+     * 1879303552 Battle Gift Box
+     * 1879303553 Cosmetic Gift Box
+     * 1879265139 Ancient Riddermark Scroll Case III
+     * 1879378494 Coffer of Adventurer's Armour - Heavy
+     * 1879378473 Coffer of Adventurer's Jewellery - Might
+     */
   }
 
   /**

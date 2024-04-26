@@ -119,15 +119,12 @@ public class CustomInstancesLootLoader
 
   private void handleLootTables(PropertiesSet properties, InstanceLootEntry entry)
   {
-    //TrophyList barterTrophyList=null;
-    //TreasureList treasureList=null;
     TrophyList trophyList=null;
     // Barter trophy list
     Integer barterTrophyListId=(Integer)properties.getProperty("SkirmishTreasureLookup_BarterTrophyListDID");
     if ((barterTrophyListId!=null) && (barterTrophyListId.intValue()!=0))
     {
       LOGGER.warn("Barter trophy list - should never happen");
-      //barterTrophyList=_lootLoader.handleTrophyList(barterTrophyListId.intValue());
     }
     // Reputation trophy
     Integer reputationTrophyListId=(Integer)properties.getProperty("SkirmishTreasureLookup_ReputationTrophyListDID");
@@ -135,16 +132,12 @@ public class CustomInstancesLootLoader
     {
       // Never happens
       LOGGER.warn("Reputation trophy - should never happen");
-      //reputationTrophyList=_lootLoader.handleReputationTrophyList(reputationTrophyListId.intValue());
-      //System.out.println(reputationTrophyList);
     }
     // Treasure list template
     Integer treasureListTemplateId=(Integer)properties.getProperty("SkirmishTreasureLookup_TreasureListTemplateDID");
     if ((treasureListTemplateId!=null) && (treasureListTemplateId.intValue()!=0))
     {
       LOGGER.warn("Treasure list - should never happen");
-      //PropertiesSet treasureListProps=_facade.loadProperties(treasureListTemplateId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
-      //treasureList=_lootLoader.handleTreasureList(treasureListTemplateId.intValue(),treasureListProps);
     }
     // Trophy list template
     Integer trophyTemplateId=(Integer)properties.getProperty("SkirmishTreasureLookup_TrophyListTemplateDID");
@@ -179,7 +172,10 @@ public class CustomInstancesLootLoader
     int minDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Min")).intValue();
     int maxDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Max")).intValue();
     Range difficulty=new Range(minDifficultyCode,maxDifficultyCode);
-    //System.out.println("Level "+minLevel+"-"+maxLevel+", size="+minGroupSize+"/"+maxGroupSize+", difficulty="+minDifficultyTier+"/"+maxDifficultyTier);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Level "+minLevel+"-"+maxLevel+", size="+minSizeCode+"/"+maxSizeCode+", difficulty="+minDifficultyCode+"/"+maxDifficultyCode);
+    }
     InstanceLootParameters params=new InstanceLootParameters(difficulty,size,level);
     return params;
   }

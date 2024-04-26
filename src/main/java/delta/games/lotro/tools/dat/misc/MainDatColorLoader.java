@@ -51,7 +51,10 @@ public class MainDatColorLoader
       PropertiesSet colorProps=(PropertiesSet)colorEntryObj;
       String colorName=DatUtils.getStringProperty(colorProps,"ItemMunging_NameLookup_Name");
       Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
-      //System.out.println("Color: "+colorName+", value: "+colorValue);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Color: "+colorName+", value: "+colorValue);
+      }
       ColorDescription color=new ColorDescription();
       color.setName(colorName);
       if (colorValue!=null)

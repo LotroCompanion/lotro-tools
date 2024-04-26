@@ -107,13 +107,8 @@ public class MainDatTradeLoader
   {
     BarterNpc barterer=null;
     // Barter_Profile_UseTabs
-    /*
+    @SuppressWarnings("unused")
     Integer useTabs=(Integer)properties.getProperty("Barter_Profile_UseTabs");
-    if ((useTabs!=null) && (useTabs.intValue()!=0) && (useTabs.intValue()!=1))
-    {
-      System.out.println("Use tab: "+useTabs);
-    }
-    */
     // Profiles
     Object[] barterProfiles=(Object[])properties.getProperty("Barter_ProfileArray");
     if (barterProfiles!=null)
@@ -182,7 +177,7 @@ public class MainDatTradeLoader
       }
       for(Object questRequirementObj : questRequirements)
       {
-        // {Usage_QuestStatus=805306368, Usage_Operator=3, Usage_QuestID=1879093911}
+        // Usage_QuestStatus=805306368, Usage_Operator=3, Usage_QuestID=1879093911
         PropertiesSet questReqProps=(PropertiesSet)questRequirementObj;
         int questId=((Integer)questReqProps.getProperty("Usage_QuestID")).intValue();
         int questStatus=((Integer)questReqProps.getProperty("Usage_QuestStatus")).intValue();
@@ -206,7 +201,7 @@ public class MainDatTradeLoader
     Object requiredFactionObj=properties.getProperty("Usage_RequiredFaction");
     if (requiredFactionObj!=null)
     {
-      //{Usage_RequiredFaction_Tier=4, Usage_RequiredFaction_DataID=1879097420}
+      // Usage_RequiredFaction_Tier=4, Usage_RequiredFaction_DataID=1879097420
       PropertiesSet factionReqProps=(PropertiesSet)requiredFactionObj;
       int factionId=((Integer)factionReqProps.getProperty("Usage_RequiredFaction_DataID")).intValue();
       Faction faction=FactionsRegistry.getInstance().getById(factionId);
@@ -395,7 +390,7 @@ public class MainDatTradeLoader
     }
     // Buys items?
     Integer buysItemsInt=(Integer)properties.getProperty("Vendor_BuysItems");
-    boolean buysItems=(buysItemsInt!=null)?(buysItemsInt.intValue()==1):false;
+    boolean buysItems=((buysItemsInt!=null) && (buysItemsInt.intValue()==1));
     ret.setBuys(buysItems);
     // Discount list
     Object[] discountArray=(Object[])properties.getProperty("Vendor_DiscountList");
@@ -409,7 +404,7 @@ public class MainDatTradeLoader
     }
     // Sells wearable items?
     Integer sellsWearableItemsInt=(Integer)properties.getProperty("Vendor_SellsWearableItems");
-    boolean sellsWearableItems=(sellsWearableItemsInt!=null)?(sellsWearableItemsInt.intValue()==1):false;
+    boolean sellsWearableItems=((sellsWearableItemsInt!=null) && (sellsWearableItemsInt.intValue()==1));
     ret.setSellsWearableItems(sellsWearableItems);
     // Sell modifier
     Float sellFactor=(Float)properties.getProperty("Vendor_SellModifier");

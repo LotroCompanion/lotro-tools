@@ -67,7 +67,6 @@ public class MainDatRecipesLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      //System.out.println(properties.dump());
       recipe=new Recipe();
       // ID
       recipe.setIdentifier(indexDataId);
@@ -373,7 +372,6 @@ public class MainDatRecipesLoader
       byte[] data=_facade.loadData(i);
       if (data!=null)
       {
-        //int did=BufferUtils.getDoubleWordAt(data,0);
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
         if (classDefIndex==1024)
         {

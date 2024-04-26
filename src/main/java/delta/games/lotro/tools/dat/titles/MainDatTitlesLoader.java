@@ -138,7 +138,6 @@ Title_String:
     byte[] data=_facade.loadData(id);
     if (data!=null)
     {
-      //int did=BufferUtils.getDoubleWordAt(data,0);
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       return (classDefIndex==WStateClass.TITLE);
     }
