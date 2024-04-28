@@ -331,7 +331,6 @@ public class LandblockInfoLoader
     return entity;
   }
 
-  @SuppressWarnings("unused")
   private LbiLink loadLink(ByteArrayInputStream bis)
   {
     LbiLink link=new LbiLink();
@@ -376,7 +375,7 @@ public class LandblockInfoLoader
     propsLoader.decodeProperties(bis,props);
     weenie.setProps(props);
     Set<Integer> ids=_generatorLoader.handleGenerator(props);
-    if ((ids!=null) && (!ids.isEmpty()))
+    if (!ids.isEmpty())
     {
       weenie.setGeneratorDids(ids);
     }

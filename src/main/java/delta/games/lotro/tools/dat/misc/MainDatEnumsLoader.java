@@ -80,6 +80,8 @@ public class MainDatEnumsLoader
 {
   private static final Logger LOGGER=Logger.getLogger(MainDatEnumsLoader.class);
 
+  private static final String ENUM_PREFIX="enum-";
+
   private DataFacade _facade;
   private MultilocalesTranslator _translator;
 
@@ -221,7 +223,7 @@ public class MainDatEnumsLoader
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
   {
     LotroEnum<T> lotroEnum=new LotroEnum<T>(enumId,name,implClass);
-    String labelsSetName="enum-"+implClass.getSimpleName();
+    String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(enumId);
     if (enumMapper!=null)
@@ -253,7 +255,7 @@ public class MainDatEnumsLoader
     EnumMapper enumMapper=_facade.getEnumsManager().getEnumMapper(sourceEnumId);
     if (enumMapper!=null)
     {
-      String labelsSetName="enum-"+implClass.getSimpleName();
+      String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
       I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
       int nbCodes=sourceCodes.length;
       for(int i=0;i<nbCodes;i++)
@@ -424,7 +426,7 @@ public class MainDatEnumsLoader
   {
     Class<CharacterSex> implClass=CharacterSex.class;
     LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(0,"Gender",implClass);
-    String labelsSetName="enum-"+implClass.getSimpleName();
+    String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE");
     handleCustomEntry(lotroEnum,i18n,101,"FEMALE","FEMALE");
@@ -436,7 +438,7 @@ public class MainDatEnumsLoader
     Class<DeedType> implClass=DeedType.class;
     String enumName="DeedType";
     LotroEnum<DeedType> lotroEnum=new LotroEnum<DeedType>(0,enumName,implClass);
-    String labelsSetName="enum-"+implClass.getSimpleName();
+    String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,enumName+".CLASS","CLASS");
     handleCustomEntry(lotroEnum,i18n,101,enumName+".RACE","RACE");
@@ -453,7 +455,7 @@ public class MainDatEnumsLoader
     Class<ItemBinding> implClass=ItemBinding.class;
     String enumName="ItemBinding";
     LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,enumName,implClass);
-    String labelsSetName="enum-"+implClass.getSimpleName();
+    String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,enumName+".BIND_ON_EQUIP","BIND_ON_EQUIP");
     handleCustomEntry(lotroEnum,i18n,101,enumName+".BIND_ON_ACQUIRE","BIND_ON_ACQUIRE");
@@ -467,7 +469,7 @@ public class MainDatEnumsLoader
     Class<EquipmentLocation> implClass=EquipmentLocation.class;
     String enumName="EquipmentLocation";
     LotroEnum<EquipmentLocation> lotroEnum=new LotroEnum<EquipmentLocation>(0,enumName,implClass);
-    String labelsSetName="enum-"+implClass.getSimpleName();
+    String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,0,enumName+".HEAD","HEAD");
     handleCustomEntry(lotroEnum,i18n,1,enumName+".SHOULDER","SHOULDER");

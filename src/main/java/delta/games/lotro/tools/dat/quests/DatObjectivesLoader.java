@@ -82,6 +82,7 @@ public class DatObjectivesLoader
 {
   private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
 
+  private static final String QUEST_EVENT_ITEM_DID="QuestEvent_ItemDID";
   private static final String QUEST_EVENT_ENTRY="QuestEvent_Entry";
   private static final String QUEST_EVENT_ROLE_CONSTRAINT="QuestEvent_RoleConstraint";
 
@@ -612,9 +613,9 @@ public class DatObjectivesLoader
      * (sometimes both, never none)
      * QuestEvent_DestroyInventoryItems: optional, found 16 times Integer 0 or 1.
      */
-    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer itemId=(Integer)properties.getProperty(QUEST_EVENT_ITEM_DID);
     @SuppressWarnings("unused")
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
 
     ItemUsedCondition ret=new ItemUsedCondition();
     fillItemCondition(ret,itemId);
@@ -624,7 +625,7 @@ public class DatObjectivesLoader
 
   private ExternalInventoryItemCondition handleExternalInventoryItemUsed(PropertiesSet properties)
   {
-    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer itemId=(Integer)properties.getProperty(QUEST_EVENT_ITEM_DID);
     @SuppressWarnings("unused")
     String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
 
@@ -636,7 +637,7 @@ public class DatObjectivesLoader
 
   private ItemTalkCondition handleItemTalk(PropertiesSet properties)
   {
-    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer itemId=(Integer)properties.getProperty(QUEST_EVENT_ITEM_DID);
     @SuppressWarnings("unused")
     String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
 
@@ -875,7 +876,7 @@ QuestEvent_ShowBillboardText: 0
      */
     InventoryItemCondition ret=new InventoryItemCondition();
 
-    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer itemId=(Integer)properties.getProperty(QUEST_EVENT_ITEM_DID);
     if (itemId!=null)
     {
       fillItemCondition(ret,itemId);
@@ -963,7 +964,7 @@ QuestEvent_ShowBillboardText: 0
      */
     @SuppressWarnings("unused")
     int hobbyId=((Integer)properties.getProperty("QuestEvent_HobbyDID")).intValue();
-    Integer itemId=(Integer)properties.getProperty("QuestEvent_ItemDID");
+    Integer itemId=(Integer)properties.getProperty(QUEST_EVENT_ITEM_DID);
     HobbyCondition ret=new HobbyCondition();
     Item item=ItemsManager.getInstance().getItem(itemId.intValue());
     ret.setItem(item);

@@ -18,7 +18,9 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class GeneratorLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(LandblockInfoLoader.class);
+  private static final Logger LOGGER=Logger.getLogger(GeneratorLoader.class);
+
+  private static final String GENERATOR_PROFILE_WEIGHT="GeneratorProfile_Weight";
 
   private DataFacade _facade;
   private Set<Integer> _dids;
@@ -46,7 +48,7 @@ public class GeneratorLoader
     Integer profileId=(Integer)props.getProperty("Generator_ProfileDID");
     if (profileId==null)
     {
-      return null;
+      return new HashSet<Integer>();
     }
     /*
 Generator_PositionSetLimitArray:
@@ -160,7 +162,7 @@ Generator_PositionSetLimitArray:
       if (profileId!=null)
       {
         Integer probability=(Integer)entryProps.getProperty("GeneratorProfile_Probability");
-        if ((probability==null) || ((probability!=null) && (probability.intValue()>0)))
+        if ((probability==null) || (probability.intValue()>0))
         {
           PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
           handleGeneratorProps(generatorProps);
@@ -191,7 +193,7 @@ Generator_PositionSetLimitArray:
     Integer profileId=(Integer)entryProps.getProperty("GeneratorProfile_ProfileDefinition");
     if (profileId!=null)
     {
-      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
+      Integer weight=(Integer)entryProps.getProperty(GENERATOR_PROFILE_WEIGHT);
       if ((weight!=null) && (weight.intValue()>0))
       {
         PropertiesSet generatorProps=_facade.loadProperties(profileId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
@@ -227,8 +229,8 @@ Generator_PositionSetLimitArray:
     Object[] oneOfArray=(Object[])entryProps.getProperty("GeneratorProfile_OneOf");
     if (oneOfArray!=null)
     {
-      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
-      if ((weight==null) || ((weight!=null) && (weight.intValue()>0)))
+      Integer weight=(Integer)entryProps.getProperty(GENERATOR_PROFILE_WEIGHT);
+      if ((weight==null) || (weight.intValue()>0))
       {
         for(Object oneOfEntryObj : oneOfArray)
         {
@@ -248,8 +250,8 @@ Generator_PositionSetLimitArray:
     Integer entityId=(Integer)entryProps.getProperty("GeneratorProfile_WSLEntity");
     if (entityId!=null)
     {
-      Integer weight=(Integer)entryProps.getProperty("GeneratorProfile_Weight");
-      if ((weight==null) || ((weight!=null) && (weight.intValue()>0)))
+      Integer weight=(Integer)entryProps.getProperty(GENERATOR_PROFILE_WEIGHT);
+      if ((weight==null) || (weight.intValue()>0))
       {
         _dids.add(entityId);
         return true;

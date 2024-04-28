@@ -24,6 +24,8 @@ public class GeoAreasLoader
 {
   private static final Logger LOGGER=Logger.getLogger(GeoAreasLoader.class);
 
+  private static final String AREA_NAME="Area_Name";
+
   private DataFacade _facade;
   private GeoAreasManager _geoMgr;
   private I18nUtils _i18n;
@@ -66,7 +68,7 @@ public class GeoAreasLoader
       return null;
     }
     // Name
-    String areaName=_i18n.getNameStringProperty(areaProps,"Area_Name",areaId,0);
+    String areaName=_i18n.getNameStringProperty(areaProps,AREA_NAME,areaId,0);
     if (areaName==null)
     {
       return null;
@@ -90,20 +92,8 @@ public class GeoAreasLoader
       territory=getTerritory(territoryId.intValue());
     }
 
-    // Scenes
-    // Scenes are not interesting
-    /*
-    Object[] scenes=(Object[])areaProps.getProperty("Area_SceneArray");
-    if (scenes!=null)
-    {
-      for(Object sceneIdObj : scenes)
-      {
-        int sceneId=((Integer)sceneIdObj).intValue();
-        PropertiesSet sceneProps=_facade.loadProperties(sceneId+DATConstants.DBPROPERTIES_OFFSET);
-        System.out.println(sceneProps.dump());
-      }
-    }
-    */
+    // Scenes: use Area_SceneArray (not interesting => not used)
+
     Area area=new Area(areaId,areaName,territory);
     area.setIconId(imageId);
     return area;
@@ -129,7 +119,7 @@ public class GeoAreasLoader
   {
     PropertiesSet territoryProps=_facade.loadProperties(territoryId+DATConstants.DBPROPERTIES_OFFSET);
     // Name
-    String areaName=_i18n.getNameStringProperty(territoryProps,"Area_Name",territoryId,0);
+    String areaName=_i18n.getNameStringProperty(territoryProps,AREA_NAME,territoryId,0);
     // Region ID
     int regionId=((Integer)territoryProps.getProperty("Area_Region")).intValue();
     Region region=getRegion(regionId);
@@ -157,7 +147,7 @@ public class GeoAreasLoader
   {
     PropertiesSet regionProps=_facade.loadProperties(regionId+DATConstants.DBPROPERTIES_OFFSET);
     // Name
-    String areaName=_i18n.getNameStringProperty(regionProps,"Area_Name",regionId,0);
+    String areaName=_i18n.getNameStringProperty(regionProps,AREA_NAME,regionId,0);
     // Region code
     int regionCode=((Integer)regionProps.getProperty("Area_RegionID")).intValue();
     Region region=new Region(regionId,regionCode,areaName);

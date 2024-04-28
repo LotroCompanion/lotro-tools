@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.DataIdentification;
@@ -27,6 +28,10 @@ import delta.games.lotro.tools.dat.agents.ClassificationLoader;
  */
 public class MarkerClassifier
 {
+  /**
+   * Craft resource type property name.
+   */
+  private static final String CRAFT_RESOURCE_TYPE="Craft_Resource_Type";
   /**
    * Weenie type property name.
    */
@@ -93,11 +98,11 @@ public class MarkerClassifier
         DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
         if (classification!=null)
         {
-          System.out.println(dataId+" => Classification: "+classification);
+          Console.println(dataId+" => Classification: "+classification);
         }
         else
         {
-          System.out.println(dataId+" => NO CLASSIFICATION");
+          Console.println(dataId+" => NO CLASSIFICATION");
         }
       }
     }
@@ -157,7 +162,7 @@ public class MarkerClassifier
   private ResourceClassification tryResourceCropClassification(int did, PropertiesSet props)
   {
     boolean ok=false;
-    Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
+    Integer craftResourceTypeCode=(Integer)props.getProperty(CRAFT_RESOURCE_TYPE);
     if ((craftResourceTypeCode!=null) && (craftResourceTypeCode.intValue()==4))
     {
       ok=true;
@@ -213,7 +218,7 @@ public class MarkerClassifier
     if ((did==1879061415) || (did==1879061417)) return 4;
     // Cook tier 5
     if ((did==1879061399) || (did==1879061414) || (did==1879061416) || (did==1879061418)) return 5;
-    System.out.println("unmanaged DID: "+did);
+    LOGGER.warn("unmanaged DID: "+did);
     return 0;
   }
 
@@ -227,7 +232,7 @@ public class MarkerClassifier
 
   private ResourceClassification tryResourceNodeClassification(int did, PropertiesSet props)
   {
-    Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
+    Integer craftResourceTypeCode=(Integer)props.getProperty(CRAFT_RESOURCE_TYPE);
     Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
 
     if (craftResourceTypeCode==null)
@@ -345,7 +350,7 @@ WeenieType: 262145 (Hotspot)
   private ItemClassification tryContainerClassification(int did, PropertiesSet props)
   {
     // Chests
-    Integer craftResourceTypeCode=(Integer)props.getProperty("Craft_Resource_Type");
+    Integer craftResourceTypeCode=(Integer)props.getProperty(CRAFT_RESOURCE_TYPE);
     Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
 
     if (craftResourceTypeCode==null)

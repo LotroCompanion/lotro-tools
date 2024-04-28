@@ -34,6 +34,8 @@ public class SocketablesManager
 {
   private static final Logger LOGGER=Logger.getLogger(SocketablesManager.class);
 
+  private static final String ITEM_SOCKET_TYPE="Item_Socket_Type";
+
   private static final int[] OVERLAY_FOR_TIER=
   {
     1091914756, 1091914773, 1091914770, 1091914772, 1091914776, // 1-5
@@ -70,7 +72,7 @@ public class SocketablesManager
     {
       return null;
     }
-    Long type=(Long)properties.getProperty("Item_Socket_Type");
+    Long type=(Long)properties.getProperty(ITEM_SOCKET_TYPE);
     if ((type==null) || (type.intValue()==0))
     {
       return null;
@@ -118,7 +120,7 @@ public class SocketablesManager
       return ItemClassUtils.getBoxOfEssenceCode();
     }
     // Use socket type...
-    Long type=(Long)properties.getProperty("Item_Socket_Type");
+    Long type=(Long)properties.getProperty(ITEM_SOCKET_TYPE);
     if (type==null)
     {
       LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
@@ -166,7 +168,7 @@ public class SocketablesManager
     {
       return ItemClassUtils.getWordOfMasteryCode();
     }
-    else //if (socketTypeCode==2)
+    else
     {
       LOGGER.warn("Unmanaged socket type "+socketTypeCode+" for item: "+item);
       return -1;
@@ -253,7 +255,7 @@ public class SocketablesManager
     for(Object essenceSlot : essenceSlots)
     {
       PropertiesSet essenceSlotProps=(PropertiesSet)essenceSlot;
-      int socketTypeCode=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
+      int socketTypeCode=((Long)essenceSlotProps.getProperty(ITEM_SOCKET_TYPE)).intValue();
       SocketType socketType=SocketUtils.getSocketType(socketTypeCode);
       setup.addSlot(socketType);
     }
