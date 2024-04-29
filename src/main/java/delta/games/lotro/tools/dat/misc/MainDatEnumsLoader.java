@@ -202,12 +202,12 @@ public class MainDatEnumsLoader
       int[] sourceCodes=new int[] {
           2,3,4,5,6,7,8,
           9,10,11,12,13,14,15,
-          16,17,18,19,20,21,23,24,25
+          16,17,18,19,20,21,22,23,24,25
       };
       String[] keys={
           "HEAD", "BREAST", "LEGS", "HANDS", "FEET", "SHOULDER", "BACK",
           "LEFT_WRIST", "RIGHT_WRIST", "NECK", "LEFT_FINGER", "RIGHT_FINGER", "LEFT_EAR", "RIGHT_EAR",
-          "POCKET", "MAIN_MELEE", "OTHER_MELEE", "RANGED", "TOOL", "CLASS_ITEM",
+          "POCKET", "MAIN_MELEE", "OTHER_MELEE", "RANGED", "TOOL", "CLASS_ITEM", "BRIDLE",
           "MAIN_HAND_AURA", "OFF_HAND_AURA", "RANGED_AURA"
       };
       buildSubEnum(587202798,"GearSlot",GearSlot.class,sourceCodes,null,keys);
