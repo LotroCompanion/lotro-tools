@@ -357,6 +357,10 @@ public class LootLoader
       }
       if (entry!=null)
       {
+        // Group drop
+        Integer groupDropInt=(Integer)trophyProps.getProperty("LootGen_TrophyList_GroupDrop");
+        boolean groupDrop=((groupDropInt!=null) && (groupDropInt.intValue()==1));
+        entry.setGroupDrop(groupDrop);
         ret.addEntry(entry);
       }
     }
