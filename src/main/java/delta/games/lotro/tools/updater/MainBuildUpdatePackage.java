@@ -41,8 +41,8 @@ public class MainBuildUpdatePackage
     File to=new File("d:/tmp/lc16-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/work/LotRO Companion/app");
-    String packageName="patch21.4.0.39.2";
-    Version newVersion=new Version(2146,"21.4.0.39.2");
+    String packageName="patch21.4.0.40";
+    Version newVersion=new Version(2147,"21.4.0.40");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
