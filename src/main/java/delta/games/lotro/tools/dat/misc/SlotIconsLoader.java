@@ -97,6 +97,12 @@ public class SlotIconsLoader
     }
   }
 
+  // TODO Load bridle icon:
+  /*
+   * 0x22000889 (mountedcombat):
+   * MountedCombatStatsPage/MountedCombatStats_AvatarInfoElement/MountedSlotParent
+   * Media desc, inv-slot_mounted: 0x4112B675
+   */
   private GearSlot getSlotFromId(String slotId)
   {
     if ("BackSlotParent".equals(slotId)) return GearSlots.BACK;
