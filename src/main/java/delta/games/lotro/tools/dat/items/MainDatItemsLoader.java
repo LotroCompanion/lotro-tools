@@ -25,7 +25,9 @@ import delta.games.lotro.common.utils.valueTables.io.xml.ValueTablesXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -55,6 +57,7 @@ import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
 import delta.games.lotro.lore.items.legendary2.SocketEntry;
 import delta.games.lotro.lore.items.legendary2.SocketsSetup;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
+import delta.games.lotro.lore.items.scaling.ItemSpellcraft;
 import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
@@ -70,6 +73,7 @@ import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
 import delta.games.lotro.tools.dat.utils.DatStatUtils;
 import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
+import delta.games.lotro.tools.dat.utils.ProgressionFactory;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
 import delta.games.lotro.tools.dat.utils.RequirementsLoadingUtils;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -214,7 +218,10 @@ public class MainDatItemsLoader
       // Item level tweak
       Integer itemLevelOffset=getItemLevelOffset(properties);
       item.setItemLevelOffset(itemLevelOffset);
+      // Scaling
       handleMunging(properties);
+      // Spellcraft
+      handleSpellcraftCalculator(item,properties);
       if (level!=null)
       {
         Integer minScaledLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
@@ -773,6 +780,38 @@ public class MainDatItemsLoader
       //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
       //System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
+  }
+
+  private void handleSpellcraftCalculator(Item item, PropertiesSet properties)
+  {
+    Integer spellcraftCalculatorId=(Integer)properties.getProperty("SpellcraftCalculator");
+    if (spellcraftCalculatorId==null)
+    {
+      return;
+    }
+    PropertiesSet props=_facade.loadProperties(spellcraftCalculatorId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+    Progression progression=null;
+    // Internal Progression?
+    if (props.hasProperty("FloatProgression_Array"))
+    {
+      progression=ProgressionFactory.buildProgression(spellcraftCalculatorId.intValue(),props);
+      if (progression!=null)
+      {
+        ProgressionUtils.PROGRESSIONS_MGR.registerProgression(spellcraftCalculatorId.intValue(),progression);
+      }
+    }
+    // Property ID
+    int propertyID=((Integer)props.getProperty("Spellcraft_Driver_PropertyName")).intValue();
+    PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
+    PropertyDefinition propertyDef=propsRegistry.getPropertyDef(propertyID);
+    // External progression
+    Integer progressionID=(Integer)props.getProperty("Spellcraft_Progression");
+    if (progressionID!=null)
+    {
+      progression=ProgressionUtils.getProgression(_facade,progressionID.intValue());
+    }
+    ItemSpellcraft spellcraft=new ItemSpellcraft(propertyDef.getName(),progression);
+    item.setSpellcraft(spellcraft);
   }
 
   private Integer getItemLevelOffset(PropertiesSet properties)
