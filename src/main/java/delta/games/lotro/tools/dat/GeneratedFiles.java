@@ -428,4 +428,8 @@ public class GeneratedFiles
    * XP table.
    */
   public static final File XP_TABLE=LotroCoreConfig.getInstance().getFile(DataFiles.XP_TABLE);
+  /**
+   * PVP data.
+   */
+  public static final File PVP=LotroCoreConfig.getInstance().getFile(DataFiles.PVP);
 }
