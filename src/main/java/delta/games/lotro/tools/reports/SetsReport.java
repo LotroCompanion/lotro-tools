@@ -18,7 +18,7 @@ import delta.games.lotro.lore.items.sets.SetBonus;
  * Report for items/traceries sets.
  * @author DAM
  */
-public class ItemsSetsReport
+public class SetsReport
 {
   /**
    * Do report.
@@ -123,6 +123,6 @@ public class ItemsSetsReport
    */
   public static void main(String[] args)
   {
-    new ItemsSetsReport().doIt();
+    new SetsReport().doIt();
   }
 }
