@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EndOfLine;
+import delta.games.lotro.common.stats.FloatStatDescription;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatDescriptionComparator;
 import delta.games.lotro.common.stats.StatType;
@@ -17,6 +18,7 @@ import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.common.stats.StatsSorter;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.common.stats.io.xml.StatXMLWriter;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.Locales;
@@ -77,16 +79,12 @@ public class MainStatsLoader
     String statName=_i18n.getNameStringProperty(properties,"PropertyMetaData_Name",propertyId,0);
     // Property definition
     PropertyDefinition propertyDefinition=_registry.getPropertyDef(propertyId);
-    String propertyKey=propertyDefinition.getName();
     // Percentage?
     Integer percentage=(Integer)properties.getProperty("PropertyMetaData_DisplayAsPercentage");
     boolean isPercentage=((percentage!=null) && (percentage.intValue()==1));
 
     // Add stat
-    StatDescription stat=addDatStat(propertyId,propertyKey,statName,isPercentage);
-    // Set stat type
-    StatType type=getTypeFromPropertyType(propertyDefinition.getPropertyType());
-    stat.setType(type);
+    addDatStat(propertyDefinition,statName,isPercentage);
   }
 
   private StatType getTypeFromPropertyType(PropertyType propertyType)
@@ -277,14 +275,78 @@ public class MainStatsLoader
     System.out.println(result);
   }
 
-  private StatDescription addDatStat(int id, String key, String name, boolean isPercentage)
+  private StatDescription addDatStat(PropertyDefinition propertyDefinition, String name, boolean isPercentage)
   {
-    StatDescription stat=new StatDescription(id);
-    stat.setKey(key);
+    int id=propertyDefinition.getPropertyId();
+    String propertyKey=propertyDefinition.getName();
+    StatType type=getTypeFromPropertyType(propertyDefinition.getPropertyType());
+    StatDescription stat=buildStatFromType(type);
+    stat.setIdentifier(id);
+    stat.setKey(propertyKey);
     stat.setInternalName(name);
     stat.setPercentage(isPercentage);
+    if (stat instanceof FloatStatDescription)
+    {
+      configureFloatStat((FloatStatDescription)stat);
+    }
+    else
+    {
+      stat.setType(type);
+    }
     _stats.addStat(stat);
     return stat;
+  }
+
+  private StatDescription buildStatFromType(StatType type)
+  {
+    if (type==StatType.FLOAT)
+    {
+      return new FloatStatDescription();
+    }
+    return new StatDescription();
+  }
+
+  private void configureFloatStat(FloatStatDescription stat)
+  {
+    stat.setMaxDigitsAbove1(getMaxFractionalDigits(stat,false));
+    stat.setMaxDigitsBelow1(getMaxFractionalDigits(stat,true));
+  }
+
+  private int getMaxFractionalDigits(StatDescription stat, boolean below1)
+  {
+    boolean isLive=LotroCoreConfig.isLive();
+    if (isLive)
+    {
+      if (below1)
+      {
+        return 2;
+      }
+      if (isRegenStat(stat))
+      {
+        return 3; 
+      }
+    }
+    else
+    {
+      if (isRegenStat(stat))
+      {
+        return 1;
+      }
+      if (below1)
+      {
+        return 2;
+      }
+    }
+    return 0;
+  }
+
+  private static boolean isRegenStat(StatDescription stat)
+  {
+    if (stat==WellKnownStat.ICMR) return true;
+    if (stat==WellKnownStat.ICPR) return true;
+    if (stat==WellKnownStat.OCMR) return true;
+    if (stat==WellKnownStat.OCPR) return true;
+    return false;
   }
 
   private void addCustomStat(int id, String legacyKey, boolean isPercentage, StatType type)
@@ -304,7 +366,8 @@ public class MainStatsLoader
     {
       LOGGER.debug("Custom stat: key="+legacyKey+", name="+statName);
     }
-    StatDescription stat=new StatDescription(id);
+    StatDescription stat=new StatDescription();
+    stat.setIdentifier(id);
     stat.setLegacyKey(legacyKey);
     stat.setKey(legacyKey);
     stat.setInternalName(statName);
