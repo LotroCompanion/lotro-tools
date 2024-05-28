@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.reports;
 
-import delta.common.ui.swing.area.AreaController;
 import delta.common.utils.variables.VariablesResolver;
 import delta.games.lotro.character.BaseCharacterSummary;
 import delta.games.lotro.character.classes.ClassDescription;
@@ -35,6 +34,10 @@ public class ReportUtils
     ret.setLevel(150);
     // Name
     ret.setName("(character name)"); // I18n
+    // Surname
+    ret.setSurname("(surname)"); // I18n
+    // Rank
+    ret.setRankCode(null);
     return ret;
   }
 
