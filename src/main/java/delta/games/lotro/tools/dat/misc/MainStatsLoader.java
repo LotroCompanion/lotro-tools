@@ -129,7 +129,10 @@ public class MainStatsLoader
     List<StatDescription> stats=_stats.getAll();
     Collections.sort(stats,new StatDescriptionComparator());
     // Show results
-    //showResultStats();
+    if (LOGGER.isDebugEnabled())
+    {
+      showResultStats();
+    }
     // Save stats
     int nbStats=stats.size();
     File toFile=GeneratedFiles.STATS;
@@ -246,11 +249,11 @@ public class MainStatsLoader
     }
   }
 
-  void showResultStats()
+  private void showResultStats()
   {
     List<StatDescription> stats=_stats.getAll();
     StatsSorter.sortStatsForUi(stats);
-    StringBuilder sb=new StringBuilder("ID\tIndex\tKey\tLegacy key\tPersistence key\tLegacy name\tInternal name\tName");
+    StringBuilder sb=new StringBuilder("\nID\tIndex\tKey\tLegacy key\tPersistence key\tLegacy name\tInternal name\tName");
     sb.append(EndOfLine.NATIVE_EOL);
     for(StatDescription stat : stats)
     {
@@ -272,7 +275,7 @@ public class MainStatsLoader
       sb.append(name).append(EndOfLine.NATIVE_EOL);
     }
     String result=sb.toString();
-    System.out.println(result);
+    LOGGER.debug(result);
   }
 
   private StatDescription addDatStat(PropertyDefinition propertyDefinition, String name, boolean isPercentage)
