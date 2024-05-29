@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
@@ -37,6 +40,7 @@ public class MainDatMobsLoader
   private ClassificationLoader _classificationLoader;
   // Loots
   private LootsManager _loots;
+  private LotroEnum<MobDivision> _mobDivision;
   private LootLoader _lootLoader;
 
   /**
@@ -50,6 +54,7 @@ public class MainDatMobsLoader
     _i18n=new I18nUtils("mobs",facade.getGlobalStringsManager());
     _classificationLoader=new ClassificationLoader(facade);
     _loots=lootsManager;
+    _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _lootLoader=new LootLoader(facade,_loots);
   }
 
@@ -119,6 +124,13 @@ Agent_Species: 66
 Agent_Subspecies: 132
 Quest_MonsterDivision: 245 => HallOfMirror
        */
+      MobDivision mobDivision=null;
+      Integer mobDivisionCode=(Integer)properties.getProperty("Quest_MonsterDivision");
+      if (mobDivisionCode!=null)
+      {
+        mobDivision=_mobDivision.getEntry(mobDivisionCode.intValue());
+        ret.setDivision(mobDivision);
+      }
     }
     else
     {
