@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.sounds;
 
+import java.io.PrintStream;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,24 +122,24 @@ public class ScriptsInspectorForSounds
     _context.pop();
   }
 
-  private void showContext()
+  private void showContext(PrintStream out)
   {
     int nb=getContextPropertiesCount();
     if (nb>0)
     {
-      System.out.println("With context:");
+      out.println("With context:");
       for(List<PropertyValue> values : _context)
       {
-        System.out.println("#");
+        out.println("#");
         for(PropertyValue value : values)
         {
-          System.out.println("\t"+value);
+          out.println("\t"+value);
         }
       }
     }
     else
     {
-      System.out.println("No context");
+      out.println("No context");
     }
   }
 
@@ -164,7 +165,7 @@ public class ScriptsInspectorForSounds
       {
         String soundChannel=_channel.getLabel(soundChannelID);
         LOGGER.debug("Found sound ID: "+soundID+" ("+soundChannel+")");
-        showContext();
+        showContext(System.out);
       }
       _aggregator.handleSound(soundID,soundChannelID,_context);
     }

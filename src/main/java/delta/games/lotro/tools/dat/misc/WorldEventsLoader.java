@@ -73,7 +73,10 @@ public class WorldEventsLoader
       return _registry.get(key);
     }
     WorldEvent ret=handleWorldEvent(worldEventId);
-    _registry.put(key,ret);
+    if (ret!=null)
+    {
+      _registry.put(key,ret);
+    }
     return ret;
   }
 
@@ -84,14 +87,20 @@ public class WorldEventsLoader
     int propertyID=((Integer)props.getProperty("WorldEvent_WorldPropertyName")).intValue();
     PropertyDefinition propertyDefinition=_facade.getPropertiesRegistry().getPropertyDef(propertyID);
     String name=propertyDefinition.getName();
-    //System.out.println("\tPropertyID="+propertyID+", name: "+name);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("\tPropertyID="+propertyID+", name: "+name);
+    }
     PropertyType type=propertyDefinition.getPropertyType();
     if (type==PropertyType.INT)
     {
       Integer minValue=(Integer)props.getProperty("WorldEvent_MinIntValue");
       int maxValue=((Integer)props.getProperty("WorldEvent_MaxIntValue")).intValue();
       Integer defaultValue=(Integer)props.getProperty("WorldEvent_DefaultIntValue");
-      //System.out.println("\tINTEGER Min="+minValue+", Max="+maxValue+", Default="+defaultValue);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\tINTEGER Min="+minValue+", Max="+maxValue+", Default="+defaultValue);
+      }
       IntegerWorldEvent integerWE=new IntegerWorldEvent();
       integerWE.setDefaultValue(defaultValue);
       integerWE.setMinValue(minValue);
@@ -101,7 +110,10 @@ public class WorldEventsLoader
     else if (type==PropertyType.BOOLEAN)
     {
       Integer defaultValueInt=(Integer)props.getProperty("WorldEvent_DefaultBoolValue");
-      //System.out.println("\tBOOLEAN Default="+defaultValue);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\tBOOLEAN Default="+defaultValueInt);
+      }
       AbstractWorldEventCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
       if (condition!=null)
       {
@@ -121,6 +133,11 @@ public class WorldEventsLoader
         ret=booleanWE;
       }
     }
+    else
+    {
+      LOGGER.warn("Unmanaged property type: "+type);
+      return null;
+    }
     ret.setIdentifier(worldEventId);
     ret.setPropertyID(propertyID);
     ret.setPropertyName(name);
@@ -128,14 +145,12 @@ public class WorldEventsLoader
     String description=(String)props.getProperty("WorldEvent_DescriptionString");
     if (description!=null)
     {
-      //System.out.println("\tDescription: "+description);
       ret.setDescription(description);
     }
     // Progress
     String progress=(String)props.getProperty("WorldEvent_ProgressString");
     if (progress!=null)
     {
-      //System.out.println("\tProgress: "+progress);
       ret.setProgress(progress);
     }
     return ret;

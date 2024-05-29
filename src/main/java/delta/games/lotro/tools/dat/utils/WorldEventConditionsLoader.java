@@ -89,7 +89,6 @@ public class WorldEventConditionsLoader
       CompoundWorldEventCondition ret=new CompoundWorldEventCondition(operator);
       for(Object entryObj : list)
       {
-        //System.out.println(operator);
         PropertiesSet entryProps=(PropertiesSet)entryObj;
         SimpleWorldEventCondition element=handleWorldEventCondition(entryProps);
         if (element!=null)
@@ -130,24 +129,33 @@ public class WorldEventConditionsLoader
     Proxy<WorldEvent> worldEvent=buildWorldEventProxy(worldEventID);
     Integer conditionValue=(Integer)props.getProperty("WorldEvent_ConditionValue");
     Integer idToCompareWith=(Integer)props.getProperty("WorldEvent_Condition_WorldEventToCompareWith");
-    String usageString=(String)props.getProperty("WorldEvent_Condition_UsageString");
-    //System.out.print("Condition: "+worldEventID+", operator="+operator);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Condition: "+worldEventID+", operator="+operator);
+    }
+    // If idToCompareWith is not null, then conditionValue is null
     if (idToCompareWith!=null)
     {
       Proxy<WorldEvent> comparetToWorldEvent=buildWorldEventProxy(idToCompareWith.intValue());
       ret=new SimpleWorldEventCondition(operator,worldEvent,comparetToWorldEvent);
-      //System.out.println("\tCompare with world event: "+idToCompareWith);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\tCompare with world event: "+idToCompareWith);
+      }
     }
     else if (conditionValue!=null)
     {
       ret=new SimpleWorldEventCondition(operator,worldEvent,conditionValue.intValue());
-      //System.out.println("\tCompare with value: "+conditionValue);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\tCompare with value: "+conditionValue);
+      }
     }
     else
     {
       LOGGER.warn("Unexpected case: no value and no 'compare with'");
     }
-    // If idToCompareWith is not null, then conditionValue is null
+    String usageString=(String)props.getProperty("WorldEvent_Condition_UsageString");
     if (usageString!=null)
     {
       // Not used

@@ -146,21 +146,23 @@ public class QuestsLoader
     boolean isMonsterPlay=((isMonsterPlayCode!=null) && (isMonsterPlayCode.intValue()!=0));
     quest.setMonsterPlay(isMonsterPlay);
     // Quests to complete (only for 'level up' quests)
-    /*
     Object questsToComplete=properties.getProperty("Quest_QuestsToComplete");
     if (questsToComplete!=null)
     {
-      System.out.println(questsToComplete);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Quests to complete: "+questsToComplete);
+      }
     }
-    */
     // Items given when the quest is bestowed
-    /*
     Object givenItems=properties.getProperty("Quest_GiveItemArray");
     if (givenItems!=null)
     {
-      System.out.println(givenItems);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Given items: "+givenItems);
+      }
     }
-    */
     // Chain
     // - previous
     _utils.findPrerequisites(quest,properties);
@@ -185,14 +187,15 @@ public class QuestsLoader
 
     // Quest Loot Table
     // (additional loot tables that are active when the quest is active)
-    /*
     Object lootTable=properties.getProperty("Quest_LootTable");
     if (lootTable!=null)
     {
       // [{Quest_LootMonsterGenus_Array=[Ljava.lang.Object;@3d1cfad4, Quest_LootItemDID=1879051728, Quest_LootItemProbability=100}]
-      System.out.println("Loot table:" +lootTable);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Loot table:" +lootTable);
+      }
     }
-    */
 
     // Objectives
     _objectivesLoader.handleObjectives(quest.getObjectives(),quest,properties);
@@ -231,38 +234,38 @@ public class QuestsLoader
     return p;
   }
 
-  /*
   private void handleScope(QuestDescription quest, PropertiesSet properties)
   {
+    // TODO Check values in enum mapper 587202822
     Integer scope=((Integer)properties.getProperty("Quest_Scope"));
     if (scope!=null)
     {
       int value=scope.intValue();
       if (value==1)
       {
-        //System.out.println("Scope 1: "+quest.getTitle()); // Task (x417) matches category="Task"
-        quest.setRepeatable(true);
+        // Task (x417) matches category="Task"
+        quest.setRepeatability(Repeatability.INFINITELY_REPEATABLE);
       }
       else if (value==2)
       {
-        //System.out.println("Scope 2: "+quest.getTitle()); // Crafting (x42)
+        // Crafting (x42)
         quest.setSize(Size.FELLOWSHIP);
       }
       else if (value==3)
       {
-        //System.out.println("Scope 3: "+quest.getTitle()); // Epic (x ~1k)
+        // Epic (x ~1k)
         quest.setSize(Size.SMALL_FELLOWSHIP);
       }
       else if (value==5)
       {
-        //System.out.println("Scope 5: "+quest.getTitle()); // Legendary Items (x12) (eg Moria or Eregion instance that require shards ; Defence of Glatrev)?
+        // Legendary Items (x12) (eg Moria or Eregion instance that require shards ; Defence of Glatrev)?
         // Normal...
         quest.setSize(Size.SOLO);
       }
       else if (value==9)
       {
-        //System.out.println("Scope 9: "+quest.getTitle()); // Allegiance quests (x44)
-        System.out.println("Instance");
+        // Allegiance quests (x44)
+        LOGGER.debug("Instance");
       }
       else
       {
@@ -270,7 +273,6 @@ public class QuestsLoader
       }
     }
   }
-  */
 
   private void handleFlags(QuestDescription quest, PropertiesSet properties)
   {
@@ -421,7 +423,7 @@ public class QuestsLoader
     List<QuestDescription> quests=new ArrayList<QuestDescription>();
     quests.addAll(_quests.values());
     Collections.sort(quests,new IdentifiableComparator<QuestDescription>());
-    System.out.println("Nb quests: "+quests.size());
+    LOGGER.info("Nb quests: "+quests.size());
     // Write quests file
     boolean ok=QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
     if (ok)

@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.deeds;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,13 @@ public class MainDeedsStatistics
 {
   private Map<Integer,IntegerHolder> _conditionsCount;
   private Map<Integer,IntegerHolder> _objectivesCount;
+  private PrintStream _out;
 
   private MainDeedsStatistics()
   {
     _conditionsCount=new HashMap<Integer,IntegerHolder>();
     _objectivesCount=new HashMap<Integer,IntegerHolder>();
+    _out=System.out;
   }
 
   private void doIt()
@@ -31,8 +34,8 @@ public class MainDeedsStatistics
     {
       handleDeed(deed);
     }
-    System.out.println("Objectives count: "+_objectivesCount);
-    System.out.println("Conditions count: "+_conditionsCount);
+    _out.println("Objectives count: "+_objectivesCount);
+    _out.println("Conditions count: "+_conditionsCount);
   }
 
   private void handleDeed(DeedDescription deed)
@@ -49,7 +52,7 @@ public class MainDeedsStatistics
     countHolder.increment();
     if (objectivesCount>2)
     {
-      System.out.println(deed+" has "+objectivesCount+" objectives");
+      _out.println(deed+" has "+objectivesCount+" objectives");
     }
     List<Objective> objectives=objectivesMgr.getObjectives();
     for(Objective objective : objectives)
@@ -70,7 +73,7 @@ public class MainDeedsStatistics
     }
     if (conditionsCount>20)
     {
-      System.out.println(deed+", objective #"+objective.getIndex()+" has "+conditionsCount+" conditions");
+      _out.println(deed+", objective #"+objective.getIndex()+" has "+conditionsCount+" conditions");
     }
     countHolder.increment();
   }

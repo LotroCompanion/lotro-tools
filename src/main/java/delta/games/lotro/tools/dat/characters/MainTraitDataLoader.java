@@ -227,19 +227,7 @@ public class MainTraitDataLoader
       ret.setSubCategory(subCategory);
     }
     // Trait groups
-    Object[] traitGroups=(Object[])traitProperties.getProperty("Trait_Groups");
-    if (traitGroups!=null)
-    {
-      for(Object traitGroupObj : traitGroups)
-      {
-        int groupCode=((Integer)traitGroupObj).intValue();
-        TraitGroup group=_traitGroupEnum.getEntry(groupCode);
-        if (group!=null)
-        {
-          ret.addTraitGroup(group);
-        }
-      }
-    }
+    loadTraitGroups(ret,traitProperties);
     // Tooltip
     String tooltip=_i18n.getStringProperty(traitProperties,"Trait_Tooltip");
     ret.setTooltip(tooltip);
@@ -268,6 +256,23 @@ public class MainTraitDataLoader
       ret.setTraitPrerequisite(toUse);
     }
     return ret;
+  }
+
+  private void loadTraitGroups(TraitDescription trait, PropertiesSet traitProperties)
+  {
+    Object[] traitGroups=(Object[])traitProperties.getProperty("Trait_Groups");
+    if (traitGroups!=null)
+    {
+      for(Object traitGroupObj : traitGroups)
+      {
+        int groupCode=((Integer)traitGroupObj).intValue();
+        TraitGroup group=_traitGroupEnum.getEntry(groupCode);
+        if (group!=null)
+        {
+          trait.addTraitGroup(group);
+        }
+      }
+    }
   }
 
   private void loadSkills(TraitDescription trait, PropertiesSet traitProperties)

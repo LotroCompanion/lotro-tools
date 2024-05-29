@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.skills.pets;
 
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,14 +42,14 @@ public class MainPetsCheck
     return ret;
   }
 
-  private void doIt()
+  private void doIt(PrintStream out)
   {
     Set<Integer> petIDs=loadPetIDs();
-    System.out.println("Size petIDs="+petIDs.size());
+    out.println("Size petIDs="+petIDs.size());
     Set<Integer> petSkillIDs=loadPetSkillsIDs();
-    System.out.println("Size petSkillIDs="+petSkillIDs.size());
+    out.println("Size petSkillIDs="+petSkillIDs.size());
     petSkillIDs.removeAll(petIDs);
-    System.out.println("Orphan skill(s): "+petSkillIDs);
+    out.println("Orphan skill(s): "+petSkillIDs);
   }
 
   /**
@@ -57,6 +58,6 @@ public class MainPetsCheck
    */
   public static void main(String[] args)
   {
-    new MainPetsCheck().doIt();
+    new MainPetsCheck().doIt(System.out);
   }
 }

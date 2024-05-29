@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.dat.skills;
 
 import java.io.File;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,8 @@ import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.mounts.MountDescription;
@@ -108,7 +111,6 @@ public class MainSkillDataLoader
     PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
     if (skillProperties!=null)
     {
-      //System.out.println("*********** Skill: "+skillId+" ****************");
       ret=buildSkill(skillProperties);
       ret.setIdentifier(skillId);
       // Name
@@ -145,14 +147,16 @@ public class MainSkillDataLoader
           }
         }
       }
-      /*
       // Skill type(s)
       {
         long typeFlags=((Long)skillProperties.getProperty("Skill_SkillType")).longValue();
-        EnumMapper skillType=facade.getEnumsManager().getEnumMapper(587203492);
+        EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
         BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags);
-        String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
-        System.out.println("Skill: "+skillName+", types="+types);
+        if (LOGGER.isDebugEnabled())
+        {
+          String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
+          LOGGER.debug("Skill: "+skillName+", types="+types);
+        }
       }
       // Skill quest flags
       {
@@ -160,10 +164,12 @@ public class MainSkillDataLoader
         if (skillQuestFlags!=null)
         {
           BitSet skillBitSet=BitSetUtils.getBitSetFromFlags(skillQuestFlags.longValue());
-          System.out.println("Skill: "+skillName+", flags="+skillBitSet);
+          if (LOGGER.isDebugEnabled())
+          {
+            LOGGER.debug("Skill: "+skillName+", flags="+skillBitSet);
+          }
         }
       }
-      */
       if (ret instanceof MountDescription)
       {
         MountDescription mount=(MountDescription)ret;

@@ -63,16 +63,11 @@ public class MountsLoader
       return;
     }
     // Hidden?
-    //int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
+    @SuppressWarnings("unused")
+    Integer hidden=(Integer)properties.getProperty("Collection_Hide_Entry");
     // Source description (null for war-steeds)
     String sourceDescription=_i18n.getStringProperty(properties,"Collection_Piece_SourceDesc");
     ret.setSourceDescription(sourceDescription);
-    // Hide?
-    Integer hide=(Integer)properties.getProperty("Collection_Hide_Entry");
-    if ((hide!=null) && (hide.intValue()!=0))
-    {
-      //System.out.println("Hide: "+name);
-    }
 
     // Sub category
     int subCategoryCode=((Integer)properties.getProperty("Skill_SubCategory")).intValue();
