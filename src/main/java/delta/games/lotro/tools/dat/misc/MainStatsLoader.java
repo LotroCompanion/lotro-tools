@@ -317,21 +317,26 @@ public class MainStatsLoader
 
   private int getMaxFractionalDigits(StatDescription stat, boolean below1)
   {
+    int propertyID=stat.getIdentifier();
     boolean isLive=LotroCoreConfig.isLive();
     if (isLive)
     {
+      if (propertyID==268439616) // Tactical Critical Multiplier
+      {
+        return 3;
+      }
       if (below1)
       {
         return 2;
       }
-      if (isRegenStat(stat))
+      if (isRegenStat(propertyID))
       {
         return 3; 
       }
     }
     else
     {
-      if (isRegenStat(stat))
+      if (isRegenStat(propertyID))
       {
         return 1;
       }
@@ -343,12 +348,12 @@ public class MainStatsLoader
     return 0;
   }
 
-  private static boolean isRegenStat(StatDescription stat)
+  private static boolean isRegenStat(int propertyID)
   {
-    if (stat==WellKnownStat.ICMR) return true;
-    if (stat==WellKnownStat.ICPR) return true;
-    if (stat==WellKnownStat.OCMR) return true;
-    if (stat==WellKnownStat.OCPR) return true;
+    if (propertyID==268438584) return true; // ICMR
+    if (propertyID==268435801) return true; // ICPR
+    if (propertyID==268437934) return true; // OCMR
+    if (propertyID==268435577) return true; // OCPR
     return false;
   }
 
