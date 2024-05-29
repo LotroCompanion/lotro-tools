@@ -59,16 +59,13 @@ public class PropertiesDescriptor
       }
       else
       {
-        //PropertyDefinition propertyDef=values.get(0).getDefinition();
-        //LOGGER.warn("Index out of bounds: "+index+" not in [0-"+values.size()+"[ for property "+propertyDef);
         // This happens mainly for properties: Ambient_MusicRegion and Ambient_SoundEnum_BlockMapOverride
         // Assume value is null is these cases
       }
     }
     else
     {
-      // Happens very oftenly
-      //LOGGER.warn("Property not found for key="+key);
+      // Property not found. Very often.
     }
     return ret;
   }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
@@ -394,28 +395,30 @@ public class LootLoader
 
   private TreasureGroupProfile loadTreasureGroupProfile(int id)
   {
-    TreasureGroupProfile ret=null;
     ItemsTable itemsTable=loadItemsTable(id);
     if (itemsTable!=null)
     {
-      ret=itemsTable;
+      return itemsTable;
     }
-    else
+    TreasureList treasureList=loadTreasureList(id);
+    if (treasureList!=null)
     {
-      TreasureList treasureList=loadTreasureList(id);
-      if (treasureList!=null)
+      return treasureList;
+    }
+    // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
+    if (LOGGER.isEnabledFor(Level.WARN))
+    {
+      PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+      if (properties!=null)
       {
-        ret=treasureList;
+        LOGGER.warn(properties.dump());
       }
       else
       {
-        System.out.println("**********************");
-        PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-        System.out.println(properties.dump());
-        // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
+        LOGGER.warn("No properties for ID: "+id);
       }
     }
-    return ret;
+    return null;
   }
 
   @SuppressWarnings("unchecked")

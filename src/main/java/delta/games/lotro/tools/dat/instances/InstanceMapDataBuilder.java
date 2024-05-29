@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import delta.games.lotro.common.Identifiable;
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.geo.BlockReferenceComparator;
 import delta.games.lotro.lore.geo.GeoBoundingBox;
 import delta.games.lotro.lore.instances.InstanceMapDescription;
 import delta.games.lotro.lore.instances.PrivateEncounter;
+import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.MapDescription;
@@ -35,6 +37,8 @@ import delta.games.lotro.tools.dat.maps.MarkerUtils;
  */
 public class InstanceMapDataBuilder
 {
+  private static final Logger LOGGER=Logger.getLogger(InstanceMapDataBuilder.class);
+
   private MarkersFinder _finder;
   private LandblocksManager _landblocksManager;
 
@@ -58,15 +62,16 @@ public class InstanceMapDataBuilder
   {
     int contentLayerId=privateEncounter.getContentLayerId();
     List<Marker> markers=_finder.findMarkersForContentLayer(contentLayerId);
-    /*
-    System.out.println("PE: "+privateEncounter.getName());
-    System.out.println("\tFound "+markers.size()+" markers.");
-    System.out.println("Blocks: "+blocks);
-    for(Marker marker : markers)
+    if (LOGGER.isDebugEnabled())
     {
-      System.out.println(marker+" => "+getBlock(marker));
+      LOGGER.debug("PE: "+privateEncounter.getName());
+      LOGGER.debug("\tFound "+markers.size()+" markers.");
+      LOGGER.debug("Blocks: "+blocks);
+      for(Marker marker : markers)
+      {
+        LOGGER.debug(marker+" => "+getBlock(marker));
+      }
     }
-    */
     List<Integer> additionalContentLayers=privateEncounter.getAdditionalContentLayers();
     for(Integer contentLayer : additionalContentLayers)
     {
@@ -77,8 +82,10 @@ public class InstanceMapDataBuilder
     markers=filterMarkers(markers,blocks);
 
     Map<Integer,List<Marker>> sortedMarkers=sortMarkersByZone(markers);
-    //System.out.println("\tFound "+sortedMarkers.size()+" zones.");
-    //Identifiable map=MapUtils.findMapForZone(parentZoneID.intValue());
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("\tFound "+sortedMarkers.size()+" zones.");
+    }
     List<Integer> dungeonsIds=findDungeons(sortedMarkers.keySet());
     for(Integer dungeonId : dungeonsIds)
     {
@@ -109,11 +116,11 @@ public class InstanceMapDataBuilder
     {
       Integer mapId=null;
       List<Integer> areaIds=getAreasForBlocks(group);
-      if (areaIds.size()>0)
+      if (!areaIds.isEmpty())
       {
         // Assume same map for all the blocks of a group
         int areaId=areaIds.get(0).intValue();
-        Identifiable map=MapUtils.findMapForZone(areaId);
+        AbstractMap map=MapUtils.findMapForZone(areaId);
         if (map!=null)
         {
           mapId=Integer.valueOf(map.getIdentifier());
@@ -130,14 +137,24 @@ public class InstanceMapDataBuilder
         instanceMap.addZoneId(areaId.intValue());
       }
       GeoBox boundingBox=buildBoundingBox(group);
-      GeoBoundingBox geoBBox=new GeoBoundingBox(boundingBox.getMin().getLongitude(),boundingBox.getMin().getLatitude(),boundingBox.getMax().getLongitude(),boundingBox.getMax().getLatitude());
-      basemap.setBoundingBox(geoBBox);
-      privateEncounter.addMapDescription(instanceMap);
+      if (boundingBox!=null)
+      {
+        GeoBoundingBox geoBBox=new GeoBoundingBox(boundingBox.getMin().getLongitude(),boundingBox.getMin().getLatitude(),boundingBox.getMax().getLongitude(),boundingBox.getMax().getLatitude());
+        basemap.setBoundingBox(geoBBox);
+        privateEncounter.addMapDescription(instanceMap);
+      }
+      else
+      {
+        LOGGER.warn("Bounding box is null. Group="+group);
+      }
     }
     // Fixes
     fixes(privateEncounter);
-    //int nbMaps=privateEncounter.getMapDescriptions().size();
-    //System.out.println("Found "+nbMaps+" map(s) for "+privateEncounter);
+    if (LOGGER.isDebugEnabled())
+    {
+      int nbMaps=privateEncounter.getMapDescriptions().size();
+      LOGGER.debug("Found "+nbMaps+" map(s) for "+privateEncounter);
+    }
   }
 
   private GeoBox buildBoundingBox(List<BlockReference> blocks)
