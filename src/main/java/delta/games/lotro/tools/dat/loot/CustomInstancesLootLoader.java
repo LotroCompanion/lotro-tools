@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.dat.others.boxes;
+package delta.games.lotro.tools.dat.loot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,6 @@ import delta.games.lotro.lore.instances.loot.InstanceLoots;
 import delta.games.lotro.lore.instances.loot.InstanceLootsTable;
 import delta.games.lotro.lore.instances.loot.io.xml.InstanceLootXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.others.LootLoader;
 
 /**
  * Get the contents of custom skirmish/instances chests from DAT files.

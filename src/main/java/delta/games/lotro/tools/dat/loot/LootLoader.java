@@ -1,9 +1,7 @@
-package delta.games.lotro.tools.dat.others;
+package delta.games.lotro.tools.dat.loot;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -28,11 +26,9 @@ import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.TrophyListEntry;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
 import delta.games.lotro.common.treasure.WeightedTreasureTableEntry;
-import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -51,8 +47,7 @@ public class LootLoader
   private static final Logger LOGGER=Logger.getLogger(LootLoader.class);
 
   private DataFacade _facade;
-  private EnumMapper _dropFrequency;
-  private Map<Integer,Float> _probabilities;
+  private LootProbabilities _probabilities;
   private LootsManager _lootsMgr;
 
   /**
@@ -63,67 +58,8 @@ public class LootLoader
   public LootLoader(DataFacade facade, LootsManager lootsMgr)
   {
     _facade=facade;
-    _dropFrequency=facade.getEnumsManager().getEnumMapper(587202656);
-    _probabilities=new HashMap<Integer,Float>();
+    _probabilities=new LootProbabilities(facade);
     _lootsMgr=lootsMgr;
-    loadProbabilities();
-  }
-
-  private void loadProbabilities()
-  {
-    boolean isLive=LotroCoreConfig.isLive();
-    if (isLive)
-    {
-      loadProbabilitiesLive();
-    }
-    else
-    {
-      loadProbabilitiesSoA();
-    }
-  }
-
-  private void loadProbabilitiesLive()
-  {
-    // LootGenControl:
-    PropertiesSet properties=_facade.loadProperties(1879076022+DATConstants.DBPROPERTIES_OFFSET);
-    if (properties==null)
-    {
-      return;
-    }
-    Object[] tableArray=(Object[])properties.getProperty("LootGenControl_DropFrequencyTable");
-    for(Object tableEntryObj : tableArray)
-    {
-      PropertiesSet entryProps=(PropertiesSet)tableEntryObj;
-      float percentage=((Float)entryProps.getProperty("LootGenControl_DropFrequency_Percentage")).floatValue();
-      int code=((Integer)entryProps.getProperty("LootGenControl_DropFrequency_Label")).intValue();
-      _probabilities.put(Integer.valueOf(code),Float.valueOf(percentage));
-      LOGGER.debug("Probability is "+percentage*100+" for "+_dropFrequency.getString(code));
-    }
-  }
-
-  private void loadProbabilitiesSoA()
-  {
-    _probabilities.put(Integer.valueOf(4),Float.valueOf(1f)); // Always
-    _probabilities.put(Integer.valueOf(9),Float.valueOf(0.7f)); // Common
-    _probabilities.put(Integer.valueOf(12),Float.valueOf(0.68f)); // Trophy
-    _probabilities.put(Integer.valueOf(10),Float.valueOf(0.6f)); // Frequent
-    _probabilities.put(Integer.valueOf(3),Float.valueOf(0.25f)); // Uncommon
-    _probabilities.put(Integer.valueOf(2),Float.valueOf(0.1f)); // Rare
-    _probabilities.put(Integer.valueOf(5),Float.valueOf(0.05f)); // UltraRare
-    _probabilities.put(Integer.valueOf(8),Float.valueOf(0.01f)); // ImpossiblyRare
-
-    _probabilities.put(Integer.valueOf(11),Float.valueOf(1f)); // EpicRaid
-
-    _probabilities.put(Integer.valueOf(16),Float.valueOf(0.75f)); // ReputationCommon
-    _probabilities.put(Integer.valueOf(15),Float.valueOf(0.5f)); // ReputationFrequent
-    _probabilities.put(Integer.valueOf(17),Float.valueOf(0.25f)); // ReputationUncommon
-    _probabilities.put(Integer.valueOf(14),Float.valueOf(0.04f)); // ReputationRare
-    _probabilities.put(Integer.valueOf(13),Float.valueOf(0.02f)); // ReputationVeryRare
-
-    _probabilities.put(Integer.valueOf(20),Float.valueOf(0.6f)); // BarterCommon
-    _probabilities.put(Integer.valueOf(22),Float.valueOf(0.4f)); // BarterFrequent
-    _probabilities.put(Integer.valueOf(19),Float.valueOf(0.2f)); // BarterUncommon
-    _probabilities.put(Integer.valueOf(21),Float.valueOf(0.1f)); // BarterRare
   }
 
   /**
@@ -330,7 +266,7 @@ public class LootLoader
       PropertiesSet trophyProps=(PropertiesSet)trophyObj;
       // Probability
       int frequencyCode=((Integer)trophyProps.getProperty("LootGen_TrophyList_DropFrequency")).intValue();
-      float probability=getProbability(frequencyCode);
+      float probability=_probabilities.getProbability(frequencyCode);
       // Quantity
       int itemOrProfile=((Integer)trophyProps.getProperty("LootGen_TrophyList_ItemOrProfile")).intValue();
       Item item=null;
@@ -530,7 +466,7 @@ public class LootLoader
       {
         PropertiesSet entryProps=(PropertiesSet)entryObj;
         int frequencyCode=((Integer)entryProps.getProperty("RunicList_DropFrequency")).intValue();
-        float probability=getProbability(frequencyCode);
+        float probability=_probabilities.getProbability(frequencyCode);
         // id may be a Relic, or a runic loot table:
         int id=((Integer)entryProps.getProperty("RunicList_RunicOrTreasureGroup")).intValue();
         Relic relic=getRelic(id);
@@ -606,15 +542,5 @@ public class LootLoader
     RelicsManager relicsMgr=RelicsManager.getInstance();
     Relic relic=relicsMgr.getById(relicId);
     return relic;
-  }
-
-  private float getProbability(int frequencyCode)
-  {
-    Float probability=_probabilities.get(Integer.valueOf(frequencyCode));
-    if (probability==null)
-    {
-      LOGGER.warn("Missing probability: frequencyCode="+frequencyCode);
-    }
-    return (probability!=null)?probability.floatValue():0.0f;
   }
 }

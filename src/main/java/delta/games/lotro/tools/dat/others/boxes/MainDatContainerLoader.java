@@ -27,7 +27,8 @@ import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsContainer;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.others.LootLoader;
+import delta.games.lotro.tools.dat.loot.CustomInstancesLootLoader;
+import delta.games.lotro.tools.dat.loot.LootLoader;
 
 /**
  * Get the contents of a container (box,chest,scrolls...) from DAT files.

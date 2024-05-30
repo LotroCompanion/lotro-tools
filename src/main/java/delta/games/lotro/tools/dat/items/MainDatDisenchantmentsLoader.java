@@ -16,7 +16,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.DisenchantmentResultXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.others.LootLoader;
+import delta.games.lotro.tools.dat.loot.LootLoader;
 
 /**
  * Get the disenchantment data from DAT files.

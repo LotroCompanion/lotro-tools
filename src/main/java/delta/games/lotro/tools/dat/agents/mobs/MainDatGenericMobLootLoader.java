@@ -22,7 +22,7 @@ import delta.games.lotro.lore.agents.mobs.loot.SpeciesLootsManager;
 import delta.games.lotro.lore.agents.mobs.loot.SubSpeciesLoot;
 import delta.games.lotro.lore.agents.mobs.loot.io.xml.GenericMobLootXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.others.LootLoader;
+import delta.games.lotro.tools.dat.loot.LootLoader;
 
 /**
  * Get mob loot data from DAT files.

@@ -36,11 +36,10 @@ public class ClassificationLoader
    */
   public ClassificationLoader(DataFacade facade)
   {
-    LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
-    _alignment=registry.get(Alignment.class);
-    _class=registry.get(AgentClass.class);
-    _classFilter=registry.get(ClassificationFilter.class);
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
+    _alignment=enumsRegistry.get(Alignment.class);
+    _class=enumsRegistry.get(AgentClass.class);
+    _classFilter=enumsRegistry.get(ClassificationFilter.class);
     _genus=enumsRegistry.get(Genus.class);
     _species=enumsRegistry.get(Species.class);
     _subSpecies=enumsRegistry.get(SubSpecies.class);

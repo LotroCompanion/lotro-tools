@@ -23,7 +23,7 @@ import delta.games.lotro.lore.agents.mobs.MobLoot;
 import delta.games.lotro.lore.agents.mobs.io.xml.MobsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
-import delta.games.lotro.tools.dat.others.LootLoader;
+import delta.games.lotro.tools.dat.loot.LootLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
