@@ -12,6 +12,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.enums.QuestScope;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
@@ -92,6 +93,7 @@ public class DatObjectivesLoader
   private LotroEnum<MobDivision> _mobDivision;
   private EnumMapper _questEvent;
   private LotroEnum<QuestCategory> _questCategory;
+  private LotroEnum<QuestScope> _questScope;
 
   @SuppressWarnings("unused")
   private GeoData _geoData;
@@ -109,6 +111,7 @@ public class DatObjectivesLoader
     _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=LotroEnumsRegistry.getInstance().get(QuestCategory.class);
+    _questScope=LotroEnumsRegistry.getInstance().get(QuestScope.class);
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
   }
 
@@ -904,6 +907,13 @@ QuestEvent_ShowBillboardText: 0
     */
 
     QuestCompleteCondition ret=new QuestCompleteCondition();
+
+    Integer scopeCode=(Integer)properties.getProperty("QuestEvent_QuestCompleteScope");
+    if (scopeCode!=null)
+    {
+      QuestScope scope=_questScope.getEntry(scopeCode.intValue());
+      ret.setQuestScope(scope);
+    }
 
     Integer questId=(Integer)properties.getProperty("QuestEvent_QuestComplete");
     if (questId!=null)

@@ -16,6 +16,7 @@ import delta.games.lotro.common.Size;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.enums.QuestScope;
 import delta.games.lotro.common.rewards.Rewards;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -48,6 +49,7 @@ public class QuestsLoader
   private DataFacade _facade;
   private Map<Integer,QuestDescription> _quests;
   private LotroEnum<QuestCategory> _questCategory;
+  private LotroEnum<QuestScope> _questScope;
   private I18nUtils _i18n;
   private DatRolesLoader _rolesLoader;
   private DatObjectivesLoader _objectivesLoader;
@@ -66,6 +68,7 @@ public class QuestsLoader
     _quests=new HashMap<Integer,QuestDescription>();
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _questCategory=registry.get(QuestCategory.class);
+    _questScope=registry.get(QuestScope.class);
     _i18n=new I18nUtils("quests",facade.getGlobalStringsManager());
     _rolesLoader=new DatRolesLoader(facade,_i18n);
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
@@ -140,7 +143,7 @@ public class QuestsLoader
     }
     quest.setLockType(lockType);
     // Scope
-    //handleScope(quest, properties);
+    handleScope(quest, properties);
     // Monster play?
     Integer isMonsterPlayCode=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
     boolean isMonsterPlay=((isMonsterPlayCode!=null) && (isMonsterPlayCode.intValue()!=0));
@@ -236,41 +239,11 @@ public class QuestsLoader
 
   private void handleScope(QuestDescription quest, PropertiesSet properties)
   {
-    // TODO Check values in enum mapper 587202822
-    Integer scope=((Integer)properties.getProperty("Quest_Scope"));
-    if (scope!=null)
+    Integer scopeCode=((Integer)properties.getProperty("Quest_Scope"));
+    if (scopeCode!=null)
     {
-      int value=scope.intValue();
-      if (value==1)
-      {
-        // Task (x417) matches category="Task"
-        quest.setRepeatability(Repeatability.INFINITELY_REPEATABLE);
-      }
-      else if (value==2)
-      {
-        // Crafting (x42)
-        quest.setSize(Size.FELLOWSHIP);
-      }
-      else if (value==3)
-      {
-        // Epic (x ~1k)
-        quest.setSize(Size.SMALL_FELLOWSHIP);
-      }
-      else if (value==5)
-      {
-        // Legendary Items (x12) (eg Moria or Eregion instance that require shards ; Defence of Glatrev)?
-        // Normal...
-        quest.setSize(Size.SOLO);
-      }
-      else if (value==9)
-      {
-        // Allegiance quests (x44)
-        LOGGER.debug("Instance");
-      }
-      else
-      {
-        LOGGER.warn("Unmanaged scope: "+value);
-      }
+      QuestScope scope=_questScope.getEntry(scopeCode.intValue());
+      quest.setQuestScope(scope);
     }
   }
 

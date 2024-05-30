@@ -36,6 +36,7 @@ import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.PerkUICategory;
 import delta.games.lotro.common.enums.QuestCategory;
+import delta.games.lotro.common.enums.QuestScope;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.enums.SkillCategory;
@@ -140,6 +141,7 @@ public class MainDatEnumsLoader
     }
     loadEnum(587203643,"ItemUniquenessChannel",ItemUniquenessChannel.class); // 0x2300043B
     loadEnum(587202585,"QuestCategory",QuestCategory.class); // 0x23000019
+    loadEnum(587202822,"QuestScope",QuestScope.class); // 0x23000106
     loadEnum(587202588,"AccomplishmentUITab",DeedCategory.class); // 0x2300001C
     loadEnum(587202659,"CraftTier",CraftTier.class); // 0x23000063
     {
