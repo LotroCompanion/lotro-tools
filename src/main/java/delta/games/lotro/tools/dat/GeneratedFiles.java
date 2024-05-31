@@ -432,4 +432,8 @@ public class GeneratedFiles
    * PVP data.
    */
   public static final File PVP=LotroCoreConfig.getInstance().getFile(DataFiles.PVP);
+  /**
+   * Mood data.
+   */
+  public static final File MOOD=LotroCoreConfig.getInstance().getFile(DataFiles.MOOD);
 }

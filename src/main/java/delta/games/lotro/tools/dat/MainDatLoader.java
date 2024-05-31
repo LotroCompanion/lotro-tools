@@ -59,6 +59,7 @@ import delta.games.lotro.tools.dat.misc.MainPerksLoader;
 import delta.games.lotro.tools.dat.misc.MainPropertyResponseMapsLoader;
 import delta.games.lotro.tools.dat.misc.MainStatsLoader;
 import delta.games.lotro.tools.dat.misc.WebStoreItemsLoader;
+import delta.games.lotro.tools.dat.mood.MainMoodDataLoader;
 import delta.games.lotro.tools.dat.others.boxes.MainDatContainerLoader;
 import delta.games.lotro.tools.dat.pvp.MainDatPVPLoader;
 import delta.games.lotro.tools.dat.quests.DatRewardsLoader;
@@ -116,6 +117,8 @@ public class MainDatLoader
     new MainXpTableLoader(_facade).doIt();
     // PVP
     new MainDatPVPLoader(_facade).doIt();
+    // Mood
+    new MainMoodDataLoader(_facade).doIt();
     // Geo
     new MainDatLandmarksLoader(_facade).doIt();
     // Combat data
@@ -278,6 +281,7 @@ public class MainDatLoader
     deleteDirectory(GeneratedFiles.ENUMS_DIR);
     deleteFile(GeneratedFiles.XP_TABLE);
     deleteFile(GeneratedFiles.PVP);
+    deleteFile(GeneratedFiles.MOOD);
     // Labels
     // Do not delete the labels directory because it is shared with the geo data loader
     // deleteDirectory(GeneratedFiles.LABELS)
