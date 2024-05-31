@@ -13,6 +13,8 @@ import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.RecallEffect;
@@ -38,6 +40,7 @@ import delta.games.lotro.tools.dat.maps.PlacesLoader;
 import delta.games.lotro.tools.dat.skills.mounts.MountsLoader;
 import delta.games.lotro.tools.dat.skills.pets.CosmeticPetLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Get skill definitions from DAT files.
@@ -239,6 +242,57 @@ public class MainSkillDataLoader
   }
 
   /**
+   * Load skill requirements.
+   * @param effectsLoader Effects loader.
+   */
+  public void loadRequirements(EffectLoader effectsLoader)
+  {
+    for(SkillDescription skill : SkillsManager.getInstance().getAll())
+    {
+      int skillId=skill.getIdentifier();
+      PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
+      loadRequirements(skill,effectsLoader,skillProperties);
+    }
+    saveSkills();
+  }
+
+  private void loadRequirements(SkillDescription skill, EffectLoader effectsLoader, PropertiesSet props)
+  {
+    // Required trait
+    Integer requiredTraitId=(Integer)props.getProperty("Skill_RequiredTrait");
+    if (requiredTraitId!=null)
+    {
+      TraitDescription trait=TraitsManager.getInstance().getTrait(requiredTraitId.intValue());
+      if (trait!=null)
+      {
+        Proxy<TraitDescription> requiredTrait=new Proxy<TraitDescription>();
+        requiredTrait.setId(requiredTraitId.intValue());
+        requiredTrait.setName(trait.getName());
+        requiredTrait.setObject(trait);
+        skill.setRequiredTrait(requiredTrait);
+      }
+      else
+      {
+        LOGGER.warn("Unknown trait: "+requiredTraitId);
+      }
+    }
+    // Required effects
+    Object[] requiredEffectsArray=(Object[])props.getProperty("Skill_RequiredEffectList");
+    if (requiredEffectsArray!=null)
+    {
+      for(Object requiredEffectEntry : requiredEffectsArray)
+      {
+        int requiredEffectId=((Integer)requiredEffectEntry).intValue();
+        Effect effect=effectsLoader.getEffect(requiredEffectId);
+        if (effect!=null)
+        {
+          skill.addRequiredEffect(effect);
+        }
+      }
+    }
+  }
+
+  /**
    * Load skill effects.
    * @param effectsLoader Effects loader.
    */
@@ -308,6 +362,7 @@ public class MainSkillDataLoader
     PlacesLoader placesLoader=new PlacesLoader(facade);
     EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     loader.loadEffects(effectsLoader);
+    loader.loadRequirements(effectsLoader);
     effectsLoader.save();
     facade.dispose();
   }

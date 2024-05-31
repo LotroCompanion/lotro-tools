@@ -162,6 +162,7 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
+    skillsLoader.loadRequirements(effectsLoader);
     skillsLoader.loadEffects(effectsLoader);
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     // Items
