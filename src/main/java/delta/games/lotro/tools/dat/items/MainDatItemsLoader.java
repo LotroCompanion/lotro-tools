@@ -295,6 +295,8 @@ public class MainDatItemsLoader
       // - effect
       EffectLoader effectsLoader=_itemEffectsLoader.getEffectsLoader();
       RequirementsLoadingUtils.loadRequiredEffect(properties,item.getUsageRequirements(),effectsLoader);
+      // - trait
+      RequirementsLoadingUtils.loadRequiredTrait(properties,item.getUsageRequirements());
       // Stats providers
       StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
       if (armorStatProvider!=null)

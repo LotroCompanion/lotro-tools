@@ -6,12 +6,15 @@ import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.requirements.EffectRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.GloryRankRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
+import delta.games.lotro.common.requirements.TraitRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -211,6 +214,22 @@ public class RequirementsLoadingUtils
       Effect effect=loader.getEffect(effectId.intValue());
       EffectRequirement requirement=new EffectRequirement(effect);
       requirements.setEffectRequirement(requirement);
+    }
+  }
+
+  /**
+   * Load trait requirement.
+   * @param properties Source properties.
+   * @param requirements Storage for loaded data.
+   */
+  public static void loadRequiredTrait(PropertiesSet properties, UsageRequirement requirements)
+  {
+    Integer traitId=(Integer)properties.getProperty("Usage_RequiredTrait");
+    if ((traitId!=null) && (traitId.intValue()>0))
+    {
+      TraitDescription trait=TraitsManager.getInstance().getTrait(traitId.intValue());
+      TraitRequirement requirement=new TraitRequirement(trait);
+      requirements.setTraitRequirement(requirement);
     }
   }
 }
