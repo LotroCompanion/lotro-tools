@@ -325,6 +325,10 @@ public class MainStatsLoader
       {
         return 3;
       }
+      if (propertyID==268436768) // Maximum Power
+      {
+        return 3;
+      }
       if (below1)
       {
         return 2;
