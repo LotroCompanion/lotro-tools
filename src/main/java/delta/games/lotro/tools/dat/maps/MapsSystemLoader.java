@@ -15,7 +15,6 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
-import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
@@ -46,19 +45,22 @@ public class MapsSystemLoader
   private EnumMapper _uiElementId;
   private List<ParchmentMap> _maps;
   private MapsManager _mapsManager;
+  private GeoreferencedBasemapsLoader _basemapsLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
    * @param mapsManager Maps manager.
+   * @param basemapsLoader Loader for basemaps.
    */
-  public MapsSystemLoader(DataFacade facade, MapsManager mapsManager)
+  public MapsSystemLoader(DataFacade facade, MapsManager mapsManager, GeoreferencedBasemapsLoader basemapsLoader)
   {
     _facade=facade;
     _i18n=new I18nUtils("parchmentMaps",facade.getGlobalStringsManager());
     _uiElementId=facade.getEnumsManager().getEnumMapper(587202769);
     _maps=new ArrayList<ParchmentMap>();
     _mapsManager=mapsManager;
+    _basemapsLoader=basemapsLoader;
   }
 
   /**
@@ -121,56 +123,12 @@ public class MapsSystemLoader
       mapName="";
     }
     Console.println(mapName,level);
+    // Push i18n labels in the basemaps file
+    I18nUtils i18n=_basemapsLoader.getI18nUtils();
+    i18n.getNameStringProperty(props,"UI_Map_MenuName",parchmentMapId,0);
 
-    GeoreferencedBasemapsManager basemapsManager=_mapsManager.getBasemapsManager();
-    // Map image
     int imageId=((Integer)props.getProperty("UI_Map_MapImage")).intValue();
-    File imageFile=basemapsManager.getBasemapImageFile(parchmentMapId);
-    if (!imageFile.exists())
-    {
-      DatIconsUtils.buildImageFile(_facade,imageId,imageFile);
-    }
-
-    // Region ID
-    Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
-
-    // Scale
-    // Scale decreases with high level maps:
-    // - Mordor/Agarnaith: 0.2375
-    // - Mordor: 0.03644
-    // - Middle-earth: 0.0173184
-    float scale=((Float)props.getProperty("UI_Map_Scale")).floatValue();
-
-    float geo2pixel;
-    // Origin
-    GeoPoint origin=MapUtils.getOrigin(activeElementName,scale,props);
-    if (origin!=null)
-    {
-      geo2pixel=scale*200;
-    }
-    else
-    {
-      origin=new GeoPoint(0,0);
-      geo2pixel=1;
-    }
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("\tScale: "+scale);
-      LOGGER.debug("\tOrigin: "+origin);
-      LOGGER.debug("\tGeo2pixel: "+geo2pixel);
-    }
-    GeoReference geoReference=new GeoReference(origin,geo2pixel);
-    GeoreferencedBasemap basemap=new GeoreferencedBasemap(parchmentMapId,mapName,geoReference);
-    // Bounding box
-    if (imageFile!=null)
-    {
-      GeoBox boundingBox=MapUtils.computeBoundingBox(geoReference,imageFile);
-      basemap.setBoundingBox(boundingBox);
-    }
-    // Image ID
-    basemap.setImageId(imageId);
-    // Register basemap
-    basemapsManager.addBasemap(basemap);
+    GeoreferencedBasemap basemap=_basemapsLoader.handleBasemap(props,parchmentMapId,imageId,mapName);
 
     // Links
     UIElement uiElement=getUIElementById(parchmentMapId);
@@ -184,6 +142,7 @@ public class MapsSystemLoader
 
     ParchmentMap parchmentMap=new ParchmentMap(parchmentMapId,mapName);
     // Region
+    Integer regionId=(Integer)props.getProperty("UI_Map_RegionID");
     if (regionId!=null)
     {
       parchmentMap.setRegion(regionId.intValue());
@@ -376,9 +335,10 @@ public class MapsSystemLoader
     DataFacade facade=new DataFacade();
     File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
-    MapsSystemLoader loader=new MapsSystemLoader(facade,mapsManager);
+    GeoreferencedBasemapsLoader basemapsLoader=new GeoreferencedBasemapsLoader(facade,mapsManager.getBasemapsManager());
+    MapsSystemLoader loader=new MapsSystemLoader(facade,mapsManager,basemapsLoader);
     loader.doIt();
-    mapsManager.getBasemapsManager().write();
+    basemapsLoader.write();
     mapsManager.getLinksManager().write();
   }
 }
