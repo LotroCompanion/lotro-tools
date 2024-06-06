@@ -210,6 +210,7 @@ public class MarkerDuplicatesRemover
     if ((category1==75) && (category2==45)) return Integer.valueOf(45);
     if ((category1==73) && (category2==34)) return Integer.valueOf(34);
     if ((category1==73) && (category2==45)) return Integer.valueOf(45);
+    if ((category1==74) && (category2==21)) return Integer.valueOf(21);
     if ((category1==74) && (category2==30)) return Integer.valueOf(30);
     if ((category1==74) && (category2==31)) return Integer.valueOf(31);
     if ((category1==74) && (category2==39)) return Integer.valueOf(43);
