@@ -6,11 +6,8 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.math.geometry.Vector3D;
 import delta.games.lotro.dat.data.DatPosition;
-import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.tools.dat.maps.MarkersLoadingUtils;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
 import delta.games.lotro.tools.dat.maps.data.LbiLink;
@@ -24,17 +21,14 @@ public class LandblockGeneratorsAnalyzer
 {
   private static final Logger LOGGER=Logger.getLogger(LandblockGeneratorsAnalyzer.class);
 
-  private DataFacade _facade;
   private MarkersLoadingUtils _markerUtils;
 
   /**
    * Constructor.
-   * @param facade Data facade.
    * @param markerUtils Marker utils.
    */
-  public LandblockGeneratorsAnalyzer(DataFacade facade, MarkersLoadingUtils markerUtils)
+  public LandblockGeneratorsAnalyzer(MarkersLoadingUtils markerUtils)
   {
-    _facade=facade;
     _markerUtils=markerUtils;
   }
 
@@ -117,10 +111,9 @@ public class LandblockGeneratorsAnalyzer
     if (_markerUtils!=null)
     {
       DatPosition position=buildPosition(lbi,entity);
-      DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
       if (contentLayers==null)
       {
-        _markerUtils.buildMarker(position,dataId,0);
+        _markerUtils.buildMarker(position,did,0);
       }
       else
       {
@@ -130,7 +123,7 @@ public class LandblockGeneratorsAnalyzer
           {
             LOGGER.warn("Found CL 0!");
           }
-          _markerUtils.buildMarker(position,dataId,contentLayerId);
+          _markerUtils.buildMarker(position,did,contentLayerId);
         }
       }
     }

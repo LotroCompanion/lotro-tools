@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -7,7 +8,6 @@ import org.apache.log4j.Logger;
 import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.geo.AchievableGeoData;
 import delta.games.lotro.dat.data.geo.AchievableGeoDataItem;
 import delta.games.lotro.dat.data.geo.ContentLayerGeoData;
@@ -15,7 +15,6 @@ import delta.games.lotro.dat.data.geo.DidGeoData;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.misc.Context;
-import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
 import delta.games.lotro.tools.dat.maps.data.LandBlockInfo;
@@ -97,6 +96,8 @@ public class MapsDataLoader
 
     // Save data
     _mapsDataMgr.write();
+    File toDir=mapsManager.getLabelsDir();
+    _markerUtils.save(toDir);
   }
 
   private void loadMaps(MapsManager mapsManager)
@@ -123,7 +124,7 @@ public class MapsDataLoader
   private void analyzeLandblocks()
   {
     LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
-    LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_facade,_markerUtils);
+    LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_markerUtils);
     boolean isLive=Context.isLive();
     int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
     for(int region : regions)
@@ -175,16 +176,11 @@ public class MapsDataLoader
     int layerId=data.getContentLayer();
     for(Integer did : data.getDids())
     {
-      DataIdentification dataId=DataIdentificationTools.identify(_facade,did.intValue());
-      if (!MarkerUtils.accept(dataId))
-      {
-        continue;
-      }
       DidGeoData didData=data.getGeoData(did.intValue());
       List<DatPosition> positions=didData.getPositions();
       for(DatPosition position : positions)
       {
-        _markerUtils.buildMarker(position,dataId,layerId);
+        _markerUtils.buildMarker(position,did.intValue(),layerId);
       }
     }
   }
@@ -198,9 +194,8 @@ public class MapsDataLoader
       {
         continue;
       }
-      DataIdentification dataId=DataIdentificationTools.identify(_facade,did);
       DatPosition position=dataItem.getPosition();
-      _markerUtils.buildMarker(position,dataId,0); // Assume world marker!
+      _markerUtils.buildMarker(position,did,0); // Assume world marker!
     }
   }
 

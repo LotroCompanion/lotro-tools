@@ -22,7 +22,7 @@ public class MainTestLandblockInfoLoader
   {
     _facade=new DataFacade();
     _loader=new LandblockInfoLoader(_facade);
-    _analyzer=new LandblockGeneratorsAnalyzer(_facade,null);
+    _analyzer=new LandblockGeneratorsAnalyzer(null);
   }
 
   void handleLandBlock(LandBlockInfo lbi)

@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.maps;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class MarkersLoadingUtils
   private MapsDataManager _mapsDataManager;
   private Map<Integer,IntegerHolder> _typesCount=new HashMap<Integer,IntegerHolder>();
   private LinksStorage _links;
+  private DataIdMgr _dataIdMgr;
 
   /**
    * Constructor.
@@ -60,6 +62,7 @@ public class MarkersLoadingUtils
     _mapNoteType=facade.getEnumsManager().getEnumMapper(587202775);
     _mapsDataManager=mapsDataManager;
     _links=new LinksStorage();
+    _dataIdMgr=new DataIdMgr(facade);
   }
 
   /**
@@ -107,11 +110,11 @@ public class MarkersLoadingUtils
   /**
    * Build a marker.
    * @param position Position.
-   * @param dataId Data identifier.
+   * @param did Data ID.
    * @param layerId Content layer identifier.
    * @return the generated marker or <code>null</code>.
    */
-  public Marker buildMarker(DatPosition position, DataIdentification dataId, int layerId)
+  public Marker buildMarker(DatPosition position, int did, int layerId)
   {
     int region=position.getRegion();
     if (((region<1) || (region>5)) && (region!=14))
@@ -123,6 +126,11 @@ public class MarkersLoadingUtils
     if (parentZoneId==null)
     {
       LOGGER.warn("No parent zone for marker!");
+      return null;
+    }
+    DataIdentification dataId=_dataIdMgr.identify(did);
+    if (dataId==null)
+    {
       return null;
     }
     Marker marker=MarkerUtils.buildMarker(position,dataId);
@@ -186,7 +194,7 @@ public class MarkersLoadingUtils
     {
       checkMarker(position,where);
     }
-    DataIdentification dataId=DataIdentificationTools.identify(_facade,noteDID);
+    DataIdentification dataId=_dataIdMgr.identify(noteDID);
     if (dataId==null)
     {
       return null;
@@ -377,5 +385,14 @@ public class MarkersLoadingUtils
       LOGGER.warn("Target map not found for target: "+destArea);
     }
     return targetMap;
+  }
+
+  /**
+   * Save data (labels).
+   * @param toDir Root directory to use.
+   */
+  public void save(File toDir)
+  {
+    _dataIdMgr.save(toDir);
   }
 }
