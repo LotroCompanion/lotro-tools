@@ -102,7 +102,7 @@ public class MapsDataLoader
   private void loadMaps(MapsManager mapsManager)
   {
     // Basemaps loader
-    GeoreferencedBasemapsLoader basemapsLoader=new GeoreferencedBasemapsLoader(_facade,mapsManager.getBasemapsManager());
+    GeoreferencedBasemapsLoader basemapsLoader=new GeoreferencedBasemapsLoader(_facade,mapsManager);
     // Parchment maps
     MapsSystemLoader mapsSystemLoader=new MapsSystemLoader(_facade,mapsManager,basemapsLoader);
     mapsSystemLoader.doIt();

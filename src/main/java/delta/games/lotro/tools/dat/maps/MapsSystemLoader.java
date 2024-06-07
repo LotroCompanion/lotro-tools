@@ -335,7 +335,7 @@ public class MapsSystemLoader
     DataFacade facade=new DataFacade();
     File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
-    GeoreferencedBasemapsLoader basemapsLoader=new GeoreferencedBasemapsLoader(facade,mapsManager.getBasemapsManager());
+    GeoreferencedBasemapsLoader basemapsLoader=new GeoreferencedBasemapsLoader(facade,mapsManager);
     MapsSystemLoader loader=new MapsSystemLoader(facade,mapsManager,basemapsLoader);
     loader.doIt();
     basemapsLoader.write();

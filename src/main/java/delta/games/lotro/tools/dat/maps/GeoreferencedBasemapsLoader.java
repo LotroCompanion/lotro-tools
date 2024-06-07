@@ -10,6 +10,7 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.GeoReference;
+import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -23,18 +24,20 @@ public class GeoreferencedBasemapsLoader
   private static final Logger LOGGER=Logger.getLogger(GeoreferencedBasemapsLoader.class);
 
   private DataFacade _facade;
+  private MapsManager _mapsManager;
   private GeoreferencedBasemapsManager _basemapsManager;
   private I18nUtils _i18n;
 
   /**
    * Constructor.
    * @param facade Facade.
-   * @param basemapsManager Basemaps manager.
+   * @param mapsManager Maps manager.
    */
-  public GeoreferencedBasemapsLoader(DataFacade facade, GeoreferencedBasemapsManager basemapsManager)
+  public GeoreferencedBasemapsLoader(DataFacade facade, MapsManager mapsManager)
   {
     _facade=facade;
-    _basemapsManager=basemapsManager;
+    _mapsManager=mapsManager;
+    _basemapsManager=mapsManager.getBasemapsManager();
     _i18n=new I18nUtils("basemaps",facade.getGlobalStringsManager());
   }
 
@@ -108,6 +111,7 @@ public class GeoreferencedBasemapsLoader
   public void write()
   {
     _basemapsManager.write();
-    _i18n.save();
+    File toDir=_mapsManager.getLabelsDir();
+    _i18n.save(toDir);
   }
 }

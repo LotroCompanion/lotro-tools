@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.utils.i18n;
 
+import java.io.File;
 import java.util.Set;
 
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -304,6 +305,15 @@ public class I18nUtils
    */
   public void save()
   {
-    _storage.saveLabels(GeneratedFiles.LABELS,_setKey);
+    save(GeneratedFiles.LABELS);
+  }
+
+  /**
+   * Save loaded data.
+   * @param toDir Directory to use.
+   */
+  public void save(File toDir)
+  {
+    _storage.saveLabels(toDir,_setKey);
   }
 }

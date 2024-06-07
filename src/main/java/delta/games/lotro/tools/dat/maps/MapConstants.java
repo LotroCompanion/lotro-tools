@@ -18,13 +18,4 @@ public class MapConstants
   {
     return LotroCoreConfig.getInstance().getFile("maps");
   }
-
-  /**
-   * Get the maps directory.
-   * @return the maps directory.
-   */
-  public static File getMapsDir()
-  {
-    return new File(getRootDir(),"maps");
-  }
 }

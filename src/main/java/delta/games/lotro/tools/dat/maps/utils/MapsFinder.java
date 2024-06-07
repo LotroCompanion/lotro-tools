@@ -11,6 +11,7 @@ import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
+import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemap;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.maps.GeoUtils;
@@ -32,8 +33,9 @@ public class MapsFinder
    */
   public MapsFinder()
   {
-    File rootDir=MapConstants.getMapsDir();
-    _basemapsManager=new GeoreferencedBasemapsManager(rootDir);
+    File rootDir=MapConstants.getRootDir();
+    MapsManager mapsManager=new MapsManager(rootDir);
+    _basemapsManager=mapsManager.getBasemapsManager();
   }
 
   /**
