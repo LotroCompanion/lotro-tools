@@ -10,8 +10,8 @@ import delta.games.lotro.common.colors.io.xml.ColorXMLWriter;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.dat.GeneratedFiles;
-import delta.games.lotro.tools.dat.utils.DatUtils;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
+import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
  * Get color definitions from DAT files.
@@ -22,6 +22,7 @@ public class MainDatColorLoader
   private static final Logger LOGGER=Logger.getLogger(MainDatColorLoader.class);
 
   private DataFacade _facade;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -30,6 +31,7 @@ public class MainDatColorLoader
   public MainDatColorLoader(DataFacade facade)
   {
     _facade=facade;
+    _i18n=new I18nUtils("colors",facade.getGlobalStringsManager());
   }
 
   /**
@@ -49,18 +51,7 @@ public class MainDatColorLoader
     for(Object colorEntryObj : entries)
     {
       PropertiesSet colorProps=(PropertiesSet)colorEntryObj;
-      String colorName=DatUtils.getStringProperty(colorProps,"ItemMunging_NameLookup_Name");
-      Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Color: "+colorName+", value: "+colorValue);
-      }
       ColorDescription color=new ColorDescription();
-      color.setName(colorName);
-      if (colorValue!=null)
-      {
-        color.setCode(colorValue.floatValue());
-      }
       // Color bit
       Long colorBitSet=(Long)colorProps.getProperty("Wardrobe_ItemClothingColorExt_Bit");
       if (colorBitSet!=null)
@@ -68,9 +59,23 @@ public class MainDatColorLoader
         int position=Long.numberOfTrailingZeros(colorBitSet.longValue())+1;
         color.setIntCode(position);
       }
+      // Name
+      int code=color.getIntCode();
+      String colorName=_i18n.getNameStringProperty(colorProps,"ItemMunging_NameLookup_Name",code,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+      color.setName(colorName);
+      Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Color: "+colorName+", value: "+colorValue);
+      }
+      if (colorValue!=null)
+      {
+        color.setCode(colorValue.floatValue());
+      }
       colors.add(color);
     }
     ColorXMLWriter.writeColorsFile(GeneratedFiles.COLORS,colors);
+    _i18n.save();
   }
 
   /**
