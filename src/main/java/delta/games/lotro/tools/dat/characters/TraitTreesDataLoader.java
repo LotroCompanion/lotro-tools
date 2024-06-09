@@ -83,10 +83,14 @@ public class TraitTreesDataLoader
         TraitTreeBranch branch=new TraitTreeBranch(branchType);
         branchesById.put(Integer.valueOf(branchId),branch);
         tree.addBranch(branch);
+        // Progression
         TraitTreeProgression progression=branch.getProgression();
         int progressionId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationProgression")).intValue();
         PropertiesSet progressionProperties=_facade.loadProperties(progressionId+DATConstants.DBPROPERTIES_OFFSET);
         handleSpecializationProgression(progression,progressionProperties);
+        // Enabled?
+        boolean enabled=isEnabled(branchId);
+        branch.setEnabled(enabled);
       }
     }
     // Traits
@@ -231,5 +235,14 @@ public class TraitTreesDataLoader
     if (traitNatureKey==32) return WellKnownCharacterClassKeys.BRAWLER;
     if (traitNatureKey==33) return WellKnownCharacterClassKeys.CORSAIR;
     return null;
+  }
+
+  private boolean isEnabled(int branchCode)
+  {
+    if (branchCode==27) return false; // Fighter of Shadows (Guardian's yellow branch)
+    if (branchCode==28) return false; // The Protector of Song (Minstrel's yellow branch)
+    if (branchCode==59) return false; // The Fundaments (Brawler's yellow branch)
+    if (branchCode==35) return false; // Assailment (Warden's yellow branch)
+    return true;
   }
 }
