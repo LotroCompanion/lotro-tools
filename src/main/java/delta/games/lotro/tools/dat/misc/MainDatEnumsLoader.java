@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import delta.common.utils.i18n.MultilocalesTranslator;
 import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.common.CharacterSex;
+import delta.games.lotro.common.enums.AICooldownChannel;
+import delta.games.lotro.common.enums.AIHint;
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.AllegianceGroup;
@@ -165,6 +167,8 @@ public class MainDatEnumsLoader
     loadEnum(587203027,"PerkUICategory",PerkUICategory.class); // 0x230001D3
     loadEnum(587203310,"TraitGroup",TraitGroup.class); // 0x230002EE
     loadEnum(587202657,"MobDivision",MobDivision.class); // 0x23000061
+    loadEnum(587202652,"AIHint",AIHint.class); // 0x2300005C
+    loadEnum(587202668,"AICooldownChannel",AICooldownChannel.class); // 0x2300006C
 
     // Derivated enums
     // From EquipmentCategory:
