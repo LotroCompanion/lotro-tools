@@ -51,7 +51,6 @@ public class LootProbabilities
   private void loadProbabilitiesLive()
   {
     // LootGenControl:
-    
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"LootGenControl");
     if (properties==null)
     {
