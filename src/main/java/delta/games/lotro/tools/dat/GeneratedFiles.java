@@ -436,4 +436,8 @@ public class GeneratedFiles
    * Mood data.
    */
   public static final File MOOD=LotroCoreConfig.getInstance().getFile(DataFiles.MOOD);
+  /**
+   * Action tables.
+   */
+  public static final File ACTION_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.ACTION_TABLES);
 }

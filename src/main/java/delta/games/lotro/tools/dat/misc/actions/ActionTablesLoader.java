@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.dat.misc.actions;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,11 +11,13 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.action.ActionEntry;
 import delta.games.lotro.common.action.ActionTable;
 import delta.games.lotro.common.action.ActionTableEntry;
 import delta.games.lotro.common.action.ActionTables;
 import delta.games.lotro.common.action.ActionTablesEntry;
+import delta.games.lotro.common.action.io.xml.ActionTablesXMLWriter;
 import delta.games.lotro.common.enums.AICooldownChannel;
 import delta.games.lotro.common.enums.AIHint;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -24,6 +27,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
+import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
@@ -56,6 +60,7 @@ public class ActionTablesLoader
   public void doIt()
   {
     doItMobs();
+    save();
   }
 
   private void doItMobs()
@@ -117,7 +122,10 @@ public class ActionTablesLoader
     if (ret==null)
     {
       ret=loadTable(tableID);
-      _actionTables.put(key,ret);
+      if (ret!=null)
+      {
+        _actionTables.put(key,ret);
+      }
     }
     return ret;
   }
@@ -147,27 +155,21 @@ public class ActionTablesLoader
       // Probability
       Integer probabilityCode=(Integer)entryProps.getProperty("AIAction_Probability");
       Float probability=_probabilities.get(probabilityCode);
-      entry.setProbability(tableID);
+      entry.setProbability(probability.floatValue());
       // Cooldown
       Float cooldown=(Float)entryProps.getProperty("AIAction_Cooldown");
-      if (cooldown!=null)
+      if ((cooldown!=null) && (cooldown.floatValue()>0))
       {
         entry.setCooldown(cooldown);
       }
       // Required hints
       BitSet requiredHintsBS=(BitSet)entryProps.getProperty("AIAction_RequiredHints");
       List<AIHint> requiredHints=loadHints(requiredHintsBS);
-      if (requiredHints!=null)
-      {
-        entry.setRequiredHints(requiredHints);
-      }
+      entry.setRequiredHints(requiredHints);
       // Disallowed hints
       BitSet disallowedHintsBS=(BitSet)entryProps.getProperty("AIAction_DisallowedHints");
       List<AIHint> disallowedHints=loadHints(disallowedHintsBS);
-      if (disallowedHints!=null)
-      {
-        entry.setDisallowedHints(disallowedHints);
-      }
+      entry.setDisallowedHints(disallowedHints);
       // Cooldown channel
       Integer cooldownChannelCode=(Integer)entryProps.getProperty("AIAction_CooldownChannel");
       if (cooldownChannelCode!=null)
@@ -177,24 +179,18 @@ public class ActionTablesLoader
       }
       // Target cooldown
       Float targetCooldown=(Float)entryProps.getProperty("AIAction_TargetCooldown");
-      if (targetCooldown!=null)
+      if ((targetCooldown!=null) && (targetCooldown.floatValue()>0))
       {
         entry.setTargetCooldown(targetCooldown);
       }
       // Target required hints
       BitSet targetRequiredHintsBS=(BitSet)entryProps.getProperty("AIAction_TargetRequiredHints");
       List<AIHint> targetRequiredHints=loadHints(targetRequiredHintsBS);
-      if (targetRequiredHints!=null)
-      {
-        entry.setTargetRequiredHints(targetRequiredHints);
-      }
+      entry.setTargetRequiredHints(targetRequiredHints);
       // Target disallowed hints
       BitSet targetDisallowedHintsBS=(BitSet)entryProps.getProperty("AIAction_TargetDisallowedHints");
       List<AIHint> targetDisallowedHints=loadHints(targetDisallowedHintsBS);
-      if (targetDisallowedHints!=null)
-      {
-        entry.setTargetDisallowedHints(targetDisallowedHints);
-      }
+      entry.setTargetDisallowedHints(targetDisallowedHints);
       if (LOGGER.isDebugEnabled())
       {
         LOGGER.debug("Entry #"+index);
@@ -261,6 +257,13 @@ public class ActionTablesLoader
       int code=((Integer)entryProps.getProperty("AIActionProbability_Type")).intValue();
       _probabilities.put(Integer.valueOf(code),Float.valueOf(percentage));
     }
+  }
+
+  private void save()
+  {
+    List<ActionTable> tables=new ArrayList<ActionTable>(_actionTables.values());
+    Collections.sort(tables,new IdentifiableComparator<ActionTable>());
+    ActionTablesXMLWriter.writeActionTablesFile(GeneratedFiles.ACTION_TABLES,tables);
   }
 
   /**
