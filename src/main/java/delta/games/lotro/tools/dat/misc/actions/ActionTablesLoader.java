@@ -31,7 +31,8 @@ import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.WeenieContentDirectory;
 
 /**
- * @author dm
+ * Loader for action tables.
+ * @author DAM
  */
 public class ActionTablesLoader
 {
@@ -77,12 +78,17 @@ public class ActionTablesLoader
     }
   }
 
-  private void loadActionTables(PropertiesSet props)
+  /**
+   * Load action tables.
+   * @param props Mob properties.
+   * @return Action tables or <code>null</code> if none.
+   */
+  public ActionTables loadActionTables(PropertiesSet props)
   {
     Object[] actionTableArray=(Object[])props.getProperty("AI_ActionTable_Array");
     if ((actionTableArray==null) || (actionTableArray.length==0))
     {
-      return;
+      return null;
     }
     ActionTables ret=new ActionTables();
     for(Object actionTableEntry : actionTableArray)
@@ -108,11 +114,15 @@ public class ActionTablesLoader
         LOGGER.debug("\tTable ID: "+tableID);
       }
       ActionTable table=getTable(tableID);
-      ActionTablesEntry entry=new ActionTablesEntry(table);
-      entry.setMinLevel(minLevel);
-      entry.setMaxLevel(maxLevel);
-      ret.addActionTablesEntry(entry);
+      if (table!=null)
+      {
+        ActionTablesEntry entry=new ActionTablesEntry(table);
+        entry.setMinLevel(minLevel);
+        entry.setMaxLevel(maxLevel);
+        ret.addActionTablesEntry(entry);
+      }
     }
+    return ret;
   }
 
   private ActionTable getTable(int tableID)
@@ -259,7 +269,10 @@ public class ActionTablesLoader
     }
   }
 
-  private void save()
+  /**
+   * Save loaded data.
+   */
+  public void save()
   {
     List<ActionTable> tables=new ArrayList<ActionTable>(_actionTables.values());
     Collections.sort(tables,new IdentifiableComparator<ActionTable>());

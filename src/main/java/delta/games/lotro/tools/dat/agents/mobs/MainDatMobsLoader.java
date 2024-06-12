@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.common.action.ActionTables;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.MobDivision;
@@ -24,6 +25,7 @@ import delta.games.lotro.lore.agents.mobs.io.xml.MobsXMLWriter;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.agents.ClassificationLoader;
 import delta.games.lotro.tools.dat.loot.LootLoader;
+import delta.games.lotro.tools.dat.misc.actions.ActionTablesLoader;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
 
 /**
@@ -42,6 +44,8 @@ public class MainDatMobsLoader
   private LootsManager _loots;
   private LotroEnum<MobDivision> _mobDivision;
   private LootLoader _lootLoader;
+  // Action tables
+  private ActionTablesLoader _actionTablesLoader;
 
   /**
    * Constructor.
@@ -56,6 +60,7 @@ public class MainDatMobsLoader
     _loots=lootsManager;
     _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _lootLoader=new LootLoader(facade,_loots);
+    _actionTablesLoader=new ActionTablesLoader(facade);
   }
 
   private MobDescription load(int mobId)
@@ -131,6 +136,9 @@ Quest_MonsterDivision: 245 => HallOfMirror
         mobDivision=_mobDivision.getEntry(mobDivisionCode.intValue());
         ret.setDivision(mobDivision);
       }
+      // Actions tables
+      ActionTables table=_actionTablesLoader.loadActionTables(properties);
+      ret.setActionTables(table);
     }
     else
     {
@@ -174,8 +182,11 @@ Quest_MonsterDivision: 245 => HallOfMirror
     {
       LOGGER.info("Wrote mobs file: "+GeneratedFiles.MOBS);
     }
-    // Save labels
+    // Save
+    // -labels
     _i18n.save();
+    // - action tables
+    _actionTablesLoader.save();
   }
 
   /**
