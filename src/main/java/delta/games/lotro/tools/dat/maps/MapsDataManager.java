@@ -43,7 +43,7 @@ public class MapsDataManager
   public MapsDataManager(DataFacade facade)
   {
     File rootDir=MapConstants.getRootDir();
-    _mapsManager=new MapsManager(rootDir);
+    _mapsManager=new MapsManager(rootDir,false);
     _index=new MarkersIndexesManager(rootDir);
     _didStore=new HashMap<Integer,MarkersStore>();
     _clStore=new HashMap<Integer,MarkersStore>();
