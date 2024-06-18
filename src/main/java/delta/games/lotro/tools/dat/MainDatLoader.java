@@ -22,10 +22,10 @@ import delta.games.lotro.tools.dat.characters.InitialGearLoader;
 import delta.games.lotro.tools.dat.characters.MainCharacterDataLoader;
 import delta.games.lotro.tools.dat.characters.MainStatTomesLoader;
 import delta.games.lotro.tools.dat.characters.MainTraitDataLoader;
+import delta.games.lotro.tools.dat.characters.MainXpTableLoader;
 import delta.games.lotro.tools.dat.characters.MonsterClassDataLoader;
 import delta.games.lotro.tools.dat.characters.NationalitiesLoader;
 import delta.games.lotro.tools.dat.characters.RaceDataLoader;
-import delta.games.lotro.tools.dat.characters.MainXpTableLoader;
 import delta.games.lotro.tools.dat.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.dat.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.dat.crafting.MainDatCraftingLoader;
@@ -70,7 +70,6 @@ import delta.games.lotro.tools.dat.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.dat.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.trade.MainDatTradeLoader;
-import delta.games.lotro.tools.dat.traitPoints.TraitPointsRegistryBuilder;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
 import delta.games.lotro.tools.lore.tasks.MainTaskDataBuilder;
@@ -232,8 +231,6 @@ public class MainDatLoader
     peLoader.finish();
     // Buffs
     new MainBuffsLoader().doIt();
-    // Trait points
-    new TraitPointsRegistryBuilder().doIt();
     if (live)
     {
       // Collections
@@ -369,8 +366,6 @@ public class MainDatLoader
     // Effects
     deleteFile(GeneratedFiles.EFFECTS);
     deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
-    // Trait points
-    deleteFile(GeneratedFiles.TRAIT_POINTS);
     // Collections
     deleteFile(GeneratedFiles.COLLECTIONS);
     // Vendors

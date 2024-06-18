@@ -253,10 +253,6 @@ public class GeneratedFiles
    */
   public static final File CRAFTING_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.CRAFTING_DATA);
   /**
-   * Trait points.
-   */
-  public static final File TRAIT_POINTS=LotroCoreConfig.getInstance().getFile(DataFiles.TRAIT_POINTS);
-  /**
    * Effect-based buffs.
    */
   public static final File BUFFS=LotroCoreConfig.getInstance().getFile(DataFiles.BUFFS);
