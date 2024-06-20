@@ -10,12 +10,12 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
-import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -141,8 +141,8 @@ public class SkillConstraintsComputer
     RacesManager mgr=RacesManager.getInstance();
     for(RaceDescription race : mgr.getAll())
     {
-      List<RaceTrait> raceTraits=race.getTraits();
-      for(RaceTrait raceTrait : raceTraits)
+      List<TraitAndLevel> raceTraits=race.getTraits();
+      for(TraitAndLevel raceTrait : raceTraits)
       {
         TraitDescription trait=raceTrait.getTrait();
         Integer key=Integer.valueOf(trait.getIdentifier());

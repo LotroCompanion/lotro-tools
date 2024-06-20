@@ -3,9 +3,9 @@ package delta.games.lotro.tools.lore.proficiencies;
 import java.util.List;
 
 import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.common.enums.SkillCategory;
 
 /**
@@ -16,8 +16,8 @@ public class MainInspectClassProficiencies
 {
   private void doClass(ClassDescription characterClass)
   {
-    List<ClassTrait> traits=characterClass.getTraits();
-    for(ClassTrait classTrait : traits)
+    List<TraitAndLevel> traits=characterClass.getTraits();
+    for(TraitAndLevel classTrait : traits)
     {
       int level=classTrait.getRequiredLevel();
       TraitDescription trait=classTrait.getTrait();

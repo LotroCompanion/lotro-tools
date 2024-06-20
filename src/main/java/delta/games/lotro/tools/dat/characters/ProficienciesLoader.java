@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
 import delta.games.lotro.character.classes.proficiencies.TypedClassProficiencies;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -41,14 +41,14 @@ public class ProficienciesLoader
    */
   public void handleClass(ClassDescription classDescription)
   {
-    List<ClassTrait> classTraits=classDescription.getTraits();
-    for(ClassTrait classTrait : classTraits)
+    List<TraitAndLevel> classTraits=classDescription.getTraits();
+    for(TraitAndLevel classTrait : classTraits)
     {
       handleClassTrait(classDescription.getProficiencies(),classTrait);
     }
   }
 
-  private void handleClassTrait(ClassProficiencies proficiencies, ClassTrait classTrait)
+  private void handleClassTrait(ClassProficiencies proficiencies, TraitAndLevel classTrait)
   {
     TraitDescription trait=classTrait.getTrait();
     int level=classTrait.getRequiredLevel();

@@ -16,9 +16,9 @@ import delta.games.lotro.character.races.NationalitiesManager;
 import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RaceGender;
-import delta.games.lotro.character.races.RaceTrait;
 import delta.games.lotro.character.races.io.xml.RaceDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -192,7 +192,7 @@ public class RaceDataLoader
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       TraitDescription trait=TraitUtils.getTrait(traitId);
       LOGGER.debug("Level: "+level+" => trait "+trait+" (rank="+rank+")");
-      RaceTrait raceTrait=new RaceTrait(level,trait);
+      TraitAndLevel raceTrait=new TraitAndLevel(level,trait);
       description.addTrait(raceTrait);
     }
   }

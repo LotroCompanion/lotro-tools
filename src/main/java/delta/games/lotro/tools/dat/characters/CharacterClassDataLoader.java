@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
-import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
@@ -23,6 +22,7 @@ import delta.games.lotro.character.stats.base.StartStatsManager;
 import delta.games.lotro.character.stats.base.io.xml.DerivedStatsContributionsXMLWriter;
 import delta.games.lotro.character.stats.base.io.xml.StartStatsXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatUtils;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -396,7 +396,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       {
         LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
         TraitDescription trait=TraitUtils.getTrait(traitId);
-        ClassTrait classTrait=new ClassTrait(level,trait);
+        TraitAndLevel classTrait=new TraitAndLevel(level,trait);
         description.addTrait(classTrait);
         knownTraits.add(key);
       }

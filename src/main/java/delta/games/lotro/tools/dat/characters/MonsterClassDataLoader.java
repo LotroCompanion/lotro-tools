@@ -10,13 +10,13 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
-import delta.games.lotro.character.classes.ClassTrait;
 import delta.games.lotro.character.classes.MonsterClassDescription;
 import delta.games.lotro.character.classes.WellKnownMonsterClassKeys;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.utils.TraitAndLevel;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -129,7 +129,7 @@ MonsterPlay_TraitList:
         {
           LOGGER.debug("Level: "+level+" (rank="+rank+")");
           TraitDescription trait=TraitUtils.getTrait(traitId);
-          ClassTrait classTrait=new ClassTrait(level,trait);
+          TraitAndLevel classTrait=new TraitAndLevel(level,trait);
           description.addTrait(classTrait);
           knownTraits.add(key);
         }
