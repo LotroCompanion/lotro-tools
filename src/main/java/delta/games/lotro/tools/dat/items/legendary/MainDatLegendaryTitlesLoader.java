@@ -136,7 +136,7 @@ Mod_Array:
       // - Private stats
       {
         StatsProvider statsProvider=_statUtils.buildStatProviders(properties);
-        if (statsProvider.getNumberOfStatProviders()>0)
+        if (statsProvider.getEntriesCount()>0)
         {
           // Level does not matter because it's only constant stats
           BasicStatsSet stats=statsProvider.getStats(1,100);

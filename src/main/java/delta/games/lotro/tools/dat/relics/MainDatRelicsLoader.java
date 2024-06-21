@@ -92,7 +92,7 @@ public class MainDatRelicsLoader
       relic.getStats().addStats(stats);
       // Runic stats
       StatsProvider runicStatsProvider=_statUtils.buildStatProviders("Runic_",properties);
-      if (runicStatsProvider.getNumberOfStatProviders()>0)
+      if (runicStatsProvider.getEntriesCount()>0)
       {
         BasicStatsSet runicStats=runicStatsProvider.getStats(1,level.intValue());
         relic.getStats().addStats(runicStats);

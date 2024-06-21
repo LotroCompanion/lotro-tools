@@ -409,10 +409,9 @@ public class LegaciesLoader
         legacy.setType(LegacyType.CLASS);
       }
     }
-    int nbStats=statsProvider.getNumberOfStatProviders();
-    if (nbStats>0)
+    StatProvider statProvider=statsProvider.getFirstStatProvider();
+    if (statProvider!=null)
     {
-      StatProvider statProvider=statsProvider.getStatProvider(0);
       ScalableStatProvider scalableStatProvider=(ScalableStatProvider)statProvider;
       Progression progression=scalableStatProvider.getProgression();
       int progressionId=progression.getIdentifier();
@@ -440,13 +439,7 @@ public class LegaciesLoader
 
   private StatDescription getStat(StatsProvider statsProvider)
   {
-    int nbStats=statsProvider.getNumberOfStatProviders();
-    if (nbStats>0)
-    {
-      StatProvider statProvider=statsProvider.getStatProvider(0);
-      return statProvider.getStat();
-    }
-    return null;
+    return statsProvider.getFirstStat();
   }
 
   private EquipmentLocation getSlotFromCode(int code)
@@ -597,7 +590,7 @@ public class LegaciesLoader
     // Guardian belts do have a special stat
     if ((WellKnownCharacterClassKeys.GUARDIAN.equals(characterClass.getKey())) && (slot==EquipmentLocations.CLASS_SLOT))
     {
-      StatProvider provider=statsProvider.getStatProvider(0);
+      StatProvider provider=statsProvider.getFirstStatProvider();
       StatsRegistry stats=StatsRegistry.getInstance();
       StatDescription stat=stats.getByKey("Combat_TacticalDPS_Modifier#1");
       provider.setStat(stat);

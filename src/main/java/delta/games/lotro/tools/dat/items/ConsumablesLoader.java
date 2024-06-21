@@ -15,10 +15,10 @@ import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.stats.ConstantStatProvider;
-import delta.games.lotro.common.stats.SpecialEffect;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatProvider;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.common.stats.StatsProviderEntry;
 import delta.games.lotro.lore.consumables.Consumable;
 import delta.games.lotro.lore.consumables.io.xml.ConsumableXMLWriter;
 import delta.games.lotro.lore.items.Item;
@@ -93,9 +93,8 @@ public class ConsumablesLoader
     }
     // Register consumable if needed
     StatsProvider statsProvider=currentConsumable.getProvider();
-    int nbStatProviders=statsProvider.getNumberOfStatProviders();
-    int nbEffects=statsProvider.getSpecialEffects().size();
-    if ((nbStatProviders>0) || (nbEffects>0))
+    int nbEntries=statsProvider.getEntriesCount();
+    if (nbEntries>0)
     {
       _consumables.add(currentConsumable);
     }
@@ -170,7 +169,8 @@ public class ConsumablesLoader
     {
       return;
     }
-    if (statsProvider.getNumberOfStatProviders()>0)
+    int nbEntries=statsProvider.getEntriesCount();
+    if (nbEntries>0)
     {
       if (_current==null)
       {
@@ -178,32 +178,31 @@ public class ConsumablesLoader
       }
       StatsProvider consumableStatsProvider=_current.getProvider();
       int level=getLevel(item,spellcraft);
-      int nbStats=statsProvider.getNumberOfStatProviders();
-      for(int i=0;i<nbStats;i++)
+      for(int i=0;i<nbEntries;i++)
       {
-        StatProvider provider=statsProvider.getStatProvider(i);
-        if (level!=0)
+        StatsProviderEntry entry=statsProvider.getEntry(i);
+        if (entry instanceof StatProvider)
         {
-          StatDescription stat=provider.getStat();
-          Float value=provider.getStatValue(1,level);
-          StatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
-          consumableProvider.setOperator(provider.getOperator());
-          consumableProvider.setDescriptionOverride(provider.getDescriptionOverride());
-          consumableStatsProvider.addStatProvider(consumableProvider);
+          StatProvider provider=(StatProvider)entry;
+          if (level!=0)
+          {
+            StatDescription stat=provider.getStat();
+            Float value=provider.getStatValue(1,level);
+            ConstantStatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
+            consumableProvider.setOperator(provider.getOperator());
+            consumableProvider.setDescriptionOverride(provider.getDescriptionOverride());
+            consumableStatsProvider.addStatProvider(consumableProvider);
+          }
+          else
+          {
+            consumableStatsProvider.addStatProvider(provider);
+          }
         }
         else
         {
-          consumableStatsProvider.addStatProvider(provider);
+          consumableStatsProvider.addEntry(entry);
         }
       }
-    }
-    for(SpecialEffect specialEffect : statsProvider.getSpecialEffects())
-    {
-      if (_current==null)
-      {
-        _current=new Consumable(item);
-      }
-      _current.getProvider().addSpecialEffect(specialEffect);
     }
   }
 
