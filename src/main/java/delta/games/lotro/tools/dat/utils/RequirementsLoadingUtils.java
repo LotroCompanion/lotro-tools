@@ -16,12 +16,12 @@ import delta.games.lotro.common.requirements.GloryRankRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
 import delta.games.lotro.common.requirements.TraitRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
-import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.crafting.CraftingSystem;
 import delta.games.lotro.lore.crafting.Profession;
 import delta.games.lotro.lore.crafting.Professions;
+import delta.games.lotro.lore.parameters.Game;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.dat.effects.EffectLoader;
@@ -54,7 +54,7 @@ public class RequirementsLoadingUtils
     Integer floatToCap=(Integer)properties.getProperty("Usage_MinLevel_FloatToCap");
     if ((floatToCap!=null) && (floatToCap.intValue()==1))
     {
-      int capLevel=LotroCoreConfig.getInstance().getMaxCharacterLevel();
+      int capLevel=Game.getParameters().getMaxCharacterLevel();
       requirements.setMinLevel(Integer.valueOf(capLevel));
     }
   }

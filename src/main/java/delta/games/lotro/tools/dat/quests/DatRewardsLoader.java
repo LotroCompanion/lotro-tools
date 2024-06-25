@@ -27,7 +27,6 @@ import delta.games.lotro.common.rewards.TraitReward;
 import delta.games.lotro.common.rewards.VirtueReward;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
-import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -38,6 +37,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
+import delta.games.lotro.lore.parameters.Game;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
@@ -480,7 +480,7 @@ public class DatRewardsLoader
       int level=challengeLevel.getEffectiveLevel();
       if (level==0)
       {
-        level=LotroCoreConfig.getInstance().getMaxCharacterLevel();
+        level=Game.getParameters().getMaxCharacterLevel();
       }
       rewardsMap=_defaultRewardMaps.get(Integer.valueOf(level));
     }

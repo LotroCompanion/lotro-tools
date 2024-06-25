@@ -436,4 +436,8 @@ public class GeneratedFiles
    * Action tables.
    */
   public static final File ACTION_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.ACTION_TABLES);
+  /**
+   * Game data.
+   */
+  public static final File GAME_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.GAME_DATA);
 }

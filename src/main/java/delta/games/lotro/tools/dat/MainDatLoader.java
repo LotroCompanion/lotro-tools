@@ -71,6 +71,7 @@ import delta.games.lotro.tools.dat.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.dat.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.dat.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
+import delta.games.lotro.tools.lore.MainGameDataBuilder;
 import delta.games.lotro.tools.lore.MainServersBuilder;
 import delta.games.lotro.tools.lore.tasks.MainTaskDataBuilder;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
@@ -104,6 +105,8 @@ public class MainDatLoader
   private void load()
   {
     boolean live=LotroCoreConfig.isLive();
+    // Game
+    new MainGameDataBuilder().doIt();
     // Servers
     new MainServersBuilder().doIt();
     // Stats
@@ -272,6 +275,7 @@ public class MainDatLoader
   private void cleanup()
   {
     // Commons
+    deleteFile(GeneratedFiles.GAME_DATA);
     deleteFile(GeneratedFiles.STATS);
     deleteFile(GeneratedFiles.COLORS);
     deleteFile(GeneratedFiles.COMBAT_DATA);
