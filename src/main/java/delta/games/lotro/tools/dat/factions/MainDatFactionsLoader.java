@@ -248,7 +248,7 @@ Reputation_LowestTier: 1
     int index=minIndex;
     for(PropertyValue tierPropsObj : tierPropsArray.getValues())
     {
-      String tierName=_i18n.getStringProperty(tierPropsObj,0);
+      String tierName=_i18n.getStringProperty(tierPropsObj,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       ret.put(Integer.valueOf(index),tierName);
       index++;
     }
