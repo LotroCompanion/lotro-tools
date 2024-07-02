@@ -305,11 +305,6 @@ public class QuestsLoader
     {
       return false;
     }
-    // Ignore 'Level Up' quests (Bullroarer specifics?)
-    if ((categoryId!=null) && (categoryId.intValue()==15))
-    {
-      return false;
-    }
     // Name
     String name=DatUtils.getStringProperty(properties,QUEST_NAME);
     if (name.startsWith("DNT"))
