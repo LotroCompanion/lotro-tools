@@ -118,6 +118,7 @@ public class DatRewardsLoader
       loadRewards(rewards,treasureId.intValue(),rewardsMap);
     }
     loadScalableRewards(rewards,properties,rewardsMap);
+    loadFixedRewards(rewards,properties);
     return challengeLevel;
   }
 
@@ -166,11 +167,7 @@ public class DatRewardsLoader
     handleRelics(rewards,props);
     // Billing token
     handleBillingTokens(props,rewards.getRewardElements());
-
-    // Class points: not for quests
-    // Lotro points: not for quests
-    // Destiny points
-    // Skills? = traits?
+    // Destiny points?
   }
 
   // Virtues
@@ -396,16 +393,16 @@ public class DatRewardsLoader
     // Positive
     {
       PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_PositiveFaction");
-      handleFactionProps(rewards,rewardsMap,factionProps,1);
+      handleFactionProps(rewards,rewardsMap,props,factionProps,1);
     }
     // Negative
     {
       PropertiesSet factionProps=(PropertiesSet)props.getProperty("Quest_NegativeFaction");
-      handleFactionProps(rewards,rewardsMap,factionProps,-1);
+      handleFactionProps(rewards,rewardsMap,props,factionProps,-1);
     }
   }
 
-  private void handleFactionProps(Rewards rewards, RewardsMap rewardsMap, PropertiesSet factionProps, int factor)
+  private void handleFactionProps(Rewards rewards, RewardsMap rewardsMap, PropertiesSet props, PropertiesSet factionProps, int factor)
   {
     if (factionProps!=null)
     {
@@ -413,26 +410,43 @@ public class DatRewardsLoader
       if (factionId!=null)
       {
         int reputationValue=0;
+        // Rep tier?
         Integer repTier=(Integer)factionProps.getProperty("Quest_RepTier");
         if (repTier!=null)
         {
           Integer repValue=rewardsMap.getReputationMap().getValue(repTier.intValue());
           reputationValue=(repValue!=null)?repValue.intValue():0;
         }
-        if (reputationValue!=0)
+        // Rep amount?
+        Integer posRep=(Integer)props.getProperty("Quest_PosRepToGive");
+        if (posRep!=null)
         {
-          Faction faction=_factions.getById(factionId.intValue());
-          if (faction!=null)
-          {
-            ReputationReward repItem=new ReputationReward(faction);
-            repItem.setAmount(reputationValue*factor);
-            rewards.addRewardElement(repItem);
-          }
-          else
-          {
-            LOGGER.warn("Faction not found: "+factionId);
-          }
+          reputationValue=(posRep!=null)?posRep.intValue():0;
         }
+        Integer negRep=(Integer)props.getProperty("Quest_NegRepToGive");
+        if (negRep!=null)
+        {
+          reputationValue=(negRep!=null)?Math.abs(negRep.intValue()):0;
+        }
+        handleFactionReward(rewards,factionId,reputationValue*factor);
+      }
+    }
+  }
+
+  private void handleFactionReward(Rewards rewards, Integer factionId, int reputationValue)
+  {
+    if (reputationValue!=0)
+    {
+      Faction faction=_factions.getById(factionId.intValue());
+      if (faction!=null)
+      {
+        ReputationReward repItem=new ReputationReward(faction);
+        repItem.setAmount(reputationValue);
+        rewards.addRewardElement(repItem);
+      }
+      else
+      {
+        LOGGER.warn("Faction not found: "+factionId);
       }
     }
   }
@@ -557,16 +571,7 @@ public class DatRewardsLoader
         rewards.setGlory(glory.intValue());
       }
     }
-    // Mithril coins
-    // Not used for deeds... seems to be the same value as LP
-    /*
-    Integer mcTier=((Integer)properties.getProperty("Quest_MithrilCoinsTier"));
-    if (mcTier!=null)
-    {
-      Integer mithrilCoins=rewardsMap.getMithrilCoinsMap().getValue(mcTier.intValue());
-      System.out.println("Mithril coin tier: "+mcTier+" => "+mithrilCoins);
-    }
-    */
+    // Mithril coins (Quest_MithrilCoinsTier). Used but no effect in-game!
     // Turbine/Lotro points
     Integer tpTier=((Integer)properties.getProperty("Quest_TurbinePointTier"));
     if (tpTier!=null)
@@ -577,18 +582,28 @@ public class DatRewardsLoader
         rewards.setLotroPoints(lotroPoints.intValue());
       }
     }
+  }
 
-    // Only for 'Level Up' quests:
-    /*
-    Integer goldToGive=((Integer)properties.getProperty("Quest_GoldToGive"));
-    if (goldToGive!=null) System.out.println("Gold to give: "+goldToGive);
-    Integer xpToGive=((Integer)properties.getProperty("Quest_ExpToGive"));
-    if (xpToGive!=null) System.out.println("XP to give: "+xpToGive);
-    Integer repToGive=((Integer)properties.getProperty("Quest_PosRepToGive"));
-    if (repToGive!=null) System.out.println("Rep to give: "+repToGive);
-    Integer gloryToGive=((Integer)properties.getProperty("Quest_GloryToGive"));
-    if (gloryToGive!=null) System.out.println("Glory to give: "+gloryToGive);
-    */
+  private void loadFixedRewards(Rewards rewards, PropertiesSet properties)
+  {
+    // Gold
+    Integer gold=((Integer)properties.getProperty("Quest_GoldToGive"));
+    if (gold!=null)
+    {
+      rewards.getMoney().setRawValue(gold.intValue());
+    }
+    // XP
+    Integer xp=((Integer)properties.getProperty("Quest_ExpToGive"));
+    if (xp!=null)
+    {
+      rewards.setXp(xp.intValue());
+    }
+    // Glory (Renown or Infamy if MONSTER_PLAY)
+    Integer glory=((Integer)properties.getProperty("Quest_GloryToGive"));
+    if (glory!=null)
+    {
+      rewards.setGlory(glory.intValue());
+    }
   }
 
   private ChallengeLevel findChallengeLevel(PropertiesSet properties)
