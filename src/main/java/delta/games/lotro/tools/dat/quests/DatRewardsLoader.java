@@ -17,6 +17,7 @@ import delta.games.lotro.common.rewards.BillingTokenReward;
 import delta.games.lotro.common.rewards.CraftingXpReward;
 import delta.games.lotro.common.rewards.EmoteReward;
 import delta.games.lotro.common.rewards.ItemReward;
+import delta.games.lotro.common.rewards.QuestCompleteReward;
 import delta.games.lotro.common.rewards.RelicReward;
 import delta.games.lotro.common.rewards.ReputationReward;
 import delta.games.lotro.common.rewards.RewardElement;
@@ -38,6 +39,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.lore.parameters.Game;
+import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
@@ -46,6 +48,7 @@ import delta.games.lotro.tools.dat.characters.TraitUtils;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMap;
 import delta.games.lotro.tools.dat.quests.rewards.RewardsMapLoader;
 import delta.games.lotro.tools.dat.utils.DatEnumsUtils;
+import delta.games.lotro.utils.Proxy;
 
 /**
  * Loader for quest/deed rewards from DAT files.
@@ -119,6 +122,8 @@ public class DatRewardsLoader
     }
     loadScalableRewards(rewards,properties,rewardsMap);
     loadFixedRewards(rewards,properties);
+    // Quests to complete
+    handleQuestCompletes(properties,rewards.getRewardElements());
     return challengeLevel;
   }
 
@@ -477,6 +482,27 @@ public class DatRewardsLoader
     {
       LOGGER.warn("Billing token not found: "+billingGroupId);
     }
+  }
+
+  private void handleQuestCompletes(PropertiesSet props, List<RewardElement> rewards)
+  {
+    Object[] questsToCompleteArray=(Object[])props.getProperty("Quest_QuestsToComplete");
+    if (questsToCompleteArray!=null)
+    {
+      for(Object questsToCompleteObj : questsToCompleteArray)
+      {
+        int achievableId=((Integer)questsToCompleteObj).intValue();
+        handleQuestComplete(achievableId,rewards);
+      }
+    }
+  }
+
+  private void handleQuestComplete(int achievableId, List<RewardElement> rewards)
+  {
+    Proxy<Achievable> proxy=new Proxy<Achievable>();
+    proxy.setId(achievableId);
+    QuestCompleteReward reward=new QuestCompleteReward(proxy);
+    rewards.add(reward);
   }
 
   private RewardsMap findRewardsMap(ChallengeLevel challengeLevel, PropertiesSet properties)
