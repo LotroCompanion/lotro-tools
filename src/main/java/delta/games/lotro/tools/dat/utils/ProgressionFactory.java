@@ -4,9 +4,9 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.ArrayProgressionConstants;
 import delta.games.lotro.utils.maths.LinearInterpolatingProgression;

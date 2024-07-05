@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Set;
 
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.GlobalStringsManager;
 import delta.games.lotro.dat.data.strings.LiteralStringInfo;

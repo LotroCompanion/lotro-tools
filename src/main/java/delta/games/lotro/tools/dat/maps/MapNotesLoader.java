@@ -12,7 +12,7 @@ import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.data.strings.StringInfo;
 import delta.games.lotro.dat.data.strings.StringInfoUtils;

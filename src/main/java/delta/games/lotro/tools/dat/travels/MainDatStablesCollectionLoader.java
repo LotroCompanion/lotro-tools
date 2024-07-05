@@ -6,7 +6,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;

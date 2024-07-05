@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.loaders.DBPropertiesLoader;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;

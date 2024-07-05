@@ -5,8 +5,8 @@ import java.util.List;
 
 import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.lotro.jukebox.core.model.SoundDescription;
 import delta.lotro.jukebox.core.model.SoundType;
 import delta.lotro.jukebox.core.model.SoundsManager;
