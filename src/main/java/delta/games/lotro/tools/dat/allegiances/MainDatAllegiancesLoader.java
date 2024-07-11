@@ -60,6 +60,9 @@ public class MainDatAllegiancesLoader
     // Name
     String name=_i18n.getNameStringProperty(properties,"Allegiance_Name",allegianceID,0);
     ret.setName(name);
+    // Advancement Progression ID
+    int advancementProgressionID=((Integer)properties.getProperty("Allegiance_Advancement_Progression")).intValue();
+    ret.setAdvancementProgressionID(advancementProgressionID);
     // Group
     int groupID=((Integer)properties.getProperty("Allegiance_Groups")).intValue();
     AllegianceGroup group=_groups.getEntry(groupID);
