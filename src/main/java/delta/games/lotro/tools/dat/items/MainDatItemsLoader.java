@@ -57,8 +57,10 @@ import delta.games.lotro.lore.items.legendary2.LegendaryWeapon2;
 import delta.games.lotro.lore.items.legendary2.SocketEntry;
 import delta.games.lotro.lore.items.legendary2.SocketsSetup;
 import delta.games.lotro.lore.items.legendary2.io.xml.LegendaryAttrs2XMLWriter;
+import delta.games.lotro.lore.items.scaling.ItemLevelBonus;
 import delta.games.lotro.lore.items.scaling.ItemSpellcraft;
 import delta.games.lotro.lore.items.scaling.Munging;
+import delta.games.lotro.lore.items.scaling.ScalingData;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
@@ -219,7 +221,7 @@ public class MainDatItemsLoader
       Integer itemLevelOffset=getItemLevelOffset(properties);
       item.setItemLevelOffset(itemLevelOffset);
       // Scaling
-      handleMunging(properties);
+      handleScaling(properties);
       // Spellcraft
       handleSpellcraftCalculator(item,properties);
       if (level!=null)
@@ -751,7 +753,18 @@ public class MainDatItemsLoader
     return slot;
   }
 
-  private void handleMunging(PropertiesSet properties)
+  private void handleScaling(PropertiesSet properties)
+  {
+    Munging munging=handleMunging(properties);
+    if (munging!=null)
+    {
+      ItemLevelBonus itemLevelBonus=handleItemLevelBonus(properties);
+      ScalingData scaling=new ScalingData(munging,itemLevelBonus);
+      _currentItem.setScaling(scaling);
+    }
+  }
+
+  private Munging handleMunging(PropertiesSet properties)
   {
     @SuppressWarnings("unused")
     Integer level=(Integer)properties.getProperty("Item_Level");
@@ -768,7 +781,7 @@ public class MainDatItemsLoader
       if ((minMungingLevel!=null) && (minMungingLevel.intValue()<0) &&
           (maxMungingLevel!=null) && (maxMungingLevel.intValue()<0))
       {
-        return;
+        return null;
       }
       Progression progression=null;
       if (progressionId!=null)
@@ -776,12 +789,27 @@ public class MainDatItemsLoader
         progression=ProgressionUtils.getProgression(_facade,progressionId.intValue());
       }
       Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
-      _currentItem.setMunging(munging);
+      return munging;
       //String name=_currentItem.getName();
       //Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
       //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
       //System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
+    return null;
+  }
+
+  private ItemLevelBonus handleItemLevelBonus(PropertiesSet properties)
+  {
+    Integer bonusLimit=(Integer)properties.getProperty("Item_iLevel_Bonus_Limit");
+    if ((bonusLimit!=null) && (bonusLimit.intValue()>0))
+    {
+      Float chance=(Float)properties.getProperty("Item_iLevel_Bonus_Chance");
+      if ((chance!=null) && (chance.floatValue()>0))
+      {
+        return new ItemLevelBonus(bonusLimit.intValue(),chance.floatValue());
+      }
+    }
+    return null;
   }
 
   private void handleSpellcraftCalculator(Item item, PropertiesSet properties)
