@@ -766,12 +766,9 @@ public class MainDatItemsLoader
 
   private Munging handleMunging(PropertiesSet properties)
   {
-    @SuppressWarnings("unused")
-    Integer level=(Integer)properties.getProperty("Item_Level");
     Integer minMungingLevel=(Integer)properties.getProperty("ItemMunging_MinMungeLevel");
     Integer maxMungingLevel=(Integer)properties.getProperty("ItemMunging_MaxMungeLevel");
     Integer progressionId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProgression");
-    @SuppressWarnings("unused")
     Integer propertyId=(Integer)properties.getProperty("ItemMunging_ItemLevelOverrideProperty");
     if (((minMungingLevel!=null) && (minMungingLevel.intValue()>0))
         || ((maxMungingLevel!=null) && (maxMungingLevel.intValue()>0))
@@ -788,12 +785,14 @@ public class MainDatItemsLoader
       {
         progression=ProgressionUtils.getProgression(_facade,progressionId.intValue());
       }
-      Munging munging=new Munging(minMungingLevel,maxMungingLevel,progression);
+      String propertyName=null;
+      if (propertyId!=null)
+      {
+        PropertyDefinition property=_facade.getPropertiesRegistry().getPropertyDef(propertyId.intValue());
+        propertyName=property.getName();
+      }
+      Munging munging=new Munging(propertyName,minMungingLevel,maxMungingLevel,progression);
       return munging;
-      //String name=_currentItem.getName();
-      //Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
-      //Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
-      //System.out.println(_currentId+"\t"+name+"\t"+level+"\t"+progressionId+"\t"+propertyId+"\t"+minMungingLevel+"\t"+maxMungingLevel+"\t"+minLevel+"\t"+maxLevel);
     }
     return null;
   }
