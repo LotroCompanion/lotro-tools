@@ -20,8 +20,7 @@ import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.MapDescription;
-import delta.games.lotro.lore.maps.landblocks.Landblock;
-import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
+import delta.games.lotro.lore.maps.ZoneUtils;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
@@ -40,14 +39,12 @@ public class InstanceMapDataBuilder
   private static final Logger LOGGER=Logger.getLogger(InstanceMapDataBuilder.class);
 
   private MarkersFinder _finder;
-  private LandblocksManager _landblocksManager;
 
   /**
    * Constructor.
    */
   public InstanceMapDataBuilder()
   {
-    _landblocksManager=LandblocksManager.getInstance();
     File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     _finder=mapsManager.getMarkersFinder();
@@ -261,7 +258,7 @@ public class InstanceMapDataBuilder
     List<Integer> ret=new ArrayList<Integer>();
     for(BlockReference block : blocks)
     {
-      Integer areaId=getAreaForBlock(block);
+      Integer areaId=ZoneUtils.getAreaForBlock(block);
       if (areaId!=null)
       {
         if (!ret.contains(areaId))
@@ -271,16 +268,6 @@ public class InstanceMapDataBuilder
       }
     }
     return ret;
-  }
-
-  private Integer getAreaForBlock(BlockReference block)
-  {
-    Landblock lb=_landblocksManager.getLandblock(block.getRegion(),block.getBlockX(),block.getBlockY());
-    if (lb!=null)
-    {
-      return lb.getParentArea();
-    }
-    return null;
   }
 
   /**
