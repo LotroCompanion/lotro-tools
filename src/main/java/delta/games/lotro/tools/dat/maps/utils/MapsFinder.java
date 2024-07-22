@@ -9,6 +9,7 @@ import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.maps.AbstractMap;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.GeoBox;
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
@@ -17,6 +18,8 @@ import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
 import delta.games.lotro.tools.dat.maps.GeoUtils;
 import delta.games.lotro.tools.dat.maps.MapConstants;
 import delta.games.lotro.tools.dat.maps.MapUtils;
+import delta.games.lotro.tools.lore.maps.AdvancedMapsManager;
+import delta.games.lotro.tools.lore.maps.DetailedMap;
 
 /**
  * Finds map for points.
@@ -26,6 +29,7 @@ public class MapsFinder
 {
   private static final Logger LOGGER=Logger.getLogger(MapsFinder.class);
 
+  private AdvancedMapsManager _mapsManager;
   private GeoreferencedBasemapsManager _basemapsManager;
 
   /**
@@ -36,6 +40,7 @@ public class MapsFinder
     File rootDir=MapConstants.getRootDir();
     MapsManager mapsManager=new MapsManager(rootDir);
     _basemapsManager=mapsManager.getBasemapsManager();
+    _mapsManager=new AdvancedMapsManager(_basemapsManager,ParchmentMapsManager.getInstance());
   }
 
   /**
@@ -46,10 +51,25 @@ public class MapsFinder
   public Integer getMap(DatPosition position)
   {
     Integer mapId=getMapUsingParentZone(position);
+    if (mapId!=null)
+    {
+      mapId=checkMap(mapId,position);
+    }
     if (mapId==null)
     {
-      return null;
+      float[] lonLat=position.getLonLat();
+      DetailedMap map=_mapsManager.getBestMapForPoint(position.getRegion(),lonLat[0],lonLat[1]);
+      if (map!=null)
+      {
+        int mapIdentifier=map.getIdentifier();
+        mapId=Integer.valueOf(mapIdentifier);
+      }
     }
+    return mapId;
+  }
+
+  private Integer checkMap(Integer mapId, DatPosition position)
+  {
     // Check bounds
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     GeoreferencedBasemap basemap=_basemapsManager.getMapById(mapId.intValue());

@@ -106,6 +106,11 @@ public class AdvancedMapsManager
     {
       for(DetailedMap mapForRegion : mapsForRegion)
       {
+        ParchmentMap parchmentMap=mapForRegion.getParchmentMap();
+        if (parchmentMap.isQuestGuideDisabled())
+        {
+          continue;
+        }
         if (mapForRegion.contains(lon,lat))
         {
           ret.add(mapForRegion);

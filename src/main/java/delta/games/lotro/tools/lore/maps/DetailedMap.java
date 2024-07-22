@@ -42,6 +42,15 @@ public class DetailedMap implements Identifiable
   }
 
   /**
+   * Get the parchment map.
+   * @return the parchment map.
+   */
+  public ParchmentMap getParchmentMap()
+  {
+    return _parchmentMap;
+  }
+
+  /**
    * Get the georeferenced basemap.
    * @return the georeferenced basemap.
    */
