@@ -122,6 +122,12 @@ public class MapsSystemLoader
     {
       mapName="";
     }
+    boolean questGuideDisabled=false;
+    Integer questGuideDisabledInt=(Integer)props.getProperty("UI_Map_QuestGuideDisabled");
+    if ((questGuideDisabledInt!=null) && (questGuideDisabledInt.intValue()==1))
+    {
+      questGuideDisabled=true;
+    }
     Console.println(mapName,level);
     // Push i18n labels in the basemaps file
     I18nUtils i18n=_basemapsLoader.getI18nUtils();
@@ -149,6 +155,8 @@ public class MapsSystemLoader
     }
     // Parent map ID
     parchmentMap.setParentMapId(parentMapId);
+    // Quest guide disabled?
+    parchmentMap.setQuestGuideDisabled(questGuideDisabled);
     // Register map
     _maps.add(parchmentMap);
     // Areas
