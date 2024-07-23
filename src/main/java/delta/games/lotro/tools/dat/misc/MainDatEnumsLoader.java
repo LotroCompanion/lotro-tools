@@ -32,6 +32,7 @@ import delta.games.lotro.common.enums.LegendaryTitleCategory;
 import delta.games.lotro.common.enums.LegendaryTitleTier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumEntry;
+import delta.games.lotro.common.enums.MapNoteType;
 import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
@@ -70,6 +71,7 @@ import delta.games.lotro.lore.items.ItemQuality;
 import delta.games.lotro.lore.items.ItemSturdiness;
 import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.lore.items.legendary.relics.RelicType;
+import delta.games.lotro.maps.data.categories.CategoriesConstants;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.i18n.I18nUtils;
@@ -169,6 +171,7 @@ public class MainDatEnumsLoader
     loadEnum(587202657,"MobDivision",MobDivision.class); // 0x23000061
     loadEnum(587202652,"AIHint",AIHint.class); // 0x2300005C
     loadEnum(587202668,"AICooldownChannel",AICooldownChannel.class); // 0x2300006C
+    loadEnum(587202775,"MapNoteType",MapNoteType.class); // 0x230000D7
 
     // Derivated enums
     // From EquipmentCategory:
@@ -310,6 +313,19 @@ public class MainDatEnumsLoader
     else if (enumId==0x23000063) // CraftTier
     {
       handleCustomEntry(lotroEnum,i18n,0,"Beginner");
+    }
+    else if (enumId==0x230000D7) // MapNoteType
+    {
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.NPC,"MapNoteType.NPC");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.MONSTER,"MapNoteType.MONSTER");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.CONTAINER,"MapNoteType.CONTAINER");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.DOOR,"MapNoteType.DOOR");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.ITEM,"MapNoteType.ITEM");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.LANDMARK,"MapNoteType.LANDMARK");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.HOTSPOT,"MapNoteType.HOTSPOT");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.CROP,"MapNoteType.CROP");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.CRITTER,"MapNoteType.CRITTER");
+      handleCustomEntry(lotroEnum,i18n,CategoriesConstants.OTHER,"MapNoteType.OTHER");
     }
   }
 
