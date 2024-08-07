@@ -64,6 +64,19 @@ public class MainDatRewardsTracksLoader
       // Name
       String name=_i18n.getNameStringProperty(properties,"Name",rewardsTrackID,0);
       ret.setName(name);
+      // Monster play
+      // ..
+      boolean monsterPlay=false;
+      PropertiesSet permissions=(PropertiesSet)properties.getProperty("DefaultPermissionBlobStruct");
+      if (permissions!=null)
+      {
+        Integer monsterPlayCanUse=(Integer)permissions.getProperty("Usage_MonsterPlayerCanUse");
+        if ((monsterPlayCanUse!=null) && (monsterPlayCanUse.intValue()==1))
+        {
+          monsterPlay=true;
+        }
+      }
+      ret.setMonsterPlay(monsterPlay);
       // Description
       String description=_i18n.getStringProperty(properties,"Description");
       ret.setDescription(description);
@@ -85,11 +98,6 @@ public class MainDatRewardsTracksLoader
         RewardsTrackStep step=loadStep(stepProps);
         ret.addStep(step);
       }
-      /*
-      RewardTrack_PlayerExperienceModifier: 268463005 (RewardTrack_Gundabad_BonusXP)
-      RewardTrack_UILayout: 268453748 (ItemAdvancementRewards)
-      RewardTrack_WorldExperienceModifier: 268463011 (we_rewardtrack_gundabad_bonusxp)
-      */
     }
     else
     {
