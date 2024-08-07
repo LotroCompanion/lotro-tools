@@ -127,13 +127,16 @@ public class MainDatRewardsTracksLoader
   private int loadItemIcon(int itemID)
   {
     PropertiesSet props=_facade.loadProperties(itemID+DATConstants.DBPROPERTIES_OFFSET);
-    int iconID=((Integer)props.getProperty("Icon_Layer_LargeImageDID")).intValue();
-    File iconFile=new File(GeneratedFiles.ITEM_LARGE_ICONS_DIR,iconID+".png").getAbsoluteFile();
-    if (!iconFile.exists())
+    Integer iconID=(Integer)props.getProperty("Icon_Layer_LargeImageDID");
+    if (iconID!=null)
     {
-      DatIconsUtils.buildImageFile(_facade,iconID,iconFile);
+      File iconFile=new File(GeneratedFiles.ITEM_LARGE_ICONS_DIR,iconID+".png").getAbsoluteFile();
+      if (!iconFile.exists())
+      {
+        DatIconsUtils.buildImageFile(_facade,iconID.intValue(),iconFile);
+      }
     }
-    return iconID;
+    return (iconID!=null)?iconID.intValue():0;
   }
 
   /**
