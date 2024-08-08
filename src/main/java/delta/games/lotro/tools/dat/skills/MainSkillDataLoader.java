@@ -152,13 +152,16 @@ public class MainSkillDataLoader
       }
       // Skill type(s)
       {
-        long typeFlags=((Long)skillProperties.getProperty("Skill_SkillType")).longValue();
-        EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
-        BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags);
-        if (LOGGER.isDebugEnabled())
+        Long typeFlags=(Long)skillProperties.getProperty("Skill_SkillType");
+        if (typeFlags!=null)
         {
-          String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
-          LOGGER.debug("Skill: "+skillName+", types="+types);
+          EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
+          BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags);
+          if (LOGGER.isDebugEnabled())
+          {
+            String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
+            LOGGER.debug("Skill: "+skillName+", types="+types);
+          }
         }
       }
       // Skill quest flags

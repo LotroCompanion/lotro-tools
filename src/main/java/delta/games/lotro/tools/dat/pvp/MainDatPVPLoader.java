@@ -1,11 +1,14 @@
 package delta.games.lotro.tools.dat.pvp;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.pvp.Rank;
 import delta.games.lotro.lore.pvp.RankScale;
@@ -53,7 +56,8 @@ public class MainDatPVPLoader
     RankScale infamyScale=loadRankScale(RankScaleKeys.INFAMY,"GloryControl_InfamyRankNameList","GloryControl_RankAdvancementTable",props);
     mgr.register(infamyScale);
     // Prestige
-    RankScale prestigeScale=loadRankScale(RankScaleKeys.PRESTIGE,"GloryControl_PrestigeNameList","GloryControl_PrestigeAdvancementTable",props);
+    String advTablePropName=Context.isLive()?"GloryControl_PrestigeAdvancementTable":"GloryControl_RankAdvancementTable";
+    RankScale prestigeScale=loadRankScale(RankScaleKeys.PRESTIGE,"GloryControl_PrestigeNameList",advTablePropName,props);
     mgr.register(prestigeScale);
     // Save
     boolean ok=new PVPDataXMLWriter().write(GeneratedFiles.PVP,mgr,EncodingNames.UTF_8);
@@ -70,7 +74,6 @@ public class MainDatPVPLoader
     RankScale ret=new RankScale(key);
 
     int advancementTableId=((Integer)props.getProperty(advancementTableProperty)).intValue();
-    
     long[] rankValues=loadRankTable(advancementTableId);
     // Rank names
     Object[] entries=(Object[])props.getProperty(rankNameListProperty);
@@ -94,7 +97,21 @@ public class MainDatPVPLoader
     WStateDataSet wstate=_facade.loadWState(tableId);
     int reference=wstate.getOrphanReferences().get(0).intValue();
     ClassInstance advancementTable=(ClassInstance)wstate.getValue(reference);
-    long[] ret=(long[])advancementTable.getAttributeValue("267720940");
+    long[] ret;
+    if (Context.isLive())
+    {
+      ret=(long[])advancementTable.getAttributeValue("267720940");
+    }
+    else
+    {
+      @SuppressWarnings("unchecked")
+      Map<Integer,Long> map=(Map<Integer,Long>)advancementTable.getAttributeValue("Attr0");
+      ret=new long[map.size()+1];
+      for(Map.Entry<Integer,Long> entry : map.entrySet())
+      {
+        ret[entry.getKey().intValue()]=entry.getValue().longValue();
+      }
+    }
     return ret;
   }
 

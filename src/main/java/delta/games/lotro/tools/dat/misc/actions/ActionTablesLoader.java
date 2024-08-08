@@ -25,6 +25,8 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
 import delta.games.lotro.tools.dat.GeneratedFiles;
@@ -173,12 +175,10 @@ public class ActionTablesLoader
         entry.setCooldown(cooldown);
       }
       // Required hints
-      BitSet requiredHintsBS=(BitSet)entryProps.getProperty("AIAction_RequiredHints");
-      List<AIHint> requiredHints=loadHints(requiredHintsBS);
+      List<AIHint> requiredHints=loadHints(entryProps,"AIAction_RequiredHints");
       entry.setRequiredHints(requiredHints);
       // Disallowed hints
-      BitSet disallowedHintsBS=(BitSet)entryProps.getProperty("AIAction_DisallowedHints");
-      List<AIHint> disallowedHints=loadHints(disallowedHintsBS);
+      List<AIHint> disallowedHints=loadHints(entryProps,"AIAction_DisallowedHints");
       entry.setDisallowedHints(disallowedHints);
       // Cooldown channel
       Integer cooldownChannelCode=(Integer)entryProps.getProperty("AIAction_CooldownChannel");
@@ -194,12 +194,10 @@ public class ActionTablesLoader
         entry.setTargetCooldown(targetCooldown);
       }
       // Target required hints
-      BitSet targetRequiredHintsBS=(BitSet)entryProps.getProperty("AIAction_TargetRequiredHints");
-      List<AIHint> targetRequiredHints=loadHints(targetRequiredHintsBS);
+      List<AIHint> targetRequiredHints=loadHints(entryProps,"AIAction_TargetRequiredHints");
       entry.setTargetRequiredHints(targetRequiredHints);
       // Target disallowed hints
-      BitSet targetDisallowedHintsBS=(BitSet)entryProps.getProperty("AIAction_TargetDisallowedHints");
-      List<AIHint> targetDisallowedHints=loadHints(targetDisallowedHintsBS);
+      List<AIHint> targetDisallowedHints=loadHints(entryProps,"AIAction_TargetDisallowedHints");
       entry.setTargetDisallowedHints(targetDisallowedHints);
       if (LOGGER.isDebugEnabled())
       {
@@ -238,6 +236,26 @@ public class ActionTablesLoader
       }
       entry.addAction(actionEntry);
     }
+  }
+
+  private List<AIHint> loadHints(PropertiesSet entryProps, String propertyName)
+  {
+    Object rawHints=entryProps.getProperty(propertyName);
+    BitSet bs=null;
+    if (rawHints!=null)
+    {
+      if (Context.isLive())
+      {
+        bs=(BitSet)rawHints;
+      }
+      else
+      {
+        Long flags=(Long)rawHints;
+        bs=BitSetUtils.getBitSetFromFlags(flags.longValue());
+      }
+    }
+    List<AIHint> hintsList=loadHints(bs);
+    return hintsList;
   }
 
   private List<AIHint> loadHints(BitSet hints)

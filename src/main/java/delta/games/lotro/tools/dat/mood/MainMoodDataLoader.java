@@ -128,6 +128,10 @@ Mod_Array:
     {
       PropertiesSet entryProps=(PropertiesSet)entry;
       int effectID=((Integer)entryProps.getProperty("Mood_Control_Mood_Effect")).intValue();
+      if (effectID==0)
+      {
+        continue;
+      }
       Float moraleMultiplier=findMoraleMultiplierFromEffect(effectID);
       if (moraleMultiplier!=null)
       {
