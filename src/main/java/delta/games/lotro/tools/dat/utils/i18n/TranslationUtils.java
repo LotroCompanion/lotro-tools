@@ -23,6 +23,7 @@ public class TranslationUtils
     locales.add(Locale.ENGLISH);
     locales.add(Locale.FRENCH);
     locales.add(Locale.GERMAN);
+    locales.add(new Locale("ru"));
     return new MultilocalesTranslator(bundleName,locales);
   }
 }

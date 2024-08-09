@@ -1,6 +1,8 @@
 package delta.games.lotro.tools.dat.utils.i18n;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -246,6 +248,7 @@ public class I18nUtils
       return false;
     }
     boolean hasLabel=false;
+    Map<String,String> values=new HashMap<String,String>();
     for(String locale : _locales)
     {
       StringsManager stringsMgr=_stringsMgr.getStringsManager(locale);
@@ -257,8 +260,15 @@ public class I18nUtils
       value=processor.processString(value);
       if (value.length()>0)
       {
-        defineLabel(locale,key,value);
         hasLabel=true;
+      }
+      values.put(locale,value);
+    }
+    if (hasLabel)
+    {
+      for(String locale : _locales)
+      {
+        defineLabel(locale,key,values.get(locale));
       }
     }
     return hasLabel;
