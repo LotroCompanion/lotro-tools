@@ -156,7 +156,7 @@ public class MainSkillDataLoader
         if (typeFlags!=null)
         {
           EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
-          BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags);
+          BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags.longValue());
           if (LOGGER.isDebugEnabled())
           {
             String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
