@@ -200,6 +200,8 @@ public class MainTraitDataLoader
     {
       ret.setTiersCount(maxTier.intValue());
     }
+    // Cost
+    handleCost(ret,traitProperties);
 
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     // Category
@@ -256,6 +258,18 @@ public class MainTraitDataLoader
       ret.setTraitPrerequisite(toUse);
     }
     return ret;
+  }
+
+  private void handleCost(TraitDescription trait, PropertiesSet props)
+  {
+    // Trait_PointBasedTrait_PointCostProgression
+    Integer progressionID=(Integer)props.getProperty("Trait_PointBasedTrait_PointCostProgression");
+    if (progressionID==null)
+    {
+      return;
+    }
+    ArrayProgression prog=(ArrayProgression)ProgressionUtils.getProgression(_facade,progressionID.intValue());
+    trait.setPointCostProgression(prog);
   }
 
   private void loadTraitGroups(TraitDescription trait, PropertiesSet traitProperties)
