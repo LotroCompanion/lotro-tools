@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.lore.sounds;
 
+import java.io.PrintStream;
 import java.util.Deque;
 import java.util.List;
 
@@ -126,10 +127,11 @@ public class SoundsDataAggregator
 
   /**
    * Dump the contents of this registry to the given stream.
+   * @param ps Output stream. 
    */
-  public void dump()
+  public void dump(PrintStream ps)
   {
-    IndentableStream out=new IndentableStream(System.out);
+    IndentableStream out=new IndentableStream(ps);
     int nbSounds=_soundsRegistry.getKnownSounds().size();
     out.println("Nb sounds: "+nbSounds);
     new SoundContextDump(_facade).dump(_contextManager);

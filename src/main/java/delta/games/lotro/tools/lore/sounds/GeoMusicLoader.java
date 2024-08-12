@@ -3,6 +3,9 @@ package delta.games.lotro.tools.lore.sounds;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -28,6 +31,8 @@ import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLWriter;
  */
 public class GeoMusicLoader
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeoMusicLoader.class);
+
   private DataFacade _facade;
   private EnumMapper _musicMapper;
   private SoundContextManager _contextMgr;
@@ -51,7 +56,8 @@ public class GeoMusicLoader
   {
     SoundContextsManager areaContexts=handleAreas();
     saveContextFile(GeneratedJukeboxFiles.AREA_CONTEXTS,areaContexts,SoundContextsXMLConstants.AREA_CONTEXT_TAG);
-    handleDungeons();
+    SoundContextsManager dungeonContexts=handleDungeons();
+    saveContextFile(GeneratedJukeboxFiles.DUNGEON_CONTEXTS,dungeonContexts,SoundContextsXMLConstants.DUNGEON_CONTEXT_TAG);
   }
 
   private void saveContextFile(File toFile, SoundContextsManager mgr, String contextTag)
@@ -78,9 +84,11 @@ public class GeoMusicLoader
     int areaId=area.getIdentifier();
     PropertiesSet areaProps=_facade.loadProperties(areaId+DATConstants.DBPROPERTIES_OFFSET);
     int musicType=((Integer)areaProps.getProperty("Ambient_MusicType")).intValue();
-    //int areaType=((Integer)areaProps.getProperty("Area_VisitedAreaType")).intValue();
-    //String musicLabel=_musicMapper.getLabel(musicType);
-    //System.out.println(area+" => Ambient_MusicType="+musicLabel+", area type="+areaType);
+    if (LOGGER.isDebugEnabled())
+    {
+      String musicLabel=_musicMapper.getLabel(musicType);
+      LOGGER.debug("Area ID={}, music type={} ({})", Integer.valueOf(areaId), Integer.valueOf(musicType), musicLabel);
+    }
     // Name
     String areaName=DatUtils.getStringProperty(areaProps,"Area_Name");
     // Icon
@@ -96,33 +104,45 @@ public class GeoMusicLoader
       ref.setSound(sound);
       soundRefs.addSoundReference(ref);
     }
-    // No Area_Music
     return ret;
   }
 
-  private void handleDungeons()
+  private SoundContextsManager handleDungeons()
   {
+    SoundContextsManager ret=new SoundContextsManager();
     DungeonsManager dungeonsMgr=DungeonsManager.getInstance();
     List<Dungeon> dungeons=dungeonsMgr.getDungeons();
     for(Dungeon dungeon : dungeons)
     {
-      handleDungeon(dungeon);
+      SoundContext context=handleDungeon(dungeon);
+      ret.registerSoundContext(context);
     }
+    return ret;
   }
 
-  private void handleDungeon(Dungeon dungeon)
+  private SoundContext handleDungeon(Dungeon dungeon)
   {
     int dungeonId=dungeon.getIdentifier();
-    PropertiesSet itemProps=_facade.loadProperties(dungeonId+DATConstants.DBPROPERTIES_OFFSET);
-    int musicType=((Integer)itemProps.getProperty("Dungeon_Music")).intValue();
-    String musicLabel=_musicMapper.getLabel(musicType);
-    System.out.println(dungeon+" => Dungeon_Music="+musicLabel);
+    PropertiesSet dungeonProps=_facade.loadProperties(dungeonId+DATConstants.DBPROPERTIES_OFFSET);
+    int musicType=((Integer)dungeonProps.getProperty("Dungeon_Music")).intValue();
+    if (LOGGER.isDebugEnabled())
+    {
+      String musicLabel=_musicMapper.getLabel(musicType);
+      LOGGER.debug("Dungeon ID={}, music type={} ({})", Integer.valueOf(dungeonId), Integer.valueOf(musicType), musicLabel);
+    }
+    // Name
+    String dungeonName=DatUtils.getStringProperty(dungeonProps,"Dungeon_Name");
+    SoundContext ret=new SoundContext(dungeonId,dungeonName,"");
+    SoundReferences soundRefs=ret.getSounds();
     PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDefByName("Area_Music");
     PropertySoundsRegistry registry=_contextMgr.getProperty(propertyDef);
     List<SoundDescription> sounds=registry.getSoundsForValue(musicType);
     for(SoundDescription sound : sounds)
     {
-      System.out.println("\t"+sound);
+      SoundReference ref=new SoundReference(sound.getIdentifier());
+      ref.setSound(sound);
+      soundRefs.addSoundReference(ref);
     }
+    return ret;
   }
 }
