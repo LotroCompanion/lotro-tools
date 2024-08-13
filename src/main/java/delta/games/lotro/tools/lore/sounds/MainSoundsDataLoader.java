@@ -9,8 +9,8 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.script.ScriptsTable;
 import delta.games.lotro.dat.loaders.script.ScriptTableLoader;
 import delta.games.lotro.tools.dat.GeneratedJukeboxFiles;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.io.xml.SoundsXMLWriter;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
+import delta.lotro.jukebox.core.model.base.io.xml.SoundsXMLWriter;
 
 /**
  * Loader for sounds data.

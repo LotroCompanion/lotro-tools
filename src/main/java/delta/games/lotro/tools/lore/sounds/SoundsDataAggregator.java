@@ -8,9 +8,9 @@ import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyValue;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundType;
-import delta.lotro.jukebox.core.model.SoundsManager;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundType;
+import delta.lotro.jukebox.core.model.base.SoundsManager;
 
 /**
  * Sounds data aggregator.

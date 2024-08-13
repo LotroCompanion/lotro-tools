@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import delta.common.utils.id.IdentifiableComparator;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundType;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundType;
 
 /**
  * Registry for known sounds.

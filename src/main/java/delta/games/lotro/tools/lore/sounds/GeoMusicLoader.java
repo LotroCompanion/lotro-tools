@@ -17,13 +17,13 @@ import delta.games.lotro.lore.maps.DungeonsManager;
 import delta.games.lotro.lore.maps.GeoAreasManager;
 import delta.games.lotro.tools.dat.GeneratedJukeboxFiles;
 import delta.games.lotro.tools.dat.utils.DatUtils;
-import delta.lotro.jukebox.core.model.SoundContext;
-import delta.lotro.jukebox.core.model.SoundContextsManager;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundReference;
-import delta.lotro.jukebox.core.model.SoundReferences;
-import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLConstants;
-import delta.lotro.jukebox.core.model.io.xml.SoundContextsXMLWriter;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
+import delta.lotro.jukebox.core.model.context.SoundContext;
+import delta.lotro.jukebox.core.model.context.SoundContextsManager;
+import delta.lotro.jukebox.core.model.context.SoundReference;
+import delta.lotro.jukebox.core.model.context.SoundReferences;
+import delta.lotro.jukebox.core.model.context.io.xml.SoundContextsXMLConstants;
+import delta.lotro.jukebox.core.model.context.io.xml.SoundContextsXMLWriter;
 
 /**
  * Loads music data for areas/dungeons.

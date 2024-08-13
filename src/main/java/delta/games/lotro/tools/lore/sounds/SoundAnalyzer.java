@@ -8,7 +8,7 @@ import delta.games.lotro.dat.archive.DetailedFileEntry;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.SoundInfo;
 import delta.games.lotro.dat.loaders.SoundInfoLoader;
-import delta.lotro.jukebox.core.model.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
 
 /**
  * Sound analyzer.

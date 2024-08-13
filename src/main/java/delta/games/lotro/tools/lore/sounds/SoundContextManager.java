@@ -8,7 +8,7 @@ import java.util.Map;
 
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyDefinitionComparator;
-import delta.lotro.jukebox.core.model.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
 
 /**
  * Manager for context data of sounds.

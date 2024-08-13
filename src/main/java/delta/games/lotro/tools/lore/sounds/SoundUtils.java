@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 import com.github.trilarion.sound.vorbis.jcraft.jorbis.VorbisFile;
 
 import delta.common.utils.io.FileIO;
-import delta.lotro.jukebox.core.model.SoundDescription;
-import delta.lotro.jukebox.core.model.SoundFormat;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundFormat;
 
 /**
  * Utility methods related to sounds management.

@@ -8,7 +8,7 @@ import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.AbstractMapper;
 import delta.games.lotro.dat.data.enums.MapperUtils;
-import delta.lotro.jukebox.core.model.SoundDescription;
+import delta.lotro.jukebox.core.model.base.SoundDescription;
 
 /**
  * @author dm
