@@ -17,7 +17,7 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.tools.dat.GeneratedFiles;
 import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
 import delta.games.lotro.tools.dat.utils.ProgressionUtils;
-import delta.games.lotro.tools.lore.deeds.geo.MainGeoDataInjector;
+import delta.games.lotro.tools.lore.achievables.geo.MainGeoDataInjector;
 
 /**
  * Get quests/deeds definitions from DAT files.

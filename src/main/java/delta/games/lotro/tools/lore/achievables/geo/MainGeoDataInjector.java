@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds.geo;
+package delta.games.lotro.tools.lore.achievables.geo;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

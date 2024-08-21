@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.lore.deeds;
+package delta.games.lotro.tools.lore.achievables;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
