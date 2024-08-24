@@ -27,6 +27,7 @@ import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.RecallEffect;
 import delta.games.lotro.common.effects.TieredEffect;
+import delta.games.lotro.common.effects.TravelEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
@@ -40,8 +41,10 @@ import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
@@ -194,6 +197,7 @@ public class EffectLoader
     else if (classDef==769) return new InduceCombatStateEffect();
     else if (classDef==714) return new DispelByResistEffect();
     else if (classDef==737) return new RecallEffect();
+    else if (classDef==749) return new TravelEffect();
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
     return new Effect();
@@ -228,7 +232,7 @@ public class EffectLoader
     else if (effect instanceof GenesisEffect)
     {
       loadGenesisEffect((GenesisEffect)effect,effectProps);
-   }
+    }
     else if (effect instanceof InduceCombatStateEffect)
     {
       loadInduceCombatStateEffect((InduceCombatStateEffect)effect,effectProps);
@@ -240,6 +244,10 @@ public class EffectLoader
     else if (effect instanceof RecallEffect)
     {
       loadRecallEffect((RecallEffect)effect,effectProps);
+    }
+    else if (effect instanceof TravelEffect)
+    {
+      loadTravelEffect((TravelEffect)effect,effectProps);
     }
     else if (effect instanceof ComboEffect)
     {
@@ -820,6 +828,48 @@ Effect_Recall_Travel_Link: 0 (Undef)
       {
         effect.setPosition(position.getPosition());
       }
+    }
+  }
+
+  private void loadTravelEffect(TravelEffect effect, PropertiesSet effectProps)
+  {
+    /*
+    EffectGenerator_EffectDataList: 
+      #1: EffectGenerator_EffectData_SceneID 1879048837
+      #2: EffectGenerator_EffectData_Destination rohan_wold_harwick_meadhall_exit
+    Effect_Applied_Description: You travel to Harwick.
+    Effect_Travel_PrivateEncounter: 1879262955
+    */
+    ArrayPropertyValue dataList=(ArrayPropertyValue)effectProps.getPropertyValueByName("EffectGenerator_EffectDataList");
+    for(PropertyValue childValue : dataList.getValues())
+    {
+      String propertyName=childValue.getDefinition().getName();
+      Object value=childValue.getValue();
+      if ("EffectGenerator_EffectData_Destination".equals(propertyName))
+      {
+        String destination=(String)value;
+        ExtendedPosition position=_placesLoader.getPositionForName(destination);
+        if (position!=null)
+        {
+          effect.setDestination(position.getPosition());
+        }
+      }
+      else if ("EffectGenerator_EffectData_SceneID".equals(propertyName))
+      {
+        Integer sceneID=(Integer)value;
+        effect.setSceneID(sceneID.intValue());
+      }
+      else if ("EffectGenerator_EffectData_RemoveFromPrivateInstance".equals(propertyName))
+      {
+        Integer removeFlagInt=(Integer)value;
+        boolean removeFlag=((removeFlagInt!=null)&& (removeFlagInt.intValue()==1));
+        effect.setRemoveFromInstance(removeFlag);
+      }
+    }
+    Integer privateEncounterID=(Integer)effectProps.getProperty("Effect_Travel_PrivateEncounter");
+    if ((privateEncounterID!=null) && (privateEncounterID.intValue()!=0))
+    {
+      effect.setPrivateEncounterID(privateEncounterID);
     }
   }
 
