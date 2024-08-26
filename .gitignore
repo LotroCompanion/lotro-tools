@@ -49,3 +49,7 @@
 /tools/voicesExtractor/.classpath
 /tools/voicesExtractor/.project
 /tools/voicesExtractor/.settings/*.prefs
+/deeds.xml
+/items.xml
+/quests.xml
+/races.xml

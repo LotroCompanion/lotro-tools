@@ -25,7 +25,7 @@ import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.WLibData;
-import delta.games.lotro.tools.dat.utils.DataFacadeBuilder;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Generator for reference data.
