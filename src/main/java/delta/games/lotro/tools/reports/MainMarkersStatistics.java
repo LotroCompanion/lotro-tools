@@ -18,6 +18,7 @@ import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 
 /**
  * Computes statistics about the markers.
@@ -74,8 +75,7 @@ public class MainMarkersStatistics
     File rootDir=new File("../lotro-maps-db");
     MapsManager mapsManager=new MapsManager(rootDir,false);
     GlobalMarkersManager markersMgr=mapsManager.getMarkersManager();
-    int[] regions=new int[]{1,2,3,4,5,14};
-    //int[] regions=new int[]{14};
+    int[] regions=GeoUtils.getRegions();
     for(int region : regions)
     {
       for(int x=0;x<16;x++)

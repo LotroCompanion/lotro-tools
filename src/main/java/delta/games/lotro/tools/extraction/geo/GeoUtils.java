@@ -4,6 +4,7 @@ import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.geo.Position;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.loaders.PositionDecoder;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.maps.Zone;
 import delta.games.lotro.lore.maps.ZoneUtils;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
@@ -59,5 +60,30 @@ public class GeoUtils
       zoneID=landblock.getParentData(cell,position.getPosition());
     }
     return zoneID;
+  }
+
+  /**
+   * Get the regions.
+   * @return an array of region IDs.
+   */
+  public static int[] getRegions()
+  {
+    boolean isLive=Context.isLive();
+    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
+    return regions;
+  }
+
+  /**
+   * Indicates if the given region ID is supported or not.
+   * @param region Region ID.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public static boolean isSupportedRegion(int region)
+  {
+    if (((region<1) || (region>5)) && (region!=14))
+    {
+      return false;
+    }
+    return true;
   }
 }

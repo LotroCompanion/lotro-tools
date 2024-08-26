@@ -17,6 +17,7 @@ import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.categories.CategoriesManager;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 import delta.games.lotro.tools.extraction.geo.landblocks.LandBlockInfo;
 import delta.games.lotro.tools.extraction.geo.landblocks.LandblockGeneratorsAnalyzer;
 import delta.games.lotro.tools.extraction.geo.landblocks.LandblockInfoLoader;
@@ -112,8 +113,7 @@ public class MarkersDataLoader
   {
     LandblockInfoLoader lbiLoader=new LandblockInfoLoader(_facade);
     LandblockGeneratorsAnalyzer analyzer=new LandblockGeneratorsAnalyzer(_markerUtils);
-    boolean isLive=Context.isLive();
-    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
+    int[] regions=GeoUtils.getRegions();
     for(int region : regions)
     {
       Console.println("Region "+region);

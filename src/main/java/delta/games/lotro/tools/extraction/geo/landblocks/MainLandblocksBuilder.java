@@ -3,11 +3,11 @@ package delta.games.lotro.tools.extraction.geo.landblocks;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.maps.landblocks.Landblock;
 import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
 import delta.games.lotro.lore.maps.landblocks.io.xml.LandblocksXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 import delta.games.lotro.tools.utils.ToolLog;
 
 /**
@@ -38,8 +38,7 @@ public class MainLandblocksBuilder
     LandblockLoader landblockLoader=new LandblockLoader(_facade);
     LandblocksManager index=new LandblocksManager();
     int nbBlocks=0;
-    boolean isLive=Context.isLive();
-    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
+    int[] regions=GeoUtils.getRegions();
     for(int region : regions)
     {
       ToolLog.LOGGER.info("Region "+region);

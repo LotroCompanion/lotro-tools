@@ -20,6 +20,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.DungeonsManager;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 
 /**
  * Tool to cleanup the images loaded from the DAT files.
@@ -98,7 +99,7 @@ public class MainLotroImagesCleanup
 
   void cleanRadarImages()
   {
-    int[] regions=new int[]{1,2,3,4,5,14,15};
+    int[] regions=GeoUtils.getRegions();
     for(int region : regions)
     {
       for(int blockX=0;blockX<=255;blockX++)

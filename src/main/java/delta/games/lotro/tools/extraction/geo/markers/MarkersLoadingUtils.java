@@ -121,7 +121,7 @@ public class MarkersLoadingUtils
   public Marker buildMarker(DatPosition position, int did, int layerId)
   {
     int region=position.getRegion();
-    if (((region<1) || (region>5)) && (region!=14))
+    if (!GeoUtils.isSupportedRegion(region))
     {
       LOGGER.warn("Found unsupported region: "+region);
       return null;
@@ -164,7 +164,7 @@ public class MarkersLoadingUtils
   {
     // Checks
     int region=position.getRegion();
-    if (((region<1) || (region>5)) && (region!=14))
+    if (!GeoUtils.isSupportedRegion(region))
     {
       LOGGER.warn("Weird region value: "+region);
       return null;
