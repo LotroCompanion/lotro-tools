@@ -20,7 +20,7 @@ import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.maps.Dungeon;
 import delta.games.lotro.lore.maps.io.xml.DungeonXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
-import delta.games.lotro.tools.extraction.maps.GeoUtils;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**

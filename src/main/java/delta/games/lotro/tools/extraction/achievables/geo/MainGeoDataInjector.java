@@ -34,8 +34,8 @@ import delta.games.lotro.lore.quests.objectives.NpcTalkCondition;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.geo.maps.finder.MapsFinder;
 import delta.games.lotro.tools.extraction.instances.BlockGroupsBuilder;
-import delta.games.lotro.tools.extraction.maps.finder.MapsFinder;
 
 /**
  * Injector for deed geo data.

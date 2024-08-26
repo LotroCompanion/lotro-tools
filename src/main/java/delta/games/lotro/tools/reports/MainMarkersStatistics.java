@@ -96,6 +96,7 @@ public class MainMarkersStatistics
     showNpcStats(sortedMarkers,markers);
     showMobStats(sortedMarkers,markers);
     showLandmarksStats(sortedMarkers,markers);
+    showMarkersLeft(sortedMarkers);
   }
 
   private void showGlobalStats(Map<Integer,List<Marker>> sortedMarkers, List<Marker> markers)
@@ -134,6 +135,7 @@ public class MainMarkersStatistics
       {
         totalItemMarkers+=itemMarkers.size();
         totalItemsWithMarkers++;
+        sortedMarkers.remove(id);
       }
     }
     System.out.println("Total item markers: "+totalItemMarkers);
@@ -163,6 +165,7 @@ public class MainMarkersStatistics
           maxMarkerPerElement=elementMarkers.size();
           maxNpc=npc;
         }
+        sortedMarkers.remove(id);
       }
     }
     System.out.println("Total NPC markers: "+totalMarkers);
@@ -193,6 +196,7 @@ public class MainMarkersStatistics
           maxMarkerPerElement=elementMarkers.size();
           maxMob=mob;
         }
+        sortedMarkers.remove(id);
       }
     }
     System.out.println("Total mob markers: "+totalMarkers);
@@ -224,10 +228,20 @@ public class MainMarkersStatistics
           max=landmark;
         }
       }
+      sortedMarkers.remove(id);
     }
     System.out.println("Total landmark markers: "+totalMarkers);
     System.out.println("Total landmarks with markers: "+totalElementsWithMarkers);
     System.out.println("Max markers per landmark: "+maxMarkerPerElement+" ("+max+")");
+  }
+
+  private void showMarkersLeft(Map<Integer,List<Marker>> sortedMarkers)
+  {
+    for(List<Marker> markers : sortedMarkers.values())
+    {
+      Marker marker=markers.get(0);
+      System.out.println(markers.size()+" => "+marker);
+    }
   }
 
   private void doIt()

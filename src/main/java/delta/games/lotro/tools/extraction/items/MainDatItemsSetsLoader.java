@@ -21,10 +21,10 @@ import delta.games.lotro.lore.items.sets.ItemsSet.SetType;
 import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.lore.items.sets.io.xml.ItemsSetXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.effects.ItemsSetEffectsLoader;
-import delta.games.lotro.tools.extraction.maps.PlacesLoader;
 import delta.games.lotro.tools.extraction.utils.DatStatUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 

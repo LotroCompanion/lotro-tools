@@ -11,9 +11,9 @@ import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.BlockMarkersManager;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
-import delta.games.lotro.tools.extraction.maps.MapConstants;
-import delta.games.lotro.tools.extraction.maps.classification.Classification;
-import delta.games.lotro.tools.extraction.maps.classification.MarkerClassifier;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
+import delta.games.lotro.tools.extraction.geo.markers.classification.Classification;
+import delta.games.lotro.tools.extraction.geo.markers.classification.MarkerClassifier;
 
 /**
  * Test class for the markers classifier.

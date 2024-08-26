@@ -5,6 +5,8 @@ import java.io.File;
 import delta.games.lotro.lore.maps.ParchmentMapsManager;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.basemaps.GeoreferencedBasemapsManager;
+import delta.games.lotro.tools.extraction.geo.maps.finder.AdvancedMapsManager;
+import delta.games.lotro.tools.extraction.geo.maps.finder.DetailedMap;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

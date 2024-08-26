@@ -6,8 +6,8 @@ import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
-import delta.games.lotro.tools.extraction.maps.MapConstants;
-import delta.games.lotro.tools.extraction.maps.markers.MarkerDuplicatesRemover;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
+import delta.games.lotro.tools.extraction.geo.markers.MarkerDuplicatesRemover;
 
 /**
  * Main method for the marker duplicates remover.

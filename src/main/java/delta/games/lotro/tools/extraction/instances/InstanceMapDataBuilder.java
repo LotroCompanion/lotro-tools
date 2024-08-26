@@ -26,9 +26,9 @@ import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
 import delta.games.lotro.maps.data.markers.MarkersFinder;
-import delta.games.lotro.tools.extraction.maps.MapConstants;
-import delta.games.lotro.tools.extraction.maps.MapUtils;
-import delta.games.lotro.tools.extraction.maps.markers.MarkerUtils;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
+import delta.games.lotro.tools.extraction.geo.maps.MapUtils;
+import delta.games.lotro.tools.extraction.geo.markers.MarkerUtils;
 
 /**
  * Build map data for instances.

@@ -14,8 +14,8 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.items.effects.GenericItemEffects;
 import delta.games.lotro.lore.items.effects.io.xml.GenericItemEffectsXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
-import delta.games.lotro.tools.extraction.maps.PlacesLoader;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 

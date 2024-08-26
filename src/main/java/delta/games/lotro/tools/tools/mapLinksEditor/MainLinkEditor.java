@@ -15,7 +15,7 @@ import delta.games.lotro.maps.ui.BasemapPanelController;
 import delta.games.lotro.maps.ui.navigation.MapViewDefinition;
 import delta.games.lotro.maps.ui.navigation.NavigationListener;
 import delta.games.lotro.maps.ui.navigation.NavigationSupport;
-import delta.games.lotro.tools.extraction.maps.MapConstants;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
 
 /**
  * Link editor for maps.

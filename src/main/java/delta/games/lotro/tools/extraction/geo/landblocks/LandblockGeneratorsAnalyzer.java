@@ -8,7 +8,7 @@ import delta.common.utils.math.geometry.Vector3D;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.tools.extraction.maps.markers.MarkersLoadingUtils;
+import delta.games.lotro.tools.extraction.geo.markers.MarkersLoadingUtils;
 
 /**
  * Analyzer for generators found in a landblock.

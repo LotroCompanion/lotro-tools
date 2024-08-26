@@ -8,8 +8,8 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.maps.Area;
 import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
-import delta.games.lotro.tools.extraction.maps.PlacesLoader;
 
 /**
  * Loader for effect-based buffs.

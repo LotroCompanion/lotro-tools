@@ -23,8 +23,8 @@ import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.perks.PerkDescription;
 import delta.games.lotro.lore.perks.io.xml.PerkDescriptionXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
-import delta.games.lotro.tools.extraction.maps.PlacesLoader;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 

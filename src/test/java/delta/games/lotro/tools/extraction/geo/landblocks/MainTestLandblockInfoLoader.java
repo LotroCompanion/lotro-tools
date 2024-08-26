@@ -5,7 +5,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.geo.BlockReference;
-import delta.games.lotro.tools.extraction.maps.markers.MarkerUtils;
+import delta.games.lotro.tools.extraction.geo.markers.MarkerUtils;
 
 /**
  * Simple test class for the landblock info loader.
