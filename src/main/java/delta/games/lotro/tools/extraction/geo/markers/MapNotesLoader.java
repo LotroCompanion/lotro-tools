@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.geo.markers;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,9 @@ import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.maps.Zone;
 import delta.games.lotro.lore.maps.ZoneUtils;
+import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.tools.extraction.geo.GeoUtils;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
 
 /**
  * Loader for map notes.
@@ -216,7 +219,9 @@ public class MapNotesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    MarkersDataManager markersDataMgr=new MarkersDataManager(facade);
+    File rootDir=MapConstants.getRootDir();
+    MapsManager mapsManager=new MapsManager(rootDir,false);
+    MarkersDataManager markersDataMgr=new MarkersDataManager(facade,mapsManager);
     MarkersLoadingUtils markersUtils=new MarkersLoadingUtils(facade,markersDataMgr);
     MapNotesLoader loader=new MapNotesLoader(facade,markersUtils);
     loader.doIt();

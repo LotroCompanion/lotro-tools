@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.geo.markers;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
 import delta.games.lotro.maps.data.markers.LandblockMarkersManager;
 import delta.games.lotro.maps.data.markers.index.MarkersIndex;
 import delta.games.lotro.maps.data.markers.index.MarkersIndexesManager;
-import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
 import delta.games.lotro.tools.extraction.geo.maps.ResourcesMapsBuilder;
 import delta.games.lotro.tools.extraction.geo.markers.classification.Classification;
 import delta.games.lotro.tools.extraction.geo.markers.classification.CropClassification;
@@ -41,12 +39,12 @@ public class MarkersDataManager
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param mapsManager Maps manager.
    */
-  public MarkersDataManager(DataFacade facade)
+  public MarkersDataManager(DataFacade facade, MapsManager mapsManager)
   {
-    File rootDir=MapConstants.getRootDir();
-    _mapsManager=new MapsManager(rootDir,false);
-    _index=new MarkersIndexesManager(rootDir);
+    _mapsManager=mapsManager;
+    _index=new MarkersIndexesManager(mapsManager.getRootDir());
     _didStore=new HashMap<Integer,MarkersStore>();
     _clStore=new HashMap<Integer,MarkersStore>();
     _classifier=new MarkerClassifier(facade);

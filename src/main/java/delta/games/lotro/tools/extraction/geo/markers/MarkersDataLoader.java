@@ -50,11 +50,11 @@ public class MarkersDataLoader
   {
     _facade=facade;
     _mapsManager=mapsManager;
-    _markersDataMgr=new MarkersDataManager(facade);
+    _markersDataMgr=new MarkersDataManager(facade,mapsManager);
   }
 
   /**
-   * Load maps data.
+   * Load markers data.
    */
   public void doIt()
   {
@@ -100,6 +100,8 @@ public class MarkersDataLoader
     // Prune categories
     MainCategoriesPruner pruner=new MainCategoriesPruner(_mapsManager);
     pruner.doIt();
+    // Save
+    write();
   }
 
   private void initCategories(CategoriesManager categoriesManager)
