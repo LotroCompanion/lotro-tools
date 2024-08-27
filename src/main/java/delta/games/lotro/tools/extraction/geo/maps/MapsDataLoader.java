@@ -1,10 +1,14 @@
 package delta.games.lotro.tools.extraction.geo.maps;
 
 import java.io.File;
+import java.io.FileFilter;
 
+import delta.common.utils.NumericTools;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.maps.data.MapsManager;
+import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.geo.markers.MarkersDataLoader;
+import delta.games.lotro.tools.extraction.utils.CleanupUtils;
 
 /**
  * Loader for maps data.
@@ -26,6 +30,37 @@ public class MapsDataLoader
     File rootDir=MapConstants.getRootDir();
     _mapsManager=new MapsManager(rootDir,false);
     _markersLoader=new MarkersDataLoader(facade,_mapsManager);
+  }
+
+  /**
+   * Cleanup managed data.
+   */
+  public void cleanup()
+  {
+    FileFilter f=new FileFilter()
+    {
+      @Override
+      public boolean accept(File pathname)
+      {
+        String name=pathname.getName();
+        if (name.endsWith(".png"))
+        {
+          int id=NumericTools.parseInt(name.substring(0,name.length()-4),0);
+          if (id>=70)
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+    };
+    CleanupUtils.deleteDirectory(_mapsManager.getCategoriesDir(),f);
+    CleanupUtils.deleteDirectory(_mapsManager.getIndexesDir());
+    CleanupUtils.deleteDirectory(_mapsManager.getMapsDir());
+    CleanupUtils.deleteDirectory(_mapsManager.getMarkersDir());
+    CleanupUtils.deleteFile(_mapsManager.getLinksFile());
+    CleanupUtils.deleteFile(GeneratedFiles.PARCHMENT_MAPS);
+    CleanupUtils.deleteFile(GeneratedFiles.RESOURCES_MAPS);
   }
 
   /**

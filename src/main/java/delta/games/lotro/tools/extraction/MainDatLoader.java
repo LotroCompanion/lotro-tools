@@ -1,11 +1,7 @@
 package delta.games.lotro.tools.extraction;
 
-import java.io.File;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
-
-import delta.common.utils.files.FilesDeleter;
 import delta.games.lotro.common.treasure.LootsManager;
 import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
@@ -43,9 +39,6 @@ import delta.games.lotro.tools.extraction.effects.MainBuffsLoader;
 import delta.games.lotro.tools.extraction.effects.mood.MainMoodDataLoader;
 import delta.games.lotro.tools.extraction.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.extraction.factions.MainDatFactionsLoader;
-import delta.games.lotro.tools.extraction.geo.MainDatLandmarksLoader;
-import delta.games.lotro.tools.extraction.geo.areas.MainDatGeoAreasLoader;
-import delta.games.lotro.tools.extraction.geo.dungeons.MainDatDungeonsLoader;
 import delta.games.lotro.tools.extraction.global.MainGameDataBuilder;
 import delta.games.lotro.tools.extraction.global.MainServersBuilder;
 import delta.games.lotro.tools.extraction.instances.MainDatInstancesTreeLoader;
@@ -74,6 +67,7 @@ import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.extraction.ui.SocketIconsLoader;
+import delta.games.lotro.tools.extraction.utils.CleanupUtils;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
@@ -83,8 +77,6 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainDatLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatLoader.class);
-
   private DataFacade _facade;
 
   /**
@@ -122,19 +114,11 @@ public class MainDatLoader
     new MainDatPVPLoader(_facade).doIt();
     // Mood
     new MainMoodDataLoader(_facade).doIt();
-    // Geo
-    new MainDatLandmarksLoader(_facade).doIt();
     // Combat data
     new MainDatCombatLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
-    // Geographic areas
-    new MainDatGeoAreasLoader(_facade).doIt();
-    // Dungeons
-    MainDatDungeonsLoader dungeonsLoader=new MainDatDungeonsLoader(_facade);
-    dungeonsLoader.doIt();
-    dungeonsLoader.loadPositions();
     // Skills
     MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
     skillsLoader.doIt();
@@ -276,177 +260,142 @@ public class MainDatLoader
   private void cleanup()
   {
     // Commons
-    deleteFile(GeneratedFiles.GAME_DATA);
-    deleteFile(GeneratedFiles.STATS);
-    deleteFile(GeneratedFiles.COLORS);
-    deleteFile(GeneratedFiles.COMBAT_DATA);
-    deleteDirectory(GeneratedFiles.ENUMS_DIR);
-    deleteFile(GeneratedFiles.XP_TABLE);
-    deleteFile(GeneratedFiles.PVP);
-    deleteFile(GeneratedFiles.MOOD);
+    CleanupUtils.deleteFile(GeneratedFiles.GAME_DATA);
+    CleanupUtils.deleteFile(GeneratedFiles.STATS);
+    CleanupUtils.deleteFile(GeneratedFiles.COLORS);
+    CleanupUtils.deleteFile(GeneratedFiles.COMBAT_DATA);
+    CleanupUtils.deleteDirectory(GeneratedFiles.ENUMS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.XP_TABLE);
+    CleanupUtils.deleteFile(GeneratedFiles.PVP);
+    CleanupUtils.deleteFile(GeneratedFiles.MOOD);
     // Labels
     // Do not delete the labels directory because it is shared with the geo data loader
-    // deleteDirectory(GeneratedFiles.LABELS)
-    // Geo
-    deleteFile(GeneratedFiles.LANDMARKS);
-    // Dungeons
-    deleteFile(GeneratedFiles.DUNGEONS);
-    // Areas
-    deleteFile(GeneratedFiles.GEO_AREAS);
-    deleteDirectory(GeneratedFiles.AREA_ICONS);
+    // CleanupUtils.deleteDirectory(GeneratedFiles.LABELS)
     // Character data
-    deleteFile(GeneratedFiles.STAT_CONTRIBS);
-    deleteFile(GeneratedFiles.START_STATS);
-    deleteFile(GeneratedFiles.CLASSES);
-    deleteFile(GeneratedFiles.MONSTER_CLASSES);
-    deleteDirectory(GeneratedFiles.CLASS_ICONS_DIR);
-    deleteFile(GeneratedFiles.TRAIT_TREES);
-    deleteFile(GeneratedFiles.INITIAL_GEAR);
-    deleteFile(GeneratedFiles.RACES);
-    deleteDirectory(GeneratedFiles.RACE_ICONS_DIR);
-    deleteFile(GeneratedFiles.NATIONALITIES);
+    CleanupUtils.deleteFile(GeneratedFiles.STAT_CONTRIBS);
+    CleanupUtils.deleteFile(GeneratedFiles.START_STATS);
+    CleanupUtils.deleteFile(GeneratedFiles.CLASSES);
+    CleanupUtils.deleteFile(GeneratedFiles.MONSTER_CLASSES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.CLASS_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.TRAIT_TREES);
+    CleanupUtils.deleteFile(GeneratedFiles.INITIAL_GEAR);
+    CleanupUtils.deleteFile(GeneratedFiles.RACES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.RACE_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
-    deleteFile(GeneratedFiles.SKILLS);
-    deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.SKILLS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
     // - virtues
-    deleteFile(GeneratedFiles.VIRTUES);
+    CleanupUtils.deleteFile(GeneratedFiles.VIRTUES);
     // - traits
-    deleteFile(GeneratedFiles.TRAITS);
-    deleteDirectory(GeneratedFiles.TRAIT_ICONS_DIR);
-    deleteFile(GeneratedFiles.SKIRMISH_TRAITS);
+    CleanupUtils.deleteFile(GeneratedFiles.TRAITS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.TRAIT_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.SKIRMISH_TRAITS);
     // - stat tomes
-    deleteFile(GeneratedFiles.STAT_TOMES);
+    CleanupUtils.deleteFile(GeneratedFiles.STAT_TOMES);
     // Titles
-    deleteFile(GeneratedFiles.TITLES);
-    deleteDirectory(GeneratedFiles.TITLE_ICONS);
+    CleanupUtils.deleteFile(GeneratedFiles.TITLES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.TITLE_ICONS);
     // Items
-    deleteFile(GeneratedFiles.GENERIC_ITEM_EFFECTS);
-    deleteFile(GeneratedFiles.ITEMS);
-    deleteDirectory(GeneratedFiles.ITEM_ICONS_DIR);
-    deleteDirectory(GeneratedFiles.ITEM_LARGE_ICONS_DIR);
-    deleteDirectory(GeneratedFiles.SOCKET_ICONS_DIR);
-    deleteFile(GeneratedFiles.PASSIVES);
-    deleteFile(GeneratedFiles.PASSIVES_USAGE);
-    deleteFile(GeneratedFiles.CONSUMABLES);
-    deleteFile(GeneratedFiles.PAPER_ITEMS);
-    deleteFile(GeneratedFiles.ITEM_COSMETICS);
-    deleteFile(GeneratedFiles.VALUE_TABLES);
-    deleteFile(GeneratedFiles.DPS_TABLES);
-    deleteFile(GeneratedFiles.SPEED_TABLES);
-    deleteFile(GeneratedFiles.WEAPON_DAMAGE);
+    CleanupUtils.deleteFile(GeneratedFiles.GENERIC_ITEM_EFFECTS);
+    CleanupUtils.deleteFile(GeneratedFiles.ITEMS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.ITEM_ICONS_DIR);
+    CleanupUtils.deleteDirectory(GeneratedFiles.ITEM_LARGE_ICONS_DIR);
+    CleanupUtils.deleteDirectory(GeneratedFiles.SOCKET_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.PASSIVES);
+    CleanupUtils.deleteFile(GeneratedFiles.PASSIVES_USAGE);
+    CleanupUtils.deleteFile(GeneratedFiles.CONSUMABLES);
+    CleanupUtils.deleteFile(GeneratedFiles.PAPER_ITEMS);
+    CleanupUtils.deleteFile(GeneratedFiles.ITEM_COSMETICS);
+    CleanupUtils.deleteFile(GeneratedFiles.VALUE_TABLES);
+    CleanupUtils.deleteFile(GeneratedFiles.DPS_TABLES);
+    CleanupUtils.deleteFile(GeneratedFiles.SPEED_TABLES);
+    CleanupUtils.deleteFile(GeneratedFiles.WEAPON_DAMAGE);
     // - legacies
-    deleteFile(GeneratedFiles.LEGACIES);
-    deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
-    deleteDirectory(GeneratedFiles.LEGACIES_ICONS);
+    CleanupUtils.deleteFile(GeneratedFiles.LEGACIES);
+    CleanupUtils.deleteFile(GeneratedFiles.NON_IMBUED_LEGACIES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.LEGACIES_ICONS);
     // Items sets
-    deleteFile(GeneratedFiles.SETS);
+    CleanupUtils.deleteFile(GeneratedFiles.SETS);
     // Legendary system
-    deleteFile(GeneratedFiles.LEGENDARY_DATA);
+    CleanupUtils.deleteFile(GeneratedFiles.LEGENDARY_DATA);
     // Legendary system (reloaded)
-    deleteFile(GeneratedFiles.LEGENDARY_DATA2);
-    deleteFile(GeneratedFiles.LEGENDARY_ATTRS);
-    deleteFile(GeneratedFiles.TRACERIES);
-    deleteFile(GeneratedFiles.ENHANCEMENT_RUNES);
+    CleanupUtils.deleteFile(GeneratedFiles.LEGENDARY_DATA2);
+    CleanupUtils.deleteFile(GeneratedFiles.LEGENDARY_ATTRS);
+    CleanupUtils.deleteFile(GeneratedFiles.TRACERIES);
+    CleanupUtils.deleteFile(GeneratedFiles.ENHANCEMENT_RUNES);
     // Legendary titles
-    deleteFile(GeneratedFiles.LEGENDARY_TITLES);
+    CleanupUtils.deleteFile(GeneratedFiles.LEGENDARY_TITLES);
     // Relics
-    deleteFile(GeneratedFiles.RELICS);
-    deleteFile(GeneratedFiles.RELIC_MELDING_RECIPES);
-    deleteDirectory(GeneratedFiles.RELIC_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.RELICS);
+    CleanupUtils.deleteFile(GeneratedFiles.RELIC_MELDING_RECIPES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.RELIC_ICONS_DIR);
     // Recipes
-    deleteFile(GeneratedFiles.RECIPES);
+    CleanupUtils.deleteFile(GeneratedFiles.RECIPES);
     // Emotes
-    deleteFile(GeneratedFiles.EMOTES);
-    deleteDirectory(GeneratedFiles.EMOTE_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.EMOTES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.EMOTE_ICONS_DIR);
     // Factions
-    deleteFile(GeneratedFiles.FACTIONS);
+    CleanupUtils.deleteFile(GeneratedFiles.FACTIONS);
     // Quests and deeds
-    deleteFile(GeneratedFiles.QUESTS);
-    deleteFile(GeneratedFiles.DEEDS);
-    deleteFile(GeneratedFiles.TASKS);
+    CleanupUtils.deleteFile(GeneratedFiles.QUESTS);
+    CleanupUtils.deleteFile(GeneratedFiles.DEEDS);
+    CleanupUtils.deleteFile(GeneratedFiles.TASKS);
     // Crafting
-    deleteFile(GeneratedFiles.CRAFTING_DATA);
+    CleanupUtils.deleteFile(GeneratedFiles.CRAFTING_DATA);
     // Buffs
-    deleteFile(GeneratedFiles.BUFFS);
+    CleanupUtils.deleteFile(GeneratedFiles.BUFFS);
     // Effects
-    deleteFile(GeneratedFiles.EFFECTS);
-    deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.EFFECTS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.EFFECT_ICONS_DIR);
     // Collections
-    deleteFile(GeneratedFiles.COLLECTIONS);
+    CleanupUtils.deleteFile(GeneratedFiles.COLLECTIONS);
     // Vendors
-    deleteFile(GeneratedFiles.VENDORS);
+    CleanupUtils.deleteFile(GeneratedFiles.VENDORS);
     // Barterers
-    deleteFile(GeneratedFiles.BARTERS);
+    CleanupUtils.deleteFile(GeneratedFiles.BARTERS);
     // Instances
-    deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
-    deleteFile(GeneratedFiles.INSTANCES_TREE);
+    CleanupUtils.deleteFile(GeneratedFiles.PRIVATE_ENCOUNTERS);
+    CleanupUtils.deleteFile(GeneratedFiles.INSTANCES_TREE);
     // Containers
-    deleteFile(GeneratedFiles.CONTAINERS);
+    CleanupUtils.deleteFile(GeneratedFiles.CONTAINERS);
     // Loot tables
-    deleteFile(GeneratedFiles.LOOTS);
-    deleteFile(GeneratedFiles.GENERIC_MOB_LOOTS);
-    deleteFile(GeneratedFiles.INSTANCES_LOOTS);
+    CleanupUtils.deleteFile(GeneratedFiles.LOOTS);
+    CleanupUtils.deleteFile(GeneratedFiles.GENERIC_MOB_LOOTS);
+    CleanupUtils.deleteFile(GeneratedFiles.INSTANCES_LOOTS);
     // Disenchantment
-    deleteFile(GeneratedFiles.DISENCHANTMENTS);
+    CleanupUtils.deleteFile(GeneratedFiles.DISENCHANTMENTS);
     // Mobs
-    deleteFile(GeneratedFiles.MOBS);
+    CleanupUtils.deleteFile(GeneratedFiles.MOBS);
     // NPCs
-    deleteFile(GeneratedFiles.NPCS);
+    CleanupUtils.deleteFile(GeneratedFiles.NPCS);
     // Misc icons
-    deleteDirectory(GeneratedFiles.MISC_ICONS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.MISC_ICONS);
     // Allegiances
-    deleteFile(GeneratedFiles.ALLEGIANCES);
-    deleteDirectory(GeneratedFiles.ALLEGIANCES_ICONS);
+    CleanupUtils.deleteFile(GeneratedFiles.ALLEGIANCES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.ALLEGIANCES_ICONS);
     // Billing groups
-    deleteFile(GeneratedFiles.BILLING_GROUPS);
+    CleanupUtils.deleteFile(GeneratedFiles.BILLING_GROUPS);
     // Hobbies
-    deleteFile(GeneratedFiles.HOBBIES);
-    deleteDirectory(GeneratedFiles.HOBBY_ICONS);
+    CleanupUtils.deleteFile(GeneratedFiles.HOBBIES);
+    CleanupUtils.deleteDirectory(GeneratedFiles.HOBBY_ICONS);
     // Perks
-    deleteFile(GeneratedFiles.PERKS);
-    deleteDirectory(GeneratedFiles.PERK_ICONS);
+    CleanupUtils.deleteFile(GeneratedFiles.PERKS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.PERK_ICONS);
     // Misc
-    deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
-    deleteFile(GeneratedFiles.WORLD_EVENTS);
-    deleteFile(GeneratedFiles.REWARDS_TRACKS);
+    CleanupUtils.deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
+    CleanupUtils.deleteFile(GeneratedFiles.WORLD_EVENTS);
+    CleanupUtils.deleteFile(GeneratedFiles.REWARDS_TRACKS);
 
     // Progressions
-    deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
-    deleteFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
-    deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS);
-    deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
-    deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
-    deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
-    deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
-    deleteFile(GeneratedFiles.PROGRESSIONS);
-  }
-
-  private void deleteFile(File toDelete)
-  {
-    if (toDelete==null)
-    {
-      LOGGER.warn("Cannot delete null file!");
-      return;
-    }
-    if (toDelete.exists())
-    {
-      boolean ok=toDelete.delete();
-      if (!ok)
-      {
-        LOGGER.warn("Could not delete file: "+toDelete);
-      }
-    }
-  }
-
-  private void deleteDirectory(File toDelete)
-  {
-    if (toDelete==null)
-    {
-      LOGGER.warn("Cannot delete null directory!");
-      return;
-    }
-    FilesDeleter deleter=new FilesDeleter(toDelete,null,true);
-    deleter.doIt();
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_COMBAT);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_CHARACTERS);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS);
   }
 
   /**

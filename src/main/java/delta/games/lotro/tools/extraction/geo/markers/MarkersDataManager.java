@@ -44,7 +44,7 @@ public class MarkersDataManager
   public MarkersDataManager(DataFacade facade, MapsManager mapsManager)
   {
     _mapsManager=mapsManager;
-    _index=new MarkersIndexesManager(mapsManager.getRootDir());
+    _index=new MarkersIndexesManager(mapsManager.getIndexesDir());
     _didStore=new HashMap<Integer,MarkersStore>();
     _clStore=new HashMap<Integer,MarkersStore>();
     _classifier=new MarkerClassifier(facade);
