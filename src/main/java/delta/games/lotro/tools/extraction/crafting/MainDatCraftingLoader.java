@@ -172,10 +172,14 @@ CraftProfession_RecipeWebStoreCategory: 19 (CraftRecipe_Weaponsmith)
 CraftProfession_RequiredTool: 128 (Smithing Hammer)
 CraftProfession_StartTime_PropertyName: 268439959 (Craft_Weaponsmith_StartTime)
      */
-
   }
 
-  private String getProfessionKey(int professionId)
+  /**
+   * Get the key for a profession.
+   * @param professionId Profession identifier.
+   * @return A profession key.
+   */
+  public static String getProfessionKey(int professionId)
   {
     if (professionId==1879054946) return "SCHOLAR";
     if (professionId==1879055079) return "METALSMITH";

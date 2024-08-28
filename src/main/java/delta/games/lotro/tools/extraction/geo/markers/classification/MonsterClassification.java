@@ -1,31 +1,20 @@
 package delta.games.lotro.tools.extraction.geo.markers.classification;
 
-import delta.games.lotro.lore.agents.AgentClassification;
-
 /**
  * Monster classification.
  * @author DAM
  */
 public class MonsterClassification extends Classification
 {
-  private AgentClassification _classification;
-  private boolean _isCritter;
+  private boolean _critter;
 
   /**
    * Constructor.
-   * @param classification Agent classification.
+   * @param critter Critter or not.
    */
-  public MonsterClassification(AgentClassification classification)
+  public MonsterClassification(boolean critter)
   {
-    _classification=classification;
-    if (classification!=null)
-    {
-      _isCritter=(classification.getEntityClassification().getSpecies().getCode()==27);
-    }
-    else
-    {
-      _isCritter=true;
-    }
+    _critter=critter;
   }
 
   /**
@@ -34,12 +23,6 @@ public class MonsterClassification extends Classification
    */
   public boolean isCritter()
   {
-    return _isCritter;
-  }
-
-  @Override
-  public String toString()
-  {
-    return _classification.toString();
+    return _critter;
   }
 }

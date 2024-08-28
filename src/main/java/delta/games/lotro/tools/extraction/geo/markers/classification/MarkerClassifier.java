@@ -15,12 +15,7 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.DataIdentificationTools;
-import delta.games.lotro.lore.agents.AgentClassification;
-import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingLevel;
-import delta.games.lotro.lore.crafting.CraftingSystem;
-import delta.games.lotro.lore.crafting.Profession;
-import delta.games.lotro.tools.extraction.agents.ClassificationLoader;
 
 /**
  * Classifier for markers.
@@ -45,7 +40,7 @@ public class MarkerClassifier
 
   private DataFacade _facade;
   private EnumMapper _mapNoteType;
-  private ClassificationLoader _agentSpecLoader;
+  private BasicCraftingData _crafting;
 
   // Map of resolved items
   private Map<Integer,Classification> _cache;
@@ -77,7 +72,7 @@ public class MarkerClassifier
     _facade=facade;
     _cache=new HashMap<Integer,Classification>();
     _mapNoteType=_facade.getEnumsManager().getEnumMapper(587202775);
-    _agentSpecLoader=new ClassificationLoader(facade);
+    _crafting=new BasicCraftingData();
   }
 
   /**
@@ -192,9 +187,7 @@ public class MarkerClassifier
     int professionId=(professionIdInt!=null)?professionIdInt.intValue():getProfessionFromDID(did);
     // Fix Farmer -> Cook
     if (professionId==1879062816) professionId=1879061252;
-    CraftingData craftingData=CraftingSystem.getInstance().getData();
-    Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
-    CraftingLevel level=profession.getByTier(craftTierCode);
+    CraftingLevel level=_crafting.getLevel(professionId,craftTierCode);
     CropClassification c=new CropClassification(level);
     return c;
     /*
@@ -263,9 +256,7 @@ public class MarkerClassifier
       craftTier=1+((craftTierCode!=null)?craftTierCode.intValue():0);
     }
     int professionId=((Integer)props.getProperty("Usage_RequiredCraftProfession")).intValue();
-    CraftingData craftingData=CraftingSystem.getInstance().getData();
-    Profession profession=craftingData.getProfessionsRegistry().getProfessionById(professionId);
-    CraftingLevel level=profession.getByTier(craftTier);
+    CraftingLevel level=_crafting.getLevel(professionId,craftTier);
     ResourceClassification c=new ResourceClassification(level);
     return c;
     /*
@@ -284,20 +275,18 @@ public class MarkerClassifier
     {
       return null;
     }
-
-    AgentClassification mobClassification=new AgentClassification();
-    _agentSpecLoader.loadClassification(props,mobClassification);
-    MonsterClassification ret=new MonsterClassification(mobClassification);
+    Integer speciesCode=(Integer)props.getProperty("Agent_Species");
+    // Critters
+    /*
+    Agent_Alignment: 2 (Neutral)
+    Agent_Class: 87 (Critter)
+    Agent_Species: 27 (Critter)
+    WeenieType: 65615 (Monster)
+    */
+    boolean critter=((speciesCode!=null) && (speciesCode.intValue()==27));
+    MonsterClassification ret=new MonsterClassification(critter);
     return ret;
   }
-
-  // Critters
-  /*
-Agent_Alignment: 2 (Neutral)
-Agent_Class: 87 (Critter)
-Agent_Species: 27 (Critter)
-WeenieType: 65615 (Monster)
-   */
 
   // !! Map Note type of type "No Icon" is found for NPC, Landmarks...
   // Workbench is sometimes an Item, sometimes a Hotspot (should be classified as Crafting Facility)
@@ -404,7 +393,7 @@ WeenieType: 259 (GameplayContainer)
       {
         if (did==critterId)
         {
-          return new MonsterClassification(null);
+          return new MonsterClassification(true);
         }
       }
     }
