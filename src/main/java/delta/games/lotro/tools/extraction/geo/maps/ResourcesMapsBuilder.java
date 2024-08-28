@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.items.Item;
-import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.maps.resources.ResourcesMapDescriptor;
 import delta.games.lotro.lore.maps.resources.ResourcesMapsManager;
 import delta.games.lotro.lore.maps.resources.io.xml.ResourcesMapsXMLWriter;
@@ -32,10 +31,11 @@ public class ResourcesMapsBuilder
   /**
    * Register a resource.
    * @param itemId Item identifier.
+   * @param itemName Item name.
    * @param level Crafting level.
    * @param parentZoneId Parent zone ID.
    */
-  public void registerResource(int itemId, CraftingLevel level, int parentZoneId)
+  public void registerResource(int itemId, String itemName, CraftingLevel level, int parentZoneId)
   {
     ResourcesMapDescriptor mapDescriptor=_mapsManager.getMapForLevel(level);
     if (mapDescriptor==null)
@@ -45,7 +45,9 @@ public class ResourcesMapsBuilder
     }
     if (!mapDescriptor.hasItem(itemId))
     {
-      Item item=ItemsManager.getInstance().getItem(itemId);
+      Item item=new Item();
+      item.setIdentifier(itemId);
+      item.setName(itemName);
       mapDescriptor.addItem(item);
     }
     Identifiable map=MapUtils.findMapForZone(parentZoneId);

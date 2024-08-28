@@ -82,7 +82,8 @@ public class MarkersDataManager
       registerDidMarker(did,marker);
       ResourceClassification resourceClassification=(ResourceClassification)classification;
       CraftingLevel level=resourceClassification.getCraftingLevel();
-      _resourcesMapsBuilder.registerResource(did,level,parentZoneId);
+      String itemName=marker.getLabel();
+      _resourcesMapsBuilder.registerResource(did,itemName,level,parentZoneId);
       if (classification instanceof CropClassification)
       {
         marker.setCategoryCode(CategoriesConstants.CROP);
