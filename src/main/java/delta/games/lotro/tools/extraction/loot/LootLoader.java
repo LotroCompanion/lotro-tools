@@ -1,13 +1,14 @@
 package delta.games.lotro.tools.extraction.loot;
 
 import java.io.File;
-import java.util.Arrays;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
 import delta.games.lotro.common.treasure.FilteredTrophyTableEntry;
@@ -27,8 +28,10 @@ import delta.games.lotro.common.treasure.TrophyListEntry;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
 import delta.games.lotro.common.treasure.WeightedTreasureTableEntry;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.Item;
@@ -146,45 +149,72 @@ public class LootLoader
       FilteredTrophyTableEntry entry=new FilteredTrophyTableEntry(lootTable);
       ret.addEntry(entry);
       // Filter
-      Object[] filter=(Object[])itemProps.getProperty("EntityFilter_Array");
-      loadFilterData(filter,entry.getUsageRequirement());
+      ArrayPropertyValue filter=(ArrayPropertyValue)itemProps.getPropertyValueByName("EntityFilter_Array");
+      if (filter!=null)
+      {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("Table ID="+id+" => "+itemProps.dump());
+        }
+        loadFilterData(id,filter,entry.getUsageRequirement());
+      }
     }
     return ret;
   }
 
-  private void loadFilterData(Object[] filterArray, UsageRequirement requirements)
+  private void loadFilterData(int tableID, ArrayPropertyValue filterArray, UsageRequirement requirements)
   {
-    if (filterArray!=null)
+    for(PropertyValue filterEntry : filterArray.getValues())
     {
-      int size=filterArray.length;
-      for(Object filterEntry : filterArray)
+      String propertyName=filterEntry.getDefinition().getName();
+      if ("EntityFilter_PropertyRange".equals(propertyName))
       {
-        if (filterEntry instanceof PropertiesSet)
-        {
-          // Level filter
-          PropertiesSet levelProps=(PropertiesSet)filterEntry;
-          loadLevelFilter(levelProps,requirements);
-        }
-        else
-        {
-          // Class filter
-          Object[] classIdsArray=(Object[])filterArray[0];
-          for(Object classIdObj : classIdsArray)
-          {
-            int classCode=((Integer)classIdObj).intValue();
-            AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
-            if (abstractClass!=null)
-            {
-              requirements.addAllowedClass(abstractClass);
-            }
-          }
-        }
-        // TODO Species filter (for PVP?)
+        // Level filter
+        PropertiesSet levelProps=(PropertiesSet)filterEntry.getValue();
+        loadLevelFilter(levelProps,requirements);
       }
-      if (size>3)
+      else if ("EntityFilter_PropertySet".equals(propertyName))
       {
-        LOGGER.warn("Unsupported size: "+size+" => "+Arrays.toString(filterArray));
+        ArrayPropertyValue propertyArray=(ArrayPropertyValue)filterEntry;
+        for(PropertyValue propertySet : propertyArray.getValues())
+        {
+          handlePropertySet(propertySet,requirements);
+        }
       }
+      else
+      {
+        LOGGER.warn("Unmanaged property: "+propertyName);
+      }
+    }
+  }
+
+  private void handlePropertySet(PropertyValue propertySet,UsageRequirement requirements)
+  {
+    String propertyName=propertySet.getDefinition().getName();
+    if ("Agent_Class".equals(propertyName))
+    {
+      // Class filter
+      int classCode=((Integer)propertySet.getValue()).intValue();
+      AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
+      if (abstractClass!=null)
+      {
+        requirements.addAllowedClass(abstractClass);
+      }
+    }
+    else if ("Agent_Species".equals(propertyName))
+    {
+      // Race filter
+      int raceCode=((Integer)propertySet.getValue()).intValue();
+      RaceDescription race=RacesManager.getInstance().getByCode(raceCode);
+      if (race!=null)
+      {
+        requirements.addAllowedRace(race);
+      }
+    }
+    else
+    {
+      LOGGER.warn("Unmanaged property name: "+propertyName);
+      // TODO: ze_skirmish_difficulty
     }
   }
 
