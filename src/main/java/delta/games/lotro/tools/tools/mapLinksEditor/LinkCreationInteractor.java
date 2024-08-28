@@ -70,8 +70,8 @@ public class LinkCreationInteractor
     public void mouseClicked(MouseEvent event)
     {
       int button=event.getButton();
-      int modifiers=event.getModifiers();
-      if ((button==MouseEvent.BUTTON1) && ((modifiers&InputEvent.SHIFT_MASK)!=0))
+      int modifiers=event.getModifiersEx();
+      if ((button==MouseEvent.BUTTON1) && ((modifiers&InputEvent.SHIFT_DOWN_MASK)!=0))
       {
         int x=event.getX();
         int y=event.getY();
