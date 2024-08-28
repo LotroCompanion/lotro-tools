@@ -40,6 +40,8 @@ public class MainGeoDatLoader
 
   private void load()
   {
+    // Land-blocks
+    new MainLandblocksBuilder(_facade).doIt();
     // Geographic areas
     new MainDatGeoAreasLoader(_facade).doIt();
     // Dungeons
@@ -48,8 +50,6 @@ public class MainGeoDatLoader
     dungeonsLoader.loadPositions();
     // Landmarks
     new MainDatLandmarksLoader(_facade).doIt();
-    // Land-blocks
-    new MainLandblocksBuilder(_facade).doIt();
     // Maps data (base-maps, markers)
     _mapsLoader.doIt();
   }
@@ -58,8 +58,6 @@ public class MainGeoDatLoader
   {
     // Maps
     _mapsLoader.cleanup();
-    // Landblocks
-    CleanupUtils.deleteFile(GeneratedFiles.LANDBLOCKS);
     // Landmarks
     CleanupUtils.deleteFile(GeneratedFiles.LANDMARKS);
     // Dungeons
@@ -67,6 +65,9 @@ public class MainGeoDatLoader
     // Areas
     CleanupUtils.deleteFile(GeneratedFiles.GEO_AREAS);
     CleanupUtils.deleteDirectory(GeneratedFiles.AREA_ICONS);
+    // Landblocks
+    CleanupUtils.deleteFile(GeneratedFiles.LANDBLOCKS);
+    // TODO Labels?
   }
 
   /**
