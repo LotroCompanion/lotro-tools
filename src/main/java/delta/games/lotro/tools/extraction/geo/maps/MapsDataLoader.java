@@ -58,7 +58,6 @@ public class MapsDataLoader
     CleanupUtils.deleteDirectory(_mapsManager.getIndexesDir());
     CleanupUtils.deleteDirectory(_mapsManager.getMapsDir());
     CleanupUtils.deleteDirectory(_mapsManager.getMarkersDir());
-    CleanupUtils.deleteFile(_mapsManager.getLinksFile());
     CleanupUtils.deleteFile(GeneratedFiles.PARCHMENT_MAPS);
     CleanupUtils.deleteFile(GeneratedFiles.RESOURCES_MAPS);
   }

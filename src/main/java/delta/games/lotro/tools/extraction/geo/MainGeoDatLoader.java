@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.extraction.geo;
 
+import java.io.File;
 import java.util.Locale;
 
 import delta.games.lotro.config.LotroCoreConfig;
@@ -9,6 +10,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.geo.areas.MainDatGeoAreasLoader;
 import delta.games.lotro.tools.extraction.geo.dungeons.MainDatDungeonsLoader;
 import delta.games.lotro.tools.extraction.geo.landblocks.MainLandblocksBuilder;
+import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
 import delta.games.lotro.tools.extraction.geo.maps.MapsDataLoader;
 import delta.games.lotro.tools.extraction.utils.CleanupUtils;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
@@ -29,7 +31,6 @@ public class MainGeoDatLoader
   public MainGeoDatLoader(DataFacade facade)
   {
     _facade=facade;
-    _mapsLoader=new MapsDataLoader(facade);
   }
 
   private void doIt()
@@ -56,8 +57,9 @@ public class MainGeoDatLoader
 
   private void cleanup()
   {
-    // Maps
-    _mapsLoader.cleanup();
+    File rootDir=MapConstants.getRootDir();
+    File links=new File(rootDir,"links.xml");
+    CleanupUtils.deleteFile(links);
     // Landmarks
     CleanupUtils.deleteFile(GeneratedFiles.LANDMARKS);
     // Dungeons
@@ -67,6 +69,9 @@ public class MainGeoDatLoader
     CleanupUtils.deleteDirectory(GeneratedFiles.AREA_ICONS);
     // Landblocks
     CleanupUtils.deleteFile(GeneratedFiles.LANDBLOCKS);
+    // Maps
+    _mapsLoader=new MapsDataLoader(_facade);
+    _mapsLoader.cleanup();
     // TODO Labels?
   }
 
