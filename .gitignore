@@ -48,8 +48,12 @@
 /data/hobbies/tmp/hobbyIcons
 /tools/voicesExtractor/.classpath
 /tools/voicesExtractor/.project
-/tools/voicesExtractor/.settings/*.prefs
+/tools/voicesExtractor/.settings
 /deeds.xml
 /items.xml
 /quests.xml
 /races.xml
+/tools/datDisplay/.classpath
+/tools/datDisplay/.project
+/tools/datDisplay/.settings
+/tools/datDisplay/target
