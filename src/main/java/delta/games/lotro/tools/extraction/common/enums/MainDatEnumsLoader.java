@@ -19,6 +19,7 @@ import delta.games.lotro.common.enums.CollectionCategory;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.enums.CraftingUICategory;
+import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EquipmentCategory;
@@ -172,6 +173,7 @@ public class MainDatEnumsLoader
     loadEnum(587202652,"AIHint",AIHint.class); // 0x2300005C
     loadEnum(587202668,"AICooldownChannel",AICooldownChannel.class); // 0x2300006C
     loadEnum(587202775,"MapNoteType",MapNoteType.class); // 0x230000D7
+    loadEnum(587202601,"DamageQualifier",DamageQualifier.class); // 0x23000029
 
     // Derivated enums
     // From EquipmentCategory:
