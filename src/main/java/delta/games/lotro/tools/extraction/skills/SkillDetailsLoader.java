@@ -1,17 +1,32 @@
 package delta.games.lotro.tools.extraction.skills;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.games.lotro.character.skills.SkillCostData;
+import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillVitalCost;
+import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.character.skills.attack.SkillAttack;
+import delta.games.lotro.common.enums.DamageQualifier;
+import delta.games.lotro.common.enums.DamageQualifiers;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.VitalType;
+import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassInstance;
+import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
+import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
+import delta.games.lotro.utils.maths.Progression;
 
 /**
  * @author dmorcellet
@@ -64,9 +79,6 @@ public class SkillDetailsLoader
     {
       return;
     }
-    Integer Skill_Category=(Integer)props.getProperty("Skill_Category");
-    String Skill_Name=(String)props.getProperty("Skill_Name");
-
     Float Skill_ActionDurationContribution=(Float)props.getProperty("Skill_ActionDurationContribution");
     Integer Skill_InductionActionID=(Integer)props.getProperty("Skill_InductionAction");
 
@@ -98,9 +110,12 @@ public class SkillDetailsLoader
 
     WStateDataSet dataSet=_facade.loadWState(skillID);
     ClassInstance SkillData=(ClassInstance) dataSet.getValueForReference(0);
-    Integer m_bUsesMagic=(Integer)SkillData.getAttributeValue("m_bUsesMagic");
-    Integer m_bUsesMelee=(Integer)SkillData.getAttributeValue("m_bUsesMelee");
-    Integer m_bUsesRanged=(Integer)SkillData.getAttributeValue("m_bUsesRanged");
+    Integer usesMagicInt=(Integer)SkillData.getAttributeValue("m_bUsesMagic");
+    boolean usesMagic=(usesMagicInt!=null)&&(usesMagicInt.intValue()==1);
+    Integer usesMeleeInt=(Integer)SkillData.getAttributeValue("m_bUsesMelee");
+    boolean usesMelee=(usesMeleeInt!=null)&&(usesMeleeInt.intValue()==1);
+    Integer usesRangedInt=(Integer)SkillData.getAttributeValue("m_bUsesRanged");
+    boolean usesRanged=(usesRangedInt!=null)&&(usesRangedInt.intValue()==1);
     /*
       SkillFlags=Skill_IgnoresResetTime*1+
           Skill_Immediate*2+
@@ -131,11 +146,11 @@ public class SkillDetailsLoader
 
     Integer Skill_AreaEffectDetectionAnchor=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
     Integer Skill_AreaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
-    List<Integer> Skill_AreaEffectMaxTargets_Mod_Array=GetStatModArray(props,"Skill_AreaEffectMaxTargets_Mod_Array");
+    ModPropertyList Skill_AreaEffectMaxTargets_Mod_Array=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
 
     Float Skill_MaxRange=(Float)props.getProperty("Skill_MaxRange");
     Float Skill_MinRange=(Float)props.getProperty("Skill_MinRange");
-    List<Integer> Skill_MaxRange_ModifierArray=GetStatModArray(props,"Skill_MaxRange_ModifierArray");
+    ModPropertyList Skill_MaxRange_ModifierArray=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
 
     // UsesToggle
     Integer Skill_Toggle_Hook_Number=(Integer)props.getProperty("Skill_Toggle_Hook_Number");
@@ -146,20 +161,28 @@ public class SkillDetailsLoader
 
     Integer Skill_Resist_Category=(Integer)props.getProperty("Skill_Resist_Category");
     BitSet Skill_DisplaySkillType=(BitSet)props.getProperty("Skill_DisplaySkillType");
-    if ((Skill_DisplaySkillType!=null) && (Skill_DisplaySkillType.size()==0))
-    {
-      Skill_DisplaySkillType=null;
-    }
 
     List<Object> sCriticalEffectList=GetSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
     List<Object> sToggleEffectList=GetSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
     List<Object> sToggleUserEffectList=GetSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
     List<Object> sUserEffectList=GetSkillEffectList(props,"Skill_UserEffectList");
 
-    Object sToggleVitalCostPerSecondListMorale=GetVitalCostList(props,"Skill_Toggle_VitalCostPerSecondList",1);
-    Object sToggleVitalCostPerSecondListPower=GetVitalCostList(props,"Skill_Toggle_VitalCostPerSecondList",2);
-    Object sVitalCostListMorale=GetVitalCostList(props,"Skill_VitalCostList",1);
-    Object sVitalCostListPower=GetVitalCostList(props,"Skill_VitalCostList",2);
+    SkillCostData costData=new SkillCostData();
+    LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
+    VitalType morale=vitalTypeEnum.getEntry(1);
+    SkillVitalCost moraleCostPerSecond=getVitalCostList(props,"Skill_Toggle_VitalCostPerSecondList",morale);
+    costData.setMoraleCostPerSecond(moraleCostPerSecond);
+    VitalType power=vitalTypeEnum.getEntry(2);
+    SkillVitalCost powerCostPerSecond=getVitalCostList(props,"Skill_Toggle_VitalCostPerSecondList",power);
+    costData.setPowerCostPerSecond(powerCostPerSecond);
+    SkillVitalCost moraleCost=getVitalCostList(props,"Skill_VitalCostList",morale);
+    costData.setMoraleCost(moraleCost);
+    SkillVitalCost powerCost=getVitalCostList(props,"Skill_VitalCostList",power);
+    costData.setPowerCost(powerCost);
+    if (costData.hasCost())
+    {
+      System.out.println(costData);
+    }
 
     if (props.hasProperty("Skill_Pip_AffectedType"))
     {
@@ -184,17 +207,34 @@ public class SkillDetailsLoader
 
   private void loadAttackHook(PropertiesSet Skill_AttackHookInfo)
   {
-    Integer Skill_AttackHook_DamageQualifier=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageQualifier");
+    SkillAttack ret=new SkillAttack();
+    // Damage qualifier
+    DamageQualifier damageQualifier=null;
+    Integer damageQualifierCode=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageQualifier");
+    if ((damageQualifierCode!=null) && (damageQualifierCode.intValue()>0))
+    {
+      damageQualifier=DamageQualifiers.getByCode(damageQualifierCode.intValue());
+    }
+    ret.setDamageQualifier(damageQualifier);
+
     Object sCriticalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_CriticalTargetEffectList");
     Object sPositionalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_PositionalTargetEffectList");
     Object sSuperCriticalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_SuperCriticalTargetEffectList");
     Object sTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_TargetEffectList");
 
-    List<Integer> sDPSAddModModArray=GetStatModArray(Skill_AttackHookInfo,"Skill_AttackHook_DPSAddMod_Mod_Array");
-    List<Integer> sHookDamageMaxModArray=GetStatModArray(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageMax_Mod_Array");
-    List<Integer> sHookDamageModifierModArray=GetStatModArray(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageModifier_Mod_Array");
+    ModPropertyList sDPSAddModModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_DPSAddMod_Mod_Array");
+    ModPropertyList sHookDamageMaxModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageMax_Mod_Array");
+    ModPropertyList sHookDamageModifierModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageModifier_Mod_Array");
 
-    Integer Skill_AttackHook_DamageType=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageType");
+    // Damage type
+    DamageType damageType=null;
+    Integer damageTypeCode=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageType");
+    if ((damageTypeCode!=null) && (damageTypeCode.intValue()>0))
+    {
+      damageType=DamageType.getDamageTypeByCode(damageTypeCode.intValue());
+    }
+    ret.setDamageType(damageType);
+    
     Float Skill_AttackHook_DamageAddContributionMultiplier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageAddContributionMultiplier");
     Integer Skill_AttackHook_DPSAddMod_Progression=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DPSAddMod_Progression");
     Float Skill_AttackHook_HookDamageMax=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageMax");
@@ -203,32 +243,34 @@ public class SkillDetailsLoader
     Float Skill_AttackHook_HookDamageModifier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageModifier");
 
     Float Skill_AttackHook_ImplementContributionMultiplier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_ImplementContributionMultiplier");
-    Integer Skill_AttackHook_UsesNatural=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesNatural");
-    Integer Skill_AttackHook_UsesPrimaryImplement=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesPrimaryImplement");
-    Integer Skill_AttackHook_UsesRangedImplement=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesRangedImplement");
-    Integer Skill_AttackHook_UsesSecondaryImplement=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesSecondaryImplement");
-    Integer Skill_AttackHook_UsesTactical=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesTactical");
-    Integer UsesImplement=Skill_AttackHook_UsesNatural * 5 +
-            Skill_AttackHook_UsesPrimaryImplement * 2 +
-            Skill_AttackHook_UsesRangedImplement * 3 +
-            Skill_AttackHook_UsesSecondaryImplement * 6 +
-            Skill_AttackHook_UsesTactical * 4;
+    Integer Skill_AttackHook_UsesNaturalInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesNatural");
+    boolean usesNatural=((Skill_AttackHook_UsesNaturalInt!=null) && (Skill_AttackHook_UsesNaturalInt.intValue()==1));
+    Integer Skill_AttackHook_UsesPrimaryImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesPrimaryImplement");
+    boolean usesPrimary=((Skill_AttackHook_UsesPrimaryImplementInt!=null) && (Skill_AttackHook_UsesPrimaryImplementInt.intValue()==1));
+    Integer Skill_AttackHook_UsesRangedImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesRangedImplement");
+    boolean usesRanged=((Skill_AttackHook_UsesRangedImplementInt!=null) && (Skill_AttackHook_UsesRangedImplementInt.intValue()==1));
+    Integer Skill_AttackHook_UsesSecondaryImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesSecondaryImplement");
+    boolean usesSecondary=((Skill_AttackHook_UsesSecondaryImplementInt!=null) && (Skill_AttackHook_UsesSecondaryImplementInt.intValue()==1));
+    Integer Skill_AttackHook_UsesTacticalInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesTactical");
+    boolean usesTactical=((Skill_AttackHook_UsesTacticalInt!=null) && (Skill_AttackHook_UsesTacticalInt.intValue()==1));
+
+    int UsesImplement=(usesNatural?5:0)+(usesPrimary?2:0)+(usesRanged?3:0)+(usesSecondary?6:0)+(usesTactical?4:0);
   }
 
   private void loadPipData(PropertiesSet props)
   {
     Integer Skill_Pip_AffectedType=(Integer)props.getProperty("Skill_Pip_AffectedType");
     Integer Skill_Pip_Change=(Integer)props.getProperty("Skill_Pip_Change");
-    List<Integer> mods=GetStatModArray(props,"Skill_PipChange_Mod_Array");
+    ModPropertyList mods=getStatModifiers(props,"Skill_PipChange_Mod_Array");
     Integer Skill_Pip_RequiredMinValue=(Integer)props.getProperty("Skill_Pip_RequiredMinValue");
-    List<Integer> modsRequiredMin=GetStatModArray(props,"Skill_PipRequiredMin_Mod_Array");
+    ModPropertyList modsRequiredMin=getStatModifiers(props,"Skill_PipRequiredMin_Mod_Array");
     Integer Skill_Pip_RequiredMaxValue=(Integer)props.getProperty("Skill_Pip_RequiredMaxValue");
-    List<Integer> modsRequiredMax=GetStatModArray(props,"Skill_PipRequiredMax_Mod_Array");
+    ModPropertyList modsRequiredMax=getStatModifiers(props,"Skill_PipRequiredMax_Mod_Array");
     Integer Skill_Pip_Toward_Home=(Integer)props.getProperty("Skill_Pip_Toward_Home");
     Integer Skill_Toggle_PipChangePerInterval=(Integer)props.getProperty("Skill_Toggle_PipChangePerInterval");
-    List<Integer> modsPipChangePerInterval=GetStatModArray(props,"Skill_TogglePipChangePerInterval_Mod_Array");
+    ModPropertyList modsPipChangePerInterval=getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
     Float Skill_Toggle_SecondsPerPipChange=(Float)props.getProperty("Skill_Toggle_SecondsPerPipChange");
-    List<Integer> modsSecondsPerPipChange=GetStatModArray(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
+    ModPropertyList modsSecondsPerPipChange=getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
   }
 
   private void loadGambitData(PropertiesSet props)
@@ -248,12 +290,12 @@ public class SkillDetailsLoader
     }
   }
 
-  private static List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
+  private List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
   {
     return GetSkillEffectList(props,sSkillEffectListPropName,null);
   }
   
-  private static List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String sEffectImplementUsagePropName)
+  private List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String sEffectImplementUsagePropName)
   {
     Object[] Skill_EffectList=(Object[])props.getProperty(sSkillEffectListPropName);
     if (Skill_EffectList == null)
@@ -270,15 +312,16 @@ public class SkillDetailsLoader
     for (Object Skill_EffectObj : Skill_EffectList)
     {
       PropertiesSet Skill_EffectData=(PropertiesSet)Skill_EffectObj;
-      Integer Skill_Effect=(Integer)Skill_EffectData.getProperty("Skill_Effect");
-      if ((Skill_Effect == null) || (Skill_Effect.intValue()<=0))
+      Integer skillEffectID=(Integer)Skill_EffectData.getProperty("Skill_Effect");
+      if ((skillEffectID == null) || (skillEffectID.intValue()<=0))
       {
         continue;
       }
+      _effectsLoader.getEffect(skillEffectID.intValue());
       // Duration
-      Float Skill_EffectDuration=(Float)Skill_EffectData.getProperty("Skill_EffectDuration");
+      Float skillEffectDuration=(Float)Skill_EffectData.getProperty("Skill_EffectDuration");
       // Implement
-      if (sEffectImplementUsagePropName == null)
+      if (sEffectImplementUsagePropName==null)
       {
         Skill_EffectImplementUsage=(Integer)Skill_EffectData.getProperty("Skill_EffectImplementUsage");
       }
@@ -288,48 +331,73 @@ public class SkillDetailsLoader
     return null;
   }
 
-  private static List<Integer> GetStatModArray(PropertiesSet props, String sStatModArrayPropName)
+  private static ModPropertyList getStatModifiers(PropertiesSet props, String statModArrayPropName)
   {
-    Object[] statIDObjs=(Integer[])props.getProperty(sStatModArrayPropName);
+    Object[] statIDObjs=(Object[])props.getProperty(statModArrayPropName);
     if (statIDObjs == null)
     {
       return null;
     }
-    List<Integer> ret=new ArrayList<Integer>();
+    boolean doKeep=false;
+    ModPropertyList ret=new ModPropertyList();
     for (Object statIDObj : statIDObjs)
     {
       Integer statID=(Integer)statIDObj;
       if ((statID != null) && (statID.intValue()>0))
       {
-        ret.add(statID);
+        ret.addID(statID.intValue());
+        doKeep=true;
       }
     }
-    return ret;
+    return doKeep?ret:null;
   }
 
-  private static Object GetVitalCostList(PropertiesSet props, String sVitalCostListPropName, int iVitalType)
+  private SkillVitalCost getVitalCostList(PropertiesSet props, String vitalCostListPropName, VitalType vitalType)
   {
-    Object[] Skill_VitalCostList=(Object[])props.getProperty(sVitalCostListPropName);
-    if (Skill_VitalCostList==null)
+    Object[] vitalCostList=(Object[])props.getProperty(vitalCostListPropName);
+    if (vitalCostList==null)
     {
       return null;
     }
-    for (Object Skill_VitalInfoObj : Skill_VitalCostList)
+    SkillVitalCost cost=null;
+    for (Object vitalCostObj : vitalCostList)
     {
-      PropertiesSet Skill_VitalInfo=(PropertiesSet)Skill_VitalInfoObj;
-      int Skill_Vital_Type=((Integer)Skill_VitalInfo.getProperty("Skill_Vital_Type")).intValue();
-      if (iVitalType==Skill_Vital_Type)
+      PropertiesSet vitalCostProps=(PropertiesSet)vitalCostObj;
+      int readVitalType=((Integer)vitalCostProps.getProperty("Skill_Vital_Type")).intValue();
+      if (readVitalType==vitalType.getCode())
       {
-        // TODO Dedicated object
-        Integer Skill_Vital_Consumes_All=(Integer)Skill_VitalInfo.getProperty("Skill_Vital_Consumes_All");
-        List<Integer> Skill_Vital_Mod_Array=GetStatModArray(Skill_VitalInfo,"Skill_Vital_Mod_Array");
-        Float Skill_Vital_Percent=(Float)Skill_VitalInfo.getProperty("Skill_Vital_Percent");
-        Float Skill_Vital_Points=(Float)Skill_VitalInfo.getProperty("Skill_Vital_Points");
-        Integer Skill_Vital_Points_Progression=(Integer)Skill_VitalInfo.getProperty("Skill_Vital_Points_Progression");
-        break;
+        Integer consumesAllInt=(Integer)vitalCostProps.getProperty("Skill_Vital_Consumes_All");
+        boolean consumesAll=((consumesAllInt!=null) && (consumesAllInt.intValue()==1));
+        ModPropertyList propertyMods=getStatModifiers(vitalCostProps,"Skill_Vital_Mod_Array");
+        Float percentage=(Float)vitalCostProps.getProperty("Skill_Vital_Percent");
+        if ((percentage!=null) && (percentage.floatValue()<=0))
+        {
+          percentage=null;
+        }
+        Float points=(Float)vitalCostProps.getProperty("Skill_Vital_Points");
+        if ((points!=null) && (points.floatValue()<=0))
+        {
+          points=null;
+        }
+        Progression progression=null;
+        Integer progressionID=(Integer)vitalCostProps.getProperty("Skill_Vital_Points_Progression");
+        if ((progressionID!=null) && (progressionID.intValue()>0))
+        {
+          progression=ProgressionUtils.getProgression(_facade,progressionID.intValue());
+        }
+        if ((consumesAll) || (propertyMods!=null) || (percentage!=null) || (points!=null) || (progression!=null))
+        {
+          cost=new SkillVitalCost(vitalType);
+          cost.setConsumesAll(consumesAll);
+          cost.setVitalMods(propertyMods);
+          cost.setPercentage(percentage);
+          cost.setPoints(points);
+          cost.setPointsProgression(progression);
+        }
+        return cost;
       }
     }
-    return null;
+    return cost;
   }
 
   private void loadInduction(int inductionID)
@@ -338,8 +406,8 @@ public class SkillDetailsLoader
     if (props == null) return;
 
     Float Induction_Duration=(Float)props.getProperty("Induction_Duration");
-    List<Integer> sAdditiveModifierList=GetStatModArray(props,"Induction_Duration_AdditiveModifierList");
-    List<Integer> sMultiplierModifierList=GetStatModArray(props,"Induction_Duration_MultiplierModifierList");
+    ModPropertyList sAdditiveModifierList=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
+    ModPropertyList sMultiplierModifierList=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
   }
 
   private void loadPipDB()
@@ -361,7 +429,20 @@ public class SkillDetailsLoader
     }
   }
 
+  private void doIt()
+  {
+    for(SkillDescription skill : SkillsManager.getInstance().getAll())
+    {
+      handleSkill(skill.getIdentifier());
+    }
+  }
+
   public static void main(String[] args)
   {
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    SkillDetailsLoader skillsLoader=new SkillDetailsLoader(facade,effectsLoader);
+    skillsLoader.doIt();
   }
 }

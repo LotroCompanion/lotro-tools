@@ -55,6 +55,7 @@ import delta.games.lotro.common.enums.TraitSubCategory;
 import delta.games.lotro.common.enums.TraitTreeBranchType;
 import delta.games.lotro.common.enums.TraitTreeType;
 import delta.games.lotro.common.enums.TravelLink;
+import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.enums.WJEncounterCategory;
 import delta.games.lotro.common.enums.WJEncounterType;
 import delta.games.lotro.common.enums.WJInstanceGroup;
@@ -174,6 +175,7 @@ public class MainDatEnumsLoader
     loadEnum(587202668,"AICooldownChannel",AICooldownChannel.class); // 0x2300006C
     loadEnum(587202775,"MapNoteType",MapNoteType.class); // 0x230000D7
     loadEnum(587202601,"DamageQualifier",DamageQualifier.class); // 0x23000029
+    loadEnum(587202563,"VitalType",VitalType.class); // 0x23000003
 
     // Derivated enums
     // From EquipmentCategory:
