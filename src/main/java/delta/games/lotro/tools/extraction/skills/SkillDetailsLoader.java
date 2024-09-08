@@ -10,6 +10,7 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillVitalCost;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.attack.SkillAttack;
+import delta.games.lotro.character.skills.attack.SkillAttackFlags;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -162,10 +163,10 @@ public class SkillDetailsLoader
     Integer Skill_Resist_Category=(Integer)props.getProperty("Skill_Resist_Category");
     BitSet Skill_DisplaySkillType=(BitSet)props.getProperty("Skill_DisplaySkillType");
 
-    List<Object> sCriticalEffectList=GetSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
+    List<Object> sCriticalEffectList=getSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
     List<Object> sToggleEffectList=GetSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
     List<Object> sToggleUserEffectList=GetSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
-    List<Object> sUserEffectList=GetSkillEffectList(props,"Skill_UserEffectList");
+    List<Object> sUserEffectList=getSkillEffectList(props,"Skill_UserEffectList");
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -179,10 +180,6 @@ public class SkillDetailsLoader
     costData.setMoraleCost(moraleCost);
     SkillVitalCost powerCost=getVitalCostList(props,"Skill_VitalCostList",power);
     costData.setPowerCost(powerCost);
-    if (costData.hasCost())
-    {
-      System.out.println(costData);
-    }
 
     if (props.hasProperty("Skill_Pip_AffectedType"))
     {
@@ -205,56 +202,83 @@ public class SkillDetailsLoader
     String Skill_Desc=(String)props.getProperty("Skill_Desc");
   }
 
-  private void loadAttackHook(PropertiesSet Skill_AttackHookInfo)
+  private SkillAttack loadAttackHook(PropertiesSet attackHookProperties)
   {
     SkillAttack ret=new SkillAttack();
     // Damage qualifier
     DamageQualifier damageQualifier=null;
-    Integer damageQualifierCode=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageQualifier");
+    Integer damageQualifierCode=(Integer)attackHookProperties.getProperty("Skill_AttackHook_DamageQualifier");
     if ((damageQualifierCode!=null) && (damageQualifierCode.intValue()>0))
     {
       damageQualifier=DamageQualifiers.getByCode(damageQualifierCode.intValue());
     }
     ret.setDamageQualifier(damageQualifier);
 
-    Object sCriticalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_CriticalTargetEffectList");
-    Object sPositionalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_PositionalTargetEffectList");
-    Object sSuperCriticalTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_SuperCriticalTargetEffectList");
-    Object sTargetEffectList=GetSkillEffectList(Skill_AttackHookInfo,"Skill_AttackHook_TargetEffectList");
+    // Effects
+    Object sCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList");
+    Object sPositionalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList");
+    Object sSuperCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList");
+    Object sTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList");
 
-    ModPropertyList sDPSAddModModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_DPSAddMod_Mod_Array");
-    ModPropertyList sHookDamageMaxModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageMax_Mod_Array");
-    ModPropertyList sHookDamageModifierModArray=getStatModifiers(Skill_AttackHookInfo,"Skill_AttackHook_HookDamageModifier_Mod_Array");
+    // Modifiers
+    ModPropertyList dpsMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
+    ret.setDPSMods(dpsMods);
+    ModPropertyList maxDamageMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageMax_Mod_Array");
+    ret.setMaxDamageMods(maxDamageMods);
+    ModPropertyList damageModifiersMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageModifier_Mod_Array");
+    ret.setDamageModifiersMods(damageModifiersMods);
 
     // Damage type
     DamageType damageType=null;
-    Integer damageTypeCode=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageType");
+    Integer damageTypeCode=(Integer)attackHookProperties.getProperty("Skill_AttackHook_DamageType");
     if ((damageTypeCode!=null) && (damageTypeCode.intValue()>0))
     {
       damageType=DamageType.getDamageTypeByCode(damageTypeCode.intValue());
     }
     ret.setDamageType(damageType);
-    
-    Float Skill_AttackHook_DamageAddContributionMultiplier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DamageAddContributionMultiplier");
-    Integer Skill_AttackHook_DPSAddMod_Progression=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_DPSAddMod_Progression");
-    Float Skill_AttackHook_HookDamageMax=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageMax");
-    Float Skill_AttackHook_HookDamageMaxVariance=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageMaxVariance");
-    Integer Skill_AttackHook_HookDamageMax_Progression=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageMax_Progression");
-    Float Skill_AttackHook_HookDamageModifier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_HookDamageModifier");
 
-    Float Skill_AttackHook_ImplementContributionMultiplier=(Float)Skill_AttackHookInfo.getProperty("Skill_AttackHook_ImplementContributionMultiplier");
-    Integer Skill_AttackHook_UsesNaturalInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesNatural");
-    boolean usesNatural=((Skill_AttackHook_UsesNaturalInt!=null) && (Skill_AttackHook_UsesNaturalInt.intValue()==1));
-    Integer Skill_AttackHook_UsesPrimaryImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesPrimaryImplement");
-    boolean usesPrimary=((Skill_AttackHook_UsesPrimaryImplementInt!=null) && (Skill_AttackHook_UsesPrimaryImplementInt.intValue()==1));
-    Integer Skill_AttackHook_UsesRangedImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesRangedImplement");
-    boolean usesRanged=((Skill_AttackHook_UsesRangedImplementInt!=null) && (Skill_AttackHook_UsesRangedImplementInt.intValue()==1));
-    Integer Skill_AttackHook_UsesSecondaryImplementInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesSecondaryImplement");
-    boolean usesSecondary=((Skill_AttackHook_UsesSecondaryImplementInt!=null) && (Skill_AttackHook_UsesSecondaryImplementInt.intValue()==1));
-    Integer Skill_AttackHook_UsesTacticalInt=(Integer)Skill_AttackHookInfo.getProperty("Skill_AttackHook_UsesTactical");
-    boolean usesTactical=((Skill_AttackHook_UsesTacticalInt!=null) && (Skill_AttackHook_UsesTacticalInt.intValue()==1));
-
-    int UsesImplement=(usesNatural?5:0)+(usesPrimary?2:0)+(usesRanged?3:0)+(usesSecondary?6:0)+(usesTactical?4:0);
+    // DPS
+    Float damageContributionMultiplier=(Float)attackHookProperties.getProperty("Skill_AttackHook_DamageAddContributionMultiplier");
+    ret.setDamageContributionMultiplier(damageContributionMultiplier);
+    Integer dpsModProgression=(Integer)attackHookProperties.getProperty("Skill_AttackHook_DPSAddMod_Progression");
+    if ((dpsModProgression!=null) && (dpsModProgression.intValue()>0))
+    {
+      Progression progression=ProgressionUtils.getProgression(_facade,dpsModProgression.intValue());
+      ret.setDPSModProgression(progression);
+    }
+    // Damage
+    Float maxDamage=(Float)attackHookProperties.getProperty("Skill_AttackHook_HookDamageMax");
+    ret.setMaxDamage(maxDamage.floatValue());
+    Float maxDamageVariance=(Float)attackHookProperties.getProperty("Skill_AttackHook_HookDamageMaxVariance");
+    ret.setMaxDamageVariance(maxDamageVariance.floatValue());
+    Integer maxDamageProgression=(Integer)attackHookProperties.getProperty("Skill_AttackHook_HookDamageMax_Progression");
+    if ((maxDamageProgression!=null) && (maxDamageProgression.intValue()>0))
+    {
+      Progression progression=ProgressionUtils.getProgression(_facade,maxDamageProgression.intValue());
+      ret.setMaxDamageProgression(progression);
+    }
+    Float damageModifier=(Float)attackHookProperties.getProperty("Skill_AttackHook_HookDamageModifier");
+    ret.setDamageModifier(damageModifier.floatValue());
+    Float implementContributionMultiplier=(Float)attackHookProperties.getProperty("Skill_AttackHook_ImplementContributionMultiplier");
+    ret.setImplementContributionMultiplier(implementContributionMultiplier);
+    // Flags
+    Integer usesNaturalInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesNatural");
+    boolean usesNatural=((usesNaturalInt!=null) && (usesNaturalInt.intValue()==1));
+    ret.setFlag(SkillAttackFlags.NATURAL,usesNatural);
+    Integer usesPrimaryImplementInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesPrimaryImplement");
+    boolean usesPrimary=((usesPrimaryImplementInt!=null) && (usesPrimaryImplementInt.intValue()==1));
+    ret.setFlag(SkillAttackFlags.PRIMARY,usesPrimary);
+    Integer usesRangedImplementInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesRangedImplement");
+    boolean usesRanged=((usesRangedImplementInt!=null) && (usesRangedImplementInt.intValue()==1));
+    ret.setFlag(SkillAttackFlags.RANGED,usesRanged);
+    Integer usesSecondaryImplementInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesSecondaryImplement");
+    boolean usesSecondary=((usesSecondaryImplementInt!=null) && (usesSecondaryImplementInt.intValue()==1));
+    ret.setFlag(SkillAttackFlags.SECONDARY,usesSecondary);
+    Integer usesTacticalInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesTactical");
+    boolean usesTactical=((usesTacticalInt!=null) && (usesTacticalInt.intValue()==1));
+    ret.setFlag(SkillAttackFlags.TACTICAL,usesTactical);
+    System.out.println(ret);
+    return ret;
   }
 
   private void loadPipData(PropertiesSet props)
@@ -290,7 +314,7 @@ public class SkillDetailsLoader
     }
   }
 
-  private List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
+  private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
   {
     return GetSkillEffectList(props,sSkillEffectListPropName,null);
   }
@@ -433,6 +457,7 @@ public class SkillDetailsLoader
   {
     for(SkillDescription skill : SkillsManager.getInstance().getAll())
     {
+      System.out.println(skill);
       handleSkill(skill.getIdentifier());
     }
   }
