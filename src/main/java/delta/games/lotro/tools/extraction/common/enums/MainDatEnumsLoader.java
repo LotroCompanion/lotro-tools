@@ -45,6 +45,7 @@ import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.RunicTier;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.SkillCharacteristicSubCategory;
+import delta.games.lotro.common.enums.SkillDisplayType;
 import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.enums.SocketType;
 import delta.games.lotro.common.enums.Species;
@@ -176,6 +177,7 @@ public class MainDatEnumsLoader
     loadEnum(587202775,"MapNoteType",MapNoteType.class); // 0x230000D7
     loadEnum(587202601,"DamageQualifier",DamageQualifier.class); // 0x23000029
     loadEnum(587202563,"VitalType",VitalType.class); // 0x23000003
+    loadEnum(587203540,"SkillDisplayType",SkillDisplayType.class); // 0x230003D4
 
     // Derivated enums
     // From EquipmentCategory:
