@@ -2,11 +2,17 @@ package delta.games.lotro.tools.extraction.skills;
 
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillDetails;
+import delta.games.lotro.character.skills.SkillFlags;
+import delta.games.lotro.character.skills.SkillGambitData;
+import delta.games.lotro.character.skills.SkillGeometry;
+import delta.games.lotro.character.skills.SkillPipData;
 import delta.games.lotro.character.skills.SkillVitalCost;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.attack.SkillAttack;
@@ -15,7 +21,10 @@ import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.ResistCategory;
+import delta.games.lotro.common.enums.SkillDisplayType;
 import delta.games.lotro.common.enums.VitalType;
+import delta.games.lotro.common.inductions.Induction;
 import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -36,26 +45,30 @@ public class SkillDetailsLoader
 {
   private DataFacade _facade;
   private EffectLoader _effectsLoader;
-  private Map<Integer,Float> _inductionDurations;
+  private Map<Integer,Induction> _inductions;
   private Map<Integer,Float> _channelingDurations;
+  private LotroEnum<ResistCategory> _resistCategoryEnum;
+  private LotroEnum<SkillDisplayType> _skillDisplayTypeEnum;
 
   public SkillDetailsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
     _effectsLoader=effectsLoader;
-    _inductionDurations=new HashMap<Integer,Float>();
+    _inductions=new HashMap<Integer,Induction>();
     _channelingDurations=new HashMap<Integer,Float>();
+    LotroEnumsRegistry lotroEnumRegistry=LotroEnumsRegistry.getInstance();
+    _resistCategoryEnum=lotroEnumRegistry.get(ResistCategory.class);
+    _skillDisplayTypeEnum=lotroEnumRegistry.get(SkillDisplayType.class);
   }
 
-  private Float getInductionDuration(int skillInductionActionID)
+  private Induction getInduction(int skillInductionActionID)
   {
     Integer key=Integer.valueOf(skillInductionActionID);
-    Float ret=_inductionDurations.get(key);
+    Induction ret=_inductions.get(key);
     if (ret==null)
     {
-      PropertiesSet props=_facade.loadProperties(skillInductionActionID+DATConstants.DBPROPERTIES_OFFSET);
-      ret=(Float)props.getProperty("Induction_Duration");
-      _inductionDurations.put(key,ret);
+      ret=loadInduction(skillInductionActionID);
+      _inductions.put(key,ret);
     }
     return ret;
   }
@@ -80,93 +93,87 @@ public class SkillDetailsLoader
     {
       return;
     }
-    Float Skill_ActionDurationContribution=(Float)props.getProperty("Skill_ActionDurationContribution");
-    Integer Skill_InductionActionID=(Integer)props.getProperty("Skill_InductionAction");
 
-    Float Skill_Toggle_ChannelingDurationOverride=(Float)props.getProperty("Skill_Toggle_ChannelingDurationOverride");
-    Float ChannelingDuration=null;
-    if (Skill_Toggle_ChannelingDurationOverride==null)
+    SkillDetails ret=new SkillDetails();
+
+    // Duration
+    Float actionDurationContribution=(Float)props.getProperty("Skill_ActionDurationContribution");
+    ret.setActionDurationContribution(actionDurationContribution);
+    // Induction
+    Integer inductionActionID=(Integer)props.getProperty("Skill_InductionAction");
+    if (inductionActionID!=null)
     {
-      Integer Skill_Toggle_ChannelingState=(Integer)props.getProperty("Skill_Toggle_ChannelingState");
-      if (Skill_Toggle_ChannelingState!=null)
+      Induction induction=getInduction(inductionActionID.intValue());
+      ret.setInduction(induction);
+    }
+    // Channeling duration
+    Float channelingDuration=null;
+    Float channelingDurationOverride=(Float)props.getProperty("Skill_Toggle_ChannelingDurationOverride");
+    if (channelingDurationOverride==null)
+    {
+      Integer channelingState=(Integer)props.getProperty("Skill_Toggle_ChannelingState");
+      if (channelingState!=null)
       {
-        ChannelingDuration=getChannelingDuration(Skill_Toggle_ChannelingState.intValue());
+        channelingDuration=getChannelingDuration(channelingState.intValue());
       }
     }
     else
     {
-      ChannelingDuration=Skill_Toggle_ChannelingDurationOverride;
+      channelingDuration=channelingDurationOverride;
     }
+    ret.setChannelingDuration(channelingDuration);
 
     // Cooldown
-    Float Skill_SkillRecoveryTime=(Float)props.getProperty("Skill_SkillRecoveryTime");
+    Float skillRecoveryTime=(Float)props.getProperty("Skill_SkillRecoveryTime");
+    ret.setCooldown(skillRecoveryTime);
 
     // Skill flags
     // Fast?
-    Integer Skill_IgnoresResetTimeInt=(Integer)props.getProperty("Skill_IgnoresResetTime");
-    boolean fast=(Skill_IgnoresResetTimeInt!=null)&&(Skill_IgnoresResetTimeInt.intValue()==1);
+    Integer ignoresResetTimeInt=(Integer)props.getProperty("Skill_IgnoresResetTime");
+    boolean fast=(ignoresResetTimeInt!=null)&&(ignoresResetTimeInt.intValue()==1);
+    ret.setFlag(SkillFlags.FAST,fast);
     // Immediate?
-    Integer Skill_ImmediateInt=(Integer)props.getProperty("Skill_Immediate"); //Immediate
-    boolean immediate=(Skill_ImmediateInt!=null)&&(Skill_ImmediateInt.intValue()==1);
-
+    Integer immediateInt=(Integer)props.getProperty("Skill_Immediate"); //Immediate
+    boolean immediate=(immediateInt!=null)&&(immediateInt.intValue()==1);
+    ret.setFlag(SkillFlags.IMMEDIATE,immediate);
     WStateDataSet dataSet=_facade.loadWState(skillID);
-    ClassInstance SkillData=(ClassInstance) dataSet.getValueForReference(0);
-    Integer usesMagicInt=(Integer)SkillData.getAttributeValue("m_bUsesMagic");
+    ClassInstance skillData=(ClassInstance) dataSet.getValueForReference(0);
+    Integer usesMagicInt=(Integer)skillData.getAttributeValue("m_bUsesMagic");
     boolean usesMagic=(usesMagicInt!=null)&&(usesMagicInt.intValue()==1);
-    Integer usesMeleeInt=(Integer)SkillData.getAttributeValue("m_bUsesMelee");
+    ret.setFlag(SkillFlags.USES_MAGIC,usesMagic);
+    Integer usesMeleeInt=(Integer)skillData.getAttributeValue("m_bUsesMelee");
     boolean usesMelee=(usesMeleeInt!=null)&&(usesMeleeInt.intValue()==1);
-    Integer usesRangedInt=(Integer)SkillData.getAttributeValue("m_bUsesRanged");
+    ret.setFlag(SkillFlags.USES_MELEE,usesMelee);
+    Integer usesRangedInt=(Integer)skillData.getAttributeValue("m_bUsesRanged");
     boolean usesRanged=(usesRangedInt!=null)&&(usesRangedInt.intValue()==1);
-    /*
-      SkillFlags=Skill_IgnoresResetTime*1+
-          Skill_Immediate*2+
-          m_bUsesMagic*4+
-          m_bUsesMelee*8+
-          m_bUsesRanged*16;
-          */
+    ret.setFlag(SkillFlags.USES_RANGED,usesRanged);
 
-    Float radius=null;
-    Float Skill_AEDetectionVolume_ArcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
-    Float Skill_AEDetectionVolume_BoxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
-    Float Skill_AEDetectionVolume_SphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
-    if ((Skill_AEDetectionVolume_ArcRadius != null) && (Skill_AEDetectionVolume_ArcRadius.floatValue()!=0.0f))
-    {
-      radius=Skill_AEDetectionVolume_ArcRadius;
-      //SkillFlags += 32;
-    }
-    else if ((Skill_AEDetectionVolume_BoxLength != null) && (Skill_AEDetectionVolume_BoxLength.floatValue()!=0.0f))
-    {
-      radius=Skill_AEDetectionVolume_BoxLength;
-      //SkillFlags += 64;
-    }
-    else if ((Skill_AEDetectionVolume_SphereRadius != null) && (Skill_AEDetectionVolume_SphereRadius.floatValue()!=0.0f))
-    {
-      radius=Skill_AEDetectionVolume_SphereRadius;
-      //SkillFlags += 128;
-    }
-
-    Integer Skill_AreaEffectDetectionAnchor=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
-    Integer Skill_AreaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
-    ModPropertyList Skill_AreaEffectMaxTargets_Mod_Array=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
-
-    Float Skill_MaxRange=(Float)props.getProperty("Skill_MaxRange");
-    Float Skill_MinRange=(Float)props.getProperty("Skill_MinRange");
-    ModPropertyList Skill_MaxRange_ModifierArray=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
+    // Geometry
+    SkillGeometry geometry=loadGeometry(props);
+    ret.setGeometry(geometry);
 
     // UsesToggle
-    Integer Skill_Toggle_Hook_Number=(Integer)props.getProperty("Skill_Toggle_Hook_Number");
-    if ((Skill_Toggle_Hook_Number != null) && (Skill_Toggle_Hook_Number.intValue() > 0))
+    Integer toggleHookNumber=(Integer)props.getProperty("Skill_Toggle_Hook_Number");
+    boolean isToggle=(toggleHookNumber!=null)&&(toggleHookNumber.intValue()==1);
+    ret.setFlag(SkillFlags.IS_TOGGLE,isToggle);
+
+    Integer resistCategoryCode=(Integer)props.getProperty("Skill_Resist_Category");
+    if (resistCategoryCode!=null)
     {
-      //SkillFlags += 256;
+      ResistCategory resistCategory=_resistCategoryEnum.getEntry(resistCategoryCode.intValue());
+      ret.setResistCategory(resistCategory);
+    }
+    BitSet displayTypesBitSet=(BitSet)props.getProperty("Skill_DisplaySkillType");
+    if (displayTypesBitSet!=null)
+    {
+      List<SkillDisplayType> displayTypes=_skillDisplayTypeEnum.getFromBitSet(displayTypesBitSet);
+      ret.setDisplayTypes(new HashSet<SkillDisplayType>(displayTypes));
     }
 
-    Integer Skill_Resist_Category=(Integer)props.getProperty("Skill_Resist_Category");
-    BitSet Skill_DisplaySkillType=(BitSet)props.getProperty("Skill_DisplaySkillType");
-
-    List<Object> sCriticalEffectList=getSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
-    List<Object> sToggleEffectList=GetSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
-    List<Object> sToggleUserEffectList=GetSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
-    List<Object> sUserEffectList=getSkillEffectList(props,"Skill_UserEffectList");
+    /*List<Object> criticalEffectList=*/getSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
+    /*List<Object> toggleEffectList=*/GetSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
+    /*List<Object> toggleUserEffectList=*/GetSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
+    /*List<Object> userEffectList=*/getSkillEffectList(props,"Skill_UserEffectList");
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -180,26 +187,55 @@ public class SkillDetailsLoader
     costData.setMoraleCost(moraleCost);
     SkillVitalCost powerCost=getVitalCostList(props,"Skill_VitalCostList",power);
     costData.setPowerCost(powerCost);
+    ret.setCostData(costData);
 
+    // PIP
     if (props.hasProperty("Skill_Pip_AffectedType"))
     {
-      loadPipData(props);
+      SkillPipData pipData=loadPipData(props);
+      ret.setPIPData(pipData);
     }
+    // Gambit
+    SkillGambitData gambitData=loadGambitData(props);
+    ret.setGambitData(gambitData);
 
-    loadGambitData(props);
-
-    //Skill_Toggle_Hook_Number: 1 - Toggle Skill
     Object[] attackHookObjs=(Object[])props.getProperty("Skill_AttackHookList");
     if (attackHookObjs != null)
     {
       for (Object attackHookObj : attackHookObjs)
       {
         PropertiesSet attackHookInfo=(PropertiesSet)attackHookObj;
-        loadAttackHook(attackHookInfo);
+        SkillAttack attack=loadAttackHook(attackHookInfo);
       }
     }
-    Integer Skill_Icon=(Integer)props.getProperty("Skill_Icon");
-    String Skill_Desc=(String)props.getProperty("Skill_Desc");
+  }
+
+  private SkillGeometry loadGeometry(PropertiesSet props)
+  {
+    SkillGeometry ret=new SkillGeometry();
+    Float radius=null;
+    Float Skill_AEDetectionVolume_ArcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
+    Float Skill_AEDetectionVolume_BoxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
+    Float Skill_AEDetectionVolume_SphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
+    if ((Skill_AEDetectionVolume_ArcRadius != null) && (Skill_AEDetectionVolume_ArcRadius.floatValue()!=0.0f))
+    {
+      radius=Skill_AEDetectionVolume_ArcRadius;
+    }
+    else if ((Skill_AEDetectionVolume_BoxLength != null) && (Skill_AEDetectionVolume_BoxLength.floatValue()!=0.0f))
+    {
+      radius=Skill_AEDetectionVolume_BoxLength;
+    }
+    else if ((Skill_AEDetectionVolume_SphereRadius != null) && (Skill_AEDetectionVolume_SphereRadius.floatValue()!=0.0f))
+    {
+      radius=Skill_AEDetectionVolume_SphereRadius;
+    }
+    Integer Skill_AreaEffectDetectionAnchor=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
+    Integer Skill_AreaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
+    ModPropertyList Skill_AreaEffectMaxTargets_Mod_Array=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
+    Float Skill_MaxRange=(Float)props.getProperty("Skill_MaxRange");
+    Float Skill_MinRange=(Float)props.getProperty("Skill_MinRange");
+    ModPropertyList Skill_MaxRange_ModifierArray=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
+    return ret;
   }
 
   private SkillAttack loadAttackHook(PropertiesSet attackHookProperties)
@@ -281,8 +317,9 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private void loadPipData(PropertiesSet props)
+  private SkillPipData loadPipData(PropertiesSet props)
   {
+    SkillPipData ret=new SkillPipData();
     Integer Skill_Pip_AffectedType=(Integer)props.getProperty("Skill_Pip_AffectedType");
     Integer Skill_Pip_Change=(Integer)props.getProperty("Skill_Pip_Change");
     ModPropertyList mods=getStatModifiers(props,"Skill_PipChange_Mod_Array");
@@ -295,10 +332,12 @@ public class SkillDetailsLoader
     ModPropertyList modsPipChangePerInterval=getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
     Float Skill_Toggle_SecondsPerPipChange=(Float)props.getProperty("Skill_Toggle_SecondsPerPipChange");
     ModPropertyList modsSecondsPerPipChange=getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
+    return ret;
   }
 
-  private void loadGambitData(PropertiesSet props)
+  private SkillGambitData loadGambitData(PropertiesSet props)
   {
+    SkillGambitData ret=new SkillGambitData();
     Integer Skill_AppliedGambit=(Integer)props.getProperty("Skill_AppliedGambit"); //gambits to add (max 5 in nibbles, least significant first)
     Integer Skill_AppliedGambitIconCount=(Integer)props.getProperty("Skill_AppliedGambitIconCount"); //count of gambits to add (max 5 total, but only 1 or 2 at a time in reality)
     Integer Skill_RemovedGambits=(Integer)props.getProperty("Skill_RemovedGambits"); //count of gambits to remove (lifo) -1 --Clears All Gambits, 1 --Clears 1 Gambit
@@ -312,6 +351,7 @@ public class SkillDetailsLoader
     {
       // TODO
     }
+    return ret;
   }
 
   private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
@@ -424,14 +464,15 @@ public class SkillDetailsLoader
     return cost;
   }
 
-  private void loadInduction(int inductionID)
+  private Induction loadInduction(int inductionID)
   {
     PropertiesSet props=_facade.loadProperties(inductionID+DATConstants.DBPROPERTIES_OFFSET);
-    if (props == null) return;
-
-    Float Induction_Duration=(Float)props.getProperty("Induction_Duration");
+    Induction ret=new Induction(inductionID);
+    float duration=((Float)props.getProperty("Induction_Duration")).floatValue();
+    ret.setDuration(duration);
     ModPropertyList sAdditiveModifierList=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
     ModPropertyList sMultiplierModifierList=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
+    return ret;
   }
 
   private void loadPipDB()
