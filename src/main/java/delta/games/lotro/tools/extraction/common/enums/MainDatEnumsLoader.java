@@ -26,6 +26,7 @@ import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.HousingHookCategory;
+import delta.games.lotro.common.enums.ImplementUsageType;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
 import delta.games.lotro.common.enums.ItemUniquenessChannel;
@@ -39,6 +40,7 @@ import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.PerkUICategory;
+import delta.games.lotro.common.enums.PipType;
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.QuestScope;
 import delta.games.lotro.common.enums.ResistCategory;
@@ -178,7 +180,9 @@ public class MainDatEnumsLoader
     loadEnum(587202601,"DamageQualifier",DamageQualifier.class); // 0x23000029
     loadEnum(587202563,"VitalType",VitalType.class); // 0x23000003
     loadEnum(587203540,"SkillDisplayType",SkillDisplayType.class); // 0x230003D4
-
+    loadEnum(587203321,"ImplementUsageType",ImplementUsageType.class); // 0x230002F9
+    loadEnum(587202673,"PipType",PipType.class); // 0x23000071
+    
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType

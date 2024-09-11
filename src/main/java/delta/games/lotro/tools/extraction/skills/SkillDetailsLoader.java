@@ -21,6 +21,7 @@ import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.PipType;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillDisplayType;
 import delta.games.lotro.common.enums.VitalType;
@@ -49,6 +50,7 @@ public class SkillDetailsLoader
   private Map<Integer,Float> _channelingDurations;
   private LotroEnum<ResistCategory> _resistCategoryEnum;
   private LotroEnum<SkillDisplayType> _skillDisplayTypeEnum;
+  private LotroEnum<PipType> _pipTypeEnum;
 
   public SkillDetailsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
@@ -59,6 +61,7 @@ public class SkillDetailsLoader
     LotroEnumsRegistry lotroEnumRegistry=LotroEnumsRegistry.getInstance();
     _resistCategoryEnum=lotroEnumRegistry.get(ResistCategory.class);
     _skillDisplayTypeEnum=lotroEnumRegistry.get(SkillDisplayType.class);
+    _pipTypeEnum=lotroEnumRegistry.get(PipType.class);
   }
 
   private Induction getInduction(int skillInductionActionID)
@@ -319,19 +322,39 @@ public class SkillDetailsLoader
 
   private SkillPipData loadPipData(PropertiesSet props)
   {
-    SkillPipData ret=new SkillPipData();
-    Integer Skill_Pip_AffectedType=(Integer)props.getProperty("Skill_Pip_AffectedType");
-    Integer Skill_Pip_Change=(Integer)props.getProperty("Skill_Pip_Change");
-    ModPropertyList mods=getStatModifiers(props,"Skill_PipChange_Mod_Array");
-    Integer Skill_Pip_RequiredMinValue=(Integer)props.getProperty("Skill_Pip_RequiredMinValue");
-    ModPropertyList modsRequiredMin=getStatModifiers(props,"Skill_PipRequiredMin_Mod_Array");
-    Integer Skill_Pip_RequiredMaxValue=(Integer)props.getProperty("Skill_Pip_RequiredMaxValue");
-    ModPropertyList modsRequiredMax=getStatModifiers(props,"Skill_PipRequiredMax_Mod_Array");
-    Integer Skill_Pip_Toward_Home=(Integer)props.getProperty("Skill_Pip_Toward_Home");
-    Integer Skill_Toggle_PipChangePerInterval=(Integer)props.getProperty("Skill_Toggle_PipChangePerInterval");
-    ModPropertyList modsPipChangePerInterval=getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
-    Float Skill_Toggle_SecondsPerPipChange=(Float)props.getProperty("Skill_Toggle_SecondsPerPipChange");
-    ModPropertyList modsSecondsPerPipChange=getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
+    Integer affectedTypeCode=(Integer)props.getProperty("Skill_Pip_AffectedType");
+    PipType type=null;
+    if ((affectedTypeCode!=null) && (affectedTypeCode.intValue()!=0))
+    {
+      type=_pipTypeEnum.getEntry(affectedTypeCode.intValue());
+    }
+    if (type==null)
+    {
+      return null;
+    }
+    SkillPipData ret=new SkillPipData(type);
+    Integer change=(Integer)props.getProperty("Skill_Pip_Change");
+    ret.setChange(change);
+    ModPropertyList changeMods=getStatModifiers(props,"Skill_PipChange_Mod_Array");
+    ret.setChangeMods(changeMods);
+    Integer requiredMinValue=(Integer)props.getProperty("Skill_Pip_RequiredMinValue");
+    ret.setRequiredMinValue(requiredMinValue);
+    ModPropertyList requiredMinValueMods=getStatModifiers(props,"Skill_PipRequiredMin_Mod_Array");
+    ret.setRequiredMinValueMods(requiredMinValueMods);
+    Integer requiredMaxValue=(Integer)props.getProperty("Skill_Pip_RequiredMaxValue");
+    ret.setRequiredMaxValue(requiredMaxValue);
+    ModPropertyList requiredMaxValueMods=getStatModifiers(props,"Skill_PipRequiredMax_Mod_Array");
+    ret.setRequiredMaxValueMods(requiredMaxValueMods);
+    Integer towardHome=(Integer)props.getProperty("Skill_Pip_Toward_Home");
+    ret.setTowardHome(towardHome);
+    Integer changePerInterval=(Integer)props.getProperty("Skill_Toggle_PipChangePerInterval");
+    ret.setChangePerInterval(changePerInterval);
+    ModPropertyList changePerIntervalMods=getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
+    ret.setSecondsPerPipChangeMods(changePerIntervalMods);
+    Float secondsPerPipChange=(Float)props.getProperty("Skill_Toggle_SecondsPerPipChange");
+    ret.setSecondsPerPipChange(secondsPerPipChange);
+    ModPropertyList secondsPerPipChangeMods=getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
+    ret.setSecondsPerPipChangeMods(secondsPerPipChangeMods);
     return ret;
   }
 
