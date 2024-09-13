@@ -11,12 +11,16 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
 import delta.games.lotro.character.skills.SkillFlags;
 import delta.games.lotro.character.skills.SkillGambitData;
-import delta.games.lotro.character.skills.SkillGeometry;
 import delta.games.lotro.character.skills.SkillPipData;
 import delta.games.lotro.character.skills.SkillVitalCost;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.attack.SkillAttack;
 import delta.games.lotro.character.skills.attack.SkillAttackFlags;
+import delta.games.lotro.character.skills.geometry.Arc;
+import delta.games.lotro.character.skills.geometry.Box;
+import delta.games.lotro.character.skills.geometry.SkillGeometry;
+import delta.games.lotro.character.skills.geometry.Sphere;
+import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -40,7 +44,8 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
- * @author dmorcellet
+ * Loader for skill details.
+ * @author DAM
  */
 public class SkillDetailsLoader
 {
@@ -51,7 +56,13 @@ public class SkillDetailsLoader
   private LotroEnum<ResistCategory> _resistCategoryEnum;
   private LotroEnum<SkillDisplayType> _skillDisplayTypeEnum;
   private LotroEnum<PipType> _pipTypeEnum;
+  private LotroEnum<AreaEffectAnchorType> _areaEffectAnchorTypeEnum;
 
+  /**
+   * Constructor.
+   * @param facade Facade.
+   * @param effectsLoader Effects loader.
+   */
   public SkillDetailsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
@@ -62,6 +73,7 @@ public class SkillDetailsLoader
     _resistCategoryEnum=lotroEnumRegistry.get(ResistCategory.class);
     _skillDisplayTypeEnum=lotroEnumRegistry.get(SkillDisplayType.class);
     _pipTypeEnum=lotroEnumRegistry.get(PipType.class);
+    _areaEffectAnchorTypeEnum=lotroEnumRegistry.get(AreaEffectAnchorType.class);
   }
 
   private Induction getInduction(int skillInductionActionID)
@@ -154,6 +166,11 @@ public class SkillDetailsLoader
     // Geometry
     SkillGeometry geometry=loadGeometry(props);
     ret.setGeometry(geometry);
+    // Targets
+    Integer areaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
+    ret.setMaxTargets(areaEffectMaxTargets);
+    ModPropertyList areaEffectMaxTargetsMods=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
+    ret.setMaxTargetsMods(areaEffectMaxTargetsMods);
 
     // UsesToggle
     Integer toggleHookNumber=(Integer)props.getProperty("Skill_Toggle_Hook_Number");
@@ -216,31 +233,49 @@ public class SkillDetailsLoader
   private SkillGeometry loadGeometry(PropertiesSet props)
   {
     SkillGeometry ret=new SkillGeometry();
-    Float radius=null;
     Float Skill_AEDetectionVolume_ArcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
     Float Skill_AEDetectionVolume_BoxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
     Float Skill_AEDetectionVolume_SphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
     if ((Skill_AEDetectionVolume_ArcRadius != null) && (Skill_AEDetectionVolume_ArcRadius.floatValue()!=0.0f))
     {
-      radius=Skill_AEDetectionVolume_ArcRadius;
+      Arc arc=new Arc();
+      arc.setRadius(Skill_AEDetectionVolume_ArcRadius.floatValue());
+      Float degrees=(Float)props.getProperty("Skill_AEDetectionVolume_ArcDegrees");
+      arc.setDegrees(degrees.floatValue());
+      Float heading=(Float)props.getProperty("Skill_AEDetectionVolume_HeadingOffset");
+      arc.setHeadingOffset(heading.floatValue());
+      ret.setShape(arc);
     }
     else if ((Skill_AEDetectionVolume_BoxLength != null) && (Skill_AEDetectionVolume_BoxLength.floatValue()!=0.0f))
     {
-      radius=Skill_AEDetectionVolume_BoxLength;
+      Box box=new Box();
+      box.setLength(Skill_AEDetectionVolume_BoxLength.floatValue());
+      Float width=(Float)props.getProperty("Skill_AEDetectionVolume_BoxWidth");
+      box.setWidth(width.floatValue());
+      ret.setShape(box);
     }
     else if ((Skill_AEDetectionVolume_SphereRadius != null) && (Skill_AEDetectionVolume_SphereRadius.floatValue()!=0.0f))
     {
-      radius=Skill_AEDetectionVolume_SphereRadius;
+      Sphere sphere=new Sphere();
+      sphere.setRadius(Skill_AEDetectionVolume_SphereRadius.floatValue());
+      ret.setShape(sphere);
     }
     Integer Skill_AreaEffectDetectionAnchor=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
-    Integer Skill_AreaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
-    ModPropertyList Skill_AreaEffectMaxTargets_Mod_Array=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
-    Float Skill_MaxRange=(Float)props.getProperty("Skill_MaxRange");
-    Float Skill_MinRange=(Float)props.getProperty("Skill_MinRange");
-    ModPropertyList Skill_MaxRange_ModifierArray=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
+    if ((Skill_AreaEffectDetectionAnchor!=null) && (Skill_AreaEffectDetectionAnchor.intValue()!=0))
+    {
+      AreaEffectAnchorType anchorType=_areaEffectAnchorTypeEnum.getEntry(Skill_AreaEffectDetectionAnchor.intValue());
+      ret.setDetectionAnchor(anchorType);
+    }
+    Float minRange=(Float)props.getProperty("Skill_MinRange");
+    ret.setMinRange(minRange);
+    Float maxRange=(Float)props.getProperty("Skill_MaxRange");
+    ret.setMaxRange(maxRange.floatValue());
+    ModPropertyList maxRangeModifiers=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
+    ret.setMaxRangeMods(maxRangeModifiers);
     return ret;
   }
 
+  @SuppressWarnings("unused")
   private SkillAttack loadAttackHook(PropertiesSet attackHookProperties)
   {
     SkillAttack ret=new SkillAttack();
@@ -254,10 +289,10 @@ public class SkillDetailsLoader
     ret.setDamageQualifier(damageQualifier);
 
     // Effects
-    Object sCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList");
-    Object sPositionalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList");
-    Object sSuperCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList");
-    Object sTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList");
+    Object criticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList");
+    Object positionalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList");
+    Object superCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList");
+    Object targetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList");
 
     // Modifiers
     ModPropertyList dpsMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
@@ -384,36 +419,36 @@ public class SkillDetailsLoader
   
   private List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String sEffectImplementUsagePropName)
   {
-    Object[] Skill_EffectList=(Object[])props.getProperty(sSkillEffectListPropName);
-    if (Skill_EffectList == null)
+    Object[] effectList=(Object[])props.getProperty(sSkillEffectListPropName);
+    if (effectList == null)
     {
       return null;
     }
-    Integer Skill_EffectImplementUsage=0;
+    Integer effectImplementUsage=0;
     if (sEffectImplementUsagePropName != null)
     {
-      Skill_EffectImplementUsage=(Integer)props.getProperty(sEffectImplementUsagePropName);
-      if (Skill_EffectImplementUsage == null) Skill_EffectImplementUsage=0;
+      effectImplementUsage=(Integer)props.getProperty(sEffectImplementUsagePropName);
+      if (effectImplementUsage == null) effectImplementUsage=0;
     }
     // TODO A list
-    for (Object Skill_EffectObj : Skill_EffectList)
+    for (Object Skill_EffectObj : effectList)
     {
-      PropertiesSet Skill_EffectData=(PropertiesSet)Skill_EffectObj;
-      Integer skillEffectID=(Integer)Skill_EffectData.getProperty("Skill_Effect");
+      PropertiesSet effectData=(PropertiesSet)Skill_EffectObj;
+      Integer skillEffectID=(Integer)effectData.getProperty("Skill_Effect");
       if ((skillEffectID == null) || (skillEffectID.intValue()<=0))
       {
         continue;
       }
       _effectsLoader.getEffect(skillEffectID.intValue());
       // Duration
-      Float skillEffectDuration=(Float)Skill_EffectData.getProperty("Skill_EffectDuration");
+      Float skillEffectDuration=(Float)effectData.getProperty("Skill_EffectDuration");
       // Implement
       if (sEffectImplementUsagePropName==null)
       {
-        Skill_EffectImplementUsage=(Integer)Skill_EffectData.getProperty("Skill_EffectImplementUsage");
+        effectImplementUsage=(Integer)effectData.getProperty("Skill_EffectImplementUsage");
       }
       // Spellcraft
-      Float Skill_EffectSpellcraft=(Float)Skill_EffectData.getProperty("Skill_EffectSpellcraft");
+      Float effectSpellcraft=(Float)effectData.getProperty("Skill_EffectSpellcraft");
     }
     return null;
   }
@@ -493,8 +528,8 @@ public class SkillDetailsLoader
     Induction ret=new Induction(inductionID);
     float duration=((Float)props.getProperty("Induction_Duration")).floatValue();
     ret.setDuration(duration);
-    ModPropertyList sAdditiveModifierList=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
-    ModPropertyList sMultiplierModifierList=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
+    ModPropertyList addMods=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
+    ModPropertyList multiplyMods=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
     return ret;
   }
 

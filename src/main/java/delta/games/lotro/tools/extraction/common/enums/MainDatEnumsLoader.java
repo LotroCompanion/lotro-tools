@@ -13,6 +13,7 @@ import delta.games.lotro.common.enums.AIHint;
 import delta.games.lotro.common.enums.AgentClass;
 import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.AllegianceGroup;
+import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.BillingGroup;
 import delta.games.lotro.common.enums.ClassificationFilter;
 import delta.games.lotro.common.enums.CollectionCategory;
@@ -182,7 +183,8 @@ public class MainDatEnumsLoader
     loadEnum(587203540,"SkillDisplayType",SkillDisplayType.class); // 0x230003D4
     loadEnum(587203321,"ImplementUsageType",ImplementUsageType.class); // 0x230002F9
     loadEnum(587202673,"PipType",PipType.class); // 0x23000071
-    
+    loadEnum(587202644,"PipAreaEffectAnchorType",AreaEffectAnchorType.class); // 0x23000054
+
     // Derivated enums
     // From EquipmentCategory:
     // - ArmourType
