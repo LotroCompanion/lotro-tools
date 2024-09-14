@@ -440,4 +440,8 @@ public class GeneratedFiles
    * Game data.
    */
   public static final File GAME_DATA=LotroCoreConfig.getInstance().getFile(DataFiles.GAME_DATA);
+  /**
+   * Inductions.
+   */
+  public static final File INDUCTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.INDUCTIONS);
 }

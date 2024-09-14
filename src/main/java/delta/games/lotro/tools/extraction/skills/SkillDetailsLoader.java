@@ -1,10 +1,14 @@
 package delta.games.lotro.tools.extraction.skills;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
@@ -16,10 +20,12 @@ import delta.games.lotro.character.skills.SkillVitalCost;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.attack.SkillAttack;
 import delta.games.lotro.character.skills.attack.SkillAttackFlags;
+import delta.games.lotro.character.skills.attack.SkillAttacks;
 import delta.games.lotro.character.skills.geometry.Arc;
 import delta.games.lotro.character.skills.geometry.Box;
 import delta.games.lotro.character.skills.geometry.SkillGeometry;
 import delta.games.lotro.character.skills.geometry.Sphere;
+import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
@@ -30,6 +36,7 @@ import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillDisplayType;
 import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.inductions.Induction;
+import delta.games.lotro.common.inductions.io.xml.InductionXMLWriter;
 import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -37,6 +44,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.DamageType;
+import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
@@ -49,6 +57,8 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class SkillDetailsLoader
 {
+  private static final Logger LOGGER=Logger.getLogger(SkillDetailsLoader.class);
+
   private DataFacade _facade;
   private EffectLoader _effectsLoader;
   private Map<Integer,Induction> _inductions;
@@ -214,18 +224,35 @@ public class SkillDetailsLoader
     {
       SkillPipData pipData=loadPipData(props);
       ret.setPIPData(pipData);
+      if (pipData!=null)
+      {
+        System.out.println(pipData);
+      }
     }
     // Gambit
     SkillGambitData gambitData=loadGambitData(props);
     ret.setGambitData(gambitData);
 
+    // Attacks
     Object[] attackHookObjs=(Object[])props.getProperty("Skill_AttackHookList");
-    if (attackHookObjs != null)
+    if (attackHookObjs!=null)
     {
+      List<SkillAttack> attacks=new ArrayList<SkillAttack>();
       for (Object attackHookObj : attackHookObjs)
       {
         PropertiesSet attackHookInfo=(PropertiesSet)attackHookObj;
         SkillAttack attack=loadAttackHook(attackHookInfo);
+        attacks.add(attack);
+      }
+      if (!attacks.isEmpty())
+      {
+        SkillAttacks attacksMgr=new SkillAttacks();
+        for(SkillAttack attack : attacks)
+        {
+          attacksMgr.addAttack(attack);
+        }
+        ret.setAttacks(attacksMgr);
+        System.out.println(attacksMgr);
       }
     }
   }
@@ -233,46 +260,62 @@ public class SkillDetailsLoader
   private SkillGeometry loadGeometry(PropertiesSet props)
   {
     SkillGeometry ret=new SkillGeometry();
-    Float Skill_AEDetectionVolume_ArcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
-    Float Skill_AEDetectionVolume_BoxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
-    Float Skill_AEDetectionVolume_SphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
-    if ((Skill_AEDetectionVolume_ArcRadius != null) && (Skill_AEDetectionVolume_ArcRadius.floatValue()!=0.0f))
+    Float arcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
+    Float boxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
+    Float sphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
+    int shapesCount=0;
+    if ((arcRadius != null) && (arcRadius.floatValue()!=0.0f))
     {
       Arc arc=new Arc();
-      arc.setRadius(Skill_AEDetectionVolume_ArcRadius.floatValue());
+      arc.setRadius(arcRadius.floatValue());
       Float degrees=(Float)props.getProperty("Skill_AEDetectionVolume_ArcDegrees");
       arc.setDegrees(degrees.floatValue());
       Float heading=(Float)props.getProperty("Skill_AEDetectionVolume_HeadingOffset");
-      arc.setHeadingOffset(heading.floatValue());
+      arc.setHeadingOffset(heading);
       ret.setShape(arc);
+      shapesCount++;
     }
-    else if ((Skill_AEDetectionVolume_BoxLength != null) && (Skill_AEDetectionVolume_BoxLength.floatValue()!=0.0f))
+    if ((boxLength != null) && (boxLength.floatValue()!=0.0f))
     {
       Box box=new Box();
-      box.setLength(Skill_AEDetectionVolume_BoxLength.floatValue());
+      box.setLength(boxLength.floatValue());
       Float width=(Float)props.getProperty("Skill_AEDetectionVolume_BoxWidth");
       box.setWidth(width.floatValue());
       ret.setShape(box);
+      shapesCount++;
     }
-    else if ((Skill_AEDetectionVolume_SphereRadius != null) && (Skill_AEDetectionVolume_SphereRadius.floatValue()!=0.0f))
+    if ((sphereRadius != null) && (sphereRadius.floatValue()!=0.0f))
     {
       Sphere sphere=new Sphere();
-      sphere.setRadius(Skill_AEDetectionVolume_SphereRadius.floatValue());
+      sphere.setRadius(sphereRadius.floatValue());
       ret.setShape(sphere);
+      shapesCount++;
     }
-    Integer Skill_AreaEffectDetectionAnchor=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
-    if ((Skill_AreaEffectDetectionAnchor!=null) && (Skill_AreaEffectDetectionAnchor.intValue()!=0))
+    if (shapesCount>1)
     {
-      AreaEffectAnchorType anchorType=_areaEffectAnchorTypeEnum.getEntry(Skill_AreaEffectDetectionAnchor.intValue());
+      LOGGER.warn("Bad shapes count: "+shapesCount);
+    }
+    Integer anchorCode=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
+    if ((anchorCode!=null) && (anchorCode.intValue()!=0))
+    {
+      AreaEffectAnchorType anchorType=_areaEffectAnchorTypeEnum.getEntry(anchorCode.intValue());
       ret.setDetectionAnchor(anchorType);
     }
     Float minRange=(Float)props.getProperty("Skill_MinRange");
-    ret.setMinRange(minRange);
+    if ((minRange!=null) && (minRange.floatValue()>0))
+    {
+      ret.setMinRange(minRange);
+    }
     Float maxRange=(Float)props.getProperty("Skill_MaxRange");
     ret.setMaxRange(maxRange.floatValue());
     ModPropertyList maxRangeModifiers=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
     ret.setMaxRangeMods(maxRangeModifiers);
-    return ret;
+    if (ret.hasValues()) 
+    {
+      System.out.println(ret);
+      return ret;
+    }
+    return null;
   }
 
   @SuppressWarnings("unused")
@@ -351,7 +394,6 @@ public class SkillDetailsLoader
     Integer usesTacticalInt=(Integer)attackHookProperties.getProperty("Skill_AttackHook_UsesTactical");
     boolean usesTactical=((usesTacticalInt!=null) && (usesTacticalInt.intValue()==1));
     ret.setFlag(SkillAttackFlags.TACTICAL,usesTactical);
-    System.out.println(ret);
     return ret;
   }
 
@@ -529,7 +571,9 @@ public class SkillDetailsLoader
     float duration=((Float)props.getProperty("Induction_Duration")).floatValue();
     ret.setDuration(duration);
     ModPropertyList addMods=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
+    ret.setAddMods(addMods);
     ModPropertyList multiplyMods=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
+    ret.setMultiplyMods(multiplyMods);
     return ret;
   }
 
@@ -552,6 +596,13 @@ public class SkillDetailsLoader
     }
   }
 
+  private void saveInductions()
+  {
+    List<Induction> inductions=new ArrayList<Induction>(_inductions.values());
+    Collections.sort(inductions,new IdentifiableComparator<Induction>());
+    InductionXMLWriter.writeInductionsFile(GeneratedFiles.INDUCTIONS,inductions);
+  }
+
   private void doIt()
   {
     for(SkillDescription skill : SkillsManager.getInstance().getAll())
@@ -559,6 +610,7 @@ public class SkillDetailsLoader
       System.out.println(skill);
       handleSkill(skill.getIdentifier());
     }
+    saveInductions();
   }
 
   public static void main(String[] args)
