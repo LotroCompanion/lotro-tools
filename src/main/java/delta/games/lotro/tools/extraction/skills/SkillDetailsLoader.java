@@ -29,6 +29,7 @@ import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
+import delta.games.lotro.common.enums.GambitIconType;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.PipType;
@@ -67,6 +68,7 @@ public class SkillDetailsLoader
   private LotroEnum<SkillDisplayType> _skillDisplayTypeEnum;
   private LotroEnum<PipType> _pipTypeEnum;
   private LotroEnum<AreaEffectAnchorType> _areaEffectAnchorTypeEnum;
+  private LotroEnum<GambitIconType> _gambitIconTypeEnum;
 
   /**
    * Constructor.
@@ -84,6 +86,7 @@ public class SkillDetailsLoader
     _skillDisplayTypeEnum=lotroEnumRegistry.get(SkillDisplayType.class);
     _pipTypeEnum=lotroEnumRegistry.get(PipType.class);
     _areaEffectAnchorTypeEnum=lotroEnumRegistry.get(AreaEffectAnchorType.class);
+    _gambitIconTypeEnum=lotroEnumRegistry.get(GambitIconType.class);
   }
 
   private Induction getInduction(int skillInductionActionID)
@@ -158,7 +161,7 @@ public class SkillDetailsLoader
     boolean fast=(ignoresResetTimeInt!=null)&&(ignoresResetTimeInt.intValue()==1);
     ret.setFlag(SkillFlags.FAST,fast);
     // Immediate?
-    Integer immediateInt=(Integer)props.getProperty("Skill_Immediate"); //Immediate
+    Integer immediateInt=(Integer)props.getProperty("Skill_Immediate");
     boolean immediate=(immediateInt!=null)&&(immediateInt.intValue()==1);
     ret.setFlag(SkillFlags.IMMEDIATE,immediate);
     WStateDataSet dataSet=_facade.loadWState(skillID);
@@ -182,7 +185,7 @@ public class SkillDetailsLoader
     ModPropertyList areaEffectMaxTargetsMods=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
     ret.setMaxTargetsMods(areaEffectMaxTargetsMods);
 
-    // UsesToggle
+    // Toggle
     Integer toggleHookNumber=(Integer)props.getProperty("Skill_Toggle_Hook_Number");
     boolean isToggle=(toggleHookNumber!=null)&&(toggleHookNumber.intValue()==1);
     ret.setFlag(SkillFlags.IS_TOGGLE,isToggle);
@@ -201,8 +204,8 @@ public class SkillDetailsLoader
     }
 
     /*List<Object> criticalEffectList=*/getSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
-    /*List<Object> toggleEffectList=*/GetSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
-    /*List<Object> toggleUserEffectList=*/GetSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
+    /*List<Object> toggleEffectList=*/getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
+    /*List<Object> toggleUserEffectList=*/getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
     /*List<Object> userEffectList=*/getSkillEffectList(props,"Skill_UserEffectList");
 
     SkillCostData costData=new SkillCostData();
@@ -233,7 +236,17 @@ public class SkillDetailsLoader
     SkillGambitData gambitData=loadGambitData(props);
     ret.setGambitData(gambitData);
 
+    // Harmful?
+    Integer harmfulInt=(Integer)props.getProperty("Skill_Harmful");
+    boolean harmful=(harmfulInt!=null)&&(harmfulInt.intValue()==1);
+    ret.setFlag(SkillFlags.HARMFUL,harmful);
+
     // Attacks
+    loadAttacks(props,ret);
+  }
+
+  private void loadAttacks(PropertiesSet props, SkillDetails skillDetails)
+  {
     Object[] attackHookObjs=(Object[])props.getProperty("Skill_AttackHookList");
     if (attackHookObjs!=null)
     {
@@ -251,8 +264,7 @@ public class SkillDetailsLoader
         {
           attacksMgr.addAttack(attack);
         }
-        ret.setAttacks(attacksMgr);
-        System.out.println(attacksMgr);
+        skillDetails.setAttacks(attacksMgr);
       }
     }
   }
@@ -437,40 +449,99 @@ public class SkillDetailsLoader
 
   private SkillGambitData loadGambitData(PropertiesSet props)
   {
-    SkillGambitData ret=new SkillGambitData();
-    Integer Skill_AppliedGambit=(Integer)props.getProperty("Skill_AppliedGambit"); //gambits to add (max 5 in nibbles, least significant first)
-    Integer Skill_AppliedGambitIconCount=(Integer)props.getProperty("Skill_AppliedGambitIconCount"); //count of gambits to add (max 5 total, but only 1 or 2 at a time in reality)
-    Integer Skill_RemovedGambits=(Integer)props.getProperty("Skill_RemovedGambits"); //count of gambits to remove (lifo) -1 --Clears All Gambits, 1 --Clears 1 Gambit
-    Integer Skill_RequiredGambit=(Integer)props.getProperty("Skill_RequiredGambit"); //gambits required (max 5 in nibbles, least significant first)
-    Integer Skill_RequiresGambits=(Integer)props.getProperty("Skill_RequiresGambits");  //1=yes, see Skill_RequiredGambit nibbles or "Requires: an active Gambit" if none required (skill:Gambit Default)
-    if (Skill_AppliedGambit != null ||
-      Skill_AppliedGambitIconCount != null ||
-      Skill_RemovedGambits != null ||
-      Skill_RequiredGambit != null ||
-      Skill_RequiresGambits != null)
+    SkillGambitData ret=null;
+    // Always null: Skill_RequiredGambitIcon, Skill_RequiredGambitIcons, Skill_AppliedGambitIcons
+    // Gambits to add
+    Integer appliedGambitInt=(Integer)props.getProperty("Skill_AppliedGambit");
+    int appliedGambit=(appliedGambitInt!=null)?appliedGambitInt.intValue():0;
+    Integer appliedGambitsCountInt=(Integer)props.getProperty("Skill_AppliedGambitIconCount");
+    int appliedGambitsCount=(appliedGambitsCountInt!=null)?appliedGambitsCountInt.intValue():0;
+    boolean appliesGambits=((appliedGambit>0) || (appliedGambitsCount>0));
+    // Gambits to remove
+    // Count of gambits to remove (lifo): -1 --Clears All Gambits ; 1 --Clears 1 Gambit
+    Integer removedGambitsInt=(Integer)props.getProperty("Skill_RemovedGambits");
+    int removedGambits=(removedGambitsInt!=null)?removedGambitsInt.intValue():0;
+    // Gambit requirements
+    // - required gambits
+    Integer requiredGambit=(Integer)props.getProperty("Skill_RequiredGambit");
+    // - requires a gambit
+    // If yes, see requiredGambit for required gambits, or "Requires: an active Gambit" if none required (skill:Gambit Default)
+    Integer requiresGambitsInt=(Integer)props.getProperty("Skill_RequiresGambits");
+    boolean requiresGambits=((requiresGambitsInt!=null) && (requiresGambitsInt.intValue()==1));
+
+    if ((appliesGambits) || (removedGambits!=0) || (requiresGambits))
     {
-      // TODO
+      ret=new SkillGambitData();
+      // Gambits to add
+      if (appliesGambits)
+      {
+        List<GambitIconType> toAdd=getGambits(appliedGambit);
+        if (toAdd.size()!=appliedGambitsCount)
+        {
+          LOGGER.warn("Mismatch on add gambits: "+toAdd+ "; size="+appliedGambitsCount);
+        }
+        ret.setToAdd(toAdd);
+      }
+      // Removal
+      if (removedGambitsInt!=null)
+      {
+        if (removedGambitsInt.intValue()<0)
+        {
+          ret.setClearAllGambits();
+        }
+        else
+        {
+          ret.setToRemove(removedGambitsInt.intValue());
+        }
+      }
+      // Required gambits
+      if (requiresGambits)
+      {
+        if (requiredGambit!=null)
+        {
+          List<GambitIconType> required=getGambits(requiredGambit.intValue());
+          ret.setRequired(required);
+        }
+        else
+        {
+          ret.setRequired(new ArrayList<GambitIconType>());
+        }
+      }
+      System.out.println(ret);
+    }
+    return ret;
+  }
+
+  private List<GambitIconType> getGambits(int value)
+  {
+    List<GambitIconType> ret=new ArrayList<GambitIconType>();
+    while(true)
+    {
+      int code=value&0xF;
+      if (code==0) break;
+      GambitIconType gambit=_gambitIconTypeEnum.getEntry(code);
+      ret.add(gambit);
+      value>>=4;
     }
     return ret;
   }
 
   private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
   {
-    return GetSkillEffectList(props,sSkillEffectListPropName,null);
+    return getSkillEffectList(props,sSkillEffectListPropName,null);
   }
   
-  private List<Object> GetSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String sEffectImplementUsagePropName)
+  private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String effectImplementUsagePropName)
   {
     Object[] effectList=(Object[])props.getProperty(sSkillEffectListPropName);
     if (effectList == null)
     {
       return null;
     }
-    Integer effectImplementUsage=0;
-    if (sEffectImplementUsagePropName != null)
+    Integer effectImplementUsage=null;
+    if (effectImplementUsagePropName!=null)
     {
-      effectImplementUsage=(Integer)props.getProperty(sEffectImplementUsagePropName);
-      if (effectImplementUsage == null) effectImplementUsage=0;
+      effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
     }
     // TODO A list
     for (Object Skill_EffectObj : effectList)
@@ -485,7 +556,7 @@ public class SkillDetailsLoader
       // Duration
       Float skillEffectDuration=(Float)effectData.getProperty("Skill_EffectDuration");
       // Implement
-      if (sEffectImplementUsagePropName==null)
+      if (effectImplementUsagePropName==null)
       {
         effectImplementUsage=(Integer)effectData.getProperty("Skill_EffectImplementUsage");
       }
