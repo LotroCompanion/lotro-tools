@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
+import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillFlags;
 import delta.games.lotro.character.skills.SkillGambitData;
 import delta.games.lotro.character.skills.SkillPipData;
@@ -49,6 +50,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
+import delta.games.lotro.tools.extraction.effects.SkillEffectsLoader;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -61,7 +63,7 @@ public class SkillDetailsLoader
   private static final Logger LOGGER=Logger.getLogger(SkillDetailsLoader.class);
 
   private DataFacade _facade;
-  private EffectLoader _effectsLoader;
+  private SkillEffectsLoader _effectsLoader;
   private Map<Integer,Induction> _inductions;
   private Map<Integer,Float> _channelingDurations;
   private LotroEnum<ResistCategory> _resistCategoryEnum;
@@ -78,7 +80,7 @@ public class SkillDetailsLoader
   public SkillDetailsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
-    _effectsLoader=effectsLoader;
+    _effectsLoader=new SkillEffectsLoader(effectsLoader);
     _inductions=new HashMap<Integer,Induction>();
     _channelingDurations=new HashMap<Integer,Float>();
     LotroEnumsRegistry lotroEnumRegistry=LotroEnumsRegistry.getInstance();
@@ -190,12 +192,14 @@ public class SkillDetailsLoader
     boolean isToggle=(toggleHookNumber!=null)&&(toggleHookNumber.intValue()==1);
     ret.setFlag(SkillFlags.IS_TOGGLE,isToggle);
 
+    // Resist
     Integer resistCategoryCode=(Integer)props.getProperty("Skill_Resist_Category");
     if (resistCategoryCode!=null)
     {
       ResistCategory resistCategory=_resistCategoryEnum.getEntry(resistCategoryCode.intValue());
       ret.setResistCategory(resistCategory);
     }
+    // Display type(s)
     BitSet displayTypesBitSet=(BitSet)props.getProperty("Skill_DisplaySkillType");
     if (displayTypesBitSet!=null)
     {
@@ -227,10 +231,6 @@ public class SkillDetailsLoader
     {
       SkillPipData pipData=loadPipData(props);
       ret.setPIPData(pipData);
-      if (pipData!=null)
-      {
-        System.out.println(pipData);
-      }
     }
     // Gambit
     SkillGambitData gambitData=loadGambitData(props);
@@ -324,7 +324,6 @@ public class SkillDetailsLoader
     ret.setMaxRangeMods(maxRangeModifiers);
     if (ret.hasValues()) 
     {
-      System.out.println(ret);
       return ret;
     }
     return null;
@@ -507,7 +506,6 @@ public class SkillDetailsLoader
           ret.setRequired(new ArrayList<GambitIconType>());
         }
       }
-      System.out.println(ret);
     }
     return ret;
   }
@@ -526,44 +524,35 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName)
+  private List<SkillEffectGenerator> getSkillEffectList(PropertiesSet props, String skillEffectListPropName)
   {
-    return getSkillEffectList(props,sSkillEffectListPropName,null);
+    return getSkillEffectList(props,skillEffectListPropName,null);
   }
   
-  private List<Object> getSkillEffectList(PropertiesSet props, String sSkillEffectListPropName, String effectImplementUsagePropName)
+  private List<SkillEffectGenerator> getSkillEffectList(PropertiesSet props, String skillEffectListPropName, String effectImplementUsagePropName)
   {
-    Object[] effectList=(Object[])props.getProperty(sSkillEffectListPropName);
+    Object[] effectList=(Object[])props.getProperty(skillEffectListPropName);
     if (effectList == null)
     {
       return null;
     }
+    // TODO Check the location of this property: on the parent props or on the effect props
     Integer effectImplementUsage=null;
     if (effectImplementUsagePropName!=null)
     {
       effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
     }
-    // TODO A list
+    List<SkillEffectGenerator> ret=new ArrayList<SkillEffectGenerator>();
     for (Object Skill_EffectObj : effectList)
     {
       PropertiesSet effectData=(PropertiesSet)Skill_EffectObj;
-      Integer skillEffectID=(Integer)effectData.getProperty("Skill_Effect");
-      if ((skillEffectID == null) || (skillEffectID.intValue()<=0))
+      SkillEffectGenerator generator=_effectsLoader.loadSkillEffect(effectData);
+      if (generator!=null)
       {
-        continue;
+        ret.add(generator);
       }
-      _effectsLoader.getEffect(skillEffectID.intValue());
-      // Duration
-      Float skillEffectDuration=(Float)effectData.getProperty("Skill_EffectDuration");
-      // Implement
-      if (effectImplementUsagePropName==null)
-      {
-        effectImplementUsage=(Integer)effectData.getProperty("Skill_EffectImplementUsage");
-      }
-      // Spellcraft
-      Float effectSpellcraft=(Float)effectData.getProperty("Skill_EffectSpellcraft");
     }
-    return null;
+    return ret;
   }
 
   private static ModPropertyList getStatModifiers(PropertiesSet props, String statModArrayPropName)
@@ -648,25 +637,6 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private void loadPipDB()
-  {
-    PropertiesSet props=_facade.loadProperties(1879048735+DATConstants.DBPROPERTIES_OFFSET);
-    Object[] PipControl_Directory=(Object[])(props.getProperty("PipControl_Directory"));
-    for(Object PipControl : PipControl_Directory)
-    {
-      int pipControlID=((Integer)PipControl).intValue();
-      props=_facade.loadProperties(pipControlID+DATConstants.DBPROPERTIES_OFFSET);
-      Integer pipType=(Integer)props.getProperty("Pip_Type");
-      String pipName=(String)props.getProperty("Pip_Name");
-      Integer pipMin=(Integer)props.getProperty("Pip_Min");
-      Integer pipMax=(Integer)props.getProperty("Pip_Max");
-      Integer pipHome=(Integer)props.getProperty("Pip_Home");
-      Integer minIcon=(Integer)props.getProperty("Pip_Examination_Min_Icon");
-      Integer maxIcon=(Integer)props.getProperty("Pip_Examination_Max_Icon");
-      Integer examinationHomeIcon=(Integer)props.getProperty("Pip_Examination_Home_Icon");
-    }
-  }
-
   private void saveInductions()
   {
     List<Induction> inductions=new ArrayList<Induction>(_inductions.values());
@@ -684,6 +654,10 @@ public class SkillDetailsLoader
     saveInductions();
   }
 
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
