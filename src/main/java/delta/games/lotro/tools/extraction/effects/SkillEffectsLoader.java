@@ -90,7 +90,7 @@ Skill_Toggle_User_Effect_List:
     Skill_Toggle_Effect: 1879174081
     Skill_Toggle_Effect_Spellcraft: -1.0
     */
-    Object[] userEffectList=(Object[])skillProps.getProperty("Skill_Toggle_Effect_List");
+    Object[] userEffectList=(Object[])skillProps.getProperty("Skill_Toggle_User_Effect_List");
     if ((userEffectList!=null) && (userEffectList.length>0))
     {
       for(Object effectEntry : userEffectList)
