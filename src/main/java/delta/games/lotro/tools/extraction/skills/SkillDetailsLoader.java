@@ -14,6 +14,8 @@ import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
+import delta.games.lotro.character.skills.SkillEffectType;
+import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillFlags;
 import delta.games.lotro.character.skills.SkillGambitData;
 import delta.games.lotro.character.skills.SkillPipData;
@@ -207,10 +209,12 @@ public class SkillDetailsLoader
       ret.setDisplayTypes(new HashSet<SkillDisplayType>(displayTypes));
     }
 
-    /*List<Object> criticalEffectList=*/getSkillEffectList(props,"Skill_CriticalEffectList"); //Apply to self on critical:
-    /*List<Object> toggleEffectList=*/getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage");
-    /*List<Object> toggleUserEffectList=*/getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage");
-    /*List<Object> userEffectList=*/getSkillEffectList(props,"Skill_UserEffectList");
+    SkillEffectsManager mgr=new SkillEffectsManager();
+    getSkillEffectList(props,"Skill_CriticalEffectList",mgr,SkillEffectType.SELF_CRITICAL);
+    getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage",mgr,SkillEffectType.TOGGLE);
+    getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage",mgr,SkillEffectType.USER_TOGGLE);
+    getSkillEffectList(props,"Skill_UserEffectList",mgr,SkillEffectType.USER);
+    // TODO Attach effects to the skill
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -343,10 +347,15 @@ public class SkillDetailsLoader
     ret.setDamageQualifier(damageQualifier);
 
     // Effects
-    Object criticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList");
-    Object positionalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList");
-    Object superCriticalTargetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList");
-    Object targetEffectList=getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList");
+    SkillEffectsManager mgr=new SkillEffectsManager();
+    getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList",mgr,SkillEffectType.ATTACK_CRITICAL);
+    getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList",mgr,SkillEffectType.ATTACK_POSITIONAL);
+    getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList",mgr,SkillEffectType.ATTACK_SUPERCRITICAL);
+    getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList",mgr,SkillEffectType.ATTACK);
+    if (mgr.hasEffects())
+    {
+      ret.setEffects(mgr);
+    }
 
     // Modifiers
     ModPropertyList dpsMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
@@ -524,17 +533,17 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private List<SkillEffectGenerator> getSkillEffectList(PropertiesSet props, String skillEffectListPropName)
+  private void getSkillEffectList(PropertiesSet props, String skillEffectListPropName, SkillEffectsManager mgr, SkillEffectType type)
   {
-    return getSkillEffectList(props,skillEffectListPropName,null);
+    getSkillEffectList(props,skillEffectListPropName,null,mgr,type);
   }
   
-  private List<SkillEffectGenerator> getSkillEffectList(PropertiesSet props, String skillEffectListPropName, String effectImplementUsagePropName)
+  private void getSkillEffectList(PropertiesSet props, String skillEffectListPropName, String effectImplementUsagePropName, SkillEffectsManager mgr, SkillEffectType type)
   {
     Object[] effectList=(Object[])props.getProperty(skillEffectListPropName);
-    if (effectList == null)
+    if (effectList==null)
     {
-      return null;
+      return;
     }
     // TODO Check the location of this property: on the parent props or on the effect props
     Integer effectImplementUsage=null;
@@ -542,17 +551,19 @@ public class SkillDetailsLoader
     {
       effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
     }
-    List<SkillEffectGenerator> ret=new ArrayList<SkillEffectGenerator>();
     for (Object Skill_EffectObj : effectList)
     {
       PropertiesSet effectData=(PropertiesSet)Skill_EffectObj;
       SkillEffectGenerator generator=_effectsLoader.loadSkillEffect(effectData);
       if (generator!=null)
       {
-        ret.add(generator);
+        generator.setType(type);
+        if (mgr!=null)
+        {
+          mgr.addEffect(generator);
+        }
       }
     }
-    return ret;
   }
 
   private static ModPropertyList getStatModifiers(PropertiesSet props, String statModArrayPropName)

@@ -3,6 +3,7 @@ package delta.games.lotro.tools.extraction.effects;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectType;
+import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.ImplementUsageType;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -36,12 +37,17 @@ public class SkillEffectsLoader
    */
   public void handleSkillProps(SkillDescription skill, PropertiesSet skillProps)
   {
-    handleSkillAttackHookList(skill,skillProps);
-    handleToggleSkillEffects(skill,skillProps);
-    handleUserSkillEffects(skill,skillProps);
+    SkillEffectsManager mgr=new SkillEffectsManager();
+    handleSkillAttackHookList(mgr,skillProps);
+    handleToggleSkillEffects(mgr,skillProps);
+    handleUserSkillEffects(mgr,skillProps);
+    if (mgr.hasEffects())
+    {
+      skill.setEffects(mgr);
+    }
   }
 
-  private void handleSkillAttackHookList(SkillDescription skill, PropertiesSet skillProps)
+  private void handleSkillAttackHookList(SkillEffectsManager mgr, PropertiesSet skillProps)
   {
     /*
 Skill_AttackHookList:
@@ -63,13 +69,13 @@ Skill_AttackHookList:
         for(Object effectEntry : effectList)
         {
           PropertiesSet effectProps=(PropertiesSet)effectEntry;
-          handleSkillEffect(skill,effectProps,SkillEffectType.ATTACK);
+          handleSkillEffect(mgr,effectProps,SkillEffectType.ATTACK);
         }
       }
     }
   }
 
-  private void handleToggleSkillEffects(SkillDescription skill, PropertiesSet skillProps)
+  private void handleToggleSkillEffects(SkillEffectsManager mgr, PropertiesSet skillProps)
   {
     /*
 Skill_Toggle_Effect_List:
@@ -86,7 +92,7 @@ Skill_Toggle_Effect_List:
       for(Object effectEntry : effectList)
       {
         PropertiesSet effectProps=(PropertiesSet)effectEntry;
-        handleSkillToggleEffect(skill,effectProps,SkillEffectType.TOGGLE);
+        handleSkillToggleEffect(mgr,effectProps,SkillEffectType.TOGGLE);
       }
     }
     /*
@@ -101,12 +107,12 @@ Skill_Toggle_User_Effect_List:
       for(Object effectEntry : userEffectList)
       {
         PropertiesSet effectProps=(PropertiesSet)effectEntry;
-        handleSkillToggleEffect(skill,effectProps,SkillEffectType.USER_TOGGLE);
+        handleSkillToggleEffect(mgr,effectProps,SkillEffectType.USER_TOGGLE);
       }
     }
   }
 
-  private void handleUserSkillEffects(SkillDescription skill, PropertiesSet skillProps)
+  private void handleUserSkillEffects(SkillEffectsManager mgr, PropertiesSet skillProps)
   {
     /*
 Skill_UserEffectList:
@@ -122,18 +128,18 @@ Skill_UserEffectList:
       for(Object effectEntry : userEffectList)
       {
         PropertiesSet effectProps=(PropertiesSet)effectEntry;
-        handleSkillEffect(skill,effectProps,SkillEffectType.USER);
+        handleSkillEffect(mgr,effectProps,SkillEffectType.USER);
       }
     }
   }
 
-  private void handleSkillEffect(SkillDescription skill, PropertiesSet effectProps, SkillEffectType type)
+  private void handleSkillEffect(SkillEffectsManager mgr, PropertiesSet effectProps, SkillEffectType type)
   {
     SkillEffectGenerator generator=loadSkillEffect(effectProps);
     if (generator!=null)
     {
       generator.setType(type);
-      SkillDescription.addEffect(skill,generator);
+      mgr.addEffect(generator);
     }
   }
 
@@ -169,7 +175,7 @@ Skill_UserEffectList:
     return generator;
   }
 
-  private void handleSkillToggleEffect(SkillDescription skill, PropertiesSet effectProps, SkillEffectType type)
+  private void handleSkillToggleEffect(SkillEffectsManager mgr, PropertiesSet effectProps, SkillEffectType type)
   {
     Integer effectID=(Integer)effectProps.getProperty("Skill_Toggle_Effect");
     if ((effectID==null) || (effectID.intValue()==0))
@@ -181,6 +187,6 @@ Skill_UserEffectList:
     Effect effect=_loader.getEffect(effectID.intValue());
     SkillEffectGenerator generator=new SkillEffectGenerator(effect,spellcraft,null);
     generator.setType(type);
-    SkillDescription.addEffect(skill,generator);
+    mgr.addEffect(generator);
   }
 }
