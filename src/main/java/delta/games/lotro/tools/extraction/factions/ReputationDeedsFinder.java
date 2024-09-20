@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.lore.deeds.DeedDescription;
@@ -20,7 +21,7 @@ import delta.games.lotro.lore.reputation.Faction;
  */
 public class ReputationDeedsFinder
 {
-  private static final Logger LOGGER=Logger.getLogger(ReputationDeedsFinder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ReputationDeedsFinder.class);
 
   /**
    * Map faction identifiers to maps of tier to deed.

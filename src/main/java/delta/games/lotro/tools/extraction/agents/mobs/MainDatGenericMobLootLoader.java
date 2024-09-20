@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.agents.mobs;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -30,7 +31,7 @@ import delta.games.lotro.tools.extraction.loot.LootLoader;
  */
 public class MainDatGenericMobLootLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatGenericMobLootLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatGenericMobLootLoader.class);
 
   private DataFacade _facade;
   // Loots

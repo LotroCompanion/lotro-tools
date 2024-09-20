@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.loot;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
@@ -17,7 +18,7 @@ import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
  */
 public class LootProbabilities
 {
-  private static final Logger LOGGER=Logger.getLogger(LootProbabilities.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LootProbabilities.class);
 
   private DataFacade _facade;
   private EnumMapper _dropFrequency;

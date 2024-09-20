@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.dat.DATConstants;
@@ -36,7 +37,7 @@ import delta.lotro.jukebox.core.model.context.io.xml.SoundContextsXMLWriter;
  */
 public class ItemsMusicLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemsMusicLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemsMusicLoader.class);
 
   private DataFacade _facade;
   private SoundContextManager _contextMgr;

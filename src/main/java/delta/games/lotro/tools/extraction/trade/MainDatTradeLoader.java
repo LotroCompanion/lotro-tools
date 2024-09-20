@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -46,7 +47,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class MainDatTradeLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatTradeLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatTradeLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

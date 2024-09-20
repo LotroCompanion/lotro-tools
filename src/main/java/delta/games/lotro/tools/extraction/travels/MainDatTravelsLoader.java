@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.travels;
 import java.io.PrintStream;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
@@ -29,7 +30,7 @@ import delta.games.lotro.tools.extraction.requirements.UsageRequirementsLoader;
  */
 public class MainDatTravelsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatTravelsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatTravelsLoader.class);
 
   private DataFacade _facade;
   private TravelsManager _travelsMgr;

@@ -7,7 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ import delta.downloads.Downloader;
  */
 public class MainLoadStats
 {
-  private static final Logger LOGGER=Logger.getLogger(MainLoadStats.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainLoadStats.class);
 
   private class Results
   {

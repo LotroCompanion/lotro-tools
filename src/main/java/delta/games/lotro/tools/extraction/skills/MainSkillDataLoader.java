@@ -5,7 +5,8 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
@@ -48,7 +49,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class MainSkillDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainSkillDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainSkillDataLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

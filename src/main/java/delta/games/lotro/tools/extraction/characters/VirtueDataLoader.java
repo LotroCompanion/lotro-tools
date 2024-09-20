@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
@@ -30,7 +31,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class VirtueDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(VirtueDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(VirtueDataLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.geo.landblocks;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -16,7 +17,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class BlockMapLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(BlockMapLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(BlockMapLoader.class);
 
   private DataFacade _facade;
   private PropertyDescriptorsManager _descriptorsMgr;

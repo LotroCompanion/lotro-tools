@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.virtues.VirtueDescription;
@@ -54,7 +55,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class DatRewardsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(DatRewardsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DatRewardsLoader.class);
 
   private static final int TIER_ARTISAN=4;
 

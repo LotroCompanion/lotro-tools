@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.effects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -18,7 +19,7 @@ import delta.games.lotro.tools.extraction.utils.Utils;
  */
 public class ItemEffectsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemEffectsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemEffectsLoader.class);
 
   private EffectLoader _loader;
 

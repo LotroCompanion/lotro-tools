@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.pvp;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DataFacade;
@@ -27,7 +28,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainDatPVPLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatPVPLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatPVPLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

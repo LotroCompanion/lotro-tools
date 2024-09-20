@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.agents.npcs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Genders;
@@ -26,7 +27,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatNPCsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatNPCsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatNPCsLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

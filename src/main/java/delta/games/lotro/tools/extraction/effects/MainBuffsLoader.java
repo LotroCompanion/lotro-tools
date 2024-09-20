@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
@@ -19,7 +20,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class MainBuffsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainBuffsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainBuffsLoader.class);
 
   /**
    * Load specific buffs.

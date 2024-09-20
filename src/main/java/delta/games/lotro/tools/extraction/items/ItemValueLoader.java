@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.utils.valueTables.QualityBasedValuesTable;
 import delta.games.lotro.dat.DATConstants;
@@ -20,7 +21,7 @@ import delta.games.lotro.tools.extraction.utils.DatEnumsUtils;
  */
 public class ItemValueLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemValueLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemValueLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,QualityBasedValuesTable> _valueTables;

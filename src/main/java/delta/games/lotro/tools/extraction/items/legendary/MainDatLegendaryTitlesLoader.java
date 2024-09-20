@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.enums.Genus;
@@ -34,7 +35,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatLegendaryTitlesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatLegendaryTitlesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatLegendaryTitlesLoader.class);
 
   private DataFacade _facade;
   private DatStatUtils _statUtils;

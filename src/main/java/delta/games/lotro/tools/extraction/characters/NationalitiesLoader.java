@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.characters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.character.races.io.xml.NationalityDescriptionXMLWriter;
@@ -19,7 +20,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class NationalitiesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(NationalitiesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(NationalitiesLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

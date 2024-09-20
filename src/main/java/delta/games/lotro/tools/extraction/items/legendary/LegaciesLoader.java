@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -53,7 +54,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class LegaciesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(LegaciesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LegaciesLoader.class);
 
   private DataFacade _facade;
   private NonImbuedLegaciesManager _nonImbuedLegaciesManager;

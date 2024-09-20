@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
@@ -21,7 +22,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class CosmeticLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(CosmeticLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CosmeticLoader.class);
 
   private Map<String,List<Item>> _map=new HashMap<String,List<Item>>();
 

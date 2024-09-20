@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
@@ -23,7 +24,7 @@ import delta.games.lotro.lore.maps.landblocks.Cell;
  */
 public class LandblockInfoLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(LandblockInfoLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LandblockInfoLoader.class);
 
   // Flags marking the presence of optional data:
   private static final int HAS_CELLS = 1;

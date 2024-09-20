@@ -13,7 +13,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.geo.HeightMap;
@@ -25,7 +26,7 @@ import delta.games.lotro.dat.loaders.HeightMapDataLoader;
  */
 public class MainHeightmapBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(MainHeightmapBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainHeightmapBuilder.class);
 
   private byte[] _buffer;
   private DataFacade _facade;

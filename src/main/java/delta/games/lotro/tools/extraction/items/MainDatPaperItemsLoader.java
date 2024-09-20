@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -28,7 +29,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class MainDatPaperItemsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatPaperItemsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatPaperItemsLoader.class);
 
   private DataFacade _facade;
   private LotroEnum<PaperItemCategory> _paperItemCategory;

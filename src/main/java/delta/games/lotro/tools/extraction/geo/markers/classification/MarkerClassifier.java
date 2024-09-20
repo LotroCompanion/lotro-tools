@@ -4,7 +4,8 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.games.lotro.dat.DATConstants;
@@ -35,7 +36,7 @@ public class MarkerClassifier
    * Map note type property name.
    */
   private static final String MAP_NOTE_TYPE="MapNote_Type";
-  private static final Logger LOGGER=Logger.getLogger(MarkerClassifier.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MarkerClassifier.class);
   private static final boolean VERBOSE=false;
 
   private DataFacade _facade;

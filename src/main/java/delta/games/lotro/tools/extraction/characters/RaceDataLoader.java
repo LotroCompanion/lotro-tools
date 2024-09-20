@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.games.lotro.character.classes.ClassDescription;
@@ -34,7 +35,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class RaceDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(RaceDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(RaceDataLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,RaceDescription> _racesById;

@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.geo.maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.Identifiable;
 import delta.games.lotro.lore.crafting.CraftingLevel;
@@ -16,7 +17,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class ResourcesMapsBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(ResourcesMapsBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ResourcesMapsBuilder.class);
 
   private ResourcesMapsManager _mapsManager;
 

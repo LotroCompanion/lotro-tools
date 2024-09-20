@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.items;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -14,7 +15,7 @@ import delta.games.lotro.common.enums.SocketType;
  */
 public class SocketUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(SocketUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SocketUtils.class);
 
   /**
    * Get the socket type from a socket code bitset.

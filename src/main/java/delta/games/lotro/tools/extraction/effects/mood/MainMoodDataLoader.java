@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
@@ -30,7 +31,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainMoodDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainMoodDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainMoodDataLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,MoodEntry> _data;

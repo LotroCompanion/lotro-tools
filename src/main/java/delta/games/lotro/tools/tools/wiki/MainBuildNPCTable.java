@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.tools.wiki;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -18,7 +19,7 @@ import delta.games.lotro.utils.StringUtils;
  */
 public class MainBuildNPCTable
 {
-  private static final Logger LOGGER=Logger.getLogger(MainBuildNPCTable.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainBuildNPCTable.class);
 
   private DataFacade _facade;
   private DataFacade _facadeFR;

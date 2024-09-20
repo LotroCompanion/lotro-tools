@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -52,7 +53,7 @@ import delta.games.lotro.utils.maths.ArrayProgression;
  */
 public class MainTraitDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainTraitDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainTraitDataLoader.class);
 
   private DataFacade _facade;
   private EffectLoader _effectsLoader;

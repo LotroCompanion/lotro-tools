@@ -6,7 +6,8 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.common.utils.misc.IntegerHolder;
@@ -36,7 +37,7 @@ import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
  */
 public class MapNotesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MapNotesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MapNotesLoader.class);
 
   private static final boolean VERBOSE=false;
   private static final int MAP_NOTES_DID=0x0E000006;

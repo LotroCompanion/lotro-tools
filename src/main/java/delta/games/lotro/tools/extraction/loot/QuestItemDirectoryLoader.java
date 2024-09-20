@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.loot;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -25,7 +26,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class QuestItemDirectoryLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(QuestItemDirectoryLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(QuestItemDirectoryLoader.class);
 
   private DataFacade _facade;
   private LootProbabilities _probabilities;

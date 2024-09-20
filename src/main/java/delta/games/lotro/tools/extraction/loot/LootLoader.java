@@ -2,8 +2,8 @@ package delta.games.lotro.tools.extraction.loot;
 
 import java.io.File;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -47,7 +47,7 @@ import delta.games.lotro.utils.StringUtils;
  */
 public class LootLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(LootLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LootLoader.class);
 
   private DataFacade _facade;
   private LootProbabilities _probabilities;
@@ -372,7 +372,7 @@ public class LootLoader
       return treasureList;
     }
     // Sometimes we get here with an ID of an unknown item (ex: 1879347509 TBD eq_u21_rar_guardian_tank_T3_set_a_shield)
-    if (LOGGER.isEnabledFor(Level.WARN))
+    if (LOGGER.isWarnEnabled())
     {
       PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
       if (properties!=null)

@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.common.utils.misc.IntegerHolder;
@@ -45,7 +46,7 @@ import delta.games.lotro.tools.extraction.geo.markers.classification.DataIdMgr;
  */
 public class MarkersLoadingUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(MarkersLoadingUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MarkersLoadingUtils.class);
   private static final boolean DO_CHECK=false;
 
   private DataFacade _facade;

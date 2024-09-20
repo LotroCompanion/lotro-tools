@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.CraftingUICategory;
 import delta.games.lotro.common.enums.LotroEnum;
@@ -37,7 +38,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainDatRecipesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatRecipesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatRecipesLoader.class);
 
   private DataFacade _facade;
   private ItemsManager _itemsManager;

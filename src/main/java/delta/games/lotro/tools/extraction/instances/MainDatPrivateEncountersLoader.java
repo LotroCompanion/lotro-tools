@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.instances;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.math.geometry.Vector3D;
 import delta.games.lotro.common.enums.Difficulty;
@@ -33,7 +34,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class MainDatPrivateEncountersLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatPrivateEncountersLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatPrivateEncountersLoader.class);
 
   private DataFacade _facade;
   private List<PrivateEncounter> _data;

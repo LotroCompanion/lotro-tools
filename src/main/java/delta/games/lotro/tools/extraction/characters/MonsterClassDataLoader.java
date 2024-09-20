@@ -6,7 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
@@ -34,7 +35,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MonsterClassDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MonsterClassDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MonsterClassDataLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

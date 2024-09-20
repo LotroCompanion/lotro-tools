@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.geo.landblocks;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.math.geometry.Vector3D;
 import delta.games.lotro.dat.data.DatPosition;
@@ -16,7 +17,7 @@ import delta.games.lotro.tools.extraction.geo.markers.MarkersLoadingUtils;
  */
 public class LandblockGeneratorsAnalyzer
 {
-  private static final Logger LOGGER=Logger.getLogger(LandblockGeneratorsAnalyzer.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LandblockGeneratorsAnalyzer.class);
 
   private MarkersLoadingUtils _markerUtils;
 

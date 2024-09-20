@@ -3,7 +3,8 @@ package delta.games.lotro.tools.tools;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.NumericTools;
 import delta.games.lotro.character.skills.SkillDescription;
@@ -28,7 +29,7 @@ import delta.games.lotro.tools.extraction.geo.GeoUtils;
  */
 public class MainLotroImagesCleanup
 {
-  private static final Logger LOGGER=Logger.getLogger(MainLotroImagesCleanup.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainLotroImagesCleanup.class);
 
   private DataFacade _facade;
   private File _rootDir;

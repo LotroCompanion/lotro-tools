@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -32,7 +33,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class SocketablesManager
 {
-  private static final Logger LOGGER=Logger.getLogger(SocketablesManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SocketablesManager.class);
 
   private static final String ITEM_SOCKET_TYPE="Item_Socket_Type";
 

@@ -4,7 +4,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.common.utils.text.EncodingNames;
@@ -43,7 +44,7 @@ import delta.games.lotro.tools.extraction.instances.BlockGroupsBuilder;
  */
 public class MainGeoDataInjector
 {
-  private static final Logger LOGGER=Logger.getLogger(MainGeoDataInjector.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainGeoDataInjector.class);
 
   private DataFacade _facade;
   private MapsFinder _mapsFinder;

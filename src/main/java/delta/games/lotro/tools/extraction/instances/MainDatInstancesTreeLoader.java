@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.instances;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -27,7 +28,7 @@ import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
  */
 public class MainDatInstancesTreeLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatInstancesTreeLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatInstancesTreeLoader.class);
 
   /**
    * "Seasonal" category name.

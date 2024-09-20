@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.geo.maps.finder;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.loaders.PositionDecoder;
@@ -25,7 +26,7 @@ import delta.games.lotro.tools.extraction.geo.maps.MapUtils;
  */
 public class MapsFinder
 {
-  private static final Logger LOGGER=Logger.getLogger(MapsFinder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MapsFinder.class);
 
   private AdvancedMapsManager _mapsManager;
   private GeoreferencedBasemapsManager _basemapsManager;

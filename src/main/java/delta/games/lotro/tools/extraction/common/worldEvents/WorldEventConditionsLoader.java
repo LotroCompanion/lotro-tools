@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.common.worldEvents;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.collections.filters.Operator;
 import delta.games.lotro.common.utils.ComparisonOperator;
@@ -20,7 +21,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class WorldEventConditionsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(WorldEventConditionsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(WorldEventConditionsLoader.class);
 
   private WorldEventsLoader _loader;
   private WorldEventConditionNormalizer _normalizer;

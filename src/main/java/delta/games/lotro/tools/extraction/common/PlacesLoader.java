@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.geo.Position;
@@ -20,7 +21,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class PlacesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(PlacesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlacesLoader.class);
 
   private static final int PLACES_DID=0x0E000004;
 

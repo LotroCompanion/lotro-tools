@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.text.EndOfLine;
 import delta.games.lotro.common.stats.FloatStatDescription;
@@ -35,7 +36,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainStatsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainStatsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainStatsLoader.class);
 
   /**
    * Get all the locale keys.

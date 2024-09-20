@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.allegiances;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -31,7 +32,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatAllegiancesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatAllegiancesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatAllegiancesLoader.class);
 
   private DataFacade _facade;
   private LotroEnum<AllegianceGroup> _groups;

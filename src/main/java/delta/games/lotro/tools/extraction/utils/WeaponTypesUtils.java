@@ -4,7 +4,8 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -18,7 +19,7 @@ import delta.games.lotro.tools.extraction.items.legendary.LegaciesLoader;
  */
 public class WeaponTypesUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(LegaciesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LegaciesLoader.class);
 
   private EnumMapper _equipmentCategory;
 

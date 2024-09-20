@@ -8,7 +8,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
 import delta.games.lotro.common.enums.EquipmentCategory;
@@ -90,7 +91,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class MainDatItemsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatItemsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatItemsLoader.class);
 
   private static final int[] TYPES=
   {

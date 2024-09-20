@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.classes.ClassDescription;
@@ -44,7 +45,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.StringProcessor;
  */
 public class DeedsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(DeedsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DeedsLoader.class);
 
   private static final String CLASS_KEY="CLASS";
 

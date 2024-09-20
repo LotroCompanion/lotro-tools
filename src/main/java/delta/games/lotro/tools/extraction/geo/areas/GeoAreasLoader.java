@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.geo.areas;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -22,7 +23,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class GeoAreasLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(GeoAreasLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeoAreasLoader.class);
 
   private static final String AREA_NAME="Area_Name";
 

@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.utils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides access to loggers to use for the tools.
@@ -11,5 +12,5 @@ public class ToolLog
   /**
    * Logger for data loading tools.
    */
-  public static final Logger LOGGER=Logger.getLogger("ToolLog");
+  public static final Logger LOGGER=LoggerFactory.getLogger("ToolLog");
 }

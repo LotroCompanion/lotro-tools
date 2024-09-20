@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -48,7 +49,7 @@ public class QuestsLoader
 {
   private static final String QUEST_NAME="Quest_Name";
 
-  private static final Logger LOGGER=Logger.getLogger(QuestsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(QuestsLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,QuestDescription> _quests;

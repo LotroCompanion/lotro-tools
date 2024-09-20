@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -36,7 +37,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatRelicsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatRelicsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatRelicsLoader.class);
 
   private DataFacade _facade;
   private DatStatUtils _statUtils;

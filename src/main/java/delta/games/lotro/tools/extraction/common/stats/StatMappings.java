@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.common.stats;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsRegistry;
@@ -12,7 +13,7 @@ import delta.games.lotro.dat.misc.Context;
  */
 public class StatMappings
 {
-  private static final Logger LOGGER=Logger.getLogger(StatMappings.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(StatMappings.class);
 
   private static StatsRegistry _stats;
 

@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.geo.maps;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.DIDMapper;
@@ -16,7 +17,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class RegionLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(RegionLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(RegionLoader.class);
 
   private DataFacade _facade;
 

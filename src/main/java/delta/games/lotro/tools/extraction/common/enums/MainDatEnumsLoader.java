@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.common.enums;
 import java.io.File;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.i18n.MultilocalesTranslator;
 import delta.games.lotro.character.gear.GearSlot;
@@ -90,7 +91,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainDatEnumsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatEnumsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatEnumsLoader.class);
 
   private static final String ENUM_PREFIX="enum-";
 

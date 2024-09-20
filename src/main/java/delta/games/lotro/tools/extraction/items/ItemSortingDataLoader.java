@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
@@ -19,7 +20,7 @@ import delta.games.lotro.lore.items.Item;
  */
 public class ItemSortingDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemSortingDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemSortingDataLoader.class);
 
   private Map<Integer,List<String>> _sortCriterias;
   private DataFacade _facade;

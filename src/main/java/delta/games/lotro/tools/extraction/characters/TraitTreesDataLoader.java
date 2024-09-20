@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.WellKnownCharacterClassKeys;
@@ -32,7 +33,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class TraitTreesDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(TraitTreesDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TraitTreesDataLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _traitCell;

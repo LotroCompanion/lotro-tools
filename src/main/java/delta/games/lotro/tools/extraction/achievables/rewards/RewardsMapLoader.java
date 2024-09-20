@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.achievables.rewards;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -12,7 +13,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class RewardsMapLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(RewardsMapLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(RewardsMapLoader.class);
 
   private static final String QUEST_REWARD_EXP_AMOUNT="QuestReward_ExpAmount";
 

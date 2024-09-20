@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.achievables;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -81,7 +82,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class DatObjectivesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(DatObjectivesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DatObjectivesLoader.class);
 
   private static final String QUEST_EVENT_ITEM_DID="QuestEvent_ItemDID";
   private static final String QUEST_EVENT_ENTRY="QuestEvent_Entry";

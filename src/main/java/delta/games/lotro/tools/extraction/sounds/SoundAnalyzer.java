@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.sounds;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.archive.DetailedFileEntry;
 import delta.games.lotro.dat.data.DataFacade;
@@ -16,7 +17,7 @@ import delta.lotro.jukebox.core.model.base.SoundDescription;
  */
 public class SoundAnalyzer
 {
-  private static final Logger LOGGER=Logger.getLogger(SoundAnalyzer.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SoundAnalyzer.class);
 
   private DataFacade _facade;
 

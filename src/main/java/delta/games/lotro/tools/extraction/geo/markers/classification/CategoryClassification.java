@@ -1,7 +1,7 @@
 package delta.games.lotro.tools.extraction.geo.markers.classification;
 
 /**
- * Category classification.
+ * Logger classification.
  * @author DAM
  */
 public class CategoryClassification extends Classification
@@ -11,8 +11,8 @@ public class CategoryClassification extends Classification
 
   /**
    * Constructor.
-   * @param code Category code.
-   * @param label Category label.
+   * @param code Logger code.
+   * @param label Logger label.
    */
   public CategoryClassification(int code, String label)
   {

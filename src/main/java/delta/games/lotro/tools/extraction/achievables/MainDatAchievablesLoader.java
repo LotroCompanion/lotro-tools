@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
@@ -28,7 +29,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class MainDatAchievablesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatAchievablesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatAchievablesLoader.class);
 
   private DataFacade _facade;
   private AchievablesLogger _logger;

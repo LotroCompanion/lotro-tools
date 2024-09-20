@@ -5,7 +5,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -26,7 +27,7 @@ import delta.games.lotro.dat.data.script.port.SwitchPortData;
  */
 public class ScriptsInspectorForSounds
 {
-  private static final Logger LOGGER=Logger.getLogger(ScriptsInspectorForSounds.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ScriptsInspectorForSounds.class);
 
   // Context
   private Deque<List<PropertyValue>> _context;

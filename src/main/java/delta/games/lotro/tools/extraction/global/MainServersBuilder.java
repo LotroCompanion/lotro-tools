@@ -6,7 +6,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.config.servers.ServerDescription;
 import delta.games.lotro.config.servers.io.xml.ServerXMLWriter;
@@ -26,7 +27,7 @@ public class MainServersBuilder
    * US servers.
    */
   private static final String US="(U.S)";
-  private static final Logger LOGGER=Logger.getLogger(MainServersBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainServersBuilder.class);
 
   private ServerDescription buildServer(String name, String ip, String location)
   {

@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.achievables.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.rewards.ReputationReward;
@@ -26,7 +27,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class MainTaskDataBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(MainTaskDataBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainTaskDataBuilder.class);
   private static final int TASK=112;
 
   private List<QuestDescription> getTaskQuests()

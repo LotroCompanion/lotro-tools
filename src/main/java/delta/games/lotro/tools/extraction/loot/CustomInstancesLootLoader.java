@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.math.Range;
 import delta.games.lotro.common.IdentifiableComparator;
@@ -29,7 +30,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class CustomInstancesLootLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(CustomInstancesLootLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CustomInstancesLootLoader.class);
 
   private DataFacade _facade;
   private LootLoader _lootLoader;

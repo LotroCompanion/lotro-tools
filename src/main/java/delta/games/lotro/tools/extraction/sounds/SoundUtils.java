@@ -11,7 +11,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.trilarion.sound.vorbis.jcraft.jorbis.VorbisFile;
 
@@ -25,7 +26,7 @@ import delta.lotro.jukebox.core.model.base.SoundFormat;
  */
 public class SoundUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(SoundUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SoundUtils.class);
 
   /**
    * Show supported sound types.

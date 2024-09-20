@@ -8,7 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
@@ -62,7 +63,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class SkillDetailsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(SkillDetailsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SkillDetailsLoader.class);
 
   private DataFacade _facade;
   private SkillEffectsLoader _effectsLoader;
@@ -537,7 +538,7 @@ public class SkillDetailsLoader
   {
     getSkillEffectList(props,skillEffectListPropName,null,mgr,type);
   }
-  
+
   private void getSkillEffectList(PropertiesSet props, String skillEffectListPropName, String effectImplementUsagePropName, SkillEffectsManager mgr, SkillEffectType type)
   {
     Object[] effectList=(Object[])props.getProperty(skillEffectListPropName);

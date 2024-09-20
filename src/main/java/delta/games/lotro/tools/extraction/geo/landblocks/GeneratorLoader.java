@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -18,7 +19,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class GeneratorLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(GeneratorLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeneratorLoader.class);
 
   private static final String GENERATOR_PROFILE_WEIGHT="GeneratorProfile_Weight";
 

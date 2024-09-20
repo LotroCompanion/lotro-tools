@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
 import delta.games.lotro.common.treasure.LootsManager;
@@ -36,7 +37,7 @@ import delta.games.lotro.tools.extraction.loot.LootLoader;
  */
 public class MainDatContainerLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatContainerLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatContainerLoader.class);
 
   private DataFacade _facade;
   private LootLoader _lootLoader;

@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -27,7 +28,7 @@ import delta.games.lotro.tools.extraction.utils.DatEnumsUtils;
  */
 public class MainDatLegendarySystemLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatLegendarySystemLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatLegendarySystemLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _slotMapper;

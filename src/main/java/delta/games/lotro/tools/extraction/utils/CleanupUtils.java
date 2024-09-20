@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.utils;
 import java.io.File;
 import java.io.FileFilter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.files.FilesDeleter;
 
@@ -13,7 +14,7 @@ import delta.common.utils.files.FilesDeleter;
  */
 public class CleanupUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(CleanupUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CleanupUtils.class);
 
   /**
    * Delete a file.

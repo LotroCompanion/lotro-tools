@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.lore.deeds.DeedDescription;
 
@@ -20,7 +21,7 @@ import delta.games.lotro.lore.deeds.DeedDescription;
  */
 public class DeedsBundle
 {
-  private static final Logger LOGGER=Logger.getLogger(DeedsBundle.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DeedsBundle.class);
 
   private List<DeedDescription> _deeds;
   private Map<String,List<DeedDescription>> _mapByName;

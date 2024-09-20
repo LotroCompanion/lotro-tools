@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.BitSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
@@ -67,7 +68,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class EffectLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(EffectLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(EffectLoader.class);
 
   private DataFacade _facade;
   private DatStatUtils _statUtils;

@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
@@ -48,7 +49,7 @@ import delta.games.lotro.tools.extraction.common.CooldownLoader;
  */
 public class ItemDetailsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemDetailsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemDetailsLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,Float> _cooldownData;

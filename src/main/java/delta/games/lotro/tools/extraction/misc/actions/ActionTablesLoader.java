@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -38,7 +39,7 @@ import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
  */
 public class ActionTablesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(ActionTablesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ActionTablesLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,ActionTable> _actionTables;

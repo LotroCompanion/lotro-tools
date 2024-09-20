@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.geo.landblocks;
 import java.io.PrintStream;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.EntityDescriptor;
 import delta.games.lotro.lore.maps.landblocks.Cell;
@@ -14,7 +15,7 @@ import delta.games.lotro.lore.maps.landblocks.Cell;
  */
 public class LbiInspector
 {
-  private static final Logger LOGGER=Logger.getLogger(LbiInspector.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LbiInspector.class);
 
   /**
    * Inspect a single LandBlockInfo.

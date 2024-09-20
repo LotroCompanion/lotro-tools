@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
@@ -22,7 +23,7 @@ import delta.games.lotro.lore.quests.io.xml.AchievableXMLConstants;
  */
 public class DeedKeysInjector
 {
-  private static final Logger LOGGER=Logger.getLogger(DeedKeysInjector.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DeedKeysInjector.class);
 
   private static final File OLD_FILE=new File("../lotro-deeds-db/deeds.xml").getAbsoluteFile();
   private static final String[] RACES = { "Dwarf", "Elf", "High Elf", "Hobbit", "Man" };

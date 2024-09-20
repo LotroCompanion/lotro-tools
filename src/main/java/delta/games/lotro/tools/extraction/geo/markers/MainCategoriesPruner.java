@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.maps.data.MapsManager;
@@ -22,7 +23,7 @@ import delta.games.lotro.tools.extraction.geo.maps.MapConstants;
  */
 public class MainCategoriesPruner
 {
-  private static final Logger LOGGER=Logger.getLogger(MainCategoriesPruner.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainCategoriesPruner.class);
 
   private MapsManager _mapsManager;
 

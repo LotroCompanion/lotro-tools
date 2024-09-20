@@ -3,7 +3,8 @@ package delta.games.lotro.tools.reports;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
@@ -33,7 +34,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class ReferenceDataGenerator
 {
-  private static final Logger LOGGER=Logger.getLogger(ReferenceDataGenerator.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ReferenceDataGenerator.class);
 
   private DataFacade _facade;
   private File _rootDir;

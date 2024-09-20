@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
@@ -34,7 +35,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainPerksLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainPerksLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainPerksLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

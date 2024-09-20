@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.links.MapLink;
@@ -16,7 +17,7 @@ import delta.games.lotro.maps.data.links.MapLink;
  */
 public class LinksStorage
 {
-  private static final Logger LOGGER=Logger.getLogger(LinksStorage.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LinksStorage.class);
 
   private static final float THRESHOLD=0.0005f;
   private List<MapLink> _links;

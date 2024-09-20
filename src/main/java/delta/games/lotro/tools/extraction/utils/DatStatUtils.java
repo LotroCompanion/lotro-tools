@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
@@ -35,7 +36,7 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class DatStatUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(DatStatUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DatStatUtils.class);
 
   private static final String MOD_DESCRIPTION_OVERRIDE="Mod_DescriptionOverride";
 

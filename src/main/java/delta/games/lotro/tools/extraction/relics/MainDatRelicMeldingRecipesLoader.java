@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.DATConstants;
@@ -29,7 +30,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class MainDatRelicMeldingRecipesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatRelicMeldingRecipesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatRelicMeldingRecipesLoader.class);
 
   private DataFacade _facade;
   private EnumMapper _categories;

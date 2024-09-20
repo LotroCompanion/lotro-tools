@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -34,7 +35,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatItemsSetsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatItemsSetsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatItemsSetsLoader.class);
 
   private DataFacade _facade;
   private ItemsSetEffectsLoader _effectsLoader;

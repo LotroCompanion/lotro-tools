@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -26,7 +27,7 @@ import delta.games.lotro.lore.items.ItemsManager;
  */
 public class RecipeItemsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(RecipeItemsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(RecipeItemsLoader.class);
 
   private DataFacade _facade;
   private Map<Integer,Item> _recipe2RecipeItemMap;

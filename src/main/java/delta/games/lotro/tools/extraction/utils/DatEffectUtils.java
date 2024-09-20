@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.utils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
@@ -14,7 +15,7 @@ import delta.games.lotro.lore.items.legendary.passives.Passive;
  */
 public class DatEffectUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(DatEffectUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DatEffectUtils.class);
 
   /**
    * Load stats for an effect.

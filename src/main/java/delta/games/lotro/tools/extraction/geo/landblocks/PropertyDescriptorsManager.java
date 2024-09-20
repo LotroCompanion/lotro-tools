@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertyDefinition;
@@ -19,7 +20,7 @@ import delta.games.lotro.dat.utils.BufferUtils;
  */
 public class PropertyDescriptorsManager
 {
-  private static final Logger LOGGER=Logger.getLogger(PropertyDescriptorsManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PropertyDescriptorsManager.class);
 
   private DataFacade _facade;
   private Map<Integer,PropertiesDescriptor> _descriptors;

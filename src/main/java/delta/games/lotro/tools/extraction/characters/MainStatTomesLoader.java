@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.characters;
 import java.io.PrintStream;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.tomes.StatTome;
@@ -24,7 +25,7 @@ import delta.games.lotro.tools.extraction.utils.DatStatUtils;
  */
 public class MainStatTomesLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainStatTomesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainStatTomesLoader.class);
 
   private DataFacade _facade;
   private DatStatUtils _statUtils;

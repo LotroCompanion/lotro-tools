@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.requirements;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -32,7 +33,7 @@ import delta.games.lotro.tools.extraction.effects.EffectLoader;
  */
 public class RequirementsLoadingUtils
 {
-  private static final Logger LOGGER=Logger.getLogger(RequirementsLoadingUtils.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(RequirementsLoadingUtils.class);
 
   /**
    * Load level requirements.

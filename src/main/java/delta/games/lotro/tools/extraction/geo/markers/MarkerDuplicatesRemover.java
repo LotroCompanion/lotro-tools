@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.maps.data.GeoPoint;
 import delta.games.lotro.maps.data.Marker;
@@ -21,7 +22,7 @@ public class MarkerDuplicatesRemover
 {
   private static final String REPLACE="\tReplace ";
 
-  private static final Logger LOGGER=Logger.getLogger(MarkerDuplicatesRemover.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MarkerDuplicatesRemover.class);
 
   private int _removedMarkers=0;
   private int _totalMarkers=0;

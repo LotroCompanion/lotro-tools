@@ -3,7 +3,8 @@ package delta.games.lotro.tools.extraction.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.io.xml.ColorXMLWriter;
@@ -19,7 +20,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatColorLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDatColorLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatColorLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

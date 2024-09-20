@@ -2,7 +2,8 @@ package delta.games.lotro.tools.extraction.global;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.lore.parameters.GameParameters;
 import delta.games.lotro.lore.parameters.io.xml.GameXMLWriter;
@@ -14,7 +15,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
  */
 public class MainGameDataBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(MainGameDataBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainGameDataBuilder.class);
 
   private GameParameters buildGameParameters()
   {

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
@@ -47,7 +48,7 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class CharacterClassDataLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(CharacterClassDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CharacterClassDataLoader.class);
 
   private DataFacade _facade;
   private List<ClassDescription> _classes;

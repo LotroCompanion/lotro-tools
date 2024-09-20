@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -28,7 +29,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MountsLoader
 {
-  private static final Logger LOGGER=Logger.getLogger(MountsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MountsLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;

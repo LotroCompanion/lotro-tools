@@ -3,7 +3,8 @@ package delta.games.lotro.tools.checks;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.WellKnownStat;
@@ -22,7 +23,7 @@ import delta.games.lotro.lore.items.legendary.Legendary;
  */
 public class ItemsConsistencyChecks
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemsConsistencyChecks.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemsConsistencyChecks.class);
 
   private List<Item> _missingStats;
   private int _nbMissingStats;
