@@ -215,7 +215,6 @@ public class SkillDetailsLoader
     getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage",mgr,SkillEffectType.TOGGLE);
     getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage",mgr,SkillEffectType.USER_TOGGLE);
     getSkillEffectList(props,"Skill_UserEffectList",mgr,SkillEffectType.USER);
-    // TODO Attach effects to the skill
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -281,7 +280,7 @@ public class SkillDetailsLoader
     Float boxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
     Float sphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
     int shapesCount=0;
-    if ((arcRadius != null) && (arcRadius.floatValue()!=0.0f))
+    if ((arcRadius!=null) && (arcRadius.floatValue()!=0.0f))
     {
       Arc arc=new Arc();
       arc.setRadius(arcRadius.floatValue());
@@ -292,7 +291,7 @@ public class SkillDetailsLoader
       ret.setShape(arc);
       shapesCount++;
     }
-    if ((boxLength != null) && (boxLength.floatValue()!=0.0f))
+    if ((boxLength!=null) && (boxLength.floatValue()!=0.0f))
     {
       Box box=new Box();
       box.setLength(boxLength.floatValue());
@@ -301,7 +300,7 @@ public class SkillDetailsLoader
       ret.setShape(box);
       shapesCount++;
     }
-    if ((sphereRadius != null) && (sphereRadius.floatValue()!=0.0f))
+    if ((sphereRadius!=null) && (sphereRadius.floatValue()!=0.0f))
     {
       Sphere sphere=new Sphere();
       sphere.setRadius(sphereRadius.floatValue());
@@ -310,7 +309,7 @@ public class SkillDetailsLoader
     }
     if (shapesCount>1)
     {
-      LOGGER.warn("Bad shapes count: "+shapesCount);
+      LOGGER.warn("Bad shapes count: {}",Integer.valueOf(shapesCount));
     }
     Integer anchorCode=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
     if ((anchorCode!=null) && (anchorCode.intValue()!=0))
@@ -487,7 +486,7 @@ public class SkillDetailsLoader
         List<GambitIconType> toAdd=getGambits(appliedGambit);
         if (toAdd.size()!=appliedGambitsCount)
         {
-          LOGGER.warn("Mismatch on add gambits: "+toAdd+ "; size="+appliedGambitsCount);
+          LOGGER.warn("Mismatch on add gambits: {} ; size={}",toAdd,Integer.valueOf(appliedGambitsCount));
         }
         ret.setToAdd(toAdd);
       }
@@ -546,15 +545,15 @@ public class SkillDetailsLoader
     {
       return;
     }
-    // TODO Check the location of this property: on the parent props or on the effect props
+    // TODO Check the location of this property: on the parent props or on the effect props => parent props!
     Integer effectImplementUsage=null;
     if (effectImplementUsagePropName!=null)
     {
       effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
     }
-    for (Object Skill_EffectObj : effectList)
+    for (Object skillEffectObj : effectList)
     {
-      PropertiesSet effectData=(PropertiesSet)Skill_EffectObj;
+      PropertiesSet effectData=(PropertiesSet)skillEffectObj;
       SkillEffectGenerator generator=_effectsLoader.loadSkillEffect(effectData);
       if (generator!=null)
       {
