@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.extraction.skills;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -8,9 +9,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.transform.sax.TransformerHandler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.helpers.AttributesImpl;
 
+import delta.common.utils.io.xml.XmlFileWriterHelper;
+import delta.common.utils.io.xml.XmlWriter;
+import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
@@ -29,6 +36,8 @@ import delta.games.lotro.character.skills.geometry.Arc;
 import delta.games.lotro.character.skills.geometry.Box;
 import delta.games.lotro.character.skills.geometry.SkillGeometry;
 import delta.games.lotro.character.skills.geometry.Sphere;
+import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLConstants;
+import delta.games.lotro.character.skills.io.xml.SkillDetailsXmlIO;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
@@ -75,6 +84,8 @@ public class SkillDetailsLoader
   private LotroEnum<AreaEffectAnchorType> _areaEffectAnchorTypeEnum;
   private LotroEnum<GambitIconType> _gambitIconTypeEnum;
 
+  private List<SkillDetails> _details;
+
   /**
    * Constructor.
    * @param facade Facade.
@@ -92,6 +103,7 @@ public class SkillDetailsLoader
     _pipTypeEnum=lotroEnumRegistry.get(PipType.class);
     _areaEffectAnchorTypeEnum=lotroEnumRegistry.get(AreaEffectAnchorType.class);
     _gambitIconTypeEnum=lotroEnumRegistry.get(GambitIconType.class);
+    _details=new ArrayList<SkillDetails>();
   }
 
   private Induction getInduction(int skillInductionActionID)
@@ -119,8 +131,9 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private void handleSkill(int skillID)
+  private void handleSkill(SkillDescription skill)
   {
+    int skillID=skill.getIdentifier();
     PropertiesSet props=_facade.loadProperties(skillID+DATConstants.DBPROPERTIES_OFFSET);
     if (props==null)
     {
@@ -128,6 +141,8 @@ public class SkillDetailsLoader
     }
 
     SkillDetails ret=new SkillDetails();
+    ret.setId(skillID);
+    ret.setName(skill.getName());
 
     // Duration
     Float actionDurationContribution=(Float)props.getProperty("Skill_ActionDurationContribution");
@@ -215,6 +230,10 @@ public class SkillDetailsLoader
     getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage",mgr,SkillEffectType.TOGGLE);
     getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage",mgr,SkillEffectType.USER_TOGGLE);
     getSkillEffectList(props,"Skill_UserEffectList",mgr,SkillEffectType.USER);
+    if (mgr.hasEffects())
+    {
+      ret.setEffects(mgr);
+    }
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -247,6 +266,8 @@ public class SkillDetailsLoader
 
     // Attacks
     loadAttacks(props,ret);
+
+    _details.add(ret);
   }
 
   private void loadAttacks(PropertiesSet props, SkillDetails skillDetails)
@@ -323,7 +344,10 @@ public class SkillDetailsLoader
       ret.setMinRange(minRange);
     }
     Float maxRange=(Float)props.getProperty("Skill_MaxRange");
-    ret.setMaxRange(maxRange.floatValue());
+    if ((maxRange!=null) && (maxRange.floatValue()>0))
+    {
+      ret.setMaxRange(maxRange);
+    }
     ModPropertyList maxRangeModifiers=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
     ret.setMaxRangeMods(maxRangeModifiers);
     if (ret.hasValues()) 
@@ -660,9 +684,35 @@ public class SkillDetailsLoader
     for(SkillDescription skill : SkillsManager.getInstance().getAll())
     {
       System.out.println(skill);
-      handleSkill(skill.getIdentifier());
+      handleSkill(skill);
     }
+    save();
+  }
+
+  private void save()
+  {
     saveInductions();
+    saveSkillDetails(_details);
+  }
+
+  private void saveSkillDetails(List<SkillDetails> details)
+  {
+    File toFile=new File("skills.xml");
+    XmlFileWriterHelper helper=new XmlFileWriterHelper();
+    XmlWriter writer=new XmlWriter()
+    {
+      @Override
+      public void writeXml(TransformerHandler hd) throws Exception
+      {
+        hd.startElement("","",SkillDescriptionXMLConstants.SKILLS_TAG,new AttributesImpl());
+        for(SkillDetails detail : details)
+        {
+          SkillDetailsXmlIO.writeSkillDetails(hd,detail);
+        }
+        hd.endElement("","",SkillDescriptionXMLConstants.SKILLS_TAG);
+      }
+    };
+    helper.write(toFile,EncodingNames.UTF_8,writer);
   }
 
   /**
