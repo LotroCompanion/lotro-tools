@@ -5,14 +5,20 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.stats.ratings.ProgressionRatingCurveImpl;
 import delta.games.lotro.character.stats.ratings.RatingCurveId;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.global.CombatData;
+import delta.games.lotro.common.global.WeaponStrikeModifiers;
+import delta.games.lotro.common.global.WeaponStrikeModifiersManager;
 import delta.games.lotro.common.global.io.xml.CombatDataXMLWriter;
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
+import delta.games.lotro.lore.items.WeaponType;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
+import delta.games.lotro.tools.extraction.utils.DatEnumsUtils;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -43,8 +49,8 @@ public class MainDatCombatLoader
    */
   public void doIt()
   {
-    // CombatControl
-    PropertiesSet props=_facade.loadProperties(1879048757+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"CombatControl");
+    // Curves
     Object[] calcControlInfoArray=(Object[])props.getProperty("Combat_Control_CalcControlInfoArray");
     if (calcControlInfoArray!=null)
     {
@@ -54,7 +60,32 @@ public class MainDatCombatLoader
         handleOneStat(calcControlProps);
       }
     }
+    // Weapon strike modifiers
+    handleWeaponStrikeModifiers(props);
     save();
+  }
+
+  private void handleWeaponStrikeModifiers(PropertiesSet props)
+  {
+    Object[] entryArray=(Object[])props.getProperty("Combat_Control_WeaponStrikeModifierList");
+    
+    LotroEnum<WeaponType> weapontypeEnum=LotroEnumsRegistry.getInstance().get(WeaponType.class);
+    WeaponStrikeModifiersManager mgr=_data.getWeaponStrikeModifiersMgr();
+    for(Object entryObject : entryArray)
+    {
+      PropertiesSet entryProps=(PropertiesSet)entryObject;
+      Long code=(Long)entryProps.getProperty("Combat_Control_EquipmentCategory");
+      int category=DatEnumsUtils.getEquipmentCategoryCode(code);
+      WeaponType type=weapontypeEnum.getEntry(category);
+      WeaponStrikeModifiers mods=new WeaponStrikeModifiers(type);
+      Integer criticalMod=(Integer)entryProps.getProperty("Combat_Control_SkillCriticalMult_AddMod");
+      mods.setCriticalMultiplierAddMod(criticalMod);
+      Integer superCriticalMod=(Integer)entryProps.getProperty("Combat_Control_SkillSuperCriticalMult_AddMod");
+      mods.setSuperCriticalMultiplierAddMod(superCriticalMod);
+      Integer weaponDamageMultiplier=(Integer)entryProps.getProperty("Combat_Control_WeaponDamageMultiplier");
+      mods.setWeaponDamageMultiplier(weaponDamageMultiplier);
+      mgr.registerStrikeModifiers(mods);
+    }
   }
 
   private void handleOneStat(PropertiesSet calcControlProps)
