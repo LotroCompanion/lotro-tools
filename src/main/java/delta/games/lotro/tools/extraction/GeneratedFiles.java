@@ -80,6 +80,10 @@ public class GeneratedFiles
    */
   public static final File SKILLS=LotroCoreConfig.getInstance().getFile(DataFiles.SKILLS);
   /**
+   * Skill details.
+   */
+  public static final File SKILL_DETAILS=LotroCoreConfig.getInstance().getFile(DataFiles.SKILL_DETAILS);
+  /**
    * Skill icons.
    */
   public static final File SKILL_ICONS_DIR=LotroCoreConfig.getInstance().getFile("skillIcons");
@@ -155,6 +159,10 @@ public class GeneratedFiles
    * Progressions for effects.
    */
   public static final File PROGRESSIONS_EFFECTS=new File("data/progressions/tmp/progressions_effects.xml").getAbsoluteFile();
+  /**
+   * Progressions for skills.
+   */
+  public static final File PROGRESSIONS_SKILLS=new File("data/progressions/tmp/progressions_skills.xml").getAbsoluteFile();
   /**
    * All progressions.
    */

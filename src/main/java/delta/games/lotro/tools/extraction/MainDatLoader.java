@@ -64,6 +64,7 @@ import delta.games.lotro.tools.extraction.relics.MainDatRelicMeldingRecipesLoade
 import delta.games.lotro.tools.extraction.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.extraction.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
+import delta.games.lotro.tools.extraction.skills.SkillDetailsLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.extraction.ui.SocketIconsLoader;
@@ -152,8 +153,10 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
+    // Skills (complements)
     skillsLoader.loadRequirements(effectsLoader);
     skillsLoader.loadEffects(effectsLoader);
+    new SkillDetailsLoader(_facade,effectsLoader).doIt();
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     // Items
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
@@ -268,6 +271,7 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.XP_TABLE);
     CleanupUtils.deleteFile(GeneratedFiles.PVP);
     CleanupUtils.deleteFile(GeneratedFiles.MOOD);
+    CleanupUtils.deleteFile(GeneratedFiles.INDUCTIONS);
     // Labels
     // Do not delete the labels directory because it is shared with the geo data loader
     // CleanupUtils.deleteDirectory(GeneratedFiles.LABELS)
@@ -284,6 +288,7 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
     CleanupUtils.deleteFile(GeneratedFiles.SKILLS);
+    CleanupUtils.deleteFile(GeneratedFiles.SKILL_DETAILS);
     CleanupUtils.deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
     // - virtues
     CleanupUtils.deleteFile(GeneratedFiles.VIRTUES);
@@ -395,6 +400,7 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_ACHIEVABLES);
     CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_LEGENDARY);
     CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_EFFECTS);
+    CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS_SKILLS);
     CleanupUtils.deleteFile(GeneratedFiles.PROGRESSIONS);
   }
 

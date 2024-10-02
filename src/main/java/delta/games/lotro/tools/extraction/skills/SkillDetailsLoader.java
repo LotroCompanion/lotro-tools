@@ -679,11 +679,13 @@ public class SkillDetailsLoader
     InductionXMLWriter.writeInductionsFile(GeneratedFiles.INDUCTIONS,inductions);
   }
 
-  private void doIt()
+  /**
+   * Do it.
+   */
+  public void doIt()
   {
     for(SkillDescription skill : SkillsManager.getInstance().getAll())
     {
-      System.out.println(skill);
       handleSkill(skill);
     }
     save();
@@ -692,12 +694,12 @@ public class SkillDetailsLoader
   private void save()
   {
     saveInductions();
-    saveSkillDetails(_details);
+    saveSkillDetails(GeneratedFiles.SKILL_DETAILS,_details);
+    ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_SKILLS);
   }
 
-  private void saveSkillDetails(List<SkillDetails> details)
+  private void saveSkillDetails(File toFile, List<SkillDetails> details)
   {
-    File toFile=new File("skills.xml");
     XmlFileWriterHelper helper=new XmlFileWriterHelper();
     XmlWriter writer=new XmlWriter()
     {
