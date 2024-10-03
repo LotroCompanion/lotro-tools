@@ -575,10 +575,19 @@ public class SkillDetailsLoader
     {
       effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
     }
+    boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
     for (Object skillEffectObj : effectList)
     {
       PropertiesSet effectData=(PropertiesSet)skillEffectObj;
-      SkillEffectGenerator generator=_effectsLoader.loadSkillEffect(effectData);
+      SkillEffectGenerator generator;
+      if (toggle)
+      {
+        generator=_effectsLoader.loadSkillToggleEffect(effectData);
+      }
+      else
+      {
+        generator=_effectsLoader.loadSkillEffect(effectData);
+      }
       if (generator!=null)
       {
         generator.setType(type);

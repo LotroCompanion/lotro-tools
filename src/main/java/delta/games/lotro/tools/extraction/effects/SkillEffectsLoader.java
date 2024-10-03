@@ -175,18 +175,32 @@ Skill_UserEffectList:
     return generator;
   }
 
-  private void handleSkillToggleEffect(SkillEffectsManager mgr, PropertiesSet effectProps, SkillEffectType type)
+  /**
+   * Load a toggle skill effect.
+   * @param effectProps Effect properties.
+   * @return the loaded effect generator or <code>null</code>.
+   */
+  public SkillEffectGenerator loadSkillToggleEffect(PropertiesSet effectProps)
   {
     Integer effectID=(Integer)effectProps.getProperty("Skill_Toggle_Effect");
     if ((effectID==null) || (effectID.intValue()==0))
     {
-      return;
+      return null;
     }
     Float spellcraft=(Float)effectProps.getProperty("Skill_Toggle_Effect_Spellcraft");
     spellcraft=Utils.normalize(spellcraft);
     Effect effect=_loader.getEffect(effectID.intValue());
     SkillEffectGenerator generator=new SkillEffectGenerator(effect,spellcraft,null);
-    generator.setType(type);
-    mgr.addEffect(generator);
+    return generator;
+  }
+
+  private void handleSkillToggleEffect(SkillEffectsManager mgr, PropertiesSet effectProps, SkillEffectType type)
+  {
+    SkillEffectGenerator generator=loadSkillToggleEffect(effectProps);
+    if (generator!=null)
+    {
+      generator.setType(type);
+      mgr.addEffect(generator);
+    }
   }
 }
