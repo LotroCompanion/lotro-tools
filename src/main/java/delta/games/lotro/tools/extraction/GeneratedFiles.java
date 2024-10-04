@@ -452,4 +452,8 @@ public class GeneratedFiles
    * Inductions.
    */
   public static final File INDUCTIONS=LotroCoreConfig.getInstance().getFile(DataFiles.INDUCTIONS);
+  /**
+   * Pips.
+   */
+  public static final File PIPS=LotroCoreConfig.getInstance().getFile(DataFiles.PIPS);
 }
