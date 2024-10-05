@@ -63,6 +63,7 @@ import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.effects.SkillEffectsLoader;
+import delta.games.lotro.tools.extraction.utils.ModifiersUtils;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.maths.Progression;
 
@@ -202,7 +203,7 @@ public class SkillDetailsLoader
     // Targets
     Integer areaEffectMaxTargets=(Integer)props.getProperty("Skill_AreaEffectMaxTargets");
     ret.setMaxTargets(areaEffectMaxTargets);
-    ModPropertyList areaEffectMaxTargetsMods=getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
+    ModPropertyList areaEffectMaxTargetsMods=ModifiersUtils.getStatModifiers(props,"Skill_AreaEffectMaxTargets_Mod_Array");
     ret.setMaxTargetsMods(areaEffectMaxTargetsMods);
 
     // Toggle
@@ -348,7 +349,7 @@ public class SkillDetailsLoader
     {
       ret.setMaxRange(maxRange);
     }
-    ModPropertyList maxRangeModifiers=getStatModifiers(props,"Skill_MaxRange_ModifierArray");
+    ModPropertyList maxRangeModifiers=ModifiersUtils.getStatModifiers(props,"Skill_MaxRange_ModifierArray");
     ret.setMaxRangeMods(maxRangeModifiers);
     if (ret.hasValues()) 
     {
@@ -382,11 +383,11 @@ public class SkillDetailsLoader
     }
 
     // Modifiers
-    ModPropertyList dpsMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
+    ModPropertyList dpsMods=ModifiersUtils.getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
     ret.setDPSMods(dpsMods);
-    ModPropertyList maxDamageMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageMax_Mod_Array");
+    ModPropertyList maxDamageMods=ModifiersUtils.getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageMax_Mod_Array");
     ret.setMaxDamageMods(maxDamageMods);
-    ModPropertyList damageModifiersMods=getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageModifier_Mod_Array");
+    ModPropertyList damageModifiersMods=ModifiersUtils.getStatModifiers(attackHookProperties,"Skill_AttackHook_HookDamageModifier_Mod_Array");
     ret.setDamageModifiersMods(damageModifiersMods);
 
     // Damage type
@@ -456,25 +457,25 @@ public class SkillDetailsLoader
     SkillPipData ret=new SkillPipData(type);
     Integer change=(Integer)props.getProperty("Skill_Pip_Change");
     ret.setChange(change);
-    ModPropertyList changeMods=getStatModifiers(props,"Skill_PipChange_Mod_Array");
+    ModPropertyList changeMods=ModifiersUtils.getStatModifiers(props,"Skill_PipChange_Mod_Array");
     ret.setChangeMods(changeMods);
     Integer requiredMinValue=(Integer)props.getProperty("Skill_Pip_RequiredMinValue");
     ret.setRequiredMinValue(requiredMinValue);
-    ModPropertyList requiredMinValueMods=getStatModifiers(props,"Skill_PipRequiredMin_Mod_Array");
+    ModPropertyList requiredMinValueMods=ModifiersUtils.getStatModifiers(props,"Skill_PipRequiredMin_Mod_Array");
     ret.setRequiredMinValueMods(requiredMinValueMods);
     Integer requiredMaxValue=(Integer)props.getProperty("Skill_Pip_RequiredMaxValue");
     ret.setRequiredMaxValue(requiredMaxValue);
-    ModPropertyList requiredMaxValueMods=getStatModifiers(props,"Skill_PipRequiredMax_Mod_Array");
+    ModPropertyList requiredMaxValueMods=ModifiersUtils.getStatModifiers(props,"Skill_PipRequiredMax_Mod_Array");
     ret.setRequiredMaxValueMods(requiredMaxValueMods);
     Integer towardHome=(Integer)props.getProperty("Skill_Pip_Toward_Home");
     ret.setTowardHome(towardHome);
     Integer changePerInterval=(Integer)props.getProperty("Skill_Toggle_PipChangePerInterval");
     ret.setChangePerInterval(changePerInterval);
-    ModPropertyList changePerIntervalMods=getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
+    ModPropertyList changePerIntervalMods=ModifiersUtils.getStatModifiers(props,"Skill_TogglePipChangePerInterval_Mod_Array");
     ret.setSecondsPerPipChangeMods(changePerIntervalMods);
     Float secondsPerPipChange=(Float)props.getProperty("Skill_Toggle_SecondsPerPipChange");
     ret.setSecondsPerPipChange(secondsPerPipChange);
-    ModPropertyList secondsPerPipChangeMods=getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
+    ModPropertyList secondsPerPipChangeMods=ModifiersUtils.getStatModifiers(props,"Skill_ToggleSecondsPerPipChange_Mod_Array");
     ret.setSecondsPerPipChangeMods(secondsPerPipChangeMods);
     return ret;
   }
@@ -599,27 +600,6 @@ public class SkillDetailsLoader
     }
   }
 
-  private static ModPropertyList getStatModifiers(PropertiesSet props, String statModArrayPropName)
-  {
-    Object[] statIDObjs=(Object[])props.getProperty(statModArrayPropName);
-    if (statIDObjs == null)
-    {
-      return null;
-    }
-    boolean doKeep=false;
-    ModPropertyList ret=new ModPropertyList();
-    for (Object statIDObj : statIDObjs)
-    {
-      Integer statID=(Integer)statIDObj;
-      if ((statID != null) && (statID.intValue()>0))
-      {
-        ret.addID(statID.intValue());
-        doKeep=true;
-      }
-    }
-    return doKeep?ret:null;
-  }
-
   private SkillVitalCost getVitalCostList(PropertiesSet props, String vitalCostListPropName, VitalType vitalType)
   {
     Object[] vitalCostList=(Object[])props.getProperty(vitalCostListPropName);
@@ -636,7 +616,7 @@ public class SkillDetailsLoader
       {
         Integer consumesAllInt=(Integer)vitalCostProps.getProperty("Skill_Vital_Consumes_All");
         boolean consumesAll=((consumesAllInt!=null) && (consumesAllInt.intValue()==1));
-        ModPropertyList propertyMods=getStatModifiers(vitalCostProps,"Skill_Vital_Mod_Array");
+        ModPropertyList propertyMods=ModifiersUtils.getStatModifiers(vitalCostProps,"Skill_Vital_Mod_Array");
         Float percentage=(Float)vitalCostProps.getProperty("Skill_Vital_Percent");
         if ((percentage!=null) && (percentage.floatValue()<=0))
         {
@@ -674,9 +654,9 @@ public class SkillDetailsLoader
     Induction ret=new Induction(inductionID);
     float duration=((Float)props.getProperty("Induction_Duration")).floatValue();
     ret.setDuration(duration);
-    ModPropertyList addMods=getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
+    ModPropertyList addMods=ModifiersUtils.getStatModifiers(props,"Induction_Duration_AdditiveModifierList");
     ret.setAddMods(addMods);
-    ModPropertyList multiplyMods=getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
+    ModPropertyList multiplyMods=ModifiersUtils.getStatModifiers(props,"Induction_Duration_MultiplierModifierList");
     ret.setMultiplyMods(multiplyMods);
     return ret;
   }

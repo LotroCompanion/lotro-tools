@@ -39,6 +39,7 @@ import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.math.LinearFunction;
+import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
@@ -58,6 +59,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.utils.DatStatUtils;
+import delta.games.lotro.tools.extraction.utils.ModifiersUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.Progression;
@@ -524,6 +526,9 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     }
     // Variance
     ret.setVariance(variance);
+    // Modifiers
+    ModPropertyList modifiers=ModifiersUtils.getStatModifiers(effectProps,seed+"_ModifierList");
+    ret.setModifiers(modifiers);
     return ret;
   }
 
