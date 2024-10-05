@@ -85,7 +85,7 @@ public class PipsLoader
   {
     List<PipDescription> sortedList=new ArrayList<PipDescription>(pips);
     Collections.sort(sortedList,new IdentifiableComparator<PipDescription>());
-    PipXMLWriter.writePipsFile(GeneratedFiles.PIPS,pips);
+    PipXMLWriter.writePipsFile(GeneratedFiles.PIPS,sortedList);
   }
 
   /**
