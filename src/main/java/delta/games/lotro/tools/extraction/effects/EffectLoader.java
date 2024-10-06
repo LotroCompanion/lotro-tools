@@ -529,6 +529,9 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     // Modifiers
     ModPropertyList modifiers=ModifiersUtils.getStatModifiers(effectProps,seed+"_ModifierList");
     ret.setModifiers(modifiers);
+    // VPS multiplier
+    Float vpsMultiplier=(Float)effectProps.getProperty((seed+"VPSMultiplier").replace("InstantVital","BaseVital"));
+    ret.setVPSMultiplier(vpsMultiplier);
     return ret;
   }
 
