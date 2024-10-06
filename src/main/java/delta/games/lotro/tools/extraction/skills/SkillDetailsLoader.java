@@ -597,7 +597,10 @@ public class SkillDetailsLoader
       if (generator!=null)
       {
         generator.setType(type);
-        generator.setImplementUsage(effectImplementUsage);
+        if (effectImplementUsage!=null)
+        {
+          generator.setImplementUsage(effectImplementUsage);
+        }
         if (mgr!=null)
         {
           mgr.addEffect(generator);
