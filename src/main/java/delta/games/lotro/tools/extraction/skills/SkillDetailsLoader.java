@@ -43,6 +43,8 @@ import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DamageQualifiers;
 import delta.games.lotro.common.enums.GambitIconType;
+import delta.games.lotro.common.enums.ImplementUsageType;
+import delta.games.lotro.common.enums.ImplementUsageTypes;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.PipType;
@@ -570,11 +572,14 @@ public class SkillDetailsLoader
     {
       return;
     }
-    // TODO Check the location of this property: on the parent props or on the effect props => parent props!
-    Integer effectImplementUsage=null;
+    ImplementUsageType effectImplementUsage=null;
     if (effectImplementUsagePropName!=null)
     {
-      effectImplementUsage=(Integer)props.getProperty(effectImplementUsagePropName);
+      Integer effectImplementUsageCode=(Integer)props.getProperty(effectImplementUsagePropName);
+      if ((effectImplementUsageCode!=null) && (effectImplementUsageCode.intValue()>0))
+      {
+        effectImplementUsage=ImplementUsageTypes.getByCode(effectImplementUsageCode.intValue());
+      }
     }
     boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
     for (Object skillEffectObj : effectList)
@@ -592,6 +597,7 @@ public class SkillDetailsLoader
       if (generator!=null)
       {
         generator.setType(type);
+        generator.setImplementUsage(effectImplementUsage);
         if (mgr!=null)
         {
           mgr.addEffect(generator);
