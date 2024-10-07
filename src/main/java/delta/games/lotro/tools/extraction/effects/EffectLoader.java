@@ -358,6 +358,16 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
  */
     Integer vitalType=(Integer)effectProps.getProperty("Effect_VitalOverTime_VitalType");
     VitalChangeDescription initialChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange");
+    if (initialChange==null)
+    {
+      LOGGER.warn("No value data for vital change!");
+    }
+    else
+    {
+      // VPS multiplier
+      Float vpsMultiplier=(Float)effectProps.getProperty("Effect_BaseVital_InitialChangeVPSMultiplier");
+      initialChange.setVPSMultiplier(vpsMultiplier);
+    }
     effect.setInitialChangeDescription(initialChange);
     VitalChangeDescription overTimeChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval");
     if (overTimeChange==null)
