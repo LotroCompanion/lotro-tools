@@ -326,6 +326,12 @@ public class EffectLoader
     {
       LOGGER.warn("No value data for vital change!");
     }
+    else
+    {
+      // VPS multiplier
+      Float vpsMultiplier=(Float)effectProps.getProperty("Effect_BaseVital_InitialChangeVPSMultiplier");
+      description.setVPSMultiplier(vpsMultiplier);
+    }
     effect.setInstantChangeDescription(description);
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
@@ -357,6 +363,12 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     if (overTimeChange==null)
     {
       LOGGER.warn("No value data for vital change!");
+    }
+    else
+    {
+      // VPS multiplier
+      Float vpsMultiplier=(Float)effectProps.getProperty("Effect_BaseVital_ChangePerIntervalVPSMultiplier");
+      overTimeChange.setVPSMultiplier(vpsMultiplier);
     }
     effect.setOverTimeChangeDescription(overTimeChange);
     // Stat
@@ -529,9 +541,6 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     // Modifiers
     ModPropertyList modifiers=ModifiersUtils.getStatModifiers(effectProps,seed+"_ModifierList");
     ret.setModifiers(modifiers);
-    // VPS multiplier
-    Float vpsMultiplier=(Float)effectProps.getProperty((seed+"VPSMultiplier").replace("InstantVital","BaseVital"));
-    ret.setVPSMultiplier(vpsMultiplier);
     return ret;
   }
 
