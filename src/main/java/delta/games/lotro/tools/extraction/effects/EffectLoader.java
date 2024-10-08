@@ -597,8 +597,13 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
 
   private EffectGenerator loadGenerator(PropertiesSet generatorProps)
   {
-    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue();
-    Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
+    return loadGenerator(generatorProps,"EffectGenerator_EffectID","EffectGenerator_EffectSpellcraft");
+  }
+
+  private EffectGenerator loadGenerator(PropertiesSet generatorProps, String idPropName, String spellcraftPropName)
+  {
+    int effectID=((Integer)generatorProps.getProperty(idPropName)).intValue();
+    Float spellcraft=(Float)generatorProps.getProperty(spellcraftPropName);
     if ((spellcraft!=null) && (spellcraft.floatValue()<0))
     {
       spellcraft=null;
@@ -1027,8 +1032,11 @@ Effect_Area_MaxTargets_AdditiveModifiers:
     Object[] effectsList=(Object[])effectProps.getProperty("Effect_Area_Applied_Effect_Array");
     for(Object effectEntry : effectsList)
     {
-      EffectGenerator generator=loadGenerator((PropertiesSet)effectEntry);
-      effect.addEffect(generator);
+      EffectGenerator generator=loadGenerator((PropertiesSet)effectEntry,"Effect_Area_Applied_Effect","Effect_Area_Applied_Effect_Spellcraft");
+      if (generator!=null)
+      {
+        effect.addEffect(generator);
+      }
     }
     // Range
     Float maxRange=(Float)effectProps.getProperty("Effect_Area_MaxRange");
