@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
+import delta.games.lotro.common.effects.AreaEffect;
+import delta.games.lotro.common.effects.AreaEffectFlags;
 import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.Effect;
@@ -165,7 +167,7 @@ public class EffectLoader
         boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
         if (!ok)
         {
-          LOGGER.warn("Could not build effect icon: "+iconFilename);
+          LOGGER.warn("Could not build effect icon: {}", iconFilename);
         }
       }
     }
@@ -203,6 +205,7 @@ public class EffectLoader
     else if (classDef==749) return new TravelEffect();
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
+    else if (classDef==2762) return new AreaEffect();
     return new Effect();
   }
 
@@ -259,6 +262,10 @@ public class EffectLoader
     else if (effect instanceof TieredEffect)
     {
       loadTieredEffect((TieredEffect)effect,effectProps);
+    }
+    else if (effect instanceof AreaEffect)
+    {
+      loadAreaEffect((AreaEffect)effect,effectProps);
     }
   }
 
@@ -507,7 +514,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     Effect effect=getEffect(effectID);
     if (effect==null)
     {
-      LOGGER.warn("Effect not found: "+effectID);
+      LOGGER.warn("Effect not found: {}",Integer.valueOf(effectID));
       return null;
     }
     EffectAndProbability ret=new EffectAndProbability(effect,probability);
@@ -778,7 +785,7 @@ WeenieType: 262145 (Hotspot)
       List<CombatState> states=damageTypeEnum.getFromBitSet(bitSet);
       if (states.size()!=1)
       {
-        LOGGER.warn("Unexpected size for combat states: "+states);
+        LOGGER.warn("Unexpected size for combat states: {}", states);
       }
       CombatState state=states.get(0);
       effect.setCombatState(state);
@@ -982,6 +989,64 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
         effect.setFinalTier(generator);
       }
     }
+  }
+
+  private void loadAreaEffect(AreaEffect effect, PropertiesSet effectProps)
+  {
+    /*
+Effect_Area_ShouldAffectCaster: 0
+Effect_Area_AffectsMonsterPlayers: 1
+Effect_Area_AffectsMonsters: 1
+Effect_Area_AffectsPlayers: 1
+Effect_Area_AffectsPvPPlayers: 1
+Effect_Area_AffectsSessionPlayers: 1
+Effect_Area_AffectsDistantBattleUnits: 0
+Effect_Area_AffectsPlayerPets: 0
+Effect_Area_CheckRangeToTargets: 0
+
+Effect_Area_Applied_Effect_Array: 
+  #1: Effect_Area_Applied_Effect_Data 
+    Effect_Area_Applied_Effect: 1879284216
+    Effect_Area_Applied_Effect_Spellcraft: -1.0
+Effect_Area_MaxRange: 5.0
+Effect_Area_MaxTargets: 10
+Effect_Area_MaxTargets_AdditiveModifiers: 
+  #1: Effect_ModifierPropertyList_Entry 268462716 (Skill_AreaEffect_TargetCount)
+    */
+    // Flags
+    effect.setFlag(AreaEffectFlags.SHOULD_AFFECT_CASTER,getFlag(effectProps,"Effect_Area_ShouldAffectCaster"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_MONSTER_PLAYERS,getFlag(effectProps,"Effect_Area_AffectsMonsterPlayers"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_MONSTERS,getFlag(effectProps,"Effect_Area_AffectsMonsters"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_PLAYERS,getFlag(effectProps,"Effect_Area_AffectsPlayers"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_PVP_PLAYERS,getFlag(effectProps,"Effect_Area_AffectsPvPPlayers"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_SESSION_PLAYERS,getFlag(effectProps,"Effect_Area_AffectsSessionPlayers"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_DISTANT_BATTLE_UNITS,getFlag(effectProps,"Effect_Area_AffectsDistantBattleUnits"));
+    effect.setFlag(AreaEffectFlags.AFFECTS_PLAYER_PETS,getFlag(effectProps,"Effect_Area_AffectsPlayerPets"));
+    effect.setFlag(AreaEffectFlags.CHECK_RANGE_TO_TARGET,getFlag(effectProps,"Effect_Area_CheckRangeToTargets"));
+    // Effects
+    Object[] effectsList=(Object[])effectProps.getProperty("Effect_Area_Applied_Effect_Array");
+    for(Object effectEntry : effectsList)
+    {
+      EffectGenerator generator=loadGenerator((PropertiesSet)effectEntry);
+      effect.addEffect(generator);
+    }
+    // Range
+    Float maxRange=(Float)effectProps.getProperty("Effect_Area_MaxRange");
+    effect.setRange((maxRange!=null)?maxRange.floatValue():0f);
+    // Detection buffer
+    Float detectionBuffer=(Float)effectProps.getProperty("Effect_Area_DetectionBuffer");
+    effect.setDetectionBuffer((detectionBuffer!=null)?detectionBuffer.floatValue():0f);
+    // Max targets
+    Integer maxTargets=(Integer)effectProps.getProperty("Effect_Area_MaxTargets");
+    effect.setMaxTargets((maxTargets!=null)?maxTargets.intValue():0);
+    ModPropertyList maxTargetsMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_Area_MaxTargets_AdditiveModifiers");
+    effect.setMaxTargetsModifiers(maxTargetsMods);
+  }
+
+  private static boolean getFlag(PropertiesSet props, String propertyName)
+  {
+    Integer intValue=(Integer)props.getProperty(propertyName);
+    return ((intValue!=null) && (intValue.intValue()==1));
   }
 
   private Proxy<Effect> buildProxy(Integer effectID)
