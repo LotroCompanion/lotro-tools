@@ -649,8 +649,12 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
         duration=null;
       }
     }
+    // Pulse count
+    // - value
     Integer pulseCountInt=(Integer)effectProps.getProperty("Effect_Duration_ConstantPulseCount");
     int pulseCount=(pulseCountInt!=null)?pulseCountInt.intValue():0;
+    // - modifiers
+    ModPropertyList pulseCountModifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_PulseCount_AdditiveModifiers");
     // Effect_Duration_ConstantInterval_ModifierList:
     //   #1: Effect_ModifierPropertyList_Entry 268457993 (Item_Guardian_ShieldSpikes_Duration)
     // Effect_Duration_ExpiresInRealTime: false, sometimes true.
@@ -663,6 +667,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     EffectDuration ret=new EffectDuration();
     ret.setDuration(duration);
     ret.setPulseCount(pulseCount);
+    ret.setPulseCountModifiers(pulseCountModifiers);
     ret.setExpiresInRealTime(expiresInRealTime);
     return ret;
   }
