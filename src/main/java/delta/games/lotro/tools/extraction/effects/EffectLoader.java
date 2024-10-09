@@ -11,6 +11,7 @@ import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.AreaEffect;
 import delta.games.lotro.common.effects.AreaEffectFlags;
+import delta.games.lotro.common.effects.BaseVitalEffect;
 import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.Effect;
@@ -328,6 +329,7 @@ public class EffectLoader
   private void loadInstantVitalEffect(InstantVitalEffect effect, PropertiesSet effectProps)
   {
     Integer vitalType=(Integer)effectProps.getProperty("Effect_BaseVital_VitalType");
+    loadBaseVitalEffect(effect,vitalType,effectProps);
     VitalChangeDescription description=loadVitalChangeDescription(effectProps,"Effect_InstantVital_InitialChange");
     if (description==null)
     {
@@ -340,9 +342,6 @@ public class EffectLoader
       description.setVPSMultiplier(vpsMultiplier);
     }
     effect.setInstantChangeDescription(description);
-    // Stat
-    StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
-    effect.setStat(stat);
     // Multiplicative?
     Integer multiplicativeInt=(Integer)effectProps.getProperty("Effect_InstantVital_Multiplicative");
     boolean multiplicative=((multiplicativeInt!=null)&&(multiplicativeInt.intValue()==1));
@@ -364,10 +363,12 @@ Effect_VitalOverTime_VitalType: 1 (Morale)
 Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
  */
     Integer vitalType=(Integer)effectProps.getProperty("Effect_VitalOverTime_VitalType");
+    loadBaseVitalEffect(effect,vitalType,effectProps);
+    // Initial change
     VitalChangeDescription initialChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_InitialChange");
     if (initialChange==null)
     {
-      LOGGER.warn("No value data for vital change!");
+      LOGGER.info("No initial change!");
     }
     else
     {
@@ -376,6 +377,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
       initialChange.setVPSMultiplier(vpsMultiplier);
     }
     effect.setInitialChangeDescription(initialChange);
+    // Over Time change
     VitalChangeDescription overTimeChange=loadVitalChangeDescription(effectProps,"Effect_VitalOverTime_ChangePerInterval");
     if (overTimeChange==null)
     {
@@ -388,6 +390,10 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
       overTimeChange.setVPSMultiplier(vpsMultiplier);
     }
     effect.setOverTimeChangeDescription(overTimeChange);
+  }
+
+  private void loadBaseVitalEffect(BaseVitalEffect effect, Integer vitalType, PropertiesSet effectProps)
+  {
     // Stat
     StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
     effect.setStat(stat);
