@@ -13,6 +13,7 @@ import delta.games.lotro.common.effects.AreaEffect;
 import delta.games.lotro.common.effects.AreaEffectFlags;
 import delta.games.lotro.common.effects.BaseVitalEffect;
 import delta.games.lotro.common.effects.ComboEffect;
+import delta.games.lotro.common.effects.CountDownEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectAndProbability;
@@ -184,7 +185,7 @@ public class EffectLoader
   {
     // Effect PropertyModificationEffect (734) and child classes
     // except those explicitly handled later
-    if ((classDef==734) || (classDef==713) || (classDef==3222) ||
+    if ((classDef==734) || (classDef==3222) ||
         (classDef==716) || (classDef==717) || (classDef==752) ||
         (classDef==753) || (classDef==739) || (classDef==748) ||
         (classDef==764) || (classDef==780) || (classDef==2156) ||
@@ -207,6 +208,7 @@ public class EffectLoader
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
     else if (classDef==2762) return new AreaEffect();
+    else if (classDef==713) return new CountDownEffect();
     return new Effect();
   }
 
@@ -267,6 +269,10 @@ public class EffectLoader
     else if (effect instanceof AreaEffect)
     {
       loadAreaEffect((AreaEffect)effect,effectProps);
+    }
+    else if (effect instanceof CountDownEffect)
+    {
+      loadCountDownEffect((CountDownEffect)effect,effectProps);
     }
   }
 
@@ -598,6 +604,29 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     if ((range!=null) && (range.floatValue()>0))
     {
       effect.setRange(range.floatValue());
+    }
+  }
+
+  private void loadCountDownEffect(CountDownEffect effect, PropertiesSet effectProps)
+  {
+    loadPropertyModificationEffect(effect,effectProps);
+    // 'on expire' effects
+    Object[] expireEffectsList=(Object[])effectProps.getProperty("EffectGenerator_Countdown_ExpireEffectList");
+    if (expireEffectsList!=null)
+    {
+      for(Object entry : expireEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps);
+        effect.addOnExpireEffect(generator);
+      }
+    }
+    // 'on removal' effect
+    PropertiesSet onRemovalProps=(PropertiesSet)effectProps.getProperty("EffectGenerator_OnRemoval_Effect");
+    if (onRemovalProps!=null)
+    {
+      EffectGenerator generator=loadGenerator(onRemovalProps);
+      effect.setOnRemovalEffect(generator);
     }
   }
 
