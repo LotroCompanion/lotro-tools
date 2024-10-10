@@ -107,7 +107,6 @@ public class EffectLoader
     if (ret==null)
     {
       ret=loadEffect(effectId);
-      _effectsMgr.addEffect(ret);
     }
     return ret;
   }
@@ -132,6 +131,7 @@ public class EffectLoader
     int classIndex=BufferUtils.getDoubleWordAt(data,4);
     Effect ret=buildEffect(classIndex);
     ret.setId(effectId);
+    _effectsMgr.addEffect(ret);
     // Name
     String effectName=_i18nUtils.getNameStringProperty(effectProps,"Effect_Name",effectId,0);
     ret.setName(effectName);
@@ -222,6 +222,10 @@ public class EffectLoader
     {
       loadReactiveVitalEffect((ReactiveVitalEffect)effect,effectProps);
     }
+    else if (effect instanceof CountDownEffect)
+    {
+      loadCountDownEffect((CountDownEffect)effect,effectProps);
+    }
     else if (effect instanceof PropertyModificationEffect)
     {
       loadPropertyModificationEffect((PropertyModificationEffect)effect,effectProps);
@@ -269,10 +273,6 @@ public class EffectLoader
     else if (effect instanceof AreaEffect)
     {
       loadAreaEffect((AreaEffect)effect,effectProps);
-    }
-    else if (effect instanceof CountDownEffect)
-    {
-      loadCountDownEffect((CountDownEffect)effect,effectProps);
     }
   }
 
