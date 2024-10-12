@@ -58,6 +58,7 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
@@ -176,7 +177,10 @@ public class SkillDetailsLoader
 
     // Cooldown
     Float skillRecoveryTime=(Float)props.getProperty("Skill_SkillRecoveryTime");
-    ret.setCooldown(skillRecoveryTime);
+    if ((skillRecoveryTime!=null) && (skillRecoveryTime.floatValue()>0))
+    {
+      ret.setCooldown(skillRecoveryTime);
+    }
 
     // Skill flags
     // Fast?
@@ -215,10 +219,16 @@ public class SkillDetailsLoader
 
     // Resist
     Integer resistCategoryCode=(Integer)props.getProperty("Skill_Resist_Category");
-    if (resistCategoryCode!=null)
+    if ((resistCategoryCode!=null) && (resistCategoryCode.intValue()!=0))
     {
-      ResistCategory resistCategory=_resistCategoryEnum.getEntry(resistCategoryCode.intValue());
+      BitSet resistCategoryBitSet=BitSetUtils.getBitSetFromFlags(resistCategoryCode.intValue());
+      List<ResistCategory> resistCategories=_resistCategoryEnum.getFromBitSet(resistCategoryBitSet);
+      ResistCategory resistCategory=resistCategories.get(0);
       ret.setResistCategory(resistCategory);
+      if (resistCategories.size()!=1)
+      {
+        LOGGER.warn("Bad number of resist categories: {}", resistCategories);
+      }
     }
     // Display type(s)
     BitSet displayTypesBitSet=(BitSet)props.getProperty("Skill_DisplaySkillType");
