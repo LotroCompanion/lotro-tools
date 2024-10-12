@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.effects.ApplicationProbability;
+import delta.games.lotro.common.effects.ApplyOverTimeEffect;
 import delta.games.lotro.common.effects.AreaEffect;
 import delta.games.lotro.common.effects.AreaEffectFlags;
 import delta.games.lotro.common.effects.BaseVitalEffect;
@@ -209,6 +210,7 @@ public class EffectLoader
     else if (classDef==3866) return new TieredEffect();
     else if (classDef==2762) return new AreaEffect();
     else if (classDef==713) return new CountDownEffect();
+    else if (classDef==708) return new ApplyOverTimeEffect();
     return new Effect();
   }
 
@@ -273,6 +275,10 @@ public class EffectLoader
     else if (effect instanceof AreaEffect)
     {
       loadAreaEffect((AreaEffect)effect,effectProps);
+    }
+    else if (effect instanceof ApplyOverTimeEffect)
+    {
+      loadApplyOverTimeEffect((ApplyOverTimeEffect)effect,effectProps);
     }
   }
 
@@ -627,6 +633,32 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     {
       EffectGenerator generator=loadGenerator(onRemovalProps);
       effect.setOnRemovalEffect(generator);
+    }
+  }
+
+  private void loadApplyOverTimeEffect(ApplyOverTimeEffect effect, PropertiesSet effectProps)
+  {
+    // 'initially applied' effects
+    Object[] initiallyAppliedEffectsList=(Object[])effectProps.getProperty("Effect_ApplyOverTime_Initial_Applied_Effect_Array");
+    if (initiallyAppliedEffectsList!=null)
+    {
+      for(Object entry : initiallyAppliedEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps,"Effect_ApplyOverTime_Applied_Effect","Effect_ApplyOverTime_Applied_Effect_Spellcraft");
+        effect.addInitiallyAppliedEffect(generator);
+      }
+    }
+    // 'applied' effects
+    Object[] appliedEffectsList=(Object[])effectProps.getProperty("Effect_ApplyOverTime_Applied_Effect_Array");
+    if (appliedEffectsList!=null)
+    {
+      for(Object entry : appliedEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps,"Effect_ApplyOverTime_Applied_Effect","Effect_ApplyOverTime_Applied_Effect_Spellcraft");
+        effect.addAppliedEffect(generator);
+      }
     }
   }
 
