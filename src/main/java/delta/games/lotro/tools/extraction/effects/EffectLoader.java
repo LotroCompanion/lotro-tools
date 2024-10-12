@@ -19,6 +19,7 @@ import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
+import delta.games.lotro.common.effects.EffectFlags;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.EffectsManager;
 import delta.games.lotro.common.effects.GenesisEffect;
@@ -174,6 +175,19 @@ public class EffectLoader
         }
       }
     }
+    // Flags
+    ret.setBaseFlag(EffectFlags.DEBUFF,getFlag(effectProps,"Effect_Debuff"));
+    ret.setBaseFlag(EffectFlags.HARMFUL,getFlag(effectProps,"Effect_Harmful"));
+    ret.setBaseFlag(EffectFlags.CURABLE,getFlag(effectProps,"Effect_IsCurable"));
+    ret.setBaseFlag(EffectFlags.REMOVAL_ONLY_IN_COMBAT,getFlag(effectProps,"Effect_RemovalOnlyInCombat"));
+    ret.setBaseFlag(EffectFlags.REMOVE_ON_AWAKEN,getFlag(effectProps,"Effect_RemoveOnAwaken"));
+    ret.setBaseFlag(EffectFlags.REMOVE_ON_DEFEAT,getFlag(effectProps,"Effect_RemoveOnDefeat"));
+    ret.setBaseFlag(EffectFlags.REMOVE_ON_PULSE_RESIST,getFlag(effectProps,"Effect_RemoveOnPulseResist"));
+    ret.setBaseFlag(EffectFlags.SEND_TO_CLIENT,getFlag(effectProps,"Effect_SentToClient"));
+    ret.setBaseFlag(EffectFlags.UI_VISIBLE,getFlag(effectProps,"Effect_UIVisible"));
+    ret.setBaseFlag(EffectFlags.DURATION_COMBAT_ONLY,getFlag(effectProps,"Effect_Duration_CombatOnly"));
+    ret.setBaseFlag(EffectFlags.DURATION_EXPIRES_IN_REAL_TIME,getFlag(effectProps,"Effect_Duration_ExpiresInRealTime"));
+    ret.setBaseFlag(EffectFlags.DURATION_PERMANENT,getFlag(effectProps,"Effect_Duration_Permanent"));
     return ret;
   }
 
@@ -718,9 +732,6 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     ModPropertyList pulseCountModifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_PulseCount_AdditiveModifiers");
     // Effect_Duration_ConstantInterval_ModifierList:
     //   #1: Effect_ModifierPropertyList_Entry 268457993 (Item_Guardian_ShieldSpikes_Duration)
-    // Effect_Duration_ExpiresInRealTime: false, sometimes true.
-    Integer expiresInRealTimeInt=(Integer)effectProps.getProperty("Effect_Duration_ExpiresInRealTime");
-    boolean expiresInRealTime=((expiresInRealTimeInt!=null)&&(expiresInRealTimeInt.intValue()==1));
     // Effect_Duration_Permanent: always 1 (true) when set. Only for legacies?
     // Effect_Duration_CombatOnly: always 0 (false)?
     // Effect_Duration_ProgressionInterval: unused?
@@ -729,7 +740,6 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     ret.setDuration(duration);
     ret.setPulseCount(pulseCount);
     ret.setPulseCountModifiers(pulseCountModifiers);
-    ret.setExpiresInRealTime(expiresInRealTime);
     return ret;
   }
 
