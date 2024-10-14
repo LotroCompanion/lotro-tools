@@ -862,6 +862,9 @@ WeenieType: 262145 (Hotspot)
       LinearFunction function=loadLinearFunction(durationProps);
       effect.setDurationFunction(function);
     }
+    // Duration modifiers
+    ModPropertyList durationMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_StateDuration_ModProp_List");
+    effect.setDurationModifiers(durationMods);
     // Combat state
     Integer bitSetValueInt=(Integer)effectProps.getProperty("Effect_InduceCombatState_StateToInduce");
     if (bitSetValueInt!=null)
@@ -877,11 +880,35 @@ WeenieType: 262145 (Hotspot)
       CombatState state=states.get(0);
       effect.setCombatState(state);
     }
-    // Grace period:
-    // TODO
-    // Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override: 1.0
-    // 100% break chance on harm after 1s
-    // 3% break chance on damage after 1s
+    // Break on harm
+    // Ex: 100% break chance on harm after 1s
+    Float breakOnHarmfullSkill=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOnHarmfulSkill_Override");
+    if (breakOnHarmfullSkill!=null)
+    {
+      System.out.println("Break on harmfull skill: "+breakOnHarmfullSkill);
+      ModPropertyList breakOnHarmfullSkillMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOnHarmfulSkill_ModProp_List");
+      if (breakOnHarmfullSkillMods!=null)
+      {
+        System.out.println("=> modifiers: "+breakOnHarmfullSkillMods);
+      }
+    }
+    // Break on vital loss
+    // Ex: 3% break chance on damage after 1s
+    Float breakOnVitalLoss=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOnVitalLossProb_Override");
+    if (breakOnVitalLoss!=null)
+    {
+      System.out.println("Break on vital loss: "+breakOnVitalLoss);
+      ModPropertyList breakOnVitalLossMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOnVitalLoss_ModProp_List");
+      if (breakOnVitalLossMods!=null)
+      {
+        System.out.println("=> modifiers: "+breakOnVitalLossMods);
+      }
+    }
+    // Grace period
+    Float gracePeriod=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override");
+    effect.setGracePeriod(gracePeriod);
+    ModPropertyList gracePeriodMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override_ModifierList");
+    effect.setGracePeriodModifiers(gracePeriodMods);
   }
 
   private LinearFunction loadLinearFunction(PropertiesSet props)
