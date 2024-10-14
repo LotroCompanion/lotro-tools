@@ -181,6 +181,8 @@ public class SkillDetailsLoader
     {
       ret.setCooldown(skillRecoveryTime);
     }
+    ModPropertyList cooldownMods=ModifiersUtils.getStatModifiers(props,"Skill_SkillRecoveryTime_Mod_Array");
+    ret.setCooldownMods(cooldownMods);
 
     // Skill flags
     // Fast?
