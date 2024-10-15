@@ -618,6 +618,10 @@ public class SkillDetailsLoader
           mgr.addEffect(generator);
         }
       }
+      else
+      {
+        break;
+      }
     }
   }
 
