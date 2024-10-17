@@ -354,7 +354,7 @@ public class DatStatUtils
         ret=DatStringUtils.getString(propertyValue);
       }
     }
-    if (ret==null)
+    if ((ret==null) || (ret.isEmpty()))
     {
       if (statProperties.hasProperty(MOD_DESCRIPTION_OVERRIDE))
       {
