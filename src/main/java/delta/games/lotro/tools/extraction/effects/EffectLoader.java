@@ -883,27 +883,15 @@ WeenieType: 262145 (Hotspot)
     // Break on harm
     // Ex: 100% break chance on harm after 1s
     Float breakOnHarmfullSkill=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOnHarmfulSkill_Override");
-    if (breakOnHarmfullSkill!=null)
-    {
-      System.out.println("Break on harmfull skill: "+breakOnHarmfullSkill);
-      ModPropertyList breakOnHarmfullSkillMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOnHarmfulSkill_ModProp_List");
-      if (breakOnHarmfullSkillMods!=null)
-      {
-        System.out.println("=> modifiers: "+breakOnHarmfullSkillMods);
-      }
-    }
-    // Break on vital loss
-    // Ex: 3% break chance on damage after 1s
+    effect.setBreakOnHarmfullSkill(breakOnHarmfullSkill);
+    // No modifiers: Effect_CombatState_Induce_BreakOnHarmfulSkill_ModProp_List
+    // Break on vital loss. Ex: 3% break chance on damage after 1s
+    // - value
     Float breakOnVitalLoss=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOnVitalLossProb_Override");
-    if (breakOnVitalLoss!=null)
-    {
-      System.out.println("Break on vital loss: "+breakOnVitalLoss);
-      ModPropertyList breakOnVitalLossMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOnVitalLoss_ModProp_List");
-      if (breakOnVitalLossMods!=null)
-      {
-        System.out.println("=> modifiers: "+breakOnVitalLossMods);
-      }
-    }
+    effect.setBreakOnVitalLossProbability(breakOnVitalLoss);
+    // - modifiers
+    ModPropertyList breakOnVitalLossMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_CombatState_Induce_BreakOnVitalLoss_ModProp_List");
+    effect.setBreakOnVitalLossProbabilityModifiers(breakOnVitalLossMods);
     // Grace period
     Float gracePeriod=(Float)effectProps.getProperty("Effect_CombatState_Induce_BreakOutOfState_GracePeriod_Override");
     effect.setGracePeriod(gracePeriod);
