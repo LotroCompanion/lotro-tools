@@ -68,7 +68,11 @@ public class MainDatCombatLoader
   private void handleWeaponStrikeModifiers(PropertiesSet props)
   {
     Object[] entryArray=(Object[])props.getProperty("Combat_Control_WeaponStrikeModifierList");
-    
+    if (entryArray==null)
+    {
+      // SOA case!
+      return;
+    }
     LotroEnum<WeaponType> weapontypeEnum=LotroEnumsRegistry.getInstance().get(WeaponType.class);
     WeaponStrikeModifiersManager mgr=_data.getWeaponStrikeModifiersMgr();
     for(Object entryObject : entryArray)

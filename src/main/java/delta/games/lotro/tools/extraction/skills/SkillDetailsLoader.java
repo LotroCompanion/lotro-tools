@@ -54,10 +54,12 @@ import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.inductions.Induction;
 import delta.games.lotro.common.inductions.io.xml.InductionXMLWriter;
 import delta.games.lotro.common.properties.ModPropertyList;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.DamageType;
@@ -321,7 +323,10 @@ public class SkillDetailsLoader
       Arc arc=new Arc();
       arc.setRadius(arcRadius.floatValue());
       Float degrees=(Float)props.getProperty("Skill_AEDetectionVolume_ArcDegrees");
-      arc.setDegrees(degrees.floatValue());
+      if (degrees!=null)
+      {
+        arc.setDegrees(degrees.floatValue());
+      }
       Float heading=(Float)props.getProperty("Skill_AEDetectionVolume_HeadingOffset");
       arc.setHeadingOffset(heading);
       ret.setShape(arc);
@@ -737,6 +742,7 @@ public class SkillDetailsLoader
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     PlacesLoader placesLoader=new PlacesLoader(facade);
     EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
