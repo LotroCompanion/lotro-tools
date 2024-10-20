@@ -3,10 +3,9 @@
 
 	<jmxConfigurator />
 
-	<contextName>LC</contextName>
+	<contextName>LC TOOLS</contextName>
 
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
-	<contextListener class="delta.games.lotro.utils.logback.LoggerStartupListener"/>
 
 	<property name="LOG_DIR" value="logs" />
 	<property name="LOG_FILENAME" value="${LOG_DIR}/tools" />
