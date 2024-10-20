@@ -178,9 +178,9 @@ public class EffectLoader
     // Flags
     ret.setBaseFlag(EffectFlags.DEBUFF,getFlag(effectProps,"Effect_Debuff"));
     ret.setBaseFlag(EffectFlags.HARMFUL,getFlag(effectProps,"Effect_Harmful"));
-    ret.setBaseFlag(EffectFlags.CURABLE,getFlag(effectProps,"Effect_IsCurable"));
-    ret.setBaseFlag(EffectFlags.REMOVAL_ONLY_IN_COMBAT,getFlag(effectProps,"Effect_RemovalOnlyInCombat"));
-    ret.setBaseFlag(EffectFlags.REMOVE_ON_AWAKEN,getFlag(effectProps,"Effect_RemoveOnAwaken"));
+    ret.setBaseFlag(EffectFlags.CURABLE,getFlag(effectProps,"Effect_IsCurable",true));
+    ret.setBaseFlag(EffectFlags.REMOVAL_ONLY_IN_COMBAT,getFlag(effectProps,"Effect_RemovalOnlyInCombat",true));
+    ret.setBaseFlag(EffectFlags.REMOVE_ON_AWAKEN,getFlag(effectProps,"Effect_RemoveOnAwaken",true));
     ret.setBaseFlag(EffectFlags.REMOVE_ON_DEFEAT,getFlag(effectProps,"Effect_RemoveOnDefeat"));
     ret.setBaseFlag(EffectFlags.REMOVE_ON_PULSE_RESIST,getFlag(effectProps,"Effect_RemoveOnPulseResist"));
     ret.setBaseFlag(EffectFlags.SEND_TO_CLIENT,getFlag(effectProps,"Effect_SentToClient"));
@@ -188,6 +188,7 @@ public class EffectLoader
     ret.setBaseFlag(EffectFlags.DURATION_COMBAT_ONLY,getFlag(effectProps,"Effect_Duration_CombatOnly"));
     ret.setBaseFlag(EffectFlags.DURATION_EXPIRES_IN_REAL_TIME,getFlag(effectProps,"Effect_Duration_ExpiresInRealTime"));
     ret.setBaseFlag(EffectFlags.DURATION_PERMANENT,getFlag(effectProps,"Effect_Duration_Permanent"));
+    ret.setBaseFlag(EffectFlags.AUTO_EXAMINATION,getFlag(effectProps,"Effect_Display_Procedurally_Generated_Examination_Information",true));
     return ret;
   }
 
@@ -1150,8 +1151,17 @@ Effect_Area_MaxTargets_AdditiveModifiers:
 
   private static boolean getFlag(PropertiesSet props, String propertyName)
   {
+    return getFlag(props,propertyName,false);
+  }
+
+  private static boolean getFlag(PropertiesSet props, String propertyName, boolean defaultValue)
+  {
     Integer intValue=(Integer)props.getProperty(propertyName);
-    return ((intValue!=null) && (intValue.intValue()==1));
+    if (intValue!=null)
+    {
+      return (intValue.intValue()==1);
+    }
+    return defaultValue;
   }
 
   private Proxy<Effect> buildProxy(Integer effectID)
