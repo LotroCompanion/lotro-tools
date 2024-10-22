@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -239,7 +238,7 @@ public class SkillDetailsLoader
     if (displayTypesBitSet!=null)
     {
       List<SkillDisplayType> displayTypes=_skillDisplayTypeEnum.getFromBitSet(displayTypesBitSet);
-      ret.setDisplayTypes(new HashSet<SkillDisplayType>(displayTypes));
+      ret.setDisplayTypes(displayTypes);
     }
 
     SkillEffectsManager mgr=new SkillEffectsManager();
