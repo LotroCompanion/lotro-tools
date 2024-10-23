@@ -717,6 +717,8 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
 
   private EffectDuration getDuration(PropertiesSet effectProps)
   {
+    // Constant duration
+    // - value
     Float duration=(Float)effectProps.getProperty("Effect_Duration_ConstantInterval");
     if (duration!=null)
     {
@@ -725,20 +727,19 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
         duration=null;
       }
     }
+    // - modifiers
+    ModPropertyList durationModifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_Duration_ConstantInterval_ModifierList");
     // Pulse count
     // - value
     Integer pulseCountInt=(Integer)effectProps.getProperty("Effect_Duration_ConstantPulseCount");
     int pulseCount=(pulseCountInt!=null)?pulseCountInt.intValue():0;
     // - modifiers
     ModPropertyList pulseCountModifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_PulseCount_AdditiveModifiers");
-    // Effect_Duration_ConstantInterval_ModifierList:
-    //   #1: Effect_ModifierPropertyList_Entry 268457993 (Item_Guardian_ShieldSpikes_Duration)
-    // Effect_Duration_Permanent: always 1 (true) when set. Only for legacies?
-    // Effect_Duration_CombatOnly: always 0 (false)?
     // Effect_Duration_ProgressionInterval: unused?
     // Effect_Duration_ProgressionPulseCount: unused?
     EffectDuration ret=new EffectDuration();
     ret.setDuration(duration);
+    ret.setDurationModifiers(durationModifiers);
     ret.setPulseCount(pulseCount);
     ret.setPulseCountModifiers(pulseCountModifiers);
     return ret;
