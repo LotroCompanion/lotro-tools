@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.common.stats.ConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
@@ -205,6 +206,7 @@ public class DatStatUtils
     }
     // Constant MULTIPLY on a percentage stat (e.g: CombatStateMod_CC_DurationMultModifier)
     boolean isPercentage=stat.isPercentage();
+    ModPropertyList modifiers=provider.getModifiers();
     StatOperator operator=provider.getOperator();
     boolean isConstant=(provider instanceof ConstantStatProvider);
     if ((isPercentage) && (isConstant) && (operator==StatOperator.MULTIPLY))
@@ -224,6 +226,7 @@ public class DatStatUtils
       provider=new ConstantStatProvider(stat,value);
       provider.setOperator(operator);
       provider.setDescriptionOverride(descriptionOverride);
+      provider.setModifiers(modifiers);
     }
     return provider;
   }
@@ -281,6 +284,8 @@ public class DatStatUtils
     Integer modOp=(Integer)statProperties.getProperty("Mod_Op");
     StatOperator operator=getOperator(modOp);
 
+    // Modifiers
+    ModPropertyList modifiers=ModifiersUtils.getStatModifiers(statProperties,"Mod_ModifierList");
     Number value=null;
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
@@ -294,7 +299,7 @@ public class DatStatUtils
       {
         value=(Number)propValue;
         float statValue=value.floatValue();
-        if (Math.abs(statValue)>0.001)
+        if ((modifiers!=null) || (Math.abs(statValue)>0.001))
         {
           if (operator!=StatOperator.MULTIPLY)
           {
@@ -311,6 +316,7 @@ public class DatStatUtils
     if (provider!=null)
     {
       provider.setOperator(operator);
+      provider.setModifiers(modifiers);
     }
     return provider;
   }

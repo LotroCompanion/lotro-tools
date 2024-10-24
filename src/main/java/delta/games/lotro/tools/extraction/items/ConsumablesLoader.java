@@ -191,6 +191,7 @@ public class ConsumablesLoader
             ConstantStatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
             consumableProvider.setOperator(provider.getOperator());
             consumableProvider.setDescriptionOverride(provider.getDescriptionOverride());
+            consumableProvider.setModifiers(provider.getModifiers());
             consumableStatsProvider.addStatProvider(consumableProvider);
           }
           else
