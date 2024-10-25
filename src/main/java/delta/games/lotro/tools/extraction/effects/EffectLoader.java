@@ -620,6 +620,13 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     {
       effect.setAppliesToTarget(target.intValue()==1);
     }
+    // String override
+    String rawOverride=DatStringUtils.getStringProperty(effectProps,"Effect_InstantFellowship_StringOverrideForFellowship");
+    if ((rawOverride!=null) && (!rawOverride.isEmpty()))
+    {
+      String override=_i18nUtils.getStringProperty(effectProps,"Effect_InstantFellowship_StringOverrideForFellowship");
+      effect.setFellowshipStringOverride(override);
+    }
     // Range
     Float range=(Float)effectProps.getProperty("Effect_InstantFellowship_MaxRange");
     if ((range!=null) && (range.floatValue()>0))
