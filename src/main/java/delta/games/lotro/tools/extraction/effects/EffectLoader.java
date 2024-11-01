@@ -705,7 +705,7 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
   private ApplicationProbability getProbability(PropertiesSet effectProps)
   {
     Float probabilityFloat=(Float)effectProps.getProperty("Effect_ConstantApplicationProbability");
-    float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():0;
+    float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():1.0f;
     Float varianceFloat=(Float)effectProps.getProperty("Effect_ApplicationProbabilityVariance");
     float variance=(varianceFloat!=null)?varianceFloat.floatValue():0;
     Integer modPropertyInt=(Integer)effectProps.getProperty("Effect_ApplicationProbability_AdditiveModProp");
