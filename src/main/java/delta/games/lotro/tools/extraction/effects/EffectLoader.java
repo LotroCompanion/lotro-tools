@@ -373,6 +373,12 @@ public class EffectLoader
     Integer multiplicativeInt=(Integer)effectProps.getProperty("Effect_InstantVital_Multiplicative");
     boolean multiplicative=((multiplicativeInt!=null)&&(multiplicativeInt.intValue()==1));
     effect.setMultiplicative(multiplicative);
+    // Initial change multiplier
+    Float multiplier=(Float)effectProps.getProperty("Effect_BaseVital_InitialChangeMultiplier");
+    if ((multiplier!=null) && (multiplier.floatValue()>0))
+    {
+      effect.setInitialChangeMultiplier(multiplier);
+    }
   }
 
   private void loadVitalOverTimeEffect(VitalOverTimeEffect effect, PropertiesSet effectProps)
