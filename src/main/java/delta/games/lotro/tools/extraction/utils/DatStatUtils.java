@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.properties.ModPropertyList;
 import delta.games.lotro.common.stats.ConstantStatProvider;
+import delta.games.lotro.common.stats.GenericConstantStatProvider;
 import delta.games.lotro.common.stats.RangedStatProvider;
 import delta.games.lotro.common.stats.ScalableStatProvider;
 import delta.games.lotro.common.stats.SpecialEffect;
@@ -23,13 +24,13 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.tools.reports.StatsUsageStatistics;
 import delta.games.lotro.utils.maths.Progression;
+import delta.games.lotro.values.EnumValue;
 
 /**
  * Utility methods related to stats from DAT files.
@@ -143,7 +144,7 @@ public class DatStatUtils
           {
             if (!Objects.equals(provider.getDescriptionOverride(),rangedProvider.getDescriptionOverride()))
             {
-              LOGGER.warn("Description override mismatch: ["+provider.getDescriptionOverride()+"],["+rangedProvider.getDescriptionOverride()+")");
+              LOGGER.warn("Description override mismatch: [{}],[{}]",provider.getDescriptionOverride(), rangedProvider.getDescriptionOverride());
             }
           }
           rangedProvider.addRange(minLevel,maxLevel,provider);
@@ -186,6 +187,7 @@ public class DatStatUtils
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   private StatProvider handleSpecificCases(StatProvider provider, StatsProvider statsProvider, String descriptionOverride)
   {
     StatDescription stat=provider.getStat();
@@ -195,7 +197,7 @@ public class DatStatUtils
       String label=descriptionOverride;
       if (descriptionOverride==null)
       {
-        label=handleSpecialStat((ConstantStatProvider)provider);
+        label=handleSpecialStat((GenericConstantStatProvider<EnumValue>)provider);
       }
       if (!StatUtils.NO_DESCRIPTION.equals(label))
       {
@@ -240,13 +242,13 @@ public class DatStatUtils
     return false;
   }
 
-  private String handleSpecialStat(ConstantStatProvider provider)
+  private String handleSpecialStat(GenericConstantStatProvider<EnumValue> provider)
   {
     StatDescription stat=provider.getStat();
     String statName=stat.getName();
-    float value=provider.getValue();
+    EnumValue value=provider.getRawValue();
     EnumMapper mapper=_facade.getEnumsManager().getEnumMapper(587202600);
-    String valueName=mapper.getLabel((int)value);
+    String valueName=mapper.getLabel(value.getValue().intValue());
     String result="Set "+statName+" to "+valueName;
     return result;
   }
@@ -272,12 +274,7 @@ public class DatStatUtils
     StatDescription stat=getStatDescription(def);
     if (stat==null)
     {
-      LOGGER.warn("Unknown stat: "+def.getName());
-      return null;
-    }
-    boolean useStat=useStat(def);
-    if (!useStat)
-    {
+      LOGGER.warn("Unknown stat: {}",def.getName());
       return null;
     }
     // Operator (often 7 for "add")
@@ -286,7 +283,6 @@ public class DatStatUtils
 
     // Modifiers
     ModPropertyList modifiers=ModifiersUtils.getStatModifiers(statProperties,"Mod_ModifierList");
-    Number value=null;
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
     {
@@ -295,22 +291,28 @@ public class DatStatUtils
     else
     {
       Object propValue=statProperties.getProperty(def.getName());
-      if (propValue instanceof Number)
+      if (propValue!=null)
       {
-        value=(Number)propValue;
-        float statValue=value.floatValue();
-        if ((modifiers!=null) || (Math.abs(statValue)>0.001))
+        Object statValue=StatValueConverter.convertStatValue(def.getPropertyType(),propValue);
+        if ((statValue instanceof Float) || (statValue instanceof Integer))
         {
-          if (operator!=StatOperator.MULTIPLY)
+          Number value=(Number)statValue;
+          float floatValue=value.floatValue();
+          if ((modifiers!=null) || (Math.abs(floatValue)>0.001))
           {
-            statValue=StatUtils.fixStatValue(stat,statValue);
+            if (operator!=StatOperator.MULTIPLY)
+            {
+              floatValue=StatUtils.fixStatValue(stat,floatValue);
+            }
+            provider=new ConstantStatProvider(stat,floatValue);
           }
-          provider=new ConstantStatProvider(stat,statValue);
         }
-      }
-      else
-      {
-        LOGGER.warn("Property value is not a Number: "+stat);
+        else
+        {
+          GenericConstantStatProvider<Object> genericConstantProvider=new GenericConstantStatProvider<Object>(stat);
+          genericConstantProvider.setRawValue(statValue);
+          provider=genericConstantProvider;
+        }
       }
     }
     if (provider!=null)
@@ -334,7 +336,7 @@ public class DatStatUtils
     if (modOp==6) return StatOperator.SUBSTRACT;
     if (modOp==7) return StatOperator.ADD;
     if (modOp==8) return StatOperator.MULTIPLY;
-    LOGGER.warn("Unmanaged operator: "+modOp);
+    LOGGER.warn("Unmanaged operator: {}",Integer.valueOf(modOp));
     // 1 => Difference
     // 2 => Divide
     // 3 => Or
@@ -420,17 +422,6 @@ public class DatStatUtils
   private static StatDescription getStatDescription(PropertyDefinition propertyDefinition)
   {
     return delta.games.lotro.utils.dat.DatStatUtils.getStatDescription(propertyDefinition.getPropertyId(),propertyDefinition.getName());
-  }
-
-  private static boolean useStat(PropertyDefinition def)
-  {
-    PropertyType type=def.getPropertyType();
-    if ((type==PropertyType.BIT_FIELD32) || (type==PropertyType.DATA_FILE) ||
-        (type==PropertyType.ARRAY) || (type==PropertyType.BOOLEAN))
-    {
-      return false;
-    }
-    return true;
   }
 
   /**

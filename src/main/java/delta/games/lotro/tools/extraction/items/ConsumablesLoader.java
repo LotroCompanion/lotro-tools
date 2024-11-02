@@ -184,10 +184,14 @@ public class ConsumablesLoader
         if (entry instanceof StatProvider)
         {
           StatProvider provider=(StatProvider)entry;
+          Float value=null;
           if (level!=0)
           {
+            value=provider.getStatValue(1,level);
+          }
+          if (value!=null)
+          {
             StatDescription stat=provider.getStat();
-            Float value=provider.getStatValue(1,level);
             ConstantStatProvider consumableProvider=new ConstantStatProvider(stat,value.floatValue());
             consumableProvider.setOperator(provider.getOperator());
             consumableProvider.setDescriptionOverride(provider.getDescriptionOverride());
