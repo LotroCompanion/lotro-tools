@@ -24,13 +24,11 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
-import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.tools.reports.StatsUsageStatistics;
 import delta.games.lotro.utils.maths.Progression;
-import delta.games.lotro.values.EnumValue;
 
 /**
  * Utility methods related to stats from DAT files.
@@ -187,25 +185,9 @@ public class DatStatUtils
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   private StatProvider handleSpecificCases(StatProvider provider, StatsProvider statsProvider, String descriptionOverride)
   {
     StatDescription stat=provider.getStat();
-    if (isSpecialStat(stat))
-    {
-      // Special case for special stats like "Item_Minstrel_Oathbreaker_Damagetype"
-      String label=descriptionOverride;
-      if (descriptionOverride==null)
-      {
-        label=handleSpecialStat((GenericConstantStatProvider<EnumValue>)provider);
-      }
-      if (!StatUtils.NO_DESCRIPTION.equals(label))
-      {
-        SpecialEffect effect=new SpecialEffect(label);
-        statsProvider.addSpecialEffect(effect);
-      }
-      return null;
-    }
     // Constant MULTIPLY on a percentage stat (e.g: CombatStateMod_CC_DurationMultModifier)
     boolean isPercentage=stat.isPercentage();
     ModPropertyList modifiers=provider.getModifiers();
@@ -231,26 +213,6 @@ public class DatStatUtils
       provider.setModifiers(modifiers);
     }
     return provider;
-  }
-
-  private static boolean isSpecialStat(StatDescription stat)
-  {
-    String statKey=stat.getKey();
-    if ("Item_Minstrel_Oathbreaker_Damagetype".equals(statKey)) return true;
-    if ("Skill_DamageTypeOverride_AllSkillsOverride".equals(statKey)) return true;
-    if ("ForwardSource_Combat_TraitCombo".equals(statKey)) return true;
-    return false;
-  }
-
-  private String handleSpecialStat(GenericConstantStatProvider<EnumValue> provider)
-  {
-    StatDescription stat=provider.getStat();
-    String statName=stat.getName();
-    EnumValue value=provider.getRawValue();
-    EnumMapper mapper=_facade.getEnumsManager().getEnumMapper(587202600);
-    String valueName=mapper.getLabel(value.getValue().intValue());
-    String result="Set "+statName+" to "+valueName;
-    return result;
   }
 
   private StatProvider buildStatProvider(String propsPrefix, PropertiesSet statProperties)
