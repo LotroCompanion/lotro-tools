@@ -18,7 +18,7 @@ public class ModifiersUtils
   public static ModPropertyList getStatModifiers(PropertiesSet props, String statModArrayPropName)
   {
     Object[] statIDObjs=(Object[])props.getProperty(statModArrayPropName);
-    if (statIDObjs == null)
+    if (statIDObjs==null)
     {
       return null;
     }

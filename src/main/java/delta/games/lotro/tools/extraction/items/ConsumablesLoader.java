@@ -250,8 +250,8 @@ public class ConsumablesLoader
     {
       return;
     }
-    SkillEffectGenerator[] effectGenerators=effectsMgr.getEffects();
-    if (effectGenerators.length==0)
+    List<SkillEffectGenerator> effectGenerators=effectsMgr.getEffects();
+    if (effectGenerators.isEmpty())
     {
       return;
     }

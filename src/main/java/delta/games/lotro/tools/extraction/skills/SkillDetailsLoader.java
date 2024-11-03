@@ -22,6 +22,7 @@ import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectType;
+import delta.games.lotro.character.skills.SingleTypeSkillEffectsManager;
 import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillFlags;
 import delta.games.lotro.character.skills.SkillGambitData;
@@ -242,14 +243,11 @@ public class SkillDetailsLoader
     }
 
     SkillEffectsManager mgr=new SkillEffectsManager();
-    getSkillEffectList(props,"Skill_CriticalEffectList",mgr,SkillEffectType.SELF_CRITICAL);
-    getSkillEffectList(props,"Skill_Toggle_Effect_List","Skill_Toggle_Effect_ImplementUsage",mgr,SkillEffectType.TOGGLE);
-    getSkillEffectList(props,"Skill_Toggle_User_Effect_List","Skill_Toggle_User_Effect_ImplementUsage",mgr,SkillEffectType.USER_TOGGLE);
-    getSkillEffectList(props,"Skill_UserEffectList",mgr,SkillEffectType.USER);
-    if (mgr.hasEffects())
-    {
-      ret.setEffects(mgr);
-    }
+    mgr.setEffects(SkillEffectType.SELF_CRITICAL,getSkillEffectList(props,SkillEffectsProperties.CRITICAL));
+    mgr.setEffects(SkillEffectType.TOGGLE,getSkillEffectList(props,SkillEffectsProperties.TOGGLE));
+    mgr.setEffects(SkillEffectType.USER_TOGGLE,getSkillEffectList(props,SkillEffectsProperties.TOGGLE_USER));
+    mgr.setEffects(SkillEffectType.USER,getSkillEffectList(props,SkillEffectsProperties.USER));
+    ret.setEffects(mgr);
 
     SkillCostData costData=new SkillCostData();
     LotroEnum<VitalType> vitalTypeEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
@@ -391,14 +389,11 @@ public class SkillDetailsLoader
 
     // Effects
     SkillEffectsManager mgr=new SkillEffectsManager();
-    getSkillEffectList(attackHookProperties,"Skill_AttackHook_CriticalTargetEffectList",mgr,SkillEffectType.ATTACK_CRITICAL);
-    getSkillEffectList(attackHookProperties,"Skill_AttackHook_PositionalTargetEffectList",mgr,SkillEffectType.ATTACK_POSITIONAL);
-    getSkillEffectList(attackHookProperties,"Skill_AttackHook_SuperCriticalTargetEffectList",mgr,SkillEffectType.ATTACK_SUPERCRITICAL);
-    getSkillEffectList(attackHookProperties,"Skill_AttackHook_TargetEffectList",mgr,SkillEffectType.ATTACK);
-    if (mgr.hasEffects())
-    {
-      ret.setEffects(mgr);
-    }
+    mgr.setEffects(SkillEffectType.ATTACK_CRITICAL,getSkillEffectList(attackHookProperties,SkillEffectsProperties.ATTACK_CRITICAL));
+    mgr.setEffects(SkillEffectType.ATTACK_POSITIONAL,getSkillEffectList(attackHookProperties,SkillEffectsProperties.ATTACK_POSITIONAL));
+    mgr.setEffects(SkillEffectType.ATTACK_SUPERCRITICAL,getSkillEffectList(attackHookProperties,SkillEffectsProperties.ATTACK_SUPERCRITICAL));
+    mgr.setEffects(SkillEffectType.ATTACK,getSkillEffectList(attackHookProperties,SkillEffectsProperties.ATTACK));
+    ret.setEffects(mgr);
 
     // Modifiers
     ModPropertyList dpsMods=ModifiersUtils.getStatModifiers(attackHookProperties,"Skill_AttackHook_DPSAddMod_Mod_Array");
@@ -576,19 +571,33 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private void getSkillEffectList(PropertiesSet props, String skillEffectListPropName, SkillEffectsManager mgr, SkillEffectType type)
+  private SingleTypeSkillEffectsManager getSkillEffectList(PropertiesSet props, SkillEffectsProperties spec)
   {
-    getSkillEffectList(props,skillEffectListPropName,null,mgr,type);
-  }
-
-  private void getSkillEffectList(PropertiesSet props, String skillEffectListPropName, String effectImplementUsagePropName, SkillEffectsManager mgr, SkillEffectType type)
-  {
+    String skillEffectListPropName=spec.getBaseProperty();
     Object[] effectList=(Object[])props.getProperty(skillEffectListPropName);
-    if (effectList==null)
+    String additionalEffectsPropName=spec.getAdditiveModsProperty();
+    ModPropertyList additiveMods=ModifiersUtils.getStatModifiers(props,additionalEffectsPropName);
+    String overridePropName=spec.getOverrideProperty();
+    Integer overridePropertyID=null;
+    if (overridePropName!=null)
     {
-      return;
+      overridePropertyID=(Integer)props.getProperty(overridePropName);
+      if ((overridePropertyID!=null) && (overridePropertyID.intValue()==0))
+      {
+        overridePropertyID=null;
+      }
     }
+    SingleTypeSkillEffectsManager mgr=null;
+    SkillEffectType type=spec.getType();
+    if ((additiveMods!=null) || (overridePropertyID!=null))
+    {
+      mgr=new SingleTypeSkillEffectsManager(type);
+      mgr.setAdditiveModifiers(additiveMods);
+      mgr.setOverridePropertyID(overridePropertyID);
+    }
+    // Implement usage
     ImplementUsageType effectImplementUsage=null;
+    String effectImplementUsagePropName=spec.getImplementUsageProperty();
     if (effectImplementUsagePropName!=null)
     {
       Integer effectImplementUsageCode=(Integer)props.getProperty(effectImplementUsagePropName);
@@ -597,36 +606,41 @@ public class SkillDetailsLoader
         effectImplementUsage=ImplementUsageTypes.getByCode(effectImplementUsageCode.intValue());
       }
     }
-    boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
-    for (Object skillEffectObj : effectList)
+    if (effectList!=null)
     {
-      PropertiesSet effectData=(PropertiesSet)skillEffectObj;
-      SkillEffectGenerator generator;
-      if (toggle)
+      boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
+      for (Object skillEffectObj : effectList)
       {
-        generator=_effectsLoader.loadSkillToggleEffect(effectData);
-      }
-      else
-      {
-        generator=_effectsLoader.loadSkillEffect(effectData);
-      }
-      if (generator!=null)
-      {
-        generator.setType(type);
-        if (effectImplementUsage!=null)
+        PropertiesSet effectData=(PropertiesSet)skillEffectObj;
+        SkillEffectGenerator generator;
+        if (toggle)
         {
-          generator.setImplementUsage(effectImplementUsage);
+          generator=_effectsLoader.loadSkillToggleEffect(effectData);
         }
-        if (mgr!=null)
+        else
         {
+          generator=_effectsLoader.loadSkillEffect(effectData);
+        }
+        if (generator!=null)
+        {
+          generator.setType(type);
+          if (effectImplementUsage!=null)
+          {
+            generator.setImplementUsage(effectImplementUsage);
+          }
+          if (mgr==null)
+          {
+            mgr=new SingleTypeSkillEffectsManager(type);
+          }
           mgr.addEffect(generator);
         }
-      }
-      else
-      {
-        break;
+        else
+        {
+          break;
+        }
       }
     }
+    return mgr;
   }
 
   private SkillVitalCost getVitalCostList(PropertiesSet props, String vitalCostListPropName, VitalType vitalType)
