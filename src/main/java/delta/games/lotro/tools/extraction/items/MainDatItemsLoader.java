@@ -567,7 +567,7 @@ public class MainDatItemsLoader
       Integer armourProgressId=(Integer)properties.getProperty("Item_Armor_Value_Lookup_Table");
       if (armourProgressId!=null)
       {
-        armorStatProvider=_statUtils.buildStatProvider(WellKnownStat.ARMOUR,armourProgressId.intValue());
+        armorStatProvider=_statUtils.buildScalableStatProvider(WellKnownStat.ARMOUR,armourProgressId.intValue());
         /*
         int statsLevel=item.getItemLevelForStats().intValue();
         Float computedArmourValue=armorStatProvider.getStatValue(1,statsLevel);

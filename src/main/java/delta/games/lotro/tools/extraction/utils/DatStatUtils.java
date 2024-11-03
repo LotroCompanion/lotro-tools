@@ -169,23 +169,20 @@ public class DatStatUtils
       }
       StatDescription stat=provider.getStat();
       _statistics.registerStatUsage(stat);
-      provider=handleSpecificCases(provider,statsProvider,descriptionOverride);
+      provider=handleSpecificCases(provider,descriptionOverride);
       return provider;
     }
     // Effect label only
-    if (descriptionOverride!=null)
+    if ((descriptionOverride!=null) && (descriptionOverride.length()>0) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
     {
-      if ((descriptionOverride.length()>0) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
-      {
-        SpecialEffect effect=new SpecialEffect(descriptionOverride);
-        statsProvider.addSpecialEffect(effect);
-      }
+      SpecialEffect effect=new SpecialEffect(descriptionOverride);
+      statsProvider.addSpecialEffect(effect);
     }
     LOGGER.debug("No provider and no override!");
     return null;
   }
 
-  private StatProvider handleSpecificCases(StatProvider provider, StatsProvider statsProvider, String descriptionOverride)
+  private StatProvider handleSpecificCases(StatProvider provider, String descriptionOverride)
   {
     StatDescription stat=provider.getStat();
     // Constant MULTIPLY on a percentage stat (e.g: CombatStateMod_CC_DurationMultModifier)
@@ -217,8 +214,6 @@ public class DatStatUtils
 
   private StatProvider buildStatProvider(String propsPrefix, PropertiesSet statProperties)
   {
-    StatProvider provider=null;
-
     String modifiedPropName="Mod_Modified";
     String progressionPropName="Mod_Progression";
     if (propsPrefix!=null)
@@ -245,37 +240,15 @@ public class DatStatUtils
 
     // Modifiers
     ModPropertyList modifiers=ModifiersUtils.getStatModifiers(statProperties,"Mod_ModifierList");
+    StatProvider provider=null;
     Integer progressId=(Integer)statProperties.getProperty(progressionPropName);
     if (progressId!=null)
     {
-      provider=buildStatProvider(stat,progressId.intValue());
+      provider=buildScalableStatProvider(stat,progressId.intValue());
     }
     else
     {
-      Object propValue=statProperties.getProperty(def.getName());
-      if (propValue!=null)
-      {
-        Object statValue=StatValueConverter.convertStatValue(def.getPropertyType(),propValue);
-        if ((statValue instanceof Float) || (statValue instanceof Integer))
-        {
-          Number value=(Number)statValue;
-          float floatValue=value.floatValue();
-          if ((modifiers!=null) || (Math.abs(floatValue)>0.001))
-          {
-            if (operator!=StatOperator.MULTIPLY)
-            {
-              floatValue=StatUtils.fixStatValue(stat,floatValue);
-            }
-            provider=new ConstantStatProvider(stat,floatValue);
-          }
-        }
-        else
-        {
-          GenericConstantStatProvider<Object> genericConstantProvider=new GenericConstantStatProvider<Object>(stat);
-          genericConstantProvider.setRawValue(statValue);
-          provider=genericConstantProvider;
-        }
-      }
+      provider=buildConstantStatProvider(stat,statProperties,def,operator,modifiers);
     }
     if (provider!=null)
     {
@@ -340,7 +313,7 @@ public class DatStatUtils
    * @param progressId Progression ID.
    * @return A stat provider.
    */
-  public StatProvider buildStatProvider(StatDescription stat, int progressId)
+  public StatProvider buildScalableStatProvider(StatDescription stat, int progressId)
   {
     if (progressId==0) return null;
     PropertiesSet properties=_facade.loadProperties(progressId+DATConstants.DBPROPERTIES_OFFSET);
@@ -352,6 +325,54 @@ public class DatStatUtils
     Progression progression=ProgressionUtils.getProgression(_facade,progressId);
     ScalableStatProvider scalableStat=new ScalableStatProvider(stat,progression);
     return scalableStat;
+  }
+
+  private StatProvider buildConstantStatProvider(StatDescription stat, PropertiesSet statProperties, PropertyDefinition def, StatOperator operator, ModPropertyList modifiers)
+  {
+    Object propValue=statProperties.getProperty(def.getName());
+    if (propValue==null)
+    {
+      return null;
+    }
+    StatProvider provider=null;
+    Object statValue=StatValueConverter.convertStatValue(def.getPropertyType(),propValue);
+    if ((statValue instanceof Float) || (statValue instanceof Integer))
+    {
+      boolean doIt=false;
+      // If there are modifiers,
+      if (modifiers!=null)
+      {
+        doIt=true;
+      }
+      // ... or if operator is not ADD and not SUBSTRACT,
+      if ((operator!=StatOperator.ADD) && ((operator!=StatOperator.SUBSTRACT)))
+      {
+        doIt=true;
+      }
+      // ... or value is not 0.
+      Number value=(Number)statValue;
+      float floatValue=value.floatValue();
+      if (Math.abs(floatValue)>0.001)
+      {
+        doIt=true;
+      }
+      // => skill cases of ADD stats with value 0 and no modifiers
+      if (doIt)
+      {
+        if (operator!=StatOperator.MULTIPLY)
+        {
+          floatValue=StatUtils.fixStatValue(stat,floatValue);
+        }
+        provider=new ConstantStatProvider(stat,floatValue);
+      }
+    }
+    else
+    {
+      GenericConstantStatProvider<Object> genericConstantProvider=new GenericConstantStatProvider<Object>(stat);
+      genericConstantProvider.setRawValue(statValue);
+      provider=genericConstantProvider;
+    }
+    return provider;
   }
 
   /**
