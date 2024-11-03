@@ -573,7 +573,7 @@ public class SkillDetailsLoader
 
   private SingleTypeSkillEffectsManager getSkillEffectList(PropertiesSet props, SkillEffectsProperties spec)
   {
-    String skillEffectListPropName=spec.getBaseProperty();
+    String skillEffectListPropName=spec.getEffectsListProperty();
     Object[] effectList=(Object[])props.getProperty(skillEffectListPropName);
     String additionalEffectsPropName=spec.getAdditiveModsProperty();
     ModPropertyList additiveMods=ModifiersUtils.getStatModifiers(props,additionalEffectsPropName);

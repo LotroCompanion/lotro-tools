@@ -34,6 +34,7 @@ import delta.games.lotro.tools.extraction.common.progressions.MainProgressionsMe
 import delta.games.lotro.tools.extraction.common.stats.MainStatsLoader;
 import delta.games.lotro.tools.extraction.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.extraction.crafting.MainDatRecipesLoader;
+import delta.games.lotro.tools.extraction.effects.AdditionalEffectsLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.effects.MainBuffsLoader;
 import delta.games.lotro.tools.extraction.effects.mood.MainMoodDataLoader;
@@ -171,6 +172,8 @@ public class MainDatLoader
     new MainPropertyResponseMapsLoader(_facade,effectsLoader).doIt();
     // Perks
     new MainPerksLoader(_facade,effectsLoader).doIt();
+    // Yet some other effects
+    new AdditionalEffectsLoader(effectsLoader).doIt();
     // Save effects
     effectsLoader.save();
     new MainProgressionsMerger().doIt();
