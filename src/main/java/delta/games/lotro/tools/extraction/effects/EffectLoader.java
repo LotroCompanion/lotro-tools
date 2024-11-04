@@ -13,6 +13,7 @@ import delta.games.lotro.common.effects.ApplyOverTimeEffect;
 import delta.games.lotro.common.effects.AreaEffect;
 import delta.games.lotro.common.effects.AreaEffectFlags;
 import delta.games.lotro.common.effects.BaseVitalEffect;
+import delta.games.lotro.common.effects.BubbleEffect;
 import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.CountDownEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
@@ -201,7 +202,7 @@ public class EffectLoader
   {
     // Effect PropertyModificationEffect (734) and child classes
     // except those explicitly handled later
-    if ((classDef==734) || (classDef==3222) ||
+    if ((classDef==734) ||
         (classDef==716) || (classDef==717) || (classDef==752) ||
         (classDef==753) || (classDef==739) || (classDef==748) ||
         (classDef==764) || (classDef==780) || (classDef==2156) ||
@@ -224,6 +225,7 @@ public class EffectLoader
     else if (classDef==767) return new ComboEffect();
     else if (classDef==3866) return new TieredEffect();
     else if (classDef==2762) return new AreaEffect();
+    else if (classDef==3222) return new BubbleEffect();
     else if (classDef==713) return new CountDownEffect();
     else if (classDef==708) return new ApplyOverTimeEffect();
     return new Effect();
@@ -238,6 +240,10 @@ public class EffectLoader
     else if (effect instanceof ReactiveVitalEffect)
     {
       loadReactiveVitalEffect((ReactiveVitalEffect)effect,effectProps);
+    }
+    else if (effect instanceof BubbleEffect)
+    {
+      loadBubbleEffect((BubbleEffect)effect,effectProps);
     }
     else if (effect instanceof CountDownEffect)
     {
@@ -662,6 +668,26 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
       EffectGenerator generator=loadGenerator(onRemovalProps);
       effect.setOnRemovalEffect(generator);
     }
+  }
+
+  private void loadBubbleEffect(BubbleEffect effect, PropertiesSet effectProps)
+  {
+    loadCountDownEffect(effect,effectProps);
+    Integer vitalType=(Integer)effectProps.getProperty("Effect_Bubble_VitalType");
+    StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType.intValue());
+    effect.setVital(stat);
+    Float value=(Float)effectProps.getProperty("Effect_Bubble_Value");
+    effect.setValue(value);
+    Integer progressionID=(Integer)effectProps.getProperty("Effect_Bubble_Value_Progression");
+    if (progressionID!=null)
+    {
+      Progression progression=ProgressionUtils.getProgression(_facade,progressionID.intValue());
+      effect.setProgression(progression);
+    }
+    Float percentage=(Float)effectProps.getProperty("Effect_Bubble_Percentage");
+    effect.setPercentage(percentage);
+    ModPropertyList modifier=ModifiersUtils.getStatModifiers(effectProps,"Effect_BubbleValue_ModifierList");
+    effect.setModifiers(modifier);
   }
 
   private void loadApplyOverTimeEffect(ApplyOverTimeEffect effect, PropertiesSet effectProps)
