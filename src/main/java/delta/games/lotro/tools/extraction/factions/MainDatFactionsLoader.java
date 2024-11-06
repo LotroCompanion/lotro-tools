@@ -441,6 +441,7 @@ Reputation_LowestTier: 1
     if (factionId==1879103953) return new String[]{category,"INN_LEAGUE",FactionLevelTemplates.CLASSIC}; // The Inn League
     if (factionId==1879305436) return new String[]{category,"HOBNANIGANS",FactionLevelTemplates.HOBNANIGANS}; // Chicken Chasing League of Eriador
     if (factionId==1879464285) return new String[]{category,null,null}; // The Path of Valour
+    if (factionId==1879490383) return new String[]{category,null,null}; // Amelia's Studies
     category="Guild";
     if (factionId==1879124448) return new String[]{category,"GUILD_COOK",FactionLevelTemplates.GUILD}; // Cook's Guild
     if (factionId==1879124449) return new String[]{category,"GUILD_JEWELLER",FactionLevelTemplates.GUILD}; // Jeweller's Guild
@@ -449,7 +450,8 @@ Reputation_LowestTier: 1
     if (factionId==1879124452) return new String[]{category,"GUILD_TAILOR",FactionLevelTemplates.GUILD}; // Tailor's Guild
     if (factionId==1879124453) return new String[]{category,"GUILD_WEAPONSMITH",FactionLevelTemplates.GUILD}; // Weaponsmith's Guild
     if (factionId==1879124454) return new String[]{category,"GUILD_WOODWORKER",FactionLevelTemplates.GUILD}; // Woodworker's Guild
-    category="Umbar Guild";
+    category="Umbar";
+    // - guilds
     if (factionId==1879479489) return new String[]{category,null,null};
     if (factionId==1879479494) return new String[]{category,null,null};
     if (factionId==1879479492) return new String[]{category,null,null};
@@ -457,6 +459,11 @@ Reputation_LowestTier: 1
     if (factionId==1879479493) return new String[]{category,null,null};
     if (factionId==1879479490) return new String[]{category,null,null};
     if (factionId==1879479487) return new String[]{category,null,null};
+    // - others
+    if (factionId==1879465745) return new String[]{category,null,null}; // Citizens of Umbar Baharbêl
+    if (factionId==1879489735) return new String[]{category,null,null}; // Phetekâri of Umbar
+    if (factionId==1879489736) return new String[]{category,null,null}; // The Ikorbâni
+    if (factionId==1879489734) return new String[]{category,null,null}; // The Adúrhid
 
     LOGGER.warn("Unmanaged faction ID: "+factionId);
     return new String[]{};
@@ -560,7 +567,6 @@ Reputation_LowestTier: 1
     if (factionId==1879326961) return new String[]{category,"MINAS_TIRITH",FactionLevelTemplates.EXTENDED_CLASSIC}; // Defenders of Minas Tirith
     if (factionId==1879330539) return new String[]{category,"RIDERS_ROHAN",FactionLevelTemplates.CLASSIC}; // Riders of Rohan
     if (factionId==1879463136) return new String[]{category,null,null}; // The Renewal of Gondor
-    if (factionId==1879465745) return new String[]{category,null,null}; // Citizens of Umbar Baharbêl
     return new String[]{};
   }
 
@@ -611,8 +617,10 @@ Reputation_LowestTier: 1
     int[] ret=new int[] {
       // Eriador
       1879091345,1879091340,1879091408,1879161272,1879091344,1879091346,1879091343,1879103954,1879091341,1879097420,
+      1879413167,1879413168,1879442863,1879443125,1879448435,1879457726,
       // Rhovanion
       1879143761,1879143766,1879150133,1879154438,1879362403,1879362405,1879363082,1879368441,1879386002,1879403792,1879407816,1879408300,
+      1879413559,1879416174,1879416935,
       // Dunland
       1879181920,1879181919,1879202077,1879202078,1879227796,1879230121,
       // Rohan
@@ -620,19 +628,19 @@ Reputation_LowestTier: 1
       // Dol Amroth
       1879306071,1879308442,1879308438,1879308441,1879308436,1879308443,1879308440,1879308439,1879308437,
       // Gondor
-      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,1879463136,1879465745,
+      1879315479,1879315480,1879315481,1879314940,1879322612,1879326961,1879330539,1879463136,
       // Mordor
       1879334719,1879341949,1879341953,1879341952,1879345136,
-      // Misc
-      1879182957,1879103953,1879305436,1879464285,
       // Mordor again
       1879345134,1879345135,1879345132,1879389871,1879389868,1879389872,
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
-      // New ones
-      1879413167,1879413168,1879413559,1879416174,1879416935,1879442863,1879443125,1879448435,1879457726,
       // Umbar guilds
-      1879479489,1879479494,1879479492,1879479491,1879479493,1879479490,1879479487
+      1879479489,1879479494,1879479492,1879479491,1879479493,1879479490,1879479487,
+      // Umbar
+      1879465745,1879489735,1879489736,1879489734,
+      // Misc
+      1879182957,1879103953,1879305436,1879464285,1879490383,
     };
     return ret;
   }
@@ -644,8 +652,8 @@ Reputation_LowestTier: 1
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatFactionsLoader(facade).doIt();
-    MainDatFactionsLoader.associateDeeds(FactionsRegistry.getInstance());
+    FactionsRegistry registry=new MainDatFactionsLoader(facade).doIt();
+    MainDatFactionsLoader.associateDeeds(registry);
     facade.dispose();
   }
 }
