@@ -35,6 +35,7 @@ import delta.games.lotro.character.skills.attack.SkillAttacks;
 import delta.games.lotro.character.skills.geometry.Arc;
 import delta.games.lotro.character.skills.geometry.Box;
 import delta.games.lotro.character.skills.geometry.SkillGeometry;
+import delta.games.lotro.character.skills.geometry.SkillPositionalData;
 import delta.games.lotro.character.skills.geometry.Sphere;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLConstants;
 import delta.games.lotro.character.skills.io.xml.SkillDetailsXmlIO;
@@ -311,6 +312,7 @@ public class SkillDetailsLoader
   private SkillGeometry loadGeometry(PropertiesSet props)
   {
     SkillGeometry ret=new SkillGeometry();
+    // Shape
     Float arcRadius=(Float)props.getProperty("Skill_AEDetectionVolume_ArcRadius");
     Float boxLength=(Float)props.getProperty("Skill_AEDetectionVolume_BoxLength");
     Float sphereRadius=(Float)props.getProperty("Skill_AEDetectionVolume_SphereRadius");
@@ -349,12 +351,17 @@ public class SkillDetailsLoader
     {
       LOGGER.warn("Bad shapes count: {}",Integer.valueOf(shapesCount));
     }
+    // Positional data
+    SkillPositionalData positionalData=loadPositionalData(props);
+    ret.setPositionalData(positionalData);
+    // Detection anchor
     Integer anchorCode=(Integer)props.getProperty("Skill_AreaEffectDetectionAnchor");
     if ((anchorCode!=null) && (anchorCode.intValue()!=0))
     {
       AreaEffectAnchorType anchorType=_areaEffectAnchorTypeEnum.getEntry(anchorCode.intValue());
       ret.setDetectionAnchor(anchorType);
     }
+    // Range
     Float minRange=(Float)props.getProperty("Skill_MinRange");
     if ((minRange!=null) && (minRange.floatValue()>0))
     {
@@ -374,7 +381,30 @@ public class SkillDetailsLoader
     return null;
   }
 
-  @SuppressWarnings("unused")
+  private SkillPositionalData loadPositionalData(PropertiesSet props)
+  {
+    SkillPositionalData ret=null;
+    Integer heading=(Integer)props.getProperty("Skill_PositionalHeading");
+    int headingValue=(heading!=null)?heading.intValue():0;
+    if (headingValue==-1)
+    {
+      headingValue=0;
+    }
+    Integer spread=(Integer)props.getProperty("Skill_PositionalSpread");
+    int spreadValue=(spread!=null)?spread.intValue():0;
+    if (spreadValue==-1)
+    {
+      spreadValue=0;
+    }
+    if ((headingValue!=0) || (spreadValue!=0))
+    {
+      ret=new SkillPositionalData();
+      ret.setHeading(headingValue);
+      ret.setSpread(spreadValue);
+    }
+    return ret;
+  }
+
   private SkillAttack loadAttackHook(PropertiesSet attackHookProperties)
   {
     SkillAttack ret=new SkillAttack();
