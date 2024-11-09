@@ -80,6 +80,9 @@ public class MainBuffsLoader
     // Guardian's Ward
     loadBuff(buffs,1879060192,null); // EFFECT
 
+    // Precision stance
+    loadBuff(buffs,1879216259,null); // EFFECT
+
     return buffs;
   }
 
