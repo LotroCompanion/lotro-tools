@@ -40,6 +40,7 @@ import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
 import delta.games.lotro.common.enums.CombatState;
+import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.ResistCategory;
@@ -476,6 +477,21 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
         int damageTypeCode=((Integer)damageTypeObj).intValue();
         DamageType damageType=damageTypeEnum.getEntry(damageTypeCode);
         effect.addDamageType(damageType);
+      }
+    }
+    // Damage qualifiers
+    LotroEnum<DamageQualifier> damageQualifierEnum=LotroEnumsRegistry.getInstance().get(DamageQualifier.class);
+    Object[] damageQualifierList=(Object[])effectProps.getProperty("Effect_ReactiveVital_RequiredAttacker_DamageQualifier_Array");
+    if (damageQualifierList!=null)
+    {
+      for(Object damageQualifierObj : damageQualifierList)
+      {
+        int damageQualifierCode=((Integer)damageQualifierObj).intValue();
+        if (damageQualifierCode!=0)
+        {
+          DamageQualifier damageQualifier=damageQualifierEnum.getEntry(damageQualifierCode);
+          effect.addDamageQualifier(damageQualifier);
+        }
       }
     }
     // Damage type override
