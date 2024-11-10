@@ -34,6 +34,8 @@ import delta.games.lotro.common.effects.ReactiveChange;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
 import delta.games.lotro.common.effects.RecallEffect;
+import delta.games.lotro.common.effects.ReviveEffect;
+import delta.games.lotro.common.effects.ReviveVitalData;
 import delta.games.lotro.common.effects.TieredEffect;
 import delta.games.lotro.common.effects.TravelEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
@@ -45,6 +47,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
+import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.properties.ModPropertyList;
@@ -229,6 +232,7 @@ public class EffectLoader
     else if (classDef==3222) return new BubbleEffect();
     else if (classDef==713) return new CountDownEffect();
     else if (classDef==708) return new ApplyOverTimeEffect();
+    else if (classDef==744) return new ReviveEffect();
     return new Effect();
   }
 
@@ -301,6 +305,10 @@ public class EffectLoader
     else if (effect instanceof ApplyOverTimeEffect)
     {
       loadApplyOverTimeEffect((ApplyOverTimeEffect)effect,effectProps);
+    }
+    else if (effect instanceof ReviveEffect)
+    {
+      loadReviveEffect((ReviveEffect)effect,effectProps);
     }
   }
 
@@ -1203,6 +1211,61 @@ Effect_Area_MaxTargets_AdditiveModifiers:
     effect.setMaxTargets((maxTargets!=null)?maxTargets.intValue():0);
     ModPropertyList maxTargetsMods=ModifiersUtils.getStatModifiers(effectProps,"Effect_Area_MaxTargets_AdditiveModifiers");
     effect.setMaxTargetsModifiers(maxTargetsMods);
+  }
+
+  private void loadReviveEffect(ReviveEffect effect, PropertiesSet props)
+  {
+    /*
+    Effect_Revive_EffectList: 
+      #1: Effect_Revive_Effect 1879212850
+    Effect_Revive_VitalDataList: 
+      #1: Effect_Revive_VitalData 
+        Effect_Revive_VitalPercent: 0.8
+        Effect_Revive_VitalPercentAdditiveModifiers: 
+          #1: Effect_ModifierPropertyList_Entry 0 (Invalid)
+          #2: Effect_ModifierPropertyList_Entry 268439066 (EffectMod_ModType_ReviveHealthMultModifier)
+          #3: Effect_ModifierPropertyList_Entry 0 (Invalid)
+        Effect_Revive_VitalType: 1 (Morale)
+      #2: Effect_Revive_VitalData 
+        Effect_Revive_VitalPercent: 0.5
+        Effect_Revive_VitalPercentAdditiveModifiers: 
+          #1: Effect_ModifierPropertyList_Entry 268437238 (EffectMod_ModType_RevivePowerMultModifier)
+          #2: Effect_ModifierPropertyList_Entry 0 (Invalid)
+          #3: Effect_ModifierPropertyList_Entry 0 (Invalid)
+        Effect_Revive_VitalType: 2 (Power)
+    */
+    // Revive effects
+    Object[] effectsList=(Object[])props.getProperty("Effect_Revive_EffectList");
+    if (effectsList!=null)
+    {
+      for(Object effectIdObj : effectsList)
+      {
+        Integer effectID=(Integer)effectIdObj;
+        Proxy<Effect> proxy=buildProxy(effectID);
+        if (proxy!=null)
+        {
+          effect.addReviveEffect(proxy);
+        }
+      }
+    }
+    // Vitals
+    Object[] vitalEntries=(Object[])props.getProperty("Effect_Revive_VitalDataList");
+    if (vitalEntries!=null)
+    {
+      LotroEnum<VitalType> vitalEnum=LotroEnumsRegistry.getInstance().get(VitalType.class);
+      for(Object vitalEntry : vitalEntries)
+      {
+        PropertiesSet vitalProps=(PropertiesSet)vitalEntry;
+        float percentage=((Float)vitalProps.getProperty("Effect_Revive_VitalPercent")).floatValue();
+        int vitalTypeCode=((Integer)vitalProps.getProperty("Effect_Revive_VitalType")).intValue();
+        VitalType vitalType=vitalEnum.getEntry(vitalTypeCode);
+        ReviveVitalData vitalData=new ReviveVitalData(vitalType,percentage);
+        // Modifiers
+        ModPropertyList modifiers=ModifiersUtils.getStatModifiers(vitalProps,"Effect_Revive_VitalPercentAdditiveModifiers");
+        vitalData.setModifiers(modifiers);
+        effect.addReviveVitalData(vitalData);
+      }
+    }
   }
 
   private static boolean getFlag(PropertiesSet props, String propertyName)
