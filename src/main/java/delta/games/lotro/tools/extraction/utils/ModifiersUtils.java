@@ -29,8 +29,11 @@ public class ModifiersUtils
       Integer statID=(Integer)statIDObj;
       if ((statID != null) && (statID.intValue()>0))
       {
-        ret.addID(statID.intValue());
-        doKeep=true;
+        if (!ret.getIDs().contains(statID))
+        {
+          ret.addID(statID.intValue());
+          doKeep=true;
+        }
       }
     }
     return doKeep?ret:null;
