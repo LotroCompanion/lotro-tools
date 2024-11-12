@@ -254,6 +254,12 @@ public class DatStatUtils
     {
       provider.setOperator(operator);
       provider.setModifiers(modifiers);
+      if (modifiers!=null)
+      {
+        Integer modifiersOp=(Integer)statProperties.getProperty("Mod_ModifierOp");
+        StatOperator modifiersOperator=getOperator(modifiersOp);
+        modifiers.setOperator(modifiersOperator);
+      }
     }
     return provider;
   }
