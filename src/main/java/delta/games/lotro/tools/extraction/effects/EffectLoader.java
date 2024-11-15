@@ -541,6 +541,10 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     // Probability
     Float probabilityFloat=(Float)effectProps.getProperty(seed+"Probability");
     float probability=(probabilityFloat!=null)?probabilityFloat.floatValue():0;
+    if (probability<0)
+    {
+      probability=1;
+    }
     ret.setProbability(probability);
     // Multiplicative/additive
     Integer additiveInt=(Integer)effectProps.getProperty(seed+"Additive");
