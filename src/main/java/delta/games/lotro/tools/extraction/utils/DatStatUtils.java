@@ -169,7 +169,7 @@ public class DatStatUtils
       }
       StatDescription stat=provider.getStat();
       _statistics.registerStatUsage(stat);
-      provider=handleSpecificCases(provider,descriptionOverride);
+      //provider=handleSpecificCases(provider,descriptionOverride);
       return provider;
     }
     // Effect label only
@@ -180,36 +180,6 @@ public class DatStatUtils
     }
     LOGGER.debug("No provider and no override!");
     return null;
-  }
-
-  private StatProvider handleSpecificCases(StatProvider provider, String descriptionOverride)
-  {
-    StatDescription stat=provider.getStat();
-    // Constant MULTIPLY on a percentage stat (e.g: CombatStateMod_CC_DurationMultModifier)
-    boolean isPercentage=stat.isPercentage();
-    ModPropertyList modifiers=provider.getModifiers();
-    StatOperator operator=provider.getOperator();
-    boolean isConstant=(provider instanceof ConstantStatProvider);
-    if ((isPercentage) && (isConstant) && (operator==StatOperator.MULTIPLY))
-    {
-      ConstantStatProvider constantProvider=(ConstantStatProvider)provider;
-      float value=constantProvider.getValue();
-      if (value<1)
-      {
-        value=Math.round((1-value)*100);
-        operator=StatOperator.SUBSTRACT;
-      }
-      else
-      {
-        value=Math.round((value-1)*100);
-        operator=StatOperator.ADD;
-      }
-      provider=new ConstantStatProvider(stat,value);
-      provider.setOperator(operator);
-      provider.setDescriptionOverride(descriptionOverride);
-      provider.setModifiers(modifiers);
-    }
-    return provider;
   }
 
   private StatProvider buildStatProvider(String propsPrefix, PropertiesSet statProperties)
