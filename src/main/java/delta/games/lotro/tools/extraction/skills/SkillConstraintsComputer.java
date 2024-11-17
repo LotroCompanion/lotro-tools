@@ -13,6 +13,7 @@ import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.character.traits.SkillAtRank;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.utils.TraitAndLevel;
@@ -119,10 +120,11 @@ public class SkillConstraintsComputer
     Map<Integer,List<TraitDescription>> ret=new HashMap<Integer,List<TraitDescription>>();
     for(TraitDescription trait : TraitsManager.getInstance().getAll())
     {
-      List<SkillDescription> traitSkills=trait.getSkills();
-      for(SkillDescription traitSkill : traitSkills)
+      List<SkillAtRank> traitSkills=trait.getSkills();
+      for(SkillAtRank traitSkill : traitSkills)
       {
-        Integer key=Integer.valueOf(traitSkill.getIdentifier());
+        SkillDescription skill=traitSkill.getSkill();
+        Integer key=Integer.valueOf(skill.getIdentifier());
         List<TraitDescription> traits=ret.get(key);
         if (traits==null)
         {
