@@ -28,6 +28,7 @@ import delta.games.lotro.common.effects.Hotspot;
 import delta.games.lotro.common.effects.InduceCombatStateEffect;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
+import delta.games.lotro.common.effects.PipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.effects.ReactiveChange;
@@ -45,6 +46,8 @@ import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.PipAdjustmentType;
+import delta.games.lotro.common.enums.PipType;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.enums.VitalType;
@@ -163,6 +166,11 @@ public class EffectLoader
     // Duration
     EffectDuration duration=getDuration(effectProps);
     ret.setEffectDuration(duration);
+    // Priority
+    /*
+    Integer priority=(Integer)effectProps.getProperty("Effect_ClassPriority");
+    ret.setPriority(priority);
+    */
     // Specifics
     loadSpecifics(ret,effectProps);
     // Icon
@@ -233,6 +241,7 @@ public class EffectLoader
     else if (classDef==713) return new CountDownEffect();
     else if (classDef==708) return new ApplyOverTimeEffect();
     else if (classDef==744) return new ReviveEffect();
+    else if (classDef==731) return new PipEffect();
     return new Effect();
   }
 
@@ -309,6 +318,10 @@ public class EffectLoader
     else if (effect instanceof ReviveEffect)
     {
       loadReviveEffect((ReviveEffect)effect,effectProps);
+    }
+    else if (effect instanceof PipEffect)
+    {
+      loadPipEffect((PipEffect)effect,effectProps);
     }
   }
 
@@ -1268,6 +1281,56 @@ Effect_Area_MaxTargets_AdditiveModifiers:
         ModPropertyList modifiers=ModifiersUtils.getStatModifiers(vitalProps,"Effect_Revive_VitalPercentAdditiveModifiers");
         vitalData.setModifiers(modifiers);
         effect.addReviveVitalData(vitalData);
+      }
+    }
+  }
+
+  private void loadPipEffect(PipEffect effect, PropertiesSet props)
+  {
+    /*
+Effect_Pip_AdjustmentAmount: 5
+Effect_Pip_AdjustmentType: 2 (Natural)
+Effect_Pip_Type: 2 (Fervour)
+    */
+    // Type
+    LotroEnum<PipType> pipTypeEnum=LotroEnumsRegistry.getInstance().get(PipType.class);
+    int typeCode=((Integer)props.getProperty("Effect_Pip_Type")).intValue();
+    PipType type=pipTypeEnum.getEntry(typeCode);
+    effect.setType(type);
+    // Reset?
+    Integer resetInt=(Integer)props.getProperty("Effect_Pip_Reset");
+    boolean reset=((resetInt!=null)&&(resetInt.intValue()==1));
+    effect.setReset(reset);
+    // Adjustment type
+    LotroEnum<PipAdjustmentType> pipAdjustmentTypeEnum=LotroEnumsRegistry.getInstance().get(PipAdjustmentType.class);
+    Integer adjustmentTypeCode=(Integer)props.getProperty("Effect_Pip_AdjustmentType");
+    if (adjustmentTypeCode!=null)
+    {
+      PipAdjustmentType adjustmentType=pipAdjustmentTypeEnum.getEntry(adjustmentTypeCode.intValue());
+      effect.setAdjustmentType(adjustmentType);
+    }
+    // Amount
+    Integer amount=(Integer)props.getProperty("Effect_Pip_AdjustmentAmount");
+    if (amount!=null)
+    {
+      effect.setAmount(amount.intValue());
+    }
+    // Modifiers
+    ModPropertyList modifiers=ModifiersUtils.getStatModifiers(props,"Effect_Pip_AdjustmentAmount_AdditiveModifiers");
+    effect.setAmountModifiers(modifiers);
+    // Some checks!
+    if (reset)
+    {
+      if ((adjustmentTypeCode!=null) || (amount!=null) || (modifiers!=null))
+      {
+        LOGGER.warn("Unexpected PIP effect value (reset=true)!");
+      }
+    }
+    else
+    {
+      if ((adjustmentTypeCode==null) || (amount==null))
+      {
+        LOGGER.warn("Unexpected PIP effect value (reset=false)!");
       }
     }
   }
