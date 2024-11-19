@@ -43,6 +43,7 @@ import delta.games.lotro.common.enums.MobType;
 import delta.games.lotro.common.enums.MountType;
 import delta.games.lotro.common.enums.PaperItemCategory;
 import delta.games.lotro.common.enums.PerkUICategory;
+import delta.games.lotro.common.enums.PipAdjustmentType;
 import delta.games.lotro.common.enums.PipType;
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.QuestScope;
@@ -185,8 +186,9 @@ public class MainDatEnumsLoader
     loadEnum(587203540,"SkillDisplayType",SkillDisplayType.class); // 0x230003D4
     loadEnum(587203321,"ImplementUsageType",ImplementUsageType.class); // 0x230002F9
     loadEnum(587202673,"PipType",PipType.class); // 0x23000071
-    loadEnum(587202644,"PipAreaEffectAnchorType",AreaEffectAnchorType.class); // 0x23000054
+    loadEnum(587202644,"AreaEffectAnchorType",AreaEffectAnchorType.class); // 0x23000054
     loadEnum(587203231,"GambitIconType",GambitIconType.class); // 0x2300029F
+    loadEnum(587203443,"PipAdjustmentType",PipAdjustmentType.class); // 0x23000373
 
     // Derivated enums
     // From EquipmentCategory:
