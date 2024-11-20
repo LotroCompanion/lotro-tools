@@ -638,6 +638,7 @@ public class SkillDetailsLoader
     }
     if (effectList!=null)
     {
+      boolean foundOne=false;
       boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
       for (Object skillEffectObj : effectList)
       {
@@ -663,10 +664,14 @@ public class SkillDetailsLoader
             mgr=new SingleTypeSkillEffectsManager(type);
           }
           mgr.addEffect(generator);
+          foundOne=true;
         }
         else
         {
-          break;
+          if (foundOne)
+          {
+            break;
+          }
         }
       }
     }
