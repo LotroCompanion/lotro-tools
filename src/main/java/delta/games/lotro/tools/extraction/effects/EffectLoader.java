@@ -1173,6 +1173,10 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
         effect.setFinalTier(generator);
       }
     }
+    // Show in Examination
+    Integer showInExaminationInt=(Integer)effectProps.getProperty("Effect_TierUp_ShowInExamination");
+    boolean showInExamination=((showInExaminationInt!=null)&&(showInExaminationInt.intValue()==1));
+    effect.setShowInExamination(showInExamination);
   }
 
   private void loadAreaEffect(AreaEffect effect, PropertiesSet effectProps)
