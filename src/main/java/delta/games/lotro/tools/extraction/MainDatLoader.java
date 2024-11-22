@@ -59,6 +59,7 @@ import delta.games.lotro.tools.extraction.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.extraction.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.extraction.misc.MainPerksLoader;
 import delta.games.lotro.tools.extraction.misc.MainPropertyResponseMapsLoader;
+import delta.games.lotro.tools.extraction.misc.PropertyResponseMapsLoader;
 import delta.games.lotro.tools.extraction.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.extraction.pvp.MainDatPVPLoader;
 import delta.games.lotro.tools.extraction.relics.MainDatRelicMeldingRecipesLoader;
@@ -169,13 +170,12 @@ public class MainDatLoader
     // Items sets
     new MainDatItemsSetsLoader(_facade,effectsLoader).doIt();
     // Property Response maps
-    new MainPropertyResponseMapsLoader(_facade,effectsLoader).doIt();
+    PropertyResponseMapsLoader propertyResponseMapsLoader=new PropertyResponseMapsLoader(_facade,effectsLoader);
+    new MainPropertyResponseMapsLoader(_facade,propertyResponseMapsLoader).doIt();
     // Perks
     new MainPerksLoader(_facade,effectsLoader).doIt();
     // Yet some other effects
     new AdditionalEffectsLoader(effectsLoader).doIt();
-    // Save effects
-    effectsLoader.save();
     new MainProgressionsMerger().doIt();
     // Initial gear
     new InitialGearLoader(_facade).doIt();
@@ -196,8 +196,10 @@ public class MainDatLoader
     new MainDatRecipesLoader(_facade).doIt();
     craftingLoader.updateRecipeIcons();
     // Private encounters
-    MainDatPrivateEncountersLoader peLoader=new MainDatPrivateEncountersLoader(_facade);
+    MainDatPrivateEncountersLoader peLoader=new MainDatPrivateEncountersLoader(_facade,propertyResponseMapsLoader);
     peLoader.doIt();
+    // Save effects
+    effectsLoader.save();
     // Containers
     new MainDatContainerLoader(_facade,lootsManager).doIt();
     // Mobs

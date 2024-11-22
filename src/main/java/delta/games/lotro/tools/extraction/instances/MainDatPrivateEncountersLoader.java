@@ -25,6 +25,9 @@ import delta.games.lotro.lore.instances.io.xml.PrivateEncountersXMLWriter;
 import delta.games.lotro.lore.quests.QuestDescription;
 import delta.games.lotro.lore.quests.QuestsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
+import delta.games.lotro.tools.extraction.effects.EffectLoader;
+import delta.games.lotro.tools.extraction.misc.PropertyResponseMapsLoader;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 
@@ -43,12 +46,14 @@ public class MainDatPrivateEncountersLoader
   private LotroEnum<WJEncounterCategory> _worldJoinCategory;
   private I18nUtils _i18n;
   private List<Proxy<QuestDescription>> _proxies;
+  private PropertyResponseMapsLoader _propertyResponseMapsLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param propertyResponseMapsLoader Loader for property response maps.
    */
-  public MainDatPrivateEncountersLoader(DataFacade facade)
+  public MainDatPrivateEncountersLoader(DataFacade facade, PropertyResponseMapsLoader propertyResponseMapsLoader)
   {
     _facade=facade;
     _data=new ArrayList<PrivateEncounter>();
@@ -57,6 +62,7 @@ public class MainDatPrivateEncountersLoader
     _worldJoinCategory=LotroEnumsRegistry.getInstance().get(WJEncounterCategory.class);
     _i18n=new I18nUtils("instances",facade.getGlobalStringsManager());
     _proxies=new ArrayList<Proxy<QuestDescription>>();
+    _propertyResponseMapsLoader=propertyResponseMapsLoader;
   }
 
   private PrivateEncounter load(int privateEncounterId, boolean isSkirmish)
@@ -132,6 +138,8 @@ public class MainDatPrivateEncountersLoader
     handleAdditionalContentLayers(ret);
     // Build maps
     _mapDataBuilder.handlePrivateEncounter(ret,blocks);
+    // Property response maps
+    loadPropertyResponseMap(props);
     return ret;
   }
 
@@ -191,6 +199,15 @@ public class MainDatPrivateEncountersLoader
         Proxy<QuestDescription> proxy=buildProxy(id);
         quests.addRandomQuest(proxy);
       }
+    }
+  }
+
+  private void loadPropertyResponseMap(PropertiesSet props)
+  {
+    Integer mapDID=(Integer)props.getProperty("PrivateEncounterTemplate_PropertyResponseMapDID");
+    if ((mapDID!=null) && (mapDID.intValue()>0))
+    {
+      _propertyResponseMapsLoader.handlePropertyResponseMap(mapDID.intValue());
     }
   }
 
@@ -381,7 +398,11 @@ public class MainDatPrivateEncountersLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    new MainDatPrivateEncountersLoader(facade).doIt();
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    PropertyResponseMapsLoader propertyResponseMapsLoader=new PropertyResponseMapsLoader(facade,effectsLoader);
+    new MainDatPrivateEncountersLoader(facade,propertyResponseMapsLoader).doIt();
+    effectsLoader.save();
     facade.dispose();
   }
 }
