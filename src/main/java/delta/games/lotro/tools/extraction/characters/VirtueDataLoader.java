@@ -3,13 +3,17 @@ package delta.games.lotro.tools.extraction.characters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.io.xml.VirtueDescriptionXMLWriter;
+import delta.games.lotro.common.effects.Effect;
+import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
@@ -19,10 +23,13 @@ import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
+import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.utils.DatStatUtils;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -35,15 +42,18 @@ public class VirtueDataLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
+  private EffectLoader _effectsLoader;
   private DatStatUtils _statUtils;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public VirtueDataLoader(DataFacade facade)
+  public VirtueDataLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
+    _effectsLoader=effectsLoader;
     _i18n=new I18nUtils("virtues",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18n);
   }
@@ -158,8 +168,11 @@ public class VirtueDataLoader
       {
         PropertiesSet passiveProps=(PropertiesSet)passiveObj;
         int effectId=((Integer)passiveProps.getProperty("EffectGenerator_EffectID")).intValue();
-        StatsProvider provider=handleEffect(facade,effectId);
-        ret.setPassiveStatsProvider(provider);
+        Effect effect=_effectsLoader.getEffect(effectId);
+        if (effect instanceof PropertyModificationEffect)
+        {
+          ret.setPassivesEffect((PropertyModificationEffect)effect);
+        }
       }
     }
 
@@ -233,13 +246,6 @@ PropertyProgression_Array:
     }
   }
 
-  private StatsProvider handleEffect(DataFacade facade, int effectId)
-  {
-    PropertiesSet effectProperties=facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
-    StatsProvider provider=_statUtils.buildStatProviders(effectProperties);
-    return provider;
-  }
-
   /**
    * Save virtues to disk.
    * @param virtues Virtues.
@@ -265,5 +271,21 @@ PropertyProgression_Array:
     saveVirtues(virtues);
     _statUtils.showStatistics();
     _i18n.save();
+  }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    new VirtueDataLoader(facade,effectsLoader).doIt();
+    effectsLoader.save();
+    facade.dispose();
   }
 }

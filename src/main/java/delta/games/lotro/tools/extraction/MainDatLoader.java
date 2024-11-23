@@ -25,6 +25,7 @@ import delta.games.lotro.tools.extraction.characters.MainXpTableLoader;
 import delta.games.lotro.tools.extraction.characters.MonsterClassDataLoader;
 import delta.games.lotro.tools.extraction.characters.NationalitiesLoader;
 import delta.games.lotro.tools.extraction.characters.RaceDataLoader;
+import delta.games.lotro.tools.extraction.characters.VirtueDataLoader;
 import delta.games.lotro.tools.extraction.collections.MainDatCollectionsLoader;
 import delta.games.lotro.tools.extraction.combat.MainDatCombatLoader;
 import delta.games.lotro.tools.extraction.common.MainDatColorLoader;
@@ -160,6 +161,8 @@ public class MainDatLoader
     skillsLoader.loadEffects(effectsLoader);
     new SkillDetailsLoader(_facade,effectsLoader).doIt();
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
+    // Virtues
+    new VirtueDataLoader(_facade,effectsLoader).doIt();
     // Items
     new MainDatItemsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
