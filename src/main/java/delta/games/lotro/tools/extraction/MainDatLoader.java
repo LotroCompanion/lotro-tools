@@ -38,6 +38,7 @@ import delta.games.lotro.tools.extraction.crafting.MainDatRecipesLoader;
 import delta.games.lotro.tools.extraction.effects.AdditionalEffectsLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.effects.MainBuffsLoader;
+import delta.games.lotro.tools.extraction.effects.SomeMoreEffectsLoader;
 import delta.games.lotro.tools.extraction.effects.mood.MainMoodDataLoader;
 import delta.games.lotro.tools.extraction.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.extraction.factions.MainDatFactionsLoader;
@@ -179,6 +180,7 @@ public class MainDatLoader
     new MainPerksLoader(_facade,effectsLoader).doIt();
     // Yet some other effects
     new AdditionalEffectsLoader(effectsLoader).doIt();
+    new SomeMoreEffectsLoader(effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Initial gear
     new InitialGearLoader(_facade).doIt();
