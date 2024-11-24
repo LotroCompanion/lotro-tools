@@ -180,7 +180,7 @@ public class MainDatLoader
     new MainPerksLoader(_facade,effectsLoader).doIt();
     // Yet some other effects
     new AdditionalEffectsLoader(effectsLoader).doIt();
-    new SomeMoreEffectsLoader(effectsLoader).doIt();
+    new SomeMoreEffectsLoader(_facade,effectsLoader).doIt();
     new MainProgressionsMerger().doIt();
     // Initial gear
     new InitialGearLoader(_facade).doIt();
