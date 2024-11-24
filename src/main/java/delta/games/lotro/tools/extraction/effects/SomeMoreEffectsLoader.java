@@ -58,6 +58,7 @@ public class SomeMoreEffectsLoader
     }
     loadLoEEffects();
     loadPipEffects();
+    loadMountedCombatEffects();
     _effectsLoader.save();
   }
 
@@ -139,6 +140,29 @@ Threshold_Pip_IntegerValue_Policy:
           }
         }
       }
+    }
+  }
+
+  private void loadMountedCombatEffects()
+  {
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"MountedCombatControl");
+    if (props==null)
+    {
+      return;
+    }
+    Object[] array=(Object[])props.getProperty("Mount_Control_Tree_Array");
+    /*
+Mount_Control_Tree_Array: 
+  #1: Mount_Control_Tree_Struct 
+    Mount_Control_Trait_Tree: 2 (Light)
+    Mount_Control_Tree_Effect: 1879253873
+    Mount_WarSteed_SkillCombo: 1 (Light)
+    */
+    for(Object entry : array)
+    {
+      PropertiesSet entryProps=(PropertiesSet)entry;
+      int effectID=((Integer)entryProps.getProperty("Mount_Control_Tree_Effect")).intValue();
+      _effectsLoader.getEffect(effectID);
     }
   }
 
