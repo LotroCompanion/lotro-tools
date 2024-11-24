@@ -18,6 +18,7 @@ import delta.games.lotro.common.effects.BubbleEffect;
 import delta.games.lotro.common.effects.ComboEffect;
 import delta.games.lotro.common.effects.CountDownEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
+import delta.games.lotro.common.effects.DispelEffect;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectAndProbability;
 import delta.games.lotro.common.effects.EffectDuration;
@@ -245,6 +246,7 @@ public class EffectLoader
     else if (classDef==744) return new ReviveEffect();
     else if (classDef==731) return new PipEffect();
     else if (classDef==709) return new AuraEffect();
+    else if (classDef==715) return new DispelEffect();
     return new Effect();
   }
 
@@ -329,6 +331,10 @@ public class EffectLoader
     else if (effect instanceof AuraEffect)
     {
       loadAuraEffect((AuraEffect)effect,effectProps);
+    }
+    else if (effect instanceof DispelEffect)
+    {
+      loadDispelEffect((DispelEffect)effect,effectProps);
     }
   }
 
@@ -1374,6 +1380,36 @@ Effect_Aura_Type: 2 (Player)
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps,"Effect_Aura_Applied_Effect","Effect_Aura_Applied_Effect_Spellcraft");
         effect.addAppliedEffect(generator);
+      }
+    }
+  }
+
+  private void loadDispelEffect(DispelEffect effect, PropertiesSet props)
+  {
+    /*
+Effect_Dispel_ByEffectList: 
+  #1: Effect_WSLEffect 1879152215
+Effect_Dispel_DispelCasters: 0
+    */
+    // Dispel casters?
+    Integer dispelCastersInt=(Integer)props.getProperty("Effect_Dispel_DispelCasters");
+    boolean dispelCasters=((dispelCastersInt!=null)&&(dispelCastersInt.intValue()==1));
+    effect.setDispelCasters(dispelCasters);
+    // Generators
+    Object[] effectsList=(Object[])props.getProperty("Effect_Dispel_ByEffectList");
+    if (effectsList!=null)
+    {
+      for(Object entry : effectsList)
+      {
+        Integer effectID=(Integer)entry;
+        if ((effectID!=null) && (effectID.intValue()>0))
+        {
+          Proxy<Effect> proxy=buildProxy(effectID);
+          if (proxy!=null)
+          {
+            effect.addEffect(proxy);
+          }
+        }
       }
     }
   }
