@@ -24,6 +24,7 @@ import delta.games.lotro.common.enums.CraftingUICategory;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DeedCategory;
 import delta.games.lotro.common.enums.Difficulty;
+import delta.games.lotro.common.enums.EffectAuraType;
 import delta.games.lotro.common.enums.EquipmentCategory;
 import delta.games.lotro.common.enums.GambitIconType;
 import delta.games.lotro.common.enums.Genus;
@@ -189,6 +190,7 @@ public class MainDatEnumsLoader
     loadEnum(587202644,"AreaEffectAnchorType",AreaEffectAnchorType.class); // 0x23000054
     loadEnum(587203231,"GambitIconType",GambitIconType.class); // 0x2300029F
     loadEnum(587203443,"PipAdjustmentType",PipAdjustmentType.class); // 0x23000373
+    loadEnum(587202856,"EffectAuraType",EffectAuraType.class); // 0x23000128
 
     // Derivated enums
     // From EquipmentCategory:

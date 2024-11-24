@@ -12,6 +12,7 @@ import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.ApplyOverTimeEffect;
 import delta.games.lotro.common.effects.AreaEffect;
 import delta.games.lotro.common.effects.AreaEffectFlags;
+import delta.games.lotro.common.effects.AuraEffect;
 import delta.games.lotro.common.effects.BaseVitalEffect;
 import delta.games.lotro.common.effects.BubbleEffect;
 import delta.games.lotro.common.effects.ComboEffect;
@@ -44,6 +45,7 @@ import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.DamageQualifier;
+import delta.games.lotro.common.enums.EffectAuraType;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.PipAdjustmentType;
@@ -242,6 +244,7 @@ public class EffectLoader
     else if (classDef==708) return new ApplyOverTimeEffect();
     else if (classDef==744) return new ReviveEffect();
     else if (classDef==731) return new PipEffect();
+    else if (classDef==709) return new AuraEffect();
     return new Effect();
   }
 
@@ -322,6 +325,10 @@ public class EffectLoader
     else if (effect instanceof PipEffect)
     {
       loadPipEffect((PipEffect)effect,effectProps);
+    }
+    else if (effect instanceof AuraEffect)
+    {
+      loadAuraEffect((AuraEffect)effect,effectProps);
     }
   }
 
@@ -1335,6 +1342,38 @@ Effect_Pip_Type: 2 (Fervour)
       if ((adjustmentTypeCode==null) || (amount==null))
       {
         LOGGER.warn("Unexpected PIP effect value (reset=false)!");
+      }
+    }
+  }
+
+  private void loadAuraEffect(AuraEffect effect, PropertiesSet props)
+  {
+    /*
+Aura_ShouldAffectCaster: 1
+Effect_Aura_Applied_Effect_Array: 
+  #1: Effect_Aura_Applied_Effect_Data 
+    Effect_Aura_Applied_Effect: 1879416043
+    Effect_Aura_Applied_Effect_Spellcraft: -1.0
+Effect_Aura_Type: 2 (Player)
+    */
+    // Type
+    LotroEnum<EffectAuraType> typeEnum=LotroEnumsRegistry.getInstance().get(EffectAuraType.class);
+    int typeCode=((Integer)props.getProperty("Effect_Aura_Type")).intValue();
+    EffectAuraType type=typeEnum.getEntry(typeCode);
+    effect.setType(type);
+    // Should affect caster?
+    Integer shouldAffectCasterInt=(Integer)props.getProperty("Aura_ShouldAffectCaster");
+    boolean shouldAffectCaster=((shouldAffectCasterInt!=null)&&(shouldAffectCasterInt.intValue()==1));
+    effect.setShouldAffectCaster(shouldAffectCaster);
+    // Generators
+    Object[] effectsList=(Object[])props.getProperty("Effect_Aura_Applied_Effect_Array");
+    if (effectsList!=null)
+    {
+      for(Object entry : effectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps,"Effect_Aura_Applied_Effect","Effect_Aura_Applied_Effect_Spellcraft");
+        effect.addAppliedEffect(generator);
       }
     }
   }
