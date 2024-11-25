@@ -33,6 +33,8 @@ import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.PipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
+import delta.games.lotro.common.effects.RandomEffect;
+import delta.games.lotro.common.effects.RandomEffectGenerator;
 import delta.games.lotro.common.effects.ReactiveChange;
 import delta.games.lotro.common.effects.ReactiveVitalChange;
 import delta.games.lotro.common.effects.ReactiveVitalEffect;
@@ -247,6 +249,7 @@ public class EffectLoader
     else if (classDef==731) return new PipEffect();
     else if (classDef==709) return new AuraEffect();
     else if (classDef==715) return new DispelEffect();
+    else if (classDef==2063) return new RandomEffect();
     return new Effect();
   }
 
@@ -335,6 +338,10 @@ public class EffectLoader
     else if (effect instanceof DispelEffect)
     {
       loadDispelEffect((DispelEffect)effect,effectProps);
+    }
+    else if (effect instanceof RandomEffect)
+    {
+      loadRandomEffect((RandomEffect)effect,effectProps);
     }
   }
 
@@ -777,15 +784,24 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
 
   private EffectGenerator loadGenerator(PropertiesSet generatorProps, String idPropName, String spellcraftPropName)
   {
+    EffectGenerator ret=new EffectGenerator();
+    loadGenerator(generatorProps,ret,idPropName,spellcraftPropName);
+    return ret;
+  }
+
+  private void loadGenerator(PropertiesSet generatorProps, EffectGenerator generator, String idPropName, String spellcraftPropName)
+  {
+    // Effect
     int effectID=((Integer)generatorProps.getProperty(idPropName)).intValue();
+    Effect effect=getEffect(effectID);
+    generator.setEffect(effect);
+    // Spellcraft
     Float spellcraft=(Float)generatorProps.getProperty(spellcraftPropName);
     if ((spellcraft!=null) && (spellcraft.floatValue()<0))
     {
       spellcraft=null;
     }
-    Effect effect=getEffect(effectID);
-    EffectGenerator ret=new EffectGenerator(effect,spellcraft);
-    return ret;
+    generator.setSpellcraft(spellcraft);
   }
 
   private ApplicationProbability getProbability(PropertiesSet effectProps)
@@ -1411,6 +1427,34 @@ Effect_Dispel_DispelCasters: 0
           }
         }
       }
+    }
+  }
+
+  private void loadRandomEffect(RandomEffect effect, PropertiesSet props)
+  {
+    /*
+Effect_RandomEffect_Array: 
+  #1: Effect_RandomEffect_Struct 
+    Effect_RandomEffect_DataID: 1879103509
+    Effect_RandomEffect_ToCaster: 1 (defaults to false)
+    Effect_RandomEffect_Weight: 90.0
+    also: Effect_RandomEffect_Spellcraft
+    */
+    Object[] entries=(Object[])props.getProperty("Effect_RandomEffect_Array");
+    for(Object entryObj : entries)
+    {
+      PropertiesSet entryProps=(PropertiesSet)entryObj;
+      RandomEffectGenerator generator=new RandomEffectGenerator();
+      // Generator basics
+      loadGenerator(entryProps,generator,"Effect_RandomEffect_DataID","Effect_RandomEffect_Spellcraft");
+      // To caster?
+      Integer toCasterInt=(Integer)entryProps.getProperty("Effect_RandomEffect_ToCaster");
+      boolean toCaster=((toCasterInt!=null)&&(toCasterInt.intValue()==1));
+      generator.setToCaster(toCaster);
+      // Weight
+      float weight=((Float)entryProps.getProperty("Effect_RandomEffect_Weight")).floatValue();
+      generator.setWeight(weight);
+      effect.addEffect(generator);
     }
   }
 
