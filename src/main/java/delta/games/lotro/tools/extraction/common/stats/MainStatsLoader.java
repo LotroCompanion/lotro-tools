@@ -83,6 +83,10 @@ public class MainStatsLoader
     // Percentage?
     Integer percentage=(Integer)properties.getProperty("PropertyMetaData_DisplayAsPercentage");
     boolean isPercentage=((percentage!=null) && (percentage.intValue()==1));
+    if (propertyId==268460448)
+    {
+      isPercentage=false;
+    }
 
     // Add stat
     addDatStat(propertyDefinition,statName,isPercentage);
