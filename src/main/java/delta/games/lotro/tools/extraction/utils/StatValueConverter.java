@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.values.ArrayValue;
 import delta.games.lotro.values.EnumValue;
@@ -22,16 +23,17 @@ public class StatValueConverter
 
   /**
    * Convert a stat value.
-   * @param type Property type.
+   * @param def Property definition.
    * @param propertyValue Value to convert.
    * @return the converted value (may be <code>null</code>).
    */
-  public static Object convertStatValue(PropertyType type, Object propertyValue)
+  public static Object convertStatValue(PropertyDefinition def, Object propertyValue)
   {
     if (propertyValue==null)
     {
       return null;
     }
+    PropertyType type=def.getPropertyType();
     if (type==PropertyType.LONG64)
     {
       LOGGER.warn("Found long64 type!");
@@ -41,12 +43,13 @@ public class StatValueConverter
     {
       return propertyValue;
     }
-    Object ret=buildValue(type,propertyValue);
+    Object ret=buildValue(def,propertyValue);
     return ret;
   }
 
-  private static Object buildValue(PropertyType type, Object propertyValue)
+  private static Object buildValue(PropertyDefinition def, Object propertyValue)
   {
+    PropertyType type=def.getPropertyType();
     if (type==PropertyType.BIT_FIELD32)
     {
       return buildBitSet(((Integer)propertyValue).intValue());
@@ -61,7 +64,9 @@ public class StatValueConverter
     }
     else if (type==PropertyType.ENUM_MAPPER)
     {
-      return buildEnumValue((Integer)propertyValue);
+      int enumId=def.getData();
+      Integer value=(Integer)propertyValue;
+      return buildEnumValue(enumId,value.intValue());
     }
     else if (type==PropertyType.BOOLEAN)
     {
@@ -146,9 +151,10 @@ public class StatValueConverter
     return ret;
   }
 
-  private static EnumValue buildEnumValue(Integer code)
+  private static EnumValue buildEnumValue(int enumId, int code)
   {
     EnumValue ret=new EnumValue();
+    ret.setEnumId(enumId);
     ret.setValue(code);
     return ret;
   }

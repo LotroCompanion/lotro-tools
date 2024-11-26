@@ -311,7 +311,7 @@ public class DatStatUtils
       return null;
     }
     StatProvider provider=null;
-    Object statValue=StatValueConverter.convertStatValue(def.getPropertyType(),propValue);
+    Object statValue=StatValueConverter.convertStatValue(def,propValue);
     if ((statValue instanceof Float) || (statValue instanceof Integer))
     {
       boolean doIt=false;
