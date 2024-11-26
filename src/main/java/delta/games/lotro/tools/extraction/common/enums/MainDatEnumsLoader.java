@@ -67,6 +67,9 @@ import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.enums.WJEncounterCategory;
 import delta.games.lotro.common.enums.WJEncounterType;
 import delta.games.lotro.common.enums.WJInstanceGroup;
+import delta.games.lotro.common.enums.directory.LotroEnumDescription;
+import delta.games.lotro.common.enums.directory.LotroEnumsDirectory;
+import delta.games.lotro.common.enums.directory.io.xml.EnumsDirectoryXMLWriter;
 import delta.games.lotro.common.enums.io.xml.EnumXMLWriter;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
@@ -99,6 +102,7 @@ public class MainDatEnumsLoader
 
   private DataFacade _facade;
   private MultilocalesTranslator _translator;
+  private LotroEnumsDirectory _directory;
 
   /**
    * Constructor.
@@ -109,6 +113,7 @@ public class MainDatEnumsLoader
     _facade=facade;
     String bundleName=getClass().getPackage().getName()+".enum";
     _translator=TranslationUtils.buildMultilocalesTranslator(bundleName);
+    _directory=new LotroEnumsDirectory();
   }
 
   /**
@@ -238,7 +243,7 @@ public class MainDatEnumsLoader
           "POCKET", "MAIN_MELEE", "OTHER_MELEE", "RANGED", "TOOL", "CLASS_ITEM", "BRIDLE",
           "MAIN_HAND_AURA", "OFF_HAND_AURA", "RANGED_AURA"
       };
-      buildSubEnum(587202798,"GearSlot",GearSlot.class,sourceCodes,null,keys);
+      buildSubEnum(587202798,"GearSlot",GearSlot.class,sourceCodes,null,keys); // From enum ContainerSlot
     }
 
     // Custom enums
@@ -246,6 +251,7 @@ public class MainDatEnumsLoader
     buildDeedTypeEnum();
     buildBindingEnum();
     buildEquipmentSlotEnum();
+    saveEnumsDirectory();
   }
 
   private <T extends LotroEnumEntry> void loadEnum(int enumId, String name, Class<T> implClass)
@@ -466,7 +472,7 @@ public class MainDatEnumsLoader
   private void buildGenderEnum()
   {
     Class<CharacterSex> implClass=CharacterSex.class;
-    LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(0,"Gender",implClass);
+    LotroEnum<CharacterSex> lotroEnum=new LotroEnum<CharacterSex>(1,"Gender",implClass);
     String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,"MALE","MALE");
@@ -478,7 +484,7 @@ public class MainDatEnumsLoader
   {
     Class<DeedType> implClass=DeedType.class;
     String enumName="DeedType";
-    LotroEnum<DeedType> lotroEnum=new LotroEnum<DeedType>(0,enumName,implClass);
+    LotroEnum<DeedType> lotroEnum=new LotroEnum<DeedType>(2,enumName,implClass);
     String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,enumName+".CLASS","CLASS");
@@ -495,7 +501,7 @@ public class MainDatEnumsLoader
   {
     Class<ItemBinding> implClass=ItemBinding.class;
     String enumName="ItemBinding";
-    LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(0,enumName,implClass);
+    LotroEnum<ItemBinding> lotroEnum=new LotroEnum<ItemBinding>(3,enumName,implClass);
     String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,100,enumName+".BIND_ON_EQUIP","BIND_ON_EQUIP");
@@ -509,7 +515,7 @@ public class MainDatEnumsLoader
   {
     Class<EquipmentLocation> implClass=EquipmentLocation.class;
     String enumName="EquipmentLocation";
-    LotroEnum<EquipmentLocation> lotroEnum=new LotroEnum<EquipmentLocation>(0,enumName,implClass);
+    LotroEnum<EquipmentLocation> lotroEnum=new LotroEnum<EquipmentLocation>(4,enumName,implClass);
     String labelsSetName=ENUM_PREFIX+implClass.getSimpleName();
     I18nUtils i18n=new I18nUtils(labelsSetName,_facade.getGlobalStringsManager());
     handleCustomEntry(lotroEnum,i18n,0,enumName+".HEAD","HEAD");
@@ -543,6 +549,21 @@ public class MainDatEnumsLoader
     File enumFile=new File(enumsDir,fileName);
     new EnumXMLWriter<T>().writeEnum(enumFile,lotroEnum);
     i18n.save();
+    registerEnum(lotroEnum,implClass);
+  }
+
+  private void registerEnum(LotroEnum<?> lotroEnum, Class<?> implClass)
+  {
+    int id=lotroEnum.getIdentifier();
+    String name=lotroEnum.getName();
+    String className=implClass.getName();
+    LotroEnumDescription d=new LotroEnumDescription(id,name,className);
+    _directory.registerEnum(d);
+  }
+
+  private void saveEnumsDirectory()
+  {
+    new EnumsDirectoryXMLWriter().writeEnumsDirectory(GeneratedFiles.ENUMS_DIRECTORY_FILE,_directory);
   }
 
   /**

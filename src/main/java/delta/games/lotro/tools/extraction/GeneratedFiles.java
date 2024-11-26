@@ -385,6 +385,10 @@ public class GeneratedFiles
    */
   public static final File ENUMS_DIR=LotroCoreConfig.getInstance().getFile(DataFiles.ENUMS_DIR);
   /**
+   * Enums directory file.
+   */
+  public static final File ENUMS_DIRECTORY_FILE=LotroCoreConfig.getInstance().getFile(DataFiles.ENUMS_DIRECTORY_FILE);
+  /**
    * Allegiances.
    */
   public static final File ALLEGIANCES=LotroCoreConfig.getInstance().getFile(DataFiles.ALLEGIANCES);
