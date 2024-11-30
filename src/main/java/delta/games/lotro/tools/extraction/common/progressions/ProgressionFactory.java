@@ -8,6 +8,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.PropertyValue;
+import delta.games.lotro.tools.extraction.utils.StatValueConverter;
 import delta.games.lotro.utils.maths.ArrayProgression;
 import delta.games.lotro.utils.maths.ArrayProgressionConstants;
 import delta.games.lotro.utils.maths.LinearInterpolatingProgression;
@@ -70,25 +71,24 @@ public class ProgressionFactory
     if (type==PropertyType.DATA_FILE) return ArrayProgressionConstants.LONG;
     if (type==PropertyType.FLOAT) return ArrayProgressionConstants.FLOAT;
     if (type==PropertyType.INT) return ArrayProgressionConstants.INTEGER;
-    if (type==PropertyType.ENUM_MAPPER) return ArrayProgressionConstants.INTEGER;
-    LOGGER.warn("Unsupported property progression type: "+type);
-    return ArrayProgressionConstants.FLOAT;
+    return ArrayProgressionConstants.OTHER;
   }
 
   private static ArrayProgression buildArrayProgression(int progressionId, String type, PropertiesSet properties, String arrayProperty)
   {
     ArrayProgression ret=null;
-    Object[] progression=(Object[])properties.getProperty(arrayProperty);
+    ArrayPropertyValue progression=(ArrayPropertyValue)properties.getPropertyValueByName(arrayProperty);
     if (progression!=null)
     {
       // Always 1?
       Integer minXValue=(Integer)properties.getProperty("Progression_MinimumIndexValue");
       int minX=(minXValue!=null)?minXValue.intValue():1;
-      int nbItems=progression.length;
+      int nbItems=progression.getValues().length;
       ret=new ArrayProgression(progressionId,type,minX,nbItems);
-      for(int i=0;i<progression.length;i++)
+      for(int i=0;i<nbItems;i++)
       {
-        Number value=(Number)progression[i];
+        PropertyValue propValue=progression.getValues()[i];
+        Object value=StatValueConverter.convertStatValue(propValue.getDefinition(),propValue.getValue());
         ret.set(i+minX,value);
       }
     }
