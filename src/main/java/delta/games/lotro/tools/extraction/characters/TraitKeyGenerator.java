@@ -56,7 +56,6 @@ public class TraitKeyGenerator
     // Guardian
     setup("OVERPOWER",1879272892); // Valorous Strength
     setup("HEAVY_BLOWS",1879272894); // Heavy Blows
-    setup("SKILLED_DEFLECTION",1879271351); // Skilled Deflection
     // Hunter
     setup("CRITICAL_EYE",1879259548);
     setup("IMPACT_ARROWS",1879264321); // Impact Arrows
