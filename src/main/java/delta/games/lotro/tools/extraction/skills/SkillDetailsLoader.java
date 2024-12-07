@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.skills;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -8,27 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.transform.sax.TransformerHandler;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.helpers.AttributesImpl;
 
-import delta.common.utils.io.xml.XmlFileWriterHelper;
-import delta.common.utils.io.xml.XmlWriter;
-import delta.common.utils.text.EncodingNames;
+import delta.games.lotro.character.skills.SingleTypeSkillEffectsManager;
 import delta.games.lotro.character.skills.SkillCostData;
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillDetails;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectType;
-import delta.games.lotro.character.skills.SingleTypeSkillEffectsManager;
 import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillFlags;
 import delta.games.lotro.character.skills.SkillGambitData;
 import delta.games.lotro.character.skills.SkillPipData;
 import delta.games.lotro.character.skills.SkillVitalCost;
-import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.attack.SkillAttack;
 import delta.games.lotro.character.skills.attack.SkillAttackFlags;
 import delta.games.lotro.character.skills.attack.SkillAttacks;
@@ -37,8 +29,6 @@ import delta.games.lotro.character.skills.geometry.Box;
 import delta.games.lotro.character.skills.geometry.SkillGeometry;
 import delta.games.lotro.character.skills.geometry.SkillPositionalData;
 import delta.games.lotro.character.skills.geometry.Sphere;
-import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLConstants;
-import delta.games.lotro.character.skills.io.xml.SkillDetailsXmlIO;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.AreaEffectAnchorType;
 import delta.games.lotro.common.enums.DamageQualifier;
@@ -55,22 +45,18 @@ import delta.games.lotro.common.enums.VitalType;
 import delta.games.lotro.common.inductions.Induction;
 import delta.games.lotro.common.inductions.io.xml.InductionXMLWriter;
 import delta.games.lotro.common.properties.ModPropertyList;
-import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
-import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
-import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.effects.SkillEffectsLoader;
 import delta.games.lotro.tools.extraction.utils.ModifiersUtils;
-import delta.games.lotro.tools.utils.DataFacadeBuilder;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
@@ -91,8 +77,6 @@ public class SkillDetailsLoader
   private LotroEnum<AreaEffectAnchorType> _areaEffectAnchorTypeEnum;
   private LotroEnum<GambitIconType> _gambitIconTypeEnum;
 
-  private List<SkillDetails> _details;
-
   /**
    * Constructor.
    * @param facade Facade.
@@ -110,7 +94,6 @@ public class SkillDetailsLoader
     _pipTypeEnum=lotroEnumRegistry.get(PipType.class);
     _areaEffectAnchorTypeEnum=lotroEnumRegistry.get(AreaEffectAnchorType.class);
     _gambitIconTypeEnum=lotroEnumRegistry.get(GambitIconType.class);
-    _details=new ArrayList<SkillDetails>();
   }
 
   private Induction getInduction(int skillInductionActionID)
@@ -138,18 +121,16 @@ public class SkillDetailsLoader
     return ret;
   }
 
-  private void handleSkill(SkillDescription skill)
+  /**
+   * Load skill details.
+   * @param skill Parent skill.
+   * @param props Skill properties.
+   * @return the loaded details.
+   */
+  public SkillDetails loadSkillDetails(SkillDescription skill, PropertiesSet props)
   {
     int skillID=skill.getIdentifier();
-    PropertiesSet props=_facade.loadProperties(skillID+DATConstants.DBPROPERTIES_OFFSET);
-    if (props==null)
-    {
-      return;
-    }
-
     SkillDetails ret=new SkillDetails();
-    ret.setId(skillID);
-    ret.setName(skill.getName());
 
     // Duration
     Float actionDurationContribution=(Float)props.getProperty("Skill_ActionDurationContribution");
@@ -282,7 +263,7 @@ public class SkillDetailsLoader
     // Attacks
     loadAttacks(props,ret);
 
-    _details.add(ret);
+    return ret;
   }
 
   private void loadAttacks(PropertiesSet props, SkillDetails skillDetails)
@@ -747,54 +728,11 @@ public class SkillDetailsLoader
   }
 
   /**
-   * Do it.
+   * Save loaded annex data.
    */
-  public void doIt()
-  {
-    for(SkillDescription skill : SkillsManager.getInstance().getAll())
-    {
-      handleSkill(skill);
-    }
-    save();
-  }
-
-  private void save()
+  public void save()
   {
     saveInductions();
-    saveSkillDetails(GeneratedFiles.SKILL_DETAILS,_details);
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_SKILLS);
-  }
-
-  private void saveSkillDetails(File toFile, List<SkillDetails> details)
-  {
-    XmlFileWriterHelper helper=new XmlFileWriterHelper();
-    XmlWriter writer=new XmlWriter()
-    {
-      @Override
-      public void writeXml(TransformerHandler hd) throws Exception
-      {
-        hd.startElement("","",SkillDescriptionXMLConstants.SKILLS_TAG,new AttributesImpl());
-        for(SkillDetails detail : details)
-        {
-          SkillDetailsXmlIO.writeSkillDetails(hd,detail);
-        }
-        hd.endElement("","",SkillDescriptionXMLConstants.SKILLS_TAG);
-      }
-    };
-    helper.write(toFile,EncodingNames.UTF_8,writer);
-  }
-
-  /**
-   * Main method for this tool.
-   * @param args Not used.
-   */
-  public static void main(String[] args)
-  {
-    Context.init(LotroCoreConfig.getMode());
-    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
-    PlacesLoader placesLoader=new PlacesLoader(facade);
-    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
-    SkillDetailsLoader skillsLoader=new SkillDetailsLoader(facade,effectsLoader);
-    skillsLoader.doIt();
   }
 }

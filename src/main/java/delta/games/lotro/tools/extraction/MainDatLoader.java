@@ -68,7 +68,6 @@ import delta.games.lotro.tools.extraction.relics.MainDatRelicMeldingRecipesLoade
 import delta.games.lotro.tools.extraction.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.extraction.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
-import delta.games.lotro.tools.extraction.skills.SkillDetailsLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.extraction.ui.SocketIconsLoader;
@@ -124,15 +123,18 @@ public class MainDatLoader
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
-    // Skills
-    MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade);
-    skillsLoader.doIt();
     // Places
     PlacesLoader placesLoader=new PlacesLoader(_facade);
     // Effects
     EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
+    // Skills
+    MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade,effectsLoader);
+    skillsLoader.doIt();
     // Traits
     new MainTraitDataLoader(_facade,effectsLoader).doIt();
+    // Skills (complements)
+    skillsLoader.loadRequirements();
+    new MainProgressionsMerger().doIt();
     // Emotes
     new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
@@ -157,10 +159,6 @@ public class MainDatLoader
     {
       new SocketIconsLoader(_facade).doIt();
     }
-    // Skills (complements)
-    skillsLoader.loadRequirements(effectsLoader);
-    skillsLoader.loadEffects(effectsLoader);
-    new SkillDetailsLoader(_facade,effectsLoader).doIt();
     new GenericItemEffectsLoader(_facade,effectsLoader).doIt();
     // Virtues
     new VirtueDataLoader(_facade,effectsLoader).doIt();
@@ -298,7 +296,6 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.NATIONALITIES);
     // - skills
     CleanupUtils.deleteFile(GeneratedFiles.SKILLS);
-    CleanupUtils.deleteFile(GeneratedFiles.SKILL_DETAILS);
     CleanupUtils.deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
     // - virtues
     CleanupUtils.deleteFile(GeneratedFiles.VIRTUES);

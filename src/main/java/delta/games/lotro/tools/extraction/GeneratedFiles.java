@@ -80,10 +80,6 @@ public class GeneratedFiles
    */
   public static final File SKILLS=LotroCoreConfig.getInstance().getFile(DataFiles.SKILLS);
   /**
-   * Skill details.
-   */
-  public static final File SKILL_DETAILS=LotroCoreConfig.getInstance().getFile(DataFiles.SKILL_DETAILS);
-  /**
    * Skill icons.
    */
   public static final File SKILL_ICONS_DIR=LotroCoreConfig.getInstance().getFile("skillIcons");

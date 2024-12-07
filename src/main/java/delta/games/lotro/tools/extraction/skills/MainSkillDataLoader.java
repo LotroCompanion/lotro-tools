@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
+import delta.games.lotro.character.skills.SkillDetails;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -37,7 +38,6 @@ import delta.games.lotro.lore.collections.pets.CosmeticPetDescription;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
-import delta.games.lotro.tools.extraction.effects.SkillEffectsLoader;
 import delta.games.lotro.tools.extraction.skills.mounts.MountsLoader;
 import delta.games.lotro.tools.extraction.skills.pets.CosmeticPetLoader;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
@@ -53,17 +53,22 @@ public class MainSkillDataLoader
 
   private DataFacade _facade;
   private I18nUtils _i18n;
+  private SkillDetailsLoader _detailsLoader;
+  private EffectLoader _effectsLoader;
   private MountsLoader _mountsLoader;
   private CosmeticPetLoader _petsLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public MainSkillDataLoader(DataFacade facade)
+  public MainSkillDataLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
     _i18n=new I18nUtils("skills",facade.getGlobalStringsManager());
+    _effectsLoader=effectsLoader;
+    _detailsLoader=new SkillDetailsLoader(facade,effectsLoader);
     _mountsLoader=new MountsLoader(facade,_i18n);
     _petsLoader=new CosmeticPetLoader(facade,_i18n);
   }
@@ -94,9 +99,13 @@ public class MainSkillDataLoader
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
         if (classDefIndex==827)
         {
-          SkillDescription skill=loadSkill(did);
+          PropertiesSet skillProperties=_facade.loadProperties(i+DATConstants.DBPROPERTIES_OFFSET);
+          SkillDescription skill=loadSkill(did,skillProperties);
           if (skill!=null)
           {
+            SkillDetails details=_detailsLoader.loadSkillDetails(skill,skillProperties);
+            skill.setDetails(details);
+            updateTravelSpecifics(skill);
             skillsMgr.registerSkill(skill);
           }
         }
@@ -107,93 +116,89 @@ public class MainSkillDataLoader
   /**
    * Load a skill.
    * @param skillId Skill identifier.
+   * @param skillProperties Properties to use.
    * @return the loaded skill description.
    */
-  private SkillDescription loadSkill(int skillId)
+  private SkillDescription loadSkill(int skillId, PropertiesSet skillProperties)
   {
-    SkillDescription ret=null;
-    PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
-    if (skillProperties!=null)
+    SkillDescription ret=buildSkill(skillProperties);
+    ret.setIdentifier(skillId);
+    // Name
+    String skillName=_i18n.getNameStringProperty(skillProperties,"Skill_Name",skillId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+    ret.setName(skillName);
+    // Description
+    String description=_i18n.getStringProperty(skillProperties,"Skill_Desc");
+    ret.setDescription(description);
+    // Icon
+    Integer iconId=(Integer)skillProperties.getProperty("Skill_SmallIcon");
+    if (iconId!=null)
     {
-      ret=buildSkill(skillProperties);
-      ret.setIdentifier(skillId);
-      // Name
-      String skillName=_i18n.getNameStringProperty(skillProperties,"Skill_Name",skillId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
-      ret.setName(skillName);
-      // Description
-      String description=_i18n.getStringProperty(skillProperties,"Skill_Desc");
-      ret.setDescription(description);
-      // Icon
-      Integer iconId=(Integer)skillProperties.getProperty("Skill_SmallIcon");
-      if (iconId!=null)
+      ret.setIconId(iconId.intValue());
+    }
+    // Category
+    Integer categoryId=(Integer)skillProperties.getProperty("Skill_Category");
+    if (categoryId!=null)
+    {
+      LotroEnum<SkillCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(SkillCategory.class);
+      SkillCategory category=categoryEnum.getEntry(categoryId.intValue());
+      ret.setCategory(category);
+    }
+    // Build icon file
+    if (iconId!=null)
+    {
+      String iconFilename=iconId+".png";
+      File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
+      if (!to.exists())
       {
-        ret.setIconId(iconId.intValue());
-      }
-      // Category
-      Integer categoryId=(Integer)skillProperties.getProperty("Skill_Category");
-      if (categoryId!=null)
-      {
-        LotroEnum<SkillCategory> categoryEnum=LotroEnumsRegistry.getInstance().get(SkillCategory.class);
-        SkillCategory category=categoryEnum.getEntry(categoryId.intValue());
-        ret.setCategory(category);
-      }
-      // Build icon file
-      if (iconId!=null)
-      {
-        String iconFilename=iconId+".png";
-        File to=new File(GeneratedFiles.SKILL_ICONS_DIR,iconFilename).getAbsoluteFile();
-        if (!to.exists())
+        boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
+        if (!ok)
         {
-          boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
-          if (!ok)
-          {
-            LOGGER.warn("Could not build skill icon: "+iconFilename);
-          }
+          LOGGER.warn("Could not build skill icon: "+iconFilename);
         }
       }
-      // Skill type(s)
+    }
+    // Skill type(s)
+    {
+      Long typeFlags=(Long)skillProperties.getProperty("Skill_SkillType");
+      if (typeFlags!=null)
       {
-        Long typeFlags=(Long)skillProperties.getProperty("Skill_SkillType");
-        if (typeFlags!=null)
+        EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
+        BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags.longValue());
+        if (LOGGER.isDebugEnabled())
         {
-          EnumMapper skillType=_facade.getEnumsManager().getEnumMapper(587203492);
-          BitSet skillTypesBitSet=BitSetUtils.getBitSetFromFlags(typeFlags.longValue());
-          if (LOGGER.isDebugEnabled())
-          {
-            String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
-            LOGGER.debug("Skill: "+skillName+", types="+types);
-          }
+          String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
+          LOGGER.debug("Skill: "+skillName+", types="+types);
         }
       }
-      // Skill quest flags
+    }
+    // Skill quest flags
+    {
+      Long skillQuestFlags=(Long)skillProperties.getProperty("Skill_QuestFlags");
+      if (skillQuestFlags!=null)
       {
-        Long skillQuestFlags=(Long)skillProperties.getProperty("Skill_QuestFlags");
-        if (skillQuestFlags!=null)
+        BitSet skillBitSet=BitSetUtils.getBitSetFromFlags(skillQuestFlags.longValue());
+        if (LOGGER.isDebugEnabled())
         {
-          BitSet skillBitSet=BitSetUtils.getBitSetFromFlags(skillQuestFlags.longValue());
-          if (LOGGER.isDebugEnabled())
-          {
-            LOGGER.debug("Skill: "+skillName+", flags="+skillBitSet);
-          }
+          LOGGER.debug("Skill: "+skillName+", flags="+skillBitSet);
         }
       }
-      if (ret instanceof MountDescription)
+    }
+    if (ret instanceof MountDescription)
+    {
+      MountDescription mount=(MountDescription)ret;
+      if (_mountsLoader.useMount(mount))
       {
-        MountDescription mount=(MountDescription)ret;
-        if (_mountsLoader.useMount(mount))
-        {
-          _mountsLoader.loadMountData(skillProperties,mount);
-        }
-        else
-        {
-          ret=null;
-        }
+        _mountsLoader.loadMountData(skillProperties,mount);
       }
-      if (ret instanceof CosmeticPetDescription)
+      else
       {
-        CosmeticPetDescription pet=(CosmeticPetDescription)ret;
-        _petsLoader.loadPetData(skillProperties,pet);
+        ret=null;
       }
+    }
+    if (ret instanceof CosmeticPetDescription)
+    {
+      CosmeticPetDescription pet=(CosmeticPetDescription)ret;
+      _petsLoader.loadPetData(skillProperties,pet);
     }
     return ret;
   }
@@ -247,20 +252,19 @@ public class MainSkillDataLoader
 
   /**
    * Load skill requirements.
-   * @param effectsLoader Effects loader.
    */
-  public void loadRequirements(EffectLoader effectsLoader)
+  public void loadRequirements()
   {
     for(SkillDescription skill : SkillsManager.getInstance().getAll())
     {
       int skillId=skill.getIdentifier();
       PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
-      loadRequirements(skill,effectsLoader,skillProperties);
+      loadRequirements(skill,skillProperties);
     }
     saveSkills();
   }
 
-  private void loadRequirements(SkillDescription skill, EffectLoader effectsLoader, PropertiesSet props)
+  private void loadRequirements(SkillDescription skill, PropertiesSet props)
   {
     // Required trait
     Integer requiredTraitId=(Integer)props.getProperty("Skill_RequiredTrait");
@@ -287,7 +291,7 @@ public class MainSkillDataLoader
       for(Object requiredEffectEntry : requiredEffectsArray)
       {
         int requiredEffectId=((Integer)requiredEffectEntry).intValue();
-        Effect effect=effectsLoader.getEffect(requiredEffectId);
+        Effect effect=_effectsLoader.getEffect(requiredEffectId);
         if (effect!=null)
         {
           skill.addRequiredEffect(effect);
@@ -296,30 +300,18 @@ public class MainSkillDataLoader
     }
   }
 
-  /**
-   * Load skill effects.
-   * @param effectsLoader Effects loader.
-   */
-  public void loadEffects(EffectLoader effectsLoader)
+  private void updateTravelSpecifics(SkillDescription skill)
   {
-    SkillEffectsLoader skillEffectsLoader=new SkillEffectsLoader(effectsLoader);
-    for(SkillDescription skill : SkillsManager.getInstance().getAll())
+    if (skill instanceof TravelSkill)
     {
-      int skillId=skill.getIdentifier();
-      PropertiesSet skillProperties=_facade.loadProperties(skillId+DATConstants.DBPROPERTIES_OFFSET);
-      skillEffectsLoader.handleSkillProps(skill,skillProperties);
-      if (skill instanceof TravelSkill)
-      {
-        TravelSkill travelSkill=(TravelSkill)skill;
-        loadTravelSkillSpecifics(travelSkill);
-      }
+      TravelSkill travelSkill=(TravelSkill)skill;
+      loadTravelSkillSpecifics(travelSkill);
     }
-    saveSkills();
   }
 
   private void loadTravelSkillSpecifics(TravelSkill travelSkill)
   {
-    SkillEffectsManager effectsMgr=travelSkill.getEffects();
+    SkillEffectsManager effectsMgr=travelSkill.getDetails().getEffects();
     if (effectsMgr!=null)
     {
       for(SkillEffectGenerator generator : effectsMgr.getEffects())
@@ -352,6 +344,8 @@ public class MainSkillDataLoader
     }
     // Labels
     _i18n.save();
+    // Details
+    _detailsLoader.save();
   }
 
   /**
@@ -361,12 +355,11 @@ public class MainSkillDataLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    MainSkillDataLoader loader=new MainSkillDataLoader(facade);
-    loader.doIt();
     PlacesLoader placesLoader=new PlacesLoader(facade);
     EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
-    loader.loadEffects(effectsLoader);
-    loader.loadRequirements(effectsLoader);
+    MainSkillDataLoader loader=new MainSkillDataLoader(facade,effectsLoader);
+    loader.doIt();
+    loader.loadRequirements();
     effectsLoader.save();
     facade.dispose();
   }

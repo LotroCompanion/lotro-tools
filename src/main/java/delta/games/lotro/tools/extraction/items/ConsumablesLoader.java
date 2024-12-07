@@ -8,7 +8,7 @@ import java.util.Set;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillEffectGenerator;
-import delta.games.lotro.character.skills.SkillEffectsManager;
+import delta.games.lotro.character.skills.SkillEffectsUtils;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectGenerator;
@@ -245,12 +245,7 @@ public class ConsumablesLoader
       return;
     }
     SkillDescription skill=skillToExecute.getSkill();
-    SkillEffectsManager effectsMgr=skill.getEffects();
-    if (effectsMgr==null)
-    {
-      return;
-    }
-    List<SkillEffectGenerator> effectGenerators=effectsMgr.getEffects();
+    List<SkillEffectGenerator> effectGenerators=SkillEffectsUtils.getEffects(skill);
     if (effectGenerators.isEmpty())
     {
       return;
