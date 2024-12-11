@@ -136,7 +136,7 @@ Generator_PositionSetLimitArray:
     }
     else
     {
-      LOGGER.warn("Unmanaged entry: "+entryObj);
+      LOGGER.warn("Unmanaged entry: {}",entryObj);
     }
   }
 
@@ -170,7 +170,7 @@ Generator_PositionSetLimitArray:
         }
         else
         {
-          LOGGER.warn("Probability is: "+probability);
+          LOGGER.warn("Probability is: {}",probability);
         }
       }
     }
@@ -202,7 +202,7 @@ Generator_PositionSetLimitArray:
       }
       else
       {
-        LOGGER.warn("Weight is: "+weight);
+        LOGGER.warn("Weight is: {}",weight);
       }
     }
   }
@@ -241,7 +241,7 @@ Generator_PositionSetLimitArray:
       }
       else
       {
-        LOGGER.warn("OneOf Weight is: "+weight);
+        LOGGER.warn("OneOf Weight is: {}",weight);
       }
     }
   }
@@ -257,7 +257,7 @@ Generator_PositionSetLimitArray:
         _dids.add(entityId);
         return true;
       }
-      LOGGER.warn("SimpleEntry Weight is: "+weight);
+      LOGGER.warn("SimpleEntry Weight is: {}",weight);
     }
     return false;
   }

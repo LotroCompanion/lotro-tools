@@ -167,7 +167,7 @@ Mount_SkillToGrantRaceArray:
         }
         else
         {
-          LOGGER.warn("Type not found or type is not 1 for "+item);
+          LOGGER.warn("Type not found or type is not 1 for {}",item);
         }
       }
     }
@@ -200,12 +200,12 @@ Mount_SkillToGrantRaceArray:
         }
         else
         {
-          LOGGER.warn("Could not find faction with ID: "+factionID+" for item: "+item);
+          LOGGER.warn("Could not find faction with ID: {} for item: {}",factionID,item);
         }
       }
       else
       {
-        LOGGER.debug("No faction ID, and isRepItem is "+isRepItem+" for item: "+item);
+        LOGGER.debug("No faction ID, and isRepItem is {} for item: {}",isRepItem,item);
       }
     }
   }
@@ -279,7 +279,7 @@ EffectGenerator_UsageEffectList:
         }
         else
         {
-          LOGGER.warn("Unmanaged data list entry: "+dataListEntryPropDef);
+          LOGGER.warn("Unmanaged data list entry: {}",dataListEntryPropDef);
         }
       }
     }
@@ -319,7 +319,7 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
       }
       else
       {
-        LOGGER.warn("Unmanaged grant entry: "+grantEntryPropDef);
+        LOGGER.warn("Unmanaged grant entry: {}",grantEntryPropDef);
       }
     }
   }

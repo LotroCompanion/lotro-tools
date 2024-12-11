@@ -169,11 +169,10 @@ public class DatStatUtils
       }
       StatDescription stat=provider.getStat();
       _statistics.registerStatUsage(stat);
-      //provider=handleSpecificCases(provider,descriptionOverride);
       return provider;
     }
     // Effect label only
-    if ((descriptionOverride!=null) && (descriptionOverride.length()>0) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
+    if ((descriptionOverride!=null) && (!descriptionOverride.isEmpty()) && (!StatUtils.NO_DESCRIPTION.equals(descriptionOverride)))
     {
       SpecialEffect effect=new SpecialEffect(descriptionOverride);
       statsProvider.addSpecialEffect(effect);
@@ -321,7 +320,7 @@ public class DatStatUtils
         doIt=true;
       }
       // ... or if operator is not ADD and not SUBSTRACT,
-      if ((operator!=StatOperator.ADD) && ((operator!=StatOperator.SUBSTRACT)))
+      if ((operator!=StatOperator.ADD) && (operator!=StatOperator.SUBSTRACT))
       {
         doIt=true;
       }

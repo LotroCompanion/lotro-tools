@@ -49,8 +49,6 @@ public class MainDatLandmarksLoader
     {
       return null;
     }
-    //System.out.println("*********** Place: "+landmarkId+" ****************");
-    //System.out.println(landmarkProperties.dump());
     // Name
     String name=_i18n.getNameStringProperty(props,"Name",landmarkId,0);
     // Type:
@@ -71,7 +69,7 @@ public class MainDatLandmarksLoader
     boolean ok=LandmarksXMLWriter.writeLandmarksFile(GeneratedFiles.LANDMARKS,landmarks);
     if (ok)
     {
-      LOGGER.info("Wrote landmarks file: "+GeneratedFiles.LANDMARKS);
+      LOGGER.info("Wrote landmarks file: {}",GeneratedFiles.LANDMARKS);
     }
     // Labels
     _i18n.save();

@@ -387,7 +387,7 @@ public class DatRewardsLoader
     }
     if (ret==null)
     {
-      LOGGER.warn("Unmanaged virtue: "+statKey);
+      LOGGER.warn("Unmanaged virtue: {}",statKey);
     }
     return ret;
   }
@@ -652,7 +652,7 @@ public class DatRewardsLoader
         }
         else
         {
-          LOGGER.warn("Unmanaged challenge level property: "+challengeLevelOverrideProperty);
+          LOGGER.warn("Unmanaged challenge level property: {}",challengeLevelOverrideProperty);
         }
       }
     }

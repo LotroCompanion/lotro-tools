@@ -78,7 +78,7 @@ public class DeedsBundle
       DeedDescription old=_mapByKey.put(key,deed);
       if (old!=null)
       {
-        LOGGER.warn("Duplicate deed key: "+key);
+        LOGGER.warn("Duplicate deed key: {}",key);
       }
     }
     int id=deed.getIdentifier();
@@ -88,7 +88,7 @@ public class DeedsBundle
       DeedDescription old=_mapById.put(idKey,deed);
       if (old!=null)
       {
-        LOGGER.warn("Duplicate deed ID: "+id);
+        LOGGER.warn("Duplicate deed ID: {}",idKey);
       }
     }
   }

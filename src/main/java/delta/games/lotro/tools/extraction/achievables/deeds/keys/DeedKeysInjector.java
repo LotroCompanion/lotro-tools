@@ -83,10 +83,7 @@ public class DeedKeysInjector
       return;
     }
     String name=deed.getName();
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("Handling deed: "+key+" -- "+name);
-    }
+    LOGGER.debug("Handling deed: {} -- {}",key,name);
     List<DeedDescription> oldDeedsWithName=_old.getDeedsByName(name);
     if (oldDeedsWithName.size()==1)
     {
@@ -109,7 +106,7 @@ public class DeedKeysInjector
       }
       if (newDeed==null)
       {
-        LOGGER.warn("Deed not resolved: key=["+key+"], name=["+name+"]");
+        LOGGER.warn("Deed not resolved: key=[{}], name=[{}]",key,name);
         _nbFailures++;
       }
       else
@@ -119,7 +116,7 @@ public class DeedKeysInjector
     }
     else
     {
-      LOGGER.warn("Several old deeds with that name: "+name);
+      LOGGER.warn("Several old deeds with that name: {}",name);
       _nbFailures++;
     }
   }
@@ -145,7 +142,7 @@ public class DeedKeysInjector
     }
     if (nbNewDeeds>1)
     {
-      LOGGER.warn("Ambiguous name: (x"+nbNewDeeds+") "+name);
+      LOGGER.warn("Ambiguous name: (x{}) {}",Integer.valueOf(nbNewDeeds),name);
       return newDeeds.get(0);
     }
     return null;
@@ -439,7 +436,7 @@ public class DeedKeysInjector
     resolveDeeds();
     if (_nbFailures>0)
     {
-      LOGGER.warn("Number of failures: "+_nbFailures);
+      LOGGER.warn("Number of failures: {}",Integer.valueOf(_nbFailures));
     }
   }
 }

@@ -156,11 +156,11 @@ public class MainBillingGroupsLoader
     }
     // Save groups
     int nbBillingGroups=billingGroupsDescriptions.size();
-    LOGGER.info("Writing "+nbBillingGroups+" titles");
+    LOGGER.info("Writing {} billing groups",Integer.valueOf(nbBillingGroups));
     boolean ok=new BillingGroupsXMLWriter().write(GeneratedFiles.BILLING_GROUPS,billingGroupsDescriptions,EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote billing groups file: "+GeneratedFiles.BILLING_GROUPS);
+      LOGGER.info("Wrote billing groups file: {}",GeneratedFiles.BILLING_GROUPS);
     }
   }
 
@@ -169,10 +169,10 @@ public class MainBillingGroupsLoader
     List<TitleDescription> titles=groupDescription.getAccountTitles();
     if (!titles.isEmpty())
     {
-      LOGGER.info("Group: "+groupDescription.getName());
+      LOGGER.info("Group: {}",groupDescription.getName());
       for(TitleDescription title : titles)
       {
-        LOGGER.info("\t"+title.getIdentifier()+" - "+title.getName());
+        LOGGER.info("\t{} - {}",Integer.valueOf(title.getIdentifier()),title.getName());
       }
     }
   }

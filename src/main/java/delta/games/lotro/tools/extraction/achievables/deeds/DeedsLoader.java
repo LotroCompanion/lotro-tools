@@ -273,7 +273,7 @@ public class DeedsLoader
         // 29 => Hobbit
         // 37 => Beorning
         // 39 => Allegiance
-        LOGGER.warn("Unmanaged type: "+typeCode);
+        LOGGER.warn("Unmanaged type: {}",Integer.valueOf(typeCode));
       }
     }
     deed.setType(type);
@@ -420,14 +420,14 @@ public class DeedsLoader
     List<DeedDescription> deeds=new ArrayList<DeedDescription>();
     deeds.addAll(_deeds.values());
     int nbDeeds=_deeds.size();
-    LOGGER.info("Nb deeds: "+nbDeeds);
+    LOGGER.info("Nb deeds: {}",Integer.valueOf(nbDeeds));
     // Write deeds file
     Collections.sort(deeds,new IdentifiableComparator<DeedDescription>());
     DeedXMLWriter writer=new DeedXMLWriter();
     boolean ok=writer.writeDeeds(GeneratedFiles.DEEDS,deeds,EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote deeds file: "+GeneratedFiles.DEEDS);
+      LOGGER.info("Wrote deeds file: {}",GeneratedFiles.DEEDS);
     }
   }
 }

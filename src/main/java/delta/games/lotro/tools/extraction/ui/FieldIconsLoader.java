@@ -1,7 +1,7 @@
 package delta.games.lotro.tools.extraction.ui;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +23,14 @@ public class FieldIconsLoader
   private static final Logger LOGGER=LoggerFactory.getLogger(FieldIconsLoader.class);
 
   private DataFacade _facade;
-  private HashMap<Integer,Item> _mapById;
+  private Map<Integer,Item> _mapById;
 
   /**
    * Constructor.
    * @param facade Data facade.
    * @param mapById Map of item, by ID.
    */
-  public FieldIconsLoader(DataFacade facade, HashMap<Integer,Item> mapById)
+  public FieldIconsLoader(DataFacade facade, Map<Integer,Item> mapById)
   {
     _facade=facade;
     _mapById=mapById;
@@ -72,7 +72,7 @@ public class FieldIconsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle recipe ID="+indexDataId);
+      LOGGER.warn("Could not handle recipe ID={}",Integer.valueOf(indexDataId));
     }
   }
 
