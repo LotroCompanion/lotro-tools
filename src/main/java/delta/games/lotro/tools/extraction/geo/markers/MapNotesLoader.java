@@ -129,7 +129,7 @@ public class MapNotesLoader
       // Checks
       if (destZone==null)
       {
-        LOGGER.warn("Destination zone not found: "+destZoneId);
+        LOGGER.warn("Destination zone not found: {}",Integer.valueOf(destZoneId));
         return;
       }
       if (VERBOSE)
@@ -196,7 +196,7 @@ public class MapNotesLoader
     int available=bis.available();
     if (available>0)
     {
-      LOGGER.warn("Available bytes: "+available);
+      LOGGER.warn("Available bytes: {}",Integer.valueOf(available));
     }
     _markersUtils.registerLinks();
   }

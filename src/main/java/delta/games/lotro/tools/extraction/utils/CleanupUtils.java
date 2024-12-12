@@ -32,7 +32,7 @@ public class CleanupUtils
       boolean ok=toDelete.delete();
       if (!ok)
       {
-        LOGGER.warn("Could not delete file: "+toDelete);
+        LOGGER.warn("Could not delete file: {}",toDelete);
       }
     }
   }

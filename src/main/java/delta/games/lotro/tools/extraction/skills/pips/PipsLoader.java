@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.skills.pips;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,7 +80,7 @@ public class PipsLoader
     return ret;
   }
 
-  private void save(File to, List<PipDescription> pips)
+  private void save(List<PipDescription> pips)
   {
     List<PipDescription> sortedList=new ArrayList<PipDescription>(pips);
     Collections.sort(sortedList,new IdentifiableComparator<PipDescription>());
@@ -94,7 +93,7 @@ public class PipsLoader
   public void doIt()
   {
     List<PipDescription> pips=load();
-    save(GeneratedFiles.PIPS,pips);
+    save(pips);
     _i18n.save();
   }
 

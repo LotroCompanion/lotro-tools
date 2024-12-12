@@ -50,7 +50,6 @@ UI_Map_MapNoteTypeArray:
     UI_Map_MapNoteType: 67108864 (Task)
      */
     PropertiesSet props=_facade.loadProperties(0x78000001); // UNIQUEDB/UI_MapNoteIcons_Map
-    //System.out.println(props.dump());
 
     Object[] mapNoteTypePropsArray=(Object[])props.getProperty("UI_Map_MapNoteTypeArray");
     for(Object mapNoteTypeObj : mapNoteTypePropsArray)
@@ -75,20 +74,6 @@ UI_Map_MapNoteTypeArray:
         File imageFile=new File(imagesDir,index+".png");
         DatIconsUtils.buildImageFile(_facade,imageId.intValue(),imageFile);
       }
-      /*
-      // Menu image
-      int menuImageId=((Integer)mapNoteTypeProps.getProperty("UI_Map_MapNoteMenuImage")).intValue();
-      File menuImageFile=new File(imagesDir,"menu-"+index+".png");
-      DatIconsUtils.buildImageFile(_facade,menuImageId,menuImageFile);
-      // Highlight image
-      int highlightImageId=((Integer)imageStruct.getProperty("UI_Map_MapNoteHighlightImage")).intValue();
-      File highlightImageFile=new File(imagesDir,"highlight-"+index+".png");
-      DatIconsUtils.buildImageFile(_facade,highlightImageId,highlightImageFile);
-      // Selected image
-      int selectedImageId=((Integer)imageStruct.getProperty("UI_Map_MapNoteSelectedImage")).intValue();
-      File selectedImageFile=new File(imagesDir,"selected-"+index+".png");
-      DatIconsUtils.buildImageFile(_facade,selectedImageId,selectedImageFile);
-      */
     }
   }
 }

@@ -82,7 +82,7 @@ public class CharacterClassDataLoader
     // Key
     String classKey=getClassKeyFromId(classCode);
     ClassDescription classDescription=new ClassDescription(classId,classCode,classKey);
-    LOGGER.info("Handling class: "+classKey);
+    LOGGER.info("Handling class: {}",classKey);
     // Name
     String className=_i18n.getNameStringProperty(classInfo,"AdvTable_ClassName",classId,0);
     classDescription.setName(className);
@@ -92,11 +92,11 @@ public class CharacterClassDataLoader
     classDescription.setTag(tag);
     // Abbreviation
     String classAbbreviation=DatStringUtils.getStringProperty(classInfo,"AdvTable_AbbreviatedClassName");
-    LOGGER.debug("Class abbreviation: "+classAbbreviation);
+    LOGGER.debug("Class abbreviation: {}",classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
     // Class description
     String description=_i18n.getStringProperty(classInfo,"AdvTable_ClassDesc");
-    LOGGER.debug("Class description: "+description);
+    LOGGER.debug("Class description: {}",description);
     classDescription.setDescription(description);
     // Icons
     // Normal size (48 pixels)
@@ -186,8 +186,8 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private void handleLevel(ClassDescription characterClass, PropertiesSet levelProperties)
   {
-    int level=((Integer)levelProperties.getProperty("AdvTable_Level")).intValue();
-    LOGGER.debug("Level: "+level);
+    Integer levelInt=(Integer)levelProperties.getProperty("AdvTable_Level");
+    LOGGER.debug("Level: {}",levelInt);
     BasicStatsSet stats=new BasicStatsSet();
     // Vitals
     Object[] vitalStats=(Object[])levelProperties.getProperty("AdvTable_BaseVitalEntryList");
@@ -206,7 +206,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       }
       else
       {
-        LOGGER.warn("Stat not found (1): "+type);
+        LOGGER.warn("Stat not found (1): {}",type);
       }
     }
     // Other stats
@@ -226,7 +226,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
       }
       else
       {
-        LOGGER.warn("Stat not found (2): "+type);
+        LOGGER.warn("Stat not found (2): {}",type);
       }
     }
     // Regen
@@ -236,6 +236,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     {
       stats.setStat(WellKnownStat.ICPR,Integer.valueOf(240));
     }
+    int level=levelInt.intValue();
     // OCPR
     if (!WellKnownCharacterClassKeys.BEORNING.equals(classKey))
     {
@@ -350,7 +351,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
         {
           if (LOGGER.isDebugEnabled())
           {
-            LOGGER.debug(sourceStat+"*"+value+" => "+targetStat);
+            LOGGER.debug("{}*{} => {}",sourceStat,Float.valueOf(value),targetStat);
           }
           _derivatedStatsManager.setFactor(sourceStat,targetStat,characterClass,Float.valueOf(value));
           if (targetStat==WellKnownStat.TACTICAL_MASTERY)
@@ -387,16 +388,16 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
     for(Object traitPropertiesObj : traitsProperties)
     {
       PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      int level=((Integer)traitProperties.getProperty("AdvTable_Trait_Level")).intValue();
+      Integer level=(Integer)traitProperties.getProperty("AdvTable_Trait_Level");
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       Integer trainingCost=(Integer)traitProperties.getProperty("AdvTable_Trait_TrainingCost");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       String key=level+"#"+traitId;
       if (!knownTraits.contains(key))
       {
-        LOGGER.debug("Level: "+level+" (rank="+rank+", training cost="+trainingCost+")");
+        LOGGER.debug("Level: {} (rank={}, training cost={})",level,rank,trainingCost);
         TraitDescription trait=TraitUtils.getTrait(traitId);
-        TraitAndLevel classTrait=new TraitAndLevel(level,trait);
+        TraitAndLevel classTrait=new TraitAndLevel(level.intValue(),trait);
         description.addTrait(classTrait);
         knownTraits.add(key);
       }
@@ -471,7 +472,7 @@ AdvTable_AvailableSkillEntryList:
     if (statType==23) return null; // Resistance_Magic
     if (statType==26) return WellKnownStat.TACTICAL_MASTERY;
     if (statType==27) return WellKnownStat.PHYSICAL_MASTERY;
-    LOGGER.warn("Unsupported stat type: "+statType);
+    LOGGER.warn("Unsupported stat type: {}",Integer.valueOf(statType));
     return null;
   }
 
@@ -494,7 +495,7 @@ AdvTable_AvailableSkillEntryList:
     if (id==193) return WellKnownCharacterClassKeys.RUNE_KEEPER;
     if (id==194) return WellKnownCharacterClassKeys.WARDEN;
     if (id==216) return WellKnownCharacterClassKeys.CORSAIR;
-    LOGGER.warn("Unknown class ID: "+id);
+    LOGGER.warn("Unknown class ID: {}",Integer.valueOf(id));
     return "Unknown";
   }
 

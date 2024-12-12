@@ -75,33 +75,33 @@ public class DatRolesLoader
       int index=0;
       for(Object roleObj : roles)
       {
-        LOGGER.debug("Index: "+index);
+        LOGGER.debug("Index: {}",Integer.valueOf(index));
         PropertiesSet roleProps=(PropertiesSet)roleObj;
         Integer dispenserAction=(Integer)roleProps.getProperty("QuestDispenser_Action");
         if (dispenserAction!=null)
         {
           String action=_questRoleAction.getString(dispenserAction.intValue());
-          LOGGER.debug("\tdispenserAction: " +action); // LeaveInstance
+          LOGGER.debug("\tdispenserAction: {}",action); // LeaveInstance
         }
         Integer npcId=(Integer)roleProps.getProperty(QUEST_DISPENSER_NPC);
         if (npcId!=null)
         {
           Interactable npc=InteractableUtils.findInteractable(npcId.intValue());
           String npcName=npc.getName();
-          LOGGER.debug("\tNPC: "+npcName);
+          LOGGER.debug("\tNPC: {}",npcName);
         }
         String dispenserRoleName=(String)roleProps.getProperty("QuestDispenser_RoleName");
         if (dispenserRoleName!=null)
         {
-          LOGGER.debug("\tdispenserRolename: " +dispenserRoleName);
+          LOGGER.debug("\tdispenserRolename: {}",dispenserRoleName);
         }
         String dispenserRoleConstraint=(String)roleProps.getProperty("QuestDispenser_RoleConstraint");
         if (dispenserRoleConstraint!=null)
         {
-          LOGGER.debug("\tdispenserRole Constraint: " +dispenserRoleConstraint);
+          LOGGER.debug("\tdispenserRole Constraint: {}",dispenserRoleConstraint);
         }
         String successText=_i18n.getStringProperty(roleProps,"QuestDispenser_RoleSuccessText");
-        LOGGER.debug("\tSuccess text: "+successText);
+        LOGGER.debug("\tSuccess text: {}",successText);
         index++;
       }
     }
@@ -142,7 +142,7 @@ public class DatRolesLoader
         }
         else
         {
-          LOGGER.warn("Found out of range objective index: "+objectiveIndex+". Max: "+objectives.size());
+          LOGGER.warn("Found out of range objective index: {}. Max: {}",objectiveIndex,Integer.valueOf(objectives.size()));
         }
         if (dispenserAction==3) // Teleport
         {
@@ -152,16 +152,16 @@ public class DatRolesLoader
             PrivateEncounter pe=PrivateEncountersManager.getInstance().getPrivateEncounterById(peId.intValue());
             if (pe!=null)
             {
-              LOGGER.info("Found PE: "+peId+" ("+pe.getName()+") in quest "+quest.getName());
+              LOGGER.info("Found PE: {} ({}) in quest {}",peId,pe.getName(),quest.getName());
             }
             else
             {
-              LOGGER.warn("PE (ID="+peId+") is null in quest "+quest.getName());
+              LOGGER.warn("PE (ID={}) is null in quest {}",peId,quest.getName());
             }
           }
           else
           {
-            LOGGER.warn("PE ID is null"+" in quest "+quest.getName());
+            LOGGER.warn("PE ID is null"+" in quest {}",quest.getName());
           }
         }
       }
@@ -175,7 +175,8 @@ public class DatRolesLoader
       }
       else
       {
-        LOGGER.warn("Role not used! Dispenser action="+action+", objectiveIndex="+objectiveIndex+", dispenserRolename="+dispenserRoleName+", NPC ID="+npcId+", text="+successText+", failure text="+failureText);
+        LOGGER.warn("Role not used! Dispenser action={}, objectiveIndex={}, dispenserRolename={}, NPC ID={}, text={}, failure text={}",
+            action,objectiveIndex,dispenserRoleName,npcId,successText,failureText);
       }
     }
   }
@@ -224,7 +225,7 @@ public class DatRolesLoader
           }
           else
           {
-            LOGGER.warn("No bestower found for quest: "+quest);
+            LOGGER.warn("No bestower found for quest: {}",quest);
           }
         }
         else if (("".equals(npcStr)) || ("QuestDispenser_TextArray".equals(npcStr)))
@@ -234,7 +235,7 @@ public class DatRolesLoader
         else
         {
           // Sometimes we find keys here, like: npc_eastangmar_golodir,color_commenter_buckland_partygoer_granny
-          LOGGER.warn("Unexpected string value: "+npcStr);
+          LOGGER.warn("Unexpected string value: {}",npcStr);
         }
       }
       else
@@ -263,7 +264,7 @@ public class DatRolesLoader
     {
       return bestowers.get(0).getWho();
     }
-    LOGGER.warn("Bad bestowers size: "+bestowers.size());
+    LOGGER.warn("Bad bestowers size: {}",Integer.valueOf(bestowers.size()));
     return null;
   }
 

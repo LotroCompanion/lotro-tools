@@ -60,7 +60,7 @@ public class MainCategoriesPruner
         boolean ok=iconFile.delete();
         if (!ok)
         {
-          LOGGER.warn("Failed to delete file: "+iconFile);
+          LOGGER.warn("Failed to delete file: {}",iconFile);
         }
       }
     }
