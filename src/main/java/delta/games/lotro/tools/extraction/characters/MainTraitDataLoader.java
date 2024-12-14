@@ -395,14 +395,7 @@ EffectGenerator_Virtue_PassiveEffectList:
 
   private void loadEffectGenerator(TraitDescription trait, PropertiesSet generatorProps)
   {
-    int effectID=((Integer)generatorProps.getProperty("EffectGenerator_EffectID")).intValue();
-    Float spellcraft=(Float)generatorProps.getProperty("EffectGenerator_EffectSpellcraft");
-    if ((spellcraft!=null) && (spellcraft.floatValue()<0))
-    {
-      spellcraft=null;
-    }
-    Effect effect=_effectsLoader.getEffect(effectID);
-    EffectGenerator generator=new EffectGenerator(effect,spellcraft);
+    EffectGenerator generator=_effectsLoader.loadGenerator(generatorProps,"EffectGenerator_EffectID","EffectGenerator_EffectSpellcraft");
     trait.addEffectGenerator(generator);
   }
 

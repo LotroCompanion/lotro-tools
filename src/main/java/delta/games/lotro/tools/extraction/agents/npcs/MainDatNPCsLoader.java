@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Genders;
+import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -19,7 +20,10 @@ import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.agents.npcs.io.xml.NPCsXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
+import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Get NPCs definitions from DAT files.
@@ -30,39 +34,61 @@ public class MainDatNPCsLoader
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDatNPCsLoader.class);
 
   private DataFacade _facade;
+  private EffectLoader _effectLoader;
   private I18nUtils _i18n;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public MainDatNPCsLoader(DataFacade facade)
+  public MainDatNPCsLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
+    _effectLoader=effectsLoader;
     _i18n=new I18nUtils("npc",facade.getGlobalStringsManager());
   }
 
   private NpcDescription load(int npcId)
   {
-    NpcDescription ret=null;
     PropertiesSet properties=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
-    if (properties!=null)
-    {
-      // Name
-      String npcName=_i18n.getNameStringProperty(properties,"Name",npcId,I18nUtils.OPTION_REMOVE_MARKS);
-      ret=new NpcDescription(npcId,npcName);
-      // Gender
-      CharacterSex gender=extractGender(properties);
-      ret.setGender(gender);
-      // Title
-      String title=_i18n.getStringProperty(properties,"OccupationTitle",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
-      ret.setTitle(title);
-    }
-    else
+    if (properties==null)
     {
       LOGGER.warn("Could not handle NPC ID="+npcId);
+      return null;
     }
+    // Name
+    String npcName=_i18n.getNameStringProperty(properties,"Name",npcId,I18nUtils.OPTION_REMOVE_MARKS);
+    NpcDescription ret=new NpcDescription(npcId,npcName);
+    // Gender
+    CharacterSex gender=extractGender(properties);
+    ret.setGender(gender);
+    // Title
+    String title=_i18n.getStringProperty(properties,"OccupationTitle",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
+    ret.setTitle(title);
+    // Effects
+    loadEffects(properties,ret);
     return ret;
+  }
+
+  private void loadEffects(PropertiesSet props, NpcDescription npc)
+  {
+    /*
+    Effect_MonsterStartupEffect_Array: 
+      #1: Effect_MonsterStartupEffect_Struct 
+        Effect_StartupEffectID: 1879328773
+        Effect_StartupEffectSpellcraft: -1.0
+    */
+    Object[] effectsList=(Object[])props.getProperty("Effect_MonsterStartupEffect_Array");
+    if (effectsList!=null)
+    {
+      for(Object entry : effectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=_effectLoader.loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
+        npc.addStartupEffect(generator);
+      }
+    }
   }
 
   private CharacterSex extractGender(PropertiesSet properties)
@@ -131,8 +157,10 @@ public class MainDatNPCsLoader
   public static void main(String[] args)
   {
     Context.init(LotroCoreConfig.getMode());
-    DataFacade facade=new DataFacade();
-    new MainDatNPCsLoader(facade).doIt();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    new MainDatNPCsLoader(facade,effectsLoader).doIt();
     facade.dispose();
   }
 }

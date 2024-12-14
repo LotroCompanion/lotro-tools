@@ -777,12 +777,24 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     }
   }
 
-  private EffectGenerator loadGenerator(PropertiesSet generatorProps)
+  /**
+   * Load a generator (use default properties).
+   * @param generatorProps Generator properties.
+   * @return the loaded generator.
+   */
+  public EffectGenerator loadGenerator(PropertiesSet generatorProps)
   {
     return loadGenerator(generatorProps,"EffectGenerator_EffectID","EffectGenerator_EffectSpellcraft");
   }
 
-  private EffectGenerator loadGenerator(PropertiesSet generatorProps, String idPropName, String spellcraftPropName)
+  /**
+   * Load a generator.
+   * @param generatorProps Generator properties.
+   * @param idPropName Effect ID property name.
+   * @param spellcraftPropName Spellcraft property name.
+   * @return the loaded generator.
+   */
+  public EffectGenerator loadGenerator(PropertiesSet generatorProps, String idPropName, String spellcraftPropName)
   {
     EffectGenerator ret=new EffectGenerator();
     loadGenerator(generatorProps,ret,idPropName,spellcraftPropName);

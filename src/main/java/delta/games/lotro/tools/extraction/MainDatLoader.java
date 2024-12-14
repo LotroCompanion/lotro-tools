@@ -201,14 +201,14 @@ public class MainDatLoader
     // Private encounters
     MainDatPrivateEncountersLoader peLoader=new MainDatPrivateEncountersLoader(_facade,propertyResponseMapsLoader);
     peLoader.doIt();
+    // NPCs
+    new MainDatNPCsLoader(_facade,effectsLoader).doIt();
     // Save effects
     effectsLoader.save();
     // Containers
     new MainDatContainerLoader(_facade,lootsManager).doIt();
     // Mobs
     new MainDatMobsLoader(_facade,lootsManager).doIt();
-    // NPCs
-    new MainDatNPCsLoader(_facade).doIt();
     // Disenchantment
     if (live)
     {
