@@ -54,7 +54,7 @@ public class ConsumablesLoader
   /**
    * Reset for a new item.
    */
-  public void reset()
+  private void reset()
   {
     _handledEffectsForCurrentItem.clear();
     _current=null;
@@ -64,7 +64,7 @@ public class ConsumablesLoader
    * Find 'on use' effects on an item.
    * @param item Item to use.
    */
-  public void handleOnUseEffects(Item item)
+  private void handleOnUseEffects(Item item)
   {
     if (!useItem(item))
     {
@@ -237,7 +237,7 @@ public class ConsumablesLoader
    * Handle skill effects.
    * @param item Parent items.
    */
-  public void handleSkillEffects(Item item)
+  private void handleSkillEffects(Item item)
   {
     SkillToExecute skillToExecute=ItemUtils.getDetail(item,SkillToExecute.class);
     if (skillToExecute==null)
@@ -264,7 +264,7 @@ public class ConsumablesLoader
   /**
    * Save the loaded consumables to a file.
    */
-  public void saveConsumables()
+  private void saveConsumables()
   {
     // Data
     Collections.sort(_consumables,new IdentifiableComparator<Consumable>());

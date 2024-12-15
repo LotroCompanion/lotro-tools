@@ -205,12 +205,12 @@ public class MainDatLoader
     peLoader.doIt();
     // NPCs
     new MainDatNPCsLoader(_facade,effectsLoader).doIt();
-    // Save effects
-    effectsLoader.save();
     // Containers
     new MainDatContainerLoader(_facade,lootsManager).doIt();
     // Mobs
-    new MainDatMobsLoader(_facade,lootsManager).doIt();
+    new MainDatMobsLoader(_facade,lootsManager,effectsLoader).doIt();
+    // Save effects
+    effectsLoader.save();
     // Disenchantment
     if (live)
     {

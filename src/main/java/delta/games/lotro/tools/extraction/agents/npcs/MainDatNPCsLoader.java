@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Genders;
-import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
@@ -20,6 +19,7 @@ import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.agents.npcs.io.xml.NPCsXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.agents.AgentLoader;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
@@ -67,28 +67,8 @@ public class MainDatNPCsLoader
     String title=_i18n.getStringProperty(properties,"OccupationTitle",I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     ret.setTitle(title);
     // Effects
-    loadEffects(properties,ret);
+    AgentLoader.loadEffects(_effectLoader,properties,ret);
     return ret;
-  }
-
-  private void loadEffects(PropertiesSet props, NpcDescription npc)
-  {
-    /*
-    Effect_MonsterStartupEffect_Array: 
-      #1: Effect_MonsterStartupEffect_Struct 
-        Effect_StartupEffectID: 1879328773
-        Effect_StartupEffectSpellcraft: -1.0
-    */
-    Object[] effectsList=(Object[])props.getProperty("Effect_MonsterStartupEffect_Array");
-    if (effectsList!=null)
-    {
-      for(Object entry : effectsList)
-      {
-        PropertiesSet entryProps=(PropertiesSet)entry;
-        EffectGenerator generator=_effectLoader.loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
-        npc.addStartupEffect(generator);
-      }
-    }
   }
 
   private CharacterSex extractGender(PropertiesSet properties)
