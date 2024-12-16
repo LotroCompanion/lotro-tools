@@ -189,6 +189,9 @@ public class MainDatItemsLoader
       // Name
       name=_i18n.getNameStringProperty(properties,"Name",indexDataId,I18nUtils.OPTION_REMOVE_MARKS);
       item.setName(name);
+      // Plural name
+      String pluralName=_i18n.getStringProperty(properties,"PluralName",I18nUtils.OPTION_REMOVE_MARKS);
+      item.setPluralName(pluralName);
       // Sort data
       _sortDataLoader.handleItem(item,properties);
       // Icon
