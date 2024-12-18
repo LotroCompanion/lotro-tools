@@ -25,6 +25,7 @@ import delta.games.lotro.common.effects.EffectDuration;
 import delta.games.lotro.common.effects.EffectFlags;
 import delta.games.lotro.common.effects.EffectGenerator;
 import delta.games.lotro.common.effects.EffectsManager;
+import delta.games.lotro.common.effects.FlagEffect;
 import delta.games.lotro.common.effects.GenesisEffect;
 import delta.games.lotro.common.effects.Hotspot;
 import delta.games.lotro.common.effects.InduceCombatStateEffect;
@@ -250,6 +251,7 @@ public class EffectLoader
     else if (classDef==709) return new AuraEffect();
     else if (classDef==715) return new DispelEffect();
     else if (classDef==2063) return new RandomEffect();
+    else if (classDef==718) return new FlagEffect();
     return new Effect();
   }
 
