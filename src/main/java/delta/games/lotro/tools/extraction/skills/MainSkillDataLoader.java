@@ -14,6 +14,9 @@ import delta.games.lotro.character.skills.SkillEffectGenerator;
 import delta.games.lotro.character.skills.SkillEffectsManager;
 import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.character.skills.TravelSkill;
+import delta.games.lotro.character.skills.combos.SkillComboElement;
+import delta.games.lotro.character.skills.combos.SkillCombos;
+import delta.games.lotro.character.skills.combos.SkillCombosUtils;
 import delta.games.lotro.character.skills.io.xml.SkillDescriptionXMLWriter;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
@@ -29,6 +32,7 @@ import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
@@ -111,6 +115,7 @@ public class MainSkillDataLoader
         }
       }
     }
+    SkillCombosUtils.resolveCombos(skillsMgr.getAll());
   }
 
   /**
@@ -199,6 +204,12 @@ public class MainSkillDataLoader
     {
       CosmeticPetDescription pet=(CosmeticPetDescription)ret;
       _petsLoader.loadPetData(skillProperties,pet);
+    }
+    // Combos
+    if (ret!=null)
+    {
+      SkillCombos combos=loadSkillCombos(skillProperties);
+      ret.setCombos(combos);
     }
     return ret;
   }
@@ -325,6 +336,45 @@ public class MainSkillDataLoader
         }
       }
     }
+  }
+
+  private SkillCombos loadSkillCombos(PropertiesSet props)
+  {
+    /*
+    Skill_Combo_ComboList: 
+      #1: Skill_Combo_ComboListEntry 
+        Combat_Hunter_SkillCombo: 16 (FireArrow)
+        Skill_Combo_ComboSkill: 1879218257
+    Skill_Combo_DisplayComboOverlay: 0
+    Skill_Combo_StateProperty: 268455146 (Combat_Hunter_SkillCombo)
+    */
+    Integer propertyID=(Integer)props.getProperty("Skill_Combo_StateProperty");
+    if ((propertyID==null) || (propertyID.intValue()==0))
+    {
+      return null;
+    }
+    Object[] elements=(Object[])props.getProperty("Skill_Combo_ComboList");
+    if (elements==null)
+    {
+      return null;
+    }
+    PropertyDefinition def=_facade.getPropertiesRegistry().getPropertyDef(propertyID.intValue());
+    SkillCombos ret=new SkillCombos(def.getPropertyId());
+    for(Object entry : elements)
+    {
+      PropertiesSet entryProps=(PropertiesSet)entry;
+      Integer value=(Integer)entryProps.getProperty(def.getName());
+      if (value==null)
+      {
+        value=(Integer)entryProps.getProperty("Skill_Combo_ComboMode");
+      }
+      int skillID=((Integer)entryProps.getProperty("Skill_Combo_ComboSkill")).intValue();
+      Proxy<SkillDescription> proxy=new Proxy<SkillDescription>();
+      proxy.setId(skillID);
+      SkillComboElement element=new SkillComboElement(value.intValue(),proxy);
+      ret.addElement(element);
+    }
+    return ret;
   }
 
   /**
