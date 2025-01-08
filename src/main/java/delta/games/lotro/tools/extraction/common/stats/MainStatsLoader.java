@@ -27,8 +27,10 @@ import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Get stats from DAT files.
@@ -156,10 +158,15 @@ public class MainStatsLoader
     int nbPremiumKeys=premiumKeys.size();
     for(int i=0;i<nbPremiumKeys;i++)
     {
-      StatDescription stat=_stats.getByKey(premiumKeys.get(i));
+      String premiumKey=premiumKeys.get(i);
+      StatDescription stat=_stats.getByKey(premiumKey);
       if (stat!=null)
       {
         stat.setIndex(Integer.valueOf(i));
+      }
+      else
+      {
+        LOGGER.warn("Stat not found for index: "+premiumKey);
       }
     }
   }
@@ -417,7 +424,9 @@ public class MainStatsLoader
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     new MainStatsLoader(facade).doIt();
     facade.dispose();
   }

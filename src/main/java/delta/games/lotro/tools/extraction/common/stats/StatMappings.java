@@ -73,8 +73,15 @@ public class StatMappings
     registerMapping("Combat_DamageQualifier_Melee_Offense","MELEE_DAMAGE_PERCENTAGE");
     registerMapping("Combat_DamageQualifier_Magic_Offense","TACTICAL_DAMAGE_PERCENTAGE");
     registerMapping("Combat_DamageQualifier_Ranged_Offense","RANGED_DAMAGE_PERCENTAGE");
-    registerMapping("Combat_IncomingHealing_Points_Current","INCOMING_HEALING");
-    registerMapping("Combat_IncomingHealing_Modifier_Current","INCOMING_HEALING_PERCENTAGE");
+    if (live)
+    {
+      registerMapping("Combat_IncomingHealing_Points_Current","INCOMING_HEALING");
+      registerMapping("Combat_IncomingHealing_Modifier_Current","INCOMING_HEALING_PERCENTAGE");
+    }
+    else
+    {
+      registerMapping("Mood_Healing_Modifier","INCOMING_HEALING_PERCENTAGE");
+    }
     registerMapping("Combat_Modifier_OutgoingHealing_Points","OUTGOING_HEALING");
     registerMapping("Combat_Modifier_OutgoingHealing_Percent","OUTGOING_HEALING_PERCENTAGE");
     registerMapping("Combat_ArmorDefense_PointsModifier_UnifiedPhysical","PHYSICAL_MITIGATION");
