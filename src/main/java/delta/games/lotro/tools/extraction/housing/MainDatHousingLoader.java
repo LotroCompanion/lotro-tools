@@ -1,27 +1,38 @@
 package delta.games.lotro.tools.extraction.housing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delta.games.lotro.character.traits.TraitDescription;
+import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.enums.HouseType;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.dat.DATConstants;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.housing.HouseDefinition;
 import delta.games.lotro.lore.housing.HouseTypeInfo;
+import delta.games.lotro.lore.housing.Neighborhood;
+import delta.games.lotro.lore.housing.NeighborhoodTemplate;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
+import delta.games.lotro.tools.extraction.utils.Utils;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
- * @author dm
+ * Loader for housing data.
+ * @author DAM
  */
 public class MainDatHousingLoader
 {
@@ -35,6 +46,7 @@ public class MainDatHousingLoader
   private LotroEnum<HouseType> _houseTypeEnum;
   private Map<HouseType,HouseTypeInfo> _houseInfos;
   private Map<Integer,HouseDefinition> _houses;
+  private Map<Integer,NeighborhoodTemplate> _neighborhoodTemplates;
 
   /**
    * Constructor.
@@ -51,6 +63,7 @@ public class MainDatHousingLoader
     _houseTypeEnum=LotroEnumsRegistry.getInstance().get(HouseType.class);
     _houseInfos=new HashMap<HouseType,HouseTypeInfo>();
     _houses=new HashMap<Integer,HouseDefinition>();
+    _neighborhoodTemplates=new HashMap<Integer,NeighborhoodTemplate>();
   }
 
   private void doIt()
@@ -136,23 +149,41 @@ NeighborhoodDirectory_NeighborhoodArray:
     for(Object neighborhoodEntry : neighborhoodArray)
     {
       int neighborhoodID=((Integer)neighborhoodEntry).intValue();
-      handleNeighborhood(neighborhoodID);
+      loadNeighborhood(neighborhoodID);
     }
   }
 
-  private void handleNeighborhood(int neighborhoodID)
+  private Neighborhood loadNeighborhood(int neighborhoodID)
   {
     /*
     Neighborhood_Name: Test Estate 11
     Neighborhood_NeighborhoodTemplate: 1879415308
     */
+    Neighborhood ret=new Neighborhood(neighborhoodID);
     PropertiesSet props=_facade.loadProperties(neighborhoodID+DATConstants.DBPROPERTIES_OFFSET);
+    // Name
     String name=_i18n.getNameStringProperty(props,"Neighborhood_Name",neighborhoodID,0);
-    int template=((Integer)props.getProperty("Neighborhood_NeighborhoodTemplate")).intValue();
-    handleNeighborhoodTemplate(template);
+    ret.setName(name);
+    // neighborhood template
+    int templateID=((Integer)props.getProperty("Neighborhood_NeighborhoodTemplate")).intValue();
+    NeighborhoodTemplate template=handleNeighborhoodTemplate(templateID);
+    ret.setTemplate(template);
+    return ret;
   }
 
-  private void handleNeighborhoodTemplate(int neighborhoodTemplateID)
+  private NeighborhoodTemplate handleNeighborhoodTemplate(int neighborhoodTemplateID)
+  {
+    Integer key=Integer.valueOf(neighborhoodTemplateID);
+    NeighborhoodTemplate neighborhoodTemplate=_neighborhoodTemplates.get(key);
+    if (neighborhoodTemplate==null)
+    {
+      neighborhoodTemplate=loadNeighborhoodTemplate(neighborhoodTemplateID);
+      _neighborhoodTemplates.put(key,neighborhoodTemplate);
+    }
+    return neighborhoodTemplate;
+  }
+
+  private NeighborhoodTemplate loadNeighborhoodTemplate(int neighborhoodTemplateID)
   {
     /*
 NeighborhoodTemplate_BootPosition: house_hobbit_micheldelving_neighborhood_exit
@@ -164,8 +195,28 @@ NeighborhoodTemplate_Name: Shire Homesteads
 NeighborhoodTemplate_SceneID: 1879101754
 NeighborhoodTemplate_Telepad: house_hobbit_micheldelving_neighborhood_entrance
     */
+    NeighborhoodTemplate ret=new NeighborhoodTemplate(neighborhoodTemplateID);
     PropertiesSet props=_facade.loadProperties(neighborhoodTemplateID+DATConstants.DBPROPERTIES_OFFSET);
+    // Name
     String name=_i18n.getNameStringProperty(props,"NeighborhoodTemplate_Name",neighborhoodTemplateID,0);
+    ret.setName(name);
+    // Boundaries
+    Object[] boundariesArray=(Object[])props.getProperty("NeighborhoodTemplate_Boundaries");
+    for(Object boundaryObj : boundariesArray)
+    {
+      DatPosition position=(DatPosition)boundaryObj;
+      BlockReference ref=new BlockReference(position.getRegion(),position.getBlockX(),position.getBlockY());
+      ret.addBlock(ref);
+    }
+    // Boot position
+    String bootPositionStr=(String)props.getProperty("NeighborhoodTemplate_BootPosition");
+    ExtendedPosition bootPosition=_placesLoader.getPositionForName(bootPositionStr);
+    ret.setBoot(bootPosition);
+    // Entrance
+    String entrancePositionStr=(String)props.getProperty("NeighborhoodTemplate_Telepad");
+    ExtendedPosition entrancePosition=_placesLoader.getPositionForName(entrancePositionStr);
+    ret.setEntrance(entrancePosition);
+    // Houses
     int houseListID=((Integer)props.getProperty("NeighborhoodTemplate_HouseList")).intValue();
     PropertiesSet houseListProps=_facade.loadProperties(houseListID+DATConstants.DBPROPERTIES_OFFSET);
     /*
@@ -176,8 +227,13 @@ HouseList_HouseArray:
     for(Object houseIDObj : houseArray)
     {
       int houseID=((Integer)houseIDObj).intValue();
-      handleHouse(houseID);
+      HouseDefinition house=handleHouse(houseID);
+      if (house!=null)
+      {
+        ret.addHouse(houseID);
+      }
     }
+    return ret;
   }
 
   private HouseDefinition handleHouse(int houseID)
@@ -208,23 +264,45 @@ HouseList_HouseArray:
     House_ValueTier: 3 (Average)
     */
     PropertiesSet props=_facade.loadProperties(houseID+DATConstants.DBPROPERTIES_OFFSET);
-    HouseDefinition ret=new HouseDefinition();
+    HouseDefinition ret=new HouseDefinition(houseID);
     // Address
     String address=_i18n.getNameStringProperty(props,"House_Address",houseID,0);
     ret.setAddress(address);
     // Description
     String description=_i18n.getStringProperty(props,"House_Description");
     ret.setDescription(description);
+    // Kinship?
+    boolean isKinship=Utils.getBooleanValue((Integer)props.getProperty("House_IsKinshipHouse"),false);
+    ret.setKinship(isKinship);
+    // Premium?
+    boolean isPremium=Utils.getBooleanValue((Integer)props.getProperty("House_IsPremiumHouse"),false);
+    ret.setPremium(isPremium);
     // Neighborhood
     int neighborhoodTemplateID=((Integer)props.getProperty("House_NeighborhoodTemplate")).intValue();
+    ret.setNeighborhoodTemplateID(neighborhoodTemplateID);
+    List<TraitDescription> traits=new ArrayList<TraitDescription>();
     Object[] characteristicsArray=(Object[])props.getProperty("House_CharacteristicArray");
     if (characteristicsArray!=null)
     {
       for(Object characteristicObj : characteristicsArray)
       {
         int traitID=((Integer)characteristicObj).intValue();
+        TraitDescription trait=TraitsManager.getInstance().getTrait(traitID);
+        if (trait!=null)
+        {
+          traits.add(trait);
+        }
+        else
+        {
+          LOGGER.warn("Trait not found: ID={}",Integer.valueOf(traitID));
+        }
       }
     }
+    ret.setTraits(traits);
+    // Telepad
+    String telepad=(String)props.getProperty("House_Telepad");
+    ExtendedPosition position=_placesLoader.getPositionForName(telepad);
+    ret.setPosition(position);
     // Price & upkeep
     int typeCode=((Integer)props.getProperty("House_Type")).intValue();
     HouseType type=_houseTypeEnum.getEntry(typeCode);
