@@ -256,7 +256,7 @@ HouseList_HouseArray:
       HouseDefinition house=handleHouse(houseID);
       if (house!=null)
       {
-        ret.addHouse(houseID);
+        ret.addHouse(house);
       }
     }
     return ret;
