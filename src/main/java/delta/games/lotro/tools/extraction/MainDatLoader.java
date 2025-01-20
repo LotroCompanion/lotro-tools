@@ -45,6 +45,7 @@ import delta.games.lotro.tools.extraction.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.extraction.factions.MainDatFactionsLoader;
 import delta.games.lotro.tools.extraction.global.MainGameDataBuilder;
 import delta.games.lotro.tools.extraction.global.MainServersBuilder;
+import delta.games.lotro.tools.extraction.housing.MainDatHousingLoader;
 import delta.games.lotro.tools.extraction.instances.MainDatInstancesTreeLoader;
 import delta.games.lotro.tools.extraction.instances.MainDatPrivateEncountersLoader;
 import delta.games.lotro.tools.extraction.items.ConsumablesLoader;
@@ -268,6 +269,8 @@ public class MainDatLoader
     }
     // Consumables
     new ConsumablesLoader().doIt();
+    // Housing
+    new MainDatHousingLoader(_facade,placesLoader).doIt();
   }
 
   private void cleanup()
@@ -396,6 +399,9 @@ public class MainDatLoader
     // Perks
     CleanupUtils.deleteFile(GeneratedFiles.PERKS);
     CleanupUtils.deleteDirectory(GeneratedFiles.PERK_ICONS);
+    // Housing
+    CleanupUtils.deleteFile(GeneratedFiles.HOUSING);
+    CleanupUtils.deleteDirectory(GeneratedFiles.HOUSING_ICONS);
     // Misc
     CleanupUtils.deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
     CleanupUtils.deleteFile(GeneratedFiles.WORLD_EVENTS);

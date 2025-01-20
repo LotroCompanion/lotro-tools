@@ -43,7 +43,6 @@ public class PlacesLoader
   {
     // Name
     String name=BufferUtils.readPrefixedUtf16String(bis);
-    //System.out.println("Name: "+name);
     // Position
     DatPosition position=GeoLoader.readPosition(bis);
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
@@ -52,13 +51,6 @@ public class PlacesLoader
     extPosition.setPosition(pos);
     // Area or Dungeon ID
     int areaDID=BufferUtils.readUInt32(bis);
-    /*
-    if (areaDID!=0)
-    {
-      PropertiesSet areaProps=_facade.loadProperties(areaDID+DATConstants.DBPROPERTIES_OFFSET);
-      System.out.println("AreaID="+areaDID+" => "+areaProps.dump());
-    }
-    */
     // Echo
     int areaDIDEcho=BufferUtils.readUInt32(bis);
     if (areaDIDEcho!=areaDID)
@@ -89,7 +81,6 @@ public class PlacesLoader
       throw new IllegalArgumentException("Expected DID for places: "+PLACES_DID);
     }
     int count=BufferUtils.readTSize(bis); // > 6k places
-    //System.out.println(count+" places to load!");
     for(int i=0;i<count;i++)
     {
       loadPlace(bis);
@@ -97,7 +88,7 @@ public class PlacesLoader
     int available=bis.available();
     if (available>0)
     {
-      LOGGER.warn("Available bytes: "+available);
+      LOGGER.warn("Available bytes: {}",Integer.valueOf(available));
     }
   }
 

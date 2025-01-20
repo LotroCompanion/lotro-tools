@@ -456,4 +456,12 @@ public class GeneratedFiles
    * Pips.
    */
   public static final File PIPS=LotroCoreConfig.getInstance().getFile(DataFiles.PIPS);
+  /**
+   * Housing.
+   */
+  public static final File HOUSING=LotroCoreConfig.getInstance().getFile(DataFiles.HOUSING);
+  /**
+   * Housing icons.
+   */
+  public static final File HOUSING_ICONS=LotroCoreConfig.getInstance().getFile("housingIcons");
 }

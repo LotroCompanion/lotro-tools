@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.extraction.housing;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +20,16 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.housing.HouseDefinition;
 import delta.games.lotro.lore.housing.HouseTypeInfo;
+import delta.games.lotro.lore.housing.HousingManager;
 import delta.games.lotro.lore.housing.Neighborhood;
 import delta.games.lotro.lore.housing.NeighborhoodTemplate;
+import delta.games.lotro.lore.housing.io.xml.HousingXMLWriter;
+import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
-import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.extraction.utils.Utils;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
@@ -36,7 +40,7 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class MainDatHousingLoader
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(MainSkillDataLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatHousingLoader.class);
 
   private DataFacade _facade;
   private I18nUtils _i18n;
@@ -44,9 +48,7 @@ public class MainDatHousingLoader
   private Map<Integer,Float> _priceModifiers;
   private Map<Integer,Float> _upkeepModifiers;
   private LotroEnum<HouseType> _houseTypeEnum;
-  private Map<HouseType,HouseTypeInfo> _houseInfos;
-  private Map<Integer,HouseDefinition> _houses;
-  private Map<Integer,NeighborhoodTemplate> _neighborhoodTemplates;
+  private HousingManager _housingMgr;
 
   /**
    * Constructor.
@@ -61,15 +63,17 @@ public class MainDatHousingLoader
     _priceModifiers=new HashMap<Integer,Float>();
     _upkeepModifiers=new HashMap<Integer,Float>();
     _houseTypeEnum=LotroEnumsRegistry.getInstance().get(HouseType.class);
-    _houseInfos=new HashMap<HouseType,HouseTypeInfo>();
-    _houses=new HashMap<Integer,HouseDefinition>();
-    _neighborhoodTemplates=new HashMap<Integer,NeighborhoodTemplate>();
+    _housingMgr=new HousingManager();
   }
 
-  private void doIt()
+  /**
+   * Just... do it!
+   */
+  public void doIt()
   {
     loadGlobalHousingData();
     loadNeighborhoods();
+    save();
   }
 
   private void loadGlobalHousingData()
@@ -125,15 +129,37 @@ public class MainDatHousingLoader
       typeInfo.setUpkeep(upkeepAsMoney);
       int iconID=((Integer)typeInfoProps.getProperty("HousingControl_Icon")).intValue();
       typeInfo.setIconID(iconID);
+      handleIcon(iconID);
       int icon16ID=((Integer)typeInfoProps.getProperty("HousingControl_Icon16")).intValue();
       typeInfo.setIcon16ID(icon16ID);
+      handleIcon(icon16ID);
       int icon32ID=((Integer)typeInfoProps.getProperty("HousingControl_Icon32")).intValue();
       typeInfo.setIcon32ID(icon32ID);
+      handleIcon(icon32ID);
       int iconLargeID=((Integer)typeInfoProps.getProperty("HousingControl_Icon_Large")).intValue();
       typeInfo.setIconLargeID(iconLargeID);
+      handleIcon(iconLargeID);
       int iconPanoramaID=((Integer)typeInfoProps.getProperty("HousingControl_Icon_Panorama")).intValue();
       typeInfo.setIconPanoramaID(iconPanoramaID);
-      _houseInfos.put(type,typeInfo);
+      handleIcon(iconPanoramaID);
+      _housingMgr.registerHouseInfo(typeInfo);
+    }
+  }
+
+  private void handleIcon(int iconID)
+  {
+    if (iconID==0)
+    {
+      return;
+    }
+    File to=new File(GeneratedFiles.HOUSING_ICONS,String.valueOf(iconID)+".png");
+    if (!to.exists())
+    {
+      boolean ok=DatIconsUtils.buildImageFile(_facade,iconID,to);
+      if (!ok)
+      {
+        LOGGER.warn("Could not load icon ID: {}",Integer.valueOf(iconID));
+      }
     }
   }
 
@@ -149,7 +175,8 @@ NeighborhoodDirectory_NeighborhoodArray:
     for(Object neighborhoodEntry : neighborhoodArray)
     {
       int neighborhoodID=((Integer)neighborhoodEntry).intValue();
-      loadNeighborhood(neighborhoodID);
+      Neighborhood neighborhood=loadNeighborhood(neighborhoodID);
+      _housingMgr.registerNeighborhood(neighborhood);
     }
   }
 
@@ -173,12 +200,11 @@ NeighborhoodDirectory_NeighborhoodArray:
 
   private NeighborhoodTemplate handleNeighborhoodTemplate(int neighborhoodTemplateID)
   {
-    Integer key=Integer.valueOf(neighborhoodTemplateID);
-    NeighborhoodTemplate neighborhoodTemplate=_neighborhoodTemplates.get(key);
+    NeighborhoodTemplate neighborhoodTemplate=_housingMgr.getNeighborhoodTemplate(neighborhoodTemplateID);
     if (neighborhoodTemplate==null)
     {
       neighborhoodTemplate=loadNeighborhoodTemplate(neighborhoodTemplateID);
-      _neighborhoodTemplates.put(key,neighborhoodTemplate);
+      _housingMgr.registerNeighborhoodTemplate(neighborhoodTemplate);
     }
     return neighborhoodTemplate;
   }
@@ -211,11 +237,11 @@ NeighborhoodTemplate_Telepad: house_hobbit_micheldelving_neighborhood_entrance
     // Boot position
     String bootPositionStr=(String)props.getProperty("NeighborhoodTemplate_BootPosition");
     ExtendedPosition bootPosition=_placesLoader.getPositionForName(bootPositionStr);
-    ret.setBoot(bootPosition);
+    ret.setBoot(bootPosition.getPosition());
     // Entrance
     String entrancePositionStr=(String)props.getProperty("NeighborhoodTemplate_Telepad");
     ExtendedPosition entrancePosition=_placesLoader.getPositionForName(entrancePositionStr);
-    ret.setEntrance(entrancePosition);
+    ret.setEntrance(entrancePosition.getPosition());
     // Houses
     int houseListID=((Integer)props.getProperty("NeighborhoodTemplate_HouseList")).intValue();
     PropertiesSet houseListProps=_facade.loadProperties(houseListID+DATConstants.DBPROPERTIES_OFFSET);
@@ -238,12 +264,14 @@ HouseList_HouseArray:
 
   private HouseDefinition handleHouse(int houseID)
   {
-    Integer key=Integer.valueOf(houseID);
-    HouseDefinition house=_houses.get(key);
+    HouseDefinition house=_housingMgr.getHouse(houseID);
     if (house==null)
     {
       house=loadHouse(houseID);
-      _houses.put(key,house);
+      if (house!=null)
+      {
+        _housingMgr.registerHouse(house);
+      }
     }
     return house;
   }
@@ -302,14 +330,14 @@ HouseList_HouseArray:
     // Telepad
     String telepad=(String)props.getProperty("House_Telepad");
     ExtendedPosition position=_placesLoader.getPositionForName(telepad);
-    ret.setPosition(position);
+    ret.setPosition(position.getPosition());
     // Price & upkeep
     int typeCode=((Integer)props.getProperty("House_Type")).intValue();
     HouseType type=_houseTypeEnum.getEntry(typeCode);
-    HouseTypeInfo houseTypeInfo=_houseInfos.get(type);
+    HouseTypeInfo houseTypeInfo=_housingMgr.getHouseInfo(type);
     if (houseTypeInfo==null)
     {
-      LOGGER.warn("Ignored house: "+address+" of type "+type);
+      LOGGER.warn("Ignored house: {} of type {}",address,type);
       return null;
     }
     ret.setInfo(houseTypeInfo);
@@ -322,8 +350,15 @@ HouseList_HouseArray:
     Float upkeepModifier=_upkeepModifiers.get(valueTier);
     int upkeep=(int)(houseTypeInfo.getUpkeep().getInternalValue()*upkeepModifier.floatValue());
     ret.setUpkeep(Money.fromRawValue(upkeep));
-    LOGGER.debug("Loaded house: name="+ret.getAddress()+", price="+ret.getPrice()+", upkeep="+ret.getUpkeep());
+    LOGGER.debug("Loaded house: {}",ret);
     return ret;
+  }
+
+  private void save()
+  {
+    HousingXMLWriter writer=new HousingXMLWriter();
+    writer.writeHousingData(GeneratedFiles.HOUSING,_housingMgr);
+    _i18n.save();
   }
 
   /**
