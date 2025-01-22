@@ -31,6 +31,7 @@ import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.GroupSize;
 import delta.games.lotro.common.enums.HouseType;
 import delta.games.lotro.common.enums.HousingHookCategory;
+import delta.games.lotro.common.enums.HousingHookID;
 import delta.games.lotro.common.enums.ImplementUsageType;
 import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.common.enums.ItemClassUtils;
@@ -198,6 +199,7 @@ public class MainDatEnumsLoader
     loadEnum(587203443,"PipAdjustmentType",PipAdjustmentType.class); // 0x23000373
     loadEnum(587202856,"EffectAuraType",EffectAuraType.class); // 0x23000128
     loadEnum(587203159,"HouseType",HouseType.class); // 0x23000257
+    loadEnum(587203173,"HousingHookID",HousingHookID.class); // 0x23000265
 
     // Derivated enums
     // From EquipmentCategory:
