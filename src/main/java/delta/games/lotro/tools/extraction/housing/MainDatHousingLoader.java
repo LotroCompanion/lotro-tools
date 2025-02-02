@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,10 +17,12 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.money.Money;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.lore.housing.HouseDefinition;
@@ -33,6 +36,7 @@ import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.utils.Utils;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Loader for housing data.
@@ -130,18 +134,27 @@ public class MainDatHousingLoader
       int iconID=((Integer)typeInfoProps.getProperty("HousingControl_Icon")).intValue();
       typeInfo.setIconID(iconID);
       handleIcon(iconID);
-      int icon16ID=((Integer)typeInfoProps.getProperty("HousingControl_Icon16")).intValue();
-      typeInfo.setIcon16ID(icon16ID);
-      handleIcon(icon16ID);
+      Integer icon16ID=(Integer)typeInfoProps.getProperty("HousingControl_Icon16");
+      if (icon16ID!=null)
+      {
+        typeInfo.setIcon16ID(icon16ID.intValue());
+        handleIcon(icon16ID.intValue());
+      }
       int icon32ID=((Integer)typeInfoProps.getProperty("HousingControl_Icon32")).intValue();
       typeInfo.setIcon32ID(icon32ID);
       handleIcon(icon32ID);
-      int iconLargeID=((Integer)typeInfoProps.getProperty("HousingControl_Icon_Large")).intValue();
-      typeInfo.setIconLargeID(iconLargeID);
-      handleIcon(iconLargeID);
-      int iconPanoramaID=((Integer)typeInfoProps.getProperty("HousingControl_Icon_Panorama")).intValue();
-      typeInfo.setIconPanoramaID(iconPanoramaID);
-      handleIcon(iconPanoramaID);
+      Integer iconLargeID=(Integer)typeInfoProps.getProperty("HousingControl_Icon_Large");
+      if (iconLargeID!=null)
+      {
+        typeInfo.setIconLargeID(iconLargeID.intValue());
+        handleIcon(iconLargeID.intValue());
+      }
+      Integer iconPanoramaID=(Integer)typeInfoProps.getProperty("HousingControl_Icon_Panorama");
+      if (iconPanoramaID!=null)
+      {
+        typeInfo.setIconPanoramaID(iconPanoramaID.intValue());
+        handleIcon(iconPanoramaID.intValue());
+      }
       _housingMgr.registerHouseInfo(typeInfo);
     }
   }
@@ -237,11 +250,17 @@ NeighborhoodTemplate_Telepad: house_hobbit_micheldelving_neighborhood_entrance
     // Boot position
     String bootPositionStr=(String)props.getProperty("NeighborhoodTemplate_BootPosition");
     ExtendedPosition bootPosition=_placesLoader.getPositionForName(bootPositionStr);
-    ret.setBoot(bootPosition.getPosition());
+    if (bootPosition!=null)
+    {
+      ret.setBoot(bootPosition.getPosition());
+    }
     // Entrance
     String entrancePositionStr=(String)props.getProperty("NeighborhoodTemplate_Telepad");
     ExtendedPosition entrancePosition=_placesLoader.getPositionForName(entrancePositionStr);
-    ret.setEntrance(entrancePosition.getPosition());
+    if (entrancePosition!=null)
+    {
+      ret.setEntrance(entrancePosition.getPosition());
+    }
     // Houses
     int houseListID=((Integer)props.getProperty("NeighborhoodTemplate_HouseList")).intValue();
     PropertiesSet houseListProps=_facade.loadProperties(houseListID+DATConstants.DBPROPERTIES_OFFSET);
@@ -330,7 +349,10 @@ HouseList_HouseArray:
     // Telepad
     String telepad=(String)props.getProperty("House_Telepad");
     ExtendedPosition position=_placesLoader.getPositionForName(telepad);
-    ret.setPosition(position.getPosition());
+    if (position!=null)
+    {
+      ret.setPosition(position.getPosition());
+    }
     // Price & upkeep
     int typeCode=((Integer)props.getProperty("House_Type")).intValue();
     HouseType type=_houseTypeEnum.getEntry(typeCode);
@@ -367,7 +389,9 @@ HouseList_HouseArray:
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    Locale.setDefault(Locale.ENGLISH);
     PlacesLoader placesLoader=new PlacesLoader(facade);
     MainDatHousingLoader loader=new MainDatHousingLoader(facade,placesLoader);
     loader.doIt();
