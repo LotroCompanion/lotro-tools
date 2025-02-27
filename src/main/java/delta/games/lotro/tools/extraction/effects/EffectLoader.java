@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.Interactable;
+import delta.games.lotro.common.effects.AIPetEffect;
 import delta.games.lotro.common.effects.ApplicationProbability;
 import delta.games.lotro.common.effects.ApplyOverTimeEffect;
 import delta.games.lotro.common.effects.AreaEffect;
@@ -71,6 +72,7 @@ import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
+import delta.games.lotro.lore.agents.AgentDescription;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.items.DamageType;
@@ -252,6 +254,7 @@ public class EffectLoader
     else if (classDef==715) return new DispelEffect();
     else if (classDef==2063) return new RandomEffect();
     else if (classDef==718) return new FlagEffect();
+    else if (classDef==763) return new AIPetEffect();
     return new Effect();
   }
 
@@ -344,6 +347,10 @@ public class EffectLoader
     else if (effect instanceof RandomEffect)
     {
       loadRandomEffect((RandomEffect)effect,effectProps);
+    }
+    else if (effect instanceof AIPetEffect)
+    {
+      loadAIPetEffect((AIPetEffect)effect,effectProps);
     }
   }
 
@@ -901,17 +908,6 @@ Effect_Genesis_SummonedObject: 1879163733
       Hotspot hotspot=loadHotspot(objectID,props);
       effect.setHotspot(hotspot);
     }
-    // Cannot use InteractableUtils.findInteractable() here because it's too soon!
-    else if (weenieType==131151) // RealNPC
-    {
-      NpcDescription npc=new NpcDescription(objectID,name);
-      interactable=npc;
-    }
-    else if (weenieType==65615) // Monster
-    {
-      MobDescription mob=new MobDescription(objectID,name);
-      interactable=mob;
-    }
     else if (weenieType==129) // Item
     {
       Item item=new Item();
@@ -921,8 +917,7 @@ Effect_Genesis_SummonedObject: 1879163733
     }
     else
     {
-      // Ignored, for instance:
-      // Generator (65537)
+      interactable=handleSummonedAgent(objectID,weenieType,name);
     }
     if (interactable!=null)
     {
@@ -932,6 +927,41 @@ Effect_Genesis_SummonedObject: 1879163733
       proxy.setObject(interactable);
       effect.setInteractable(proxy);
     }
+  }
+
+  private Proxy<AgentDescription> handleSummonedPet(int objectID)
+  {
+    PropertiesSet props=_facade.loadProperties(objectID+DATConstants.DBPROPERTIES_OFFSET);
+    String name=DatStringUtils.getStringProperty(props,"Name");
+    name=DatStringUtils.fixName(name);
+    int weenieType=((Integer)props.getProperty("WeenieType")).intValue();
+    AgentDescription agent=handleSummonedAgent(objectID,weenieType,name);
+    if (agent!=null)
+    {
+      Proxy<AgentDescription> proxy=new Proxy<AgentDescription>();
+      proxy.setId(objectID);
+      proxy.setName(name);
+      proxy.setObject(agent);
+      return proxy;
+    }
+    return null;
+  }
+
+  private AgentDescription handleSummonedAgent(int objectID, int weenieType, String name)
+  {
+    AgentDescription agent=null;
+    // Cannot use InteractableUtils.findInteractable() here because it's too soon!
+    if (weenieType==131151) // RealNPC
+    {
+      NpcDescription npc=new NpcDescription(objectID,name);
+      agent=npc;
+    }
+    else if (weenieType==65615) // Monster
+    {
+      MobDescription mob=new MobDescription(objectID,name);
+      agent=mob;
+    }
+    return agent;
   }
 
   private Hotspot loadHotspot(int hotspotID, PropertiesSet props)
@@ -1469,6 +1499,26 @@ Effect_RandomEffect_Array:
       float weight=((Float)entryProps.getProperty("Effect_RandomEffect_Weight")).floatValue();
       generator.setWeight(weight);
       effect.addEffect(generator);
+    }
+  }
+
+  private void loadAIPetEffect(AIPetEffect effect, PropertiesSet effectProps)
+  {
+    Object[] startupEffectsList=(Object[])effectProps.getProperty("Effect_MonsterStartupEffect_Array");
+
+    // Summon object
+    int summonedObjectID=((Integer)effectProps.getProperty("Effect_AIPet_SummonObject")).intValue();
+    Proxy<AgentDescription> agent=handleSummonedPet(summonedObjectID);
+    effect.setAgent(agent);
+    // Startup effects
+    if (startupEffectsList!=null)
+    {
+      for(Object entry : startupEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
+        effect.addStartupEffect(generator);
+      }
     }
   }
 
