@@ -59,6 +59,10 @@ public class CosmeticPetLoader
     PropertiesSet effectProps=_facade.loadProperties(effectId+DATConstants.DBPROPERTIES_OFFSET);
 
     Object[] mods=(Object[])effectProps.getProperty("Mod_Array");
+    if (mods==null)
+    {
+      return;
+    }
     for(Object modObj : mods)
     {
       PropertiesSet modProps=(PropertiesSet)modObj;
