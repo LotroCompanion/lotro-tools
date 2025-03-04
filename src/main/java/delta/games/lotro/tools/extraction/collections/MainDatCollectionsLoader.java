@@ -25,6 +25,7 @@ import delta.games.lotro.lore.collections.pets.CosmeticPetsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.achievables.rewards.DatRewardsLoader;
 import delta.games.lotro.tools.extraction.requirements.RequirementsLoadingUtils;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
@@ -118,7 +119,7 @@ public class MainDatCollectionsLoader
   public void doIt()
   {
     List<CollectionDescription> collections=new ArrayList<CollectionDescription>();
-    PropertiesSet collectionDirectoryProps=_facade.loadProperties(1879310505+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet collectionDirectoryProps=WeenieContentDirectory.loadWeenieContentProps(_facade,"CollectionControl");
     Object[] collectionsList=(Object[])collectionDirectoryProps.getProperty("CollectionControl_CollectionList");
     for(Object collectionObj : collectionsList)
     {
