@@ -145,6 +145,7 @@ public class SocketablesManager
     // Essences
     if (item instanceof Essence)
     {
+      handleEssence((Essence)item,properties);
       return -1;
     }
     // Traceries
@@ -195,6 +196,25 @@ public class SocketablesManager
     String name=item.getName();
     LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
     return null;
+  }
+
+  private void handleEssence(Essence essence, PropertiesSet props)
+  {
+    Integer minItemLevel=(Integer)props.getProperty("Item_Socket_GemMinLevel");
+    int itemLevel=((Integer)props.getProperty("Item_Level")).intValue();
+    if (minItemLevel!=null)
+    {
+      if (minItemLevel.intValue()>itemLevel)
+      {
+        LOGGER.warn("Fixed essence item level: {} => {}",essence,minItemLevel);
+        essence.setItemLevel(minItemLevel);
+      }
+      Integer maxItemLevel=(Integer)props.getProperty("Item_Socket_GemMaxLevel");
+      if ((maxItemLevel!=null) && (minItemLevel.intValue()!=maxItemLevel.intValue()))
+      {
+        LOGGER.warn("Essence with min item level!=max item level: {} => min={}, max={}",essence,minItemLevel,maxItemLevel);
+      }
+    }
   }
 
   private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
