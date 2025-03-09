@@ -70,6 +70,7 @@ import delta.games.lotro.tools.extraction.relics.MainDatRelicMeldingRecipesLoade
 import delta.games.lotro.tools.extraction.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.extraction.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
+import delta.games.lotro.tools.extraction.skills.baubles.MainBaublesLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.extraction.ui.SocketIconsLoader;
@@ -137,6 +138,8 @@ public class MainDatLoader
     // Skills (complements)
     skillsLoader.loadRequirements();
     new MainProgressionsMerger().doIt();
+    // Baubles
+    new MainBaublesLoader(_facade).doIt();
     // Emotes
     new MainDatEmotesLoader(_facade).doIt();
     // Stat tomes
@@ -302,6 +305,7 @@ public class MainDatLoader
     // - skills
     CleanupUtils.deleteFile(GeneratedFiles.SKILLS);
     CleanupUtils.deleteDirectory(GeneratedFiles.SKILL_ICONS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.BAUBLES);
     // - virtues
     CleanupUtils.deleteFile(GeneratedFiles.VIRTUES);
     // - traits

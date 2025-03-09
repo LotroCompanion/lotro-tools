@@ -464,4 +464,8 @@ public class GeneratedFiles
    * Housing icons.
    */
   public static final File HOUSING_ICONS=LotroCoreConfig.getInstance().getFile("housingIcons");
+  /**
+   * Baubles.
+   */
+  public static final File BAUBLES=LotroCoreConfig.getInstance().getFile(DataFiles.BAUBLES);
 }
