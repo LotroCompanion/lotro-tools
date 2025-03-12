@@ -540,9 +540,15 @@ public class MainDatEnumsLoader
     handleCustomEntry(lotroEnum,i18n,15,enumName+".TOOL","TOOL");
     handleCustomEntry(lotroEnum,i18n,16,enumName+".CLASS_SLOT","CLASS_SLOT");
     handleCustomEntry(lotroEnum,i18n,17,enumName+".BRIDLE","BRIDLE");
-    handleCustomEntry(lotroEnum,i18n,18,enumName+".MAIN_HAND_AURA","MAIN_HAND_AURA");
-    handleCustomEntry(lotroEnum,i18n,19,enumName+".OFF_HAND_AURA","OFF_HAND_AURA");
-    handleCustomEntry(lotroEnum,i18n,20,enumName+".RANGED_AURA","RANGED_AURA");
+    handleCustomEntry(lotroEnum,i18n,18,enumName+".AURA","AURA");
+    handleCustomEntry(lotroEnum,i18n,19,enumName+".LEFT_EAR","LEFT_EAR");
+    handleCustomEntry(lotroEnum,i18n,20,enumName+".RIGHT_EAR","RIGHT_EAR");
+    handleCustomEntry(lotroEnum,i18n,21,enumName+".LEFT_WRIST","LEFT_WRIST");
+    handleCustomEntry(lotroEnum,i18n,22,enumName+".RIGHT_WRIST","RIGHT_WRIST");
+    handleCustomEntry(lotroEnum,i18n,23,enumName+".LEFT_FINGER","LEFT_FINGER");
+    handleCustomEntry(lotroEnum,i18n,24,enumName+".RIGHT_FINGER","RIGHT_FINGER");
+    handleCustomEntry(lotroEnum,i18n,25,enumName+".EITHER_HAND","EITHER_HAND");
+
     saveEnumFile(lotroEnum,implClass,i18n);
   }
 
