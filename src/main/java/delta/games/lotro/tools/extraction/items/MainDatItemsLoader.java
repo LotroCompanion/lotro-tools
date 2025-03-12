@@ -753,10 +753,12 @@ public class MainDatItemsLoader
 
   private EquipmentLocation getSlot(PropertiesSet properties)
   {
-    Integer defaultSlotInt=(Integer)properties.getProperty("Inventory_DefaultSlot");
-    int defaultSlot=(defaultSlotInt!=null)?defaultSlotInt.intValue():0;
-    EquipmentLocation slot=DatEnumsUtils.getSlot(defaultSlot);
-    return slot;
+    Integer compatibleSlot=(Integer)properties.getProperty("Inventory_CompatibleSlot");
+    if (compatibleSlot!=null)
+    {
+      return DatEnumsUtils.getLocationFromAllowedSlots(compatibleSlot.intValue());
+    }
+    return null;
   }
 
   private void handleScaling(PropertiesSet properties)
