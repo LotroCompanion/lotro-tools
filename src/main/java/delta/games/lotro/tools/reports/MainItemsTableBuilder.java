@@ -7,7 +7,8 @@ import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
- * @author dm
+ * Tool to build a table of items.
+ * @author DAM
  */
 public class MainItemsTableBuilder
 {
