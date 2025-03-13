@@ -37,6 +37,7 @@ import delta.games.lotro.lore.items.Armour;
 import delta.games.lotro.lore.items.ArmourType;
 import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.EquipmentLocation;
+import delta.games.lotro.lore.items.EquipmentLocations;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
 import delta.games.lotro.lore.items.ItemBindings;
@@ -758,7 +759,7 @@ public class MainDatItemsLoader
     {
       return DatEnumsUtils.getLocationFromAllowedSlots(compatibleSlot.intValue());
     }
-    return null;
+    return EquipmentLocations.NONE;
   }
 
   private void handleScaling(PropertiesSet properties)
