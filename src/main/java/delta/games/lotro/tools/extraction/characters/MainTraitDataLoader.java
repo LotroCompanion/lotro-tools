@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.character.skills.effects.StatsProviderStructValuesVisitor;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.traits.io.xml.TraitDescriptionXMLWriter;
@@ -27,6 +28,7 @@ import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.TraitGroup;
 import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.common.enums.TraitSubCategory;
+import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatsProvider;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
@@ -46,6 +48,7 @@ import delta.games.lotro.tools.extraction.utils.DatStatUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.utils.Proxy;
 import delta.games.lotro.utils.maths.ArrayProgression;
+import delta.games.lotro.values.StructValue;
 
 /**
  * Get trait definitions from DAT files.
@@ -62,6 +65,7 @@ public class MainTraitDataLoader
   private Map<Integer,Integer> _traitIds2PropMap;
   private List<Proxy<TraitDescription>> _proxies;
   private LotroEnum<TraitGroup> _traitGroupEnum;
+  private StatsProviderStructValuesVisitor _visitor;
 
   /**
    * Constructor.
@@ -76,6 +80,7 @@ public class MainTraitDataLoader
     _statUtils=new DatStatUtils(facade,_i18n);
     _proxies=new ArrayList<Proxy<TraitDescription>>();
     _traitGroupEnum=LotroEnumsRegistry.getInstance().get(TraitGroup.class);
+    _visitor=new StatsProviderStructValuesVisitor(this::handleEffect);
   }
 
   /**
@@ -241,6 +246,7 @@ public class MainTraitDataLoader
     // Stats
     StatsProvider statsProvider=_statUtils.buildStatProviders(traitProperties);
     ret.setStatsProvider(statsProvider);
+    _visitor.inspectStatsProvider(statsProvider);
     // Build icon file
     if (iconId!=null)
     {
@@ -259,6 +265,16 @@ public class MainTraitDataLoader
       ret.setTraitPrerequisite(toUse);
     }
     return ret;
+  }
+
+  private Void handleEffect(StatDescription stat, StructValue structValue)
+  {
+    Integer effectID=(Integer)structValue.getValue("Effect_StartupEffectID");
+    if (effectID!=null)
+    {
+      _effectsLoader.getEffect(effectID.intValue());
+    }
+    return null;
   }
 
   private void handleCost(TraitDescription trait, PropertiesSet props)
