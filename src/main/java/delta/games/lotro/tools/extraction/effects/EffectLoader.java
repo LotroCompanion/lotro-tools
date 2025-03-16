@@ -1504,13 +1504,12 @@ Effect_RandomEffect_Array:
 
   private void loadAIPetEffect(AIPetEffect effect, PropertiesSet effectProps)
   {
-    Object[] startupEffectsList=(Object[])effectProps.getProperty("Effect_MonsterStartupEffect_Array");
-
     // Summon object
     int summonedObjectID=((Integer)effectProps.getProperty("Effect_AIPet_SummonObject")).intValue();
     Proxy<AgentDescription> agent=handleSummonedPet(summonedObjectID);
     effect.setAgent(agent);
     // Startup effects
+    Object[] startupEffectsList=(Object[])effectProps.getProperty("Effect_MonsterStartupEffect_Array");
     if (startupEffectsList!=null)
     {
       for(Object entry : startupEffectsList)
@@ -1518,6 +1517,17 @@ Effect_RandomEffect_Array:
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
         effect.addStartupEffect(generator);
+      }
+    }
+    // 'Apply to master' effects
+    Object[] applyToMasterEffectsList=(Object[])effectProps.getProperty("Effect_PetApplyToMasterEffect_Array");
+    if (applyToMasterEffectsList!=null)
+    {
+      for(Object entry : applyToMasterEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
+        effect.addApplyToMasterEffect(generator);
       }
     }
   }
