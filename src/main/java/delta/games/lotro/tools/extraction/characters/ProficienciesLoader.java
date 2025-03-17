@@ -8,6 +8,10 @@ import delta.games.lotro.character.classes.proficiencies.ClassProficiencies;
 import delta.games.lotro.character.classes.proficiencies.TypedClassProficiencies;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.utils.TraitAndLevel;
+import delta.games.lotro.common.stats.StatDescription;
+import delta.games.lotro.common.stats.StatProvider;
+import delta.games.lotro.common.stats.StatsProvider;
+import delta.games.lotro.common.stats.StatsRegistry;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -58,6 +62,14 @@ public class ProficienciesLoader
     if (category!=null)
     {
       addProficiencies(category,level,proficiencies);
+    }
+    StatsProvider statsProvider=trait.getStatsProvider();
+    // Dual-wield
+    StatDescription dualWield=StatsRegistry.getInstance().getByKey("Inventory_AllowSecondaryWeapon");
+    StatProvider dualWieldProvider=statsProvider.getStat(dualWield);
+    if (dualWieldProvider!=null)
+    {
+      proficiencies.setMinLevelForDualWield(Integer.valueOf(level));
     }
     // Stats modifiers
     Object[] modArray=(Object[])props.getProperty("Mod_Array");
