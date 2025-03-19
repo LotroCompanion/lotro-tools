@@ -243,7 +243,7 @@ public class MainDatItemsLoader
             {
               if (level.intValue()!=1)
               {
-                LOGGER.info("Updated the min level for: "+_currentItem+" "+level+" => "+minScaledLevel);
+                LOGGER.info("Updated the min level for: {} {} => {}",_currentItem,level,minScaledLevel);
               }
               Munging munging=item.getMunging();
               level=minScaledLevel;
@@ -343,7 +343,7 @@ public class MainDatItemsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle item ID="+indexDataId);
+      LOGGER.warn("Could not handle item ID={}",Integer.valueOf(indexDataId));
     }
     return item;
   }
@@ -412,7 +412,10 @@ public class MainDatItemsLoader
       Legendary2 legendary=(Legendary2)item;
       LegendaryAttrs2 attrs=legendary.getLegendaryAttrs();
       attrs.setSockets(setup);
-      LOGGER.debug("Got new legendary item: "+item+" with "+setup.getSocketsCount()+" slots");
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Got new legendary item: {} with {} slots",item,Integer.valueOf(setup.getSocketsCount()));
+      }
     }
     else
     {
@@ -527,12 +530,11 @@ public class MainDatItemsLoader
       }
       else
       {
-        LOGGER.warn("Legendary item with no main legacy (DPS or not): "+item);
+        LOGGER.warn("Legendary item with no main legacy (DPS or not): {}",item);
       }
       //int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
       // Seems that each legendary item (4764 occurrences) has either ItemAdvancement_CombatDPSLevel or ItemAdvancement_CombatPropertyModLevel
       // depending on whether it has a DPS main legacy of a non-DPS main legacy
-      // TODO An automatic check
       Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");
       Integer combatPropertyModLevel=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLevel");
       if (combatDpsLevel!=null)
@@ -545,7 +547,7 @@ public class MainDatItemsLoader
       }
       else
       {
-        LOGGER.warn("Legendary item with no main legacy base rank: "+item);
+        LOGGER.warn("Legendary item with no main legacy base rank: {}",item);
       }
       @SuppressWarnings("unused")
       Integer icon=(Integer)properties.getProperty("ItemAdvancement_CombatPropertyModLargeIconDID");
@@ -617,7 +619,7 @@ public class MainDatItemsLoader
     Integer dpsLut=(Integer)properties.getProperty("Combat_DPS_LUT");
     if (dpsLut==null)
     {
-      LOGGER.warn("No DPS LUT for item: "+weapon);
+      LOGGER.warn("No DPS LUT for item: {}",weapon);
       return 0;
     }
 
@@ -658,11 +660,11 @@ public class MainDatItemsLoader
     float expectedAnimDurationMod=entry.getBaseAnimationDurationMultiplierModifier();
     if (Math.abs(expectedDuration-duration.floatValue())>0.01)
     {
-      LOGGER.warn("************ BAD DURATION! ID="+id+", name="+name+" ***********");
+      LOGGER.warn("************ BAD DURATION! ID={}, name={} ***********",Integer.valueOf(id),name);
     }
     if (Math.abs(expectedAnimDurationMod-mod.floatValue())>0.01)
     {
-      LOGGER.warn("************ BAD ANIM DURATION MOD! ID="+id+", name="+name+" ***********");
+      LOGGER.warn("************ BAD ANIM DURATION MOD! ID={}, name={} ***********",Integer.valueOf(id),name);
     }
     weapon.setSpeed(entry);
     //System.out.println(id+"\t"+name+"\t"+type+"\t"+speedCode+"\t"+duration+"\t"+mod);
