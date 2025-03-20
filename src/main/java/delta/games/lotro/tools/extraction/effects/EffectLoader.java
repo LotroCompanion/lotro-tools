@@ -34,6 +34,7 @@ import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.PipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
+import delta.games.lotro.common.effects.ProcEffectGenerator;
 import delta.games.lotro.common.effects.PropertyModificationEffect;
 import delta.games.lotro.common.effects.RandomEffect;
 import delta.games.lotro.common.effects.RandomEffectGenerator;
@@ -392,7 +393,9 @@ public class EffectLoader
       for(Object entry : userEffectsList)
       {
         PropertiesSet entryProps=(PropertiesSet)entry;
-        EffectGenerator generator=loadGenerator(entryProps);
+        ProcEffectGenerator generator=new ProcEffectGenerator();
+        loadGenerator(entryProps,generator);
+        generator.setOnTarget(false);
         effect.addProcedEffect(generator);
       }
     }
@@ -401,8 +404,10 @@ public class EffectLoader
       for(Object entry : targetEffectsList)
       {
         PropertiesSet entryProps=(PropertiesSet)entry;
-        EffectGenerator generator=loadGenerator(entryProps);
-        effect.addProcedEffect(generator); // TODO Distinguish User/Target
+        ProcEffectGenerator generator=new ProcEffectGenerator();
+        loadGenerator(entryProps,generator);
+        generator.setOnTarget(true);
+        effect.addProcedEffect(generator);
       }
     }
     // Cooldown
@@ -793,7 +798,14 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
    */
   public EffectGenerator loadGenerator(PropertiesSet generatorProps)
   {
-    return loadGenerator(generatorProps,"EffectGenerator_EffectID","EffectGenerator_EffectSpellcraft");
+    EffectGenerator generator=new EffectGenerator();
+    loadGenerator(generatorProps,generator);
+    return generator;
+  }
+
+  private void loadGenerator(PropertiesSet generatorProps, EffectGenerator generator)
+  {
+    loadGenerator(generatorProps,generator,"EffectGenerator_EffectID","EffectGenerator_EffectSpellcraft");
   }
 
   /**
