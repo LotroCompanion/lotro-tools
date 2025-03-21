@@ -54,7 +54,7 @@ public class MainDatNPCsLoader
     PropertiesSet properties=_facade.loadProperties(npcId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle NPC ID="+npcId);
+      LOGGER.warn("Could not handle NPC ID={}",Integer.valueOf(npcId));
       return null;
     }
     // Name
@@ -124,7 +124,7 @@ public class MainDatNPCsLoader
     boolean ok=NPCsXMLWriter.writeNPCsFile(GeneratedFiles.NPCS,npcs);
     if (ok)
     {
-      LOGGER.info("Wrote NPCs file: "+GeneratedFiles.NPCS);
+      LOGGER.info("Wrote NPCs file: {}",GeneratedFiles.NPCS);
     }
     // - labels
     _i18n.save();

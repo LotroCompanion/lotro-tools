@@ -188,12 +188,12 @@ public class RaceDataLoader
     for(Object traitPropertiesObj : traitsProperties)
     {
       PropertiesSet traitProperties=(PropertiesSet)traitPropertiesObj;
-      int level=((Integer)traitProperties.getProperty("AdvTable_Trait_Level")).intValue();
+      Integer level=(Integer)traitProperties.getProperty("AdvTable_Trait_Level");
       Integer rank=(Integer)traitProperties.getProperty("AdvTable_Trait_Rank");
       int traitId=((Integer)traitProperties.getProperty("AdvTable_Trait_WC")).intValue();
       TraitDescription trait=TraitUtils.getTrait(traitId);
-      LOGGER.debug("Level: "+level+" => trait "+trait+" (rank="+rank+")");
-      TraitAndLevel raceTrait=new TraitAndLevel(level,trait);
+      LOGGER.debug("Level: {} => trait {} (rank={})",level,trait,rank);
+      TraitAndLevel raceTrait=new TraitAndLevel(level.intValue(),trait);
       description.addTrait(raceTrait);
     }
   }
@@ -220,9 +220,9 @@ public class RaceDataLoader
     for(Object raceArrayObj : raceArrays)
     {
       PropertiesSet raceProps=(PropertiesSet)raceArrayObj;
-      int raceId=((Integer)raceProps.getProperty("Trait_Control_Race")).intValue();
-      LOGGER.debug("Race: "+raceId);
-      RaceDescription description=_racesById.get(Integer.valueOf(raceId));
+      Integer raceId=(Integer)raceProps.getProperty("Trait_Control_Race");
+      LOGGER.debug("Race: {}",raceId);
+      RaceDescription description=_racesById.get(raceId);
       if (description!=null)
       {
         Object[] traitsArray=(Object[])raceProps.getProperty("Trait_Control_TraitArray");
@@ -235,7 +235,7 @@ public class RaceDataLoader
       }
       else
       {
-        LOGGER.warn("Could not find race ID="+raceId);
+        LOGGER.warn("Could not find race ID={}",raceId);
       }
     }
   }

@@ -89,8 +89,7 @@ Set_Name:
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
-      LOGGER.warn("Properties not found: "+setId);
-      LOGGER.warn("Could not handle items set ID="+setId);
+      LOGGER.warn("Properties not found. Could not handle items set ID={}",Integer.valueOf(setId));
       return null;
     }
     // Name
@@ -136,23 +135,7 @@ Set_Name:
     String description=_i18n.getStringProperty(properties,"Set_Description");
     set.setDescription(description);
     // Members
-    Object[] membersArray=(Object[])properties.getProperty("Set_MemberList");
-    if (membersArray!=null)
-    {
-      for(Object memberObj : membersArray)
-      {
-        int memberId=((Integer)memberObj).intValue();
-        Item member=ItemsManager.getInstance().getItem(memberId);
-        if (member!=null)
-        {
-          set.addMember(member);
-        }
-        else
-        {
-          LOGGER.warn("Member not found: "+memberId+" in set "+name);
-        }
-      }
-    }
+    loadMembers(properties,set);
     // Bonus
     Object[] bonusesArray=(Object[])properties.getProperty("Set_ActiveCountDataList");
     if (bonusesArray!=null)
@@ -166,6 +149,27 @@ Set_Name:
     // Effects
     _effectsLoader.handleSetEffects(set,properties);
     return set;
+  }
+
+  private void loadMembers(PropertiesSet properties, ItemsSet set)
+  {
+    Object[] membersArray=(Object[])properties.getProperty("Set_MemberList");
+    if (membersArray!=null)
+    {
+      for(Object memberObj : membersArray)
+      {
+        int memberId=((Integer)memberObj).intValue();
+        Item member=ItemsManager.getInstance().getItem(memberId);
+        if (member!=null)
+        {
+          set.addMember(member);
+        }
+        else
+        {
+          LOGGER.warn("Member not found: {} in set {}",Integer.valueOf(memberId),set.getName());
+        }
+      }
+    }
   }
 
   private boolean useIt(String name)
@@ -249,12 +253,12 @@ Set_Name:
     handleTraceriesSets(sets);
     // Save sets
     int nbSets=sets.size();
-    LOGGER.info("Writing "+nbSets+" sets");
+    LOGGER.info("Writing {} sets",Integer.valueOf(nbSets));
     File to=GeneratedFiles.SETS;
     boolean ok=ItemsSetXMLWriter.writeSetsFile(to,sets);
     if (ok)
     {
-      LOGGER.info("Wrote sets file: "+to);
+      LOGGER.info("Wrote sets file: {}",to);
     }
     // Save progressions
     ProgressionUtils.PROGRESSIONS_MGR.writeToFile(GeneratedFiles.PROGRESSIONS_ITEMS_SETS);

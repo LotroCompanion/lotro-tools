@@ -72,25 +72,25 @@ public class RecipeItemsLoader
           Item old=_recipe2RecipeItemMap.put(recipeKey,item);
           if (old!=null)
           {
-            LOGGER.warn("Found multiple recipe items for recipe: "+recipe);
+            LOGGER.warn("Found multiple recipe items for recipe: {}",recipe);
           }
           _unknownRecipes.remove(recipeKey);
           recipe.setRecipeScroll(item);
         }
       }
     }
-    LOGGER.info("Found "+_recipe2RecipeItemMap.size()+" items that hold a recipe!");
-    LOGGER.info("There are "+recipesManager.getRecipesCount()+" recipes.");
+    LOGGER.info("Found {} items that hold a recipe!",Integer.valueOf(_recipe2RecipeItemMap.size()));
+    LOGGER.info("There are {} recipes.",Integer.valueOf(recipesManager.getRecipesCount()));
     Set<Integer> autobestowed=getAutobestowedRecipes();
-    LOGGER.info("There are "+autobestowed.size()+" autobestowed recipes.");
+    LOGGER.info("There are {} autobestowed recipes.",Integer.valueOf(autobestowed.size()));
     _unknownRecipes.removeAll(autobestowed);
     if (!_unknownRecipes.isEmpty())
     {
-      LOGGER.warn("There are "+_unknownRecipes.size()+" recipe with unknown source:");
+      LOGGER.warn("There are {} recipes with unknown source:",Integer.valueOf(_unknownRecipes.size()));
       for(Integer unknownRecipeId : _unknownRecipes)
       {
         Recipe unknownRecipe=recipesManager.getRecipeById(unknownRecipeId.intValue());
-        LOGGER.warn("\t"+unknownRecipe+"\t"+unknownRecipe.getTier());
+        LOGGER.warn("\t{}\t{}",unknownRecipe,Integer.valueOf(unknownRecipe.getTier()));
       }
     }
   }

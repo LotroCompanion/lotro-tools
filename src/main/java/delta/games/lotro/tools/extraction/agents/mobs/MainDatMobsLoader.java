@@ -76,7 +76,7 @@ public class MainDatMobsLoader
     PropertiesSet properties=_facade.loadProperties(mobId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle mob ID="+mobId);
+      LOGGER.warn("Could not handle mob ID={}",Integer.valueOf(mobId));
       return null;
     }
     // Name
@@ -187,7 +187,7 @@ Quest_MonsterDivision: 245 => HallOfMirror
     boolean ok=MobsXMLWriter.writeMobsFile(GeneratedFiles.MOBS,mobs);
     if (ok)
     {
-      LOGGER.info("Wrote mobs file: "+GeneratedFiles.MOBS);
+      LOGGER.info("Wrote mobs file: {}",GeneratedFiles.MOBS);
     }
     // Save
     // -labels

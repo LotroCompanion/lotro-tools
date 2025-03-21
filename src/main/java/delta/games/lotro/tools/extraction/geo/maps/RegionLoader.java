@@ -41,11 +41,11 @@ public class RegionLoader
       DIDMapper subMap=DataIdMapLoader.decodeDataIdMap(data);
       for(Integer key : subMap.getKeys())
       {
-        LOGGER.debug("Key="+key);
+        LOGGER.debug("Key={}",key);
         DidMapEntry entry=subMap.getEntry(key.intValue());
         int did=entry.getDID();
         String label=entry.getLabel();
-        LOGGER.debug("\tDID="+did+", label="+label);
+        LOGGER.debug("\tDID={}, label={}",Integer.valueOf(did),label);
         if (did!=0)
         {
           loadRegion(did,label);
@@ -84,7 +84,7 @@ public class RegionLoader
     int propertyDescDID=BufferUtils.readUInt32(bis);
     BufferUtils.skip(bis,6); // "
     int terrainTypeTableDID=BufferUtils.readUInt32(bis);
-    LOGGER.debug("Property Descriptor ID: "+propertyDescDID);
+    LOGGER.debug("Property Descriptor ID: {}",Integer.valueOf(propertyDescDID));
   }
 
   /**

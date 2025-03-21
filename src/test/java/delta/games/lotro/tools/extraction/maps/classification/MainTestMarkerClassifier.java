@@ -1,11 +1,8 @@
 package delta.games.lotro.tools.extraction.maps.classification;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
@@ -37,7 +34,13 @@ public class MainTestMarkerClassifier
 
   private void doIt()
   {
-    //doBlocks();
+    /*
+    doBlocks();
+    doBlock(1,6,7,markersMgr); // Shire/bree
+    doBlock(1,10,3,markersMgr); // Dunland
+    doBlock(1,8,8,markersMgr); // Esteldin / Western North Downs
+    doBlock(1,15,5,markersMgr); // Shire Auction Hall
+    */
     doSimpleClassification();
   }
 
@@ -46,26 +49,19 @@ public class MainTestMarkerClassifier
     File rootDir=MapConstants.getRootDir();
     MapsManager maps=new MapsManager(rootDir);
     GlobalMarkersManager markersMgr=maps.getMarkersManager();
-    Map<Integer,IntegerHolder> stats=new HashMap<Integer,IntegerHolder>();
     for(int region=1;region<=4;region++)
     {
       for(int blockX=0;blockX<=0xFE;blockX++)
       {
         for(int blockY=0;blockY<=0xFE;blockY++)
         {
-          doBlock(region,blockX,blockY,markersMgr,stats);
+          doBlock(region,blockX,blockY,markersMgr);
         }
       }
     }
-    /*
-    doBlock(1,6,7,markersMgr,stats); // Shire/bree
-    doBlock(1,10,3,markersMgr,stats); // Dunland
-    doBlock(1,8,8,markersMgr,stats); // Esteldin / Western North Downs
-    doBlock(1,15,5,markersMgr,stats); // Shire Auction Hall
-    */
   }
 
-  private void doBlock(int region, int x, int y, GlobalMarkersManager markersMgr, Map<Integer,IntegerHolder> stats)
+  private void doBlock(int region, int x, int y, GlobalMarkersManager markersMgr)
   {
     BlockMarkersManager blockMgr=markersMgr.getBlockManager(region,x,y);
     List<Marker> markers=blockMgr.getMarkers();

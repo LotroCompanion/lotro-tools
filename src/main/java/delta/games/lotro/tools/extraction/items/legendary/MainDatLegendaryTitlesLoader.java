@@ -104,8 +104,6 @@ Mod_Array:
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties!=null)
     {
-      //System.out.println("************* "+indexDataId+" *****************");
-      //System.out.println(properties.dump());
       ret=new LegendaryTitle();
       // ID
       ret.setIdentifier(indexDataId);
@@ -162,7 +160,7 @@ Mod_Array:
     }
     else
     {
-      LOGGER.warn("Could not handle legendary title ID="+indexDataId);
+      LOGGER.warn("Could not handle legendary title ID={}",Integer.valueOf(indexDataId));
     }
     return ret;
   }
@@ -198,11 +196,11 @@ Mod_Array:
     }
     // Save titles
     int nbTitles=titles.size();
-    System.out.println("Writing "+nbTitles+" legendary titles");
+    LOGGER.info("Writing {} legendary titles",Integer.valueOf(nbTitles));
     boolean ok=LegendaryTitleXMLWriter.writeLegendaryTitlesFile(GeneratedFiles.LEGENDARY_TITLES,titles);
     if (ok)
     {
-      LOGGER.info("Wrote titles file: "+GeneratedFiles.LEGENDARY_TITLES);
+      LOGGER.info("Wrote titles file: {}",GeneratedFiles.LEGENDARY_TITLES);
     }
     _i18n.save();
   }

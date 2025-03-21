@@ -143,7 +143,7 @@ public class QuestsLoader
       else if (lockTypeCode.intValue()==3) lockType=LockType.WEEKLY;
       else
       {
-        LOGGER.warn("Unmanaged lock type: "+lockTypeCode);
+        LOGGER.warn("Unmanaged lock type: {}",lockTypeCode);
       }
     }
     quest.setLockType(lockType);
@@ -157,19 +157,13 @@ public class QuestsLoader
     Object questsToComplete=properties.getProperty("Quest_QuestsToComplete");
     if (questsToComplete!=null)
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Quests to complete: "+questsToComplete);
-      }
+      LOGGER.debug("Quests to complete: {}",questsToComplete);
     }
     // Items given when the quest is bestowed
     Object givenItems=properties.getProperty("Quest_GiveItemArray");
     if (givenItems!=null)
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Given items: "+givenItems);
-      }
+      LOGGER.debug("Given items: {}",givenItems);
     }
     // Chain
     // - previous
@@ -199,10 +193,7 @@ public class QuestsLoader
     if (lootTable!=null)
     {
       // [{Quest_LootMonsterGenus_Array=[Ljava.lang.Object;@3d1cfad4, Quest_LootItemDID=1879051728, Quest_LootItemProbability=100}]
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Loot table:" +lootTable);
-      }
+      LOGGER.debug("Loot table: {}",lootTable);
     }
 
     // Objectives
@@ -364,7 +355,7 @@ public class QuestsLoader
       }
       else
       {
-        LOGGER.warn("Quest "+questId+" not found for arc: "+arcName);
+        LOGGER.warn("Quest {} not found for arc: {}",questId,arcName);
       }
     }
   }
@@ -396,12 +387,12 @@ public class QuestsLoader
     List<QuestDescription> quests=new ArrayList<QuestDescription>();
     quests.addAll(_quests.values());
     Collections.sort(quests,new IdentifiableComparator<QuestDescription>());
-    LOGGER.info("Nb quests: "+quests.size());
+    LOGGER.info("Nb quests: {}",Integer.valueOf(quests.size()));
     // Write quests file
     boolean ok=QuestXMLWriter.writeQuestsFile(GeneratedFiles.QUESTS,quests);
     if (ok)
     {
-      LOGGER.info("Wrote quests file: "+GeneratedFiles.QUESTS);
+      LOGGER.info("Wrote quests file: {}",GeneratedFiles.QUESTS);
     }
   }
 }

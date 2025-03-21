@@ -253,13 +253,19 @@ DefaultPermissionBlobStruct:
     ComparisonOperator operator=OperatorUtils.getComparisonOperatorFromCode(operatorCode);
     if (operator==null)
     {
-      LOGGER.warn("Unmanaged operator: "+operatorCode+": "+_operator.getLabel(operatorCode));
+      if (LOGGER.isWarnEnabled())
+      {
+        LOGGER.warn("Unmanaged operator: {}: {}",Integer.valueOf(operatorCode),_operator.getLabel(operatorCode));
+      }
       return null;
     }
     QuestStatus questStatus=getQuestStatusFromCode(questStatusCode);
     if (questStatus==null) // Completed
     {
-      LOGGER.warn("Unmanaged quest status: "+questStatusCode+": "+_questStatus.getLabel(questStatusCode));
+      if (LOGGER.isWarnEnabled())
+      {
+        LOGGER.warn("Unmanaged quest status: {}: {}",Integer.valueOf(questStatusCode),_questStatus.getLabel(questStatusCode));
+      }
       return null;
     }
     QuestRequirement ret=new QuestRequirement(questId,questStatus);
@@ -272,8 +278,8 @@ DefaultPermissionBlobStruct:
     if (questStatus==0x10000000) return QuestStatus.UNDERWAY;
     if (questStatus==0x20000000) return QuestStatus.FAILED;
     if (questStatus==0x30000000) return QuestStatus.COMPLETED;
-    //if (questStatus==0x40000000) return QuestStatus.ABANDONED;
-    //if (questStatus==0x50000000) return QuestStatus.TAPPED;
+    // Not managed: questStatus==0x40000000 => ABANDONED
+    // Not managed: questStatus==0x50000000 => TAPPED
     if ((questStatus&0x10000000)==0x10000000)
     {
       int objectiveIndex=questStatus&0xFFFFFFF;

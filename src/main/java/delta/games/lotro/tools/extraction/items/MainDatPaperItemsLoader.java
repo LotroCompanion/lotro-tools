@@ -48,7 +48,7 @@ public class MainDatPaperItemsLoader
   /**
    * Handle a paper item.
    * @param itemProps Paper item properties.
-   * @param free Indicates if this papaer item goes into the basic wallet or not.
+   * @param free Indicates if this paper item goes into the basic wallet or not.
    * @return the loaded paper item.
    */
   private PaperItem handleItem(PropertiesSet itemProps, boolean free)
@@ -82,7 +82,7 @@ public class MainDatPaperItemsLoader
     Item item=ItemsManager.getInstance().getItem(itemId);
     if (item==null)
     {
-      LOGGER.warn("Unknown item: "+itemId);
+      LOGGER.warn("Unknown item: {}",Integer.valueOf(itemId));
       return null;
     }
     PaperItem ret=new PaperItem(item);
@@ -90,7 +90,7 @@ public class MainDatPaperItemsLoader
     Integer isBarter=(Integer)itemProps.getProperty("Barter_IsBarterItem");
     if ((isBarter==null) || (isBarter.intValue()!=1))
     {
-      LOGGER.warn("Is barter is: "+isBarter+" for item ID="+itemId);
+      LOGGER.warn("Is barter is: {} for item={}",isBarter,item);
     }
     Integer paperItemCategoryCode=(Integer)itemProps.getProperty("PaperItem_Category");
     PaperItemCategory paperItemCategory=_paperItemCategory.getEntry(paperItemCategoryCode.intValue());
@@ -112,7 +112,8 @@ public class MainDatPaperItemsLoader
     {
       String name=ret.getName();
       String itemClassName=ret.getItemClass().getLabel();
-      LOGGER.debug("ID="+itemId+", name="+name+", class="+itemClassName+", category="+paperItemCategory+", iconID="+smallIconId+", shared="+accountShared);
+      LOGGER.debug("ID={}, name={}, class={}, category={}, iconID={}, shared={}",
+          Integer.valueOf(itemId),name,itemClassName,paperItemCategory,smallIconId,Boolean.valueOf(accountShared));
     }
     return ret;
   }
@@ -177,20 +178,20 @@ PaperItemControl_VersionArray:
           }
           else
           {
-            LOGGER.warn("Old item not found: item ID="+oldItemId);
+            LOGGER.warn("Old item not found: item ID={}",oldItemId);
           }
         }
       }
     }
 
-    LOGGER.info("Writing "+paperItems.size()+" paperItems");
+    LOGGER.info("Writing {} paperItems",Integer.valueOf(paperItems.size()));
     File to=GeneratedFiles.PAPER_ITEMS;
     List<PaperItem> sortedItems=new ArrayList<PaperItem>(paperItems.values());
     Collections.sort(sortedItems,new IdentifiableComparator<PaperItem>());
     boolean ok=PaperItemsXMLWriter.write(to,sortedItems);
     if (ok)
     {
-      LOGGER.info("Wrote paper items file: "+to);
+      LOGGER.info("Wrote paper items file: {}",to);
     }
   }
 

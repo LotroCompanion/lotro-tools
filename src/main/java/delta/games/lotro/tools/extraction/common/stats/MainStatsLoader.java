@@ -73,7 +73,7 @@ public class MainStatsLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle property metadata ID="+indexDataId);
+      LOGGER.warn("Could not handle property metadata ID={}",Integer.valueOf(indexDataId));
       return;
     }
     // Property ID
@@ -106,7 +106,7 @@ public class MainStatsLoader
     if (propertyType==PropertyType.BIT_FIELD32) return StatType.BITFIELD;
     if (propertyType==PropertyType.BITFIELD_64) return StatType.BITFIELD;
     if (propertyType==PropertyType.ARRAY) return StatType.ARRAY;
-    LOGGER.warn("Unmanaged property type: "+propertyType);
+    LOGGER.warn("Unmanaged property type: {}",propertyType);
     return StatType.OTHER;
   }
 
@@ -143,7 +143,7 @@ public class MainStatsLoader
     // Save stats
     int nbStats=stats.size();
     File toFile=GeneratedFiles.STATS;
-    LOGGER.info("Writing "+nbStats+" stats to: "+toFile);
+    LOGGER.info("Writing {} stats to: {}",Integer.valueOf(nbStats),toFile);
     StatXMLWriter.write(toFile,stats);
     // Checks
     checks();
@@ -166,7 +166,7 @@ public class MainStatsLoader
       }
       else
       {
-        LOGGER.warn("Stat not found for index: "+premiumKey);
+        LOGGER.warn("Stat not found for index: {}",premiumKey);
       }
     }
   }
@@ -184,7 +184,7 @@ public class MainStatsLoader
           // Legacy labels
           int id=stat.getIdentifier();
           String legacyName=_oldStatsLabels.getStatLegacyName(legacyKey,locale);
-          if ((legacyName!=null) && (legacyName.length()>0))
+          if ((legacyName!=null) && (!legacyName.isEmpty()))
           {
             String statName=_i18n.getLabelsStorage().getLabel(localeCode,String.valueOf(id));
             if (!legacyName.equals(statName))
@@ -224,7 +224,7 @@ public class MainStatsLoader
     {
       wellKnownStatsKeys.add(wellKnownStat.getLegacyKey());
     }
-    LOGGER.info("Well-known stats count: "+wellKnownStatsKeys.size());
+    LOGGER.info("Well-known stats count: {}",Integer.valueOf(wellKnownStatsKeys.size()));
     // Not well-known stats
     Set<String> notWellKnownStatsKeys=new HashSet<String>();
     for(NotWellKnownLegacyStats notWellKnownStat : NotWellKnownLegacyStats.values())
@@ -232,14 +232,14 @@ public class MainStatsLoader
       String notWellKnownStatsKey=notWellKnownStat.getKey();
       notWellKnownStatsKeys.add(notWellKnownStatsKey);
     }
-    LOGGER.info("Not well-known stats count: "+notWellKnownStatsKeys.size());
+    LOGGER.info("Not well-known stats count: {}",Integer.valueOf(notWellKnownStatsKeys.size()));
     // Check that well-known and not-well-known do not intersect
     {
       Set<String> intersection=new HashSet<String>(wellKnownStatsKeys);
       intersection.retainAll(notWellKnownStatsKeys);
       if (!intersection.isEmpty())
       {
-        LOGGER.warn("Well-known and not well-known do intersect: "+intersection);
+        LOGGER.warn("Well-known and not well-known do intersect: {}",intersection);
       }
     }
   }
@@ -255,7 +255,7 @@ public class MainStatsLoader
         boolean ok=names.add(name);
         if (!ok)
         {
-          LOGGER.warn("Found duplicate stat name: "+name);
+          LOGGER.warn("Found duplicate stat name: {}",name);
         }
       }
     }
@@ -388,7 +388,7 @@ public class MainStatsLoader
     String statName=_oldStatsLabels.getStatLegacyName(legacyKey,Locale.ENGLISH);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Custom stat: key="+legacyKey+", name="+statName);
+      LOGGER.debug("Custom stat: key={}, name={}",legacyKey,statName);
     }
     StatDescription stat=new StatDescription();
     stat.setIdentifier(id);
