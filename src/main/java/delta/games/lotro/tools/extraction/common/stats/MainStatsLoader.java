@@ -330,6 +330,16 @@ public class MainStatsLoader
   private int getMaxFractionalDigits(StatDescription stat, boolean below1)
   {
     int propertyID=stat.getIdentifier();
+    if (!below1)
+    {
+      if ((propertyID==268437571) || // PROSPECTOR_MINING_DURATION
+          (propertyID==268437808) || // FARMER_MINING_DURATION
+          (propertyID==268436396) || // FORESTER_CHOPPING_DURATION
+          (propertyID==268459005)) // SCHOLAR_RESEARCHING_DURATION
+      {
+        return 2;
+      }
+    }
     boolean isLive=LotroCoreConfig.isLive();
     if (isLive)
     {
