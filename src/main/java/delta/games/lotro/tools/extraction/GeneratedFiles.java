@@ -468,4 +468,8 @@ public class GeneratedFiles
    * Baubles.
    */
   public static final File BAUBLES=LotroCoreConfig.getInstance().getFile(DataFiles.BAUBLES);
+  /**
+   * Birds.
+   */
+  public static final File BIRDS=LotroCoreConfig.getInstance().getFile(DataFiles.BIRDS);
 }
