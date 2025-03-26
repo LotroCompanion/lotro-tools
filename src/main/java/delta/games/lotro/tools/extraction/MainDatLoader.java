@@ -120,17 +120,17 @@ public class MainDatLoader
     new MainXpTableLoader(_facade).doIt();
     // PVP
     new MainDatPVPLoader(_facade).doIt();
+    // Places
+    PlacesLoader placesLoader=new PlacesLoader(_facade);
+    // Effects
+    EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     // Mood
-    new MainMoodDataLoader(_facade).doIt();
+    new MainMoodDataLoader(_facade,effectsLoader).doIt();
     // Combat data
     new MainDatCombatLoader(_facade).doIt();
     new MainProgressionsMerger().doIt();
     // Weapon damage
     new MainWeaponDamageLoader(_facade).doIt();
-    // Places
-    PlacesLoader placesLoader=new PlacesLoader(_facade);
-    // Effects
-    EffectLoader effectsLoader=new EffectLoader(_facade,placesLoader);
     // Skills
     MainSkillDataLoader skillsLoader=new MainSkillDataLoader(_facade,effectsLoader);
     skillsLoader.doIt();
@@ -224,7 +224,7 @@ public class MainDatLoader
     // Mobs loot
     new MainDatGenericMobLootLoader(_facade,lootsManager).doIt();
     // Save loots
-    lootsManager.dump(System.out);
+    lootsManager.dump(System.out); // #ÑOSONAR
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
     // Quests and deeds

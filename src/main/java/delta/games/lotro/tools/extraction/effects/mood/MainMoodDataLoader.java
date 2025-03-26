@@ -21,6 +21,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.mood.MoodEntry;
 import delta.games.lotro.lore.mood.io.xml.MoodXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
@@ -34,15 +35,18 @@ public class MainMoodDataLoader
   private static final Logger LOGGER=LoggerFactory.getLogger(MainMoodDataLoader.class);
 
   private DataFacade _facade;
+  private EffectLoader _effectsLoader;
   private Map<Integer,MoodEntry> _data;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    */
-  public MainMoodDataLoader(DataFacade facade)
+  public MainMoodDataLoader(DataFacade facade, EffectLoader effectsLoader)
   {
     _facade=facade;
+    _effectsLoader=effectsLoader;
     _data=new HashMap<Integer,MoodEntry>();
   }
 
@@ -144,8 +148,7 @@ Mod_Array:
 
   private Float findMoraleMultiplierFromEffect(int effectID)
   {
-    EffectLoader loader=new EffectLoader(_facade,null);
-    Effect effect=loader.getEffect(effectID);
+    Effect effect=_effectsLoader.getEffect(effectID);
     if (effect instanceof PropertyModificationEffect)
     {
       PropertyModificationEffect propModEffect=(PropertyModificationEffect)effect;
@@ -184,9 +187,8 @@ Mod_Array:
     boolean ok=MoodXMLWriter.writeMoodsFile(GeneratedFiles.MOOD,data);
     if (ok)
     {
-      LOGGER.info("Wrote moods file: "+GeneratedFiles.MOOD);
+      LOGGER.info("Wrote moods file: {}",GeneratedFiles.MOOD);
     }
-
   }
 
   /**
@@ -196,7 +198,9 @@ Mod_Array:
   public static void main(String[] args)
   {
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
-    MainMoodDataLoader loader=new MainMoodDataLoader(facade);
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
+    MainMoodDataLoader loader=new MainMoodDataLoader(facade,effectsLoader);
     loader.doIt();
     facade.dispose();
   }
