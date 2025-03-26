@@ -5,6 +5,7 @@ import java.util.List;
 
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
+import delta.games.lotro.common.effects.EffectsManager;
 import delta.games.lotro.common.effects.io.xml.EffectXMLParser;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
@@ -27,10 +28,10 @@ public class MainExtractEffects
   {
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
-    EffectXMLParser p=new EffectXMLParser(null);
-    List<Effect> effects=p.parseEffectsFile(GeneratedFiles.EFFECTS);
+    EffectsManager effectsMgr=EffectsManager.getInstance();
+    List<Effect> effects=effectsMgr.getEffects();
     Collections.sort(effects,new IdentifiableComparator<Effect>());
-    GeneratedFiles.EFFECTS.delete();
+    effects.clear();
     PlacesLoader placesLoader=new PlacesLoader(facade);
     EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     for(Effect effect : effects)

@@ -175,11 +175,6 @@ public class EffectLoader
     // Duration
     EffectDuration duration=getDuration(effectProps);
     ret.setEffectDuration(duration);
-    // Priority
-    /*
-    Integer priority=(Integer)effectProps.getProperty("Effect_ClassPriority");
-    ret.setPriority(priority);
-    */
     // Specifics
     loadSpecifics(ret,effectProps);
     // Icon
@@ -1584,7 +1579,7 @@ Effect_RandomEffect_Array:
   {
     // Effects
     EffectXMLWriter w=new EffectXMLWriter();
-    List<Effect> effects=EffectsManager.getInstance().getEffects();
+    List<Effect> effects=_effectsMgr.getEffects();
     w.write(GeneratedFiles.EFFECTS,effects);
     _i18nUtils.save();
     // Progressions

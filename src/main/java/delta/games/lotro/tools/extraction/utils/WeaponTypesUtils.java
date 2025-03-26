@@ -11,7 +11,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.items.WeaponType;
-import delta.games.lotro.tools.extraction.items.legendary.LegaciesLoader;
 
 /**
  * Utility methods related to weapon types.
@@ -19,7 +18,7 @@ import delta.games.lotro.tools.extraction.items.legendary.LegaciesLoader;
  */
 public class WeaponTypesUtils
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(LegaciesLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(WeaponTypesUtils.class);
 
   private EnumMapper _equipmentCategory;
 
@@ -43,7 +42,7 @@ public class WeaponTypesUtils
     if (LOGGER.isDebugEnabled())
     {
       String allowedEquipementTypes=BitSetUtils.getStringFromBitSet(equipementBitSet,_equipmentCategory, ",");
-      LOGGER.debug("Allowed equipment types:"+allowedEquipementTypes);
+      LOGGER.debug("Allowed equipment types: {}",allowedEquipementTypes);
     }
     Set<WeaponType> ret=new HashSet<WeaponType>();
     for(int i=0;i<equipementBitSet.size();i++)
@@ -59,7 +58,7 @@ public class WeaponTypesUtils
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Decoded equipment types:"+ret);
+      LOGGER.debug("Decoded equipment types: {}",ret);
     }
     return ret;
   }
