@@ -96,7 +96,7 @@ public class LandblockInfoLoader
     if ((flags & HAS_CELLS)!=0)
     {
       int count=BufferUtils.readTSize(bis);
-      LOGGER.debug("Cells count: "+count);
+      LOGGER.debug("Cells count: {}",Integer.valueOf(count));
       for(int i=0;i<count;i++)
       {
         Cell cell=loadCell(bis);
@@ -110,30 +110,30 @@ public class LandblockInfoLoader
     // Static entities
     {
       int count=BufferUtils.readUInt32(bis);
-      LOGGER.debug("Entity count: "+count);
+      LOGGER.debug("Entity count: {}",Integer.valueOf(count));
       for(int i=0;i<count;i++)
       {
         EntityDescriptor entity=loadStaticEntity(bis);
         ret.addEntity(entity);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Entity desc index: "+i);
-          LOGGER.debug("Added entity: "+String.format("%08X",Long.valueOf(entity.getIid())));
+          LOGGER.debug("Entity desc index: {}",Integer.valueOf(i));
+          LOGGER.debug("Added entity: {}",String.format("%08X",Long.valueOf(entity.getIid())));
         }
       }
     }
     // Links
     {
       int count=BufferUtils.readUInt32(bis);
-      LOGGER.debug("Links count: "+count);
+      LOGGER.debug("Links count: {}",Integer.valueOf(count));
       for(int i=0;i<count;i++)
       {
         LbiLink link=loadLink(bis);
         ret.addLink(link);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Link index: "+i);
-          LOGGER.debug("Added link: "+String.format("%08X",Long.valueOf(link.getIid())));
+          LOGGER.debug("Link index: {}",Integer.valueOf(i));
+          LOGGER.debug("Added link: {}",String.format("%08X",Long.valueOf(link.getIid())));
         }
       }
     }
@@ -148,15 +148,15 @@ public class LandblockInfoLoader
     // Weenies
     {
       int count=BufferUtils.readTSize(bis);
-      LOGGER.debug("Weenies count: "+count);
+      LOGGER.debug("Weenies count: {}",Integer.valueOf(count));
       for(int i=0;i<count;i++)
       {
         Weenie weenie=loadWeenie(bis);
         ret.addWeenie(weenie);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Weenie index: "+i);
-          LOGGER.debug("Added weenie: "+String.format("%08X",Long.valueOf(weenie.getIid())));
+          LOGGER.debug("Weenie index: {}",Integer.valueOf(i));
+          LOGGER.debug("Added weenie: {}",String.format("%08X",Long.valueOf(weenie.getIid())));
         }
       }
     }
@@ -169,7 +169,7 @@ public class LandblockInfoLoader
     bytesAvailable=bis.available();
     if (bytesAvailable>0)
     {
-      LOGGER.warn("Bytes lefts: "+bytesAvailable);
+      LOGGER.warn("Bytes lefts: {}",Integer.valueOf(bytesAvailable));
     }
     return ret;
   }
@@ -186,8 +186,9 @@ public class LandblockInfoLoader
     int mask=BufferUtils.readUInt32(bis);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Cross link: "+typeStr+" - from: "+String.format("%04X",Long.valueOf(fromLbiDID))+"/"+fromIndex+" ; to:"
-          +String.format("%04X",Long.valueOf(toLbiDID))+"/"+toIndex+", mask="+mask);
+      LOGGER.debug("Cross link: {} - from: {}/{} ; to: {}/{}, mask={}",typeStr,
+          String.format("%04X",Long.valueOf(fromLbiDID)),Integer.valueOf(fromIndex),
+          String.format("%04X",Long.valueOf(toLbiDID)),Integer.valueOf(toIndex),Integer.valueOf(mask));
     }
   }
 
@@ -221,10 +222,10 @@ public class LandblockInfoLoader
     int neighboursCount=BufferUtils.readUInt32(bis);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Cell index: "+index);
-      LOGGER.debug("\tPosition: "+position);
-      LOGGER.debug("\tMesh ID: "+cellMeshDID);
-      LOGGER.debug("\tNeighbours count: "+neighboursCount);
+      LOGGER.debug("Cell index: {}",Integer.valueOf(index));
+      LOGGER.debug("\tPosition: {}",position);
+      LOGGER.debug("\tMesh ID: {}",Integer.valueOf(cellMeshDID));
+      LOGGER.debug("\tNeighbours count: {}",Integer.valueOf(neighboursCount));
     }
     // Neighbours
     for(int i=0;i<neighboursCount;i++)
@@ -244,7 +245,7 @@ public class LandblockInfoLoader
       if (LOGGER.isDebugEnabled())
       {
         LOGGER.debug("\tCell indices: #0="+Arrays.toString(cellIndices0)+", #1="+Arrays.toString(cellIndices1));
-        LOGGER.debug("\tUnknown: "+unknown);
+        LOGGER.debug("\tUnknown: {}",Integer.valueOf(unknown));
       }
     }
     else
@@ -269,9 +270,9 @@ public class LandblockInfoLoader
         {
           if ((dungeonId!=null) && (dungeonId.intValue()>0))
           {
-            LOGGER.debug("Found Dungeon ID: "+dungeonId+" for cell "+index);
+            LOGGER.debug("Found Dungeon ID: {} for cell {}",dungeonId,Integer.valueOf(index));
           }
-          LOGGER.debug("Cell props: "+props.dump());
+          LOGGER.debug("Cell props: {}",props.dump());
         }
         /*
          * Physics_AdjustableScale=null (vector),
@@ -403,7 +404,7 @@ public class LandblockInfoLoader
     if (code==0x10000013) return "House_PropertyDriver";
     if (code==0x10000019) return "Phasing";
 
-    LOGGER.warn("Unmanaged link code: "+code);
+    LOGGER.warn("Unmanaged link code: {}",Integer.valueOf(code));
     return "? "+code+" ?";
   }
 }

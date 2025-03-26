@@ -15,6 +15,7 @@ import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.misc.Context;
@@ -77,7 +78,7 @@ Reputation_LowestTier: 1
     PropertiesSet properties=_facade.loadProperties(factionId+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not load properties for faction ID="+factionId);
+      LOGGER.warn("Could not load properties for faction ID={}",Integer.valueOf(factionId));
       return null;
     }
     // Name
@@ -93,7 +94,7 @@ Reputation_LowestTier: 1
   {
     Faction faction=new Faction(factionId);
     faction.setName(name);
-    LOGGER.info("Loading faction: ID: "+factionId+" => "+name);
+    LOGGER.info("Loading faction: {}",faction);
 
     // Category
     String[] factionDescription=getFactionDescription(factionId);
@@ -111,7 +112,7 @@ Reputation_LowestTier: 1
     Integer tierNamesId=(Integer)properties.getProperty("Reputation_Faction_TierNameProgression");
     if (tierNamesId!=null)
     {
-      LOGGER.debug("Tier names table: "+tierNamesId);
+      LOGGER.debug("Tier names table ID: {}",tierNamesId);
       tierNames=getTierNames(tierNamesId.intValue());
       LOGGER.debug("{}",tierNames);
     }
@@ -122,11 +123,14 @@ Reputation_LowestTier: 1
 
     // Faction advancement table
     // Here we find the total amount of reputation points for each tier
-    int reputationTableId=((Integer)properties.getProperty("Reputation_Faction_AdvancementTable")).intValue();
-    LOGGER.debug("Reputation table: "+reputationTableId);
-    WStateDataSet table=_facade.loadWState(reputationTableId);
+    Integer reputationTableId=(Integer)properties.getProperty("Reputation_Faction_AdvancementTable");
+    LOGGER.debug("Reputation table: {}",reputationTableId);
+    WStateDataSet table=_facade.loadWState(reputationTableId.intValue());
     long[] reputationTable=extractReputationTable(table);
-    LOGGER.debug(Arrays.toString(reputationTable));
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("{}",Arrays.toString(reputationTable));
+    }
 
     // Guild?
     boolean isGuild=isGuildFaction(factionId);
@@ -143,7 +147,7 @@ Reputation_LowestTier: 1
       lowestTier=1;
       highestTier=reputationTable.length-1;
     }
-    LOGGER.debug("Tiers (lowest/default/highest): "+lowestTier+" / "+defaultTier+" / "+highestTier);
+    LOGGER.debug("Tiers (lowest/default/highest): {} / {} / {}",lowestTierInt,Integer.valueOf(defaultTier),highestTierInt);
     faction.setLowestTier(lowestTier);
     faction.setHighestTier(highestTier);
     faction.setInitialTier(defaultTier);
@@ -164,7 +168,7 @@ Reputation_LowestTier: 1
       {
         if (levelKeys.size()!=levels.size())
         {
-          LOGGER.warn("Size mismatch for faction "+faction.getName());
+          LOGGER.warn("Size mismatch for faction: {}",faction);
         }
         else
         {
@@ -194,27 +198,31 @@ Reputation_LowestTier: 1
 
   private void handleFactionUnusedAttributes(PropertiesSet properties)
   {
-    PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
     int globalCapPropId=((Integer)properties.getProperty("Reputation_Faction_GlobalCap_PropertyName")).intValue();
-    LOGGER.debug("Global cap property: "+propsRegistry.getPropertyDef(globalCapPropId));
+    if (LOGGER.isDebugEnabled())
+    {
+      PropertiesRegistry propsRegistry=_facade.getPropertiesRegistry();
+      PropertyDefinition def=propsRegistry.getPropertyDef(globalCapPropId);
+      LOGGER.debug("Global cap property: {}",def);
+    }
 
     Integer disableAcc=(Integer)properties.getProperty("Reputation_Faction_DisableAcceleration");
     if ((disableAcc!=null) && (disableAcc.intValue()==1))
     {
       // Only 1 for Dol Amroth library (null otherwise)
-      LOGGER.debug("Disable acc: "+disableAcc);
+      LOGGER.debug("Disable acc: {}",disableAcc);
     }
     Integer lowestMonetizedTier=(Integer)properties.getProperty("Reputation_Faction_LowestMonetizedTier");
     if (lowestMonetizedTier!=null)
     {
       // 4 for guilds, nothing for other factions
-      LOGGER.debug("Lowest monetized tier: "+lowestMonetizedTier);
+      LOGGER.debug("Lowest monetized tier: {}",lowestMonetizedTier);
     }
     Integer webStoreDataId=(Integer)properties.getProperty("WebStoreAccountItem_DataID");
     if (webStoreDataId!=null)
     {
       // Only for guilds
-      LOGGER.debug("Web store ID: "+webStoreDataId);
+      LOGGER.debug("Web store ID: {}",webStoreDataId);
     }
   }
 
@@ -328,7 +336,7 @@ Reputation_LowestTier: 1
     }
     if (!factions.isEmpty())
     {
-      LOGGER.warn("Sort order not specified for some factions: "+factions);
+      LOGGER.warn("Sort order not specified for some factions: {}",factions);
     }
     ret.addAll(factions);
     return ret;
@@ -370,11 +378,11 @@ Reputation_LowestTier: 1
     boolean ok=FactionsXMLWriter.writeFactionsFile(toFile,factions);
     if (ok)
     {
-      LOGGER.info("Wrote file: "+toFile);
+      LOGGER.info("Wrote file: {}",toFile);
     }
     else
     {
-      LOGGER.error("Failed to build factions registry file: "+toFile);
+      LOGGER.error("Failed to build factions registry file: {}",toFile);
     }
   }
 
@@ -465,7 +473,7 @@ Reputation_LowestTier: 1
     if (factionId==1879489736) return new String[]{category,null,null}; // The Ikorbâni
     if (factionId==1879489734) return new String[]{category,null,null}; // The Adúrhid
 
-    LOGGER.warn("Unmanaged faction ID: "+factionId);
+    LOGGER.warn("Unmanaged faction ID: {}",Integer.valueOf(factionId));
     return new String[]{};
   }
 
