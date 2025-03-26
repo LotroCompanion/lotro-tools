@@ -100,7 +100,7 @@ public class MainDatTradeLoader
     }
     else
     {
-      LOGGER.warn("Could not handle NPC ID="+npcId);
+      LOGGER.warn("Could not handle NPC ID={}",Integer.valueOf(npcId));
     }
   }
 
@@ -159,7 +159,7 @@ public class MainDatTradeLoader
         }
         else
         {
-          LOGGER.warn("Unsupported class: "+abstractClass);
+          LOGGER.warn("Unsupported class: {}",abstractClass);
         }
       }
     }
@@ -180,16 +180,16 @@ public class MainDatTradeLoader
       {
         // Usage_QuestStatus=805306368, Usage_Operator=3, Usage_QuestID=1879093911
         PropertiesSet questReqProps=(PropertiesSet)questRequirementObj;
-        int questId=((Integer)questReqProps.getProperty("Usage_QuestID")).intValue();
-        int questStatus=((Integer)questReqProps.getProperty("Usage_QuestStatus")).intValue();
+        Integer questId=(Integer)questReqProps.getProperty("Usage_QuestID");
+        Integer questStatus=(Integer)questReqProps.getProperty("Usage_QuestStatus");
         Integer operator=(Integer)questReqProps.getProperty("Usage_Operator");
-        if ((questStatus==805306368) && ((operator==null) || (operator.intValue()==3)))
+        if ((questStatus.intValue()==805306368) && ((operator==null) || (operator.intValue()==3)))
         {
-          ret=new QuestRequirement(questId,QuestStatus.COMPLETED);
+          ret=new QuestRequirement(questId.intValue(),QuestStatus.COMPLETED);
         }
         else
         {
-          LOGGER.warn("Unmanaged quest status:"+questStatus+/*"/operator:"+operator+*/" for quest ID: "+questId);
+          LOGGER.warn("Unmanaged quest status: {} for quest ID: {}",questStatus,questId);
         }
       }
     }
@@ -290,7 +290,7 @@ public class MainDatTradeLoader
 
     if ((itemId==null) && (quantity!=null))
     {
-      LOGGER.warn("No item, but found quantity: "+quantity);
+      LOGGER.warn("No item, but found quantity: {}",quantity);
       return null;
     }
 
@@ -300,7 +300,7 @@ public class MainDatTradeLoader
       Item item=_itemsManager.getItem(itemId.intValue());
       if (item==null)
       {
-        LOGGER.warn("Item not found: ID="+itemId);
+        LOGGER.warn("Item not found: ID={}",itemId);
         return null;
       }
       if (quantity==null)
@@ -380,14 +380,14 @@ public class MainDatTradeLoader
       boolean alreadyKnown=ret.sells(itemId.intValue());
       if (!alreadyKnown)
       {
-        LOGGER.warn("Found new item in item sells: "+itemId);
+        LOGGER.warn("Found new item in item sells: {}",itemId);
       }
     }
     int nbItemSells=itemSells.size();
     int nbAllSells=allSells.size();
     if ((nbItemSells!=0) && (nbItemSells!=nbAllSells))
     {
-      LOGGER.warn("Mismatch sells="+nbItemSells+" all sells="+nbAllSells);
+      LOGGER.warn("Mismatch sells={} all sells={}",Integer.valueOf(nbItemSells),Integer.valueOf(nbAllSells));
     }
     // Buys items?
     Integer buysItemsInt=(Integer)properties.getProperty("Vendor_BuysItems");
@@ -452,7 +452,7 @@ public class MainDatTradeLoader
         }
         else
         {
-          LOGGER.warn("Unknown item: "+itemId);
+          LOGGER.warn("Unknown item: {}",itemId);
         }
       }
     }

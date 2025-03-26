@@ -97,15 +97,8 @@ public class DatRewardsLoader
 
     // Faction
     getFaction(rewards,properties,rewardsMap);
-    // Destiny points: Quest_SessionPointsTier
-    /* Disabled - found weird values.
-    Integer destinyPointsTier=((Integer)properties.getProperty("Quest_SessionPointsTier"));
-    if (destinyPointsTier!=null)
-    {
-      Integer destinyPoints=rewardLevel.getDestinyPointsMap().getValue(destinyPointsTier.intValue());
-      System.out.println("Destiny points tier: "+destinyPointsTier+" => "+destinyPoints);
-    }
-    */
+    // Destiny points: Quest_SessionPointsTier. See enum 587202823.
+    // Disabled - found weird values.
     // Class points
     Integer classPoints=((Integer)properties.getProperty("Quest_ClassTraitPointReward"));
     if (classPoints!=null)
@@ -232,7 +225,7 @@ public class DatRewardsLoader
     }
     else
     {
-      LOGGER.warn("Title not found: "+titleId);
+      LOGGER.warn("Title not found: {}",Integer.valueOf(titleId));
     }
   }
 
@@ -272,7 +265,7 @@ public class DatRewardsLoader
     }
     else
     {
-      LOGGER.warn("Emote not found: "+emoteId);
+      LOGGER.warn("Emote not found: {}",Integer.valueOf(emoteId));
     }
   }
 
@@ -299,7 +292,7 @@ public class DatRewardsLoader
     }
     else
     {
-      LOGGER.warn("Trait not found: "+traitId);
+      LOGGER.warn("Trait not found: {}",Integer.valueOf(traitId));
     }
   }
 
@@ -322,7 +315,7 @@ public class DatRewardsLoader
         }
         else
         {
-          LOGGER.warn("Item not found: "+itemId);
+          LOGGER.warn("Item not found: {}",Integer.valueOf(itemId));
         }
       }
     }
@@ -367,7 +360,7 @@ public class DatRewardsLoader
     }
     else
     {
-      LOGGER.warn("Relic not found: "+relicId);
+      LOGGER.warn("Relic not found: {}",Integer.valueOf(relicId));
     }
   }
 
@@ -425,12 +418,12 @@ public class DatRewardsLoader
         Integer posRep=(Integer)props.getProperty("Quest_PosRepToGive");
         if (posRep!=null)
         {
-          reputationValue=(posRep!=null)?posRep.intValue():0;
+          reputationValue=posRep.intValue();
         }
         Integer negRep=(Integer)props.getProperty("Quest_NegRepToGive");
         if (negRep!=null)
         {
-          reputationValue=(negRep!=null)?Math.abs(negRep.intValue()):0;
+          reputationValue=Math.abs(negRep.intValue());
         }
         handleFactionReward(rewards,factionId,reputationValue*factor);
       }
@@ -450,7 +443,7 @@ public class DatRewardsLoader
       }
       else
       {
-        LOGGER.warn("Faction not found: "+factionId);
+        LOGGER.warn("Faction not found: {}",factionId);
       }
     }
   }
@@ -479,7 +472,7 @@ public class DatRewardsLoader
     }
     else
     {
-      LOGGER.warn("Billing token not found: "+billingGroupId);
+      LOGGER.warn("Billing token not found: {}",Integer.valueOf(billingGroupId));
     }
   }
 
@@ -697,7 +690,7 @@ public class DatRewardsLoader
       int index=1;
       for(Object rewardMapObj : rewardMaps)
       {
-        LOGGER.debug("Loading default rewards map for level: "+index);
+        LOGGER.debug("Loading default rewards map for level: {}",Integer.valueOf(index));
         Integer rewardLevelId=(Integer)rewardMapObj;
         RewardsMap rewardsMap=_rewardLevelLoader.loadMap(rewardLevelId.intValue());
         _defaultRewardMaps.put(Integer.valueOf(index),rewardsMap);

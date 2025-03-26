@@ -103,7 +103,7 @@ public class MarkersLoadingUtils
     {
       Console.println("Content layers: "+Arrays.toString(contentLayersArray));
     }
-    if ((text!=null) && (text.length()>0))
+    if ((text!=null) && (!text.isEmpty()))
     {
       Console.println("Text: "+text);
     }
@@ -124,7 +124,7 @@ public class MarkersLoadingUtils
     int region=position.getRegion();
     if (!GeoUtils.isSupportedRegion(region))
     {
-      LOGGER.warn("Found unsupported region: "+region);
+      LOGGER.warn("Found unsupported region: {}",Integer.valueOf(region));
       return null;
     }
     Integer parentZoneId=GeoUtils.getZoneID(position);
@@ -167,13 +167,13 @@ public class MarkersLoadingUtils
     int region=position.getRegion();
     if (!GeoUtils.isSupportedRegion(region))
     {
-      LOGGER.warn("Weird region value: "+region);
+      LOGGER.warn("Found unsupported region: {}",Integer.valueOf(region));
       return null;
     }
     int instance=position.getInstance();
     if (instance!=0)
     {
-      LOGGER.warn("Instance is not 0 for position: "+position);
+      LOGGER.warn("Instance is not 0 for position: {}",position);
     }
     Zone where=null;
     if (areaDID!=0)
@@ -181,7 +181,7 @@ public class MarkersLoadingUtils
       where=ZoneUtils.getZone(areaDID);
       if (where==null)
       {
-        LOGGER.warn("Area is null: ID="+areaDID);
+        LOGGER.warn("Area not found: ID={}",Integer.valueOf(areaDID));
       }
     }
     if (dungeonDID!=0)
@@ -191,7 +191,7 @@ public class MarkersLoadingUtils
     }
     if (where==null)
     {
-      LOGGER.warn("Unidentified geo entity! AreaID="+areaDID+", DungeonID="+dungeonDID);
+      LOGGER.warn("Unidentified geo entity! AreaID={}, DungeonID={}",Integer.valueOf(areaDID),Integer.valueOf(dungeonDID));
       return null;
     }
     // Checks
@@ -222,6 +222,12 @@ public class MarkersLoadingUtils
       marker.setCategoryCode(code);
     }
     // Register this marker
+    register(marker,region,position,where,contentLayersArray);
+    return marker;
+  }
+
+  private void register(Marker marker, int region, DatPosition position, Zone where, Object[] contentLayersArray)
+  {
     _mapsDataManager.registerMarker(marker,region,position.getBlockX(),position.getBlockY(),where.getIdentifier());
     // Content layer
     if ((contentLayersArray!=null) && (contentLayersArray.length>0))
@@ -241,7 +247,6 @@ public class MarkersLoadingUtils
       // World
       _mapsDataManager.registerContentLayerMarker(0,marker);
     }
-    return marker;
   }
 
   private void checkMarker(DatPosition position, Zone where)
@@ -249,19 +254,19 @@ public class MarkersLoadingUtils
     Landblock landblock=LandblocksManager.getInstance().getLandblock(position.getRegion(),position.getBlockX(),position.getBlockY());
     if (landblock==null)
     {
-      LOGGER.warn("No parent data for: "+position);
+      LOGGER.warn("No parent data for: {}",position);
     }
     int cell=position.getCell();
     if ((cell!=0) && (!(where instanceof Dungeon)))
     {
       // It happens: once in Trum Dreng, and about 10 times in the "Eyes and Guard Tavern"
-      LOGGER.warn("Cell="+cell+" while where="+where+" for position: "+position);
+      LOGGER.warn("Cell={} while where={} for position: {}",Integer.valueOf(cell),where,position);
     }
     Integer parentArea=(landblock!=null)?landblock.getParentData(cell,position.getPosition()):null;
     Integer whereId=(where!=null)?Integer.valueOf(where.getIdentifier()):null;
     if (!Objects.equals(whereId,parentArea))
     {
-      LOGGER.warn("Parent mismatch: got="+whereId+", expected="+parentArea);
+      LOGGER.warn("Parent mismatch: got={}, expected={}",whereId,parentArea);
     }
   }
 
@@ -304,9 +309,9 @@ public class MarkersLoadingUtils
       LOGGER.warn("Link DID is not a Waypoint or a DoorTemplate");
       return;
     }
-    if ((text!=null) && (text.length()>0))
+    if ((text!=null) && (!text.isEmpty()))
     {
-      LOGGER.warn("Link has text: ["+text+"]");
+      LOGGER.warn("Link has text: [{}]",text);
     }
     AbstractMap targetMap=getTargetMap(destArea,destPosition);
     if (targetMap==null)
@@ -374,7 +379,7 @@ public class MarkersLoadingUtils
     Integer destId=(destArea!=null)?Integer.valueOf(destArea.getIdentifier()):null;
     if (!Objects.equals(destId,parentZone))
     {
-      LOGGER.warn("Parent mismatch: got="+parentZone+", expected="+destId);
+      LOGGER.warn("Parent mismatch: got={}, expected={}",parentZone,destId);
     }
 
     if (parentZone!=null)
@@ -387,7 +392,7 @@ public class MarkersLoadingUtils
     }
     if (targetMap==null)
     {
-      LOGGER.warn("Target map not found for target: "+destArea);
+      LOGGER.warn("Target map not found for target: {}",destArea);
     }
     return targetMap;
   }
