@@ -6,11 +6,9 @@ import java.util.List;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.effects.EffectsManager;
-import delta.games.lotro.common.effects.io.xml.EffectXMLParser;
 import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.misc.Context;
-import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
