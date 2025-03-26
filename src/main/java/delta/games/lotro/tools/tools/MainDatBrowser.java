@@ -39,7 +39,7 @@ public class MainDatBrowser
     _facade=facade;
     _countByType=new HashMap<Integer,IntegerHolder>();
     _ids=new ArrayList<Long>();
-    _out=System.out; // #NOSONAR
+    _out=System.out; // NOSONAR
   }
 
   private void handleEntry(long id)

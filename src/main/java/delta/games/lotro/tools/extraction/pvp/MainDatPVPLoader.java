@@ -30,6 +30,8 @@ public class MainDatPVPLoader
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDatPVPLoader.class);
 
+  private static final String GLORY_CONTROL_RANK_ADVANCEMENT_TABLE="GloryControl_RankAdvancementTable";
+
   private DataFacade _facade;
   private I18nUtils _i18n;
 
@@ -51,20 +53,20 @@ public class MainDatPVPLoader
     PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"GloryControl");
     RanksManager mgr=new RanksManager(false);
     // Renown
-    RankScale renownScale=loadRankScale(RankScaleKeys.RENOWN,"GloryControl_RenownRankNameList","GloryControl_RankAdvancementTable",props);
+    RankScale renownScale=loadRankScale(RankScaleKeys.RENOWN,"GloryControl_RenownRankNameList",GLORY_CONTROL_RANK_ADVANCEMENT_TABLE,props);
     mgr.register(renownScale);
     // Infamy
-    RankScale infamyScale=loadRankScale(RankScaleKeys.INFAMY,"GloryControl_InfamyRankNameList","GloryControl_RankAdvancementTable",props);
+    RankScale infamyScale=loadRankScale(RankScaleKeys.INFAMY,"GloryControl_InfamyRankNameList",GLORY_CONTROL_RANK_ADVANCEMENT_TABLE,props);
     mgr.register(infamyScale);
     // Prestige
-    String advTablePropName=Context.isLive()?"GloryControl_PrestigeAdvancementTable":"GloryControl_RankAdvancementTable";
+    String advTablePropName=Context.isLive()?"GloryControl_PrestigeAdvancementTable":GLORY_CONTROL_RANK_ADVANCEMENT_TABLE;
     RankScale prestigeScale=loadRankScale(RankScaleKeys.PRESTIGE,"GloryControl_PrestigeNameList",advTablePropName,props);
     mgr.register(prestigeScale);
     // Save
     boolean ok=new PVPDataXMLWriter().write(GeneratedFiles.PVP,mgr,EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote PVP file: "+GeneratedFiles.PVP);
+      LOGGER.info("Wrote PVP file: {}",GeneratedFiles.PVP);
     }
     // Labels
     _i18n.save();

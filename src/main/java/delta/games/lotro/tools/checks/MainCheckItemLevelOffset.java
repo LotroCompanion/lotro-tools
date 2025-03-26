@@ -29,18 +29,18 @@ public class MainCheckItemLevelOffset
       String name=item.getName();
       if (item instanceof Legendary)
       {
-        System.out.println("ID="+id+", name="+name+", LEGENDARY, offset="+offset);
+        System.out.println("ID="+id+", name="+name+", LEGENDARY, offset="+offset); // NOSONAR
         //=> there are some!
       }
       if (item instanceof Legendary2)
       {
-        System.out.println("ID="+id+", name="+name+", LEGENDARY2, offset="+offset);
+        System.out.println("ID="+id+", name="+name+", LEGENDARY2, offset="+offset); // NOSONAR
         // => None!
       }
       Munging munging=item.getMunging();
       if (munging!=null)
       {
-        System.out.println("ID="+id+", name="+name+", munging="+munging+", offset="+offset);
+        System.out.println("ID="+id+", name="+name+", munging="+munging+", offset="+offset); // NOSONAR
         // => there are some!
       }
     }

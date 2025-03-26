@@ -1,7 +1,10 @@
 package delta.games.lotro.tools.extraction.achievables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +103,8 @@ public class DatObjectivesLoader
   private GeoData _geoData;
   private Achievable _currentAchievable;
 
+  private Map<Integer,Function<PropertiesSet,ObjectiveCondition>> _builders;
+
   /**
    * Constructor.
    * @param facade Data facade.
@@ -114,6 +119,7 @@ public class DatObjectivesLoader
     _questCategory=LotroEnumsRegistry.getInstance().get(QuestCategory.class);
     _questScope=LotroEnumsRegistry.getInstance().get(QuestScope.class);
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
+    _builders=initConditionBuilders();
   }
 
   /**
@@ -191,7 +197,7 @@ public class DatObjectivesLoader
     }
     else
     {
-      LOGGER.warn("Unmanaged item for a completion condition array: "+item);
+      LOGGER.warn("Unmanaged element for a completion condition array: {}",item);
     }
   }
 
@@ -231,7 +237,7 @@ public class DatObjectivesLoader
       }
       else
       {
-        LOGGER.warn("Unmanaged item for a completion condition array: "+completionCondition);
+        LOGGER.warn("Unmanaged element for a completion condition array: {}",completionCondition);
       }
     }
   }
@@ -346,113 +352,65 @@ public class DatObjectivesLoader
     // Count
     Integer count=(Integer)properties.getProperty("QuestEvent_Number");
 
-    // Deeds:
-    // QuestEvent_ID: 32=3936(done), 22=1142(done), 1=889, 21=869(done), 26=611, 31=487(done), 45=411, 7=349, 25=116,
-    // 34=108, 11=82, 39=51, 4=41, 18=29, 24=22, 16=20, 6=15, 10=2, 58=2, 59=1
-    // Quests:
-    // QuestEvent_ID:  11=11545, 7=3845, 22=3164(done), 1=2970, 32=1967(done), 34=1599, 10=1162, 31=831(done), 5=640, 21=425(done),
-    // 24=301, 14=293, 19=210, 27=196, 13=187, 56=144, 16=123, 37=97, 29=97, 33=72, 2=58, 59=50, 25=46,
-    // 18=43, 26=39, 58=35, 57=35, 4=25, 46=16, 40=15, 39=14, 43=14, 30=12, 45=8, 38=5, 6=1, 9=1
+    ObjectiveCondition condition=buildCondition(questEventId,properties);
+    // Lore info
+    if (loreInfo!=null)
+    {
+      condition.setLoreInfo(loreInfo);
+    }
+    // Progress
+    if (progressOverride!=null)
+    {
+      condition.setProgressOverride(progressOverride);
+    }
+    condition.setShowProgressText(showProgressText);
+    // Billboard
+    condition.setShowBillboardText(showBillboardText);
+    // Count
+    if (count!=null)
+    {
+      condition.setCount(count.intValue());
+    }
+    // Order
+    Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
+    if (eventOrder!=null)
+    {
+      condition.setIndex(eventOrder.intValue());
+    }
+    return condition;
+  }
 
-    /*
-  1 => EnterDetection (deeds,quests)
-  2 => LeaveDetection (quests)
-  4 => MonsterPlayerDied (deeds,quests)
-  5 => NPCUsed (quests)
-  6 => SkillApplied (deeds,quests)
-  7 => ItemUsed (deeds,quests)
-  9 => Detecting (quests)
-  10 => ExternalInventoryItem (deeds,quests)
-  11 => NPCTalk (deeds,quests)
-  13 => Channeling (quests)
-  14 => TimeExpired (quests)
-  16 => ItemTalk (deeds,quests)
-  18 => Level (deeds,quests)
-  19 => ClearCamp (quests)
-  21 => LandmarkDetection (deeds,quests)
-  22 => MonsterDied (deeds,quests)
-  24 => Emote (deeds,quests)
-  25 => PlayerDied (deeds,quests)
-  26 => SkillUsed (deeds,quests)
-  27 => KungFu (quests)
-  29 => Escort (quests)
-  30 => SelfDied (quests)
-  31 => InventoryItem (deeds,quests)
-  32 => QuestComplete (deeds,quests)
-  33 => CraftRecipeExecution (quests)
-  34 => WorldEventCondition (deeds,quests)
-  37 => SessionFinished (quests)
-  38 => ResourceSet (quests)
-  39 => HobbyItem (deeds,quests)
-  40 => ItemAdvancement (quests)
-  43 => Dismounted (quests)
-  45 => FactionLevel (deeds,quests)
-  46 => Teleported (quests)
-  56 => EnterPlayerAOI (quests)
-  57 => CorpseUsed (quests)
-  58 => ScriptCallback (deeds,quests)
-  59 => QuestBestowed (deeds,quests)
- */
+  private Map<Integer,Function<PropertiesSet,ObjectiveCondition>> initConditionBuilders()
+  {
+    Map<Integer,Function<PropertiesSet,ObjectiveCondition>> map=new HashMap<>();
+    map.put(Integer.valueOf(1),this::handleEnterDetection);
+    map.put(Integer.valueOf(5),this::handleNpcUsed);
+    map.put(Integer.valueOf(7),this::handleItemUsed);
+    map.put(Integer.valueOf(9),this::handleDetecting);
+    map.put(Integer.valueOf(10),this::handleExternalInventoryItemUsed);
+    map.put(Integer.valueOf(11),this::handleNpcTalk);
+    map.put(Integer.valueOf(13),this::handleChanneling);
+    map.put(Integer.valueOf(14),this::handleTimeExpired);
+    map.put(Integer.valueOf(16),this::handleItemTalk);
+    map.put(Integer.valueOf(18),this::handleLevelCondition);
+    map.put(Integer.valueOf(19),this::handleClearCamp);
+    map.put(Integer.valueOf(20),this::handleChannelingFailed);
+    map.put(Integer.valueOf(21),this::handleLandmarkDetection);
+    map.put(Integer.valueOf(22),this::handleMonsterDieCondition);
+    map.put(Integer.valueOf(24),this::handleEmoteCondition);
+    return map;
+  }
 
+  private ObjectiveCondition buildCondition(int questEventId, PropertiesSet properties)
+  {
+    Function<PropertiesSet,ObjectiveCondition> builder=_builders.get(Integer.valueOf(questEventId));
+    if (builder!=null)
+    {
+      return builder.apply(properties);
+    }
     ObjectiveCondition condition=null;
     ConditionType type=null;
-    if (questEventId==1)
-    {
-      condition=handleEnterDetection(properties);
-    }
-    else if (questEventId==5)
-    {
-      condition=handleNpcUsed(properties);
-    }
-    else if (questEventId==7)
-    {
-      condition=handleItemUsed(properties);
-    }
-    else if (questEventId==9)
-    {
-      condition=handleDetecting(properties);
-    }
-    else if (questEventId==10)
-    {
-      condition=handleExternalInventoryItemUsed(properties);
-    }
-    else if (questEventId==11)
-    {
-      condition=handleNpcTalk(properties);
-    }
-    else if (questEventId==13)
-    {
-      condition=handleChanneling();
-    }
-    else if (questEventId==14)
-    {
-      condition=handleTimeExpired(properties);
-    }
-    else if (questEventId==16)
-    {
-      condition=handleItemTalk(properties);
-    }
-    else if (questEventId==18)
-    {
-      condition=handleLevelCondition(properties);
-    }
-    else if (questEventId==19)
-    {
-      condition=handleClearCamp();
-    }
-    else if (questEventId==20)
-    {
-      condition=handleChannelingFailed();
-    }
-    else if (questEventId==21)
-    {
-      condition=handleLandmarkDetection(properties);
-    }
-    else if (questEventId==22)
-    {
-      condition=handleMonsterDieCondition(properties);
-    }
-    else if (questEventId==24)
+    if (questEventId==24)
     {
       condition=handleEmoteCondition(properties);
     }
@@ -524,36 +482,12 @@ public class DatObjectivesLoader
     else
     {
       String eventMeaning=_questEvent.getString(questEventId);
-      LOGGER.warn("Unmanaged quest event: ID="+questEventId+", meaning="+eventMeaning);
+      LOGGER.warn("Unmanaged quest event: ID={}, meaning={}",Integer.valueOf(questEventId),eventMeaning);
     }
 
     if (condition==null)
     {
       condition=new DefaultObjectiveCondition(type);
-    }
-    // Lore info
-    if (loreInfo!=null)
-    {
-      condition.setLoreInfo(loreInfo);
-    }
-    // Progress
-    if (progressOverride!=null)
-    {
-      condition.setProgressOverride(progressOverride);
-    }
-    condition.setShowProgressText(showProgressText);
-    // Billboard
-    condition.setShowBillboardText(showBillboardText);
-    // Count
-    if (count!=null)
-    {
-      condition.setCount(count.intValue());
-    }
-    // Order
-    Integer eventOrder=(Integer)properties.getProperty("QuestEvent_EventOrder");
-    if (eventOrder!=null)
-    {
-      condition.setIndex(eventOrder.intValue());
     }
     return condition;
   }
@@ -589,20 +523,14 @@ public class DatObjectivesLoader
     {
       LOGGER.warn("Detect condition: No detect and no role constraint");
     }
-    /*
-    List<DatPosition> positions=getPositions(detect,roleConstraint,objective.getIndex());
-    if (positions!=null)
-    {
-      System.out.println("\tPositions: "+positions);
-    }
-    */
     condition.setTarget(target);
   }
 
-  private void handleKungFu()
+  private ObjectiveCondition handleKungFu()
   {
     // QuestEvent_RunKungFu is 0 or absent...
     // QuestEvent_RoleConstraint: always set
+    return new DefaultObjectiveCondition(ConditionType.KUNG_FU);
   }
 
   private ItemUsedCondition handleItemUsed(PropertiesSet properties)
@@ -623,7 +551,6 @@ public class DatObjectivesLoader
 
     ItemUsedCondition ret=new ItemUsedCondition();
     fillItemCondition(ret,itemId);
-    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
@@ -635,7 +562,6 @@ public class DatObjectivesLoader
 
     ExternalInventoryItemCondition ret=new ExternalInventoryItemCondition();
     fillItemCondition(ret,itemId);
-    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
@@ -647,7 +573,6 @@ public class DatObjectivesLoader
 
     ItemTalkCondition ret=new ItemTalkCondition();
     fillItemCondition(ret,itemId);
-    //List<DatPosition> positions=getPositions(itemId,roleConstraint,objective.getIndex());
     return ret;
   }
 
@@ -696,8 +621,6 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
     }
     // TODO
     //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
-    /*List<DatPosition> positions=*/
-    //getPositions(npcId,roleConstraint,objective.getIndex());
   }
 
   private LevelCondition handleLevelCondition(PropertiesSet properties)
@@ -724,8 +647,6 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       LandmarkDescription landmark=LandmarksManager.getInstance().getLandmarkById(landmarkId.intValue());
       ret.setLandmark(landmark);
     }
-    /*List<DatPosition> positions=*/
-    //getPositions(landmarkId,null,objective.getIndex());
     return ret;
   }
 
@@ -793,15 +714,15 @@ QuestEvent_ShowBillboardText: 0
   {
     EmoteCondition ret=new EmoteCondition();
     // Emote ID
-    int emoteId=((Integer)properties.getProperty("QuestEvent_EmoteDID")).intValue();
-    EmoteDescription emote=EmotesManager.getInstance().getEmote(emoteId);
+    Integer emoteId=(Integer)properties.getProperty("QuestEvent_EmoteDID");
+    EmoteDescription emote=EmotesManager.getInstance().getEmote(emoteId.intValue());
     if (emote!=null)
     {
       ret.setEmote(emote);
     }
     else
     {
-      LOGGER.warn("Emote not found: "+emoteId);
+      LOGGER.warn("Emote not found: {}",emoteId);
     }
     // Target
     Integer targetDID=(Integer)properties.getProperty("QuestEvent_EmoteTargetDID");
@@ -856,7 +777,7 @@ QuestEvent_ShowBillboardText: 0
       }
       else
       {
-        LOGGER.warn("Skill not found: "+skillId);
+        LOGGER.warn("Skill not found: {}",skillId);
       }
     }
     Integer dailyMaxIncrement=(Integer)properties.getProperty("QuestEvent_DailyMaximumIncrements");
@@ -939,7 +860,7 @@ QuestEvent_ShowBillboardText: 0
       }
       else
       {
-        LOGGER.warn("No ID and no category for QuestCompleteCondition in : "+_currentAchievable);
+        LOGGER.warn("No ID and no category for QuestCompleteCondition in: {}",_currentAchievable);
         // May be use: QuestEvent_AccomplishmentCompleteCategory?
       }
     }
@@ -1052,7 +973,7 @@ QuestEvent_ShowBillboardText: 1
     return ret;
   }
 
-  private DefaultObjectiveCondition handleChanneling()
+  private DefaultObjectiveCondition handleChanneling(PropertiesSet properties)
   {
     /*
 QuestEvent_BillboardProgressOverride:
@@ -1075,7 +996,7 @@ QuestEvent_TappedProgressOverride:
     return ret;
   }
 
-  private DefaultObjectiveCondition handleChannelingFailed()
+  private DefaultObjectiveCondition handleChannelingFailed(PropertiesSet properties)
   {
     /*
 Channeling failed!
@@ -1091,7 +1012,7 @@ QuestEvent_ShowProgressText: 0
     return ret;
   }
 
-  private DefaultObjectiveCondition handleClearCamp()
+  private DefaultObjectiveCondition handleClearCamp(PropertiesSet properties)
   {
     DefaultObjectiveCondition ret=new DefaultObjectiveCondition(ConditionType.CLEAR_CAMP);
     /*
@@ -1135,38 +1056,6 @@ QuestEvent_ShowProgressText: 0
     return ret;
   }
 
-  /*
-  private List<DatPosition> getPositions(Integer did, String roleConstraint, int index)
-  {
-    List<DatPosition> ret=null;
-    if (did!=null)
-    {
-      ContentLayerGeoData worldData=_geoData.getWorldGeoData();
-      DidGeoData didGeoData=worldData.getGeoData(did.intValue());
-      if (didGeoData!=null)
-      {
-        //System.out.println("\tPositions: "+didGeoData.getPositions());
-        ret=didGeoData.getPositions();
-      }
-    }
-    if ((ret==null) && (roleConstraint!=null))
-    {
-      int achievableId=_currentAchievable.getIdentifier();
-      AchievableGeoData achievableGeoData=_geoData.getGeoDataForAchievable(achievableId,index);
-      if (achievableGeoData!=null)
-      {
-        ret=achievableGeoData.getPositions(roleConstraint);
-        //System.out.println("\tPositions for key: "+positions+" ("+roleConstraint+")");
-      }
-    }
-    if (ret!=null)
-    {
-      //System.out.println("\tPositions: "+ret);
-    }
-    return ret;
-  }
-  */
-
   private ConditionTarget getTarget(Integer id)
   {
     ConditionTarget target=null;
@@ -1185,7 +1074,7 @@ QuestEvent_ShowProgressText: 0
     }
     else
     {
-      LOGGER.warn("Unmanaged target element: "+id+". WStateClass="+wstateClass);
+      LOGGER.warn("Unmanaged target element: {}. WStateClass={}",id,Integer.valueOf(wstateClass));
     }
     if (agent!=null)
     {

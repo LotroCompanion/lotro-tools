@@ -269,6 +269,6 @@ public class MainMarkersStatistics
    */
   public static void main(String[] args)
   {
-    new MainMarkersStatistics(System.out).doIt(); // #NOSONAR
+    new MainMarkersStatistics(System.out).doIt(); // NOSONAR
   }
 }

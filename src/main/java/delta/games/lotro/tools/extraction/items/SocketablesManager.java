@@ -35,6 +35,8 @@ public class SocketablesManager
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(SocketablesManager.class);
 
+  private static final String ITEM_SOCKET_GEM_MIN_LEVEL="Item_Socket_GemMinLevel";
+  private static final String ITEM_SOCKET_GEM_MAX_LEVEL="Item_Socket_GemMaxLevel";
   private static final String ITEM_SOCKET_TYPE="Item_Socket_Type";
 
   private static final int[] OVERLAY_FOR_TIER=
@@ -124,7 +126,7 @@ public class SocketablesManager
     Long type=(Long)properties.getProperty(ITEM_SOCKET_TYPE);
     if (type==null)
     {
-      LOGGER.warn("Expected an Item_Socket_Type property for item: "+item);
+      LOGGER.warn("Expected a property '{}' for item: {}",ITEM_SOCKET_TYPE,item);
       return -1;
     }
     Integer tierInt=findTier(item,properties);
@@ -138,7 +140,7 @@ public class SocketablesManager
     SocketType socketType=SocketUtils.getSocketType(type.intValue());
     if (socketType==null)
     {
-      LOGGER.warn("Unexpected socket type: "+type+" for item: "+item);
+      LOGGER.warn("Unexpected socket type: {} for item: {}",type,item);
       return -1;
     }
     int socketTypeCode=socketType.getCode();
@@ -172,7 +174,7 @@ public class SocketablesManager
     }
     else
     {
-      LOGGER.warn("Unmanaged socket type "+socketTypeCode+" for item: "+item);
+      LOGGER.warn("Unmanaged socket type {} for item: {}",socketType,item);
       return -1;
     }
   }
@@ -193,14 +195,13 @@ public class SocketablesManager
         return Integer.valueOf(tier);
       }
     }
-    String name=item.getName();
-    LOGGER.warn("Unmanaged essence/tracery overlay: "+overlay+" for "+name);
+    LOGGER.warn("Unmanaged essence/tracery overlay: {} for {}",overlay,item);
     return null;
   }
 
   private void handleEssence(Essence essence, PropertiesSet props)
   {
-    Integer minItemLevel=(Integer)props.getProperty("Item_Socket_GemMinLevel");
+    Integer minItemLevel=(Integer)props.getProperty(ITEM_SOCKET_GEM_MIN_LEVEL);
     int itemLevel=((Integer)props.getProperty("Item_Level")).intValue();
     if (minItemLevel!=null)
     {
@@ -209,7 +210,7 @@ public class SocketablesManager
         LOGGER.warn("Fixed essence item level: {} => {}",essence,minItemLevel);
         essence.setItemLevel(minItemLevel);
       }
-      Integer maxItemLevel=(Integer)props.getProperty("Item_Socket_GemMaxLevel");
+      Integer maxItemLevel=(Integer)props.getProperty(ITEM_SOCKET_GEM_MAX_LEVEL);
       if ((maxItemLevel!=null) && (minItemLevel.intValue()!=maxItemLevel.intValue()))
       {
         LOGGER.warn("Essence with min item level!=max item level: {} => min={}, max={}",essence,minItemLevel,maxItemLevel);
@@ -219,8 +220,8 @@ public class SocketablesManager
 
   private void handleTracery(Item item, SocketType socketType, PropertiesSet props)
   {
-    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
-    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
+    int minItemLevel=((Integer)props.getProperty(ITEM_SOCKET_GEM_MIN_LEVEL)).intValue();
+    int maxItemLevel=((Integer)props.getProperty(ITEM_SOCKET_GEM_MAX_LEVEL)).intValue();
     int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
     int setId=((Integer)props.getProperty("Item_PropertySet")).intValue();
     ItemUniquenessChannel uniquenessChannel=null;
@@ -241,8 +242,8 @@ public class SocketablesManager
 
   private void handleEnhancementRune(Item item, PropertiesSet props)
   {
-    int minItemLevel=((Integer)props.getProperty("Item_Socket_GemMinLevel")).intValue();
-    int maxItemLevel=((Integer)props.getProperty("Item_Socket_GemMaxLevel")).intValue();
+    int minItemLevel=((Integer)props.getProperty(ITEM_SOCKET_GEM_MIN_LEVEL)).intValue();
+    int maxItemLevel=((Integer)props.getProperty(ITEM_SOCKET_GEM_MAX_LEVEL)).intValue();
     int levelupIncrement=((Integer)props.getProperty("Item_Socket_LevelupRuneIncrement")).intValue();
     EnhancementRune enhancementRune=new EnhancementRune(item,minItemLevel,maxItemLevel,levelupIncrement);
     _enhancementRunes.add(enhancementRune);

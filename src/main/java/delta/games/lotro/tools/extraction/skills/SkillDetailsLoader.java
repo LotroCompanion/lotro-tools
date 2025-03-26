@@ -619,40 +619,46 @@ public class SkillDetailsLoader
     }
     if (effectList!=null)
     {
-      boolean foundOne=false;
-      boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
-      for (Object skillEffectObj : effectList)
+      mgr=handleEffectsList(effectList,type,effectImplementUsage,mgr);
+    }
+    return mgr;
+  }
+
+  private SingleTypeSkillEffectsManager handleEffectsList(Object[] effectList, SkillEffectType type, ImplementUsageType effectImplementUsage, SingleTypeSkillEffectsManager mgr)
+  {
+    boolean foundOne=false;
+    boolean toggle=((type==SkillEffectType.TOGGLE)||(type==SkillEffectType.USER_TOGGLE));
+    for (Object skillEffectObj : effectList)
+    {
+      PropertiesSet effectData=(PropertiesSet)skillEffectObj;
+      SkillEffectGenerator generator;
+      if (toggle)
       {
-        PropertiesSet effectData=(PropertiesSet)skillEffectObj;
-        SkillEffectGenerator generator;
-        if (toggle)
+        generator=_effectsLoader.loadSkillToggleEffect(effectData);
+      }
+      else
+      {
+        generator=_effectsLoader.loadSkillEffect(effectData);
+      }
+      if (generator!=null)
+      {
+        generator.setType(type);
+        if (effectImplementUsage!=null)
         {
-          generator=_effectsLoader.loadSkillToggleEffect(effectData);
+          generator.setImplementUsage(effectImplementUsage);
         }
-        else
+        if (mgr==null)
         {
-          generator=_effectsLoader.loadSkillEffect(effectData);
+          mgr=new SingleTypeSkillEffectsManager(type);
         }
-        if (generator!=null)
+        mgr.addEffect(generator);
+        foundOne=true;
+      }
+      else
+      {
+        if (foundOne)
         {
-          generator.setType(type);
-          if (effectImplementUsage!=null)
-          {
-            generator.setImplementUsage(effectImplementUsage);
-          }
-          if (mgr==null)
-          {
-            mgr=new SingleTypeSkillEffectsManager(type);
-          }
-          mgr.addEffect(generator);
-          foundOne=true;
-        }
-        else
-        {
-          if (foundOne)
-          {
-            break;
-          }
+          break;
         }
       }
     }

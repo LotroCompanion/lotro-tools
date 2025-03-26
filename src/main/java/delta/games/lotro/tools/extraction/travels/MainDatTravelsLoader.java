@@ -56,7 +56,7 @@ public class MainDatTravelsLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle travel node ID="+indexDataId);
+      LOGGER.warn("Could not handle travel node ID={}",Integer.valueOf(indexDataId));
       return null;
     }
     // Home location
@@ -186,7 +186,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     if (travelModeId==1879108779) return TravelMode.SHAGGY;
     if (travelModeId==1879444821) return TravelMode.ELK;
     if (travelModeId==1879417911) return TravelMode.BOAR;
-    LOGGER.warn("Unmanaged travel mode: "+travelModeId);
+    LOGGER.warn("Unmanaged travel mode: {}",Integer.valueOf(travelModeId));
     return null;
   }
 
@@ -233,7 +233,7 @@ Usage_RequiresSubscriberOrUnsub: 1
         }
       }
     }
-    dumpTravels(System.out);
+    dumpTravels(System.out); // NOSONAR
   }
 
   private void dumpTravels(PrintStream out)
@@ -241,7 +241,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     List<TravelNode> nodes=_travelsMgr.getNodes();
     for(TravelNode node : nodes)
     {
-      out.println("Node: ID="+node.getIdentifier()+", name="+node.getName());
+      out.println("Node: ID="+node.getIdentifier()+", name="+node.getName()); // NOSONAR
       for(TravelDestination location : node.getLocations())
       {
         out.println("\tAssociated location: ID="+location.getIdentifier()+", name="+location.getName());
