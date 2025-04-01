@@ -59,6 +59,7 @@ import delta.games.lotro.common.enums.PipType;
 import delta.games.lotro.common.enums.ResistCategory;
 import delta.games.lotro.common.enums.SkillType;
 import delta.games.lotro.common.enums.VitalType;
+import delta.games.lotro.common.enums.VitalTypes;
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.common.math.LinearFunction;
 import delta.games.lotro.common.properties.ModPropertyList;
@@ -505,18 +506,16 @@ Effect_DamageType: 1 (Common) ; OR Effect_DamageType: 0 (Undef)
     ReactiveChange defenderChange=loadReactiveChange(effectProps,"Effect_ReactiveVital_Defender");
     effect.setDefenderReactiveChange(defenderChange);
     // Vital types
-    /*
     Object[] vitalTypeList=(Object[])effectProps.getProperty("Effect_VitalInterested_VitalTypeList");
     if (vitalTypeList!=null)
     {
       for(Object vitalTypeObj : vitalTypeList)
       {
-        int vitalType=((Integer)vitalTypeObj).intValue();
-        StatDescription stat=DatStatUtils.getStatFromVitalType(vitalType);
-        ret.addVitalType(stat);
+        int vitalTypeCode=((Integer)vitalTypeObj).intValue();
+        VitalType vitalType=VitalTypes.getByCode(vitalTypeCode);
+        effect.addVitalType(vitalType);
       }
     }
-    */
     // Incoming damage types
     LotroEnum<DamageType> damageTypeEnum=LotroEnumsRegistry.getInstance().get(DamageType.class);
     Object[] damageTypeList=(Object[])effectProps.getProperty("Effect_InterestedIncomingDamageTypes");
