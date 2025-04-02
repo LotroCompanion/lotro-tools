@@ -3,9 +3,6 @@ package delta.games.lotro.tools.reports;
 import java.io.File;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.EndOfLine;
@@ -21,8 +18,6 @@ import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.DataIdMapLoader;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
-import delta.games.lotro.dat.loaders.wstate.WSLUtils;
-import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.WLibData;
@@ -34,8 +29,6 @@ import delta.games.lotro.tools.utils.DataFacadeBuilder;
  */
 public class ReferenceDataGenerator
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(ReferenceDataGenerator.class);
-
   private DataFacade _facade;
   private File _rootDir;
 
@@ -84,31 +77,6 @@ public class ReferenceDataGenerator
         //File toWState=new File(toDir,subLabel+".wsl.txt");
         //dumpWState(subDataId,toWState);
       }
-    }
-  }
-
-  @SuppressWarnings("unused")
-  private void dumpWState(int id, File to)
-  {
-    try
-    {
-      WStateDataSet decodedData=_facade.loadWState(id);
-      if (decodedData!=null)
-      {
-        StringBuilder sb=new StringBuilder();
-        List<Integer> mainReferences=decodedData.getOrphanReferences();
-        for(Integer mainReference : mainReferences)
-        {
-          Object value=decodedData.getValueForReference(mainReference.intValue());
-          String display=WSLUtils.getDecodedDataDisplay(value);
-          sb.append("#"+mainReference+": "+display).append(EndOfLine.NATIVE_EOL);
-        }
-        writeFile(to,sb.toString().trim());
-      }
-    }
-    catch(Exception e)
-    {
-      LOGGER.error("Error with WSL ID="+id+", "+to, e);
     }
   }
 
