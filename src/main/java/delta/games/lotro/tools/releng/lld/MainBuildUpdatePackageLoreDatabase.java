@@ -41,8 +41,8 @@ public class MainBuildUpdatePackageLoreDatabase
     File to=new File("d:/tmp/loredb-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/work/LotRO Lore Database/app");
-    String packageName="patch4.0.0";
-    Version newVersion=new Version(4000,"SoA Book 11 - 4.0.0");
+    String packageName="patch4.0.1";
+    Version newVersion=new Version(4001,"SoA Book 11 - 4.0.1");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
