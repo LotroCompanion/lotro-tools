@@ -78,12 +78,12 @@ public class ItemsConsistencyChecks
       }
     }
     LOGGER.info("Items statistics:");
-    LOGGER.info("Nb armours with missing armour type: " + nbMissingArmourTypes);
-    LOGGER.info("Nb armours with missing armour value: " + nbMissingArmourValues);
-    LOGGER.info("Nb weapons with missing type: " + nbMissingWeaponTypes);
-    LOGGER.info("Nb legendary items: " + _nbLegendaryItems);
-    LOGGER.info("Nb items with stats: " + _nbStats);
-    LOGGER.info("Nb items with missing stats: " + _nbMissingStats);
+    LOGGER.info("Nb armours with missing armour type: {}",Integer.valueOf(nbMissingArmourTypes));
+    LOGGER.info("Nb armours with missing armour value: {}",Integer.valueOf(nbMissingArmourValues));
+    LOGGER.info("Nb weapons with missing type: {}",Integer.valueOf(nbMissingWeaponTypes));
+    LOGGER.info("Nb legendary items: {}",Integer.valueOf(_nbLegendaryItems));
+    LOGGER.info("Nb items with stats: {}",Integer.valueOf(_nbStats));
+    LOGGER.info("Nb items with missing stats: {}",Integer.valueOf(_nbMissingStats));
   }
 
   private void checkItemStats(Item item)

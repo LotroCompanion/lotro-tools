@@ -877,14 +877,14 @@ QuestEvent_ShowBillboardText: 0
      * QuestEvent_Number: almost always. Integer 1 if set.
      */
     Integer value=(Integer)properties.getProperty("QuestEvent_WorldEvent_Value");
-    int id=((Integer)properties.getProperty("QuestEvent_WorldEvent")).intValue();
-    int operator=((Integer)properties.getProperty("QuestEvent_WorldEvent_Operator")).intValue();
+    Integer id=(Integer)properties.getProperty("QuestEvent_WorldEvent");
+    Integer operator=(Integer)properties.getProperty("QuestEvent_WorldEvent_Operator");
     String constraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
-    PropertiesSet worldEventProps=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet worldEventProps=_facade.loadProperties(id.intValue()+DATConstants.DBPROPERTIES_OFFSET);
     int propId=((Integer)worldEventProps.getProperty("WorldEvent_WorldPropertyName")).intValue();
     PropertyDefinition propDef=_facade.getPropertiesRegistry().getPropertyDef(propId);
     String propName=(propDef!=null)?propDef.getName():"?";
-    LOGGER.debug("World event: ID="+id+", name="+propName+", operator="+operator+", value="+value+", constraint="+constraint);
+    LOGGER.debug("World event: ID={}, name={}, operator={}, value={}, constraint={}",id,propName,operator,value,constraint);
   }
 
   private HobbyCondition handleHobbyItem(PropertiesSet properties)

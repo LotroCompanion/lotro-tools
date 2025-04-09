@@ -117,7 +117,7 @@ Dungeon_ParentDungeon: 0
     Integer parentDungeonId=(Integer)dungeonProps.getProperty("Dungeon_ParentDungeon");
     if ((parentDungeonId!=null) && (parentDungeonId.intValue()!=0))
     {
-      LOGGER.warn("Dungeon "+dungeonId+" HAS a parent dungeon: "+parentDungeonId+"!");
+      LOGGER.warn("Dungeon {} HAS a parent dungeon: {}!",Integer.valueOf(dungeonId),parentDungeonId);
     }
     Integer key=Integer.valueOf(dungeonId);
     _data.put(key,dungeon);
@@ -173,7 +173,7 @@ Dungeon_ParentDungeon: 0
   public void loadPositions()
   {
     List<Dungeon> dungeons=getDungeons();
-    LOGGER.info("Found "+dungeons.size()+" dungeons");
+    LOGGER.info("Found {} dungeons",Integer.valueOf(dungeons.size()));
     for(Dungeon dungeon : dungeons)
     {
       // Handle position

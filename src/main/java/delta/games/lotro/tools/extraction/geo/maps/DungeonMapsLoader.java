@@ -49,7 +49,7 @@ public class DungeonMapsLoader
     PropertiesSet dungeonProps=_facade.loadProperties(dungeonId+DATConstants.DBPROPERTIES_OFFSET);
     if (dungeonProps==null)
     {
-      LOGGER.warn("Cannot find dungeon properties: ID="+dungeonId);
+      LOGGER.warn("Cannot find dungeon properties: ID={}",Integer.valueOf(dungeonId));
       return;
     }
     /*
