@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.checks;
+package delta.games.lotro.tools.checks.items;
 
 import delta.common.utils.io.Console;
 import delta.games.lotro.common.stats.StatsProvider;
@@ -10,10 +10,10 @@ import delta.games.lotro.lore.items.scaling.Munging;
 import delta.games.lotro.utils.maths.Progression;
 
 /**
- * Tool to find items.
+ * Tool to checks scalable items.
  * @author DAM
  */
-public class MainFindItems
+public class MainCheckScalableItems
 {
   static void findRegularItemWithScalingNoProgression()
   {

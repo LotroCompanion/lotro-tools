@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.checks;
+package delta.games.lotro.tools.checks.items;
 
 import java.util.ArrayList;
 import java.util.List;

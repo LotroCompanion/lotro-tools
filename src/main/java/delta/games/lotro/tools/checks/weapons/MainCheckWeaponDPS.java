@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.checks;
+package delta.games.lotro.tools.checks.weapons;
 
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;

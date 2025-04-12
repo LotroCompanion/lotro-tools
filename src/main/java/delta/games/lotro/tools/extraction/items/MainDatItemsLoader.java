@@ -67,7 +67,7 @@ import delta.games.lotro.lore.items.scaling.ScalingData;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedEntry;
 import delta.games.lotro.lore.items.weapons.WeaponSpeedTables;
 import delta.games.lotro.lore.items.weapons.io.xml.WeaponSpeedTablesXMLWriter;
-import delta.games.lotro.tools.checks.ItemsConsistencyChecks;
+import delta.games.lotro.tools.checks.items.ItemsConsistencyChecks;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionFactory;
