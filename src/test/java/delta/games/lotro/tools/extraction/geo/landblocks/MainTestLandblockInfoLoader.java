@@ -1,9 +1,12 @@
 package delta.games.lotro.tools.extraction.geo.landblocks;
 
-import delta.games.lotro.dat.data.DatPosition;
+import java.io.File;
+import java.io.PrintStream;
+
+import delta.common.utils.files.TextFileWriter;
+import delta.common.utils.io.PrintStreamToStringBridge;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.tools.extraction.geo.markers.MarkerUtils;
 
@@ -34,13 +37,13 @@ public class MainTestLandblockInfoLoader
     }
   }
 
-  void dumpLandBlock(LandBlockInfo lbi)
+  void dumpLandBlock(LandBlockInfo lbi,PrintStream out)
   {
     //System.out.println("Using region "+region+", block X="+blockX+",Y="+blockY);
     if (lbi!=null)
     {
       LbiInspector inspector=new LbiInspector();
-      inspector.dump(lbi,System.out);
+      inspector.dump(lbi,out);
     }
   }
 
@@ -54,48 +57,55 @@ public class MainTestLandblockInfoLoader
 
   private void doIt()
   {
-    long now=System.currentTimeMillis();
-    /*
-    LandBlockInfo lbi=_loader.loadLandblockInfo(1,779/8,1338/8);
-    analyzeBlock(lbi); // Itä-mâ (r1 lx779 ly1338 ox69.00 oy59.60 oz434.04 h296.7)
-    */
-    //DatPosition position=PositionDecoder.fromLatLon(-20,-30);
-    DatPosition position=PositionDecoder.fromLatLon(-62.5f,-14.7f);
-    System.out.println("Position: "+position);
-    //int region=1; int blockX=position.getBlockX(); int blockY=position.getBlockY();
-    //int region=2; int blockX=252; int blockY=83;
-    //int region=2; int blockX=0x71; int blockY=0xB5;
-    //int region=2; int blockX=252; int blockY=82;
-    //int region=2; int blockX=248; int blockY=198;
-    //int region=1; int blockX=2000/8; int blockY=904/8;
-    //int region=4; int blockX=252; int blockY=232;
-    //int region=14; int blockX=14; int blockY=234;
-    //int markerId=-521232379; // Tales of Yore
-    int markerId=1263431680; // Echad Uial
+    // Ghámgur
+    doIt(646815745);
+    doIt(662990851);
+    doIt(663371787);
+    doIt(663564292);
+    doIt(679522307);
+    // Thorang
+    doIt(646815744);
+    doIt(662990850);
+    doIt(663371789);
+    doIt(663564291);
+    doIt(679522306);
+    // Helchurth
+    doIt(646868993);
+    doIt(662777856);
+    doIt(662990848);
+    doIt(663371786);
+    doIt(679522304);
+    // Woe-weaver
+    doIt(646868994);
+    doIt(662777857);
+    doIt(662990849);
+    doIt(663371788);
+    doIt(679522305);
+  }
+
+  private void doIt(int markerId)
+  {
+    //long now=System.currentTimeMillis();
     BlockReference block=MarkerUtils.getBlockForMarker(markerId);
     int region=block.getRegion(); int blockX=block.getBlockX(); int blockY=block.getBlockY();
-    BlockMapLoader bmLoader=new BlockMapLoader(_facade);
-    PropertiesSet props=bmLoader.loadPropertiesForMapBlock(region,blockX,blockY);
-    System.out.println("Block map props: "+props.dump());
+    String name="block-x-"+blockX+"-y-"+blockY+".txt";
+    File toFile=new File(name);
+    TextFileWriter writer=new TextFileWriter(toFile);
+    writer.start();
+    PrintStreamToStringBridge b=new PrintStreamToStringBridge();
     LandBlockInfo lbi=_loader.loadLandblockInfo(region,blockX,blockY);
-    dumpLandBlock(lbi);
-    /*
-    for(int region=1;region<=1;region++)
-    {
-      System.out.println("Region "+region);
-      for(int blockX=0;blockX<=0xFE;blockX++)
-      {
-        System.out.println("X="+blockX);
-        for(int blockY=0;blockY<=0xFE;blockY++)
-        {
-          LandBlockInfo lbi=_loader.loadLandblockInfo(region,blockX,blockY);
-          analyzeBlock(lbi);
-        }
-      }
-    }
-    */
-    long now2=System.currentTimeMillis();
-    System.out.println("Done in "+(now2-now)+"ms");
+    PrintStream out=b.getPrintStream();
+    BlockMapLoader bmLoader=new BlockMapLoader(_facade);
+    // Block properties
+    PropertiesSet props=bmLoader.loadPropertiesForMapBlock(region,blockX,blockY);
+    writer.writeNextLine("Block properties:");
+    writer.writeSomeText(props.dump());
+    writer.writeNextLine("**************************");
+    // Block details
+    writer.writeNextLine("Block details:");
+    dumpLandBlock(lbi,out);
+    writer.writeSomeText(b.getText());
+    writer.terminate();
   }
 
   /**
