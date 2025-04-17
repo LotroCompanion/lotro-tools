@@ -62,10 +62,6 @@ EffectGenerator_HotspotEffectList:
         EffectGenerator generator=_effectLoader.loadGenerator(entryProps);
         generators.add(generator);
       }
-      if (!generators.isEmpty())
-      {
-        System.out.println("Hotspot ID="+hotspotID+" => "+generators);
-      }
     }
   }
 
