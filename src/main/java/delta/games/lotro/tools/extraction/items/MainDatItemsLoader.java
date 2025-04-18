@@ -219,6 +219,8 @@ public class MainDatItemsLoader
       // Slot
       EquipmentLocation slot=getSlot(properties);
       item.setEquipmentLocation(slot);
+      EquipmentLocation precludedSlots=getPrecludedSlots(properties);
+      item.setPrecludedSlots(precludedSlots);
       // Essence slots & traceries
       handleSockets(item,properties);
       // Level
@@ -762,6 +764,16 @@ public class MainDatItemsLoader
       return DatEnumsUtils.getLocationFromAllowedSlots(compatibleSlot.intValue());
     }
     return EquipmentLocations.NONE;
+  }
+
+  private EquipmentLocation getPrecludedSlots(PropertiesSet properties)
+  {
+    Integer orecludedSlots=(Integer)properties.getProperty("Inventory_PrecludedSlot");
+    if (orecludedSlots!=null)
+    {
+      return DatEnumsUtils.getPrecludedSlots(orecludedSlots.intValue());
+    }
+    return null;
   }
 
   private void handleScaling(PropertiesSet properties)

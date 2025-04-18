@@ -60,7 +60,7 @@ public class DatEnumsUtils
   /**
    * Get a location from a DAT bit set of allowed slots.
    * @param allowedSlots Input code.
-   * @return A slot or <code>null</code> if not supported.
+   * @return A location or <code>null</code> if not supported.
    */
   public static EquipmentLocation getLocationFromAllowedSlots(int allowedSlots)
   {
@@ -92,7 +92,20 @@ public class DatEnumsUtils
     if (allowedSlots==-534773760) return EquipmentLocations.BRIDLE;
     if (allowedSlots==-507510784) return EquipmentLocations.AURA;
     LOGGER.warn("Unmanaged allowed slots: {}",Integer.valueOf(allowedSlots));
+    return null;
+  }
 
+  /**
+   * Get a precluded slot(s) from a DAT bit set of precluded slots.
+   * @param precludedSlots Input code.
+   * @return A location or <code>null</code> if not supported.
+   */
+  public static EquipmentLocation getPrecludedSlots(int precludedSlots)
+  {
+    if (precludedSlots==0) return null;
+    if (precludedSlots==536870912) return null;
+    if (precludedSlots==537001984) return EquipmentLocations.OFF_HAND;
+    LOGGER.warn("Unmanaged precluded slots: {}",Integer.valueOf(precludedSlots));
     return null;
   }
 
