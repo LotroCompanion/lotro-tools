@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.extraction.collections;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,7 @@ import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.collections.birds.BirdDescription;
 import delta.games.lotro.lore.collections.birds.io.xml.BirdsXMLWriter;
 import delta.games.lotro.lore.items.Item;
@@ -75,9 +77,19 @@ public class MainBirdsLoader
         // Icon ID
         int iconID=((Integer)props.getProperty("Hobby_Reward_Icon")).intValue();
         bird.setIconID(iconID);
+        File iconFile=new File(GeneratedFiles.BIRD_ICONS_DIR,iconID+".png");
+        if (!iconFile.exists())
+        {
+          DatIconsUtils.buildImageFile(_facade,iconID,iconFile);
+        }
         // Large icon ID
         int largeIconID=((Integer)props.getProperty("Hobby_Reward_Icon_Large")).intValue();
         bird.setLargeIconID(largeIconID);
+        File largeIconFile=new File(GeneratedFiles.BIRD_ICONS_DIR,largeIconID+".png");
+        if (!largeIconFile.exists())
+        {
+          DatIconsUtils.buildImageFile(_facade,largeIconID,largeIconFile);
+        }
         ret.add(bird);
       }
     }

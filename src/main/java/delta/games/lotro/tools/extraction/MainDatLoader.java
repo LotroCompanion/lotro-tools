@@ -374,6 +374,7 @@ public class MainDatLoader
     // Collections
     CleanupUtils.deleteFile(GeneratedFiles.COLLECTIONS);
     CleanupUtils.deleteFile(GeneratedFiles.BIRDS);
+    CleanupUtils.deleteDirectory(GeneratedFiles.BIRD_ICONS_DIR);
     // Vendors
     CleanupUtils.deleteFile(GeneratedFiles.VENDORS);
     // Barterers
