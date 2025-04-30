@@ -72,7 +72,11 @@ public class CosmeticLoader
       for(Object entryObj : entryArray)
       {
         PropertiesSet entryProps=(PropertiesSet)entryObj;
-        keys.add(buildCosmeticEntry(entryProps));
+        String entry=buildCosmeticEntry(entryProps);
+        if (entry!=null)
+        {
+          keys.add(entry);
+        }
       }
       Collections.sort(keys);
       sb.append(keys);
@@ -82,14 +86,19 @@ public class CosmeticLoader
 
   private String buildCosmeticEntry(PropertiesSet entryProps)
   {
-    StringBuilder sb=new StringBuilder();
     int species=((Integer)entryProps.getProperty("Item_SpeciesOfWearer")).intValue();
-    sb.append(species).append('/');
     int sex=((Integer)entryProps.getProperty("Item_SexOfWearer")).intValue();
-    sb.append(sex).append('/');
     Integer key=(Integer)entryProps.getProperty("Item_AppearanceKey");
-    sb.append(key).append('/');
     int wornAppearance=((Integer)entryProps.getProperty("Item_WornAppearance")).intValue();
+    if ((sex==8192) && (species==73))
+    {
+      // Ignore female dwarf
+      return null;
+    }
+    StringBuilder sb=new StringBuilder();
+    sb.append(species).append('/');
+    sb.append(sex).append('/');
+    sb.append(key).append('/');
     sb.append(wornAppearance);
     return sb.toString();
   }
