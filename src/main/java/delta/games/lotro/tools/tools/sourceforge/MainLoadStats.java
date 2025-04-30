@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.tools.sourceforge;
 
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +22,8 @@ import delta.downloads.Downloader;
 public class MainLoadStats
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MainLoadStats.class);
+
+  private PrintStream _out=System.out; // NOSONAR
 
   private class Results
   {
@@ -91,7 +94,7 @@ public class MainLoadStats
       }
       if (count!=count2)
       {
-        System.err.println("Error: count="+count+", count2="+count2);
+        LOGGER.error("Error: count={}, count2={}",Integer.valueOf(count),Integer.valueOf(count2));
       }
       return count;
     }
@@ -141,7 +144,7 @@ public class MainLoadStats
     Date myEnd=end;
     Results results=new Results();
     Calendar c=Calendar.getInstance();
-    System.out.println(file);
+    _out.println(file);
     while (true)
     {
       c.setTime(myEnd);
@@ -151,7 +154,7 @@ public class MainLoadStats
       if (myStart.getTime()>=start.getTime())
       {
         Results r=doItForOneMonthMax(myStart,myEnd,file);
-        System.out.println("Month: "+myStart+" => Results: "+r);
+        _out.println("Month: "+myStart+" => Results: "+r);
         results.merge(r);
         myEnd=new Date(myStart.getTime()-24*3600*1000);
       }
@@ -160,7 +163,7 @@ public class MainLoadStats
         break;
       }
     }
-    System.out.println("Results: "+results);
+    _out.println("Results: "+results);
     return results;
   }
 
@@ -168,7 +171,6 @@ public class MainLoadStats
   {
     Results results=new Results();
     String url=buildURL("lotrocompanion",file,start,end);
-    // System.out.println("URL: "+url);
     Downloader d=new Downloader();
     String s=null;
     try
@@ -204,7 +206,6 @@ public class MainLoadStats
     {
       LOGGER.warn("Got exception. JSON was ["+s+"]", e);
     }
-    // System.out.println("Results: "+results);
     return results;
   }
 
@@ -215,7 +216,6 @@ public class MainLoadStats
     String endDateStr=sdf.format(end);
     file=file.replace(" ","%20");
     String url="http://sourceforge.net/projects/"+project+"/files/"+file+"/stats/json?start_date="+startDateStr+"&end_date="+endDateStr;
-    // System.out.println("URL: "+url);
     return url;
   }
 

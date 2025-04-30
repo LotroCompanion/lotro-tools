@@ -27,7 +27,6 @@ public class MainInitUpdatesSystemLoreDatabaseRu
   public static void main(String[] args)
   {
     // Constants
-    //String baseURL="http://localhost:8080/delta-web-genea-1.1-SNAPSHOT/app16/";
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/loredb/ru/${file}/download";
     File to=new File("d:/tmp/loredb-ru-packages");
     ToolsConfig config=new ToolsConfig(baseURL,to);

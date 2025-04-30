@@ -1,5 +1,7 @@
 package delta.games.lotro.tools.reports;
 
+import java.io.PrintStream;
+
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -12,6 +14,8 @@ import delta.games.lotro.utils.maths.Progression;
  */
 public class MainItemsTableBuilder
 {
+  private PrintStream _out=System.out; // NOSONAR
+
   private static final int CHAR_LEVEL=150;
   private static final int ITEM_LEVEL=500;
 
@@ -90,13 +94,12 @@ public class MainItemsTableBuilder
       showItem(item,Integer.valueOf(CHAR_LEVEL),itemLevel);
       return;
     }
-    //System.out.println("No progression:");
     showItem(item,Integer.valueOf(CHAR_LEVEL),item.getItemLevel().intValue());
   }
 
   private void showItem(Item item, Integer level, int itemLevel)
   {
-    System.out.println(item.getIdentifier()+"\t"+item.getName()+"\t"+level+"\t"+itemLevel+"\t"+item.getMinLevel()+"\t"+item.getMunging());
+    _out.println(item.getIdentifier()+"\t"+item.getName()+"\t"+level+"\t"+itemLevel+"\t"+item.getMinLevel()+"\t"+item.getMunging());
   }
 
   private void doIt()
@@ -106,8 +109,10 @@ public class MainItemsTableBuilder
       handleItem(item);
     }
   }
+
   /**
-   * @param args
+   * Main method for this tool.
+   * @param args Not used.
    */
   public static void main(String[] args)
   {

@@ -452,43 +452,39 @@ public class MainDatItemsLoader
 
   private void handleItemValue(Item item, PropertiesSet properties)
   {
-    Integer itemValue=(Integer)properties.getProperty("Item_Value");
-    Integer itemValueFromTable=null;
     Integer itemValueTableId=(Integer)properties.getProperty("Item_ValueLookupTable");
+    QualityBasedValuesTable table=null;
     if ((itemValueTableId!=null) && (itemValueTableId.intValue()!=0))
     {
-      QualityBasedValuesTable table=_valueLoader.getTable(itemValueTableId.intValue());
-      if (table!=null)
+      table=_valueLoader.getTable(itemValueTableId.intValue());
+      item.setValueTable(table);
+    }
+    if (table!=null)
+    {
+      Integer itemValueFromTable=null;
+      ItemQuality quality=item.getQuality();
+      Integer itemLevel=item.getItemLevel();
+      if (itemLevel!=null)
       {
-        ItemQuality quality=item.getQuality();
-        Integer itemLevel=item.getItemLevel();
-        if (itemLevel!=null)
+        Float valueFromTable=table.getValue(quality,itemLevel.intValue());
+        if (valueFromTable!=null)
         {
-          Float valueFromTable=table.getValue(quality,itemLevel.intValue());
-          if (valueFromTable!=null)
-          {
-            itemValueFromTable=Integer.valueOf(Math.round(valueFromTable.floatValue()));
-          }
-          else
-          {
-            LOGGER.warn("Could not build item value from table!");
-          }
+          itemValueFromTable=Integer.valueOf(Math.round(valueFromTable.floatValue()));
         }
         else
         {
-          LOGGER.warn("Item level not found!");
+          LOGGER.warn("Could not build item value from table!");
         }
-        item.setValueTable(table);
       }
-    }
-    else
-    {
-      itemValueFromTable=Integer.valueOf(0);
-    }
-    if (!Objects.equals(itemValue,itemValueFromTable))
-    {
-      //LOGGER.warn("ID: "+item.getIdentifier()+" - Value: "+itemValue);
-      //LOGGER.warn("ID: "+item.getIdentifier()+" - Value (from progression): "+itemValueFromTable);
+      else
+      {
+        LOGGER.warn("Item level not found!");
+      }
+      Integer itemValue=(Integer)properties.getProperty("Item_Value");
+      if (!Objects.equals(itemValue,itemValueFromTable))
+      {
+        LOGGER.warn("ID: {} - Value: {}, Value (from progression): {}",item,itemValue,itemValueFromTable);
+      }
     }
   }
 
@@ -669,7 +665,6 @@ public class MainDatItemsLoader
       LOGGER.warn("************ BAD ANIM DURATION MOD! ID={}, name={} ***********",Integer.valueOf(id),name);
     }
     weapon.setSpeed(entry);
-    //System.out.println(id+"\t"+name+"\t"+type+"\t"+speedCode+"\t"+duration+"\t"+mod);
     return duration.floatValue();
   }
 

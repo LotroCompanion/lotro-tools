@@ -94,7 +94,7 @@ public class InstanceChestsFinder
 
   private void showResults()
   {
-    //showByContainer();
+    showByContainer(System.out);
     showByInstance(System.out);
   }
 

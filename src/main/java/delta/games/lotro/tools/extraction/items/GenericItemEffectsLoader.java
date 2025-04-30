@@ -49,7 +49,7 @@ public class GenericItemEffectsLoader
     // Equipper effects
     handleEquipperEffects(props,allEffects);
     // TODO Handle target effects
-    //handleTargetEffects(props,allEffects);
+    //handleTargetEffects(props,allEffects)
     // Save
     save(allEffects);
   }

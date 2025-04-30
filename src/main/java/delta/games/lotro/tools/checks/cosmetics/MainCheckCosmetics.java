@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.checks.cosmetics;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import delta.games.lotro.lore.items.cosmetics.ItemCosmeticsManager;
 public class MainCheckCosmetics
 {
   private DataFacade _facade=new DataFacade();
+  private PrintStream _out=System.out; // NOSONAR
 
   private List<Item> findItems()
   {
@@ -64,7 +66,7 @@ public class MainCheckCosmetics
     Collections.sort(cosmeticIDs);
     for(Integer cosmeticID : cosmeticIDs)
     {
-      System.out.println("ID="+cosmeticID);
+      _out.println("ID="+cosmeticID);
       CosmeticGroup group=groups.get(cosmeticID);
       List<Item> items=group.getItems();
       Collections.sort(items,new IdentifiableComparator<Item>());
@@ -76,7 +78,7 @@ public class MainCheckCosmetics
           showProps(item);
           first=false;
         }
-        System.out.println("\t"+item.getIdentifier()+"\t"+item.getQuality()+"\t"+item.getItemLevel()+"\t"+item.getUsageRequirements());
+        _out.println("\t"+item.getIdentifier()+"\t"+item.getQuality()+"\t"+item.getItemLevel()+"\t"+item.getUsageRequirements());
       }
     }
   }
@@ -95,17 +97,16 @@ public class MainCheckCosmetics
       int entryIndex=0;
       for(Object entryObj : entryArray)
       {
-        System.out.println("Entry #"+entryIndex);
+        _out.println("Entry #"+entryIndex);
         PropertiesSet entryProps=(PropertiesSet)entryObj;
         Integer key=(Integer)entryProps.getProperty("Item_AppearanceKey");
         int sex=((Integer)entryProps.getProperty("Item_SexOfWearer")).intValue();
         int species=((Integer)entryProps.getProperty("Item_SpeciesOfWearer")).intValue();
         int wornAppearance=((Integer)entryProps.getProperty("Item_WornAppearance")).intValue();
-        System.out.println("Index="+entryIndex+": appearance key: "+key+", sex="+sex+", species="+species+", wornAppearance="+wornAppearance);
+        _out.println("Index="+entryIndex+": appearance key: "+key+", sex="+sex+", species="+species+", wornAppearance="+wornAppearance);
         entryIndex++;
       }
     }
-    //System.out.println(props.dump());
   }
 
   private void doIt()

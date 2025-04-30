@@ -2,6 +2,7 @@ package delta.games.lotro.tools.tools;
 
 import java.io.File;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.lore.geo.BlockReference;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.markers.GlobalMarkersManager;
@@ -37,14 +38,11 @@ public class MainMarkerDuplicatesRemover
 
   private void doIt()
   {
-    //BlockReference block=MarkerUtils.getBlockForMarker(376705024);
-    //doBlock(block);
     for(int region=1;region<=4;region++)
     {
-      System.out.println("Region "+region);
+      Console.println("Region "+region);
       for(int blockX=0;blockX<=0xFF;blockX++)
       {
-        //System.out.println("X="+blockX);
         for(int blockY=0;blockY<=0xFF;blockY++)
         {
           BlockReference block=new BlockReference(region,blockX,blockY);
@@ -54,7 +52,7 @@ public class MainMarkerDuplicatesRemover
     }
     int nbRemovedMarkers=_remover.getRemovedMarkers();
     int nbTotalMarkers=_remover.getTotalMarkers();
-    System.out.println("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
+    Console.println("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
   }
 
   /**

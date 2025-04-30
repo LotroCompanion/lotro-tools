@@ -517,7 +517,7 @@ public class DatObjectivesLoader
     }
     else if (roleConstraint!=null)
     {
-      //System.out.println("\tRole:"+roleConstraint);
+      // Nothing!
     }
     else
     {
@@ -619,8 +619,8 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       Interactable npc=InteractableUtils.findInteractable(npcId.intValue());
       condition.setNpc(npc);
     }
-    // TODO
-    //String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    @SuppressWarnings("unused")
+    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
   }
 
   private LevelCondition handleLevelCondition(PropertiesSet properties)
