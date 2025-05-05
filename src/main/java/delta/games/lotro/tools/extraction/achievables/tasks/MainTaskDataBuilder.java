@@ -47,7 +47,7 @@ public class MainTaskDataBuilder
 
   private Task buildTask(QuestDescription quest)
   {
-    LOGGER.info("ID="+quest.getIdentifier()+" - "+quest.getName());
+    LOGGER.info("{}",quest);
     // Item
     InventoryItemCondition itemCondition=findRequiredItem(quest);
     if (itemCondition==null)
@@ -57,7 +57,7 @@ public class MainTaskDataBuilder
     int count=itemCondition.getCount();
     Item item=itemCondition.getItem();
     String name=item.getName();
-    LOGGER.info("\t"+name+" x"+count);
+    LOGGER.info("\t{} x{}",name,Integer.valueOf(count));
     Task ret=new Task(quest);
     ret.setRequiredItems(item,count);
     Rewards rewards=quest.getRewards();
@@ -69,7 +69,7 @@ public class MainTaskDataBuilder
       {
         Faction faction=reputationReward.getFaction();
         int amount=reputationReward.getAmount();
-        LOGGER.info("\t"+faction.getName()+" - "+amount+" pts");
+        LOGGER.info("\t{} - {} pts",faction.getName(),Integer.valueOf(amount));
       }
     }
     return ret;
@@ -81,7 +81,7 @@ public class MainTaskDataBuilder
     int nbConditions=inventoryItemConditions.size();
     if ((nbConditions!=1) && (nbConditions!=2))
     {
-      LOGGER.warn("Bad conditions count for "+task+". Got: "+nbConditions);
+      LOGGER.warn("Bad conditions count for {}. Got: {}",task,Integer.valueOf(nbConditions));
       return null;
     }
     if (nbConditions>1)
@@ -92,11 +92,11 @@ public class MainTaskDataBuilder
       int count2=inventoryItemConditions.get(1).getCount();
       if (itemID!=itemID2)
       {
-        LOGGER.warn("Item ID mismatch: "+itemID+"!="+itemID2);
+        LOGGER.warn("Item ID mismatch: {}!={}",Integer.valueOf(itemID),Integer.valueOf(itemID2));
       }
       if (count!=count2)
       {
-        LOGGER.warn("Item count mismatch: "+count+"!="+count2);
+        LOGGER.warn("Item count mismatch: {}!={}",Integer.valueOf(count),Integer.valueOf(count2));
       }
     }
     return inventoryItemConditions.get(0);
@@ -131,7 +131,7 @@ public class MainTaskDataBuilder
     boolean ok=TasksXMLWriter.write(GeneratedFiles.TASKS,tasks);
     if (ok)
     {
-      LOGGER.info("Wrote tasks file: "+GeneratedFiles.TASKS);
+      LOGGER.info("Wrote tasks file: {}",GeneratedFiles.TASKS);
     }
   }
 

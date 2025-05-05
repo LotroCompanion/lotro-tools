@@ -51,14 +51,14 @@ public class MainDatRelicMeldingRecipesLoader
     PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not load properties: "+id);
+      LOGGER.warn("Could not load properties: {}",Integer.valueOf(id));
       return null;
     }
     WStateDataSet wstate=_facade.loadWState(id);
     ClassInstance recipeWState=getObjectFromWState(wstate);
     if (recipeWState==null)
     {
-      LOGGER.warn("Could not load recipe wstate: "+id);
+      LOGGER.warn("Could not load recipe wstate: {}",Integer.valueOf(id));
       return null;
     }
     RelicMeldingRecipe ret=new RelicMeldingRecipe(id);
@@ -105,7 +105,7 @@ public class MainDatRelicMeldingRecipesLoader
       }
       else
       {
-        LOGGER.warn("Relic not found: "+relicId);
+        LOGGER.warn("Relic not found: {}",Integer.valueOf(relicId));
       }
     }
 
@@ -131,7 +131,7 @@ public class MainDatRelicMeldingRecipesLoader
         }
         else
         {
-          LOGGER.warn("Output ID not found: "+outputId);
+          LOGGER.warn("Output ID not found: {}",Integer.valueOf(outputId));
         }
       }
     }
@@ -167,6 +167,7 @@ public class MainDatRelicMeldingRecipesLoader
     if (props==null)
     {
       LOGGER.warn("Could not load transmutation directory properties");
+      return;
     }
     List<RelicMeldingRecipe> recipes=new ArrayList<RelicMeldingRecipe>();
     // Recipe IDs
@@ -185,7 +186,7 @@ public class MainDatRelicMeldingRecipesLoader
     boolean ok=writer.write(GeneratedFiles.RELIC_MELDING_RECIPES,recipes,EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote relic melding recipes file: "+GeneratedFiles.RELIC_MELDING_RECIPES);
+      LOGGER.info("Wrote relic melding recipes file: {}",GeneratedFiles.RELIC_MELDING_RECIPES);
     }
   }
 

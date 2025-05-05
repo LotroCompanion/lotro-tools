@@ -165,10 +165,9 @@ public class QuestsLoader
     {
       LOGGER.debug("Given items: {}",givenItems);
     }
-    // Chain
-    // - previous
+    // Pre-requisites
     _utils.findPrerequisites(quest,properties);
-    // - next
+    // Next quest
     Integer nextQuestId=((Integer)properties.getProperty("Quest_NextQuest"));
     if (nextQuestId!=null)
     {

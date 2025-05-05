@@ -172,7 +172,7 @@ Perk_UICategory: 7 (Armour)
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
       if (!ok)
       {
-        LOGGER.warn("Could not build perk icon: "+iconFilename);
+        LOGGER.warn("Could not build perk icon: {}",iconFilename);
       }
     }
     // Effect
@@ -208,12 +208,12 @@ Perk_UICategory: 7 (Armour)
   private void savePerks(List<PerkDescription> perks)
   {
     int nbPerks=perks.size();
-    LOGGER.info("Writing "+nbPerks+" perks");
+    LOGGER.info("Writing {} perks",Integer.valueOf(nbPerks));
     // Write perks file
     boolean ok=PerkDescriptionXMLWriter.write(GeneratedFiles.PERKS,perks);
     if (ok)
     {
-      LOGGER.info("Wrote perks file: "+GeneratedFiles.PERKS);
+      LOGGER.info("Wrote perks file: {}",GeneratedFiles.PERKS);
     }
     // Labels
     _i18n.save();

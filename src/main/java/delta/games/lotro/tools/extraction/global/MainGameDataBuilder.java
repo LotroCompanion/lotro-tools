@@ -36,11 +36,11 @@ public class MainGameDataBuilder
     boolean ok=GameXMLWriter.write(toFile,parameters);
     if (ok)
     {
-      LOGGER.info("Wrote file: "+toFile);
+      LOGGER.info("Wrote file: {}",toFile);
     }
     else
     {
-      LOGGER.error("Failed to build game file: "+toFile);
+      LOGGER.error("Failed to build game file: {}",toFile);
     }
   }
 

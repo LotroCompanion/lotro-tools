@@ -100,10 +100,11 @@ public class LootProbabilities
    */
   public float getProbability(int frequencyCode)
   {
-    Float probability=_probabilities.get(Integer.valueOf(frequencyCode));
+    Integer key=Integer.valueOf(frequencyCode);
+    Float probability=_probabilities.get(key);
     if (probability==null)
     {
-      LOGGER.warn("Missing probability: frequencyCode="+frequencyCode);
+      LOGGER.warn("Missing probability: frequencyCode={}",key);
     }
     return (probability!=null)?probability.floatValue():0.0f;
   }

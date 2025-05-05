@@ -51,7 +51,7 @@ public class MainDatRewardsTracksLoader
       PropertyDefinition propertyDef=_facade.getPropertiesRegistry().getPropertyDef(propertyID.intValue());
       return propertyDef.getName();
     }
-    LOGGER.warn("Property not found: "+propertyName);
+    LOGGER.warn("Property not found: {}",propertyName);
     return "";
   }
 
@@ -102,7 +102,7 @@ public class MainDatRewardsTracksLoader
     }
     else
     {
-      LOGGER.warn("Could not handle collection ID="+rewardsTrackID);
+      LOGGER.warn("Could not handle rewards track ID={}",Integer.valueOf(rewardsTrackID));
     }
     return ret;
   }
@@ -165,7 +165,8 @@ public class MainDatRewardsTracksLoader
         rewardsTracks.add(rewardsTrack);
       }
     }
-    LOGGER.info("Loaded "+rewardsTracks.size()+" rewards tracks.");
+    int nbRewardsTracks=rewardsTracks.size();
+    LOGGER.info("Loaded {} rewards tracks.",Integer.valueOf(nbRewardsTracks));
     saveRewardsTracks(rewardsTracks);
   }
 
@@ -180,7 +181,7 @@ public class MainDatRewardsTracksLoader
     boolean ok=RewardsTracksXMLWriter.writeRewardsTracksFile(GeneratedFiles.REWARDS_TRACKS,rewardsTracks);
     if (ok)
     {
-      LOGGER.info("Wrote rewards tracks file: "+GeneratedFiles.REWARDS_TRACKS);
+      LOGGER.info("Wrote rewards tracks file: {}",GeneratedFiles.REWARDS_TRACKS);
     }
     // Labels
     _i18n.save();

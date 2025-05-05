@@ -11,11 +11,13 @@ import delta.common.utils.io.Console;
 import delta.common.utils.text.EncodingNames;
 import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.DataIdentification;
 import delta.games.lotro.dat.data.geo.AchievableGeoData;
 import delta.games.lotro.dat.data.geo.AchievableGeoDataItem;
 import delta.games.lotro.dat.data.geo.GeoData;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.loaders.wstate.QuestEventTargetLocationLoader;
+import delta.games.lotro.dat.utils.DataIdentificationTools;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.deeds.io.xml.DeedXMLWriter;
@@ -66,7 +68,7 @@ public class MainGeoDataInjector
     AchievableGeoData achievableGeoData=data.getGeoDataForAchievable(achievableId);
     if (achievableGeoData!=null)
     {
-      LOGGER.debug("Achievable: "+achievable);
+      LOGGER.debug("Achievable: {}",achievable);
       List<Objective> objectives=achievable.getObjectives().getObjectives();
       List<Integer> objectiveIndexes=achievableGeoData.getObjectiveIndexes();
       for(Integer objectiveIndex : objectiveIndexes)
@@ -85,7 +87,7 @@ public class MainGeoDataInjector
   private void handleAchievableObjective(AchievableGeoPointsManager pointsMgr, Achievable achievable, Objective objective, AchievableGeoData geoData)
   {
     int objectiveIndex=objective.getIndex();
-    LOGGER.debug("\tObjective #"+objectiveIndex);
+    LOGGER.debug("\tObjective #{}",Integer.valueOf(objectiveIndex));
     List<Integer> conditionIndexes=geoData.getConditionIndexes(objectiveIndex);
     List<ObjectiveCondition> conditions=objective.getConditions();
     for(Integer conditionIndex : conditionIndexes)
@@ -93,7 +95,7 @@ public class MainGeoDataInjector
       int nbConditions=conditions.size();
       if (conditionIndex.intValue()>=nbConditions)
       {
-        LOGGER.warn("Invalid condition index for achievable: "+achievable+", condition #"+conditionIndex);
+        LOGGER.warn("Invalid condition index for achievable: {}, objective #{}, condition #{}",achievable,Integer.valueOf(objectiveIndex),conditionIndex);
         continue;
       }
       ObjectiveCondition condition=conditions.get(conditionIndex.intValue());
@@ -102,46 +104,66 @@ public class MainGeoDataInjector
       {
         continue;
       }
-      LOGGER.debug("\t\tCondition #"+conditionIndex);
+      LOGGER.debug("\t\tCondition #{}",conditionIndex);
       List<AchievableGeoDataItem> items=geoData.getConditionData(objectiveIndex,conditionIndex.intValue());
       for(AchievableGeoDataItem geoItem : items)
       {
-        int did=geoItem.getDid();
-        String key1=geoItem.getKey();
-        String key2=geoItem.getKey2();
-        DatPosition position=geoItem.getPosition();
-        //DataIdentification dataId=(did!=0)?DataIdentificationTools.identify(_facade,did):null;
-        //String positionLabel=(position!=null)?position.asLatLon():"?";
-        //System.out.println("\t\t\t"+dataId+", key1="+key1+", key2="+key2+", position="+positionLabel);
-        String key=null;
-        if (key1.length()>0)
+        AchievableGeoPoint point=handleGeoDataItem(pointsMgr,achievable,objective,conditionIndex,geoItem);
+        if (point!=null)
         {
-          key=key1;
+          condition.addPoint(point);
         }
-        if (key2.length()>0)
-        {
-          if (key!=null)
-          {
-            LOGGER.warn("Both key are defined: key1="+key1+", key2="+key2);
-          }
-          key=key2;
-        }
-        float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
-        Integer mapId=_mapsFinder.getMap(position);
-        AchievableGeoPoint item=new AchievableGeoPoint(did,key,0,new Point2D.Float(lonLat[0],lonLat[1]));
-        if (mapId!=null)
-        {
-          pointsMgr.addPointForMap(mapId.intValue(),item);
-        }
-        else
-        {
-          BlockReference block=new BlockReference(position.getRegion(),position.getBlockX(),position.getBlockY());
-          pointsMgr.addPointForBlock(block,item);
-        }
-        fixPoint(achievable.getIdentifier(),item);
-        condition.addPoint(item);
       }
     }
+  }
+
+  private AchievableGeoPoint handleGeoDataItem(AchievableGeoPointsManager pointsMgr, Achievable achievable, Objective objective,Integer conditionIndex, AchievableGeoDataItem geoItem)
+  {
+    int did=geoItem.getDid();
+    String key1=geoItem.getKey();
+    String key2=geoItem.getKey2();
+    DatPosition position=geoItem.getPosition();
+    if (position==null)
+    {
+      return null;
+    }
+    if (LOGGER.isDebugEnabled())
+    {
+      DataIdentification dataId=(did!=0)?DataIdentificationTools.identify(_facade,did):null;
+      String positionLabel=position.asLatLon();
+      LOGGER.debug("\t\t\t{}, key1={}, key2={}, position={}",dataId,key1,key2,positionLabel);
+    }
+    String key=null;
+    if (!key1.isEmpty())
+    {
+      key=key1;
+    }
+    if (!key2.isEmpty())
+    {
+      if (key!=null)
+      {
+        DataIdentification dataId=(did!=0)?DataIdentificationTools.identify(_facade,did):null;
+        String positionLabel=position.asLatLon();
+        int objectiveIndex=objective.getIndex();
+        LOGGER.warn("Achievable {}, objective #{}, condition #{}:",achievable,Integer.valueOf(objectiveIndex),conditionIndex);
+        LOGGER.warn("\tBoth key are defined: DataID={}, position={}, key1={}, key2={}",dataId,positionLabel,key1,key2);
+      }
+      key=key2;
+    }
+    float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
+    Integer mapId=_mapsFinder.getMap(position);
+    AchievableGeoPoint item=new AchievableGeoPoint(did,key,0,new Point2D.Float(lonLat[0],lonLat[1]));
+    if (mapId!=null)
+    {
+      pointsMgr.addPointForMap(mapId.intValue(),item);
+    }
+    else
+    {
+      BlockReference block=new BlockReference(position.getRegion(),position.getBlockX(),position.getBlockY());
+      pointsMgr.addPointForBlock(block,item);
+    }
+    fixPoint(achievable.getIdentifier(),item);
+    return item;
   }
 
   private void fixPoint(int deedId, AchievableGeoPoint point)
@@ -185,7 +207,7 @@ public class MainGeoDataInjector
     for(List<BlockReference> group : groups)
     {
       GeoBoundingBox boundingBox=buildBoundingBox(group);
-      LOGGER.info("Box: "+boundingBox);
+      LOGGER.info("Box: {}",boundingBox);
       MapDescription map=new MapDescription();
       map.setRegion(group.get(0).getRegion());
       map.setBoundingBox(boundingBox);

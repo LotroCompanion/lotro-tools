@@ -158,7 +158,7 @@ public class MainSkillDataLoader
         boolean ok=DatIconsUtils.buildImageFile(_facade,iconId.intValue(),to);
         if (!ok)
         {
-          LOGGER.warn("Could not build skill icon: "+iconFilename);
+          LOGGER.warn("Could not build skill icon: {}",iconFilename);
         }
       }
     }
@@ -172,7 +172,7 @@ public class MainSkillDataLoader
         if (LOGGER.isDebugEnabled())
         {
           String types=BitSetUtils.getStringFromBitSet(skillTypesBitSet,skillType,"/");
-          LOGGER.debug("Skill: "+skillName+", types="+types);
+          LOGGER.debug("Skill: {}, types={}",skillName,types);
         }
       }
     }
@@ -184,7 +184,7 @@ public class MainSkillDataLoader
         BitSet skillBitSet=BitSetUtils.getBitSetFromFlags(skillQuestFlags.longValue());
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Skill: "+skillName+", flags="+skillBitSet);
+          LOGGER.debug("Skill: {}, flags={}",skillName,skillBitSet);
         }
       }
     }
@@ -292,7 +292,7 @@ public class MainSkillDataLoader
       }
       else
       {
-        LOGGER.warn("Unknown trait: "+requiredTraitId);
+        LOGGER.warn("Unknown trait: {}",requiredTraitId);
       }
     }
     // Required effects
@@ -384,13 +384,13 @@ public class MainSkillDataLoader
   {
     List<SkillDescription> skills=SkillsManager.getInstance().getAll();
     int nbSkills=skills.size();
-    LOGGER.info("Writing "+nbSkills+" skills");
+    LOGGER.info("Writing {} skills",Integer.valueOf(nbSkills));
     // Write skills file
     Collections.sort(skills,new IdentifiableComparator<SkillDescription>());
     boolean ok=new SkillDescriptionXMLWriter().write(GeneratedFiles.SKILLS,skills);
     if (ok)
     {
-      LOGGER.info("Wrote skills file: "+GeneratedFiles.SKILLS);
+      LOGGER.info("Wrote skills file: {}",GeneratedFiles.SKILLS);
     }
     // Labels
     _i18n.save();

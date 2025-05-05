@@ -149,7 +149,7 @@ public class MainTraitDataLoader
       Integer oldValue=_traitIds2PropMap.put(entry.getValue(),entry.getKey());
       if (oldValue!=null)
       {
-        LOGGER.warn("Multiple properties for trait: "+oldValue);
+        LOGGER.warn("Multiple properties for trait: {}",oldValue);
       }
     }
   }
@@ -200,7 +200,7 @@ public class MainTraitDataLoader
     int minLevel=(minLevelInt!=null)?minLevelInt.intValue():1;
     ret.setMinLevel(minLevel);
     // Tier
-    //int traitTier=((Integer)traitProperties.getProperty("Trait_Tier")).intValue();
+    // We do not use property "Trait_Tier"
     Integer maxTier=(Integer)traitProperties.getProperty("Trait_Virtue_Maximum_Rank");
     if ((maxTier!=null) && (maxTier.intValue()>1))
     {
@@ -315,15 +315,15 @@ public class MainTraitDataLoader
       {
         for(Object skillIdObj : skillArray)
         {
-          int skillId=((Integer)skillIdObj).intValue();
-          SkillDescription skill=skillsMgr.getSkill(skillId);
+          Integer skillId=(Integer)skillIdObj;
+          SkillDescription skill=skillsMgr.getSkill(skillId.intValue());
           if (skill!=null)
           {
             trait.addSkill(skill,0);
           }
           else
           {
-            LOGGER.warn("Skill not found: "+skillId);
+            LOGGER.warn("Skill not found: {}",skillId);
           }
         }
       }
@@ -347,15 +347,15 @@ Trait_EffectSkill_AtRankSkillsAcquired_Array:
           Object[] skillIDsArray=(Object[])effectSkillStruct.getProperty("Trait_EffectSkill_SkillAcquired_Array");
           for(Object skillIDObj : skillIDsArray)
           {
-            int skillId=((Integer)skillIDObj).intValue();
-            SkillDescription skill=skillsMgr.getSkill(skillId);
+            Integer skillId=(Integer)skillIDObj;
+            SkillDescription skill=skillsMgr.getSkill(skillId.intValue());
             if (skill!=null)
             {
               trait.addSkill(skill,rank);
             }
             else
             {
-              LOGGER.warn("Skill not found: "+skillId);
+              LOGGER.warn("Skill not found: {}",skillId);
             }
           }
         }
@@ -436,15 +436,15 @@ Trait_EffectSkill_AtRankEffects_Array:
       Object[] effectIDsArray=(Object[])effectSkillStruct.getProperty("Trait_EffectSkill_Effect_Array");
       for(Object effectIDObj : effectIDsArray)
       {
-        int effectID=((Integer)effectIDObj).intValue();
-        Effect effect=_effectsLoader.getEffect(effectID);
+        Integer effectID=(Integer)effectIDObj;
+        Effect effect=_effectsLoader.getEffect(effectID.intValue());
         if (effect!=null)
         {
           trait.addEffect(effect,rank);
         }
         else
         {
-          LOGGER.warn("Effect not found: "+effectID);
+          LOGGER.warn("Effect not found: {}",effectID);
         }
       }
     }
@@ -535,7 +535,7 @@ Trait_EffectSkill_AtRankEffects_Array:
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
       if (!ok)
       {
-        LOGGER.warn("Could not build trait icon: "+iconFilename);
+        LOGGER.warn("Could not build trait icon: {}",iconFilename);
       }
     }
   }
@@ -549,12 +549,12 @@ Trait_EffectSkill_AtRankEffects_Array:
     new TraitKeyGenerator(traitsManager).setup();
     List<TraitDescription> traits=traitsManager.getAll();
     int nbTraits=traits.size();
-    LOGGER.info("Writing "+nbTraits+" traits");
+    LOGGER.info("Writing {} traits",Integer.valueOf(nbTraits));
     // Write traits file
     boolean ok=TraitDescriptionXMLWriter.write(GeneratedFiles.TRAITS,traits);
     if (ok)
     {
-      LOGGER.info("Wrote traits file: "+GeneratedFiles.TRAITS);
+      LOGGER.info("Wrote traits file: {}",GeneratedFiles.TRAITS);
     }
     // Labels
     _i18n.save();

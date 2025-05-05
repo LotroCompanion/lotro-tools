@@ -67,7 +67,7 @@ public class MainDatRecipesLoader
     PropertiesSet properties=_facade.loadProperties(dbPropertiesId);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle recipe ID="+indexDataId);
+      LOGGER.warn("Could not handle recipe ID={}",Integer.valueOf(indexDataId));
       return null;
     }
     Recipe recipe=new Recipe();
@@ -361,14 +361,14 @@ public class MainDatRecipesLoader
     RecipesManager recipesManager=new RecipesManager(false);
     scanAll(recipesManager);
     int nbRecipes=recipesManager.getRecipesCount();
-    LOGGER.info("Found: "+nbRecipes+" recipes.");
+    LOGGER.info("Found: {} recipes.",Integer.valueOf(nbRecipes));
     // Load recipe->recipe item links
     _recipeItemsLoader.loadRecipeItems(recipesManager);
     // Save
     boolean ok=recipesManager.writeToFile(GeneratedFiles.RECIPES);
     if (ok)
     {
-      LOGGER.info("Wrote recipes file: "+GeneratedFiles.RECIPES);
+      LOGGER.info("Wrote recipes file: {}",GeneratedFiles.RECIPES);
     }
     // Labels
     _i18n.save();
@@ -436,13 +436,13 @@ public class MainDatRecipesLoader
   {
     if (item==null)
     {
-      LOGGER.error(context+": missing item");
+      LOGGER.error("{}: missing item",context);
       return;
     }
     String icon=item.getIcon();
     if (icon==null)
     {
-      LOGGER.warn(context+": missing icon");
+      LOGGER.warn("{}: missing icon",context);
     }
   }
 

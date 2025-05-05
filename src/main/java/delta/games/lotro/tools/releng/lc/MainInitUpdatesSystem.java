@@ -52,7 +52,6 @@ public class MainInitUpdatesSystem
     packageID++;
     // Remaining
     packages.add(builder.buildPackage(packageID,"main",description));
-    packageID++;
 
     // Build the software description
     SoftwareDescription software=new SoftwareDescription(0);

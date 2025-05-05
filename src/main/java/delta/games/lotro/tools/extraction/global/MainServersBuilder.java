@@ -75,11 +75,11 @@ public class MainServersBuilder
     boolean ok=ServerXMLWriter.writeServersFile(toFile,servers);
     if (ok)
     {
-      LOGGER.info("Wrote file: "+toFile);
+      LOGGER.info("Wrote file: {}",toFile);
     }
     else
     {
-      LOGGER.error("Failed to build servers file: "+toFile);
+      LOGGER.error("Failed to build servers file: {}",toFile);
     }
   }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
@@ -115,9 +116,7 @@ public class MainDatRelicsLoader
       // Icons
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer imageIconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
-      // Unused:
-      //Integer shadowIconId=(Integer)properties.getProperty("Icon_Layer_ShadowDID");
-      //Integer underlayIconId=(Integer)properties.getProperty("Icon_Layer_UnderlayDID");
+      // Unused: "Icon_Layer_ShadowDID" and "Icon_Layer_UnderlayDID"
       String iconFilename=imageIconId+"-"+backgroundIconId+".png";
       File to=new File(GeneratedFiles.RELIC_ICONS_DIR,iconFilename).getAbsoluteFile();
       if (!to.exists())
@@ -126,7 +125,7 @@ public class MainDatRelicsLoader
         boolean ok=DatIconsUtils.buildImageFile(_facade,imagesIDs,to);
         if (!ok)
         {
-          LOGGER.warn("Could not build relic icon: "+iconFilename);
+          LOGGER.warn("Could not build relic icon: {}",iconFilename);
         }
       }
       relic.setIconFilename(iconFilename);
@@ -136,7 +135,7 @@ public class MainDatRelicsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle relic ID="+relicId);
+      LOGGER.warn("Could not handle relic ID={}",Integer.valueOf(relicId));
     }
   }
 
@@ -184,12 +183,12 @@ public class MainDatRelicsLoader
     boolean ok=_relicsMgr.writeRelicsFile(GeneratedFiles.RELICS);
     if (ok)
     {
-      LOGGER.info("Wrote relics file: "+GeneratedFiles.RELICS);
+      LOGGER.info("Wrote relics file: {}",GeneratedFiles.RELICS);
     }
     // - labels
     _i18n.save();
     // Stats usage statistics
-    System.out.println("Stats usage statistics (relics):");
+    Console.println("Stats usage statistics (relics):");
     _statUtils.showStatistics();
   }
 

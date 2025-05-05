@@ -143,7 +143,7 @@ public class MainLotroImagesCleanup
       boolean ok=from.delete();
       if (!ok)
       {
-        LOGGER.warn("Failed to delete file: "+from);
+        LOGGER.warn("Failed to delete file: {}",from);
       }
     }
   }
@@ -170,7 +170,7 @@ public class MainLotroImagesCleanup
       boolean ok=iconFile.delete();
       if (!ok)
       {
-        LOGGER.warn("Failed to delete file: "+iconFile);
+        LOGGER.warn("Failed to delete file: {}",iconFile);
       }
     }
   }
@@ -181,7 +181,6 @@ public class MainLotroImagesCleanup
    */
   public static void main(String[] args)
   {
-    // D:\\dev\\git\\lotro-tools
     File rootDir=new File(args[0]);
     new MainLotroImagesCleanup(rootDir).doIt();
   }

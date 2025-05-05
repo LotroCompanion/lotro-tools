@@ -97,7 +97,7 @@ Title_String:
         title.setPriority(Integer.valueOf(priority));
         if (priority<1)
         {
-          LOGGER.warn("Unexpected priority value: "+priority+" for title ID="+titleID);
+          LOGGER.warn("Unexpected priority value: {} for title ID={}",Integer.valueOf(priority),Integer.valueOf(titleID));
         }
       }
       // Icon
@@ -111,7 +111,7 @@ Title_String:
     }
     else
     {
-      LOGGER.warn("Could not handle title ID="+titleID);
+      LOGGER.warn("Could not handle title ID={}",Integer.valueOf(titleID));
     }
     return title;
   }
@@ -172,11 +172,11 @@ Title_String:
   {
     // Data
     int nbTitles=titles.size();
-    LOGGER.info("Writing "+nbTitles+" titles");
+    LOGGER.info("Writing {} titles",Integer.valueOf(nbTitles));
     boolean ok=TitleXMLWriter.writeTitlesFile(GeneratedFiles.TITLES,titles);
     if (ok)
     {
-      LOGGER.info("Wrote titles file: "+GeneratedFiles.TITLES);
+      LOGGER.info("Wrote titles file: {}",GeneratedFiles.TITLES);
     }
     // Labels
     _i18n.save();

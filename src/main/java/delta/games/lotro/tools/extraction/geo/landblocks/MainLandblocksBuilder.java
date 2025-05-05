@@ -42,13 +42,13 @@ public class MainLandblocksBuilder
     int[] regions=GeoUtils.getRegions();
     for(int region : regions)
     {
-      ToolLog.LOGGER.info("Region "+region);
+      ToolLog.LOGGER.info("Region {}",Integer.valueOf(region));
       for(int blockX=0;blockX<=0xFF;blockX++)
       {
-        ToolLog.LOGGER.info("X="+blockX);
+        ToolLog.LOGGER.info("X={}",Integer.valueOf(blockX));
         for(int blockY=0;blockY<=0xFF;blockY++)
         {
-          ToolLog.LOGGER.debug("\tY="+blockY);
+          ToolLog.LOGGER.debug("\tY={}",Integer.valueOf(blockY));
           Landblock data=landblockLoader.buildLandblock(region,blockX,blockY);
           if (data!=null)
           {
@@ -58,7 +58,7 @@ public class MainLandblocksBuilder
         }
       }
     }
-    ToolLog.LOGGER.info("Loaded "+nbBlocks+" landblocks!");
+    ToolLog.LOGGER.info("Loaded {} landblocks!",Integer.valueOf(nbBlocks));
     return index;
   }
 
@@ -72,7 +72,7 @@ public class MainLandblocksBuilder
     boolean ok=LandblocksXMLWriter.writeLandblocksFile(GeneratedFiles.LANDBLOCKS,index);
     if (ok)
     {
-      LOGGER.info("Wrote landblocks file: "+GeneratedFiles.LANDBLOCKS);
+      LOGGER.info("Wrote landblocks file: {}",GeneratedFiles.LANDBLOCKS);
     }
   }
 
