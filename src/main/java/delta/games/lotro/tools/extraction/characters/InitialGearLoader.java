@@ -44,19 +44,18 @@ public class InitialGearLoader
     for(ClassDescription characterClass : ClassesManager.getInstance().getAllCharacterClasses())
     {
       int classId=characterClass.getIdentifier();
-      String classKey=characterClass.getKey();
-      InitialGearDefinition gearDefinition=handleClass(classId,classKey);
+      InitialGearDefinition gearDefinition=handleClass(classId,characterClass);
       gearDefinitions.add(gearDefinition);
     }
     File to=GeneratedFiles.INITIAL_GEAR;
     InitialGearXMLWriter.write(to,gearDefinitions);
   }
 
-  private InitialGearDefinition handleClass(int classId, String classKey)
+  private InitialGearDefinition handleClass(int classId, ClassDescription characterClass)
   {
     PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
     // Initial gear:
-    InitialGearDefinition initialGear=new InitialGearDefinition(classKey);
+    InitialGearDefinition initialGear=new InitialGearDefinition(characterClass);
     // AdvTable_StartingInventory_List: initial gear at level 1
     Object[] inventory=(Object[])properties.getProperty("AdvTable_StartingInventory_List");
     for(Object inventoryElement : inventory)
@@ -67,15 +66,14 @@ public class InitialGearLoader
       if ((startsEquipped>0) && (quantity==1))
       {
         int itemId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_Item")).intValue();
-        InitialGearElement element=new InitialGearElement();
         Item item=ItemsManager.getInstance().getItem(itemId);
-        element.setItem(item);
+        RaceDescription race=null;
         int raceId=((Integer)inventoryElementProps.getProperty("AdvTable_StartingInventory_RequiredRace")).intValue();
         if (raceId!=0)
         {
-          RaceDescription race=RacesManager.getInstance().getByCode(raceId);
-          element.setRequiredRace(race);
+          race=RacesManager.getInstance().getByCode(raceId);
         }
+        InitialGearElement element=new InitialGearElement(item,characterClass,race);
         initialGear.addGearElement(element);
       }
     }
