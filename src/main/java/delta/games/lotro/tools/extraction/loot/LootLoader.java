@@ -5,11 +5,6 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import delta.games.lotro.character.classes.AbstractClassDescription;
-import delta.games.lotro.character.classes.ClassesManager;
-import delta.games.lotro.character.races.RaceDescription;
-import delta.games.lotro.character.races.RacesManager;
-import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.treasure.FilteredTrophyTable;
 import delta.games.lotro.common.treasure.FilteredTrophyTableEntry;
 import delta.games.lotro.common.treasure.ItemsTable;
@@ -31,7 +26,6 @@ import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.items.Item;
@@ -39,6 +33,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.requirements.LootFilterLoader;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -52,6 +47,7 @@ public class LootLoader
   private DataFacade _facade;
   private LootProbabilities _probabilities;
   private LootsManager _lootsMgr;
+  private LootFilterLoader _filterLoader;
 
   /**
    * Constructor.
@@ -63,6 +59,7 @@ public class LootLoader
     _facade=facade;
     _probabilities=new LootProbabilities(facade);
     _lootsMgr=lootsMgr;
+    _filterLoader=new LootFilterLoader();
   }
 
   /**
@@ -156,89 +153,10 @@ public class LootLoader
         {
           LOGGER.debug("Table ID="+id+" => "+itemProps.dump());
         }
-        loadFilterData(id,filter,entry.getUsageRequirement());
+        _filterLoader.loadFilterData(filter,entry.getUsageRequirement());
       }
     }
     return ret;
-  }
-
-  private void loadFilterData(int tableID, ArrayPropertyValue filterArray, UsageRequirement requirements)
-  {
-    for(PropertyValue filterEntry : filterArray.getValues())
-    {
-      String propertyName=filterEntry.getDefinition().getName();
-      if ("EntityFilter_PropertyRange".equals(propertyName))
-      {
-        // Level filter
-        PropertiesSet levelProps=(PropertiesSet)filterEntry.getValue();
-        loadLevelFilter(levelProps,requirements);
-      }
-      else if ("EntityFilter_PropertySet".equals(propertyName))
-      {
-        ArrayPropertyValue propertyArray=(ArrayPropertyValue)filterEntry;
-        for(PropertyValue propertySet : propertyArray.getValues())
-        {
-          handlePropertySet(propertySet,requirements);
-        }
-      }
-      else
-      {
-        LOGGER.warn("Unmanaged property: "+propertyName);
-      }
-    }
-  }
-
-  private void handlePropertySet(PropertyValue propertySet,UsageRequirement requirements)
-  {
-    String propertyName=propertySet.getDefinition().getName();
-    if ("Agent_Class".equals(propertyName))
-    {
-      // Class filter
-      int classCode=((Integer)propertySet.getValue()).intValue();
-      AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
-      if (abstractClass!=null)
-      {
-        requirements.addAllowedClass(abstractClass);
-      }
-    }
-    else if ("Agent_Species".equals(propertyName))
-    {
-      // Race filter
-      int raceCode=((Integer)propertySet.getValue()).intValue();
-      RaceDescription race=RacesManager.getInstance().getByCode(raceCode);
-      if (race!=null)
-      {
-        requirements.addAllowedRace(race);
-      }
-    }
-    else
-    {
-      LOGGER.warn("Unmanaged property name: "+propertyName);
-      // TODO: ze_skirmish_difficulty
-    }
-  }
-
-  private void loadLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
-  {
-    /*
-    EntityFilter_PropertyRange_Max:
-      #1: 39
-    EntityFilter_PropertyRange_Min:
-      #1: 30
-     */
-    Object[] minArray=(Object[])levelProps.getProperty("EntityFilter_PropertyRange_Min");
-    Object[] maxArray=(Object[])levelProps.getProperty("EntityFilter_PropertyRange_Max");
-    if ((minArray!=null) && (maxArray!=null))
-    {
-      int nbRanges=Math.min(minArray.length,maxArray.length);
-      for(int i=0;i<nbRanges;i++)
-      {
-        int min=((Integer)minArray[i]).intValue();
-        requirements.setMinLevel(Integer.valueOf(min));
-        int max=((Integer)maxArray[i]).intValue();
-        requirements.setMaxLevel(Integer.valueOf(max));
-      }
-    }
   }
 
   /**

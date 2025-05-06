@@ -121,7 +121,12 @@ public class WorldEventConditionsLoader
     return null;
   }
 
-  private SimpleWorldEventCondition handleWorldEventCondition(PropertiesSet props)
+  /**
+   * Parse a simple world event condition from some properties.
+   * @param props Input properties.
+   * @return A world event condition or <code>null</code>.
+   */
+  public SimpleWorldEventCondition handleWorldEventCondition(PropertiesSet props)
   {
     SimpleWorldEventCondition ret=null;
     int operatorCode=((Integer)props.getProperty("WorldEvent_Operator")).intValue();
