@@ -92,7 +92,7 @@ public class MainDatLegendarySystemLoader
        */
       int qualityCode=((Integer)itemInfoProps.getProperty("ItemAdvancement_Quality")).intValue();
       ItemQuality quality=DatEnumsUtils.getQuality(qualityCode);
-      LOGGER.debug("Quality: "+quality);
+      LOGGER.debug("Quality: {}",quality);
       QualityBasedData qualityData=_data.getQualityData(quality,true);
       // - item level info
       int itemLevelInfoId=((Integer)itemInfoProps.getProperty("ItemAdvancement_ItemLevelInfo")).intValue();
@@ -103,7 +103,10 @@ public class MainDatLegendarySystemLoader
       // - level table
       int levelTableId=((Integer)itemInfoProps.getProperty("ItemAdvancement_LevelTable")).intValue();
       int[] xpTable=handleLevelTable(levelTableId);
-      LOGGER.debug("\tFound XP table: "+Arrays.toString(xpTable));
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\tFound XP table: {}",Arrays.toString(xpTable));
+      }
       qualityData.setXpTable(xpTable);
     }
   }
@@ -149,11 +152,14 @@ public class MainDatLegendarySystemLoader
       int slotBits=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_Slot")).intValue();
       BitSet slotsSet=BitSetUtils.getBitSetFromFlags(slotBits);
       String slots=BitSetUtils.getStringFromBitSet(slotsSet,_slotMapper,",");
-      LOGGER.debug("\t\tSlots: "+slots);
+      LOGGER.debug("\t\tSlots: {}",slots);
       // Legendary points table
       int legendaryPointsTableId=((Integer)legendaryPointSlotInfoProps.getProperty("ItemAdvancement_LegendaryPointsTable")).intValue();
       int[] pointsByLevel=getPointsByLevel(legendaryPointsTableId);
-      LOGGER.debug("\t\tPoints by level: "+Arrays.toString(pointsByLevel));
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\t\tPoints by level: {}",Arrays.toString(pointsByLevel));
+      }
       EquipmentLocation slot=DatEnumsUtils.getSlot(slotBits);
       qualityData.setPointsTable(slot,pointsByLevel);
     }
@@ -162,13 +168,8 @@ public class MainDatLegendarySystemLoader
   private int[] getPointsByLevel(int legendaryPointsTableId)
   {
     // See: https://lotro-wiki.com/index.php/Legendary_Items for confirmation
-    // The wstate below contains the 'increase of legacy points' for each level, for 3rd age items
-    //PropertiesSet legendaryPointsTableProps=showProperties(_facade,legendaryPointsTableId+OFFSET); // Nothing!
+    // The wstate below contains the 'increase of legacy points' for each level, for 3rd age items Nothing in the properties.
     WStateDataSet data=_facade.loadWState(legendaryPointsTableId);
-    //WStateLoader.showDecodedData(data);
-    //Number of read classes: 2
-    //#0: Buffer of size: 4
-    //#1: {1=0, 2=10, 3=10, 4=10, 5=10, 6=10, 7=10, 8=10, 9=10, 10=10, 11=12, 12=12, 13=12, 14=12, 15=12, 17=12, 16=12, 19=12, 18=12, 21=14, 20=12, 23=14, 22=14, 25=14, 24=14, 27=14, 26=14, 29=14, 28=14, 31=8, 30=14, 34=8, 35=8, 32=8, 33=8, 38=8, 39=8, 36=8, 37=8, 42=8, 43=8, 40=8, 41=8, 46=8, 47=8, 44=8, 45=8, 51=8, 50=8, 49=8, 48=8, 55=8, 54=8, 53=8, 52=8, 59=8, 58=8, 57=8, 56=8, 63=8, 62=8, 61=8, 60=8, 68=8, 69=8, 70=8, 64=8, 65=8, 66=8, 67=8}
     int[] ret=new int[LegendaryConstants.MAX_LEVEL+1];
     @SuppressWarnings("unchecked")
     Map<Integer,Long> pointsMap=(Map<Integer,Long>)data.getValue(1);

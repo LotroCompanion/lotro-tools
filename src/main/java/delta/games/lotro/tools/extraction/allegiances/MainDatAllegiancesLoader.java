@@ -129,15 +129,15 @@ public class MainDatAllegiancesLoader
     Object[] allegianceIds=(Object[])props.getProperty("Allegiance_Type_Array");
     for(Object allegianceIdObj : allegianceIds)
     {
-      int allegianceId=((Integer)allegianceIdObj).intValue();
-      AllegianceDescription allegiance=load(allegianceId);
+      Integer allegianceId=(Integer)allegianceIdObj;
+      AllegianceDescription allegiance=load(allegianceId.intValue());
       if (allegiance!=null)
       {
         mgr.addAllegiance(allegiance);
       }
       else
       {
-        LOGGER.warn("Could not handle allegiance ID="+allegianceId);
+        LOGGER.warn("Could not handle allegiance ID={}",allegianceId);
       }
     }
     // Load curves
@@ -164,7 +164,7 @@ public class MainDatAllegiancesLoader
     boolean ok=AllegianceXMLWriter.writeAllegiancesFile(GeneratedFiles.ALLEGIANCES,mgr);
     if (ok)
     {
-      LOGGER.info("Wrote allegiances file: "+GeneratedFiles.ALLEGIANCES);
+      LOGGER.info("Wrote allegiances file: {}",GeneratedFiles.ALLEGIANCES);
     }
     _i18n.save();
   }

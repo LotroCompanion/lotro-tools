@@ -52,7 +52,7 @@ public class DatEffectUtils
     }
     else
     {
-      LOGGER.warn("Passive not found: "+effectId);
+      LOGGER.warn("Passive not found: {}",Integer.valueOf(effectId));
     }
     return ret;
   }

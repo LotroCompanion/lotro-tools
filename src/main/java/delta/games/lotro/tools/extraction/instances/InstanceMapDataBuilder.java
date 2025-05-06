@@ -62,12 +62,13 @@ public class InstanceMapDataBuilder
     List<Marker> markers=_finder.findMarkersForContentLayer(contentLayerId);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("PE: "+privateEncounter.getName());
-      LOGGER.debug("\tFound "+markers.size()+" markers.");
-      LOGGER.debug("Blocks: "+blocks);
+      LOGGER.debug("PE: {}",privateEncounter.getName());
+      int nbMarkers=markers.size();
+      LOGGER.debug("\tFound {} markers.",Integer.valueOf(nbMarkers));
+      LOGGER.debug("Blocks: {}",blocks);
       for(Marker marker : markers)
       {
-        LOGGER.debug(marker+" => "+getBlock(marker));
+        LOGGER.debug("{} => {}",marker,getBlock(marker));
       }
     }
     List<Integer> additionalContentLayers=privateEncounter.getAdditionalContentLayers();
@@ -82,7 +83,8 @@ public class InstanceMapDataBuilder
     Map<Integer,List<Marker>> sortedMarkers=sortMarkersByZone(markers);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("\tFound "+sortedMarkers.size()+" zones.");
+      int nbZones=sortedMarkers.size();
+      LOGGER.debug("\tFound {} zones.",Integer.valueOf(nbZones));
     }
     List<Integer> dungeonsIds=findDungeons(sortedMarkers.keySet());
     for(Integer dungeonId : dungeonsIds)
@@ -143,7 +145,7 @@ public class InstanceMapDataBuilder
       }
       else
       {
-        LOGGER.warn("Bounding box is null. Group="+group);
+        LOGGER.warn("Bounding box is null. Group={}",group);
       }
     }
     // Fixes
@@ -151,7 +153,7 @@ public class InstanceMapDataBuilder
     if (LOGGER.isDebugEnabled())
     {
       int nbMaps=privateEncounter.getMapDescriptions().size();
-      LOGGER.debug("Found "+nbMaps+" map(s) for "+privateEncounter);
+      LOGGER.debug("Found {} map(s) for {}",Integer.valueOf(nbMaps),privateEncounter);
     }
   }
 

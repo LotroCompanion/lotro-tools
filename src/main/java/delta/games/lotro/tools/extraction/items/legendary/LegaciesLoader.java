@@ -149,9 +149,10 @@ public class LegaciesLoader
     int iconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_Icon")).intValue();
     ret.setIconId(iconId);
     loadIcon(iconId);
-    //int smallIconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
-    //int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
-    //System.out.println("Level table: "+levelTable);
+    @SuppressWarnings("unused")
+    int smallIconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
+    @SuppressWarnings("unused")
+    int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
 
     PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
     if (mutationProps!=null)
@@ -165,7 +166,7 @@ public class LegaciesLoader
         StatDescription oldStat=stats.getByKey(propDef.getName());
         if (oldStat!=null)
         {
-          LOGGER.debug("Old stat: "+oldStat.getName());
+          LOGGER.debug("Old stat: {}",oldStat.getName());
           TieredNonImbuedLegacy oldLegacy=_nonImbuedLegaciesManager.getLegacy(oldStat);
           if (oldLegacy!=null)
           {
@@ -175,14 +176,14 @@ public class LegaciesLoader
           }
           else
           {
-            LOGGER.warn("Old legacy not found for stat: "+oldStat.getName());
+            LOGGER.warn("Old legacy not found for stat: {}",oldStat.getName());
           }
         }
       }
     }
     else
     {
-      LOGGER.debug("No mutation data for: "+ret);
+      LOGGER.debug("No mutation data for: {}",ret);
     }
     return ret;
   }
@@ -266,11 +267,11 @@ public class LegaciesLoader
     List<ImbuedLegacy> legacies=legaciesMgr.getAll();
     Collections.sort(legacies,new IdentifiableComparator<ImbuedLegacy>());
     int nbLegacies=legacies.size();
-    LOGGER.info("Writing "+nbLegacies+" legacies");
+    LOGGER.info("Writing {} legacies",Integer.valueOf(nbLegacies));
     boolean ok=LegacyXMLWriter.write(GeneratedFiles.LEGACIES,legacies);
     if (ok)
     {
-      LOGGER.info("Wrote legacies file: "+GeneratedFiles.LEGACIES);
+      LOGGER.info("Wrote legacies file: {}",GeneratedFiles.LEGACIES);
     }
   }
 
@@ -283,11 +284,11 @@ public class LegaciesLoader
     all.addAll(tieredLegacies);
 
     int nbLegacies=all.size();
-    LOGGER.info("Writing "+nbLegacies+" legacies");
+    LOGGER.info("Writing {} non-imbued legacies",Integer.valueOf(nbLegacies));
     boolean ok=LegacyXMLWriter.write(GeneratedFiles.NON_IMBUED_LEGACIES,all);
     if (ok)
     {
-      LOGGER.info("Wrote non-imbued legacies file: "+GeneratedFiles.NON_IMBUED_LEGACIES);
+      LOGGER.info("Wrote non-imbued legacies file: {}",GeneratedFiles.NON_IMBUED_LEGACIES);
     }
   }
 
@@ -337,7 +338,7 @@ public class LegaciesLoader
 
   private void handleReforgeGroup(ClassDescription characterClass, EquipmentLocation slot, int reforgeGroupId)
   {
-    LOGGER.debug("Handle reforge group "+reforgeGroupId+" for class "+characterClass+", slot="+slot);
+    LOGGER.debug("Handle reforge group {} for class {}, slot={}",Integer.valueOf(reforgeGroupId),characterClass,slot);
     PropertiesSet props=_facade.loadProperties(reforgeGroupId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] progressionLists=(Object[])props.getProperty("ItemAdvancement_ProgressionListArray");
     int index=0;
@@ -372,13 +373,11 @@ public class LegaciesLoader
           legacyTier=buildTieredLegacy(effectId.intValue(),major);
           _loadedEffects.put(effectId,legacyTier);
         }
-        TieredNonImbuedLegacy legacy=legacyTier.getParentLegacy();
-        StatDescription stat=legacy.getStat();
-        if (_nonImbuedLegaciesManager.getLegacy(stat)==null)
+        if (legacyTier!=null)
         {
-          _nonImbuedLegaciesManager.addTieredLegacy(legacy);
+          TieredNonImbuedLegacy legacy=legacyTier.getParentLegacy();
+          _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
         }
-        _nonImbuedLegaciesManager.registerLegacyUsage(legacy,characterClass,slot);
       }
       index++;
     }
@@ -408,6 +407,7 @@ public class LegaciesLoader
       {
         legacy.setType(LegacyType.CLASS);
       }
+      _nonImbuedLegaciesManager.addTieredLegacy(legacy);
     }
     StatProvider statProvider=statsProvider.getFirstStatProvider();
     if (statProvider!=null)
@@ -425,10 +425,10 @@ public class LegaciesLoader
       // Start level
       Integer startLevel=_progressionControl.getStartingLevel(typeCode);
       legacyTier.setStartRank(startLevel);
-      LOGGER.debug("Start level for "+stat+": "+startLevel);
+      LOGGER.debug("Start level for {}: {}",stat,startLevel);
       // Multiplier
       Float multiplier=_progressionControl.getMultiplier(typeCode);
-      LOGGER.debug("Multiplier for "+stat.getName()+" @tier"+tier+": "+multiplier);
+      LOGGER.debug("Multiplier for {} @tier{}: {}",stat.getName(),Integer.valueOf(tier),multiplier);
     }
     else
     {
@@ -610,7 +610,7 @@ public class LegaciesLoader
       // Build a DPS legacy using the effect identifier as legacy identifier
       legacy=new DefaultNonImbuedLegacy();
       legacy.setType(LegacyType.DPS);
-      legacy.setEffectID(dpsLutId); // TODO : this is not a true effect ID!!
+      legacy.setEffectID(dpsLutId); // Note: this is not a true effect ID!!
       StatsProvider stats=loadDpsLut(dpsLutId);
       legacy.setStatsProvider(stats);
       legacy.setIconId(1091968768);
@@ -645,7 +645,7 @@ public class LegaciesLoader
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
       if (!ok)
       {
-        LOGGER.warn("Could not build legacy icon: "+iconFilename);
+        LOGGER.warn("Could not build legacy icon: {}",iconFilename);
       }
     }
   }

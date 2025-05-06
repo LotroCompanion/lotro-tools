@@ -71,10 +71,7 @@ public class ActionTablesLoader
   {
     for(MobDescription mob : MobsManager.getInstance().getMobs())
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Loading actions tables for mob: "+mob);
-      }
+      LOGGER.debug("Loading actions tables for mob: {}",mob);
       int mobID=mob.getIdentifier();
       PropertiesSet props=_facade.loadProperties(mobID+DATConstants.DBPROPERTIES_OFFSET);
       loadActionTables(props);
@@ -114,7 +111,7 @@ public class ActionTablesLoader
       }
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\tTable ID: "+tableID);
+        LOGGER.debug("\tTable ID: {}",Integer.valueOf(tableID));
       }
       ActionTable table=getTable(tableID);
       if (table!=null)
@@ -157,7 +154,7 @@ public class ActionTablesLoader
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Loading Table ID: "+tableID);
+      LOGGER.debug("Loading Table ID: {}",Integer.valueOf(tableID));
     }
     ActionTable ret=new ActionTable(tableID);
     int index=0;
@@ -202,14 +199,14 @@ public class ActionTablesLoader
       entry.setTargetDisallowedHints(targetDisallowedHints);
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("Entry #"+index);
-        LOGGER.debug("\tProbability: "+probability);
-        LOGGER.debug("\tCooldown: "+cooldown);
-        LOGGER.debug("\tRequired Hints: "+requiredHints);
-        LOGGER.debug("\tDisallowed Hints: "+disallowedHints);
-        LOGGER.debug("\tTarget cooldown: "+targetCooldown);
-        LOGGER.debug("\tTarget required hints: "+targetRequiredHints);
-        LOGGER.debug("\tTarget disallowed hints: "+targetDisallowedHints);
+        LOGGER.debug("Entry #{}",Integer.valueOf(index));
+        LOGGER.debug("\tProbability: {}",probability);
+        LOGGER.debug("\tCooldown: {}",cooldown);
+        LOGGER.debug("\tRequired Hints: {}",requiredHints);
+        LOGGER.debug("\tDisallowed Hints: {}",disallowedHints);
+        LOGGER.debug("\tTarget cooldown: {}",targetCooldown);
+        LOGGER.debug("\tTarget required hints: {}",targetRequiredHints);
+        LOGGER.debug("\tTarget disallowed hints: {}",targetDisallowedHints);
       }
       // Action Chain
       loadActionChain(entryProps,entry);
@@ -233,7 +230,7 @@ public class ActionTablesLoader
       actionEntry.setRecovery(recovery);
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\t\tSkill: "+skill+" => "+recovery);
+        LOGGER.debug("\t\tSkill: {} => {}",skill,recovery);
       }
       entry.addAction(actionEntry);
     }

@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.checks.sets;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import delta.games.lotro.lore.items.sets.ItemsSet.SetType;
  */
 public class MainCheckItemSets
 {
+  private PrintStream _out=System.out; // NOSONAR
+
   private void doIt()
   {
     displaySets();
@@ -37,7 +40,7 @@ public class MainCheckItemSets
 
   void checkItemsThatBelongToSeveralSets()
   {
-    System.out.println("Check for items that belong to several sets:");
+    _out.println("Check for items that belong to several sets:");
     // Gather data
     Map<Integer,List<ItemsSet>> mapByItemId=new HashMap<Integer,List<ItemsSet>>();
     ItemsSetsManager mgr=ItemsSetsManager.getInstance();
@@ -60,10 +63,10 @@ public class MainCheckItemSets
       {
         int itemId=entry.getKey().intValue();
         Item item=ItemsManager.getInstance().getItem(itemId);
-        System.out.println("Item: "+item+" is found in severals sets:");
+        _out.println("Item: "+item+" is found in severals sets:");
         for(ItemsSet set : sets)
         {
-          System.out.println("\t"+set.getIdentifier()+" - "+set.getName());
+          _out.println("\t"+set.getIdentifier()+" - "+set.getName());
         }
       }
     }
@@ -87,7 +90,7 @@ public class MainCheckItemSets
 
   void displaySets()
   {
-    System.out.println("Sets:");
+    _out.println("Sets:");
     // Gather data
     ItemsSetsManager mgr=ItemsSetsManager.getInstance();
     List<ItemsSet> itemsSets=mgr.getAll();
@@ -110,46 +113,46 @@ public class MainCheckItemSets
 
   void displayItemLevelSet(ItemsSet itemsSet)
   {
-    System.out.println("Items set: "+itemsSet.getName());
+    _out.println("Items set: "+itemsSet.getName());
     int level=itemsSet.getSetLevel();
-    System.out.println("\tSet level="+level);
+    _out.println("\tSet level="+level);
     List<Item> members=itemsSet.getMembers();
-    System.out.println("\tMembers:");
+    _out.println("\tMembers:");
     for(Item member : members)
     {
       Munging munging=member.getMunging();
-      System.out.println("\t\t"+member+" => "+munging);
+      _out.println("\t\t"+member+" => "+munging);
     }
     if (ItemsSetsUtils.hasMultipleItemLevels(itemsSet))
     {
       Range itemLevelRange=ItemsSetsUtils.findItemLevelRange(itemsSet);
-      System.out.println("Range: "+itemLevelRange);
+      _out.println("Range: "+itemLevelRange);
     }
     for(SetBonus bonusSet : itemsSet.getBonuses())
     {
       // Count
       int count=bonusSet.getPiecesCount();
-      System.out.println("\tCount="+count);
+      _out.println("\tCount="+count);
       // Stats provider
       StatsProvider statsProvider=bonusSet.getStatsProvider();
       int nbEntries=statsProvider.getEntriesCount();
       for(int i=0;i<nbEntries;i++)
       {
         StatsProviderEntry entry=statsProvider.getEntry(i);
-        System.out.println("\t\t"+entry);
+        _out.println("\t\t"+entry);
       }
       // Stats
       List<String> lines=StatUtils.getFullStatsForDisplay(statsProvider,level);
       for(String line : lines)
       {
-        System.out.println("\t\t"+line);
+        _out.println("\t\t"+line);
       }
     }
   }
 
   void checkItemsInSetAreUnique()
   {
-    System.out.println("Check unicity of items:");
+    _out.println("Check unicity of items:");
     // Gather data
     ItemsSetsManager mgr=ItemsSetsManager.getInstance();
     List<ItemsSet> itemsSets=mgr.getAll();
@@ -169,7 +172,7 @@ public class MainCheckItemSets
           boolean isUnique=member.isUnique();
           if (!isUnique)
           {
-            System.out.println("Set "+itemsSet.getIdentifier()+" - "+itemsSet.getName()+": "+member+" is not unique");
+            _out.println("Set "+itemsSet.getIdentifier()+" - "+itemsSet.getName()+": "+member+" is not unique");
           }
         }
       }

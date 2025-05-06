@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -25,6 +28,8 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
  */
 public class PassivesLoader
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(PassivesLoader.class);
+
   private DataFacade _facade;
   private I18nUtils _i18n;
   private DatStatUtils _statUtils;
@@ -58,7 +63,7 @@ public class PassivesLoader
       group=new PassivesGroup();
       _loadedGroups.put(Integer.valueOf(staticEffectGroupId),group);
 
-      //System.out.println("Handle table: "+id);
+      LOGGER.debug("Handle passives table: {}",tableKey);
       PropertiesSet tableProps=_facade.loadProperties(staticEffectGroupId+DATConstants.DBPROPERTIES_OFFSET);
       Object[] listsArray=(Object[])tableProps.getProperty("ItemAdvancement_ProgressionListArray");
       for(Object listObj : listsArray)
@@ -73,7 +78,7 @@ public class PassivesLoader
 
   private void handleList(int staticEffectGroupId, int effectsListId)
   {
-    //System.out.println("Handle list: "+effectsListId);
+    LOGGER.debug("Handle passives list: {}",Integer.valueOf(effectsListId));
     PropertiesSet effectsProps=_facade.loadProperties(effectsListId+DATConstants.DBPROPERTIES_OFFSET);
     Object[] effectsListArray=(Object[])effectsProps.getProperty("ItemAdvancement_Effect_Array");
     for(Object effectObj : effectsListArray)
@@ -87,7 +92,7 @@ public class PassivesLoader
         {
           passive=DatEffectUtils.loadPassive(_statUtils,effectId.intValue());
           _parsedPassives.put(effectId,passive);
-          //System.out.println("\tLoaded effect: "+effect);
+          LOGGER.debug("\tLoaded effect: {}",passive);
         }
         PassivesGroup group=_loadedGroups.get(Integer.valueOf(staticEffectGroupId));
         group.addPassive(effectId.intValue());

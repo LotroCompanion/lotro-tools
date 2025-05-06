@@ -90,7 +90,7 @@ public class MainDatCollectionsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle collection ID="+collectionId);
+      LOGGER.warn("Could not handle collection ID={}",Integer.valueOf(collectionId));
     }
     return ret;
   }
@@ -108,7 +108,7 @@ public class MainDatCollectionsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle collection item ID="+collectionItemId);
+      LOGGER.warn("Could not handle collection item ID={}",Integer.valueOf(collectionItemId));
     }
     return ret;
   }
@@ -130,7 +130,7 @@ public class MainDatCollectionsLoader
         collections.add(collection);
       }
     }
-    LOGGER.info("Loaded "+collections.size()+" collections.");
+    LOGGER.info("Loaded {} collections.",Integer.valueOf(collections.size()));
     // Save
     // - data
     saveCollections(collections);
@@ -148,7 +148,7 @@ public class MainDatCollectionsLoader
     boolean ok=CollectionsXMLWriter.write(GeneratedFiles.COLLECTIONS,collections);
     if (ok)
     {
-      LOGGER.info("Wrote collections file: "+GeneratedFiles.COLLECTIONS);
+      LOGGER.info("Wrote collections file: {}",GeneratedFiles.COLLECTIONS);
     }
   }
 
