@@ -133,6 +133,8 @@ public class MainGeoDataInjector
       String positionLabel=position.asLatLon();
       LOGGER.debug("\t\t\t{}, key1={}, key2={}, position={}",dataId,key1,key2,positionLabel);
     }
+    // Key1 seems to be the key used in QuestEvent_RoleConstraint of conditions (e.g ItemUsed)
+    // Key2 seems to identify the points done/not done (see m_rRuntimeStringList in class DynamicQuestEvent)
     String key=null;
     if (!key1.isEmpty())
     {
