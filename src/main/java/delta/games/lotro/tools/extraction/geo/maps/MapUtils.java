@@ -57,7 +57,7 @@ public class MapUtils
     }
     else
     {
-      LOGGER.warn("No block data for: "+context+"!");
+      LOGGER.warn("No block data for: {}!",context);
       return null;
     }
     // Pixel
@@ -71,7 +71,7 @@ public class MapUtils
     }
     else
     {
-      LOGGER.warn("No pixel data for: "+context+"!");
+      LOGGER.warn("No pixel data for: {}!",context);
       return null;
     }
 

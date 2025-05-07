@@ -155,7 +155,7 @@ public class VirtueDataLoader
       Progression charLevelToMaxRankProg=ProgressionUtils.getProgression(facade,charLevelToMaxRankProgId.intValue());
       if (charLevelToMaxRankProg==null)
       {
-        LOGGER.warn("Could not find progression char level->max rank for virtue: "+traitName);
+        LOGGER.warn("Could not find progression char level->max rank for virtue: {}",traitName);
       }
       ret.setMaxRankForCharacterLevelProgression(charLevelToMaxRankProg);
     }
@@ -241,7 +241,7 @@ PropertyProgression_Array:
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconID,to);
       if (!ok)
       {
-        LOGGER.warn("Could not build virtue icon: "+iconFilename);
+        LOGGER.warn("Could not build virtue icon: {}",iconFilename);
       }
     }
   }
@@ -253,12 +253,12 @@ PropertyProgression_Array:
   public static void saveVirtues(List<VirtueDescription> virtues)
   {
     int nbVirtues=virtues.size();
-    LOGGER.info("Writing "+nbVirtues+" virtues");
+    LOGGER.info("Writing {} virtues",Integer.valueOf(nbVirtues));
     // Write virtues file
     boolean ok=VirtueDescriptionXMLWriter.write(GeneratedFiles.VIRTUES,virtues);
     if (ok)
     {
-      LOGGER.info("Wrote virtues file: "+GeneratedFiles.VIRTUES);
+      LOGGER.info("Wrote virtues file: {}",GeneratedFiles.VIRTUES);
     }
   }
 

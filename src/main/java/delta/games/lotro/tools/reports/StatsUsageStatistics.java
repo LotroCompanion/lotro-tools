@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.utils.io.Console;
 import delta.common.utils.misc.IntegerHolder;
 import delta.games.lotro.common.stats.StatDescription;
 
@@ -84,7 +85,7 @@ public class StatsUsageStatistics
     for(StatDescription stat : stats)
     {
       IntegerHolder counter=_data.get(stat);
-      System.out.println(stat.getPersistenceKey()+"\t"+stat.getName()+"\t"+counter);
+      Console.println(stat.getPersistenceKey()+"\t"+stat.getName()+"\t"+counter);
     }
   }
 }

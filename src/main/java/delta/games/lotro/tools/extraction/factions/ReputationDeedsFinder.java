@@ -77,11 +77,11 @@ public class ReputationDeedsFinder
     if (oldDeed==null)
     {
       deedsMap.put(tierKey,deed);
-      LOGGER.debug("Found deed: "+deed+" for faction id="+factionId+", tier="+tier);
+      LOGGER.debug("Found deed: {} for faction id={}, tier={}",deed,factionKey,tierKey);
     }
     else
     {
-      LOGGER.warn("Duplicate deed for faction: "+factionId+", tier: "+tier+": old="+oldDeed.getName()+", new="+deed.getName());
+      LOGGER.warn("Duplicate deed for faction: {}, tier: {}: old={}, new={}",factionKey,tierKey,oldDeed.getName(),deed.getName());
     }
   }
 

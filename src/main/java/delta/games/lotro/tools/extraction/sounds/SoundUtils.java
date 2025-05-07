@@ -103,10 +103,10 @@ public class SoundUtils
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Format: "+format.getFormat());
-      LOGGER.debug("Byte length: "+format.getByteLength());
-      LOGGER.debug("Frame length: "+format.getFrameLength());
-      LOGGER.debug("Properties: "+format.properties());
+      LOGGER.debug("Format: {}",format.getFormat());
+      LOGGER.debug("Byte length: {}",Integer.valueOf(format.getByteLength()));
+      LOGGER.debug("Frame length: {}",Integer.valueOf(format.getFrameLength()));
+      LOGGER.debug("Properties: {}",format.properties());
     }
   }
 

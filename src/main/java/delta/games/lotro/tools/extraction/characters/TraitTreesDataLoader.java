@@ -58,10 +58,7 @@ public class TraitTreesDataLoader
     {
       PropertiesSet branchDescriptionProps=(PropertiesSet)branchDescriptionObj;
       int branchId=((Integer)branchDescriptionProps.getProperty("Trait_TraitTree_Branch")).intValue();
-      String branchName=_traitTreeBranch.getString(branchId);
-      System.out.println("Branch name: "+branchName);
       String branchDescription=DatUtils.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
-      System.out.println("Branch description: "+branchDescription);
     }
     */
     int traitTreeTypeCode=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
@@ -69,7 +66,7 @@ public class TraitTreesDataLoader
     LotroEnum<TraitTreeType> traitTreeTypeEnum=registry.get(TraitTreeType.class);
     TraitTreeType traiTreeType=traitTreeTypeEnum.getEntry(traitTreeTypeCode);
     TraitTree tree=new TraitTree(traitTreeId,traiTreeType);
-    LOGGER.info("Loading trait tree with type: "+traiTreeType);
+    LOGGER.info("Loading trait tree with type: {}",traiTreeType);
     Map<Integer,TraitTreeBranch> branchesById=new HashMap<Integer,TraitTreeBranch>();
     // Specializations
     LotroEnum<TraitTreeBranchType> traitTreeBranchTypeEnum=registry.get(TraitTreeBranchType.class);

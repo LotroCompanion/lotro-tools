@@ -137,12 +137,12 @@ public class RequirementsLoadingUtils
         }
         else
         {
-          LOGGER.warn("Faction not found: "+factionId);
+          LOGGER.warn("Faction not found: {}",factionId);
         }
       }
       else
       {
-        LOGGER.debug("Incomplete faction requirement: factionId="+factionId+", tier="+tier);
+        LOGGER.debug("Incomplete faction requirement: factionId={}, tier={}",factionId,tier);
       }
     }
   }
@@ -181,7 +181,7 @@ public class RequirementsLoadingUtils
       }
       else
       {
-        LOGGER.warn("Profession not found: "+professionId);
+        LOGGER.warn("Profession not found: {}",professionId);
       }
     }
   }

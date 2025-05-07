@@ -25,7 +25,7 @@ public class StatMappings
   {
     _stats=stats;
     boolean live=Context.isLive();
-    //registerMapping("Combat_Agent_Armor_Value_Float","ARMOUR");
+    // !! Combat_Agent_Armor_Value_Float is not ARMOUR !!
     registerMapping("Health_MaxLevel","MORALE");
     registerMapping("Power_MaxLevel","POWER");
     registerMapping("Stat_Might","MIGHT");
@@ -108,8 +108,6 @@ public class StatMappings
     registerMapping("Combat_MitigationPercentage_OrcCraft","OCFW_MITIGATION_PERCENTAGE");
     registerMapping("Combat_PhysicalMastery_Modifier_Unified","PHYSICAL_MASTERY");
     registerMapping("Combat_TacticalMastery_Modifier_Unified","TACTICAL_MASTERY");
-    //registerMapping("Combat_Class_PhysicalMastery_Unified","PHYSICAL_MASTERY");
-    //registerMapping("Combat_Class_TacticalMastery_Unified","TACTICAL_MASTERY");
     registerMapping("Stealth_StealthLevelModifier","STEALTH_LEVEL");
     registerMapping("Craft_Weaponsmith_CriticalChanceAddModifier","WEAPONSMITH_CRIT_CHANCE_PERCENTAGE");
     registerMapping("Craft_Metalsmith_CriticalChanceAddModifier","METALSMITH_CRIT_CHANCE_PERCENTAGE");
@@ -147,7 +145,7 @@ public class StatMappings
     StatDescription oldStat=_stats.getByKey(legacyKey);
     if (oldStat!=null)
     {
-      LOGGER.warn("Legacy key already used: "+legacyKey);
+      LOGGER.warn("Legacy key already used: {}",legacyKey);
       return;
     }
     StatDescription stat=_stats.getByKey(gameKey);
@@ -161,7 +159,7 @@ public class StatMappings
     }
     else
     {
-      LOGGER.warn("Stat not found: "+gameKey);
+      LOGGER.warn("Stat not found: {}",gameKey);
     }
   }
 }

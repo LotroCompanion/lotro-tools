@@ -164,7 +164,7 @@ public class WebStoreItemsLoader
     boolean ok=webStoreItemsWriter.write(webStoreItemsFile,getWebStoreItems(),EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote web store items file: "+GeneratedFiles.WEB_STORE_ITEMS);
+      LOGGER.info("Wrote web store items file: {}",GeneratedFiles.WEB_STORE_ITEMS);
     }
     // Labels
     _i18n.save();

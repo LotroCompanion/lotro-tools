@@ -76,7 +76,6 @@ public class SoundsRegistry
     if (soundChannel==7) return SoundType.AMBIENT;
     if (soundChannel==8) return SoundType.SFX;
     // 0: default
-    //LOGGER.warn("Unmanaged sound channel: "+soundChannel);
     return null;
   }
 }

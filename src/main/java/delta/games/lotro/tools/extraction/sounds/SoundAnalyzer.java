@@ -40,14 +40,14 @@ public class SoundAnalyzer
     byte[] data=_facade.loadData(soundInfoID);
     if (data==null)
     {
-      LOGGER.warn("Could not load sound ID="+soundInfoID);
+      LOGGER.warn("Could not load sound ID={}",Integer.valueOf(soundInfoID));
       return null;
     }
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     SoundInfo soundInfo=SoundInfoLoader.decodeSoundInfo(bis);
     if (soundInfo==null)
     {
-      LOGGER.warn("Could not decode sound ID="+soundInfoID);
+      LOGGER.warn("Could not decode sound ID={}",Integer.valueOf(soundInfoID));
       return null;
     }
     int soundID=soundInfo.getSoundID();
@@ -55,7 +55,7 @@ public class SoundAnalyzer
     DetailedFileEntry entry=_facade.getDetailedEntry(soundID);
     if (entry==null)
     {
-      LOGGER.warn("Could not load raw sound for sound ID="+soundInfoID);
+      LOGGER.warn("Could not load raw sound for sound ID={}",Integer.valueOf(soundInfoID));
       return null;
     }
     byte[] soundData=entry.getData();

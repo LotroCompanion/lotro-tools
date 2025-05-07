@@ -93,7 +93,8 @@ public class QuestItemDirectoryLoader
     MobDivision mobDivision=_mobDivision.getEntry(mobDivisionID);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Species="+species+", subSpecies="+subSpecies+", probability="+probability+", item="+item+", division="+mobDivision);
+      LOGGER.debug("Species={}, subSpecies={}, probability={}, item={}, division={}",
+          species,subSpecies,Float.valueOf(probability),item,mobDivision);
     }
   }
 
@@ -127,7 +128,7 @@ public class QuestItemDirectoryLoader
       LandDivision region=getRegion(regionID);
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("Region ID="+regionID+" => "+region);
+        LOGGER.debug("Region ID={} => {}",Integer.valueOf(regionID),region);
       }
       int directoryID=((Integer)entryProps.getProperty("Quest_QuestItemDirectory")).intValue();
       handleQuestItemDirectory(directoryID);

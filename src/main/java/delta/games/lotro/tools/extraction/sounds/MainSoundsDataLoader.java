@@ -58,7 +58,6 @@ public class MainSoundsDataLoader
     }
     SoundsDataAggregator aggregator=inspector.getAggregator();
     SoundContextManager contextMgr=aggregator.getSoundContextManager();
-    //aggregator.dump();
     // Load context data
     handleContextData(contextMgr);
     // Write sounds

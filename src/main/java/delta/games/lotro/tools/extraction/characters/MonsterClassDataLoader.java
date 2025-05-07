@@ -57,7 +57,6 @@ public class MonsterClassDataLoader
   private void handleClass(int classId)
   {
     PropertiesSet properties=_facade.loadProperties(classId+DATConstants.DBPROPERTIES_OFFSET);
-    //System.out.println(properties.dump());
     PropertiesSet classInfo=(PropertiesSet)properties.getProperty("MonsterPlay_MonsterInfo");
     // Code
     int classCode=((Integer)classInfo.getProperty("MonsterPlay_Class")).intValue();
@@ -66,11 +65,11 @@ public class MonsterClassDataLoader
     if (classKey==null)
     {
       String className=DatStringUtils.getStringProperty(classInfo,"MonsterPlay_MonsterName");
-      LOGGER.warn("Unmanaged monster class: "+className);
+      LOGGER.warn("Unmanaged monster class: {}",className);
       return;
     }
     MonsterClassDescription classDescription=new MonsterClassDescription(classId,classCode,classKey);
-    LOGGER.info("Handling class: "+classKey);
+    LOGGER.info("Handling class: {}",classKey);
     // Name
     String className=_i18n.getNameStringProperty(classInfo,"MonsterPlay_MonsterName",classId,0);
     classDescription.setName(className);
@@ -80,11 +79,11 @@ public class MonsterClassDataLoader
     classDescription.setTag(tag);
     // Abbreviation
     String classAbbreviation=DatStringUtils.getStringProperty(classInfo,"MonsterPlay_AbbreviatedMonsterName");
-    LOGGER.debug("Class abbreviation: "+classAbbreviation);
+    LOGGER.debug("Class abbreviation: {}",classAbbreviation);
     classDescription.setAbbreviation(classAbbreviation);
     // Class description
     String description=_i18n.getStringProperty(classInfo,"MonsterPlay_MonsterDesc");
-    LOGGER.debug("Class description: "+description);
+    LOGGER.debug("Class description: {}",description);
     classDescription.setDescription(description);
     // Icons
     // Normal size (48 pixels)
@@ -127,7 +126,7 @@ MonsterPlay_TraitList:
         String key=level+"#"+traitId;
         if (!knownTraits.contains(key))
         {
-          LOGGER.debug("Level: "+level+" (rank="+rank+")");
+          LOGGER.debug("Level: {} (rank={})",Integer.valueOf(level),rank);
           TraitDescription trait=TraitUtils.getTrait(traitId);
           TraitAndLevel classTrait=new TraitAndLevel(level,trait);
           description.addTrait(classTrait);

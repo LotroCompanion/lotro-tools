@@ -18,7 +18,7 @@ public class RewardsMapLoader
   private static final String QUEST_REWARD_EXP_AMOUNT="QuestReward_ExpAmount";
 
   private DataFacade _facade;
-  private int _rewardsMapId;
+  private Integer _rewardsMapId;
 
   /**
    * Constructor.
@@ -36,12 +36,12 @@ public class RewardsMapLoader
    */
   public RewardsMap loadMap(int rewardsMapId)
   {
-    _rewardsMapId=rewardsMapId;
+    _rewardsMapId=Integer.valueOf(rewardsMapId);
     RewardsMap rewardsMap=null;
     PropertiesSet props=_facade.loadProperties(rewardsMapId+DATConstants.DBPROPERTIES_OFFSET);
     if (props!=null)
     {
-      LOGGER.debug("Loading map ID: "+rewardsMapId);
+      LOGGER.debug("Loading map ID: {}",_rewardsMapId);
       rewardsMap=new RewardsMap();
       fill(props,rewardsMap);
     }
@@ -85,11 +85,11 @@ public class RewardsMapLoader
         T value=(T)entryProps.getProperty(entryPropName);
         storage.addEntry(tier.intValue(),value);
       }
-      LOGGER.debug("Loaded list: "+listPropName+": "+storage);
+      LOGGER.debug("Loaded list: {}: {}",listPropName,storage);
     }
     else
     {
-      LOGGER.warn("Failed to load list: "+listPropName+" for rewards map ID="+_rewardsMapId);
+      LOGGER.warn("Failed to load list: {} for rewards map ID={}",listPropName,_rewardsMapId);
     }
   }
 }

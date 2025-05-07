@@ -67,7 +67,7 @@ public class QuestMapNotesLoader
     {
       Console.println("****** Quest map note:");
       _markersUtils.log(position,areaDID,dungeonDID,noteDID,contentLayersArray,null,0);
-      if (questDispenserInfo.getPropertyNames().size()>0)
+      if (!questDispenserInfo.getPropertyNames().isEmpty())
       {
         Console.println("Quest dispenser info: "+questDispenserInfo.dump());
       }
@@ -88,7 +88,7 @@ public class QuestMapNotesLoader
       throw new IllegalArgumentException("Expected DID for quest map notes: "+QUEST_MAP_NOTES_DID);
     }
     int count=BufferUtils.readUInt32(bis);
-    System.out.println("Number of quest map notes: "+count);
+    Console.println("Number of quest map notes: "+count);
     for(int i=0;i<count;i++)
     {
       loadQuestMapNote(bis);

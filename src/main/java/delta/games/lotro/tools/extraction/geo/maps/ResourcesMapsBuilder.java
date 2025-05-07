@@ -83,7 +83,7 @@ public class ResourcesMapsBuilder
     boolean ok=ResourcesMapsXMLWriter.writeResourcesMapsFile(GeneratedFiles.RESOURCES_MAPS,_mapsManager.getResourcesMaps());
     if (ok)
     {
-      LOGGER.info("Wrote resources maps file: "+GeneratedFiles.RESOURCES_MAPS);
+      LOGGER.info("Wrote resources maps file: {}",GeneratedFiles.RESOURCES_MAPS);
     }
   }
 }

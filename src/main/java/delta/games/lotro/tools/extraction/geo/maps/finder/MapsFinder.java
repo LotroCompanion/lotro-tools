@@ -76,7 +76,7 @@ public class MapsFinder
     boolean isInBox=box.isInBox(new GeoPoint(lonLat[0],lonLat[1]));
     if (!isInBox)
     {
-      LOGGER.warn("Point not in map box: "+position+", map="+basemap.getName());
+      LOGGER.warn("Point not in map box: {}, map={}",position,basemap.getName());
       mapId=null;
     }
     return mapId;
@@ -96,12 +96,12 @@ public class MapsFinder
       else
       {
         Area area=GeoAreasManager.getInstance().getAreaById(parentZoneId.intValue());
-        LOGGER.warn("No map for zone: "+parentZoneId+" => "+area);
+        LOGGER.warn("No map for zone: {} => {}",parentZoneId,area);
       }
     }
     else
     {
-      LOGGER.warn("No parent zone ID for "+position);
+      LOGGER.warn("No parent zone ID for {}",position);
     }
     return ret;
   }

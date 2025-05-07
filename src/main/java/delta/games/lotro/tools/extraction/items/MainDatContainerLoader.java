@@ -68,7 +68,7 @@ public class MainDatContainerLoader
     PropertiesSet properties=_facade.loadProperties(itemID+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle container item ID="+itemID);
+      LOGGER.warn("Could not handle container item: {}",item);
       return null;
     }
 
@@ -123,7 +123,7 @@ public class MainDatContainerLoader
     {
       if (ret!=null)
       {
-        LOGGER.warn("Both containers (items+relics) for: "+itemID);
+        LOGGER.warn("Both containers (items+relics) for: {}",item);
       }
       ret=relicsContainer;
     }
@@ -138,7 +138,7 @@ public class MainDatContainerLoader
       Object[] previewList=(Object[])properties.getProperty("PackageItem_PreviewList");
       if ((previewList==null) || (previewList.length==0))
       {
-        LOGGER.warn("No or empty preview list for "+item);
+        LOGGER.warn("No or empty preview list for {}",item);
       }
     }
     int action=((Integer)properties.getProperty("Usage_Action")).intValue();
@@ -164,7 +164,7 @@ public class MainDatContainerLoader
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug(item+"\t"+action+"\t"+weenieType+"\t"+bind2Acc+"\t"+bind2Char+"\t"+previewable+"\t"+playerForMunging);
+      LOGGER.debug("{}\t{}\t{}\t{}\t{}\t{}\t{}",item,Integer.valueOf(action),weenieType,bind2Acc,bind2Char,previewable,playerForMunging);
     }
   }
 
@@ -191,7 +191,7 @@ If PackageItem_IsPreviewable: 1
       {
         Integer previewId=(Integer)previewIdObj;
         Item item=ItemsManager.getInstance().getItem(previewId.intValue());
-        LOGGER.debug("\t"+item);
+        LOGGER.debug("\t{}",item);
       }
     }
   }
@@ -303,7 +303,7 @@ If PackageItem_IsPreviewable: 1
       }
       else
       {
-        LOGGER.warn("Relic not found: "+relicId);
+        LOGGER.warn("Relic not found: {}",relicId);
       }
     }
 

@@ -97,7 +97,7 @@ public class MainHobbiesLoader
       boolean ok=DatIconsUtils.buildImageFile(_facade,iconId,to);
       if (!ok)
       {
-        LOGGER.warn("Could not build hobby icon: "+iconFilename);
+        LOGGER.warn("Could not build hobby icon: {}",iconFilename);
       }
     }
     // Daily proficiency gain limit
@@ -193,12 +193,12 @@ public class MainHobbiesLoader
   private void saveHobbies(List<HobbyDescription> hobbies)
   {
     int nbHobbies=hobbies.size();
-    LOGGER.info("Writing "+nbHobbies+" hobbies");
+    LOGGER.info("Writing {} hobbies",Integer.valueOf(nbHobbies));
     // Write hobbies file
     boolean ok=HobbyDescriptionXMLWriter.write(GeneratedFiles.HOBBIES,hobbies);
     if (ok)
     {
-      LOGGER.info("Wrote hobbies file: "+GeneratedFiles.HOBBIES);
+      LOGGER.info("Wrote hobbies file: {}",GeneratedFiles.HOBBIES);
     }
     // Labels
     _i18n.save();

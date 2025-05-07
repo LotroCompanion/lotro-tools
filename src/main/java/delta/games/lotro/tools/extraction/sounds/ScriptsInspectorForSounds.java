@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.sounds;
 
-import java.io.PrintStream;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -123,24 +122,24 @@ public class ScriptsInspectorForSounds
     _context.pop();
   }
 
-  private void showContext(PrintStream out)
+  private void showContext()
   {
     int nb=getContextPropertiesCount();
     if (nb>0)
     {
-      out.println("With context:");
+      LOGGER.debug("With context:");
       for(List<PropertyValue> values : _context)
       {
-        out.println("#");
+        LOGGER.debug("#");
         for(PropertyValue value : values)
         {
-          out.println("\t"+value);
+          LOGGER.debug("\t{}",value);
         }
       }
     }
     else
     {
-      out.println("No context");
+      LOGGER.debug("No context");
     }
   }
 
@@ -160,15 +159,15 @@ public class ScriptsInspectorForSounds
     if (data!=null)
     {
       PropertiesSet props=data.getProperties();
-      int soundID=((Integer)props.getProperty("SoundScript_SoundID")).intValue();
+      Integer soundID=(Integer)props.getProperty("SoundScript_SoundID");
       int soundChannelID=((Integer)props.getProperty("SoundScript_Channel")).intValue();
       if (LOGGER.isDebugEnabled())
       {
         String soundChannel=_channel.getLabel(soundChannelID);
-        LOGGER.debug("Found sound ID: "+soundID+" ("+soundChannel+")");
-        showContext(System.out);
+        LOGGER.debug("Found sound ID: {} ({})",soundID,soundChannel);
+        showContext();
       }
-      _aggregator.handleSound(soundID,soundChannelID,_context);
+      _aggregator.handleSound(soundID.intValue(),soundChannelID,_context);
     }
   }
 }

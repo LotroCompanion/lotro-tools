@@ -134,6 +134,6 @@ public class SoundsDataAggregator
     IndentableStream out=new IndentableStream(ps);
     int nbSounds=_soundsRegistry.getKnownSounds().size();
     out.println("Nb sounds: "+nbSounds);
-    new SoundContextDump(_facade).dump(_contextManager);
+    new SoundContextDump(_facade).dump(_contextManager,out);
   }
 }

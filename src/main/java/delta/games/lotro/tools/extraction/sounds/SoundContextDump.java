@@ -29,10 +29,10 @@ public class SoundContextDump
   /**
    * Dump the contents of the given context manager.
    * @param contextManager Context manager.
+   * @param out Output stream.
    */
-  public void dump(SoundContextManager contextManager)
+  public void dump(SoundContextManager contextManager, IndentableStream out)
   {
-    IndentableStream out=new IndentableStream(System.out);
     out.println("Sounds sorted by property");
     for(PropertyDefinition propertyDefinition : contextManager.getProperties())
     {

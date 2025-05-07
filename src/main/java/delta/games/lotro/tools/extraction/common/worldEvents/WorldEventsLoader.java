@@ -89,22 +89,22 @@ public class WorldEventsLoader
     String name=propertyDefinition.getName();
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("\tPropertyID="+propertyID+", name: "+name);
+      LOGGER.debug("\tPropertyID={}, name: {}",Integer.valueOf(propertyID),name);
     }
     PropertyType type=propertyDefinition.getPropertyType();
     if (type==PropertyType.INT)
     {
       Integer minValue=(Integer)props.getProperty("WorldEvent_MinIntValue");
-      int maxValue=((Integer)props.getProperty("WorldEvent_MaxIntValue")).intValue();
+      Integer maxValue=(Integer)props.getProperty("WorldEvent_MaxIntValue");
       Integer defaultValue=(Integer)props.getProperty("WorldEvent_DefaultIntValue");
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\tINTEGER Min="+minValue+", Max="+maxValue+", Default="+defaultValue);
+        LOGGER.debug("\tINTEGER Min={}, Max={}, Default={}",minValue,maxValue,defaultValue);
       }
       IntegerWorldEvent integerWE=new IntegerWorldEvent();
       integerWE.setDefaultValue(defaultValue);
       integerWE.setMinValue(minValue);
-      integerWE.setMaxValue(Integer.valueOf(maxValue));
+      integerWE.setMaxValue(maxValue);
       ret=integerWE;
     }
     else if (type==PropertyType.BOOLEAN)
@@ -112,7 +112,7 @@ public class WorldEventsLoader
       Integer defaultValueInt=(Integer)props.getProperty("WorldEvent_DefaultBoolValue");
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\tBOOLEAN Default="+defaultValueInt);
+        LOGGER.debug("\tBOOLEAN Default={}",defaultValueInt);
       }
       AbstractWorldEventCondition condition=_weConditionsLoader.loadWorldEventsConditions(props,"WorldEvent_AllConditionList","WorldEvent_AnyConditionList");
       if (condition!=null)
@@ -135,7 +135,7 @@ public class WorldEventsLoader
     }
     else
     {
-      LOGGER.warn("Unmanaged property type: "+type);
+      LOGGER.warn("Unmanaged property type: {}",type);
       return null;
     }
     ret.setIdentifier(worldEventId);
@@ -166,7 +166,7 @@ public class WorldEventsLoader
     boolean ok=worldEventsWriter.write(worldEventsFile,getWorldEvents(),EncodingNames.UTF_8);
     if (ok)
     {
-      LOGGER.info("Wrote world events file: "+GeneratedFiles.WORLD_EVENTS);
+      LOGGER.info("Wrote world events file: {}",GeneratedFiles.WORLD_EVENTS);
     }
   }
 }

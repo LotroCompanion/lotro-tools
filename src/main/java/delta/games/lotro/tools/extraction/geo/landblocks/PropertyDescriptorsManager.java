@@ -90,7 +90,7 @@ public class PropertyDescriptorsManager
     int available=bis.available();
     if (available>0)
     {
-      LOGGER.warn("Available bytes: "+available);
+      LOGGER.warn("Available bytes: {}",Integer.valueOf(available));
     }
     return ret;
   }

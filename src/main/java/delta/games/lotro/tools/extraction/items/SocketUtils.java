@@ -29,7 +29,7 @@ public class SocketUtils
     List<SocketType> types=socketTypes.getFromBitSet(code);
     if (types.size()!=1)
     {
-      LOGGER.warn("Unsupported socket type code: "+code);
+      LOGGER.warn("Unsupported socket type code: {}",Integer.valueOf(code));
       return null;
     }
     return types.get(0);

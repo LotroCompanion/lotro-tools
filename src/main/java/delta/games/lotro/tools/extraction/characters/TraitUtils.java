@@ -25,7 +25,7 @@ public class TraitUtils
     TraitDescription trait=traitsMgr.getTrait(traitId);
     if (trait==null)
     {
-      LOGGER.warn("Could not find trait ID="+traitId);
+      LOGGER.warn("Could not find trait ID={}",Integer.valueOf(traitId));
     }
     return trait;
   }

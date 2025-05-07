@@ -45,7 +45,7 @@ public class ProgressionFactory
     }
     if (ret==null)
     {
-      LOGGER.warn("Could not build progression with properties: "+properties.dump());
+      LOGGER.warn("Could not build progression with properties: {}",properties);
     }
     return ret;
   }

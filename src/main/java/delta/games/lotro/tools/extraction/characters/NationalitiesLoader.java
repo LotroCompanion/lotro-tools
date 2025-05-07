@@ -93,7 +93,7 @@ public class NationalitiesLoader
       }
       else
       {
-        LOGGER.warn("Unmanaged gender code: "+sexCode);
+        LOGGER.warn("Unmanaged gender code: {}",Integer.valueOf(sexCode));
       }
     }
     // Title

@@ -131,13 +131,13 @@ public class WorldEventConditionsLoader
     SimpleWorldEventCondition ret=null;
     int operatorCode=((Integer)props.getProperty("WorldEvent_Operator")).intValue();
     ComparisonOperator operator=OperatorUtils.getComparisonOperatorFromCode(operatorCode);
-    int worldEventID=((Integer)props.getProperty("WorldEvent_WorldEvent")).intValue();
-    Proxy<WorldEvent> worldEvent=buildWorldEventProxy(worldEventID);
+    Integer worldEventID=(Integer)props.getProperty("WorldEvent_WorldEvent");
+    Proxy<WorldEvent> worldEvent=buildWorldEventProxy(worldEventID.intValue());
     Integer conditionValue=(Integer)props.getProperty("WorldEvent_ConditionValue");
     Integer idToCompareWith=(Integer)props.getProperty("WorldEvent_Condition_WorldEventToCompareWith");
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Condition: "+worldEventID+", operator="+operator);
+      LOGGER.debug("Condition: {}, operator={}",worldEventID,operator);
     }
     // If idToCompareWith is not null, then conditionValue is null
     if (idToCompareWith!=null)
@@ -146,7 +146,7 @@ public class WorldEventConditionsLoader
       ret=new SimpleWorldEventCondition(operator,worldEvent,comparetToWorldEvent);
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\tCompare with world event: "+idToCompareWith);
+        LOGGER.debug("\tCompare with world event: {}",idToCompareWith);
       }
     }
     else if (conditionValue!=null)
@@ -154,7 +154,7 @@ public class WorldEventConditionsLoader
       ret=new SimpleWorldEventCondition(operator,worldEvent,conditionValue.intValue());
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\tCompare with value: "+conditionValue);
+        LOGGER.debug("\tCompare with value: {}",conditionValue);
       }
     }
     else
@@ -165,7 +165,7 @@ public class WorldEventConditionsLoader
     if (usageString!=null)
     {
       // Not used
-      LOGGER.warn("\tUsage Info: "+usageString);
+      LOGGER.warn("\tUsage Info: {}",usageString);
     }
     return ret;
   }

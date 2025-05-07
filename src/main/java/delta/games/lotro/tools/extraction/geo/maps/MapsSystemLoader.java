@@ -115,7 +115,7 @@ public class MapsSystemLoader
     String activeElementName=_uiElementId.getString(parchmentMapId);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Active element: "+activeElementName+" ("+parchmentMapId+")");
+      LOGGER.debug("Active element: {} ({})",activeElementName,Integer.valueOf(parchmentMapId));
     }
     // Map name
     String mapName=_i18n.getNameStringProperty(props,"UI_Map_MenuName",parchmentMapId,0);
@@ -182,11 +182,11 @@ public class MapsSystemLoader
       Point location=childElement.getRelativeBounds().getLocation();
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\t\tChild map: "+childMapUI);
+        LOGGER.debug("\t\tChild map: {}",childMapUI);
         PropertiesSet childProps=childElement.getProperties();
         String tooltip=DatStringUtils.getStringProperty(childProps,"UICore_Element_tooltip_entry");
-        LOGGER.debug("\t\tTooltip: "+tooltip);
-        LOGGER.debug("\t\tLocation: "+location);
+        LOGGER.debug("\t\tTooltip: {}",tooltip);
+        LOGGER.debug("\t\tLocation: {}",location);
       }
       // Add link
       int target=childMapUI.intValue();
@@ -202,7 +202,7 @@ public class MapsSystemLoader
       }
       else
       {
-        LOGGER.warn("Point: "+hotPoint+" is not in bounding box: "+boundingBox);
+        LOGGER.warn("Point: {} is not in bounding box: {}",hotPoint,boundingBox);
       }
     }
   }
@@ -270,7 +270,7 @@ public class MapsSystemLoader
     boolean ok=ParchmentMapsXMLWriter.writeParchmentMapsFile(GeneratedFiles.PARCHMENT_MAPS,_maps);
     if (ok)
     {
-      LOGGER.info("Wrote parchment maps file: "+GeneratedFiles.PARCHMENT_MAPS);
+      LOGGER.info("Wrote parchment maps file: {}",GeneratedFiles.PARCHMENT_MAPS);
     }
     _mapsManager.getLinksManager().write();
     // - labels
@@ -293,7 +293,7 @@ public class MapsSystemLoader
       }
       else
       {
-        LOGGER.warn("Unknown map ID="+targetMapId);
+        LOGGER.warn("Unknown map ID={}",Integer.valueOf(targetMapId));
       }
     }
   }

@@ -83,7 +83,7 @@ public class TraitKeyGenerator
     }
     else
     {
-      LOGGER.warn("Trait not found: ID="+identifier);
+      LOGGER.warn("Trait not found: ID={}",Integer.valueOf(identifier));
     }
   }
 }
