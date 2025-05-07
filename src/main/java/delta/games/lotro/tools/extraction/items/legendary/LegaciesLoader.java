@@ -150,9 +150,9 @@ public class LegaciesLoader
     ret.setIconId(iconId);
     loadIcon(iconId);
     @SuppressWarnings("unused")
-    int smallIconId=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon")).intValue();
+    Integer smallIconId=(Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_SmallIcon");
     @SuppressWarnings("unused")
-    int levelTable=((Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable")).intValue();
+    Integer levelTable=(Integer)props.getProperty("ItemAdvancement_AdvanceableWidget_LevelTable");
 
     PropertiesSet mutationProps=(PropertiesSet)props.getProperty("ItemAdvancement_ImbuedLegacy_ClassicLegacyTransform");
     if (mutationProps!=null)
