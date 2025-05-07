@@ -77,7 +77,7 @@ public class MainDatDisenchantmentsLoader
     }
     else
     {
-      LOGGER.warn("Could not handle disenchantment for item: "+sourceItem);
+      LOGGER.warn("Could not handle disenchantment for item: {}",sourceItem);
     }
     return ret;
   }

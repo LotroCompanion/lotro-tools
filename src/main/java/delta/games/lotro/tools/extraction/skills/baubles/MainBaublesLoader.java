@@ -65,7 +65,7 @@ public class MainBaublesLoader
     boolean ok=BaublesXMLWriter.write(GeneratedFiles.BAUBLES,baubles);
     if (ok)
     {
-      LOGGER.info("Wrote baubles file: "+GeneratedFiles.BAUBLES);
+      LOGGER.info("Wrote baubles file: {}",GeneratedFiles.BAUBLES);
     }
   }
 

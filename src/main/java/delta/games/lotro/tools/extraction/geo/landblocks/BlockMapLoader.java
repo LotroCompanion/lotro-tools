@@ -60,7 +60,7 @@ public class BlockMapLoader
     }
     PropertiesSet props=new PropertiesSet();
     int count=BufferUtils.readTSize(bis);
-    LOGGER.debug(count+" entries in this block map!");
+    LOGGER.debug("{} entries in this block map!",Integer.valueOf(count));
     boolean isLive=Context.isLive();
     for(int i=0;i<count;i++)
     {
@@ -71,17 +71,17 @@ public class BlockMapLoader
       {
         props.setProperty(value);
       }
-      LOGGER.debug("Mapping key="+key+" to index="+index);
+      LOGGER.debug("Mapping key={} to index={}",Integer.valueOf(key),Integer.valueOf(index));
     }
     Integer areaDID=(Integer)props.getProperty("Area_DID");
     if (areaDID==null)
     {
-      LOGGER.debug("No area DID for land block: region="+region+", blockX="+blockX+", blockY="+blockY);
+      LOGGER.debug("No area DID for land block: region={}, blockX={}, blockY={}",Integer.valueOf(region),Integer.valueOf(blockX),Integer.valueOf(blockY));
     }
     int available=bis.available();
     if (available>0)
     {
-      LOGGER.warn("Available bytes: "+available);
+      LOGGER.warn("Available bytes: {}",Integer.valueOf(available));
     }
     return props;
   }

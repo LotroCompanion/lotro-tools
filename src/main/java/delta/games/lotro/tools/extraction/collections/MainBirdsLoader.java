@@ -102,7 +102,7 @@ public class MainBirdsLoader
     boolean ok=BirdsXMLWriter.write(GeneratedFiles.BIRDS,birds);
     if (ok)
     {
-      LOGGER.info("Wrote birds file: "+GeneratedFiles.BIRDS);
+      LOGGER.info("Wrote birds file: {}",GeneratedFiles.BIRDS);
     }
     // Labels
     _i18n.save();

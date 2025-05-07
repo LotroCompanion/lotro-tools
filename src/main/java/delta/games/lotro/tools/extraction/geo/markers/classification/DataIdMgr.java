@@ -69,7 +69,7 @@ public class DataIdMgr
       int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
       return classDefIndex;
     }
-    LOGGER.warn("Cannot load data: "+did);
+    LOGGER.warn("Cannot load class ID for did: {}",Integer.valueOf(did));
     return 0;
   }
 

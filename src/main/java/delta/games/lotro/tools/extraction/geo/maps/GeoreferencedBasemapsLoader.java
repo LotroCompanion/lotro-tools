@@ -89,9 +89,9 @@ public class GeoreferencedBasemapsLoader
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("\tScale: "+scale);
-      LOGGER.debug("\tOrigin: "+origin);
-      LOGGER.debug("\tGeo2pixel: "+geo2pixel);
+      LOGGER.debug("\tScale: {}",Float.valueOf(scale));
+      LOGGER.debug("\tOrigin: {}",origin);
+      LOGGER.debug("\tGeo2pixel: {}",Float.valueOf(geo2pixel));
     }
 
     GeoReference geoReference=new GeoReference(origin,geo2pixel);

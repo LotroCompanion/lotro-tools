@@ -96,7 +96,7 @@ Emote_SourceText:
     }
     else
     {
-      LOGGER.warn("Could not handle emote ID="+indexDataId);
+      LOGGER.warn("Could not handle emote ID={}",Integer.valueOf(indexDataId));
     }
     return emote;
   }
@@ -133,11 +133,11 @@ Emote_SourceText:
     }
     // Save emotes
     int nbEmotes=emotes.size();
-    LOGGER.info("Writing "+nbEmotes+" emotes");
+    LOGGER.info("Writing {} emotes",Integer.valueOf(nbEmotes));
     boolean ok=EmoteXMLWriter.writeEmotesFile(GeneratedFiles.EMOTES,emotes);
     if (ok)
     {
-      LOGGER.info("Wrote emotes file: "+GeneratedFiles.EMOTES);
+      LOGGER.info("Wrote emotes file: {}",GeneratedFiles.EMOTES);
     }
     _i18n.save();
   }

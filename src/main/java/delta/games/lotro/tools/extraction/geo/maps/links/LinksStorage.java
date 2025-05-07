@@ -64,19 +64,13 @@ public class LinksStorage
     }
     if (doAdd)
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Added link: "+linkToAdd);
-      }
+      LOGGER.debug("Added link: {}",linkToAdd);
       _links.add(linkToAdd);
       links.add(linkToAdd);
     }
     else
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Ignored: "+linkToAdd);
-      }
+      LOGGER.debug("Ignored: {}",linkToAdd);
     }
   }
 

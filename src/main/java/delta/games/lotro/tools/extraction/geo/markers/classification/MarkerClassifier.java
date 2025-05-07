@@ -178,7 +178,7 @@ public class MarkerClassifier
     Integer weenieType=(Integer)props.getProperty(WEENIE_TYPE);
     if ((weenieType==null) || (weenieType.intValue()!=129)) // Item
     {
-      LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
+      LOGGER.warn("No/bad weenie type while craft resource type is set! DID={}",Integer.valueOf(did));
       return null;
     }
 
@@ -212,7 +212,7 @@ public class MarkerClassifier
     if ((did==1879061415) || (did==1879061417)) return 4;
     // Cook tier 5
     if ((did==1879061399) || (did==1879061414) || (did==1879061416) || (did==1879061418)) return 5;
-    LOGGER.warn("unmanaged DID: "+did);
+    LOGGER.warn("unmanaged DID: {}",Integer.valueOf(did));
     return 0;
   }
 
@@ -241,7 +241,7 @@ public class MarkerClassifier
     }
     if ((weenieType==null) || (weenieType.intValue()!=259)) // GameplayContainer
     {
-      LOGGER.warn("No/bad weenie type while craft resource type is set! DID="+did);
+      LOGGER.warn("No/bad weenie type while craft resource type is set! DID={}",Integer.valueOf(did));
       return null;
     }
     int craftTier=0;
@@ -354,7 +354,7 @@ WeenieType: 262145 (Hotspot)
     }
     if ((weenieType==null) || (weenieType.intValue()!=259)) // GameplayContainer
     {
-      LOGGER.warn("No/bad weenie type while craft resource type is 1! DID="+did);
+      LOGGER.warn("No/bad weenie type while craft resource type is 1! DID={}",Integer.valueOf(did));
       return null;
     }
     /*

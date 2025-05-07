@@ -43,7 +43,7 @@ public class HotspotEffectsLoader
     PropertiesSet properties=_facade.loadProperties(hotspotID+DATConstants.DBPROPERTIES_OFFSET);
     if (properties==null)
     {
-      LOGGER.warn("Could not handle hotspot ID="+hotspotID);
+      LOGGER.warn("Could not handle hotspot ID={}",Integer.valueOf(hotspotID));
       return;
     }
     /*

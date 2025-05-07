@@ -104,7 +104,7 @@ public class ItemEffectsLoader
     Item.addDetail(item,detail);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Set skill for item: "+item+" = "+skill+", level="+skillLevel);
+      LOGGER.debug("Set skill for item: {} = {}, level={}",item,skill,skillLevel);
     }
   }
 }

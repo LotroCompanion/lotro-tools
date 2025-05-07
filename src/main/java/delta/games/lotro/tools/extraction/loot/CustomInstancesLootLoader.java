@@ -68,7 +68,7 @@ public class CustomInstancesLootLoader
       return _tables.get(key);
     }
     _loots.clear();
-    LOGGER.info("Doing custom skirmish loot table: "+tableId);
+    LOGGER.info("Doing custom skirmish loot table: {}",key);
     InstanceLootsTable table=new InstanceLootsTable(tableId);
     Object[] tableArray=(Object[])properties.getProperty("SkirmishCustomLootLookupTable_Array");
     for(Object tableItemObj : tableArray)
@@ -163,19 +163,16 @@ public class CustomInstancesLootLoader
       SkirmishMatchParams_Level_Max: 29
       SkirmishMatchParams_Level_Min: 1
      */
-    int minLevel=((Integer)properties.getProperty("SkirmishMatchParams_Level_Min")).intValue();
-    int maxLevel=((Integer)properties.getProperty("SkirmishMatchParams_Level_Max")).intValue();
+    Integer minLevel=(Integer)properties.getProperty("SkirmishMatchParams_Level_Min");
+    Integer maxLevel=(Integer)properties.getProperty("SkirmishMatchParams_Level_Max");
     Range level=new Range(minLevel,maxLevel);
-    int minSizeCode=((Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Min")).intValue();
-    int maxSizeCode=((Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Max")).intValue();
+    Integer minSizeCode=(Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Min");
+    Integer maxSizeCode=(Integer)properties.getProperty("SkirmishMatchParams_GroupSize_Max");
     Range size=new Range(minSizeCode,maxSizeCode);
-    int minDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Min")).intValue();
-    int maxDifficultyCode=((Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Max")).intValue();
+    Integer minDifficultyCode=(Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Min");
+    Integer maxDifficultyCode=(Integer)properties.getProperty("SkirmishMatchParams_DifficultyTier_Max");
     Range difficulty=new Range(minDifficultyCode,maxDifficultyCode);
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("Level "+minLevel+"-"+maxLevel+", size="+minSizeCode+"/"+maxSizeCode+", difficulty="+minDifficultyCode+"/"+maxDifficultyCode);
-    }
+    LOGGER.debug("Level {}, size={}, difficulty={}",level,size,difficulty);
     InstanceLootParameters params=new InstanceLootParameters(difficulty,size,level);
     return params;
   }

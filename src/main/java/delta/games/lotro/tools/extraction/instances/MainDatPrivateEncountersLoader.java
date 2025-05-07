@@ -108,12 +108,12 @@ public class MainDatPrivateEncountersLoader
         int cellX=(int)vector.getY();
         if (cellX%8!=0)
         {
-          LOGGER.warn("Cell X is not a multiple of 8: "+cellX+" for PE "+privateEncounterId);
+          LOGGER.warn("Cell X is not a multiple of 8: {} for PE {}",Integer.valueOf(cellX),ret);
         }
         int cellY=(int)vector.getZ();
         if (cellY%8!=0)
         {
-          LOGGER.warn("Cell Y is not a multiple of 8: "+cellY+" for PE "+privateEncounterId);
+          LOGGER.warn("Cell Y is not a multiple of 8: {} for PE {}",Integer.valueOf(cellY),ret);
         }
         BlockReference block=new BlockReference(region,cellX/8,cellY/8);
         blocks.add(block);
@@ -184,7 +184,7 @@ public class MainDatPrivateEncountersLoader
       int size=randomQuestsArray.length;
       if (size!=1)
       {
-        LOGGER.warn("Size is not 1: "+size);
+        LOGGER.warn("Size is not 1: {} for PE {}",Integer.valueOf(size),pe);
       }
       PropertiesSet randomProps=(PropertiesSet)randomQuestsArray[0];
       Integer nbRandomQuests=(Integer)randomProps.getProperty("PrivateEncounterTemplate_NumQuestsToBestow");
@@ -234,7 +234,7 @@ public class MainDatPrivateEncountersLoader
       QuestDescription quest=QuestsManager.getInstance().getQuest(questId);
       if (quest==null)
       {
-        LOGGER.warn("Quest not found: "+questId);
+        LOGGER.warn("Quest not found: {}",proxy);
         continue;
       }
       proxy.setName(quest.getName());
@@ -387,7 +387,7 @@ public class MainDatPrivateEncountersLoader
     boolean ok=PrivateEncountersXMLWriter.writePrivateEncountersFile(GeneratedFiles.PRIVATE_ENCOUNTERS,_data);
     if (ok)
     {
-      LOGGER.info("Wrote private encounters file: "+GeneratedFiles.PRIVATE_ENCOUNTERS);
+      LOGGER.info("Wrote private encounters file: {}",GeneratedFiles.PRIVATE_ENCOUNTERS);
     }
   }
 

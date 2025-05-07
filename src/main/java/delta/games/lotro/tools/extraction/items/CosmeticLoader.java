@@ -46,10 +46,7 @@ public class CosmeticLoader
       return;
     }
     String appearanceHash=buildCosmeticKey(physObj,entryArray);
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug(physObj+" => "+appearanceHash+" => "+item);
-    }
+    LOGGER.debug("{} => {} => {}",physObj,appearanceHash,item);
     List<Item> list=_map.get(appearanceHash);
     if (list==null)
     {

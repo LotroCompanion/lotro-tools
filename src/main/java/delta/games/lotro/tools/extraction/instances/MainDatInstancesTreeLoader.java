@@ -95,20 +95,19 @@ public class MainDatInstancesTreeLoader
     Object[] featuredInstancesArray=(Object[])props.getProperty("WorldJoinControl_FeaturedInstance_Array");
     for(Object featuredInstanceObj : featuredInstancesArray)
     {
-      int instanceId=((Integer)featuredInstanceObj).intValue();
-      PrivateEncounter pe=peMgr.getPrivateEncounterById(instanceId);
+      Integer instanceId=(Integer)featuredInstanceObj;
+      PrivateEncounter pe=peMgr.getPrivateEncounterById(instanceId.intValue());
       if (pe!=null)
       {
-        String name=pe.getName();
         boolean isSkirmish=(pe instanceof SkirmishPrivateEncounter);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("\tID="+instanceId+" => "+name+" (skirmish="+isSkirmish);
+          LOGGER.debug("\t{} (skirmish={})",pe,Boolean.valueOf(isSkirmish));
         }
       }
       else
       {
-        LOGGER.warn("Private encounter not found: "+instanceId);
+        LOGGER.warn("Private encounter not found: {}",instanceId);
       }
     }
     InstanceCategory seasonal=new InstanceCategory(SEASONAL);
@@ -153,7 +152,7 @@ public class MainDatInstancesTreeLoader
       }
       else
       {
-        LOGGER.warn("Private encounter not found: "+privateEncounterId);
+        LOGGER.warn("Private encounter not found: {}",Integer.valueOf(privateEncounterId));
       }
     }
     _tree.dump();
@@ -161,7 +160,7 @@ public class MainDatInstancesTreeLoader
     boolean ok=InstancesTreeXMLWriter.writeInstancesTreeFile(GeneratedFiles.INSTANCES_TREE,_tree);
     if (ok)
     {
-      LOGGER.info("Wrote instances tree file: "+GeneratedFiles.INSTANCES_TREE);
+      LOGGER.info("Wrote instances tree file: {}",GeneratedFiles.INSTANCES_TREE);
     }
   }
 

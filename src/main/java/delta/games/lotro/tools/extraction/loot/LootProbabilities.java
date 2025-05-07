@@ -51,7 +51,6 @@ public class LootProbabilities
 
   private void loadProbabilitiesLive()
   {
-    // LootGenControl:
     PropertiesSet properties=WeenieContentDirectory.loadWeenieContentProps(_facade,"LootGenControl");
     if (properties==null)
     {
@@ -61,10 +60,15 @@ public class LootProbabilities
     for(Object tableEntryObj : tableArray)
     {
       PropertiesSet entryProps=(PropertiesSet)tableEntryObj;
-      float percentage=((Float)entryProps.getProperty("LootGenControl_DropFrequency_Percentage")).floatValue();
-      int code=((Integer)entryProps.getProperty("LootGenControl_DropFrequency_Label")).intValue();
-      _probabilities.put(Integer.valueOf(code),Float.valueOf(percentage));
-      LOGGER.debug("Probability is "+percentage*100+" for "+_dropFrequency.getString(code));
+      Float percentage=(Float)entryProps.getProperty("LootGenControl_DropFrequency_Percentage");
+      Integer code=(Integer)entryProps.getProperty("LootGenControl_DropFrequency_Label");
+      _probabilities.put(code,percentage);
+      if (LOGGER.isDebugEnabled())
+      {
+        String meaning=_dropFrequency.getString(code.intValue());
+        Float percentage100=Float.valueOf(percentage.floatValue()*100);
+        LOGGER.debug("Probability is {} for {}",percentage100,meaning);
+      }
     }
   }
 

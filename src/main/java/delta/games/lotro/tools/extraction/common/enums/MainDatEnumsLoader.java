@@ -281,7 +281,7 @@ public class MainDatEnumsLoader
     }
     else
     {
-      LOGGER.warn("Could not load enum: "+name);
+      LOGGER.warn("Could not load enum: {}",name);
     }
     saveEnumFile(lotroEnum,implClass,i18n);
   }
@@ -309,7 +309,7 @@ public class MainDatEnumsLoader
     }
     else
     {
-      LOGGER.warn("Could not load enum: "+name);
+      LOGGER.warn("Could not load enum: {}",name);
     }
   }
 

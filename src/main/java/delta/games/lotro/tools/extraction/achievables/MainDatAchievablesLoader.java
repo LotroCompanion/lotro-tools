@@ -71,7 +71,7 @@ public class MainDatAchievablesLoader
     }
     else
     {
-      LOGGER.warn("Could not handle achievable ID="+indexDataId);
+      LOGGER.warn("Could not handle achievable ID={}",Integer.valueOf(indexDataId));
     }
   }
 

@@ -19,7 +19,7 @@ import delta.games.lotro.tools.extraction.loot.LootLoader;
  */
 public class LootFilterLoader
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(LootLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LootFilterLoader.class);
 
   /**
    * Load filter.
@@ -54,7 +54,7 @@ public class LootFilterLoader
       */
       else
       {
-        LOGGER.warn("Unmanaged property: "+propertyName);
+        LOGGER.warn("Unmanaged property: {}",propertyName);
       }
     }
   }
@@ -96,7 +96,7 @@ public class LootFilterLoader
     */
     else
     {
-      LOGGER.warn("Unmanaged property name: "+propertyName);
+      LOGGER.warn("Unmanaged property name: {}",propertyName);
     }
   }
 

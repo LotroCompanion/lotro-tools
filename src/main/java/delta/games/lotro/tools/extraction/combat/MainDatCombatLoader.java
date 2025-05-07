@@ -113,7 +113,8 @@ public class MainDatCombatLoader
     }
     else
     {
-      LOGGER.warn("Unmanaged curve type: "+calcType+" => "+_calcType.getString(calcType));
+      String calcName=_calcType.getString(calcType);
+      LOGGER.warn("Unmanaged curve type: {} => {}",Integer.valueOf(calcType),calcName);
     }
   }
 

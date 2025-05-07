@@ -65,10 +65,7 @@ public class MainDatColorLoader
       String colorName=_i18n.getNameStringProperty(colorProps,"ItemMunging_NameLookup_Name",code,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       color.setName(colorName);
       Float colorValue=(Float)colorProps.getProperty("ItemMunging_NameLookup_Value");
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Color: "+colorName+", value: "+colorValue);
-      }
+      LOGGER.debug("Color: {}, value: {}",colorName,colorValue);
       if (colorValue!=null)
       {
         color.setCode(colorValue.floatValue());

@@ -63,7 +63,7 @@ public class DPSValueLoader
       }
       else
       {
-        LOGGER.warn("Failed to load value table: "+tableId);
+        LOGGER.warn("Failed to load value table: {}",Integer.valueOf(tableId));
       }
     }
     return ret;

@@ -128,19 +128,19 @@ Usage_IsMusicalInstrument: 1
   {
     int itemId=item.getIdentifier();
     PropertiesSet itemProps=_facade.loadProperties(itemId+DATConstants.DBPROPERTIES_OFFSET);
-    int propertyId=((Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Name")).intValue();
+    Integer propertyId=(Integer)itemProps.getProperty("Item_Decoration_PropertyHook_Name");
     PropertyValue propertyValueValue=itemProps.getPropertyValueByName("Item_Decoration_PropertyHook_Value");
-    int propertyValue=((Integer)propertyValueValue.getValue()).intValue();
+    Integer propertyValue=(Integer)propertyValueValue.getValue();
     if (LOGGER.isDebugEnabled())
     {
-      long category=((Long)itemProps.getProperty("Item_Decoration_Category")).longValue();
+      Long category=(Long)itemProps.getProperty("Item_Decoration_Category");
       EnumMapper enumMapper=findEnumForProperty(propertyValueValue.getDefinition());
-      String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue):"?";
-      LOGGER.debug("Item: "+item+" => category="+category+", ID="+propertyId+", value="+propertyValue+" ("+valueLabel+")");
+      String valueLabel=(enumMapper!=null)?enumMapper.getLabel(propertyValue.intValue()):"?";
+      LOGGER.debug("Item: {} => category={}, ID={}, value={} ({})",item,category,propertyId,propertyValue,valueLabel);
     }
     SoundContext ret=new SoundContext(itemId,item.getName(),item.getIcon());
     SoundReferences soundRefs=ret.getSounds();
-    List<SoundDescription> sounds=findSounds(propertyId,propertyValue);
+    List<SoundDescription> sounds=findSounds(propertyId.intValue(),propertyValue.intValue());
     for(SoundDescription sound : sounds)
     {
       SoundReference ref=new SoundReference(sound.getIdentifier());
@@ -164,10 +164,7 @@ Usage_IsMusicalInstrument: 1
     PropertyDefinition propertyDef=registry.getPropertyDefByName("Item_Music_Instrument_Type");
     EnumMapper enumMapper=findEnumForProperty(propertyDef);
     String valueLabel=(enumMapper!=null)?enumMapper.getLabel(category.intValue()):"?";
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("Item: "+item+" => category="+category+" ("+valueLabel+")");
-    }
+    LOGGER.debug("Item: {} => category={} ({})",item,category,valueLabel);
     PropertyDefinition propertyDefForSound=registry.getPropertyDefByName("Music_Instrument_Type");
     List<SoundDescription> sounds=findSounds(propertyDefForSound.getPropertyId(),category.intValue());
     ret=new SoundContext(category.intValue(),valueLabel,null);

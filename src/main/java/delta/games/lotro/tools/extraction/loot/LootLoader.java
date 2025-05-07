@@ -151,7 +151,7 @@ public class LootLoader
       {
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Table ID="+id+" => "+itemProps.dump());
+          LOGGER.debug("Table ID={} => {}",Integer.valueOf(id),itemProps.dump());
         }
         _filterLoader.loadFilterData(filter,entry.getUsageRequirement());
       }
@@ -299,7 +299,7 @@ public class LootLoader
       }
       else
       {
-        LOGGER.warn("No properties for ID: "+id);
+        LOGGER.warn("No properties for ID: {}",Integer.valueOf(id));
       }
     }
     return null;
@@ -463,7 +463,7 @@ public class LootLoader
         }
         else
         {
-          LOGGER.warn("Relic not found: "+relicId);
+          LOGGER.warn("Relic not found: {}",Integer.valueOf(relicId));
         }
       }
       Object[] countsArray=(Object[])properties.getProperty("RunicTreasureGroup_PullCount_Array");

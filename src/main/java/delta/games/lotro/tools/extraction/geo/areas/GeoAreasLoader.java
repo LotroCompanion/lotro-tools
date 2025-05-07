@@ -189,7 +189,7 @@ public class GeoAreasLoader
     boolean ok=GeoAreasXMLWriter.writeGeoAreasFile(GeneratedFiles.GEO_AREAS,_geoMgr);
     if (ok)
     {
-      LOGGER.info("Wrote geographic areas file: "+GeneratedFiles.GEO_AREAS);
+      LOGGER.info("Wrote geographic areas file: {}",GeneratedFiles.GEO_AREAS);
     }
     // Labels
     _i18n.save();

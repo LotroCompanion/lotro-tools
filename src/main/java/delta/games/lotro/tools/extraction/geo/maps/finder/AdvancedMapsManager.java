@@ -52,7 +52,7 @@ public class AdvancedMapsManager
       GeoreferencedBasemap basemap=_mapsMgr.getMapById(id);
       if (basemap==null)
       {
-        LOGGER.warn("Found a parchment map with no basemap: id="+id);
+        LOGGER.warn("Found a parchment map with no basemap: id={}",Integer.valueOf(id));
         continue;
       }
       DetailedMap detailedMap=new DetailedMap(basemap,parchmentMap);

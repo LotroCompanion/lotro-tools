@@ -70,7 +70,7 @@ public class ItemSortingDataLoader
         }
         else
         {
-          LOGGER.warn("Could not find property with ID: "+propertyID);
+          LOGGER.warn("Could not find property with ID: {}",propertyID);
         }
       }
       _sortCriterias.put(sortType,propertyNames);
@@ -85,18 +85,18 @@ public class ItemSortingDataLoader
   public void handleItem(Item item, PropertiesSet properties)
   {
     Integer sortType=(Integer)properties.getProperty("Item_Client_Sort_Type");
-    if (sortType==null)
+    if (sortType!=null)
     {
-      return;
+      if (LOGGER.isDebugEnabled())
+      {
+        List<String> sortProperties=_sortCriterias.get(sortType);
+        List<Object> values=new ArrayList<Object>();
+        for(String sortProperty : sortProperties)
+        {
+          values.add(properties.getProperty(sortProperty));
+        }
+        LOGGER.debug("Item: {} => {}",item,values);
+      }
     }
-    /*
-    List<String> sortProperties=_sortCriterias.get(sortType);
-    List<Object> values=new ArrayList<Object>();
-    for(String sortProperty : sortProperties)
-    {
-      values.add(properties.getProperty(sortProperty));
-    }
-    System.out.println("Item: "+item+" => "+values);
-    */
   }
 }

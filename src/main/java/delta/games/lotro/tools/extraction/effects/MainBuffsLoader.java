@@ -102,7 +102,7 @@ public class MainBuffsLoader
     }
     else
     {
-      LOGGER.warn("Effect not found: "+id);
+      LOGGER.warn("Effect not found: {}",Integer.valueOf(id));
     }
   }
 
