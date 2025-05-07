@@ -36,7 +36,7 @@ import delta.games.lotro.lore.trade.vendor.VendorsManager;
  */
 public class MainRecipesDataBuilder
 {
-  private PrintStream _out=System.out;
+  private PrintStream _out=System.out; // NOSONAR
 
   private Set<Integer> getRecipeItemIds()
   {

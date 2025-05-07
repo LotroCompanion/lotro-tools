@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.geo.HeightMap;
 import delta.games.lotro.dat.loaders.HeightMapDataLoader;
@@ -52,13 +53,11 @@ public class MainHeightmapBuilder
     _buffer=new byte[WIDTH*HEIGHT*3];
 
     int region=1;
-    //int[] regions={1,2,3,4,14};
-    //for(int region : regions)
     {
-      System.out.println("Region "+region);
+      Console.println("Region "+region);
       for(int blockX=MIN_X;blockX<=MAX_X;blockX++)
       {
-        System.out.println("X="+blockX);
+        Console.println("X="+blockX);
         for(int blockY=MIN_Y;blockY<=MAX_Y;blockY++)
         {
           HeightMap map=_loader.loadHeightMapData(region,blockX,blockY);

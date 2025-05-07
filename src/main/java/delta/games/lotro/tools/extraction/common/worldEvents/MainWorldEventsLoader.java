@@ -1,5 +1,6 @@
 package delta.games.lotro.tools.extraction.common.worldEvents;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.worldEvents.WorldEvent;
@@ -40,9 +41,8 @@ public class MainWorldEventsLoader
 
   private void handleWorldEvent(int worldEventId)
   {
-    //System.out.println("World Event: "+worldEventId);
     WorldEvent worldEvent=_loader.getWorldEvent(worldEventId);
-    System.out.println(worldEvent);
+    Console.println(worldEvent);
   }
 
   /**

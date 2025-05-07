@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.characters;
 
-import java.io.PrintStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class MainStatTomesLoader
   }
 
   /**
-   * Load trait data.
+   * Load tomes data.
    */
   public void doIt()
   {
@@ -54,7 +53,10 @@ public class MainStatTomesLoader
       int subDirectoryId=((Integer)subDirectoryObj).intValue();
       handleStat(subDirectoryId);
     }
-    //showRegistry();
+    if (LOGGER.isDebugEnabled())
+    {
+      showRegistry();
+    }
     StatTomesXMLWriter.write(GeneratedFiles.STAT_TOMES,_tomesManager);
   }
 
@@ -101,17 +103,17 @@ public class MainStatTomesLoader
     _tomesManager.registerStatTome(tome);
   }
 
-  void showRegistry(PrintStream out)
+  private void showRegistry()
   {
     List<StatDescription> stats=_tomesManager.getStats();
     for(StatDescription stat : stats)
     {
-      out.println(stat.getName());
+      LOGGER.debug(stat.getName());
       int nbRanks=_tomesManager.getNbOfRanks(stat);
       for(int i=1;i<=nbRanks;i++)
       {
         StatTome tome=_tomesManager.getStatTome(stat,i);
-        out.println("\t"+tome);
+        LOGGER.debug("\t{}",tome);
       }
     }
   }

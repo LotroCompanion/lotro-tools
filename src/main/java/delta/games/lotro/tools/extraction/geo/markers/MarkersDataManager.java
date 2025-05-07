@@ -173,7 +173,7 @@ public class MarkersDataManager
     }
     int nbRemovedMarkers=remover.getRemovedMarkers();
     int nbTotalMarkers=remover.getTotalMarkers();
-    LOGGER.info("Removed "+nbRemovedMarkers+" markers / "+nbTotalMarkers);
+    LOGGER.info("Removed {} markers / {}",Integer.valueOf(nbRemovedMarkers),Integer.valueOf(nbTotalMarkers));
   }
 
   /**

@@ -7,6 +7,7 @@ import java.util.List;
 
 import delta.common.utils.files.FileCopy;
 import delta.common.utils.files.FilesDeleter;
+import delta.common.utils.io.Console;
 import delta.updates.data.DirectoryDescription;
 import delta.updates.data.DirectoryEntryDescription;
 import delta.updates.data.EntryUtils;
@@ -56,9 +57,9 @@ public class MainBuildUpdatePackageLoreDatabase
     // Compute diffs
     UpdateOperationsBuilder diffBuilder=new UpdateOperationsBuilder();
     UpdateOperations operations=diffBuilder.computeDiff(directory,description);
-    if (operations.getOperations().size()==0)
+    if (operations.getOperations().isEmpty())
     {
-      System.out.println("No updates!");
+      Console.println("No updates!");
       return;
     }
 

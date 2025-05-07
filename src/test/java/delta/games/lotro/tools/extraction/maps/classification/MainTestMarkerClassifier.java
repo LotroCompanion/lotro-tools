@@ -3,6 +3,7 @@ package delta.games.lotro.tools.extraction.maps.classification;
 import java.io.File;
 import java.util.List;
 
+import delta.common.utils.io.Console;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.maps.data.MapsManager;
 import delta.games.lotro.maps.data.Marker;
@@ -29,26 +30,22 @@ public class MainTestMarkerClassifier
   private void doSimpleClassification()
   {
     Classification classif=_classifier.classifyDid(1879410562);
-    System.out.println(classif);
+    Console.println(classif);
   }
 
   private void doIt()
   {
-    /*
-    doBlocks();
+    GlobalMarkersManager markersMgr=buildMarkersManager();
+    doBlocks(markersMgr);
     doBlock(1,6,7,markersMgr); // Shire/bree
     doBlock(1,10,3,markersMgr); // Dunland
     doBlock(1,8,8,markersMgr); // Esteldin / Western North Downs
     doBlock(1,15,5,markersMgr); // Shire Auction Hall
-    */
     doSimpleClassification();
   }
 
-  void doBlocks()
+  private void doBlocks(GlobalMarkersManager markersMgr)
   {
-    File rootDir=MapConstants.getRootDir();
-    MapsManager maps=new MapsManager(rootDir);
-    GlobalMarkersManager markersMgr=maps.getMarkersManager();
     for(int region=1;region<=4;region++)
     {
       for(int blockX=0;blockX<=0xFE;blockX++)
@@ -59,6 +56,14 @@ public class MainTestMarkerClassifier
         }
       }
     }
+  }
+
+  private GlobalMarkersManager buildMarkersManager()
+  {
+    File rootDir=MapConstants.getRootDir();
+    MapsManager maps=new MapsManager(rootDir);
+    GlobalMarkersManager markersMgr=maps.getMarkersManager();
+    return markersMgr;
   }
 
   private void doBlock(int region, int x, int y, GlobalMarkersManager markersMgr)

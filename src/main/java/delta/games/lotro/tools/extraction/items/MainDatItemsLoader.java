@@ -528,7 +528,8 @@ public class MainDatItemsLoader
       {
         LOGGER.warn("Legendary item with no main legacy (DPS or not): {}",item);
       }
-      //int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
+      @SuppressWarnings("unused")
+      int combatPropertyType=((Integer)properties.getProperty("Item_RequiredCombatPropertyType")).intValue();
       // Seems that each legendary item (4764 occurrences) has either ItemAdvancement_CombatDPSLevel or ItemAdvancement_CombatPropertyModLevel
       // depending on whether it has a DPS main legacy of a non-DPS main legacy
       Integer combatDpsLevel=(Integer)properties.getProperty("ItemAdvancement_CombatDPSLevel");

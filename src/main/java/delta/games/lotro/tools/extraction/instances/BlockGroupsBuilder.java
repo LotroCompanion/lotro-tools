@@ -30,7 +30,7 @@ public class BlockGroupsBuilder
   {
     _groups.clear();
     List<BlockReference> blocksToUse=new ArrayList<BlockReference>(blocks);
-    while(blocksToUse.size()>0)
+    while(!blocksToUse.isEmpty())
     {
       BlockReference block=findGroupForABlock(blocksToUse);
       if (block==null)
@@ -75,7 +75,7 @@ public class BlockGroupsBuilder
         }
       }
     }
-    return null;
+    return null; // NOSONAR
   }
 
   private boolean areNeighbours(BlockReference ref, BlockReference toTest)

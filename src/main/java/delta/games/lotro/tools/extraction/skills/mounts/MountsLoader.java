@@ -103,7 +103,7 @@ public class MountsLoader
         ret.setMountType(mountType);
         if (mountTypes.size()>1)
         {
-          LOGGER.warn("More than one mount type: "+mountTypes);
+          LOGGER.warn("More than one mount type: {}",mountTypes);
         }
         // Morale
         int morale=((Integer)effectProps.getProperty("Mount_Durability_Base_Max")).intValue();

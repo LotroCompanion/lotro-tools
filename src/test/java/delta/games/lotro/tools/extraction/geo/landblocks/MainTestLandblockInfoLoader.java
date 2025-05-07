@@ -29,7 +29,6 @@ public class MainTestLandblockInfoLoader
 
   void handleLandBlock(LandBlockInfo lbi)
   {
-    //System.out.println("Using region "+region+", block X="+blockX+",Y="+blockY);
     if (lbi!=null)
     {
       LbiInspector inspector=new LbiInspector();
@@ -39,7 +38,6 @@ public class MainTestLandblockInfoLoader
 
   void dumpLandBlock(LandBlockInfo lbi,PrintStream out)
   {
-    //System.out.println("Using region "+region+", block X="+blockX+",Y="+blockY);
     if (lbi!=null)
     {
       LbiInspector inspector=new LbiInspector();
@@ -85,7 +83,6 @@ public class MainTestLandblockInfoLoader
 
   private void doIt(int markerId)
   {
-    //long now=System.currentTimeMillis();
     BlockReference block=MarkerUtils.getBlockForMarker(markerId);
     int region=block.getRegion(); int blockX=block.getBlockX(); int blockY=block.getBlockY();
     String name="block-x-"+blockX+"-y-"+blockY+".txt";

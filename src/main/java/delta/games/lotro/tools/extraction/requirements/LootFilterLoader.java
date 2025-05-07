@@ -11,7 +11,6 @@ import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyValue;
-import delta.games.lotro.tools.extraction.loot.LootLoader;
 
 /**
  * Loader for loot filters.

@@ -54,8 +54,7 @@ public class InstanceChestsFinder
   {
     _mapByContainer=new HashMap<Integer,Set<PrivateEncounter>>();
     _mapByPe=new HashMap<Integer,Set<Integer>>();
-    //_containers=findContainersWithCustomLootTables();
-    _containers=findContainers();
+    _containers=findContainers(); // or findContainersWithCustomLootTables
     PrivateEncountersManager peMgr=PrivateEncountersManager.getInstance();
     for(SkirmishPrivateEncounter skirmishPe : peMgr.getSkirmishPrivateEncounters())
     {
@@ -94,8 +93,8 @@ public class InstanceChestsFinder
 
   private void showResults()
   {
-    showByContainer(System.out);
-    showByInstance(System.out);
+    showByContainer(System.out); // NOSONAR
+    showByInstance(System.out); // NOSONAR
   }
 
   @SuppressWarnings("unused")

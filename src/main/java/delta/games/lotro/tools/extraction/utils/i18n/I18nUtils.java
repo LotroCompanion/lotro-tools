@@ -258,7 +258,7 @@ public class I18nUtils
         value=defaultValue;
       }
       value=processor.processString(value);
-      if (value.length()>0)
+      if (!value.isEmpty())
       {
         hasLabel=true;
       }
@@ -283,7 +283,7 @@ public class I18nUtils
   private void handleLiteral(String literal, String key, StringProcessor processor)
   {
     literal=processor.processString(literal);
-    if (literal.length()>0)
+    if (!literal.isEmpty())
     {
       for(String locale : _locales)
       {

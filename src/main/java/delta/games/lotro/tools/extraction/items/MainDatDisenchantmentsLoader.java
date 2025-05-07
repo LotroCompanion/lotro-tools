@@ -61,12 +61,9 @@ public class MainDatDisenchantmentsLoader
       if ((value!=null) && (value.intValue()>0) && (did!=null))
       {
         ret=new DisenchantmentResult(sourceItem);
-        if (did!=null)
-        {
-          Item item=ItemsManager.getInstance().getItem(did.intValue());
-          CountedItem<Item> countedItem=new CountedItem<Item>(item,value.intValue());
-          ret.setCountedItem(countedItem);
-        }
+        Item item=ItemsManager.getInstance().getItem(did.intValue());
+        CountedItem<Item> countedItem=new CountedItem<Item>(item,value.intValue());
+        ret.setCountedItem(countedItem);
       }
       else if (trophyListId!=null)
       {

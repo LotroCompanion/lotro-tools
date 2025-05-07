@@ -185,7 +185,7 @@ LevelBasedLootTable_LootTable:
       treasureList=_lootLoader.getTreasureList(treasureProfileId);
       if (treasureList==null)
       {
-        LOGGER.warn("Treasure list not found: "+treasureProfileId);
+        LOGGER.warn("Treasure list not found: {}",Integer.valueOf(treasureProfileId));
       }
     }
     TrophyList trophyList=null;
@@ -195,7 +195,7 @@ LevelBasedLootTable_LootTable:
       trophyList=_lootLoader.getTrophyList(trophyListId);
       if (trophyList==null)
       {
-        LOGGER.warn("Trophy list not found: "+trophyListId);
+        LOGGER.warn("Trophy list not found: {}",Integer.valueOf(trophyListId));
       }
     }
     GenericMobLootEntry entry=new GenericMobLootEntry(level);
@@ -214,7 +214,7 @@ LevelBasedLootTable_LootTable:
     boolean ok=GenericMobLootXMLWriter.writeMobLootFile(GeneratedFiles.GENERIC_MOB_LOOTS,lootsMgr);
     if (ok)
     {
-      LOGGER.info("Wrote generic mobs loot file: "+GeneratedFiles.GENERIC_MOB_LOOTS);
+      LOGGER.info("Wrote generic mobs loot file: {}",GeneratedFiles.GENERIC_MOB_LOOTS);
     }
   }
 

@@ -72,14 +72,16 @@ public class LbiInspector
     for(EntityDescriptor entity : entities)
     {
       long entityIid=entity.getIid();
+      String entityId=String.format("%08X",Long.valueOf(entityIid));
       Weenie weenie=lbi.getWeenieByIid(entityIid);
       if (weenie!=null)
       {
-        //System.out.println("\tFound weenie: "+String.format("%08X",Long.valueOf(weenie.getIid())));
+        String id=String.format("%08X",Long.valueOf(weenie.getIid()));
+        LOGGER.info("\tFound weenie: {} for entity {}",id,entityId);
       }
       else
       {
-        LOGGER.warn("No weenie for entity: "+String.format("%08X",Long.valueOf(entityIid)));
+        LOGGER.warn("No weenie for entity: {}",entityId);
       }
     }
     // Conclusion: each entity has an associated weenie
@@ -97,18 +99,20 @@ public class LbiInspector
       String from=findSource(lbi,fromIid);
       if (from==null)
       {
-        LOGGER.warn("No from source for IID="+String.format("%08X",Long.valueOf(fromIid)));
+        String id=String.format("%08X",Long.valueOf(fromIid));
+        LOGGER.warn("No from source for IID={}",id);
       }
       // From
       long toIid=link.getToIid();
       String to=findSource(lbi,toIid);
       if (to==null)
       {
-        LOGGER.warn("No to source for IID="+String.format("%08X",Long.valueOf(toIid)));
+        String id=String.format("%08X",Long.valueOf(toIid));
+        LOGGER.warn("No to source for IID={}",id);
       }
       if ((from!=null) && (to!=null))
       {
-        System.out.println("Link: from "+from+" to "+to+" - type="+link.getType());
+        LOGGER.info("Link: from {} to {} - type={}",from,to,link.getType());
       }
     }
   }
@@ -142,7 +146,7 @@ public class LbiInspector
       EntityDescriptor entity=lbi.getEntityByIid(iid);
       if (entity==null)
       {
-        System.out.println("Orphan weenie: "+weenie);
+        LOGGER.warn("Orphan weenie: {}",weenie);
       }
     }
     // Use cases for orphan weenies (weenies with no associated entity):

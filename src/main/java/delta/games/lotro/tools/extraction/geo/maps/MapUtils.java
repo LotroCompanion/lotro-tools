@@ -53,7 +53,7 @@ public class MapUtils
     Integer blockY=(Integer)props.getProperty("UI_Map_BlockOffsetY");
     if ((blockX!=null) && (blockY!=null))
     {
-      //System.out.println("\tBlock X/Y: "+blockX+"/"+blockY);
+      LOGGER.debug("\tBlock X/Y: {}/{}",blockX,blockY);
     }
     else
     {
@@ -67,7 +67,7 @@ public class MapUtils
     {
       // Pixel offset from the top/left of the map
       // Matches the position blockX/blockY/ox=0/oy=0
-      //System.out.println("\tPixel offset X/Y: "+pixelOffsetX+"/"+pixelOffsetY);
+      LOGGER.debug("\tPixel offset X/Y: {}/{}",pixelOffsetX,pixelOffsetY);
     }
     else
     {
@@ -106,9 +106,8 @@ public class MapUtils
     if (iter.hasNext())
     {
       ImageReader reader=iter.next();
-      try
+      try(ImageInputStream stream=new FileImageInputStream(imageFile))
       {
-        ImageInputStream stream=new FileImageInputStream(imageFile);
         reader.setInput(stream);
         int width=reader.getWidth(reader.getMinIndex());
         int height=reader.getHeight(reader.getMinIndex());

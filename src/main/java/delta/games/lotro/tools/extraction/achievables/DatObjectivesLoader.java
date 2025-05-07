@@ -620,7 +620,7 @@ QuestEvent_DisableEntityExamination, QuestEvent_BillboardProgressOverride, Quest
       condition.setNpc(npc);
     }
     @SuppressWarnings("unused")
-    String roleConstraint=(String)properties.getProperty("QuestEvent_RoleConstraint");
+    String roleConstraint=(String)properties.getProperty(QUEST_EVENT_ROLE_CONSTRAINT);
   }
 
   private LevelCondition handleLevelCondition(PropertiesSet properties)
@@ -841,8 +841,8 @@ QuestEvent_ShowBillboardText: 0
     if (questId!=null)
     {
       // Check if deed or quest
-      Boolean isQuest=DatQuestDeedsUtils.isQuestId(_facade,questId.intValue());
-      if (isQuest!=null)
+      PropertiesSet questProps=_facade.loadProperties(questId.intValue()+DATConstants.DBPROPERTIES_OFFSET);
+      if (questProps!=null)
       {
         Proxy<Achievable> proxy=new Proxy<Achievable>();
         proxy.setId(questId.intValue());

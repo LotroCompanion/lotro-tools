@@ -1,6 +1,5 @@
 package delta.games.lotro.tools.extraction.achievables;
 
-import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.WStateClass;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -27,22 +26,6 @@ public class DatQuestDeedsUtils
       return (classDefIndex==WStateClass.ACCOMPLISHMENT);
     }
     return false;
-  }
-
-  /**
-   * Indicates if this is a quest ID.
-   * @param facade Data facade.
-   * @param id Identifier to test.
-   * @return <code>true</code> for a quest ID, <code>false</code> for a deed ID.
-   */
-  public static Boolean isQuestId(DataFacade facade, int id)
-  {
-    PropertiesSet properties=facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    if (properties!=null)
-    {
-      return Boolean.valueOf(isQuest(properties));
-    }
-    return null;
   }
 
   /**

@@ -51,19 +51,6 @@ public class LinkCreationInteractor
     }
   }
 
-  private void doLink(GeoreferencedBasemap target, int x, int y)
-  {
-    GeoreferencedBasemap currentMap=_mapPanel.getCurrentBasemap();
-    int sourceMapId=currentMap.getIdentifier();
-    GeoPoint hotPoint=currentMap.getGeoReference().pixel2geo(new Dimension(x,y));
-    int targetMapId=target.getIdentifier();
-    MapLink link=new MapLink(sourceMapId,0,targetMapId,hotPoint,null);
-    LinksManager linksManager=_manager.getLinksManager();
-    linksManager.addLink(link);
-    linksManager.write();
-    _mapPanel.getCanvas().repaint();
-  }
-
   private class LinkCreationMouseListener extends MouseAdapter
   {
     @Override
@@ -82,7 +69,15 @@ public class LinkCreationInteractor
         GeoreferencedBasemap selected=chooser.editModal();
         if (selected!=null)
         {
-          doLink(selected,x,y);
+          GeoreferencedBasemap currentMap=_mapPanel.getCurrentBasemap();
+          int sourceMapId=currentMap.getIdentifier();
+          GeoPoint hotPoint=currentMap.getGeoReference().pixel2geo(new Dimension(x,y));
+          int targetMapId=selected.getIdentifier();
+          MapLink link=new MapLink(sourceMapId,0,targetMapId,hotPoint,null);
+          LinksManager linksManager=_manager.getLinksManager();
+          linksManager.addLink(link);
+          linksManager.write();
+          _mapPanel.getCanvas().repaint();
         }
       }
     }

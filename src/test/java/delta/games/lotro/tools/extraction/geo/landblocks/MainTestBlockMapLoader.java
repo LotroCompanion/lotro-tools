@@ -23,13 +23,6 @@ public class MainTestBlockMapLoader
   {
     DataFacade facade=new DataFacade();
     BlockMapLoader loader=new BlockMapLoader(facade);
-    /*
-    PropertiesSet props=loader.loadPropertiesForMapBlock(1,243,248);
-    if (props!=null)
-    {
-      System.out.println(props.dump());
-    }
-    */
     int blocksCount=0;
     for(int region=1;region<=1;region++)
     {
