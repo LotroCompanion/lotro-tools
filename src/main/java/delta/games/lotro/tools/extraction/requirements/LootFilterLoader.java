@@ -120,10 +120,9 @@ public class LootFilterLoader
       int nbRanges=Math.min(minArray.length,maxArray.length);
       for(int i=0;i<nbRanges;i++)
       {
-        int min=((Integer)minArray[i]).intValue();
-        requirements.setMinLevel(Integer.valueOf(min));
-        int max=((Integer)maxArray[i]).intValue();
-        requirements.setMaxLevel(Integer.valueOf(max));
+        Integer min=(Integer)minArray[i];
+        Integer max=(Integer)maxArray[i];
+        requirements.setLevelRange(min,max);
       }
     }
   }

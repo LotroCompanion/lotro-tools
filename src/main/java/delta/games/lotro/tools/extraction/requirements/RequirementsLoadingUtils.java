@@ -43,21 +43,22 @@ public class RequirementsLoadingUtils
   public static void loadLevelRequirements(PropertiesSet properties, UsageRequirement requirements)
   {
     Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
-    if ((minLevel!=null) && (minLevel.intValue()>1))
+    if ((minLevel!=null) && (minLevel.intValue()<=1))
     {
-      requirements.setMinLevel(minLevel);
+      minLevel=null;
     }
     Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
-    if ((maxLevel!=null) && (maxLevel.intValue()!=-1))
+    if ((maxLevel!=null) && (maxLevel.intValue()==-1))
     {
-      requirements.setMaxLevel(maxLevel);
+      maxLevel=null;
     }
     Integer floatToCap=(Integer)properties.getProperty("Usage_MinLevel_FloatToCap");
     if ((floatToCap!=null) && (floatToCap.intValue()==1))
     {
       int capLevel=Game.getParameters().getMaxCharacterLevel();
-      requirements.setMinLevel(Integer.valueOf(capLevel));
+      minLevel=Integer.valueOf(capLevel);
     }
+    requirements.setLevelRange(minLevel,maxLevel);
   }
 
   /**

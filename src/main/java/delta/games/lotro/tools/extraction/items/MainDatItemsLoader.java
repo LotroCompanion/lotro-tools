@@ -255,12 +255,10 @@ public class MainDatItemsLoader
           }
         }
       }
-      // Min Level
+      // Min/max Level
       Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
-      item.setMinLevel(minLevel);
-      // Max Level
       Integer maxLevel=(Integer)properties.getProperty("Usage_MaxLevel");
-      item.setMaxLevel(maxLevel);
+      item.setLevelRange(minLevel,maxLevel);
       // Binding
       item.setBinding(getBinding(properties));
       // Durability
