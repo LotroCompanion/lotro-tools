@@ -82,6 +82,7 @@ public class ItemDetailsLoader
     handleCooldownData(item,props);
     handleAllegiancePoints(item,props);
     handleDecorationInfo(item,props);
+    handleVirtueXPBonus(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -311,7 +312,7 @@ Property: Effect_GrantTraitRank_Grant_XP, ID=268461837, type=Int
         {
           if ((virtueXPAmount!=null) && (virtueXPAmount.intValue()!=0))
           {
-            VirtueXP virtueXP=new VirtueXP(virtueXPAmount.intValue());
+            VirtueXP virtueXP=new VirtueXP(virtueXPAmount.intValue(),false);
             Item.addDetail(item,virtueXP);
           }
           // TODO Handle upToRank, traitToGrant and grantNRanks
@@ -410,6 +411,16 @@ Usage_CooldownDuration: 21 (Item_2m)
         info.addCategory(category);
       }
       Item.addDetail(item,info);
+    }
+  }
+
+  private void handleVirtueXPBonus(Item item, PropertiesSet props)
+  {
+    Integer bonus=(Integer)props.getProperty("Trait_Virtue_XP_Bonus");
+    if ((bonus!=null) && (bonus.intValue()!=0))
+    {
+      VirtueXP virtueXP=new VirtueXP(bonus.intValue(),true);
+      Item.addDetail(item,virtueXP);
     }
   }
 }
