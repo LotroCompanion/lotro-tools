@@ -145,22 +145,23 @@ public class MainDatTradeLoader
     Object[] requiredClassArray=(Object[])properties.getProperty("Usage_RequiredClassList");
     if (requiredClassArray!=null)
     {
+      List<AbstractClassDescription> classes=new ArrayList<AbstractClassDescription>();
       for(Object requiredClassObj : requiredClassArray)
       {
         int classCode=((Integer)requiredClassObj).intValue();
         AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
         if (abstractClass!=null)
         {
-          if (ret==null)
-          {
-            ret=new ClassRequirement();
-          }
-          ret.addAllowedClass(abstractClass);
+          classes.add(abstractClass);
         }
         else
         {
           LOGGER.warn("Unsupported class: {}",abstractClass);
         }
+      }
+      if (!classes.isEmpty())
+      {
+        ret=new ClassRequirement(classes);
       }
     }
     return ret;

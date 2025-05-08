@@ -2,10 +2,16 @@ package delta.games.lotro.tools.extraction.skills;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
+import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -22,6 +28,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.requirements.ClassRequirement;
+import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemBinding;
@@ -36,7 +43,9 @@ import delta.games.lotro.lore.items.details.ItemDetailsManager;
  */
 public class SkillConstraintsComputer
 {
-  private Map<Integer,List<ClassDescription>> _classSkills;
+  private static final Logger LOGGER=LoggerFactory.getLogger(SkillConstraintsComputer.class);
+
+  private Map<Integer,Set<AbstractClassDescription>> _classSkills;
   private Map<Integer,List<Item>> _itemGrantedSkills;
   private Map<Integer,List<TraitDescription>> _traitSkills;
   private Map<Integer,List<RaceDescription>> _trait2Race;
@@ -64,9 +73,9 @@ public class SkillConstraintsComputer
     return skills;
   }
 
-  private Map<Integer,List<ClassDescription>> loadClassSkills()
+  private Map<Integer,Set<AbstractClassDescription>> loadClassSkills()
   {
-    Map<Integer,List<ClassDescription>> ret=new HashMap<Integer,List<ClassDescription>>();
+    Map<Integer,Set<AbstractClassDescription>> ret=new HashMap<Integer,Set<AbstractClassDescription>>();
     for(ClassDescription classDescription : ClassesManager.getInstance().getAllCharacterClasses())
     {
       List<ClassSkill> classSkills=classDescription.getSkills();
@@ -74,10 +83,10 @@ public class SkillConstraintsComputer
       {
         SkillDescription skill=classSkill.getSkill();
         Integer key=Integer.valueOf(skill.getIdentifier());
-        List<ClassDescription> classes=ret.get(key);
+        Set<AbstractClassDescription> classes=ret.get(key);
         if (classes==null)
         {
-          classes=new ArrayList<ClassDescription>();
+          classes=new HashSet<AbstractClassDescription>();
           ret.put(key,classes);
         }
         classes.add(classDescription);
@@ -173,101 +182,88 @@ public class SkillConstraintsComputer
 
   private void handleSkill(SkillDescription skill)
   {
-    Console.println("Skill: "+skill);
     UsageRequirement req=getSkillRequirement(skill);
-    Console.println("\t"+req);
+    if (!req.isEmpty())
+    {
+      Console.println("Skill: "+skill);
+      Console.println("\t"+req);
+    }
   }
 
   private UsageRequirement getSkillRequirement(SkillDescription skill)
   {
     Integer key=Integer.valueOf(skill.getIdentifier());
-    UsageRequirement ret=null;
+    UsageRequirement ret=new UsageRequirement();
     // Class skills
-    List<ClassDescription> classes=_classSkills.get(key);
-    if ((classes!=null) && (!classes.isEmpty()))
+    Set<AbstractClassDescription> allClasses=new HashSet<AbstractClassDescription>();
+    Set<AbstractClassDescription> classes=_classSkills.get(key);
+    if (classes!=null)
     {
-      ret=new UsageRequirement();
-      for(ClassDescription characterClass : classes)
-      {
-        ret.addAllowedClass(characterClass);
-      }
+      allClasses.addAll(classes);
     }
     // Item granted skills
     List<Item> items=_itemGrantedSkills.get(key);
     if (items!=null)
     {
-      UsageRequirement itemReq=getRequirementFromItems(items);
-      if (itemReq==null)
+      Set<AbstractClassDescription> classesFromItems=getAllowedClassesFromItems(items);
+      if (classesFromItems!=null)
       {
-        return null;
+        allClasses.addAll(classesFromItems);
       }
-      ret=itemReq; // Merge!
+    }
+    if (!allClasses.isEmpty())
+    {
+      List<AbstractClassDescription> allowedClasses=new ArrayList<AbstractClassDescription>(allClasses);
+      ClassRequirement classRequirement=new ClassRequirement(allowedClasses);
+      ret.setClassRequirement(classRequirement);
     }
     // Trait granted skills
     List<TraitDescription> traits=_traitSkills.get(key);
     if (traits!=null)
     {
-      UsageRequirement traitsReq=getRequirementsFromTraits(traits);
-      if (traitsReq==null)
-      {
-        return null;
-      }
-      ret=traitsReq; // Merge
+      RaceRequirement raceRequirement=getRaceRequirementFromTraits(traits);
+      ret.setRaceRequirement(raceRequirement);
     }
     return ret;
   }
 
-  private UsageRequirement getRequirementFromItems(List<Item> items)
+  private Set<AbstractClassDescription> getAllowedClassesFromItems(List<Item> items)
   {
-    UsageRequirement ret=null;
+    Set<AbstractClassDescription> ret=null;
     for(Item item : items)
     {
-      UsageRequirement itemReq=null;
-      Console.println("\tItem: "+item);
+      LOGGER.debug("\tItem: {}",item);
       ItemBinding binding=item.getBinding();
       if (binding==ItemBindings.BIND_ON_ACQUIRE)
       {
-        itemReq=analyzeRequirements(item.getUsageRequirements());
+        AbstractClassDescription characterClass=item.getRequiredClass();
+        if (characterClass!=null)
+        {
+          if (ret==null)
+          {
+            ret=new HashSet<AbstractClassDescription>();
+          }
+          ret.add(characterClass);
+        }
       }
-      if (itemReq==null)
-      {
-        return null;
-      }
-      ret=itemReq; // Merge!
     }
     return ret;
   }
 
-  private UsageRequirement getRequirementsFromTraits(List<TraitDescription> traits)
+  private RaceRequirement getRaceRequirementFromTraits(List<TraitDescription> traits)
   {
-    UsageRequirement ret=null;
+    RaceRequirement ret=null;
     for(TraitDescription trait : traits)
     {
-      Console.println("\tTrait: "+trait);
+      LOGGER.debug("\tTrait: {}",trait);
       Integer traitKey=Integer.valueOf(trait.getIdentifier());
       List<RaceDescription> races=_trait2Race.get(traitKey);
-      if (races==null)
+      if ((races!=null) && (!races.isEmpty()))
       {
-        return null;
-      }
-      for(RaceDescription raceDescription : races)
-      {
-        ret=new UsageRequirement();
-        ret.addAllowedRace(raceDescription);
-        Console.println("\t\tRace: "+raceDescription.getKey());
+        ret=new RaceRequirement(races);
       }
     }
     return ret;
-  }
-
-  private UsageRequirement analyzeRequirements(UsageRequirement requirements)
-  {
-    ClassRequirement classRequirement=requirements.getClassRequirement();
-    if (classRequirement!=null)
-    {
-      return requirements;
-    }
-    return null;
   }
 
   private void doIt()

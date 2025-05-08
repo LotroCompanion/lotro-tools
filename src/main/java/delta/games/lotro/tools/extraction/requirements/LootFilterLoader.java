@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.extraction.requirements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +10,8 @@ import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
+import delta.games.lotro.common.requirements.ClassRequirement;
+import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -19,6 +24,18 @@ import delta.games.lotro.dat.data.PropertyValue;
 public class LootFilterLoader
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(LootFilterLoader.class);
+
+  private List<AbstractClassDescription> _classes;
+  private List<RaceDescription> _races;
+
+  /**
+   * Constructor.
+   */
+  public LootFilterLoader()
+  {
+    _classes=new ArrayList<AbstractClassDescription>();
+    _races=new ArrayList<RaceDescription>();
+  }
 
   /**
    * Load filter.
@@ -56,9 +73,21 @@ public class LootFilterLoader
         LOGGER.warn("Unmanaged property: {}",propertyName);
       }
     }
+    if (!_classes.isEmpty())
+    {
+      ClassRequirement classRequirement=new ClassRequirement(_classes);
+      requirements.setClassRequirement(classRequirement);
+      _classes.clear();
+    }
+    if (!_races.isEmpty())
+    {
+      RaceRequirement raceRequirement=new RaceRequirement(_races);
+      requirements.setRaceRequirement(raceRequirement);
+      _races.clear();
+    }
   }
 
-  private void handlePropertySet(PropertyValue propertySet,UsageRequirement requirements)
+  private void handlePropertySet(PropertyValue propertySet, UsageRequirement requirements)
   {
     String propertyName=propertySet.getDefinition().getName();
     if ("Agent_Class".equals(propertyName))
@@ -68,7 +97,7 @@ public class LootFilterLoader
       AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
       if (abstractClass!=null)
       {
-        requirements.addAllowedClass(abstractClass);
+        _classes.add(abstractClass);
       }
     }
     else if ("Agent_Species".equals(propertyName))
@@ -78,7 +107,7 @@ public class LootFilterLoader
       RaceDescription race=RacesManager.getInstance().getByCode(raceCode);
       if (race!=null)
       {
-        requirements.addAllowedRace(race);
+        _races.add(race);
       }
     }
     /*
@@ -99,7 +128,7 @@ public class LootFilterLoader
     }
   }
 
-  private void loadWorldEventFilter(PropertiesSet worldEventProps)
+  void loadWorldEventFilter(PropertiesSet worldEventProps)
   {
     System.out.println("World event filter: "+worldEventProps.dump());
   }

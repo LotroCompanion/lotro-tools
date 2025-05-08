@@ -1,5 +1,8 @@
 package delta.games.lotro.tools.extraction.requirements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +14,12 @@ import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.enums.CraftTier;
+import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.EffectRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.GloryRankRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
+import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.TraitRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -75,14 +80,20 @@ public class RequirementsLoadingUtils
     Object[] classReqs=(Object[])properties.getProperty("Usage_RequiredClassList");
     if (classReqs!=null)
     {
+      List<AbstractClassDescription> classes=new ArrayList<AbstractClassDescription>();
       for(Object classReq : classReqs)
       {
         int classCode=((Integer)classReq).intValue();
         AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classCode);
         if (abstractClass!=null)
         {
-          requirements.addAllowedClass(abstractClass);
+          classes.add(abstractClass);
         }
+      }
+      if (!classes.isEmpty())
+      {
+        ClassRequirement classRequirement=new ClassRequirement(classes);
+        requirements.setClassRequirement(classRequirement);
       }
     }
   }
@@ -103,14 +114,20 @@ public class RequirementsLoadingUtils
     Object[] raceReqs=(Object[])properties.getProperty("Usage_RequiredRaces");
     if (raceReqs!=null)
     {
+      List<RaceDescription> races=new ArrayList<RaceDescription>();
       for(Object raceReq : raceReqs)
       {
         int raceId=((Integer)raceReq).intValue();
         RaceDescription race=RacesManager.getInstance().getByCode(raceId);
         if (race!=null)
         {
-          requirements.addAllowedRace(race);
+          races.add(race);
         }
+      }
+      if (!races.isEmpty())
+      {
+        RaceRequirement raceRequirement=new RaceRequirement(races);
+        requirements.setRaceRequirement(raceRequirement);
       }
     }
   }

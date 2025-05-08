@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
-import delta.games.lotro.character.classes.AbstractClassDescription;
-import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
@@ -29,6 +27,7 @@ import delta.games.lotro.lore.items.legendary.relics.RelicTypes;
 import delta.games.lotro.lore.items.legendary.relics.RelicsCategory;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.requirements.RequirementsLoadingUtils;
 import delta.games.lotro.tools.extraction.utils.DatStatUtils;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
@@ -102,17 +101,8 @@ public class MainDatRelicsLoader
       // Required level
       Integer requiredLevel=(Integer)properties.getProperty("Runic_RequiredItemLevel");
       relic.setRequiredLevel(requiredLevel);
-      // Required class
-      Object[] classIdObjArray=(Object[])properties.getProperty("Usage_RequiredClassList");
-      if (classIdObjArray!=null)
-      {
-        for(Object classIdObj : classIdObjArray)
-        {
-          int classId=((Integer)classIdObj).intValue();
-          AbstractClassDescription abstractClass=ClassesManager.getInstance().getClassByCode(classId);
-          relic.getUsageRequirement().addAllowedClass(abstractClass);
-        }
-      }
+      // Required classes
+      RequirementsLoadingUtils.loadRequiredClasses(properties,relic.getUsageRequirement());
       // Icons
       Integer backgroundIconId=(Integer)properties.getProperty("Icon_Layer_BackgroundDID");
       Integer imageIconId=(Integer)properties.getProperty("Icon_Layer_ImageDID");
