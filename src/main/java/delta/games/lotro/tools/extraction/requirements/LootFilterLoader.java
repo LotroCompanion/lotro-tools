@@ -11,6 +11,8 @@ import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.requirements.ClassRequirement;
+import delta.games.lotro.common.requirements.DifficultyRequirement;
+import delta.games.lotro.common.requirements.LevelCapRequirement;
 import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
@@ -110,18 +112,18 @@ public class LootFilterLoader
         _races.add(race);
       }
     }
-    /*
     else if ("WE_Player_Level_Cap".equals(propertyName))
     {
       int playerLevelCap=((Integer)propertySet.getValue()).intValue();
-      System.out.println("Player level cap: "+playerLevelCap);
+      LevelCapRequirement requirement=new LevelCapRequirement(playerLevelCap);
+      requirements.setRequirement(requirement);
     }
     else if ("ze_skirmish_difficulty".equals(propertyName))
     {
       int difficulty=((Integer)propertySet.getValue()).intValue();
-      System.out.println("Difficulty: "+difficulty);
+      DifficultyRequirement requirement=new DifficultyRequirement(difficulty);
+      requirements.setRequirement(requirement);
     }
-    */
     else
     {
       LOGGER.warn("Unmanaged property name: {}",propertyName);
