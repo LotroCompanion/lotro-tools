@@ -27,6 +27,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.agents.AgentLoader;
 import delta.games.lotro.tools.extraction.agents.ClassificationLoader;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.loot.LootLoader;
 import delta.games.lotro.tools.extraction.misc.actions.ActionTablesLoader;
@@ -47,7 +48,6 @@ public class MainDatMobsLoader
   private ClassificationLoader _classificationLoader;
   private LotroEnum<MobDivision> _mobDivision;
   // Loots
-  private LootsManager _loots;
   private EffectLoader _effectLoader;
   private LootLoader _lootLoader;
   // Action tables
@@ -56,18 +56,17 @@ public class MainDatMobsLoader
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param lootsManager Loots manager.
+   * @param lootLoader Loot loader.
    * @param effectsLoader Effects loader.
    */
-  public MainDatMobsLoader(DataFacade facade, LootsManager lootsManager, EffectLoader effectsLoader)
+  public MainDatMobsLoader(DataFacade facade, LootLoader lootLoader, EffectLoader effectsLoader)
   {
     _facade=facade;
     _i18n=new I18nUtils("mobs",facade.getGlobalStringsManager());
     _classificationLoader=new ClassificationLoader(facade);
-    _loots=lootsManager;
     _effectLoader=effectsLoader;
     _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
-    _lootLoader=new LootLoader(facade,_loots);
+    _lootLoader=lootLoader;
     _actionTablesLoader=new ActionTablesLoader(facade);
   }
 
@@ -207,7 +206,9 @@ Quest_MonsterDivision: 245 => HallOfMirror
     PlacesLoader placesLoader=new PlacesLoader(facade);
     EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     LootsManager lootsManager=new LootsManager();
-    new MainDatMobsLoader(facade,lootsManager,effectsLoader).doIt();
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    LootLoader lootLoader=new LootLoader(facade,worldEventsLoader,lootsManager);
+    new MainDatMobsLoader(facade,lootLoader,effectsLoader).doIt();
     facade.dispose();
   }
 }

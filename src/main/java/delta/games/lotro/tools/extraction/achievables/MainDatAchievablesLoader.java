@@ -21,6 +21,7 @@ import delta.games.lotro.tools.extraction.achievables.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.extraction.achievables.quests.QuestsLoader;
 import delta.games.lotro.tools.extraction.achievables.rewards.DatRewardsLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
@@ -40,13 +41,14 @@ public class MainDatAchievablesLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param worldEventsLoader World events loader.
    * @param rewardsLoader Rewards loader.
    */
-  public MainDatAchievablesLoader(DataFacade facade, DatRewardsLoader rewardsLoader)
+  public MainDatAchievablesLoader(DataFacade facade, WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
   {
     _facade=facade;
     _logger=new AchievablesLogger(true,true,"achievables.txt");
-    _utils=new AchievablesLoadingUtils(facade,rewardsLoader);
+    _utils=new AchievablesLoadingUtils(facade,worldEventsLoader,rewardsLoader);
     _questsLoader=new QuestsLoader(facade,_utils);
     _deedsLoader=new DeedsLoader(facade,_utils);
   }
@@ -173,7 +175,8 @@ public class MainDatAchievablesLoader
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     Locale.setDefault(Locale.ENGLISH);
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(facade);
-    new MainDatAchievablesLoader(facade,rewardsLoader).doIt();
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    new MainDatAchievablesLoader(facade,worldEventsLoader,rewardsLoader).doIt();
     facade.dispose();
   }
 }

@@ -34,6 +34,7 @@ import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.enums.MainDatEnumsLoader;
 import delta.games.lotro.tools.extraction.common.progressions.MainProgressionsMerger;
 import delta.games.lotro.tools.extraction.common.stats.MainStatsLoader;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.crafting.MainDatCraftingLoader;
 import delta.games.lotro.tools.extraction.crafting.MainDatRecipesLoader;
 import delta.games.lotro.tools.extraction.effects.AdditionalEffectsLoader;
@@ -60,6 +61,7 @@ import delta.games.lotro.tools.extraction.items.MainWeaponDamageLoader;
 import delta.games.lotro.tools.extraction.items.legendary.MainDatLegendarySystem2Loader;
 import delta.games.lotro.tools.extraction.items.legendary.MainDatLegendarySystemLoader;
 import delta.games.lotro.tools.extraction.items.legendary.MainDatLegendaryTitlesLoader;
+import delta.games.lotro.tools.extraction.loot.LootLoader;
 import delta.games.lotro.tools.extraction.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.extraction.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.extraction.misc.MainPerksLoader;
@@ -210,26 +212,30 @@ public class MainDatLoader
     peLoader.doIt();
     // NPCs
     new MainDatNPCsLoader(_facade,effectsLoader).doIt();
+    // Some utils
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(_facade); 
+    LootLoader lootLoader=new LootLoader(_facade,worldEventsLoader,lootsManager);
     // Containers
-    new MainDatContainerLoader(_facade,lootsManager).doIt();
+    new MainDatContainerLoader(_facade,lootLoader).doIt();
     // Mobs
-    new MainDatMobsLoader(_facade,lootsManager,effectsLoader).doIt();
+    new MainDatMobsLoader(_facade,lootLoader,effectsLoader).doIt();
     // Save effects
     effectsLoader.save();
     // Disenchantment
     if (live)
     {
-      new MainDatDisenchantmentsLoader(_facade,lootsManager).doIt();
+      new MainDatDisenchantmentsLoader(_facade,lootLoader).doIt();
     }
     // Mobs loot
-    new MainDatGenericMobLootLoader(_facade,lootsManager).doIt();
+    new MainDatGenericMobLootLoader(_facade,lootLoader).doIt();
     // Save loots
     lootsManager.dump(System.out); // #NOSONAR
     // Write loot data
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
     // Quests and deeds
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
-    new MainDatAchievablesLoader(_facade,rewardsLoader).doIt();
+    new MainDatAchievablesLoader(_facade,worldEventsLoader,rewardsLoader).doIt();
+    worldEventsLoader.save();
     new MainProgressionsMerger().doIt();
     // Associate deeds to faction levels
     MainDatFactionsLoader.associateDeeds(factionsRegistry);

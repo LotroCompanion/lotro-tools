@@ -30,12 +30,13 @@ public class AchievablesLoadingUtils
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param worldEventsLoader World events loader.
    * @param rewardsLoader Rewards loader.
    */
-  public AchievablesLoadingUtils(DataFacade facade, DatRewardsLoader rewardsLoader)
+  public AchievablesLoadingUtils(DataFacade facade, WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
   {
     _rewardsLoader=rewardsLoader;
-    _worldEventsLoader=new WorldEventsLoader(facade);
+    _worldEventsLoader=worldEventsLoader;
     _webStoreItemsLoader=new WebStoreItemsLoader(facade);
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _usageRequirementsLoader=new UsageRequirementsLoader();

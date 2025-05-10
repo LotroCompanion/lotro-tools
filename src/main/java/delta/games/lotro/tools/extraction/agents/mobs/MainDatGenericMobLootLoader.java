@@ -23,6 +23,7 @@ import delta.games.lotro.lore.agents.mobs.loot.SpeciesLootsManager;
 import delta.games.lotro.lore.agents.mobs.loot.SubSpeciesLoot;
 import delta.games.lotro.lore.agents.mobs.loot.io.xml.GenericMobLootXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.loot.LootLoader;
 
 /**
@@ -35,7 +36,6 @@ public class MainDatGenericMobLootLoader
 
   private DataFacade _facade;
   // Loots
-  private LootsManager _loots;
   private LootLoader _lootLoader;
   // Data
   private SpeciesLootsManager _mgr;
@@ -48,13 +48,12 @@ public class MainDatGenericMobLootLoader
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param lootsManager Loots manager.
+   * @param lootLoader Loot loader.
    */
-  public MainDatGenericMobLootLoader(DataFacade facade, LootsManager lootsManager)
+  public MainDatGenericMobLootLoader(DataFacade facade, LootLoader lootLoader)
   {
     _facade=facade;
-    _loots=lootsManager;
-    _lootLoader=new LootLoader(facade,_loots);
+    _lootLoader=lootLoader;
     boolean isLive=LotroCoreConfig.isLive();
     String prefix=isLive?"LevelBasedLootTable":"SpeciesLevelLootTable";
     _levelTableProperty=prefix+"_LevelTable";
@@ -227,7 +226,9 @@ LevelBasedLootTable_LootTable:
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=new DataFacade();
     LootsManager lootsManager=new LootsManager();
-    new MainDatGenericMobLootLoader(facade,lootsManager).doIt();
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    LootLoader lootLoader=new LootLoader(facade,worldEventsLoader,lootsManager);
+    new MainDatGenericMobLootLoader(facade,lootLoader).doIt();
     facade.dispose();
   }
 }

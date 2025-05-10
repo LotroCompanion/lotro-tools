@@ -33,6 +33,7 @@ import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.requirements.LootFilterLoader;
 import delta.games.lotro.utils.StringUtils;
 
@@ -52,14 +53,15 @@ public class LootLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param worldEventsLoader World events loader.
    * @param lootsMgr Loots manager.
    */
-  public LootLoader(DataFacade facade, LootsManager lootsMgr)
+  public LootLoader(DataFacade facade, WorldEventsLoader worldEventsLoader, LootsManager lootsMgr)
   {
     _facade=facade;
     _probabilities=new LootProbabilities(facade);
     _lootsMgr=lootsMgr;
-    _filterLoader=new LootFilterLoader();
+    _filterLoader=new LootFilterLoader(worldEventsLoader);
   }
 
   /**

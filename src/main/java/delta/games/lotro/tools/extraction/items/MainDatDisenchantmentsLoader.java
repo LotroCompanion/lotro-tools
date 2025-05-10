@@ -17,6 +17,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
 import delta.games.lotro.lore.items.io.xml.DisenchantmentResultXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.loot.LootLoader;
 
 /**
@@ -29,18 +30,16 @@ public class MainDatDisenchantmentsLoader
 
   private DataFacade _facade;
   private LootLoader _lootLoader;
-  private LootsManager _loots;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param lootsManager Loots manager.
+   * @param lootLoader Loot loader.
    */
-  public MainDatDisenchantmentsLoader(DataFacade facade, LootsManager lootsManager)
+  public MainDatDisenchantmentsLoader(DataFacade facade, LootLoader lootLoader)
   {
     _facade=facade;
-    _loots=lootsManager;
-    _lootLoader=new LootLoader(facade,_loots);
+    _lootLoader=lootLoader;
   }
 
   /**
@@ -106,7 +105,9 @@ public class MainDatDisenchantmentsLoader
   {
     DataFacade facade=new DataFacade();
     LootsManager lootsManager=LootsManager.getInstance();
-    new MainDatDisenchantmentsLoader(facade,lootsManager).doIt();
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    LootLoader lootLoader=new LootLoader(facade,worldEventsLoader,lootsManager);
+    new MainDatDisenchantmentsLoader(facade,lootLoader).doIt();
     facade.dispose();
   }
 }

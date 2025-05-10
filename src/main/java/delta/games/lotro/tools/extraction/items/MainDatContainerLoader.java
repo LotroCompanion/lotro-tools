@@ -12,6 +12,7 @@ import delta.games.lotro.common.treasure.RelicsList;
 import delta.games.lotro.common.treasure.TreasureList;
 import delta.games.lotro.common.treasure.TrophyList;
 import delta.games.lotro.common.treasure.WeightedTreasureTable;
+import delta.games.lotro.common.treasure.io.xml.TreasureXMLWriter;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -28,6 +29,7 @@ import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsContainer;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.loot.CustomInstancesLootLoader;
 import delta.games.lotro.tools.extraction.loot.LootLoader;
 
@@ -41,19 +43,17 @@ public class MainDatContainerLoader
 
   private DataFacade _facade;
   private LootLoader _lootLoader;
-  private LootsManager _loots;
   private CustomInstancesLootLoader _instancesLootLoader;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param lootsManager Loots manager.
+   * @param lootLoader Loot loader.
    */
-  public MainDatContainerLoader(DataFacade facade, LootsManager lootsManager)
+  public MainDatContainerLoader(DataFacade facade, LootLoader lootLoader)
   {
     _facade=facade;
-    _loots=lootsManager;
-    _lootLoader=new LootLoader(facade,_loots);
+    _lootLoader=lootLoader;
     _instancesLootLoader=new CustomInstancesLootLoader(_facade,_lootLoader);
   }
 
@@ -353,8 +353,11 @@ If PackageItem_IsPreviewable: 1
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    LootsManager lootsManager=LootsManager.getInstance();
-    new MainDatContainerLoader(facade,lootsManager).doIt();
+    LootsManager lootsManager=new LootsManager();
+    WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
+    LootLoader lootLoader=new LootLoader(facade,worldEventsLoader,lootsManager);
+    new MainDatContainerLoader(facade,lootLoader).doIt();
     facade.dispose();
+    TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
   }
 }

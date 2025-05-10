@@ -15,9 +15,13 @@ import delta.games.lotro.common.requirements.DifficultyRequirement;
 import delta.games.lotro.common.requirements.LevelCapRequirement;
 import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.common.requirements.WorldEventRequirement;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyValue;
+import delta.games.lotro.lore.worldEvents.SimpleWorldEventCondition;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventConditionsLoader;
+import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 
 /**
  * Loader for loot filters.
@@ -29,14 +33,17 @@ public class LootFilterLoader
 
   private List<AbstractClassDescription> _classes;
   private List<RaceDescription> _races;
+  private WorldEventConditionsLoader _weConditionsLoader;
 
   /**
    * Constructor.
+   * @param worldEventsLoader World events loader.
    */
-  public LootFilterLoader()
+  public LootFilterLoader(WorldEventsLoader worldEventsLoader)
   {
     _classes=new ArrayList<AbstractClassDescription>();
     _races=new ArrayList<RaceDescription>();
+    _weConditionsLoader=new WorldEventConditionsLoader(worldEventsLoader);
   }
 
   /**
@@ -63,13 +70,11 @@ public class LootFilterLoader
           handlePropertySet(propertySet,requirements);
         }
       }
-      /*
       else if ("EntityFilter_WorldEvent".equals(propertyName))
       {
         PropertiesSet worldEventProps=(PropertiesSet)filterEntry.getValue();
-        loadWorldEventFilter(worldEventProps);
+        loadWorldEventFilter(worldEventProps,requirements);
       }
-      */
       else
       {
         LOGGER.warn("Unmanaged property: {}",propertyName);
@@ -130,9 +135,15 @@ public class LootFilterLoader
     }
   }
 
-  void loadWorldEventFilter(PropertiesSet worldEventProps)
+  void loadWorldEventFilter(PropertiesSet worldEventProps, UsageRequirement requirements)
   {
-    System.out.println("World event filter: "+worldEventProps.dump());
+    PropertiesSet worldEventConditionProps=(PropertiesSet)worldEventProps.getProperty("WorldEvent_Condition");
+    if (worldEventConditionProps!=null)
+    {
+      SimpleWorldEventCondition condition=_weConditionsLoader.handleWorldEventCondition(worldEventConditionProps);
+      WorldEventRequirement worldEventRequirement=new WorldEventRequirement(condition);
+      requirements.setRequirement(worldEventRequirement);
+    }
   }
 
   private void loadLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
