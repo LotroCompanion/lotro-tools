@@ -128,40 +128,48 @@ public class WorldEventConditionsLoader
    */
   public SimpleWorldEventCondition handleWorldEventCondition(PropertiesSet props)
   {
-    SimpleWorldEventCondition ret=null;
     int operatorCode=((Integer)props.getProperty("WorldEvent_Operator")).intValue();
     ComparisonOperator operator=OperatorUtils.getComparisonOperatorFromCode(operatorCode);
     Integer worldEventID=(Integer)props.getProperty("WorldEvent_WorldEvent");
-    Proxy<WorldEvent> worldEvent=buildWorldEventProxy(worldEventID.intValue());
     Integer conditionValue=(Integer)props.getProperty("WorldEvent_ConditionValue");
     Integer idToCompareWith=(Integer)props.getProperty("WorldEvent_Condition_WorldEventToCompareWith");
+    String usageString=(String)props.getProperty("WorldEvent_Condition_UsageString");
+    return buildWorldEventCondition(worldEventID.intValue(),operator,conditionValue,idToCompareWith,usageString);
+  }
+
+  /**
+   * Build a simple world event condition from raw values.
+   * @param worldEventID World event identifier.
+   * @param operator Operator.
+   * @param conditionValue Value.
+   * @param idToCompareWith World event to compare with.
+   * @param usageString Usage string.
+   * @return A simple world event condition.
+   */
+  public SimpleWorldEventCondition buildWorldEventCondition(int worldEventID, ComparisonOperator operator, Integer conditionValue, Integer idToCompareWith, String usageString)
+  {
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Condition: {}, operator={}",worldEventID,operator);
+      LOGGER.debug("Condition: {}, operator={}",Integer.valueOf(worldEventID),operator);
     }
+    Proxy<WorldEvent> worldEvent=buildWorldEventProxy(worldEventID);
+    SimpleWorldEventCondition ret=null;
     // If idToCompareWith is not null, then conditionValue is null
     if (idToCompareWith!=null)
     {
       Proxy<WorldEvent> comparetToWorldEvent=buildWorldEventProxy(idToCompareWith.intValue());
       ret=new SimpleWorldEventCondition(operator,worldEvent,comparetToWorldEvent);
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("\tCompare with world event: {}",idToCompareWith);
-      }
+      LOGGER.debug("\tCompare with world event: {}",idToCompareWith);
     }
     else if (conditionValue!=null)
     {
       ret=new SimpleWorldEventCondition(operator,worldEvent,conditionValue.intValue());
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("\tCompare with value: {}",conditionValue);
-      }
+      LOGGER.debug("\tCompare with value: {}",conditionValue);
     }
     else
     {
       LOGGER.warn("Unexpected case: no value and no 'compare with'");
     }
-    String usageString=(String)props.getProperty("WorldEvent_Condition_UsageString");
     if (usageString!=null)
     {
       // Not used

@@ -16,6 +16,7 @@ import delta.games.lotro.common.requirements.LevelCapRequirement;
 import delta.games.lotro.common.requirements.RaceRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.common.requirements.WorldEventRequirement;
+import delta.games.lotro.common.utils.ComparisonOperator;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyValue;
@@ -128,6 +129,13 @@ public class LootFilterLoader
       int difficulty=((Integer)propertySet.getValue()).intValue();
       DifficultyRequirement requirement=new DifficultyRequirement(difficulty);
       requirements.setRequirement(requirement);
+    }
+    else if ("WE_Lootbox_bonus_embers_motes".equals(propertyName))
+    {
+      Integer value=(Integer)propertySet.getValue();
+      SimpleWorldEventCondition condition=_weConditionsLoader.buildWorldEventCondition(1879387811,ComparisonOperator.EQUAL,value,null,null);
+      WorldEventRequirement worldEventRequirement=new WorldEventRequirement(condition);
+      requirements.setRequirement(worldEventRequirement);
     }
     else
     {
