@@ -26,6 +26,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
  * Get trait trees definitions from DAT files.
@@ -35,8 +36,11 @@ public class TraitTreesDataLoader
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(TraitTreesDataLoader.class);
 
+  private static final String TRAIT_TRAIT_TREE_BRANCH="Trait_TraitTree_Branch";
+
   private DataFacade _facade;
   private EnumMapper _traitCell;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -46,21 +50,22 @@ public class TraitTreesDataLoader
   {
     _facade=facade;
     _traitCell=_facade.getEnumsManager().getEnumMapper(0x2300036E);
+    _i18n=new I18nUtils("traitTrees",facade.getGlobalStringsManager());
   }
 
   private TraitTree handleTraitTree(int traitTreeId)
   {
     PropertiesSet properties=_facade.loadProperties(traitTreeId+DATConstants.DBPROPERTIES_OFFSET);
     // Branches
-    /*
+    Map<Integer,String> descriptions=new HashMap<Integer,String>();
     Object[] branchDescriptions=(Object[])properties.getProperty("Trait_TraitTree_BranchDescriptionArray");
     for(Object branchDescriptionObj : branchDescriptions)
     {
       PropertiesSet branchDescriptionProps=(PropertiesSet)branchDescriptionObj;
-      int branchId=((Integer)branchDescriptionProps.getProperty("Trait_TraitTree_Branch")).intValue();
-      String branchDescription=DatUtils.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
+      int branchId=((Integer)branchDescriptionProps.getProperty(TRAIT_TRAIT_TREE_BRANCH)).intValue();
+      String branchDescription=_i18n.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
+      descriptions.put(Integer.valueOf(branchId),branchDescription);
     }
-    */
     int traitTreeTypeCode=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     LotroEnum<TraitTreeType> traitTreeTypeEnum=registry.get(TraitTreeType.class);
@@ -76,18 +81,24 @@ public class TraitTreesDataLoader
       for(Object specializationObj : specializations)
       {
         PropertiesSet specializationProps=(PropertiesSet)specializationObj;
-        int branchId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationBranch")).intValue();
-        TraitTreeBranchType branchType=traitTreeBranchTypeEnum.getEntry(branchId);
+        Integer branchId=(Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationBranch");
+        TraitTreeBranchType branchType=traitTreeBranchTypeEnum.getEntry(branchId.intValue());
         TraitTreeBranch branch=new TraitTreeBranch(branchType);
-        branchesById.put(Integer.valueOf(branchId),branch);
+        branchesById.put(branchId,branch);
         tree.addBranch(branch);
+        // Description
+        String description=descriptions.get(branchId);
+        if (description!=null)
+        {
+          branch.setDescription(description);
+        }
         // Progression
         TraitTreeProgression progression=branch.getProgression();
         int progressionId=((Integer)specializationProps.getProperty("Trait_TraitTree_SpecializationProgression")).intValue();
         PropertiesSet progressionProperties=_facade.loadProperties(progressionId+DATConstants.DBPROPERTIES_OFFSET);
         handleSpecializationProgression(progression,progressionProperties);
         // Enabled?
-        boolean enabled=isEnabled(branchId);
+        boolean enabled=isEnabled(branchId.intValue());
         branch.setEnabled(enabled);
       }
     }
@@ -96,7 +107,7 @@ public class TraitTreesDataLoader
     for(Object traitObj : traits)
     {
       PropertiesSet traitProps=(PropertiesSet)traitObj;
-      Integer branchIdInt=(Integer)traitProps.getProperty("Trait_TraitTree_Branch");
+      Integer branchIdInt=(Integer)traitProps.getProperty(TRAIT_TRAIT_TREE_BRANCH);
       if (branchIdInt==null)
       {
         // Special case of non-branch specific traits in the mounted combat trees
@@ -194,7 +205,9 @@ public class TraitTreesDataLoader
         handleMainTraits(traitNatureProps,branchByCode);
       }
     }
+    // Save data
     TraitTreeXMLWriter.write(GeneratedFiles.TRAIT_TREES,traitTrees);
+    _i18n.save();
   }
 
   private void handleMainTraits(PropertiesSet traitNatureProps, Map<Integer,TraitTreeBranch> branchByCode)
@@ -209,7 +222,7 @@ public class TraitTreesDataLoader
       for(Object traitObj : traits)
       {
         PropertiesSet traitProps=(PropertiesSet)traitObj;
-        int branchId=((Integer)traitProps.getProperty("Trait_TraitTree_Branch")).intValue();
+        int branchId=((Integer)traitProps.getProperty(TRAIT_TRAIT_TREE_BRANCH)).intValue();
         TraitTreeBranch branch=branchByCode.get(Integer.valueOf(branchId));
         int traitId=((Integer)traitProps.getProperty("Trait_TraitTree_Trait")).intValue();
         TraitDescription trait=TraitUtils.getTrait(traitId);
