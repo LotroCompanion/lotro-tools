@@ -59,12 +59,15 @@ public class TraitTreesDataLoader
     // Branches
     Map<Integer,String> descriptions=new HashMap<Integer,String>();
     Object[] branchDescriptions=(Object[])properties.getProperty("Trait_TraitTree_BranchDescriptionArray");
-    for(Object branchDescriptionObj : branchDescriptions)
+    if (branchDescriptions!=null)
     {
-      PropertiesSet branchDescriptionProps=(PropertiesSet)branchDescriptionObj;
-      int branchId=((Integer)branchDescriptionProps.getProperty(TRAIT_TRAIT_TREE_BRANCH)).intValue();
-      String branchDescription=_i18n.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
-      descriptions.put(Integer.valueOf(branchId),branchDescription);
+      for(Object branchDescriptionObj : branchDescriptions)
+      {
+        PropertiesSet branchDescriptionProps=(PropertiesSet)branchDescriptionObj;
+        int branchId=((Integer)branchDescriptionProps.getProperty(TRAIT_TRAIT_TREE_BRANCH)).intValue();
+        String branchDescription=_i18n.getStringProperty(branchDescriptionProps,"Trait_TraitTree_Description");
+        descriptions.put(Integer.valueOf(branchId),branchDescription);
+      }
     }
     int traitTreeTypeCode=((Integer)properties.getProperty("Trait_TraitTree_TreeType")).intValue();
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
