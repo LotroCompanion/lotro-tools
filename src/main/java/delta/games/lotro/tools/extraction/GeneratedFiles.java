@@ -313,10 +313,6 @@ public class GeneratedFiles
    */
   public static final File MISC_ICONS=LotroCoreConfig.getInstance().getFile("miscIcons");
   /**
-   * Servers.
-   */
-  public static final File SERVERS=LotroCoreConfig.getInstance().getFile(DataFiles.SERVERS_DESCRIPTION);
-  /**
    * Geographic areas.
    */
   public static final File GEO_AREAS=LotroCoreConfig.getInstance().getFile(DataFiles.GEO_AREAS);

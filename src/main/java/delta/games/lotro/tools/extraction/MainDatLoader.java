@@ -46,7 +46,6 @@ import delta.games.lotro.tools.extraction.effects.mood.MainMoodDataLoader;
 import delta.games.lotro.tools.extraction.emotes.MainDatEmotesLoader;
 import delta.games.lotro.tools.extraction.factions.MainDatFactionsLoader;
 import delta.games.lotro.tools.extraction.global.MainGameDataBuilder;
-import delta.games.lotro.tools.extraction.global.MainServersBuilder;
 import delta.games.lotro.tools.extraction.housing.MainDatHousingLoader;
 import delta.games.lotro.tools.extraction.instances.MainDatInstancesTreeLoader;
 import delta.games.lotro.tools.extraction.instances.MainDatPrivateEncountersLoader;
@@ -110,8 +109,6 @@ public class MainDatLoader
     boolean live=LotroCoreConfig.isLive();
     // Game
     new MainGameDataBuilder().doIt();
-    // Servers
-    new MainServersBuilder().doIt();
     // Stats
     new MainStatsLoader(_facade).doIt();
     // Colors
