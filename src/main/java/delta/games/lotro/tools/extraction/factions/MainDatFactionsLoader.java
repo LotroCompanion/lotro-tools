@@ -450,6 +450,7 @@ Reputation_LowestTier: 1
     if (factionId==1879305436) return new String[]{category,"HOBNANIGANS",FactionLevelTemplates.HOBNANIGANS}; // Chicken Chasing League of Eriador
     if (factionId==1879464285) return new String[]{category,null,null}; // The Path of Valour
     if (factionId==1879490383) return new String[]{category,null,null}; // Amelia's Studies
+    if (factionId==1879496954) return new String[]{category,null,null}; // Moria Bounty Hunters
     category="Guild";
     if (factionId==1879124448) return new String[]{category,"GUILD_COOK",FactionLevelTemplates.GUILD}; // Cook's Guild
     if (factionId==1879124449) return new String[]{category,"GUILD_JEWELLER",FactionLevelTemplates.GUILD}; // Jeweller's Guild
@@ -648,7 +649,7 @@ Reputation_LowestTier: 1
       // Umbar
       1879465745,1879489735,1879489736,1879489734,
       // Misc
-      1879182957,1879103953,1879305436,1879464285,1879490383,
+      1879182957,1879103953,1879305436,1879464285,1879490383,1879496954
     };
     return ret;
   }
