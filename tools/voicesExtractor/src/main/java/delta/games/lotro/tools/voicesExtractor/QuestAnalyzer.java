@@ -1,8 +1,12 @@
 package delta.games.lotro.tools.voicesExtractor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.voicesExtractor.npc.NpcVoices;
 
 /**
  * Analyzes quest data to find NPC/sound pairs.
@@ -10,24 +14,17 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class QuestAnalyzer
 {
+  private Map<Integer,NpcVoices> _npcVoices;
+  private ScriptsInspectorForVoices _inspector;
+
   /**
-   * Result element: NPC/sound pair.
-   * @author DAM
+   * Constructor.
+   * @param facade Data facade.
    */
-  public class ResultElement
+  public QuestAnalyzer(DataFacade facade)
   {
-    /**
-     * Quest ID.
-     */
-    public int questID;
-    /**
-     * NPC identifier.
-     */
-    public int npcID;
-    /**
-     * Sound identifier.
-     */
-    public int soundID;
+    _inspector=new ScriptsInspectorForVoices(facade);
+    _npcVoices=new HashMap<Integer,NpcVoices>();
   }
 
   /**
@@ -56,14 +53,44 @@ public class QuestAnalyzer
   Quest_ObjectiveIndex: 0
 */
       PropertiesSet roleProps=(PropertiesSet)roleObj;
-      //int dispenserAction=((Integer)roleProps.getProperty("QuestDispenser_Action")).intValue();
       Integer npcId=(Integer)roleProps.getProperty("QuestDispenser_NPC");
-      Integer soundID=(Integer)roleProps.getProperty("QuestDispenser_VOSoundID");
-      if ((npcId!=null) && (npcId.intValue()!=0) && (soundID!=null) && (soundID.intValue()!=0))
+      if ((npcId!=null) && (npcId.intValue()!=0))
+      {
+        Integer soundID=(Integer)roleProps.getProperty("QuestDispenser_VOSoundID");
+        if ((soundID!=null) && (soundID.intValue()!=0))
+        {
+          ResultElement element=new ResultElement();
+          element.questID=questID;
+          element.npcID=npcId.intValue();
+          element.soundID=soundID.intValue();
+          results.add(element);
+        }
+        Integer scriptID=(Integer)roleProps.getProperty("QuestDispenser_VOScriptID");
+        if ((scriptID!=null) && (scriptID.intValue()!=0))
+        {
+          handleNpcScript(questID,npcId.intValue(),scriptID.intValue(),results);
+        }
+      }
+    }
+  }
+
+  private void handleNpcScript(int questID, int npcID, int scriptID, List<ResultElement> results)
+  {
+    Integer key=Integer.valueOf(npcID);
+    NpcVoices voices=_npcVoices.get(key);
+    if (voices==null)
+    {
+      voices=_inspector.handleNPC(npcID);
+      _npcVoices.put(key,voices);
+    }
+    List<Integer> soundIDs=voices.getSounds(questID,scriptID);
+    if (!soundIDs.isEmpty())
+    {
+      for(Integer soundID : soundIDs)
       {
         ResultElement element=new ResultElement();
         element.questID=questID;
-        element.npcID=npcId.intValue();
+        element.npcID=npcID;
         element.soundID=soundID.intValue();
         results.add(element);
       }

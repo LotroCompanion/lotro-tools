@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+	<contextName>VOICES-EXTRACTOR</contextName>
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<!-- simplified display in console -->
+		<encoder>
+			<pattern>
+				%date{ISO8601} %-5level [%thread] %logger{0} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Loggers configuration -->
+	<!-- logger levels: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF, INHERITED or NULL-->
+	<!-- Global -->
+	<logger name="delta.games.lotro"                               level="WARN"/>
+
+	<!-- ********************** COTS ****************** -->
+	<!-- logback himself -->
+	<logger name="ch.qos.logback" level="WARN"/>
+	<!-- JAXB -->
+	<logger name="com.sun.xml" level="INHERITED"/>
+
+	<!-- root logger level: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF-->
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

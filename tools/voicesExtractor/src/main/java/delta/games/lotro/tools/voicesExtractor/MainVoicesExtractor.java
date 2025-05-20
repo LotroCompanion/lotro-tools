@@ -11,7 +11,6 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
-import delta.games.lotro.tools.voicesExtractor.QuestAnalyzer.ResultElement;
 
 /**
  * Tool to extract quest NPC voices.
@@ -37,7 +36,7 @@ public class MainVoicesExtractor
     cfg.setLocale(_language);
     _facade=new DataFacade(cfg);
     _soundsExtractor=new SoundExtractor(_facade);
-    _questAnalyzer=new QuestAnalyzer();
+    _questAnalyzer=new QuestAnalyzer(_facade);
     _elements=new ArrayList<ResultElement>();
     // Info
     File datFiles=cfg.getRootPath();
@@ -108,7 +107,7 @@ public class MainVoicesExtractor
     {
       // Name
       String npcName=DatStringUtils.getStringProperty(properties,"Name");
-      npcName=DatStringUtils.fixName(npcName);
+      npcName=DatStringUtils.fixName(npcName).trim();
       return npcName;
     }
     return null;

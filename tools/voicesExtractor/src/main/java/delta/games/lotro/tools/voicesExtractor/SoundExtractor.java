@@ -8,7 +8,8 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFileFormat.Type;
 import javax.sound.sampled.AudioSystem;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.FileIO;
 import delta.games.lotro.dat.archive.DetailedFileEntry;
@@ -22,7 +23,7 @@ import delta.games.lotro.dat.loaders.SoundInfoLoader;
  */
 public class SoundExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(SoundExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SoundExtractor.class);
 
   private DataFacade _facade;
 
@@ -47,14 +48,14 @@ public class SoundExtractor
     byte[] data=_facade.loadData(soundInfoID);
     if (data==null)
     {
-      LOGGER.warn("Could not load sound ID="+soundInfoID);
+      LOGGER.warn("Could not load sound ID={}",Integer.valueOf(soundInfoID));
       return false;
     }
     ByteArrayInputStream bis=new ByteArrayInputStream(data);
     SoundInfo soundInfo=SoundInfoLoader.decodeSoundInfo(bis);
     if (soundInfo==null)
     {
-      LOGGER.warn("Could not decode sound ID="+soundInfoID);
+      LOGGER.warn("Could not decode sound ID={}",Integer.valueOf(soundInfoID));
       return false;
     }
     int soundID=soundInfo.getSoundID();
@@ -62,7 +63,7 @@ public class SoundExtractor
     DetailedFileEntry entry=_facade.getDetailedEntry(soundID);
     if (entry==null)
     {
-      LOGGER.warn("Could not load raw sound for sound ID="+soundInfoID);
+      LOGGER.warn("Could not load raw sound for sound ID={}",Integer.valueOf(soundInfoID));
       return false;
     }
     byte[] soundData=entry.getData();
@@ -75,7 +76,7 @@ public class SoundExtractor
     else if (format==SoundFormat.OGG_VORBIS) extension=".ogg";
     else extension=".unknown";
     if (soundName==null) soundName="";
-    String filename=""+questID+"-"+soundID+((soundName.length()>0)?"-"+soundName:"");
+    String filename=""+questID+"-"+soundID+((!soundName.isEmpty())?"-"+soundName:"");
     File f=new File(toDir,filename+extension);
     boolean ok=FileIO.writeFile(f,rawSoundData);
     return ok;
@@ -104,9 +105,5 @@ public class SoundExtractor
     }
     LOGGER.warn("Could not get format of sound: unsupported type!");
     return null;
-    // System.out.println("Format: "+format.getFormat());
-    // System.out.println("Byte length: "+format.getByteLength());
-    // System.out.println("Frame length: "+format.getFrameLength());
-    // System.out.println("Properties: "+format.properties());
   }
 }

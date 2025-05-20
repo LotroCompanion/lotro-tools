@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>voicesExtractor</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>2.0</version>
   <name>voicesExtractor</name>
   <parent>
     <groupId>com.dam.delta4j</groupId>
@@ -14,19 +14,12 @@
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-dat-utils</artifactId>
-      <version>10.2</version>
+      <version>11.6</version>
     </dependency>
-	<!--
-    <dependency>
-      <groupId>com.dam.delta4j</groupId>
-      <artifactId>delta-lotro-core</artifactId>
-      <version>20.10</version>
-    </dependency>
-	-->
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-common</artifactId>
-      <version>1.10</version>
+      <version>1.15</version>
     </dependency>
   </dependencies>
 </project>
