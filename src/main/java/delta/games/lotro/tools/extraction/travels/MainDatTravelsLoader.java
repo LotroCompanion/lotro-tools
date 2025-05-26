@@ -21,8 +21,11 @@ import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelRoute;
 import delta.games.lotro.lore.travels.TravelRouteInstance;
 import delta.games.lotro.lore.travels.TravelsManager;
+import delta.games.lotro.lore.travels.io.xml.TravelsWebXMLWriter;
+import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.achievables.QuestRequirementsLoader;
 import delta.games.lotro.tools.extraction.requirements.UsageRequirementsLoader;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 
 /**
  * Get travel definitions from DAT files.
@@ -64,6 +67,7 @@ public class MainDatTravelsLoader
     TravelDestination homeLocation=getTravelDestination(homeLocationId);
     node.addLocation(homeLocation);
     // Other locations
+    /*
     Object[] otherLocationsArray=(Object[])properties.getProperty("TravelHomeLocationsArray");
     if (otherLocationsArray!=null)
     {
@@ -77,6 +81,7 @@ public class MainDatTravelsLoader
         }
       }
     }
+    */
 
     // Routes
     Object[] routesArray=(Object[])properties.getProperty("TravelDestinationRecordArray");
@@ -85,7 +90,7 @@ public class MainDatTravelsLoader
       PropertiesSet routeProps = (PropertiesSet)routeObj;
       int routeCost=((Integer)routeProps.getProperty("TravelDestinationCost")).intValue();
       int routeId=((Integer)routeProps.getProperty("TravelDestinationRoute")).intValue();
-      TravelRoute route=loadTravelRoute(routeId);
+      TravelRoute route=getTravelRoute(routeId);
       TravelRouteInstance routeInstance=new TravelRouteInstance(routeCost,route);
       node.addRoute(routeInstance);
     }
@@ -115,6 +120,17 @@ public class MainDatTravelsLoader
       _travelsMgr.addDestination(destination);
     }
     return destination;
+  }
+
+  private TravelRoute getTravelRoute(int travelRouteId)
+  {
+    TravelRoute route=_travelsMgr.getRoute(travelRouteId);
+    if (route==null)
+    {
+      route=loadTravelRoute(travelRouteId);
+      _travelsMgr.addRoute(route);
+    }
+    return route;
   }
 
   private TravelRoute loadTravelRoute(int travelRouteId)
@@ -186,6 +202,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     if (travelModeId==1879108779) return TravelMode.SHAGGY;
     if (travelModeId==1879444821) return TravelMode.ELK;
     if (travelModeId==1879417911) return TravelMode.BOAR;
+    if (travelModeId==1879495383) return TravelMode.OTHER;
     LOGGER.warn("Unmanaged travel mode: {}",Integer.valueOf(travelModeId));
     return null;
   }
@@ -209,13 +226,14 @@ Usage_RequiresSubscriberOrUnsub: 1
 
   void doItWithIndex()
   {
-    PropertiesSet indexProperties=_facade.loadProperties(1879048794+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet indexProperties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TravelWebDirectory");
     Object[] idsArray=(Object[])indexProperties.getProperty("TravelWebArray");
     for(Object idObj : idsArray)
     {
       int id=((Integer)idObj).intValue();
       load(id);
     }
+    save();
   }
 
   private void doItWithScan()
@@ -233,10 +251,16 @@ Usage_RequiresSubscriberOrUnsub: 1
         }
       }
     }
-    dumpTravels(System.out); // NOSONAR
+    save();
+    //dumpTravels(System.out); // NOSONAR
   }
 
-  private void dumpTravels(PrintStream out)
+  private void save()
+  {
+    TravelsWebXMLWriter.writeTravelsWebFile(GeneratedFiles.TRAVELS_WEB,_travelsMgr);
+  }
+
+  void dumpTravels(PrintStream out)
   {
     List<TravelNode> nodes=_travelsMgr.getNodes();
     for(TravelNode node : nodes)

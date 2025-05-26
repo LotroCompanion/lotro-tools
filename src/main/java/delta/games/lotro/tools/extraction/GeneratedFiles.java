@@ -472,4 +472,8 @@ public class GeneratedFiles
    * Bird icons.
    */
   public static final File BIRD_ICONS_DIR=LotroCoreConfig.getInstance().getFile("birdIconsDir");
+  /**
+   * Travels web.
+   */
+  public static final File TRAVELS_WEB=LotroCoreConfig.getInstance().getFile(DataFiles.TRAVELS_WEB);
 }
