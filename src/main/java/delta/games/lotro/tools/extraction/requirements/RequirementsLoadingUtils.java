@@ -18,8 +18,10 @@ import delta.games.lotro.common.requirements.ClassRequirement;
 import delta.games.lotro.common.requirements.EffectRequirement;
 import delta.games.lotro.common.requirements.FactionRequirement;
 import delta.games.lotro.common.requirements.GloryRankRequirement;
+import delta.games.lotro.common.requirements.LevelRangeRequirement;
 import delta.games.lotro.common.requirements.ProfessionRequirement;
 import delta.games.lotro.common.requirements.RaceRequirement;
+import delta.games.lotro.common.requirements.Requirements;
 import delta.games.lotro.common.requirements.TraitRequirement;
 import delta.games.lotro.common.requirements.UsageRequirement;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -45,7 +47,7 @@ public class RequirementsLoadingUtils
    * @param properties Source properties.
    * @param requirements Storage for loaded data.
    */
-  public static void loadLevelRequirements(PropertiesSet properties, UsageRequirement requirements)
+  public static void loadLevelRequirements(PropertiesSet properties, Requirements requirements)
   {
     Integer minLevel=(Integer)properties.getProperty("Usage_MinLevel");
     if ((minLevel!=null) && (minLevel.intValue()<=1))
@@ -63,7 +65,11 @@ public class RequirementsLoadingUtils
       int capLevel=Game.getParameters().getMaxCharacterLevel();
       minLevel=Integer.valueOf(capLevel);
     }
-    requirements.setLevelRange(minLevel,maxLevel);
+    if ((minLevel!=null) || (maxLevel!=null))
+    {
+      LevelRangeRequirement levelRequirement=new LevelRangeRequirement(minLevel,maxLevel);
+      requirements.setRequirement(LevelRangeRequirement.class,levelRequirement);
+    }
   }
 
   /**
@@ -71,7 +77,7 @@ public class RequirementsLoadingUtils
    * @param properties Source properties.
    * @param requirements Storage for loaded data.
    */
-  public static void loadRequiredClasses(PropertiesSet properties, UsageRequirement requirements)
+  public static void loadRequiredClasses(PropertiesSet properties, Requirements requirements)
   {
     /*
     Usage_RequiredClassList:
@@ -93,7 +99,7 @@ public class RequirementsLoadingUtils
       if (!classes.isEmpty())
       {
         ClassRequirement classRequirement=new ClassRequirement(classes);
-        requirements.setClassRequirement(classRequirement);
+        requirements.setRequirement(ClassRequirement.class,classRequirement);
       }
     }
   }
@@ -103,7 +109,7 @@ public class RequirementsLoadingUtils
    * @param properties Source properties.
    * @param requirements Storage for loaded data.
    */
-  public static void loadRequiredRaces(PropertiesSet properties, UsageRequirement requirements)
+  public static void loadRequiredRaces(PropertiesSet properties, Requirements requirements)
   {
     /*
     Usage_RequiredRaces:
@@ -127,7 +133,7 @@ public class RequirementsLoadingUtils
       if (!races.isEmpty())
       {
         RaceRequirement raceRequirement=new RaceRequirement(races);
-        requirements.setRaceRequirement(raceRequirement);
+        requirements.setRequirement(RaceRequirement.class,raceRequirement);
       }
     }
   }
@@ -137,7 +143,7 @@ public class RequirementsLoadingUtils
    * @param properties Source properties.
    * @param requirements Storage for loaded data.
    */
-  public static void loadRequiredFaction(PropertiesSet properties, UsageRequirement requirements)
+  public static void loadRequiredFaction(PropertiesSet properties, Requirements requirements)
   {
     PropertiesSet factionReqProps=(PropertiesSet)properties.getProperty("Usage_RequiredFaction");
     if (factionReqProps!=null)
@@ -150,7 +156,7 @@ public class RequirementsLoadingUtils
         if (faction!=null)
         {
           FactionRequirement factionRequirement=new FactionRequirement(faction,tier.intValue());
-          requirements.setFactionRequirement(factionRequirement);
+          requirements.setRequirement(FactionRequirement.class,factionRequirement);
         }
         else
         {
@@ -169,7 +175,7 @@ public class RequirementsLoadingUtils
    * @param properties Source properties.
    * @param requirements Storage for loaded data.
    */
-  public static void loadRequiredProfession(PropertiesSet properties, UsageRequirement requirements)
+  public static void loadRequiredProfession(PropertiesSet properties, Requirements requirements)
   {
     Integer professionId=(Integer)properties.getProperty("Usage_RequiredCraftProfession");
     if (professionId!=null)
@@ -194,7 +200,7 @@ public class RequirementsLoadingUtils
           tier=level.getCraftTier();
         }
         ProfessionRequirement professionRequirement=new ProfessionRequirement(profession,tier);
-        requirements.setProfessionRequirement(professionRequirement);
+        requirements.setRequirement(ProfessionRequirement.class,professionRequirement);
       }
       else
       {

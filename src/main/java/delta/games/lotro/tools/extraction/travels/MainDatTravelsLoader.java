@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
-import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.common.requirements.Requirements;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -19,6 +19,7 @@ import delta.games.lotro.lore.travels.TravelDestination;
 import delta.games.lotro.lore.travels.TravelMode;
 import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelRoute;
+import delta.games.lotro.lore.travels.TravelRouteAction;
 import delta.games.lotro.lore.travels.TravelRouteInstance;
 import delta.games.lotro.lore.travels.TravelsManager;
 import delta.games.lotro.lore.travels.io.xml.TravelsWebXMLWriter;
@@ -38,7 +39,6 @@ public class MainDatTravelsLoader
   private DataFacade _facade;
   private TravelsManager _travelsMgr;
   private QuestRequirementsLoader _questRequirementsLoader;
-  private UsageRequirementsLoader _usageRequirementsLoader;
 
   /**
    * Constructor.
@@ -49,7 +49,6 @@ public class MainDatTravelsLoader
     _facade=facade;
     _travelsMgr=new TravelsManager();
     _questRequirementsLoader=new QuestRequirementsLoader(facade);
-    _usageRequirementsLoader=new UsageRequirementsLoader();
   }
 
   private TravelNode load(int indexDataId)
@@ -90,6 +89,7 @@ public class MainDatTravelsLoader
       PropertiesSet routeProps = (PropertiesSet)routeObj;
       int routeCost=((Integer)routeProps.getProperty("TravelDestinationCost")).intValue();
       int routeId=((Integer)routeProps.getProperty("TravelDestinationRoute")).intValue();
+      // TravelDestinationMinLevel is not used
       TravelRoute route=getTravelRoute(routeId);
       TravelRouteInstance routeInstance=new TravelRouteInstance(routeCost,route);
       node.addRoute(routeInstance);
@@ -173,11 +173,8 @@ Usage_RequiresSubscriberOrUnsub: 1
     for(Object routeActionObj : routeActionsArray)
     {
       int routeActionId=((Integer)routeActionObj).intValue();
-      String segmentKey=loadTravelRouteAction(routeActionId);
-      if (segmentKey!=null)
-      {
-        route.addRouteAction(segmentKey);
-      }
+      TravelRouteAction action=loadTravelRouteAction(routeActionId);
+      route.addRouteAction(action);
     }
     // Requirements
     // - quests/deeds
@@ -185,11 +182,10 @@ Usage_RequiresSubscriberOrUnsub: 1
     if (questRequirement!=null)
     {
       AchievableProxiesResolver.getInstance().resolveQuestRequirement(questRequirement);
-      route.setQuestRequirement(questRequirement);
+      route.getRequirements().setRequirement(questRequirement);
     }
     // - other usage requirements
-    UsageRequirement usageRequirement=route.getUsageRequirement();
-    _usageRequirementsLoader.loadUsageRequirements(properties,usageRequirement);
+    UsageRequirementsLoader.loadUsageRequirements(properties,route.getRequirements());
 
     return route;
   }
@@ -207,20 +203,14 @@ Usage_RequiresSubscriberOrUnsub: 1
     return null;
   }
 
-  private String loadTravelRouteAction(int routeActionId)
+  private TravelRouteAction loadTravelRouteAction(int routeActionId)
   {
     PropertiesSet properties=_facade.loadProperties(routeActionId+DATConstants.DBPROPERTIES_OFFSET);
-    String ret=(String)properties.getProperty("TravelSegment_HeadName");
-    if (ret==null)
-    {
-      @SuppressWarnings("unused")
-      Float hopDelay=(Float)properties.getProperty("TravelHop_Delay");
-      String padLocation=(String)properties.getProperty("TravelPad_Location");
-      if (padLocation!=null)
-      {
-        ret=padLocation;
-      }
-    }
+    String headname=(String)properties.getProperty("TravelSegment_HeadName");
+    Float hopDelay=(Float)properties.getProperty("TravelHop_Delay");
+    Integer sceneID=(Integer)properties.getProperty("TravelHop_SceneID");
+    String padLocation=(String)properties.getProperty("TravelPad_Location");
+    TravelRouteAction ret=new TravelRouteAction(routeActionId,headname,hopDelay,sceneID,padLocation);
     return ret;
   }
 
@@ -279,10 +269,10 @@ Usage_RequiresSubscriberOrUnsub: 1
         out.println("\t\tCost: "+cost);
         out.println("\t\tMode: "+route.getMode());
         out.println("\t\t"+route.getDestination());
-        UsageRequirement usageRequirement=route.getUsageRequirement();
-        if (!usageRequirement.isEmpty())
+        Requirements requirements=route.getRequirements();
+        if (!requirements.isEmpty())
         {
-          out.println("\t\tRequirements: "+usageRequirement);
+          out.println("\t\tRequirements: "+requirements);
         }
         AbstractAchievableRequirement questRequirements=route.getQuestRequirement();
         if (questRequirements!=null)

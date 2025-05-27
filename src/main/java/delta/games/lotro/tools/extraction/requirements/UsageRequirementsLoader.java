@@ -1,6 +1,6 @@
 package delta.games.lotro.tools.extraction.requirements;
 
-import delta.games.lotro.common.requirements.UsageRequirement;
+import delta.games.lotro.common.requirements.Requirements;
 import delta.games.lotro.dat.data.PropertiesSet;
 
 /**
@@ -10,11 +10,11 @@ import delta.games.lotro.dat.data.PropertiesSet;
 public class UsageRequirementsLoader
 {
   /**
-   * Load usage requirements.
+   * Load requirements.
    * @param permissions Input properties.
    * @param storage Storage for loaded data.
    */
-  public void loadUsageRequirements(PropertiesSet permissions, UsageRequirement storage)
+  public static void loadUsageRequirements(PropertiesSet permissions, Requirements storage)
   {
     // - level
     RequirementsLoadingUtils.loadLevelRequirements(permissions,storage);

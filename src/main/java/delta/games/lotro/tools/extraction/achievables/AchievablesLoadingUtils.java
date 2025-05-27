@@ -20,7 +20,6 @@ import delta.games.lotro.utils.Proxy;
 public class AchievablesLoadingUtils
 {
   private QuestRequirementsLoader _requirementsLoader;
-  private UsageRequirementsLoader _usageRequirementsLoader;
   private WorldEventConditionsLoader _weConditionsLoader;
   private DatRewardsLoader _rewardsLoader;
   private WorldEventsLoader _worldEventsLoader;
@@ -39,7 +38,6 @@ public class AchievablesLoadingUtils
     _worldEventsLoader=worldEventsLoader;
     _webStoreItemsLoader=new WebStoreItemsLoader(facade);
     _requirementsLoader=new QuestRequirementsLoader(facade);
-    _usageRequirementsLoader=new UsageRequirementsLoader();
     _weConditionsLoader=new WorldEventConditionsLoader(_worldEventsLoader);
     _eventIDsLoader=new AchievableEventIDLoader(facade);
   }
@@ -108,7 +106,7 @@ public class AchievablesLoadingUtils
     if (permissions!=null)
     {
       // - generic usage requirements
-      _usageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
+      UsageRequirementsLoader.loadUsageRequirements(permissions,achievable.getUsageRequirement());
       // - world events
       AbstractWorldEventCondition worldEventsRequirements=_weConditionsLoader.loadWorldEventsUsageConditions(permissions);
       achievable.setWorldEventsRequirement(worldEventsRequirements);
