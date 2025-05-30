@@ -64,9 +64,8 @@ public class MainDatTravelsLoader
     // Home location
     int homeLocationId=((Integer)properties.getProperty("TravelHomeLocation")).intValue();
     TravelDestination homeLocation=getTravelDestination(homeLocationId);
-    node.addLocation(homeLocation);
+    node.setMainLocation(homeLocation);
     // Other locations
-    /*
     Object[] otherLocationsArray=(Object[])properties.getProperty("TravelHomeLocationsArray");
     if (otherLocationsArray!=null)
     {
@@ -80,7 +79,6 @@ public class MainDatTravelsLoader
         }
       }
     }
-    */
 
     // Routes
     Object[] routesArray=(Object[])properties.getProperty("TravelDestinationRecordArray");
