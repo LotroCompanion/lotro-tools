@@ -14,6 +14,7 @@ import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.loaders.GeoLoader;
 import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.dat.utils.BufferUtils;
+import delta.games.lotro.tools.extraction.geo.GeoUtils;
 
 /**
  * Loader for places.
@@ -36,7 +37,7 @@ public class PlacesLoader
   {
     _facade=facade;
     _map=new HashMap<String,ExtendedPosition>();
-    doIt();
+    loadPlaces();
   }
 
   private void loadPlace(ByteArrayInputStream bis)
@@ -45,6 +46,7 @@ public class PlacesLoader
     String name=BufferUtils.readPrefixedUtf16String(bis);
     // Position
     DatPosition position=GeoLoader.readPosition(bis);
+    Integer zoneID=GeoUtils.getZoneID(position);
     float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
     Position pos=new Position(position.getRegion(),lonLat[0],lonLat[1]);
     ExtendedPosition extPosition=new ExtendedPosition();
@@ -57,10 +59,7 @@ public class PlacesLoader
     {
       throw new IllegalArgumentException("Mismatch areaID: "+areaDIDEcho+"!="+areaDID);
     }
-    if (areaDID!=0)
-    {
-      extPosition.setZoneID(Integer.valueOf(areaDID));
-    }
+    extPosition.setZoneID(zoneID);
     _map.put(name,extPosition);
   }
 
@@ -102,11 +101,6 @@ public class PlacesLoader
     return _map.get(name);
   }
 
-  private void doIt()
-  {
-    loadPlaces();
-  }
-
   /**
    * Main method for this tool.
    * @param args Not used.
@@ -114,7 +108,6 @@ public class PlacesLoader
   public static void main(String[] args)
   {
     DataFacade facade=new DataFacade();
-    PlacesLoader loader=new PlacesLoader(facade);
-    loader.doIt();
+    new PlacesLoader(facade);
   }
 }

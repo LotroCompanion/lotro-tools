@@ -281,6 +281,10 @@ public class GeneratedFiles
    */
   public static final File VENDORS=LotroCoreConfig.getInstance().getFile(DataFiles.VENDORS);
   /**
+   * Travel NPCs.
+   */
+  public static final File TRAVEL_NPCS=LotroCoreConfig.getInstance().getFile(DataFiles.TRAVEL_NPCS);
+  /**
    * Value tables.
    */
   public static final File VALUE_TABLES=LotroCoreConfig.getInstance().getFile(DataFiles.VALUE_TABLES);
