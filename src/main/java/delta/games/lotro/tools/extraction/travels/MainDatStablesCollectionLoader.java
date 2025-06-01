@@ -1,8 +1,14 @@
 package delta.games.lotro.tools.extraction.travels;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.geo.ExtendedPosition;
 import delta.games.lotro.dat.DATConstants;
@@ -26,8 +32,11 @@ import delta.games.lotro.tools.extraction.common.PlacesLoader;
  */
 public class MainDatStablesCollectionLoader
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatStablesCollectionLoader.class);
+
   private DataFacade _facade;
   private PlacesLoader _placesLoader;
+  private Map<Integer,TravelNpc> _map;
 
   /**
    * Constructor.
@@ -36,12 +45,19 @@ public class MainDatStablesCollectionLoader
   public MainDatStablesCollectionLoader(DataFacade facade)
   {
     _facade=facade;
+    _map=new HashMap<Integer,TravelNpc>();
     _placesLoader=new PlacesLoader(facade);
   }
 
   private void doIt()
   {
+    // NPCs
     loadTravelNPCs();
+    // UI stuff
+    loadTravelUINodes();
+    // Save data
+    List<TravelNpc> travelNPCs=new ArrayList<TravelNpc>(_map.values());
+    TravelNPCXMLWriter.writeTravelNPCsFile(GeneratedFiles.TRAVEL_NPCS,travelNPCs);
   }
 
   void loadTravelUINodes()
@@ -71,11 +87,19 @@ public class MainDatStablesCollectionLoader
       Rectangle bounds=buttonElement.getRelativeBounds();
       PropertiesSet props=buttonElement.getProperties();
       String name=(String)props.getProperty("UICore_Element_tooltip_entry");
-      int npcID=((Integer)props.getProperty("UI_StablesCollection_TravelNPC")).intValue();
-      System.out.println("Name: "+name+", NPC="+npcID);
-      System.out.println("\tBounds: "+bounds);
-      NpcDescription npc=NPCsManager.getInstance().getNPCById(npcID);
-      handleNpc(npc);
+      Integer npcID=(Integer)props.getProperty("UI_StablesCollection_TravelNPC");
+      LOGGER.debug("Name: {}, NPC={}",name,npcID);
+      LOGGER.debug("\tBounds: {}",bounds);
+      TravelNpc npc=_map.get(npcID);
+      if (npc!=null)
+      {
+        Dimension position=new Dimension(bounds.x,bounds.y);
+        npc.setUIPosition(position);
+      }
+      else
+      {
+        LOGGER.warn("NPC not found: {}",npcID);
+      }
     }
   }
 
@@ -126,18 +150,15 @@ Travel_DiscountArray:
 
   private void loadTravelNPCs()
   {
-    List<TravelNpc> travelNPCs=new ArrayList<TravelNpc>();
     NPCsManager npcsManager=NPCsManager.getInstance();
     for(NpcDescription npc : npcsManager.getNPCs())
     {
       TravelNpc travelNPC=handleNpc(npc);
       if (travelNPC!=null)
       {
-        travelNPCs.add(travelNPC);
+        _map.put(Integer.valueOf(npc.getIdentifier()),travelNPC);
       }
     }
-    // Save data
-    TravelNPCXMLWriter.writeTravelNPCsFile(GeneratedFiles.TRAVEL_NPCS,travelNPCs);
   }
 
   /**
