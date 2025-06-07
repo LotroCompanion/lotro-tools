@@ -480,4 +480,8 @@ public class GeneratedFiles
    * Travels web.
    */
   public static final File TRAVELS_WEB=LotroCoreConfig.getInstance().getFile(DataFiles.TRAVELS_WEB);
+  /**
+   * Travels map.
+   */
+  public static final File TRAVELS_MAP=LotroCoreConfig.getInstance().getFile(DataFiles.TRAVELS_MAP);
 }

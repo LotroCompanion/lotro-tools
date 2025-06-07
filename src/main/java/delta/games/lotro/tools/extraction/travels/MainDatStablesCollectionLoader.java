@@ -23,8 +23,13 @@ import delta.games.lotro.lore.travels.TravelNode;
 import delta.games.lotro.lore.travels.TravelNpc;
 import delta.games.lotro.lore.travels.TravelsManager;
 import delta.games.lotro.lore.travels.io.xml.TravelNPCXMLWriter;
+import delta.games.lotro.lore.travels.map.TravelsMap;
+import delta.games.lotro.lore.travels.map.TravelsMapLabel;
+import delta.games.lotro.lore.travels.map.TravelsMapNode;
+import delta.games.lotro.lore.travels.map.io.xml.TravelsMapXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
+import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
  * Loads travel NPC for the stables collection UI.
@@ -37,6 +42,8 @@ public class MainDatStablesCollectionLoader
   private DataFacade _facade;
   private PlacesLoader _placesLoader;
   private Map<Integer,TravelNpc> _map;
+  private TravelsMap _travelsMap;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -46,7 +53,9 @@ public class MainDatStablesCollectionLoader
   {
     _facade=facade;
     _map=new HashMap<Integer,TravelNpc>();
+    _travelsMap=new TravelsMap();
     _placesLoader=new PlacesLoader(facade);
+    _i18n=new I18nUtils("travelsMap",facade.getGlobalStringsManager());
   }
 
   private void doIt()
@@ -58,6 +67,8 @@ public class MainDatStablesCollectionLoader
     // Save data
     List<TravelNpc> travelNPCs=new ArrayList<TravelNpc>(_map.values());
     TravelNPCXMLWriter.writeTravelNPCsFile(GeneratedFiles.TRAVEL_NPCS,travelNPCs);
+    TravelsMapXMLWriter.writeTravelsMapFile(GeneratedFiles.TRAVELS_MAP,_travelsMap);
+    _i18n.save();
   }
 
   void loadTravelUINodes()
@@ -73,7 +84,10 @@ public class MainDatStablesCollectionLoader
       if (uiElement.getIdentifier()==268452723) // CollectionView_ME_Map_Buttons
       {
         inspectStablemasterButtons(uiElement);
-        break;
+      }
+      if (uiElement.getIdentifier()==268451601) // CollectionView_ME_Map_Labels
+      {
+        inspectStablemasterLabels(uiElement);
       }
       inspect(uiElement.getChildElements());
     }
@@ -84,9 +98,13 @@ public class MainDatStablesCollectionLoader
     // Bounds: width=1280,height=1500
     for(UIElement buttonElement : uiElement.getChildElements())
     {
+      int baseElementID=buttonElement.getBaseElementId();
+      // 268451585 Stablemaster_Capitol_Location_Button
+      // 268451298 Stablemaster_Location_Button
+      boolean capital=(baseElementID==268451585);
       Rectangle bounds=buttonElement.getRelativeBounds();
       PropertiesSet props=buttonElement.getProperties();
-      String name=(String)props.getProperty("UICore_Element_tooltip_entry");
+      String name=_i18n.getStringProperty(props,"UICore_Element_tooltip_entry");
       Integer npcID=(Integer)props.getProperty("UI_StablesCollection_TravelNPC");
       LOGGER.debug("Name: {}, NPC={}",name,npcID);
       LOGGER.debug("\tBounds: {}",bounds);
@@ -94,12 +112,28 @@ public class MainDatStablesCollectionLoader
       if (npc!=null)
       {
         Dimension position=new Dimension(bounds.x,bounds.y);
-        npc.setUIPosition(position);
+        TravelsMapNode node=new TravelsMapNode(npc,position,name,capital);
+        _travelsMap.addNode(node);
       }
       else
       {
         LOGGER.warn("NPC not found: {}",npcID);
       }
+    }
+  }
+
+  private void inspectStablemasterLabels(UIElement uiElement)
+  {
+    for(UIElement labelElement : uiElement.getChildElements())
+    {
+      Rectangle bounds=labelElement.getRelativeBounds();
+      PropertiesSet props=labelElement.getProperties();
+      String text=_i18n.getStringProperty(props,"UICore_Text_entry");
+      LOGGER.debug("Text: {}",text);
+      LOGGER.debug("\tBounds: {}",bounds);
+      Dimension position=new Dimension(bounds.x,bounds.y);
+      TravelsMapLabel label=new TravelsMapLabel(position,text);
+      _travelsMap.addLabel(label);
     }
   }
 
