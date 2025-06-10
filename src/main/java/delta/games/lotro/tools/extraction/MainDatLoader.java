@@ -75,6 +75,8 @@ import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.extraction.skills.baubles.MainBaublesLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
+import delta.games.lotro.tools.extraction.travels.MainDatTravelsMapLoader;
+import delta.games.lotro.tools.extraction.travels.MainDatTravelsWebLoader;
 import delta.games.lotro.tools.extraction.ui.SocketIconsLoader;
 import delta.games.lotro.tools.extraction.utils.CleanupUtils;
 import delta.games.lotro.tools.reports.ReferenceDataGenerator;
@@ -279,6 +281,9 @@ public class MainDatLoader
     new ConsumablesLoader().doIt();
     // Housing
     new MainDatHousingLoader(_facade,placesLoader).doIt();
+    // Travels
+    new MainDatTravelsWebLoader(_facade).doIt();
+    new MainDatTravelsMapLoader(_facade).doIt();
   }
 
   private void cleanup()
@@ -413,6 +418,10 @@ public class MainDatLoader
     // Housing
     CleanupUtils.deleteFile(GeneratedFiles.HOUSING);
     CleanupUtils.deleteDirectory(GeneratedFiles.HOUSING_ICONS);
+    // Travels
+    CleanupUtils.deleteFile(GeneratedFiles.TRAVELS_WEB);
+    CleanupUtils.deleteFile(GeneratedFiles.TRAVEL_NPCS);
+    CleanupUtils.deleteFile(GeneratedFiles.TRAVELS_MAP);
     // Misc
     CleanupUtils.deleteFile(GeneratedFiles.WEB_STORE_ITEMS);
     CleanupUtils.deleteFile(GeneratedFiles.WORLD_EVENTS);

@@ -27,14 +27,15 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.achievables.QuestRequirementsLoader;
 import delta.games.lotro.tools.extraction.requirements.UsageRequirementsLoader;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
- * Get travel definitions from DAT files.
+ * Get travels web definition from the DAT files.
  * @author DAM
  */
-public class MainDatTravelsLoader
+public class MainDatTravelsWebLoader
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatTravelsLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatTravelsWebLoader.class);
 
   private DataFacade _facade;
   private TravelsManager _travelsMgr;
@@ -44,7 +45,7 @@ public class MainDatTravelsLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatTravelsLoader(DataFacade facade)
+  public MainDatTravelsWebLoader(DataFacade facade)
   {
     _facade=facade;
     _travelsMgr=new TravelsManager();
@@ -212,8 +213,19 @@ Usage_RequiresSubscriberOrUnsub: 1
     return ret;
   }
 
+  /**
+   * Do it.
+   */
+  public void doIt()
+  {
+    doItWithScan();
+    save();
+    //dumpTravels(System.out); // NOSONAR
+  }
+
   void doItWithIndex()
   {
+    // Not used? This index is not enough!
     PropertiesSet indexProperties=WeenieContentDirectory.loadWeenieContentProps(_facade,"TravelWebDirectory");
     Object[] idsArray=(Object[])indexProperties.getProperty("TravelWebArray");
     for(Object idObj : idsArray)
@@ -221,7 +233,6 @@ Usage_RequiresSubscriberOrUnsub: 1
       int id=((Integer)idObj).intValue();
       load(id);
     }
-    save();
   }
 
   private void doItWithScan()
@@ -239,8 +250,6 @@ Usage_RequiresSubscriberOrUnsub: 1
         }
       }
     }
-    save();
-    //dumpTravels(System.out); // NOSONAR
   }
 
   private void save()
@@ -287,8 +296,9 @@ Usage_RequiresSubscriberOrUnsub: 1
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
-    new MainDatTravelsLoader(facade).doItWithScan();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    MainDatTravelsWebLoader loader=new MainDatTravelsWebLoader(facade);
+    loader.doIt();
     facade.dispose();
   }
 }

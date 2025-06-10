@@ -30,14 +30,15 @@ import delta.games.lotro.lore.travels.map.io.xml.TravelsMapXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Loads travel NPC for the stables collection UI.
  * @author DAM
  */
-public class MainDatStablesCollectionLoader
+public class MainDatTravelsMapLoader
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatStablesCollectionLoader.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDatTravelsMapLoader.class);
 
   private DataFacade _facade;
   private PlacesLoader _placesLoader;
@@ -49,7 +50,7 @@ public class MainDatStablesCollectionLoader
    * Constructor.
    * @param facade Data facade.
    */
-  public MainDatStablesCollectionLoader(DataFacade facade)
+  public MainDatTravelsMapLoader(DataFacade facade)
   {
     _facade=facade;
     _map=new HashMap<Integer,TravelNpc>();
@@ -58,7 +59,10 @@ public class MainDatStablesCollectionLoader
     _i18n=new I18nUtils("travelsMap",facade.getGlobalStringsManager());
   }
 
-  private void doIt()
+  /**
+   * Do it.
+   */
+  public void doIt()
   {
     // NPCs
     loadTravelNPCs();
@@ -157,6 +161,11 @@ Travel_DiscountArray:
     // Node
     TravelsManager travelsMgr=TravelsManager.getInstance();
     TravelNode node=travelsMgr.getNode(travelNodeId.intValue());
+    if (node==null)
+    {
+      LOGGER.warn("Node not found: {}",travelNodeId);
+      return null;
+    }
     ret.setNode(node);
     // Sell factor
     float sellFactor=((Float)props.getProperty("TravelWebSellMultiplier")).floatValue();
@@ -201,8 +210,9 @@ Travel_DiscountArray:
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
-    new MainDatStablesCollectionLoader(facade).doIt();
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
+    MainDatTravelsMapLoader loader=new MainDatTravelsMapLoader(facade);
+    loader.doIt();
     facade.dispose();
   }
 }
