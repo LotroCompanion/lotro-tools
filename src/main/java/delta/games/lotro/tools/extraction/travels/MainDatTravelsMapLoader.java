@@ -2,6 +2,7 @@ package delta.games.lotro.tools.extraction.travels;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
+import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
 import delta.games.lotro.lore.travels.TravelNode;
@@ -68,6 +70,8 @@ public class MainDatTravelsMapLoader
     loadTravelNPCs();
     // UI stuff
     loadTravelUINodes();
+    // Images
+    loadImages();
     // Save data
     List<TravelNpc> travelNPCs=new ArrayList<TravelNpc>(_map.values());
     TravelNPCXMLWriter.writeTravelNPCsFile(GeneratedFiles.TRAVEL_NPCS,travelNPCs);
@@ -139,6 +143,25 @@ public class MainDatTravelsMapLoader
       TravelsMapLabel label=new TravelsMapLabel(position,text);
       _travelsMap.addLabel(label);
     }
+  }
+
+  private void loadImages()
+  {
+    // CollectionView_ME_Map
+    loadImage("travels",0x4116B614);
+    // Stablemaster_Location_Button
+    loadImage("normal",0x4119502C); // normal
+    loadImage("normal-empty",0x4119502D); // ghosted
+    // Stablemaster_Capitol_Location_Button
+    loadImage("capital",0x41195032); // normal
+    loadImage("capital-empty",0x4119502F); // ghosted
+  }
+
+  private void loadImage(String name, int did)
+  {
+    File toDir=new File(GeneratedFiles.MISC_ICONS,"travelsMap");
+    File to=new File(toDir,name+".png");
+    DatIconsUtils.buildImageFile(_facade,did,to);
   }
 
   private TravelNpc handleNpc(NpcDescription npc)
