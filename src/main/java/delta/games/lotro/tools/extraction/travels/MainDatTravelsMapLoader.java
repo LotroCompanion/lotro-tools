@@ -139,8 +139,7 @@ public class MainDatTravelsMapLoader
       String text=_i18n.getStringProperty(props,"UICore_Text_entry");
       LOGGER.debug("Text: {}",text);
       LOGGER.debug("\tBounds: {}",bounds);
-      Dimension position=new Dimension(bounds.x,bounds.y);
-      TravelsMapLabel label=new TravelsMapLabel(position,text);
+      TravelsMapLabel label=new TravelsMapLabel(bounds,text);
       _travelsMap.addLabel(label);
     }
   }
