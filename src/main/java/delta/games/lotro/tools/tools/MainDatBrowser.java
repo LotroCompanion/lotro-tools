@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import delta.common.utils.misc.IntegerHolder;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.KPM;
+import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
  * Tool to search byte patterns in the DAT files.
@@ -174,7 +177,8 @@ public class MainDatBrowser
    */
   public static void main(String[] args)
   {
-    DataFacade facade=new DataFacade();
+    Context.init(LotroCoreConfig.getMode());
+    DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     new MainDatBrowser(facade).doIt();
     facade.dispose();
   }
