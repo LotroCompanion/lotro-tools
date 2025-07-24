@@ -175,6 +175,7 @@ MonsterPlay_SkillList:
     if (id==179) return WellKnownMonsterClassKeys.BLACKARROW;
     if (id==52) return WellKnownMonsterClassKeys.WARLEADER;
     if (id==126) return WellKnownMonsterClassKeys.STALKER;
+    if (id==217) return WellKnownMonsterClassKeys.SORCERESS;
     return null;
   }
 
