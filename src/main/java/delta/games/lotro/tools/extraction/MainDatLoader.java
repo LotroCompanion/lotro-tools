@@ -257,8 +257,6 @@ public class MainDatLoader
     }
     // Merge progressions
     new MainProgressionsMerger().doIt();
-    // Reference data
-    new ReferenceDataGenerator(_facade).doIt();
     // Tasks data
     new MainTaskDataBuilder().doIt();
     if (live)
@@ -284,6 +282,8 @@ public class MainDatLoader
     // Travels
     new MainDatTravelsWebLoader(_facade).doIt();
     new MainDatTravelsMapLoader(_facade).doIt();
+    // Reference data
+    new ReferenceDataGenerator(_facade).doIt();
   }
 
   private void cleanup()
