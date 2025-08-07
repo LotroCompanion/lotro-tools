@@ -281,7 +281,10 @@ public class MainDatLoader
     new MainDatHousingLoader(_facade,placesLoader).doIt();
     // Travels
     new MainDatTravelsWebLoader(_facade).doIt();
-    new MainDatTravelsMapLoader(_facade).doIt();
+    if (live)
+    {
+      new MainDatTravelsMapLoader(_facade).doIt();
+    }
     // Reference data
     new ReferenceDataGenerator(_facade).doIt();
   }

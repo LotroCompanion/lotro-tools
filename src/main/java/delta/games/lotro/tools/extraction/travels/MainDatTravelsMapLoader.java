@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.geo.ExtendedPosition;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.ui.UIElement;
 import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.DatIconsUtils;
 import delta.games.lotro.lore.agents.npcs.NPCsManager;
 import delta.games.lotro.lore.agents.npcs.NpcDescription;
@@ -82,7 +84,10 @@ public class MainDatTravelsMapLoader
   void loadTravelUINodes()
   {
     UILayout layout=new UILayoutLoader(_facade).loadUiLayout(0x220008BB);
-    inspect(layout.getChildElements());
+    if (layout!=null)
+    {
+      inspect(layout.getChildElements());
+    }
   }
 
   private void inspect(List<UIElement> uiElements)
@@ -232,6 +237,7 @@ Travel_DiscountArray:
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     MainDatTravelsMapLoader loader=new MainDatTravelsMapLoader(facade);
     loader.doIt();

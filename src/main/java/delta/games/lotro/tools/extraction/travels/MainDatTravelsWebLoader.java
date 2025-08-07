@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.common.requirements.AbstractAchievableRequirement;
 import delta.games.lotro.common.requirements.Requirements;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.dat.utils.BufferUtils;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.lore.quests.AchievableProxiesResolver;
@@ -161,10 +163,21 @@ Usage_RequiresSubscriberOrUnsub: 1
     // Destination
     int destinationId=((Integer)properties.getProperty("TravelRoute_Destination")).intValue();
     TravelDestination destination=getTravelDestination(destinationId);
-
+    if (routeName==null)
+    {
+      routeName=destination.getName();
+    }
     // Travel mode
-    int travelModeId=((Integer)properties.getProperty("TravelRoute_TravelMode")).intValue();
-    TravelMode mode=getTravelMode(travelModeId);
+    Integer travelModeId=(Integer)properties.getProperty("TravelRoute_TravelMode");
+    TravelMode mode=null;
+    if (travelModeId!=null)
+    {
+      mode=getTravelMode(travelModeId.intValue());
+    }
+    else
+    {
+      mode=TravelMode.HORSE;
+    }
     TravelRoute route=new TravelRoute(travelRouteId,routeName,mode,destination);
 
     // Route actions
@@ -296,6 +309,7 @@ Usage_RequiresSubscriberOrUnsub: 1
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     MainDatTravelsWebLoader loader=new MainDatTravelsWebLoader(facade);
     loader.doIt();
