@@ -17,6 +17,7 @@ import delta.games.lotro.common.effects.AuraEffect;
 import delta.games.lotro.common.effects.BaseVitalEffect;
 import delta.games.lotro.common.effects.BubbleEffect;
 import delta.games.lotro.common.effects.ComboEffect;
+import delta.games.lotro.common.effects.CooldownEffect;
 import delta.games.lotro.common.effects.CountDownEffect;
 import delta.games.lotro.common.effects.DispelByResistEffect;
 import delta.games.lotro.common.effects.DispelEffect;
@@ -49,6 +50,7 @@ import delta.games.lotro.common.effects.TravelEffect;
 import delta.games.lotro.common.effects.VitalChangeDescription;
 import delta.games.lotro.common.effects.VitalOverTimeEffect;
 import delta.games.lotro.common.effects.io.xml.EffectXMLWriter;
+import delta.games.lotro.common.enums.AICooldownChannel;
 import delta.games.lotro.common.enums.CombatState;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.EffectAuraType;
@@ -101,6 +103,7 @@ public class EffectLoader
   private I18nUtils _i18nUtils;
   private EffectsManager _effectsMgr;
   private PlacesLoader _placesLoader;
+  private LotroEnum<AICooldownChannel> _cooldownChannelsEnum;
 
   /**
    * Constructor.
@@ -114,6 +117,7 @@ public class EffectLoader
     _i18nUtils=new I18nUtils("effects",facade.getGlobalStringsManager());
     _statUtils=new DatStatUtils(facade,_i18nUtils);
     _effectsMgr=EffectsManager.getInstance();
+    _cooldownChannelsEnum=LotroEnumsRegistry.getInstance().get(AICooldownChannel.class);
   }
 
   /**
@@ -252,6 +256,7 @@ public class EffectLoader
     else if (classDef==2063) return new RandomEffect();
     else if (classDef==718) return new FlagEffect();
     else if (classDef==763) return new AIPetEffect();
+    else if (classDef==3184) return new CooldownEffect();
     return new Effect();
   }
 
@@ -348,6 +353,10 @@ public class EffectLoader
     else if (effect instanceof AIPetEffect)
     {
       loadAIPetEffect((AIPetEffect)effect,effectProps);
+    }
+    else if (effect instanceof CooldownEffect)
+    {
+      loadCooldownEffect((CooldownEffect)effect,effectProps);
     }
   }
 
@@ -1534,6 +1543,37 @@ Effect_RandomEffect_Array:
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
         effect.addApplyToMasterEffect(generator);
+      }
+    }
+  }
+
+  private void loadCooldownEffect(CooldownEffect effect, PropertiesSet effectProps)
+  {
+    // Modifiers
+    ModPropertyList modifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_CooldownMod_AdditiveModifiers");
+    effect.setDurationModifiers(modifiers);
+    // Skills
+    Object[] skillsList=(Object[])effectProps.getProperty("CooldownEffect_Skill_List");
+    if (skillsList!=null)
+    {
+      for(Object entry : skillsList)
+      {
+        Integer skillID=(Integer)entry;
+        effect.addSkill(skillID.intValue());
+      }
+    }
+    // Cooldown channels
+    Object[] cooldownChannels=(Object[])effectProps.getProperty("CooldownEffect_CooldownChannel_List");
+    if (cooldownChannels!=null)
+    {
+      for(Object entry : cooldownChannels)
+      {
+        Integer cooldownChannelCode=(Integer)entry;
+        AICooldownChannel cooldownChannel=_cooldownChannelsEnum.getEntry(cooldownChannelCode.intValue());
+        if (cooldownChannel!=null)
+        {
+          effect.addCooldownChannel(cooldownChannel);
+        }
       }
     }
   }
