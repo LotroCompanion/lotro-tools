@@ -1549,7 +1549,11 @@ Effect_RandomEffect_Array:
 
   private void loadCooldownEffect(CooldownEffect effect, PropertiesSet effectProps)
   {
-    // Modifiers
+    // Duration modifiers
+    // - base
+    float modifier=((Float)effectProps.getProperty("CooldownEffect_CooldownMod")).floatValue();
+    effect.setBaseModifier(modifier);
+    // Additional modifiers
     ModPropertyList modifiers=ModifiersUtils.getStatModifiers(effectProps,"Effect_CooldownMod_AdditiveModifiers");
     effect.setDurationModifiers(modifiers);
     // Skills
