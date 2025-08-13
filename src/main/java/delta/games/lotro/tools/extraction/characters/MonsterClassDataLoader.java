@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.AbstractClassDescription;
 import delta.games.lotro.character.classes.ClassSkill;
+import delta.games.lotro.character.classes.ClassVirtue;
 import delta.games.lotro.character.classes.MonsterClassDescription;
 import delta.games.lotro.character.classes.WellKnownMonsterClassKeys;
 import delta.games.lotro.character.classes.io.xml.ClassDescriptionXMLWriter;
@@ -92,6 +93,7 @@ public class MonsterClassDataLoader
     DatIconsUtils.buildImageFile(_facade,classIconId,classIconFile);
     classDescription.setIconId(classIconId);
 
+    loadVirtues(classDescription,properties);
     loadTraits(classDescription,properties);
     loadSkills(classDescription,properties);
     _classes.add(classDescription);
@@ -101,6 +103,31 @@ public class MonsterClassDataLoader
   {
     File iconFile=new File(GeneratedFiles.CLASS_ICONS_DIR,iconID+".png").getAbsoluteFile();
     return iconFile;
+  }
+
+  private void loadVirtues(MonsterClassDescription description, PropertiesSet properties)
+  {
+/*
+MonsterPlay_VirtueList: 
+  #1: MonsterPlay_VirtueEntry 
+    MonsterPlay_Trait: 1879063892
+    MonsterPlay_VirtueMaxRank: 5
+    MonsterPlay_VirtueStartRank: 5
+ */
+    Object[] virtuesProperties=(Object[])properties.getProperty("MonsterPlay_VirtueList");
+    if (virtuesProperties!=null)
+    {
+      for(Object virtuePropertiesObj : virtuesProperties)
+      {
+        PropertiesSet virtueProperties=(PropertiesSet)virtuePropertiesObj;
+        int startRank=((Integer)virtueProperties.getProperty("MonsterPlay_VirtueStartRank")).intValue();
+        int maxRank=((Integer)virtueProperties.getProperty("MonsterPlay_VirtueMaxRank")).intValue();
+        int traitId=((Integer)virtueProperties.getProperty("MonsterPlay_Trait")).intValue();
+        TraitDescription trait=TraitUtils.getTrait(traitId);
+        ClassVirtue classVirtue=new ClassVirtue(startRank,maxRank,trait);
+        description.addVirtue(classVirtue);
+      }
+    }
   }
 
   private void loadTraits(AbstractClassDescription description, PropertiesSet properties)
