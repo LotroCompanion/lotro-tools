@@ -218,8 +218,6 @@ public class MainDatLoader
     new MainDatContainerLoader(_facade,lootLoader).doIt();
     // Mobs
     new MainDatMobsLoader(_facade,lootLoader,effectsLoader).doIt();
-    // Save effects
-    effectsLoader.save();
     // Disenchantment
     if (live)
     {
@@ -233,9 +231,11 @@ public class MainDatLoader
     TreasureXMLWriter.writeLootsFile(GeneratedFiles.LOOTS,lootsManager);
     // Quests and deeds
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(_facade);
-    new MainDatAchievablesLoader(_facade,worldEventsLoader,rewardsLoader).doIt();
+    new MainDatAchievablesLoader(_facade,effectsLoader,worldEventsLoader,rewardsLoader).doIt();
     worldEventsLoader.save();
     new MainProgressionsMerger().doIt();
+    // Save effects
+    effectsLoader.save();
     // Associate deeds to faction levels
     MainDatFactionsLoader.associateDeeds(factionsRegistry);
     // Private encounter loader: resolve proxies

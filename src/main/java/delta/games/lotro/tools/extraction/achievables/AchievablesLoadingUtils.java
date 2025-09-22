@@ -9,6 +9,7 @@ import delta.games.lotro.lore.worldEvents.AbstractWorldEventCondition;
 import delta.games.lotro.tools.extraction.achievables.rewards.DatRewardsLoader;
 import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventConditionsLoader;
 import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
+import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.extraction.misc.WebStoreItemsLoader;
 import delta.games.lotro.tools.extraction.requirements.UsageRequirementsLoader;
 import delta.games.lotro.utils.Proxy;
@@ -19,6 +20,7 @@ import delta.games.lotro.utils.Proxy;
  */
 public class AchievablesLoadingUtils
 {
+  private EffectLoader _effectsLoader;
   private QuestRequirementsLoader _requirementsLoader;
   private WorldEventConditionsLoader _weConditionsLoader;
   private DatRewardsLoader _rewardsLoader;
@@ -29,13 +31,16 @@ public class AchievablesLoadingUtils
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    * @param worldEventsLoader World events loader.
    * @param rewardsLoader Rewards loader.
    */
-  public AchievablesLoadingUtils(DataFacade facade, WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
+  public AchievablesLoadingUtils(DataFacade facade, EffectLoader effectsLoader,
+      WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
   {
-    _rewardsLoader=rewardsLoader;
+    _effectsLoader=effectsLoader;
     _worldEventsLoader=worldEventsLoader;
+    _rewardsLoader=rewardsLoader;
     _webStoreItemsLoader=new WebStoreItemsLoader(facade);
     _requirementsLoader=new QuestRequirementsLoader(facade);
     _weConditionsLoader=new WorldEventConditionsLoader(_worldEventsLoader);
@@ -137,6 +142,31 @@ public class AchievablesLoadingUtils
         }
       }
     }
+  }
+
+  /**
+   * Handle the effects of a quest/deed.
+   * @param properties Quest/deed properties.
+   */
+  public void handleEffects(PropertiesSet properties)
+  {
+    Object[] effectArray=(Object[])properties.getProperty("Quest_EffectArray");
+    if (effectArray!=null)
+    {
+      for(Object effectObj : effectArray)
+      {
+        PropertiesSet effectProps=(PropertiesSet)effectObj;
+        handleEffect(effectProps);
+      }
+    }
+  }
+
+  private void handleEffect(PropertiesSet effectProps)
+  {
+    int effectID=((Integer)effectProps.getProperty("Quest_DataID")).intValue();
+    @SuppressWarnings("unused")
+    int roleCode=((Integer)effectProps.getProperty("QuestEffect_ApplyRole")).intValue();
+    _effectsLoader.getEffect(effectID);
   }
 
   /**

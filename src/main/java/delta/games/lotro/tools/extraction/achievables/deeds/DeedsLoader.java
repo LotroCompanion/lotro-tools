@@ -146,6 +146,8 @@ public class DeedsLoader
     }
     // Events
     _utils.getEventIDsLoader().doAchievable(deed);
+    // Effects
+    _utils.handleEffects(properties);
     // Registration
     _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
   }

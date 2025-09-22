@@ -287,6 +287,8 @@ public class QuestsLoader
     {
       quest.setAutoBestowed(true);
     }
+    // Effects
+    _utils.handleEffects(properties);
     // Unused:
     // Quest_IsSessionAccomplishment
     // Quest_IsHidden

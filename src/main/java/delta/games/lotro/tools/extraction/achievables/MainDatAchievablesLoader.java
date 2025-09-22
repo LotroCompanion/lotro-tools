@@ -20,8 +20,10 @@ import delta.games.lotro.tools.extraction.achievables.deeds.DeedsLoader;
 import delta.games.lotro.tools.extraction.achievables.geo.MainGeoDataInjector;
 import delta.games.lotro.tools.extraction.achievables.quests.QuestsLoader;
 import delta.games.lotro.tools.extraction.achievables.rewards.DatRewardsLoader;
+import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
+import delta.games.lotro.tools.extraction.effects.EffectLoader;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
@@ -41,14 +43,15 @@ public class MainDatAchievablesLoader
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param effectsLoader Effects loader.
    * @param worldEventsLoader World events loader.
    * @param rewardsLoader Rewards loader.
    */
-  public MainDatAchievablesLoader(DataFacade facade, WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
+  public MainDatAchievablesLoader(DataFacade facade, EffectLoader effectsLoader, WorldEventsLoader worldEventsLoader, DatRewardsLoader rewardsLoader)
   {
     _facade=facade;
     _logger=new AchievablesLogger(true,true,"achievables.txt");
-    _utils=new AchievablesLoadingUtils(facade,worldEventsLoader,rewardsLoader);
+    _utils=new AchievablesLoadingUtils(facade,effectsLoader,worldEventsLoader,rewardsLoader);
     _questsLoader=new QuestsLoader(facade,_utils);
     _deedsLoader=new DeedsLoader(facade,_utils);
   }
@@ -174,9 +177,14 @@ public class MainDatAchievablesLoader
     Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     Locale.setDefault(Locale.ENGLISH);
+    // Places
+    PlacesLoader placesLoader=new PlacesLoader(facade);
+    // Effects
+    EffectLoader effectsLoader=new EffectLoader(facade,placesLoader);
     DatRewardsLoader rewardsLoader=new DatRewardsLoader(facade);
     WorldEventsLoader worldEventsLoader=new WorldEventsLoader(facade);
-    new MainDatAchievablesLoader(facade,worldEventsLoader,rewardsLoader).doIt();
+    new MainDatAchievablesLoader(facade,effectsLoader,worldEventsLoader,rewardsLoader).doIt();
+    effectsLoader.save();
     facade.dispose();
   }
 }
