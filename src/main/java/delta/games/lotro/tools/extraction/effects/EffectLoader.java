@@ -3,6 +3,7 @@ package delta.games.lotro.tools.extraction.effects;
 import java.io.File;
 import java.util.BitSet;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import delta.games.lotro.common.effects.InduceCombatStateEffect;
 import delta.games.lotro.common.effects.InstantFellowshipEffect;
 import delta.games.lotro.common.effects.InstantVitalEffect;
 import delta.games.lotro.common.effects.KillProcEffect;
+import delta.games.lotro.common.effects.PersistentComboEffect;
 import delta.games.lotro.common.effects.PipEffect;
 import delta.games.lotro.common.effects.ProcEffect;
 import delta.games.lotro.common.effects.ProcEffectGenerator;
@@ -247,6 +249,7 @@ public class EffectLoader
     else if (classDef==737) return new RecallEffect();
     else if (classDef==749) return new TravelEffect();
     else if (classDef==767) return new ComboEffect();
+    else if (classDef==3124) return new PersistentComboEffect();
     else if (classDef==3866) return new TieredEffect();
     else if (classDef==2762) return new AreaEffect();
     else if (classDef==3222) return new BubbleEffect();
@@ -325,6 +328,10 @@ public class EffectLoader
     else if (effect instanceof ComboEffect)
     {
       loadComboEffect((ComboEffect)effect,effectProps);
+    }
+    else if (effect instanceof PersistentComboEffect)
+    {
+      loadPersistentComboEffect((PersistentComboEffect)effect,effectProps);
     }
     else if (effect instanceof TieredEffect)
     {
@@ -1230,6 +1237,58 @@ Effect_Combo_RemoveOldEffectIfPresent: 0 (bool)
     // To examine
     Integer toExamine=(Integer)effectProps.getProperty("Effect_Combo_EffectToExamine");
     effect.setToExamine(buildProxy(toExamine));
+  }
+
+  private void loadPersistentComboEffect(PersistentComboEffect effect, PropertiesSet effectProps)
+  {
+/*
+******** Properties: 1879453021
+Effect_Combo_CasterOnly: 0
+Effect_Combo_EffectClassPresentList: 
+  #1: Effect_EquivalenceClass 0 (Undef)
+Effect_Combo_EffectPresentList: 
+  #1: Effect_WSLEffect 1879314733
+Effect_PersistentCombo_EffectsToAddIfAbsent_Array: 
+  #1: Effect_ApplyOverTime_Applied_Effect_Data 
+    Effect_ApplyOverTime_Applied_Effect: 1879313817
+    Effect_ApplyOverTime_Applied_Effect_Spellcraft: -1.0
+Effect_PersistentCombo_EffectsToAddIfPresent_Array: 
+  #1: Effect_ApplyOverTime_Applied_Effect_Data 
+    Effect_ApplyOverTime_Applied_Effect: 1879313816
+    Effect_ApplyOverTime_Applied_Effect_Spellcraft: -1.0
+*/
+    handleEffectsList(effect,effectProps,"Effect_Combo_EffectPresentList",effect::addPresentEffect);
+    handleEffectsList(effect,effectProps,"Effect_PersistentCombo_EffectsToAddIfAbsent_Array",effect::addToAddIfAbsent);
+    handleEffectsList(effect,effectProps,"Effect_PersistentCombo_EffectsToAddIfPresent_Array",effect::addToAddIfPresent);
+    // To examine
+    Integer toExamine=(Integer)effectProps.getProperty("Effect_Combo_EffectToExamine");
+    effect.setToExamine(buildProxy(toExamine));
+  }
+
+  private void handleEffectsList(PersistentComboEffect effect, PropertiesSet effectProps, String propertyName,Consumer<Proxy<Effect>> addFunction)
+  {
+    Object[] array=(Object[])effectProps.getProperty(propertyName);
+    if (array!=null)
+    {
+      for(Object object : array)
+      {
+        Integer effectID=null;
+        if (object instanceof PropertiesSet)
+        {
+          PropertiesSet entryProps=(PropertiesSet)object;
+          effectID=(Integer)entryProps.getProperty("Effect_ApplyOverTime_Applied_Effect");
+        }
+        else if (object instanceof Integer)
+        {
+          effectID=(Integer)object;
+        }
+        if ((effectID!=null) && (effectID.intValue()>0))
+        {
+          Proxy<Effect> proxyEffect=buildProxy(effectID);
+          addFunction.accept(proxyEffect);
+        }
+      }
+    }
   }
 
   private void loadTieredEffect(TieredEffect effect, PropertiesSet effectProps)
