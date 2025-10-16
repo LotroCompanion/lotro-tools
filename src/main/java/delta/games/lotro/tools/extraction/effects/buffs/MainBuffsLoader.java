@@ -1,4 +1,4 @@
-package delta.games.lotro.tools.extraction.effects;
+package delta.games.lotro.tools.extraction.effects.buffs;
 
 import java.util.ArrayList;
 import java.util.Collections;

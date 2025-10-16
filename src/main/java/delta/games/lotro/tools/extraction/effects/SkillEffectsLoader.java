@@ -9,7 +9,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.tools.extraction.utils.Utils;
 
 /**
- * Skill effects loader.
+ * Loader for skill effects.
  * @author DAM
  */
 public class SkillEffectsLoader

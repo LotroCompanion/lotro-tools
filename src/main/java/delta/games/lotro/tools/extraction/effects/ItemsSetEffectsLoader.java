@@ -8,7 +8,7 @@ import delta.games.lotro.lore.items.sets.SetBonus;
 import delta.games.lotro.tools.extraction.utils.Utils;
 
 /**
- * Items set effects loader.
+ * Loader for items sets effects.
  * @author DAM
  */
 public class ItemsSetEffectsLoader
