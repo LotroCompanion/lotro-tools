@@ -73,6 +73,7 @@ import delta.games.lotro.tools.extraction.relics.MainDatRelicsLoader;
 import delta.games.lotro.tools.extraction.rewardsTrack.MainDatRewardsTracksLoader;
 import delta.games.lotro.tools.extraction.skills.MainSkillDataLoader;
 import delta.games.lotro.tools.extraction.skills.baubles.MainBaublesLoader;
+import delta.games.lotro.tools.extraction.skills.pips.PipsLoader;
 import delta.games.lotro.tools.extraction.titles.MainDatTitlesLoader;
 import delta.games.lotro.tools.extraction.trade.MainDatTradeLoader;
 import delta.games.lotro.tools.extraction.travels.MainDatTravelsMapLoader;
@@ -117,6 +118,8 @@ public class MainDatLoader
     new MainDatColorLoader(_facade).doIt();
     // Enums
     new MainDatEnumsLoader(_facade).doIt();
+    // PIPs
+    new PipsLoader(_facade).doIt();
     // XP
     new MainXpTableLoader(_facade).doIt();
     // PVP
