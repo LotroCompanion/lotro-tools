@@ -8,9 +8,11 @@ import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.PipType;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.misc.Context;
 import delta.games.lotro.lore.pip.PipDescription;
 import delta.games.lotro.lore.pip.io.xml.PipXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
@@ -71,8 +73,11 @@ public class PipsLoader
       Integer maxIcon=(Integer)pipProps.getProperty("Pip_Examination_Max_Icon");
       pip.setIconMax(maxIcon);
       // Home
-      int home=((Integer)pipProps.getProperty("Pip_Home")).intValue();
-      pip.setHome(home);
+      Integer home=(Integer)pipProps.getProperty("Pip_Home");
+      if (home!=null)
+      {
+        pip.setHome(home.intValue());
+      }
       Integer homeIcon=(Integer)pipProps.getProperty("Pip_Examination_Home_Icon");
       pip.setIconHome(homeIcon);
       ret.add(pip);
@@ -103,6 +108,7 @@ public class PipsLoader
    */
   public static void main(String[] args)
   {
+    Context.init(LotroCoreConfig.getMode());
     DataFacade facade=DataFacadeBuilder.buildFacadeForTools();
     PipsLoader pipsLoader=new PipsLoader(facade);
     pipsLoader.doIt();

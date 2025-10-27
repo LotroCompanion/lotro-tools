@@ -300,6 +300,7 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.COLORS);
     CleanupUtils.deleteFile(GeneratedFiles.COMBAT_DATA);
     CleanupUtils.deleteDirectory(GeneratedFiles.ENUMS_DIR);
+    CleanupUtils.deleteFile(GeneratedFiles.PIPS);
     CleanupUtils.deleteFile(GeneratedFiles.XP_TABLE);
     CleanupUtils.deleteFile(GeneratedFiles.PVP);
     CleanupUtils.deleteFile(GeneratedFiles.MOOD);
