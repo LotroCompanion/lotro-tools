@@ -294,6 +294,7 @@ public class MainDatLoader
 
   private void cleanup()
   {
+    boolean live=LotroCoreConfig.isLive();
     // Commons
     CleanupUtils.deleteFile(GeneratedFiles.GAME_DATA);
     CleanupUtils.deleteFile(GeneratedFiles.STATS);
@@ -347,7 +348,10 @@ public class MainDatLoader
     CleanupUtils.deleteFile(GeneratedFiles.ITEM_COSMETICS);
     CleanupUtils.deleteFile(GeneratedFiles.VALUE_TABLES);
     CleanupUtils.deleteFile(GeneratedFiles.DPS_TABLES);
-    CleanupUtils.deleteFile(GeneratedFiles.SPEED_TABLES);
+    if (!live)
+    {
+      CleanupUtils.deleteFile(GeneratedFiles.SPEED_TABLES);
+    }
     CleanupUtils.deleteFile(GeneratedFiles.WEAPON_DAMAGE);
     // - legacies
     CleanupUtils.deleteFile(GeneratedFiles.LEGACIES);
