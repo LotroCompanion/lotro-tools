@@ -59,7 +59,7 @@ public class MapNotesLoader
     _markersUtils=markersUtils;
   }
 
-  private void loadMapNote(ByteArrayInputStream bis)
+  private boolean loadMapNote(ByteArrayInputStream bis)
   {
     // Position
     DatPosition position=GeoLoader.readPosition(bis);
@@ -78,6 +78,11 @@ public class MapNotesLoader
       {
         areaDID=parentZoneId.intValue();
       }
+    }
+    if (position==null)
+    {
+      BufferUtils.skip(bis,1);
+      return false;
     }
 
     // Properties
@@ -130,7 +135,7 @@ public class MapNotesLoader
       if (destZone==null)
       {
         LOGGER.warn("Destination zone not found: {}",Integer.valueOf(destZoneId));
-        return;
+        return true;
       }
       if (VERBOSE)
       {
@@ -173,6 +178,7 @@ public class MapNotesLoader
     {
       _markersUtils.buildMarker(position,areaDID,dungeonDID,noteDID,contentLayersArray,text,type);
     }
+    return true;
   }
 
   /**
@@ -189,9 +195,14 @@ public class MapNotesLoader
     }
     int count=BufferUtils.readUInt32(bis); // > 10k
     Console.println("Number of map notes: "+count);
-    for(int i=0;i<count;i++)
+    int nbLoadedNotes=0;
+    while(nbLoadedNotes<count)
     {
-      loadMapNote(bis);
+      boolean ok=loadMapNote(bis);
+      if (ok)
+      {
+        nbLoadedNotes++;
+      }
     }
     int available=bis.available();
     if (available>0)

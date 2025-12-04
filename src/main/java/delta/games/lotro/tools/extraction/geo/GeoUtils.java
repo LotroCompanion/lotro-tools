@@ -48,6 +48,10 @@ public class GeoUtils
    */
   public static Integer getZoneID(DatPosition position)
   {
+    if (position==null)
+    {
+      return null;
+    }
     Integer zoneID=null;
     int region=position.getRegion();
     int blockX=position.getBlockX();
