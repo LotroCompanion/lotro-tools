@@ -57,10 +57,13 @@ public class MainCategoriesPruner
       {
         categoriesMgr.removeCategory(code);
         File iconFile=categoriesMgr.getIconFile(category);
-        boolean ok=iconFile.delete();
-        if (!ok)
+        if (iconFile.exists())
         {
-          LOGGER.warn("Failed to delete file: {}",iconFile);
+          boolean ok=iconFile.delete();
+          if (!ok)
+          {
+            LOGGER.warn("Failed to delete file: {}",iconFile);
+          }
         }
       }
     }
