@@ -470,9 +470,15 @@ Reputation_LowestTier: 1
     if (factionId==1879479487) return new String[]{category,null,null};
     // - others
     if (factionId==1879465745) return new String[]{category,null,null}; // Citizens of Umbar Baharbêl
+    category="Haradwaith";
     if (factionId==1879489735) return new String[]{category,null,null}; // Phetekâri of Umbar
     if (factionId==1879489736) return new String[]{category,null,null}; // The Ikorbâni
     if (factionId==1879489734) return new String[]{category,null,null}; // The Adúrhid
+    if (factionId==1879506198) return new String[]{category,null,null}; // Temámir of Jiret-menêsh
+    if (factionId==1879506206) return new String[]{category,null,null}; // City of Zajâna
+    if (factionId==1879506212) return new String[]{category,null,null}; // Kintai of Sul Madásh
+    if (factionId==1879508769) return new String[]{category,null,null}; // Hamât Renewed
+    if (factionId==1879519543) return new String[]{category,null,null}; // Hunter's Guild of Mûr Ghala
 
     LOGGER.warn("Unmanaged faction ID: {}",Integer.valueOf(factionId));
     return new String[]{};
@@ -644,10 +650,10 @@ Reputation_LowestTier: 1
       1879345134,1879345135,1879345132,1879389871,1879389868,1879389872,
       // Guilds
       1879124448,1879124449,1879124450,1879124451,1879124452,1879124453,1879124454,
-      // Umbar guilds
-      1879479489,1879479494,1879479492,1879479491,1879479493,1879479490,1879479487,
-      // Umbar
-      1879465745,1879489735,1879489736,1879489734,
+      // Umbar + guilds
+      1879479489,1879479494,1879479492,1879479491,1879479493,1879479490,1879479487,1879465745,
+      // Haradwaith
+      1879489735,1879489736,1879489734,1879506198,1879506206,1879506212,1879508769,1879519543,
       // Misc
       1879182957,1879103953,1879305436,1879464285,1879490383,1879496954
     };
