@@ -52,18 +52,24 @@ public class ItemDetailsLoader
   private static final Logger LOGGER=LoggerFactory.getLogger(ItemDetailsLoader.class);
 
   private DataFacade _facade;
+  private boolean _live;
   private Map<Integer,Float> _cooldownData;
   private LotroEnum<AllegianceGroup> _allegianceGroupEnum;
 
   /**
    * Constructor.
    * @param facade Data facade.
+   * @param live Use live client or not.
    */
-  public ItemDetailsLoader(DataFacade facade)
+  public ItemDetailsLoader(DataFacade facade, boolean live)
   {
     _facade=facade;
+    _live=live;
     _cooldownData=CooldownLoader.doIt(facade);
-    _allegianceGroupEnum=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
+    if (_live)
+    {
+      _allegianceGroupEnum=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
+    }
   }
 
   /**
@@ -80,7 +86,10 @@ public class ItemDetailsLoader
     handleEffects(item,props);
     handleWeaponSlayer(item,props);
     handleCooldownData(item,props);
-    handleAllegiancePoints(item,props);
+    if (_live)
+    {
+      handleAllegiancePoints(item,props);
+    }
     handleDecorationInfo(item,props);
     handleVirtueXPBonus(item,props);
   }

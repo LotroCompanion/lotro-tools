@@ -153,7 +153,7 @@ public class MainDatItemsLoader
     _valueLoader=new ItemValueLoader(_facade);
     _dpsLoader=new DPSValueLoader(_facade);
     _sortDataLoader=new ItemSortingDataLoader(facade);
-    _detailsLoader=new ItemDetailsLoader(_facade);
+    _detailsLoader=new ItemDetailsLoader(_facade,_live);
     _cosmeticLoader=new CosmeticLoader();
     if (!_live)
     {
