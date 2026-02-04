@@ -71,7 +71,7 @@ public class MapsSystemLoader
   private PropertiesSet loadMapsSystemProperties()
   {
     _uiLayout=buildLayout();
-    UIElement mapBackgroundElement=getUIElementById(268437543);
+    UIElement mapBackgroundElement=getUIElementById(268455092); // MapWindow
     if (mapBackgroundElement!=null)
     {
       return mapBackgroundElement.getProperties();

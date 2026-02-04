@@ -176,7 +176,7 @@ public class ReferenceDataGenerator
     }
     for(UIElement uiElement : layout.getChildElements())
     {
-      if (uiElement.getIdentifier()==268437543) // MapBackground
+      if (uiElement.getIdentifier()==268455092) // MapWindow
       {
         props=uiElement.getProperties();
         break;
