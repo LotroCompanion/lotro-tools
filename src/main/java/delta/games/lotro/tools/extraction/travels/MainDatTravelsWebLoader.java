@@ -210,6 +210,7 @@ Usage_RequiresSubscriberOrUnsub: 1
     if (travelModeId==1879108779) return TravelMode.SHAGGY;
     if (travelModeId==1879444821) return TravelMode.ELK;
     if (travelModeId==1879417911) return TravelMode.BOAR;
+    if (travelModeId==1879522335) return TravelMode.ORYX;
     if (travelModeId==1879495383) return TravelMode.OTHER;
     LOGGER.warn("Unmanaged travel mode: {}",Integer.valueOf(travelModeId));
     return null;
