@@ -35,7 +35,6 @@ public class MainGeoDatLoader
 
   private void doIt()
   {
-    _mapsLoader=new MapsDataLoader(_facade);
     cleanup();
     load();
   }
@@ -71,6 +70,7 @@ public class MainGeoDatLoader
     // Landblocks
     CleanupUtils.deleteFile(GeneratedFiles.LANDBLOCKS);
     // Maps
+    _mapsLoader=new MapsDataLoader(_facade);
     _mapsLoader.cleanup();
     // TODO Labels?
   }
