@@ -31,6 +31,10 @@ public class MainPropertyResponseMapsLoader
   private void handleArea(int areaId)
   {
     PropertiesSet props=_facade.loadProperties(areaId+DATConstants.DBPROPERTIES_OFFSET);
+    if (props==null)
+    {
+      return;
+    }
     Integer propertyResponseMapID=(Integer)props.getProperty("Area_PropertyResponseMapDID");
     if ((propertyResponseMapID!=null) && (propertyResponseMapID.intValue()>0))
     {
