@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.Console;
+import delta.games.lotro.config.LotroCoreConfig;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
@@ -39,6 +40,9 @@ import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 public class MapsSystemLoader
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MapsSystemLoader.class);
+
+  private static final int MAP_WINDOW_ID_EOA=268437543;
+  private static final int MAP_WINDOW_ID_LIVE=268455092; // MapWindow
 
   private DataFacade _facade;
   private I18nUtils _i18n;
@@ -71,7 +75,9 @@ public class MapsSystemLoader
   private PropertiesSet loadMapsSystemProperties()
   {
     _uiLayout=buildLayout();
-    UIElement mapBackgroundElement=getUIElementById(268455092); // MapWindow
+    boolean live=LotroCoreConfig.isLive();
+    int mapWindowID=live?MAP_WINDOW_ID_LIVE:MAP_WINDOW_ID_EOA;
+    UIElement mapBackgroundElement=getUIElementById(mapWindowID);
     if (mapBackgroundElement!=null)
     {
       return mapBackgroundElement.getProperties();
