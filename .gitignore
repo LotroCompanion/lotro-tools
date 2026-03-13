@@ -58,3 +58,4 @@
 /tools/datDisplay/.settings
 /tools/datDisplay/target
 /logs
+/packages/**
