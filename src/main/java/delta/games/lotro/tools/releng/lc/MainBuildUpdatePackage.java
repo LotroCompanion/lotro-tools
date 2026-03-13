@@ -38,11 +38,11 @@ public class MainBuildUpdatePackage
   {
     // Constants
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/16/${file}/download";
-    File to=new File("d:/tmp/lc16-packages");
+    File to=new File("packages");
     ToolsConfig config=new ToolsConfig(baseURL,to);
-    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/work/LotRO Companion/app");
-    String packageName="patch24.7.2.46.1";
-    Version newVersion=new Version(24702,"24.7.2.46.1"); // NOSONAR (this is not an IP address)
+    File from=new File("D:/shared/damien/dev/lotrocompanion/Live/work/LotRO Companion/app");
+    String packageName="patch24.7.3.47";
+    Version newVersion=new Version(24703,"24.7.3.47"); // NOSONAR (this is not an IP address)
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
