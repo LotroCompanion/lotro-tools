@@ -39,11 +39,11 @@ public class MainBuildUpdatePackageLoreDatabase
   {
     // Constants
     String baseURL="https://sourceforge.net/projects/lotrocompanion/files/loredb/${file}/download";
-    File to=new File("d:/tmp/loredb-packages");
+    File to=new File("packages-eoa");
     ToolsConfig config=new ToolsConfig(baseURL,to);
-    File from=new File("D:/shared/damien/dev/lotrocompanion/releases/EoA/work/LotRO Lore Database/app");
-    String packageName="patch4.0.1";
-    Version newVersion=new Version(4001,"SoA Book 11 - 4.0.1");
+    File from=new File("D:/shared/damien/dev/lotrocompanion/EoA/work/LotRO Lore Database/app");
+    String packageName="patch5.0.0";
+    Version newVersion=new Version(5000,"SoA Book 11 - 5.0.0");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
