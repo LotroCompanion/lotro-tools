@@ -6,8 +6,8 @@ import java.util.Map;
 
 import delta.common.utils.collections.TreeNode;
 import delta.common.utils.text.EndOfLine;
-import delta.games.lotro.dat.wlib.ClassDefinition;
-import delta.games.lotro.dat.wlib.WLibData;
+import delta.games.lotro.dat.wlib.classes.ClassDefinition;
+import delta.games.lotro.dat.wlib.classes.ClassesRegistry;
 
 /**
  * Tool to build a tree view of the WSL classes hierarchy.
@@ -20,28 +20,28 @@ public class ClassesTreeGenerator
    * @param data WLib data.
    * @return A displayable string.
    */
-  public String dumpClassesTree(WLibData data)
+  public String dumpClassesTree(ClassesRegistry data)
   {
     TreeNode<ClassDefinition> tree=buildClassesTree(data);
     return dumpTree(tree);
   }
 
-  private TreeNode<ClassDefinition> buildClassesTree(WLibData data)
+  private TreeNode<ClassDefinition> buildClassesTree(ClassesRegistry classes)
   {
     TreeNode<ClassDefinition> rootNode=new TreeNode<ClassDefinition>(null);
     Map<Integer,TreeNode<ClassDefinition>> nodes=new HashMap<Integer,TreeNode<ClassDefinition>>();
     // Pass #1: create all nodes
-    List<Integer> classIndexes=data.getClassIndexes();
+    List<Integer> classIndexes=classes.getClassIndexes();
     for(Integer classIndex : classIndexes)
     {
-      ClassDefinition classDefinition=data.getClass(classIndex.intValue());
+      ClassDefinition classDefinition=classes.getClass(classIndex.intValue());
       TreeNode<ClassDefinition> node=new TreeNode<ClassDefinition>(classDefinition);
       nodes.put(classIndex,node);
     }
     // Pass #2: parent nodes
     for(Integer classIndex : classIndexes)
     {
-      ClassDefinition classDefinition=data.getClass(classIndex.intValue());
+      ClassDefinition classDefinition=classes.getClass(classIndex.intValue());
       TreeNode<ClassDefinition> node=nodes.get(classIndex);
       ClassDefinition parentClass=classDefinition.getParent();
       if (parentClass!=null)

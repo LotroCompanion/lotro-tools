@@ -19,8 +19,8 @@ import delta.games.lotro.dat.data.ui.UILayout;
 import delta.games.lotro.dat.loaders.DataIdMapLoader;
 import delta.games.lotro.dat.loaders.ui.UILayoutLoader;
 import delta.games.lotro.dat.misc.Context;
-import delta.games.lotro.dat.wlib.ClassDefinition;
-import delta.games.lotro.dat.wlib.WLibData;
+import delta.games.lotro.dat.wlib.classes.ClassDefinition;
+import delta.games.lotro.dat.wlib.classes.ClassesRegistry;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
@@ -191,12 +191,12 @@ public class ReferenceDataGenerator
 
   private void dumpWLibClasses()
   {
-    WLibData wlibData=_facade.getWLibData();
-    List<Integer> classIndexes=wlibData.getClassIndexes();
+    ClassesRegistry classes=_facade.getWLibData().getClassesRegistry();
+    List<Integer> classIndexes=classes.getClassIndexes();
     StringBuilder sb=new StringBuilder();
     for(Integer classIndex : classIndexes)
     {
-      ClassDefinition classDefinition=wlibData.getClass(classIndex.intValue());
+      ClassDefinition classDefinition=classes.getClass(classIndex.intValue());
       sb.append(classDefinition).append(EndOfLine.NATIVE_EOL);
     }
     String contents=sb.toString().trim();
@@ -207,9 +207,9 @@ public class ReferenceDataGenerator
 
   private void dumpWLibClassesHierarchy()
   {
-    WLibData wlibData=_facade.getWLibData();
+    ClassesRegistry classes=_facade.getWLibData().getClassesRegistry();
     ClassesTreeGenerator builder=new ClassesTreeGenerator();
-    String classTree=builder.dumpClassesTree(wlibData);
+    String classTree=builder.dumpClassesTree(classes);
     File wDir=new File(_rootDir,"W");
     File to=new File(wDir,"classesTree.txt");
     writeFile(to,classTree);
