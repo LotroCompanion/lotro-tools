@@ -34,6 +34,7 @@ import delta.games.lotro.lore.items.details.AllegiancePoints;
 import delta.games.lotro.lore.items.details.GrantType;
 import delta.games.lotro.lore.items.details.GrantedElement;
 import delta.games.lotro.lore.items.details.HousingHooks;
+import delta.games.lotro.lore.items.details.ItemDecay;
 import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemUsageCooldown;
 import delta.games.lotro.lore.items.details.ItemXP;
@@ -55,6 +56,7 @@ public class ItemDetailsLoader
   private boolean _live;
   private Map<Integer,Float> _cooldownData;
   private LotroEnum<AllegianceGroup> _allegianceGroupEnum;
+  private ItemDecayLoader _decay;
 
   /**
    * Constructor.
@@ -69,6 +71,7 @@ public class ItemDetailsLoader
     if (_live)
     {
       _allegianceGroupEnum=LotroEnumsRegistry.getInstance().get(AllegianceGroup.class);
+      _decay=new ItemDecayLoader(facade);
     }
   }
 
@@ -92,6 +95,10 @@ public class ItemDetailsLoader
     }
     handleDecorationInfo(item,props);
     handleVirtueXPBonus(item,props);
+    if (_live)
+    {
+      handleItemDecay(item,props);
+    }
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -430,6 +437,20 @@ Usage_CooldownDuration: 21 (Item_2m)
     {
       VirtueXP virtueXP=new VirtueXP(bonus.intValue(),true);
       Item.addDetail(item,virtueXP);
+    }
+  }
+
+  private void handleItemDecay(Item item, PropertiesSet props)
+  {
+    Integer durationType=(Integer)props.getProperty("ItemDecay_Duration");
+    if ((durationType!=null) && (durationType.intValue()!=0))
+    {
+      Float decayDuration=_decay.getDuration(durationType);
+      if (decayDuration!=null)
+      {
+        ItemDecay decay=new ItemDecay(decayDuration.floatValue());
+        Item.addDetail(item,decay);
+      }
     }
   }
 }
