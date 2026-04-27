@@ -42,8 +42,8 @@ public class MainBuildUpdatePackageLoreDatabase
     File to=new File("packages-eoa");
     ToolsConfig config=new ToolsConfig(baseURL,to);
     File from=new File("D:/shared/damien/dev/lotrocompanion/EoA/work/LotRO Lore Database/app");
-    String packageName="patch5.0.0";
-    Version newVersion=new Version(5000,"SoA Book 11 - 5.0.0");
+    String packageName="patch5.1.0";
+    Version newVersion=new Version(5100,"SoA Book 11 - 5.1.0");
 
     // Build software description
     LocalDataManager local=new LocalDataManager(from);
