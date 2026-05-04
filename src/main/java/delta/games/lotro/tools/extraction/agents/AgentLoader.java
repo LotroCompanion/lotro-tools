@@ -25,14 +25,26 @@ public class AgentLoader
         Effect_StartupEffectID: 1879328773
         Effect_StartupEffectSpellcraft: -1.0
     */
-    Object[] effectsList=(Object[])props.getProperty("Effect_MonsterStartupEffect_Array");
-    if (effectsList!=null)
+    // Startup effects
+    Object[] startupEffectsList=(Object[])props.getProperty("Effect_MonsterStartupEffect_Array");
+    if (startupEffectsList!=null)
     {
-      for(Object entry : effectsList)
+      for(Object entry : startupEffectsList)
       {
         PropertiesSet entryProps=(PropertiesSet)entry;
         EffectGenerator generator=effectsLoader.loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
         agent.addStartupEffect(generator);
+      }
+    }
+    // Init effects
+    Object[] initEffectsList=(Object[])props.getProperty("Effect_MonsterInitEffect_Array");
+    if (initEffectsList!=null)
+    {
+      for(Object entry : initEffectsList)
+      {
+        PropertiesSet entryProps=(PropertiesSet)entry;
+        EffectGenerator generator=effectsLoader.loadGenerator(entryProps,"Effect_StartupEffectID","Effect_StartupEffectSpellcraft");
+        agent.addInitEffect(generator);
       }
     }
   }
