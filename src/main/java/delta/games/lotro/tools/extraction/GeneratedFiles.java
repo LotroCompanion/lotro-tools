@@ -484,4 +484,12 @@ public class GeneratedFiles
    * Travels map.
    */
   public static final File TRAVELS_MAP=LotroCoreConfig.getInstance().getFile(DataFiles.TRAVELS_MAP);
+  /**
+   * Portrait frame descriptions.
+   */
+  public static final File PORTRAIT_FRAMES=LotroCoreConfig.getInstance().getFile(DataFiles.PORTRAIT_FRAMES);
+  /**
+   * Frame icons.
+   */
+  public static final File FRAME_ICONS=LotroCoreConfig.getInstance().getFile("frameIcons");
 }

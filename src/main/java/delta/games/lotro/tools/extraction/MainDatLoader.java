@@ -64,6 +64,7 @@ import delta.games.lotro.tools.extraction.loot.LootLoader;
 import delta.games.lotro.tools.extraction.misc.MainBillingGroupsLoader;
 import delta.games.lotro.tools.extraction.misc.MainHobbiesLoader;
 import delta.games.lotro.tools.extraction.misc.MainPerksLoader;
+import delta.games.lotro.tools.extraction.misc.MainPortaitFramesLoader;
 import delta.games.lotro.tools.extraction.misc.MainPropertyResponseMapsLoader;
 import delta.games.lotro.tools.extraction.misc.PropertyResponseMapsLoader;
 import delta.games.lotro.tools.extraction.misc.WebStoreItemsLoader;
@@ -112,6 +113,11 @@ public class MainDatLoader
     boolean live=LotroCoreConfig.isLive();
     // Game
     new MainGameDataBuilder().doIt();
+    // Portrait frame icons
+    if (live)
+    {
+      new MainPortaitFramesLoader(_facade).doIt();
+    }
     // Stats
     new MainStatsLoader(_facade).doIt();
     // Colors
@@ -297,6 +303,11 @@ public class MainDatLoader
     boolean live=LotroCoreConfig.isLive();
     // Commons
     CleanupUtils.deleteFile(GeneratedFiles.GAME_DATA);
+    if (live)
+    {
+      CleanupUtils.deleteFile(GeneratedFiles.PORTRAIT_FRAMES);
+      CleanupUtils.deleteDirectory(GeneratedFiles.FRAME_ICONS);
+    }
     CleanupUtils.deleteFile(GeneratedFiles.STATS);
     CleanupUtils.deleteFile(GeneratedFiles.COLORS);
     CleanupUtils.deleteFile(GeneratedFiles.COMBAT_DATA);
