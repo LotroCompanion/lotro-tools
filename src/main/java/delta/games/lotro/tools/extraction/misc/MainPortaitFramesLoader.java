@@ -108,7 +108,7 @@ public class MainPortaitFramesLoader
     ret.setIconName(iconName);
     // Is for freeps
     boolean isForFreeps=Utils.getBooleanValue((Integer)properties.getProperty("VitalDisplayOverride_IsForFreepCharacters"),false);
-    ret.setIsForCreeps(isForFreeps);
+    ret.setIsForFreeps(isForFreeps);
     // Is for creeps
     boolean isForCreeps=Utils.getBooleanValue((Integer)properties.getProperty("VitalDisplayOverride_IsForMonsterCharacters"),false);
     ret.setIsForCreeps(isForCreeps);
