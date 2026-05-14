@@ -2,7 +2,6 @@ package delta.games.lotro.tools.extraction.items;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -216,12 +215,6 @@ public class MainDatItemsLoader
       if ((maxStack!=null) && (maxStack.intValue()>1))
       {
         item.setStackMax(maxStack);
-      }
-      // Frame?
-      Object[] setProperty=(Object[])properties.getProperty("Usage_SetPropertyUsageData_Array");
-      if (setProperty!=null)
-      {
-        System.out.println("***** "+Arrays.toString(setProperty)+ " => "+name);
       }
       // Slot
       EquipmentLocation slot=getSlot(properties);

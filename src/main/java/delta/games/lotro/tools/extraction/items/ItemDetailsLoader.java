@@ -38,8 +38,11 @@ import delta.games.lotro.lore.items.details.ItemDecay;
 import delta.games.lotro.lore.items.details.ItemReputation;
 import delta.games.lotro.lore.items.details.ItemUsageCooldown;
 import delta.games.lotro.lore.items.details.ItemXP;
+import delta.games.lotro.lore.items.details.ProvidesPortraitFrame;
 import delta.games.lotro.lore.items.details.VirtueXP;
 import delta.games.lotro.lore.items.details.WeaponSlayerInfo;
+import delta.games.lotro.lore.portraitFrames.PortraitFrameDescription;
+import delta.games.lotro.lore.portraitFrames.PortraitFramesManager;
 import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.tools.extraction.common.CooldownLoader;
@@ -99,6 +102,7 @@ public class ItemDetailsLoader
     {
       handleItemDecay(item,props);
     }
+    handlePortraitFramesProviders(item,props);
   }
 
   private void handleGrantedSkills(Item item, PropertiesSet props)
@@ -450,6 +454,36 @@ Usage_CooldownDuration: 21 (Item_2m)
       {
         ItemDecay decay=new ItemDecay(decayDuration.floatValue());
         Item.addDetail(item,decay);
+      }
+    }
+  }
+
+  private void handlePortraitFramesProviders(Item item, PropertiesSet props)
+  {
+    PropertyValue setPropertyArray=props.getPropertyValueByName("Usage_SetPropertyUsageData_Array");
+    if (setPropertyArray!=null)
+    {
+      ArrayPropertyValue arrayPropertyValue=(ArrayPropertyValue)setPropertyArray;
+      for(PropertyValue propertyValue : arrayPropertyValue.getValues())
+      {
+        if (propertyValue.getDefinition().getPropertyId()==268454411) // VitalDisplayOverride_UnlockedVDOs
+        {
+          PortraitFramesManager mgr=PortraitFramesManager.getInstance();
+          BitSet bitSet=(BitSet)(propertyValue.getValue());
+          int nb=bitSet.size();
+          for(int i=0;i<nb;i++)
+          {
+            if (bitSet.get(i))
+            {
+              PortraitFrameDescription portrait=mgr.getPortraitFrameByCode(i+1);
+              if (portrait!=null)
+              {
+                ProvidesPortraitFrame provides=new ProvidesPortraitFrame(portrait);
+                Item.addDetail(item,provides);
+              }
+            }
+          }
+        }
       }
     }
   }
