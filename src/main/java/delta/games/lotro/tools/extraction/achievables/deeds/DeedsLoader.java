@@ -32,6 +32,7 @@ import delta.games.lotro.lore.quests.AchievableProxiesResolver;
 import delta.games.lotro.lore.webStore.WebStoreItem;
 import delta.games.lotro.lore.webStore.WebStoreItemsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.achievables.AchievableLootLoader;
 import delta.games.lotro.tools.extraction.achievables.AchievablesLoadingUtils;
 import delta.games.lotro.tools.extraction.achievables.DatObjectivesLoader;
 import delta.games.lotro.tools.extraction.achievables.deeds.keys.DeedKeysInjector;
@@ -54,6 +55,7 @@ public class DeedsLoader
   private LotroEnum<DeedCategory> _deedUiTabName;
   private I18nUtils _i18n;
   private DatObjectivesLoader _objectivesLoader;
+  private AchievableLootLoader _lootLoader;
   private AchievablesLoadingUtils _utils;
   private StringProcessor _processor;
   private LotroEnum<DeedType> _deedTypeEnum;
@@ -71,6 +73,7 @@ public class DeedsLoader
     _deedUiTabName=registry.get(DeedCategory.class);
     _i18n=new I18nUtils("deeds",facade.getGlobalStringsManager());
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
+    _lootLoader=new AchievableLootLoader();
     _utils=utils;
     _processor=buildProcessor();
     _deedTypeEnum=LotroEnumsRegistry.getInstance().get(DeedType.class);
@@ -148,6 +151,8 @@ public class DeedsLoader
     _utils.getEventIDsLoader().doAchievable(deed);
     // Effects
     _utils.handleEffects(properties);
+    // Loots
+    _lootLoader.handleLoot(deed,properties);
     // Registration
     _deeds.put(Integer.valueOf(deed.getIdentifier()),deed);
   }

@@ -31,6 +31,7 @@ import delta.games.lotro.lore.quests.io.xml.QuestXMLWriter;
 import delta.games.lotro.lore.webStore.WebStoreItem;
 import delta.games.lotro.lore.webStore.WebStoreItemsManager;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.achievables.AchievableLootLoader;
 import delta.games.lotro.tools.extraction.achievables.AchievablesLoadingUtils;
 import delta.games.lotro.tools.extraction.achievables.DatObjectivesLoader;
 import delta.games.lotro.tools.extraction.achievables.DatRolesLoader;
@@ -58,6 +59,7 @@ public class QuestsLoader
   private I18nUtils _i18n;
   private DatRolesLoader _rolesLoader;
   private DatObjectivesLoader _objectivesLoader;
+  private AchievableLootLoader _lootLoader;
   private AchievablesLoadingUtils _utils;
   private StringProcessor _processor;
 
@@ -77,6 +79,7 @@ public class QuestsLoader
     _i18n=new I18nUtils("quests",facade.getGlobalStringsManager());
     _rolesLoader=new DatRolesLoader(facade,_i18n);
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
+    _lootLoader=new AchievableLootLoader();
     _processor=buildProcessor();
   }
 
@@ -210,6 +213,8 @@ public class QuestsLoader
     }
     // Events
     _utils.getEventIDsLoader().doAchievable(quest);
+    // Loots
+    _lootLoader.handleLoot(quest,properties);
     // Registration
     _quests.put(Integer.valueOf(quest.getIdentifier()),quest);
   }

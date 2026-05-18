@@ -26,7 +26,7 @@ public class CosmeticPetLoader
   {
     _facade=facade;
     _i18n=i18n;
-    _classificationLoader=new ClassificationLoader(facade);
+    _classificationLoader=new ClassificationLoader();
   }
 
   /**

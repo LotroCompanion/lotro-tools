@@ -11,7 +11,6 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
-import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
@@ -32,9 +31,8 @@ public class ClassificationLoader
 
   /**
    * Constructor.
-   * @param facade Data facade.
    */
-  public ClassificationLoader(DataFacade facade)
+  public ClassificationLoader()
   {
     LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
     _alignment=enumsRegistry.get(Alignment.class);

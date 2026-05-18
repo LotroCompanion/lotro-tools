@@ -63,7 +63,7 @@ public class MainDatMobsLoader
   {
     _facade=facade;
     _i18n=new I18nUtils("mobs",facade.getGlobalStringsManager());
-    _classificationLoader=new ClassificationLoader(facade);
+    _classificationLoader=new ClassificationLoader();
     _effectLoader=effectsLoader;
     _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _lootLoader=lootLoader;
