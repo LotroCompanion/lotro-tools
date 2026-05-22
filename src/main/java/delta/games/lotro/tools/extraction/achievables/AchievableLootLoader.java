@@ -16,6 +16,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
+import delta.games.lotro.lore.agents.mobs.MobLocation;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
 import delta.games.lotro.lore.geo.landmarks.LandmarkDescription;
 import delta.games.lotro.lore.geo.landmarks.LandmarksManager;
@@ -26,7 +27,7 @@ import delta.games.lotro.lore.maps.LandDivision;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.loots.AchievableLoot;
 import delta.games.lotro.lore.quests.loots.AchievableLootMonsterSpec;
-import delta.games.lotro.lore.quests.objectives.MobLocation;
+import delta.games.lotro.lore.quests.loots.AchievableLoots;
 
 /**
  * Loader for achievable loots.
@@ -66,13 +67,16 @@ public class AchievableLootLoader
     {
       return;
     }
+    AchievableLoots loots=new AchievableLoots();
     for(Object lootProps : lootPropsArray)
     {
-      //System.out.println(((PropertiesSet)lootProps).dump());
-      @SuppressWarnings("unused")
       AchievableLoot loot=handleElementaryLoot((PropertiesSet)lootProps);
-      //System.out.println("Loot for "+achievable+" => "+loot);
+      if (loot!=null)
+      {
+        loots.addLoot(loot);
+      }
     }
+    achievable.setLoots(loots);
   }
 
   private AchievableLoot handleElementaryLoot(PropertiesSet lootProps)
@@ -83,7 +87,7 @@ public class AchievableLootLoader
     {
       return null;
     }
-    AchievableLoot loot=new AchievableLoot(null);
+    AchievableLoot loot=new AchievableLoot(item);
     // Probabilities
     Integer probability=(Integer)lootProps.getProperty("Quest_LootItemProbability");
     if (probability!=null)
@@ -194,7 +198,10 @@ public class AchievableLootLoader
     if (genusCode!=null)
     {
       Genus genus=_genusEnum.getEntry(genusCode.intValue());
-      classification.setGenus(Arrays.asList(genus));
+      if (genus!=null)
+      {
+        classification.setGenus(Arrays.asList(genus));
+      }
     }
     // - Species
     Integer speciesCode=(Integer)mobSpecProps.getProperty("Quest_MonsterSpecies");
