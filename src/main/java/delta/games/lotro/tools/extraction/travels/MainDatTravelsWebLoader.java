@@ -29,6 +29,7 @@ import delta.games.lotro.tools.extraction.GeneratedFiles;
 import delta.games.lotro.tools.extraction.achievables.QuestRequirementsLoader;
 import delta.games.lotro.tools.extraction.requirements.UsageRequirementsLoader;
 import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
+import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
@@ -42,6 +43,7 @@ public class MainDatTravelsWebLoader
   private DataFacade _facade;
   private TravelsManager _travelsMgr;
   private QuestRequirementsLoader _questRequirementsLoader;
+  private I18nUtils _i18n;
 
   /**
    * Constructor.
@@ -52,6 +54,7 @@ public class MainDatTravelsWebLoader
     _facade=facade;
     _travelsMgr=new TravelsManager();
     _questRequirementsLoader=new QuestRequirementsLoader(facade);
+    _i18n=new I18nUtils("travelsWeb",facade.getGlobalStringsManager());
   }
 
   private TravelNode load(int indexDataId)
@@ -114,6 +117,7 @@ public class MainDatTravelsWebLoader
         // Sometimes location IDs refer to routes, not destinations... skip them!
         return null;
       }
+      name=_i18n.getNameStringProperty(properties,"TravelDisplayName",locationId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
       // Swift travel?
       Integer swiftTravelInt=(Integer)properties.getProperty("TravelDestinationIsSwiftTravel");
       boolean isSwiftTravel=((swiftTravelInt!=null) && (swiftTravelInt.intValue()==1));
@@ -160,13 +164,10 @@ Usage_RequiresSubscriberOrUnsub: 1
      */
     // Name
     String routeName=DatStringUtils.getStringProperty(properties,"Name");
+    routeName=_i18n.getNameStringProperty(properties,"Name",travelRouteId,I18nUtils.OPTION_REMOVE_TRAILING_MARK);
     // Destination
     int destinationId=((Integer)properties.getProperty("TravelRoute_Destination")).intValue();
     TravelDestination destination=getTravelDestination(destinationId);
-    if (routeName==null)
-    {
-      routeName=destination.getName();
-    }
     // Travel mode
     Integer travelModeId=(Integer)properties.getProperty("TravelRoute_TravelMode");
     TravelMode mode=null;
@@ -269,6 +270,7 @@ Usage_RequiresSubscriberOrUnsub: 1
   private void save()
   {
     TravelsWebXMLWriter.writeTravelsWebFile(GeneratedFiles.TRAVELS_WEB,_travelsMgr);
+    _i18n.save();
   }
 
   void dumpTravels(PrintStream out)
