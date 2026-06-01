@@ -1,7 +1,7 @@
 package delta.games.lotro.tools.extraction.achievables;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
 import delta.games.lotro.common.enums.AgentClass;
@@ -13,6 +13,7 @@ import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
@@ -197,11 +198,9 @@ public class AchievableLootLoader
     Integer genusCode=(Integer)mobSpecProps.getProperty("Quest_MonsterGenus");
     if (genusCode!=null)
     {
-      Genus genus=_genusEnum.getEntry(genusCode.intValue());
-      if (genus!=null)
-      {
-        classification.setGenus(Arrays.asList(genus));
-      }
+      BitSet bitset=BitSetUtils.getBitSetFromFlags(genusCode.intValue());
+      List<Genus> genus=_genusEnum.getFromBitSet(bitset);
+      classification.setGenus(genus);
     }
     // - Species
     Integer speciesCode=(Integer)mobSpecProps.getProperty("Quest_MonsterSpecies");
