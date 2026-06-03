@@ -1,21 +1,13 @@
 package delta.games.lotro.tools.extraction.achievables;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
-import delta.games.lotro.common.enums.AgentClass;
-import delta.games.lotro.common.enums.Alignment;
-import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.MobDivision;
-import delta.games.lotro.common.enums.Species;
-import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
-import delta.games.lotro.lore.agents.EntityClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobLocation;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
@@ -29,6 +21,7 @@ import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.loots.AchievableLoot;
 import delta.games.lotro.lore.quests.loots.AchievableLootMonsterSpec;
 import delta.games.lotro.lore.quests.loots.AchievableLoots;
+import delta.games.lotro.tools.extraction.utils.MobUtils;
 
 /**
  * Loader for achievable loots.
@@ -37,11 +30,7 @@ import delta.games.lotro.lore.quests.loots.AchievableLoots;
 public class AchievableLootLoader
 {
   private LotroEnum<MobDivision> _mobDivisionEnum;
-  private LotroEnum<AgentClass> _agentClassEnum;
-  private LotroEnum<Alignment> _alignmentEnum;
-  private LotroEnum<Genus> _genusEnum;
-  private LotroEnum<Species> _speciesEnum;
-  private LotroEnum<SubSpecies> _subSpeciesEnum;
+  private MobUtils _mobUtils;
 
   /**
    * Constructor.
@@ -49,11 +38,7 @@ public class AchievableLootLoader
   public AchievableLootLoader()
   {
     _mobDivisionEnum=LotroEnumsRegistry.getInstance().get(MobDivision.class);
-    _agentClassEnum=LotroEnumsRegistry.getInstance().get(AgentClass.class);
-    _alignmentEnum=LotroEnumsRegistry.getInstance().get(Alignment.class);
-    _genusEnum=LotroEnumsRegistry.getInstance().get(Genus.class);
-    _speciesEnum=LotroEnumsRegistry.getInstance().get(Species.class);
-    _subSpeciesEnum=LotroEnumsRegistry.getInstance().get(SubSpecies.class);
+    _mobUtils=new MobUtils();
   }
 
   /**
@@ -144,7 +129,7 @@ public class AchievableLootLoader
   private AchievableLootMonsterSpec parseMonsterSpec(PropertiesSet mobSpecProps)
   {
     MobLocation mobLocation=parseMobLocation(mobSpecProps);
-    AgentClassification classification=parseClassification(mobSpecProps);
+    AgentClassification classification=_mobUtils.parseClassification(mobSpecProps);
     AchievableLootMonsterSpec ret=new AchievableLootMonsterSpec(mobLocation,classification);
     return ret;
   }
@@ -172,50 +157,5 @@ public class AchievableLootLoader
     }
     MobLocation mobLocation=new MobLocation(mobDivision,landDivision,landmark);
     return mobLocation;
-  }
-
-  private AgentClassification parseClassification(PropertiesSet mobSpecProps)
-  {
-    AgentClassification ret=new AgentClassification();
-    // Agent classification
-    // - Alignment
-    Integer alignmentCode=(Integer)mobSpecProps.getProperty("Quest_MonsterAlignment");
-    if (alignmentCode!=null)
-    {
-      Alignment alignment=_alignmentEnum.getEntry(alignmentCode.intValue());
-      ret.setAlignment(alignment);
-    }
-    // Class
-    Integer classCode=(Integer)mobSpecProps.getProperty("Quest_MonsterClass");
-    if (classCode!=null)
-    {
-      AgentClass agentClass=_agentClassEnum.getEntry(classCode.intValue());
-      ret.setAgentClass(agentClass);
-    }
-    // Entity classification
-    EntityClassification classification=ret.getEntityClassification();
-    // - Genus
-    Integer genusCode=(Integer)mobSpecProps.getProperty("Quest_MonsterGenus");
-    if (genusCode!=null)
-    {
-      BitSet bitset=BitSetUtils.getBitSetFromFlags(genusCode.intValue());
-      List<Genus> genus=_genusEnum.getFromBitSet(bitset);
-      classification.setGenus(genus);
-    }
-    // - Species
-    Integer speciesCode=(Integer)mobSpecProps.getProperty("Quest_MonsterSpecies");
-    if (speciesCode!=null)
-    {
-      Species species=_speciesEnum.getEntry(speciesCode.intValue());
-      classification.setSpecies(species);
-    }
-    // Sub-species
-    Integer subSpeciesCode=(Integer)mobSpecProps.getProperty("Quest_MonsterSubspecies");
-    if (subSpeciesCode!=null)
-    {
-      SubSpecies subSpecies=_subSpeciesEnum.getEntry(subSpeciesCode.intValue());
-      classification.setSubSpecies(subSpecies);
-    }
-    return ret;
   }
 }

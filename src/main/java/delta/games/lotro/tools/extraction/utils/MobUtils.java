@@ -21,69 +21,77 @@ import delta.games.lotro.lore.agents.EntityClassification;
  */
 public class MobUtils
 {
+  private LotroEnum<AgentClass> _agentClassEnum;
+  private LotroEnum<Alignment> _alignmentEnum;
+  private LotroEnum<Genus> _genusEnum;
+  private LotroEnum<Species> _speciesEnum;
+  private LotroEnum<SubSpecies> _subSpeciesEnum;
+  /**
+   * Constructor.
+   */
+  public MobUtils()
+  {
+    _agentClassEnum=LotroEnumsRegistry.getInstance().get(AgentClass.class);
+    _alignmentEnum=LotroEnumsRegistry.getInstance().get(Alignment.class);
+    _genusEnum=LotroEnumsRegistry.getInstance().get(Genus.class);
+    _speciesEnum=LotroEnumsRegistry.getInstance().get(Species.class);
+    _subSpeciesEnum=LotroEnumsRegistry.getInstance().get(SubSpecies.class);
+  }
+
   /**
    * Build a mob classification from raw properties.
-   * @param props Input properties.
+   * @param mobProps Input properties.
    * @return the mob classification.
    */
-  public static AgentClassification buildClassification(PropertiesSet props)
+  public AgentClassification parseClassification(PropertiesSet mobProps)
   {
     AgentClassification ret=new AgentClassification();
-    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
-    // - class
-    LotroEnum<AgentClass> classEnum=enumsRegistry.get(AgentClass.class);
-    Integer classId=(Integer)props.getProperty("Quest_MonsterClass");
-    if (classId!=null)
+    // - Alignment
+    Integer alignmentCode=(Integer)mobProps.getProperty("Quest_MonsterAlignment");
+    if (alignmentCode!=null)
     {
-      AgentClass monsterClass=classEnum.getEntry(classId.intValue());
-      ret.setAgentClass(monsterClass);
-    }
-    // - alignment
-    LotroEnum<Alignment> alignmentEnum=enumsRegistry.get(Alignment.class);
-    Integer alignmentId=(Integer)props.getProperty("Quest_MonsterAlignment");
-    if (alignmentId!=null)
-    {
-      Alignment alignment=alignmentEnum.getEntry(alignmentId.intValue());
+      Alignment alignment=_alignmentEnum.getEntry(alignmentCode.intValue());
       ret.setAlignment(alignment);
     }
-    loadEntityClassification(props,ret.getEntityClassification());
+    // Class
+    Integer classCode=(Integer)mobProps.getProperty("Quest_MonsterClass");
+    if (classCode!=null)
+    {
+      AgentClass agentClass=_agentClassEnum.getEntry(classCode.intValue());
+      ret.setAgentClass(agentClass);
+    }
+    loadEntityClassification(mobProps,ret.getEntityClassification());
     return ret;
   }
 
   /**
-   * Load a mob reference from the given properties.
+   * Load a classification from the given properties.
    * @param mobProps Properties.
-   * @param mobRef Storage.
+   * @param classification Storage.
    */
-  private static void loadEntityClassification(PropertiesSet mobProps, EntityClassification mobRef)
+  private void loadEntityClassification(PropertiesSet mobProps, EntityClassification classification)
   {
-    LotroEnumsRegistry enumsRegistry=LotroEnumsRegistry.getInstance();
-    // - subspecies
-    LotroEnum<SubSpecies> subSpeciesEnum=enumsRegistry.get(SubSpecies.class);
-    Integer subSpeciesId=(Integer)mobProps.getProperty("Quest_MonsterSubspecies");
-    SubSpecies subSpecies=null;
-    if (subSpeciesId!=null)
+    // - Genus
+    Integer genusCode=(Integer)mobProps.getProperty("Quest_MonsterGenus");
+    if (genusCode!=null)
     {
-      subSpecies=subSpeciesEnum.getEntry(subSpeciesId.intValue());
-      mobRef.setSubSpecies(subSpecies);
+      BitSet bitset=BitSetUtils.getBitSetFromFlags(genusCode.intValue());
+      List<Genus> genus=_genusEnum.getFromBitSet(bitset);
+      classification.setGenus(genus);
     }
-    // - species
-    LotroEnum<Species> speciesEnum=enumsRegistry.get(Species.class);
-    Integer speciesId=(Integer)mobProps.getProperty("Quest_MonsterSpecies");
-    Species species=null;
-    if (speciesId!=null)
+    // - Species
+    Integer speciesCode=(Integer)mobProps.getProperty("Quest_MonsterSpecies");
+    if (speciesCode!=null)
     {
-      species=speciesEnum.getEntry(speciesId.intValue());
-      mobRef.setSpecies(species);
+      Species species=_speciesEnum.getEntry(speciesCode.intValue());
+      classification.setSpecies(species);
     }
-    // - genus
-    LotroEnum<Genus> genusEnum=enumsRegistry.get(Genus.class);
-    Integer genusId=(Integer)mobProps.getProperty("Quest_MonsterGenus");
-    if (genusId!=null)
+    // Sub-species
+    Integer subSpeciesCode=(Integer)mobProps.getProperty("Quest_MonsterSubspecies");
+    if (subSpeciesCode!=null)
     {
-      BitSet bitset=BitSetUtils.getBitSetFromFlags(genusId.intValue());
-      List<Genus> genus=genusEnum.getFromBitSet(bitset);
-      mobRef.setGenus(genus);
+      SubSpecies subSpecies=_subSpeciesEnum.getEntry(subSpeciesCode.intValue());
+      classification.setSubSpecies(subSpecies);
     }
   }
 }

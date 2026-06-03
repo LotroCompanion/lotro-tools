@@ -98,6 +98,7 @@ public class DatObjectivesLoader
   private EnumMapper _questEvent;
   private LotroEnum<QuestCategory> _questCategory;
   private LotroEnum<QuestScope> _questScope;
+  private MobUtils _mobUtils;
 
   @SuppressWarnings("unused")
   private GeoData _geoData;
@@ -118,6 +119,7 @@ public class DatObjectivesLoader
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=LotroEnumsRegistry.getInstance().get(QuestCategory.class);
     _questScope=LotroEnumsRegistry.getInstance().get(QuestScope.class);
+    _mobUtils=new MobUtils();
     _geoData=QuestEventTargetLocationLoader.loadGeoData(facade);
     _builders=initConditionBuilders();
   }
@@ -690,7 +692,7 @@ QuestEvent_ShowBillboardText: 0
           landmark=LandmarksManager.getInstance().getLandmarkById(landmarkId.intValue());
         }
         // What
-        AgentClassification classification=MobUtils.buildClassification(monsterGenusProps);
+        AgentClassification classification=_mobUtils.parseClassification(monsterGenusProps);
         MobSelection selection=new MobSelection();
         MobLocation location=new MobLocation(mobDivision,landDivision,landmark);
         selection.setWhere(location);
