@@ -8,12 +8,18 @@ import delta.games.lotro.common.enums.Alignment;
 import delta.games.lotro.common.enums.Genus;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.Species;
 import delta.games.lotro.common.enums.SubSpecies;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.utils.BitSetUtils;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.EntityClassification;
+import delta.games.lotro.lore.agents.mobs.MobLocation;
+import delta.games.lotro.lore.geo.landmarks.LandmarkDescription;
+import delta.games.lotro.lore.geo.landmarks.LandmarksManager;
+import delta.games.lotro.lore.maps.GeoAreasManager;
+import delta.games.lotro.lore.maps.LandDivision;
 
 /**
  * Utility methods related to mobs.
@@ -21,6 +27,7 @@ import delta.games.lotro.lore.agents.EntityClassification;
  */
 public class MobUtils
 {
+  private LotroEnum<MobDivision> _mobDivisionEnum;
   private LotroEnum<AgentClass> _agentClassEnum;
   private LotroEnum<Alignment> _alignmentEnum;
   private LotroEnum<Genus> _genusEnum;
@@ -31,6 +38,7 @@ public class MobUtils
    */
   public MobUtils()
   {
+    _mobDivisionEnum=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _agentClassEnum=LotroEnumsRegistry.getInstance().get(AgentClass.class);
     _alignmentEnum=LotroEnumsRegistry.getInstance().get(Alignment.class);
     _genusEnum=LotroEnumsRegistry.getInstance().get(Genus.class);
@@ -93,5 +101,35 @@ public class MobUtils
       SubSpecies subSpecies=_subSpeciesEnum.getEntry(subSpeciesCode.intValue());
       classification.setSubSpecies(subSpecies);
     }
+  }
+
+  /**
+   * Build a mob location from raw properties.
+   * @param mobProps Input properties.
+   * @return the mob location.
+   */
+  public MobLocation parseMobLocation(PropertiesSet mobProps)
+  {
+    // Mob location
+    MobDivision mobDivision=null;
+    Integer mobDivisionCode=(Integer)mobProps.getProperty("Quest_MonsterDivision");
+    if (mobDivisionCode!=null)
+    {
+      mobDivision=_mobDivisionEnum.getEntry(mobDivisionCode.intValue());
+    }
+    LandDivision landDivision=null;
+    Integer regionDID=(Integer)mobProps.getProperty("Quest_MonsterRegion");
+    if (regionDID!=null)
+    {
+      landDivision=GeoAreasManager.getInstance().getLandById(regionDID.intValue());
+    }
+    LandmarkDescription landmark=null;
+    Integer landmarkDID=(Integer)mobProps.getProperty("QuestEvent_LandmarkDID");
+    if (landmarkDID!=null)
+    {
+      landmark=LandmarksManager.getInstance().getLandmarkById(landmarkDID.intValue());
+    }
+    MobLocation mobLocation=new MobLocation(mobDivision,landDivision,landmark);
+    return mobLocation;
   }
 }

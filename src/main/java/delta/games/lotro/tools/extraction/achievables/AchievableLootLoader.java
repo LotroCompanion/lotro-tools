@@ -3,23 +3,16 @@ package delta.games.lotro.tools.extraction.achievables;
 import java.util.ArrayList;
 import java.util.List;
 
-import delta.games.lotro.common.enums.LotroEnum;
-import delta.games.lotro.common.enums.LotroEnumsRegistry;
-import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.agents.AgentClassification;
 import delta.games.lotro.lore.agents.mobs.MobDescription;
 import delta.games.lotro.lore.agents.mobs.MobLocation;
+import delta.games.lotro.lore.agents.mobs.MobSelection;
 import delta.games.lotro.lore.agents.mobs.MobsManager;
-import delta.games.lotro.lore.geo.landmarks.LandmarkDescription;
-import delta.games.lotro.lore.geo.landmarks.LandmarksManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.maps.GeoAreasManager;
-import delta.games.lotro.lore.maps.LandDivision;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.loots.AchievableLoot;
-import delta.games.lotro.lore.quests.loots.AchievableLootMonsterSpec;
 import delta.games.lotro.lore.quests.loots.AchievableLoots;
 import delta.games.lotro.tools.extraction.utils.MobUtils;
 
@@ -29,7 +22,6 @@ import delta.games.lotro.tools.extraction.utils.MobUtils;
  */
 public class AchievableLootLoader
 {
-  private LotroEnum<MobDivision> _mobDivisionEnum;
   private MobUtils _mobUtils;
 
   /**
@@ -37,7 +29,6 @@ public class AchievableLootLoader
    */
   public AchievableLootLoader()
   {
-    _mobDivisionEnum=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _mobUtils=new MobUtils();
   }
 
@@ -109,7 +100,7 @@ public class AchievableLootLoader
     {
       for(Object monsterSpecEntry : monsterSpecsArray)
       {
-        AchievableLootMonsterSpec spec=parseMonsterSpec((PropertiesSet)monsterSpecEntry);
+        MobSelection spec=parseMonsterSpec((PropertiesSet)monsterSpecEntry);
         loot.addMonsterSpec(spec);
       }
     }
@@ -119,43 +110,18 @@ public class AchievableLootLoader
     {
       for(Object monsterExcludedSpecEntry : monsterExcludedSpecsArray)
       {
-        AchievableLootMonsterSpec spec=parseMonsterSpec((PropertiesSet)monsterExcludedSpecEntry);
+        MobSelection spec=parseMonsterSpec((PropertiesSet)monsterExcludedSpecEntry);
         loot.addExcludedMonsterSpec(spec);
       }
     }
     return loot;
   }
 
-  private AchievableLootMonsterSpec parseMonsterSpec(PropertiesSet mobSpecProps)
+  private MobSelection parseMonsterSpec(PropertiesSet mobSpecProps)
   {
-    MobLocation mobLocation=parseMobLocation(mobSpecProps);
+    MobLocation mobLocation=_mobUtils.parseMobLocation(mobSpecProps);
     AgentClassification classification=_mobUtils.parseClassification(mobSpecProps);
-    AchievableLootMonsterSpec ret=new AchievableLootMonsterSpec(mobLocation,classification);
+    MobSelection ret=new MobSelection(mobLocation,classification);
     return ret;
-  }
-
-  private MobLocation parseMobLocation(PropertiesSet mobSpecProps)
-  {
-    // Mob location
-    MobDivision mobDivision=null;
-    Integer mobDivisionCode=(Integer)mobSpecProps.getProperty("Quest_MonsterDivision");
-    if (mobDivisionCode!=null)
-    {
-      mobDivision=_mobDivisionEnum.getEntry(mobDivisionCode.intValue());
-    }
-    LandDivision landDivision=null;
-    Integer regionDID=(Integer)mobSpecProps.getProperty("Quest_MonsterRegion");
-    if (regionDID!=null)
-    {
-      landDivision=GeoAreasManager.getInstance().getLandById(regionDID.intValue());
-    }
-    LandmarkDescription landmark=null;
-    Integer landmarkDID=(Integer)mobSpecProps.getProperty("QuestEvent_LandmarkDID");
-    if (landmarkDID!=null)
-    {
-      landmark=LandmarksManager.getInstance().getLandmarkById(landmarkDID.intValue());
-    }
-    MobLocation mobLocation=new MobLocation(mobDivision,landDivision,landmark);
-    return mobLocation;
   }
 }

@@ -14,7 +14,6 @@ import delta.games.lotro.character.skills.SkillsManager;
 import delta.games.lotro.common.Interactable;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
-import delta.games.lotro.common.enums.MobDivision;
 import delta.games.lotro.common.enums.QuestCategory;
 import delta.games.lotro.common.enums.QuestScope;
 import delta.games.lotro.dat.DATConstants;
@@ -41,8 +40,6 @@ import delta.games.lotro.lore.geo.landmarks.LandmarkDescription;
 import delta.games.lotro.lore.geo.landmarks.LandmarksManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.maps.GeoAreasManager;
-import delta.games.lotro.lore.maps.LandDivision;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.CompoundQuestEvent;
 import delta.games.lotro.lore.quests.objectives.ConditionTarget;
@@ -94,7 +91,6 @@ public class DatObjectivesLoader
   private DataFacade _facade;
   private I18nUtils _i18n;
 
-  private LotroEnum<MobDivision> _mobDivision;
   private EnumMapper _questEvent;
   private LotroEnum<QuestCategory> _questCategory;
   private LotroEnum<QuestScope> _questScope;
@@ -115,7 +111,6 @@ public class DatObjectivesLoader
   {
     _facade=facade;
     _i18n=i18n;
-    _mobDivision=LotroEnumsRegistry.getInstance().get(MobDivision.class);
     _questEvent=_facade.getEnumsManager().getEnumMapper(587202639);
     _questCategory=LotroEnumsRegistry.getInstance().get(QuestCategory.class);
     _questScope=LotroEnumsRegistry.getInstance().get(QuestScope.class);
@@ -673,30 +668,10 @@ QuestEvent_ShowBillboardText: 0
       {
         PropertiesSet monsterGenusProps=(PropertiesSet)monsterGenusArray[i];
         // Where
-        MobDivision mobDivision=null;
-        Integer mobDivisionCode=(Integer)monsterGenusProps.getProperty("Quest_MonsterDivision");
-        if (mobDivisionCode!=null)
-        {
-          mobDivision=_mobDivision.getEntry(mobDivisionCode.intValue());
-        }
-        LandDivision landDivision=null;
-        Integer regionId=(Integer)monsterGenusProps.getProperty("Quest_MonsterRegion");
-        if (regionId!=null)
-        {
-          landDivision=GeoAreasManager.getInstance().getLandById(regionId.intValue());
-        }
-        LandmarkDescription landmark=null;
-        Integer landmarkId=(Integer)monsterGenusProps.getProperty("QuestEvent_LandmarkDID");
-        if (landmarkId!=null)
-        {
-          landmark=LandmarksManager.getInstance().getLandmarkById(landmarkId.intValue());
-        }
+        MobLocation location=_mobUtils.parseMobLocation(monsterGenusProps);
         // What
         AgentClassification classification=_mobUtils.parseClassification(monsterGenusProps);
-        MobSelection selection=new MobSelection();
-        MobLocation location=new MobLocation(mobDivision,landDivision,landmark);
-        selection.setWhere(location);
-        selection.setWhat(classification);
+        MobSelection selection=new MobSelection(location,classification);
         ret.getMobSelections().add(selection);
       }
     }
