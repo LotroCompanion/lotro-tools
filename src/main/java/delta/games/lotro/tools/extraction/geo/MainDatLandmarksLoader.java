@@ -86,7 +86,7 @@ public class MainDatLandmarksLoader
       if (data!=null)
       {
         int classDefIndex=BufferUtils.getDoubleWordAt(data,4);
-        if (classDefIndex==1210)
+        if ((classDefIndex==1210) || (classDefIndex==1995)) // Landmark and HousingLandmark
         {
           LandmarkDescription landmark=handleLandmark(id);
           if (landmark!=null)
