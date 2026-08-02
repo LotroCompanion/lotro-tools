@@ -93,7 +93,8 @@ public class SocketablesManager
         (socketTypeCode==19) || // Cloak essences
         (socketTypeCode==20) || // Necklace essences
         (socketTypeCode==22) || // Primary Essence
-        (socketTypeCode==23)) // Vital Essence
+        (socketTypeCode==23) || // Vital Essence
+        (socketTypeCode==24)) // Necklace of War (PvP)
     {
       return socketType;
     }

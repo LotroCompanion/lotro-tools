@@ -470,6 +470,7 @@ public class MainDatEnumsLoader
     if (code==20) return "N"; // Necklace
     if (code==22) return "P"; // Primary
     if (code==23) return "V"; // Vital
+    if (code==24) return "n"; // Necklace of War
     return null;
   }
 
