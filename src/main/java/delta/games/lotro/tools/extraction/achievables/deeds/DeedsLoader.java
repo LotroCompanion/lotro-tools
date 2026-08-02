@@ -18,6 +18,7 @@ import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.enums.DeedCategory;
+import delta.games.lotro.common.enums.DeedUIFilter;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.rewards.Rewards;
@@ -53,12 +54,13 @@ public class DeedsLoader
   private DataFacade _facade;
   private Map<Integer,DeedDescription> _deeds;
   private LotroEnum<DeedCategory> _deedUiTabName;
+  private LotroEnum<DeedType> _deedTypeEnum;
+  private LotroEnum<DeedUIFilter> _deedUIFilterEnum;
   private I18nUtils _i18n;
   private DatObjectivesLoader _objectivesLoader;
   private AchievableLootLoader _lootLoader;
   private AchievablesLoadingUtils _utils;
   private StringProcessor _processor;
-  private LotroEnum<DeedType> _deedTypeEnum;
 
   /**
    * Constructor.
@@ -71,12 +73,13 @@ public class DeedsLoader
     _deeds=new HashMap<Integer,DeedDescription>();
     LotroEnumsRegistry registry=LotroEnumsRegistry.getInstance();
     _deedUiTabName=registry.get(DeedCategory.class);
+    _deedTypeEnum=registry.get(DeedType.class);
+    _deedUIFilterEnum=registry.get(DeedUIFilter.class);
     _i18n=new I18nUtils("deeds",facade.getGlobalStringsManager());
     _objectivesLoader=new DatObjectivesLoader(facade,_i18n);
     _lootLoader=new AchievableLootLoader();
     _utils=utils;
     _processor=buildProcessor();
-    _deedTypeEnum=LotroEnumsRegistry.getInstance().get(DeedType.class);
   }
 
   /**
@@ -113,6 +116,9 @@ public class DeedsLoader
     deed.setCategory(uiTabName);
     // Deed type
     handleDeedType(deed,properties);
+    // UI Filter
+    handleDeedUIFilter(deed,properties);
+
     // Monster play?
     Integer isMonsterPlayCode=((Integer)properties.getProperty("Quest_IsMonsterPlayQuest"));
     boolean isMonsterPlay=((isMonsterPlayCode!=null) && (isMonsterPlayCode.intValue()!=0));
@@ -284,6 +290,16 @@ public class DeedsLoader
       }
     }
     deed.setType(type);
+  }
+
+  private void handleDeedUIFilter(DeedDescription deed, PropertiesSet properties)
+  {
+    Integer uiFilterCode=((Integer)properties.getProperty("Accomplishment_UIFilter"));
+    if (uiFilterCode!=null)
+    {
+      DeedUIFilter uiFilter=_deedUIFilterEnum.getEntry(uiFilterCode.intValue());
+      deed.setUIFilter(uiFilter);
+    }
   }
 
   private void setClassRequirementForDeed(DeedDescription deed, String classKey)

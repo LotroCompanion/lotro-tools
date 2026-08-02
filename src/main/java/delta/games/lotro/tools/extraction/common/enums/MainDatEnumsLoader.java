@@ -23,6 +23,7 @@ import delta.games.lotro.common.enums.CraftTier;
 import delta.games.lotro.common.enums.CraftingUICategory;
 import delta.games.lotro.common.enums.DamageQualifier;
 import delta.games.lotro.common.enums.DeedCategory;
+import delta.games.lotro.common.enums.DeedUIFilter;
 import delta.games.lotro.common.enums.Difficulty;
 import delta.games.lotro.common.enums.EffectAuraType;
 import delta.games.lotro.common.enums.EquipmentCategory;
@@ -200,6 +201,7 @@ public class MainDatEnumsLoader
     loadEnum(587202856,"EffectAuraType",EffectAuraType.class); // 0x23000128
     loadEnum(587203159,"HouseType",HouseType.class); // 0x23000257
     loadEnum(587203173,"HousingHookID",HousingHookID.class); // 0x23000265
+    loadEnum(587202826,"AccomplishmentUIFilter",DeedUIFilter.class); // 0x2300010A
 
     // Derivated enums
     // From EquipmentCategory:
