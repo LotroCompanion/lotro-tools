@@ -21,7 +21,7 @@ public class MainGameDataBuilder
   {
     GameParameters ret=new GameParameters();
     ret.setMaxCharacterLevel(160);
-    ret.setMaxLegendaryItemLevel(560);
+    ret.setMaxLegendaryItemLevel(565);
     ret.setMaxVirtueRank(100);
     return ret;
   }
