@@ -13,7 +13,7 @@ import delta.games.lotro.common.ChallengeLevel;
 import delta.games.lotro.common.IdentifiableComparator;
 import delta.games.lotro.common.LockType;
 import delta.games.lotro.common.Repeatability;
-import delta.games.lotro.common.Size;
+import delta.games.lotro.common.Sizes;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.QuestCategory;
@@ -254,19 +254,19 @@ public class QuestsLoader
     Integer smallFellowshipRecommended=((Integer)properties.getProperty("Quest_IsSmallFellowshipRecommended"));
     if ((smallFellowshipRecommended!=null) && (smallFellowshipRecommended.intValue()==1))
     {
-      quest.setSize(Size.SMALL_FELLOWSHIP);
+      quest.setSize(Sizes.SMALL_FELLOWSHIP);
     }
     // - fellowship
     Integer fellowshipRecommended=((Integer)properties.getProperty("Quest_IsFellowshipRecommended"));
     if ((fellowshipRecommended!=null) && (fellowshipRecommended.intValue()==1))
     {
-      quest.setSize(Size.FELLOWSHIP);
+      quest.setSize(Sizes.FELLOWSHIP);
     }
     // - raid
     Integer isRaidQuest=((Integer)properties.getProperty("Quest_ShowRaidInJournal"));
     if ((isRaidQuest!=null) && (isRaidQuest.intValue()==1))
     {
-      quest.setSize(Size.RAID);
+      quest.setSize(Sizes.RAID);
     }
     // Instance quest? Default is no.
     Integer isInstanceQuest=((Integer)properties.getProperty("Quest_IsInstanceQuest"));
