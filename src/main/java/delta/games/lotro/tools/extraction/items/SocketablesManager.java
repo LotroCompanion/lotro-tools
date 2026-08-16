@@ -265,6 +265,7 @@ public class SocketablesManager
     if (code==14) return WellKnownCharacterClassKeys.MINSTREL;
     if (code==15) return WellKnownCharacterClassKeys.RUNE_KEEPER;
     if (code==16) return WellKnownCharacterClassKeys.WARDEN;
+    if (code==21) return WellKnownCharacterClassKeys.CORSAIR;
     return null;
   }
 
