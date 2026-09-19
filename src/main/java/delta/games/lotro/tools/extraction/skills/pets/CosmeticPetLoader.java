@@ -37,8 +37,8 @@ public class CosmeticPetLoader
   public void loadPetData(PropertiesSet properties, CosmeticPetDescription ret)
   {
     // Hidden?
-    @SuppressWarnings("unused")
     int hidden=((Integer)properties.getProperty("Collection_Hide_Entry")).intValue();
+    ret.setHidden(hidden==1);
     // Source description (null for war-steeds)
     String sourceDescription=_i18n.getStringProperty(properties,"Collection_Piece_SourceDesc");
     ret.setSourceDescription(sourceDescription);
@@ -52,6 +52,9 @@ public class CosmeticPetLoader
         handleCosmeticPetEffect(ret,effectId);
       }
     }
+    // Also:
+    // - Collection_Webstore_Item : associated web store item
+    // - Collection_Piece_DisplayDID : ID of the associated mob
   }
 
   private void handleCosmeticPetEffect(CosmeticPetDescription pet, int effectId)
