@@ -24,6 +24,7 @@ public class TranslationUtils
     locales.add(Locale.FRENCH);
     locales.add(Locale.GERMAN);
     locales.add(Locale.forLanguageTag("ru"));
+    locales.add(Locale.forLanguageTag("es"));
     return new MultilocalesTranslator(bundleName,locales);
   }
 }
