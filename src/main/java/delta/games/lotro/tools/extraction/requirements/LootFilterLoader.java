@@ -1,6 +1,7 @@
 package delta.games.lotro.tools.extraction.requirements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -59,9 +60,9 @@ public class LootFilterLoader
       String propertyName=filterEntry.getDefinition().getName();
       if ("EntityFilter_PropertyRange".equals(propertyName))
       {
-        // Level filter
-        PropertiesSet levelProps=(PropertiesSet)filterEntry.getValue();
-        loadLevelFilter(levelProps,requirements);
+        // Range filter
+        PropertiesSet rangeProps=(PropertiesSet)filterEntry.getValue();
+        loadRangeFilter(rangeProps,requirements);
       }
       else if ("EntityFilter_PropertySet".equals(propertyName))
       {
@@ -78,7 +79,7 @@ public class LootFilterLoader
       }
       else
       {
-        LOGGER.warn("Unmanaged property: {}",propertyName);
+        LOGGER.warn("Unmanaged property name: {}",propertyName);
       }
     }
     if (!_classes.isEmpty())
@@ -154,7 +155,7 @@ public class LootFilterLoader
     }
   }
 
-  private void loadLevelFilter(PropertiesSet levelProps, UsageRequirement requirements)
+  private void loadRangeFilter(PropertiesSet props, UsageRequirement requirements)
   {
     /*
     EntityFilter_PropertyRange_Max:
@@ -162,17 +163,64 @@ public class LootFilterLoader
     EntityFilter_PropertyRange_Min:
       #1: 30
      */
-    Object[] minArray=(Object[])levelProps.getProperty("EntityFilter_PropertyRange_Min");
-    Object[] maxArray=(Object[])levelProps.getProperty("EntityFilter_PropertyRange_Max");
-    if ((minArray!=null) && (maxArray!=null))
+    ArrayPropertyValue minPropValue=(ArrayPropertyValue)props.getPropertyValueByName("EntityFilter_PropertyRange_Min");
+    ArrayPropertyValue maxPropValue=(ArrayPropertyValue)props.getPropertyValueByName("EntityFilter_PropertyRange_Max");
+    if ((minPropValue==null) && (maxPropValue==null))
     {
-      int nbRanges=Math.min(minArray.length,maxArray.length);
-      for(int i=0;i<nbRanges;i++)
+      return;
+    }
+    Integer propId=null;
+    // Min
+    Integer min=null;
+    if (minPropValue!=null)
+    {
+      PropertyValue[] values=minPropValue.getValues();
+      if ((values!=null) && (values.length>0))
       {
-        Integer min=(Integer)minArray[i];
-        Integer max=(Integer)maxArray[i];
-        requirements.setLevelRange(min,max);
+        propId=Integer.valueOf(values[0].getDefinition().getPropertyId());
+        min=(Integer)values[0].getValue();
+        if (values.length>1)
+        {
+          LOGGER.warn("More than 1 value in array: {}",Arrays.toString(values));
+        }
       }
     }
+    // Max
+    Integer max=null;
+    if (maxPropValue!=null)
+    {
+      PropertyValue[] values=maxPropValue.getValues();
+      if ((values!=null) && (values.length>0))
+      {
+        propId=Integer.valueOf(values[0].getDefinition().getPropertyId());
+        max=(Integer)values[0].getValue();
+        if (values.length>1)
+        {
+          LOGGER.warn("More than 1 value in array: {}",Arrays.toString(values));
+        }
+      }
+    }
+    if (propId==null)
+    {
+      return;
+    }
+    if ((min==null) && (max==null))
+    {
+      return;
+    }
+    if ((propId.intValue()==268446666) // ze_skirmish_level
+        || (propId.intValue()==268439569)) // Advancement_Level
+    {
+      loadLevelFilter(min,max,requirements);
+    }
+    else
+    {
+      LOGGER.warn("Unmanaged property range: {}",propId);
+    }
+  }
+
+  private void loadLevelFilter(Integer min, Integer max, UsageRequirement requirements)
+  {
+    requirements.setLevelRange(min,max);
   }
 }
