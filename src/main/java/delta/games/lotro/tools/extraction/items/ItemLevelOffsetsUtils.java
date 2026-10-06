@@ -5,6 +5,7 @@ import java.util.Map;
 
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 
 /**
  * Utility methods related to item level offsets.
@@ -20,8 +21,7 @@ public class ItemLevelOffsetsUtils
   public static Map<Integer,Integer> buildOffsetsMap(DataFacade facade)
   {
     Map<Integer,Integer> ret=new HashMap<Integer,Integer>();
-    // InventoryControl
-    PropertiesSet props=facade.loadProperties(0x79000230);
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(facade,"InventoryControl");
     Object[] offsetsList=(Object[])props.getProperty("InventoryControl_DistributionToLevelOffsetList");
     for(Object offsetEntry : offsetsList)
     {

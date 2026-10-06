@@ -24,6 +24,7 @@ import delta.games.lotro.tools.extraction.common.PlacesLoader;
 import delta.games.lotro.tools.extraction.common.progressions.ProgressionUtils;
 import delta.games.lotro.tools.extraction.common.worldEvents.WorldEventsLoader;
 import delta.games.lotro.tools.extraction.effects.EffectLoader;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.utils.DataFacadeBuilder;
 
 /**
@@ -143,7 +144,7 @@ public class MainDatAchievablesLoader
 
   private void doIndex()
   {
-    PropertiesSet deedsDirectory=_facade.loadProperties(0x79000255);
+    PropertiesSet deedsDirectory=WeenieContentDirectory.loadWeenieContentProps(_facade,"AccomplishmentDirectory");
     Object[] list=(Object[])deedsDirectory.getProperty("Accomplishment_List");
     for(Object entry : list)
     {

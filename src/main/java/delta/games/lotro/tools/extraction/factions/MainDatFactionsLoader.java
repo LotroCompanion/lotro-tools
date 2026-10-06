@@ -27,6 +27,7 @@ import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.reputation.ReputationDeed;
 import delta.games.lotro.lore.reputation.io.xml.FactionsXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
@@ -299,7 +300,7 @@ Reputation_LowestTier: 1
   private List<Faction> buildFactions()
   {
     List<Faction> ret=new ArrayList<Faction>();
-    PropertiesSet indexProperties=_facade.loadProperties(0x7900A452);
+    PropertiesSet indexProperties=WeenieContentDirectory.loadWeenieContentProps(_facade,"ReputationControl");
     Object[] idsArray=(Object[])indexProperties.getProperty("Reputation_FactionTable");
     for(Object idObj : idsArray)
     {

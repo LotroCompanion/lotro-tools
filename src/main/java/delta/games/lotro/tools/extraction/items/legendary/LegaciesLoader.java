@@ -294,9 +294,8 @@ public class LegaciesLoader
 
   private void loadNonImbuedLegacies()
   {
-    // Load reforge table: value of ItemAdvancement_ReforgeTable from 1879134775 (NPC: Forge-master)
-    PropertiesSet globalReforgeTableProps=_facade.loadProperties(1879138325+DATConstants.DBPROPERTIES_OFFSET);
-
+    // Load reforge table
+    PropertiesSet globalReforgeTableProps=WeenieContentDirectory.loadWeenieContentProps(_facade,"IADefaultReforgeTable");
     Object[] reforgeTables=(Object[])globalReforgeTableProps.getProperty("ItemAdvancement_ReforgeSlotInfo_Array");
     for(Object reforgeTableObj : reforgeTables)
     {

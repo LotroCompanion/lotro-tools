@@ -18,6 +18,7 @@ import delta.games.lotro.lore.reputation.Faction;
 import delta.games.lotro.lore.reputation.FactionsRegistry;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
@@ -48,8 +49,7 @@ public class MainDatCraftingLoader
    */
   public void doIt()
   {
-    // CraftDirectory
-    PropertiesSet props=_facade.loadProperties(1879048722+DATConstants.DBPROPERTIES_OFFSET);
+    PropertiesSet props=WeenieContentDirectory.loadWeenieContentProps(_facade,"CraftDirectory");
     // - vocations
     Object[] vocationArray=(Object[])props.getProperty("CraftDirectory_VocationArray");
     for(Object vocationObj : vocationArray)

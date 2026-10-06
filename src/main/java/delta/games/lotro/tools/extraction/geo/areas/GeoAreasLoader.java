@@ -15,6 +15,7 @@ import delta.games.lotro.lore.maps.Region;
 import delta.games.lotro.lore.maps.Territory;
 import delta.games.lotro.lore.maps.io.xml.GeoAreasXMLWriter;
 import delta.games.lotro.tools.extraction.GeneratedFiles;
+import delta.games.lotro.tools.extraction.utils.WeenieContentDirectory;
 import delta.games.lotro.tools.extraction.utils.i18n.I18nUtils;
 
 /**
@@ -160,7 +161,7 @@ public class GeoAreasLoader
    */
   public void addMissingRegions()
   {
-    PropertiesSet regionControlProps=_facade.loadProperties(1879146908+DATConstants.DBPROPERTIES_OFFSET); // 0x7001819C
+    PropertiesSet regionControlProps=WeenieContentDirectory.loadWeenieContentProps(_facade,"RegionControl");
     if (regionControlProps==null)
     {
       return;
