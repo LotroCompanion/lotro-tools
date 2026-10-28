@@ -128,6 +128,7 @@ public class MainPortaitFramesLoader
     String[] path={
         "AvatarPanel",
         "VitalsParent",
+        "PanelParent",
         "AvatarPanel_BG"
     };
     UIElement element=(UIElement)finder.find(layout,path);
