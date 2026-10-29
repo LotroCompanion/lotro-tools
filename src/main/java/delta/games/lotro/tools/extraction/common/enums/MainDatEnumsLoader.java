@@ -475,6 +475,7 @@ public class MainDatEnumsLoader
     if (code==22) return "P"; // Primary
     if (code==23) return "V"; // Vital
     if (code==24) return "n"; // Necklace of War
+    if (code==25) return "I"; // Survival Instinct
     return null;
   }
 

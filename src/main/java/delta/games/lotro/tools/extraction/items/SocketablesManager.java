@@ -94,7 +94,8 @@ public class SocketablesManager
         (socketTypeCode==20) || // Necklace essences
         (socketTypeCode==22) || // Primary Essence
         (socketTypeCode==23) || // Vital Essence
-        (socketTypeCode==24)) // Necklace of War (PvP)
+        (socketTypeCode==24) || // Necklace of War (PvP)
+        (socketTypeCode==25)) // Survival Instinct Essence
     {
       return socketType;
     }

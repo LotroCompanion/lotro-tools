@@ -600,6 +600,9 @@ Reputation_LowestTier: 1
     if (factionId==1879389868) return new String[]{category,null,null}; // The White Company
     if (factionId==1879389872) return new String[]{category,null,null}; // Reclamation of Minas Ithil
     if (factionId==1879389871) return new String[]{category,null,null}; // The Great Alliance
+    if (factionId==1879527303) return new String[]{category,null,null}; // Scouts of Draugardh
+    if (factionId==1879527306) return new String[]{category,null,null}; // Têtikir
+    if (factionId==1879527304) return new String[]{category,null,null}; // Khemozêl Clan
     return new String[]{};
   }
 

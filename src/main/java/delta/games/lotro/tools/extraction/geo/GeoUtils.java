@@ -73,7 +73,7 @@ public class GeoUtils
   public static int[] getRegions()
   {
     boolean isLive=Context.isLive();
-    int[] regions=isLive?new int[]{1,2,3,4,5,14}:new int[]{1};
+    int[] regions=isLive?new int[]{1,2,3,4,5,6,14}:new int[]{1};
     return regions;
   }
 
@@ -84,7 +84,7 @@ public class GeoUtils
    */
   public static boolean isSupportedRegion(int region)
   {
-    if (((region<1) || (region>5)) && (region!=14))
+    if (((region<1) || (region>6)) && (region!=14))
     {
       return false;
     }
