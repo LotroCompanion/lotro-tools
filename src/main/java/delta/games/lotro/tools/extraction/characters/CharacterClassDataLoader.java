@@ -257,6 +257,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private int computeOCMR(String classKey, int level)
   {
+    // TODO Mariner
     int ocmr;
     if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
         (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
@@ -286,6 +287,7 @@ AdvTable_AdvancedCharacterStart_AdvancedTierCASI_List:
 
   private int computeICMR(String classKey, int level)
   {
+    // TODO Mariner
     int icmr;
     if ((WellKnownCharacterClassKeys.CHAMPION.equals(classKey)) ||
         (WellKnownCharacterClassKeys.GUARDIAN.equals(classKey)) ||
