@@ -43,7 +43,7 @@ public class MainStatsLoader
   /**
    * Get all the locale keys.
    */
-  private static final Locale[] LOCALES={Locale.ENGLISH,Locale.FRENCH,Locale.GERMAN,Locale.forLanguageTag("ru"),Locale.forLanguageTag("es")};
+  private static final Locale[] LOCALES={Locale.ENGLISH,Locale.FRENCH,Locale.GERMAN,Locale.forLanguageTag("ru"),Locale.forLanguageTag("es"),Locale.forLanguageTag("zh")};
 
   private DataFacade _facade;
   private I18nUtils _i18n;
