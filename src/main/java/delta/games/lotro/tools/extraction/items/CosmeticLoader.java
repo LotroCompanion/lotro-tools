@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delta.games.lotro.common.enums.ItemClass;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.EquipmentLocations;
@@ -36,8 +37,8 @@ public class CosmeticLoader
    */
   public void handleItem(Item item, PropertiesSet props, int type)
   {
-    // Use only IWeapon, IShield, IClothing and IItem
-    if ((type!=799)&&(type!=797)&&(type!=795)&&(type!=796))
+    // Use only IWeapon, IShield, IClothing, IItem and Jewelry
+    if ((type!=799)&&(type!=797)&&(type!=795)&&(type!=796)&&(type!=802))
     {
       return;
     }
@@ -52,17 +53,13 @@ public class CosmeticLoader
     {
       return;
     }
-    EquipmentLocation location=item.getEquipmentLocation();
-    if (location==EquipmentLocations.NONE)
-    {
-      return;
-    }
-    boolean useIt=use(physObj.intValue(),appearanceID,entryArray);
+    boolean useIt=use(item,physObj.intValue(),appearanceID,entryArray);
     if (!useIt)
     {
       return;
     }
-    String appearanceHash=buildCosmeticKey(physObj,appearanceID,entryArray);
+    Integer weaponImbueType=(Integer)props.getProperty("Script_WeaponImbueType_Cosmetic");
+    String appearanceHash=buildCosmeticKey(physObj,appearanceID,weaponImbueType,entryArray);
     LOGGER.debug("{} => {} => {}",physObj,appearanceHash,item);
     List<Item> list=_map.get(appearanceHash);
     if (list==null)
@@ -73,8 +70,18 @@ public class CosmeticLoader
     list.add(item);
   }
 
-  private boolean use(int phyObjId, Integer appearanceID, Object[] entryArray)
+  private boolean use(Item item, int phyObjId, Integer appearanceID, Object[] entryArray)
   {
+    ItemClass itemClass=item.getItemClass();
+    if (itemClass.getCode()==253) // Weapon Auras
+    {
+      return true;
+    }
+    EquipmentLocation location=item.getEquipmentLocation();
+    if (location==EquipmentLocations.NONE)
+    {
+      return false;
+    }
     // Crafting tools
     if ((phyObjId==1191182341) && (appearanceID!=null) && (appearanceID.intValue()==536870916) && (entryArray==null)) return false;
     // Tomes, standards, sealed LIs (emblem, tools, belt, rune...)
@@ -82,7 +89,7 @@ public class CosmeticLoader
     return true;
   }
 
-  private String buildCosmeticKey(Integer physObj, Integer appearanceID, Object[] entryArray)
+  private String buildCosmeticKey(Integer physObj, Integer appearanceID, Integer weaponImbueType, Object[] entryArray)
   {
     StringBuilder sb=new StringBuilder();
     if (physObj!=null)
@@ -93,6 +100,11 @@ public class CosmeticLoader
     {
       sb.append("#");
       sb.append(appearanceID.toString());
+    }
+    if (weaponImbueType!=null)
+    {
+      sb.append("#");
+      sb.append(weaponImbueType.toString());
     }
     if (entryArray!=null)
     {
