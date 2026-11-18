@@ -440,7 +440,7 @@ public class MainDatItemsLoader
        */
       int socketType=((Long)essenceSlotProps.getProperty("Item_Socket_Type")).intValue();
       if ((socketType!=1) && (socketType!=131072) && (socketType!=262144) && (socketType!=524288)
-          && (socketType!=2097152) && (socketType!=4194304))
+          && (socketType!=2097152) && (socketType!=4194304) && (socketType!=8388608) && (socketType!=16777216))
       {
         return true;
       }
